@@ -949,6 +949,7 @@ export default function App() {
   const [screen, setScreen] = useState("board");
   const [board, setBoard] = useState(null);
   const [topic, setTopic] = useState(null);
+  const [activeSection, setActiveSection] = useState(null);
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [known, setKnown] = useState({});
@@ -974,6 +975,7 @@ export default function App() {
   };
   const goBack = () => {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
+    else if (screen === "topics" && activeSection) { setActiveSection(null); }
     else if (screen === "topics") { setScreen("board"); setBoard(null); }
   };
 
@@ -1062,50 +1064,95 @@ export default function App() {
   );
 
   // TOPIC SELECT
+  const FOLDER_COLORS = {
+    physical_as:   { accent: "#29ABE2", bg: "linear-gradient(135deg, #0d2137, #0f2d4a)", icon: "⚛️" },
+    physical_a2:   { accent: "#00D4FF", bg: "linear-gradient(135deg, #0a1f35, #0d2d47)", icon: "⚛️" },
+    inorganic_as:  { accent: "#26D9B0", bg: "linear-gradient(135deg, #0a2830, #0d3530)", icon: "🧪" },
+    inorganic_a2:  { accent: "#00F5C8", bg: "linear-gradient(135deg, #082830, #0b3530)", icon: "🧪" },
+    organic:       { accent: "#A78BFA", bg: "linear-gradient(135deg, #1a1035, #241545)", icon: "🔗" },
+    organic2:      { accent: "#C4B5FD", bg: "linear-gradient(135deg, #160e30, #1e1342)", icon: "🔗" },
+    practicals_as: { accent: "#FBB040", bg: "linear-gradient(135deg, #2a1a05, #352208)", icon: "🔬" },
+    practicals_a2: { accent: "#FFD166", bg: "linear-gradient(135deg, #251805, #302006)", icon: "🔬" },
+  };
+
+  if (screen === "topics" && activeSection) {
+    const section = SECTIONS.find(s => s.id === activeSection);
+    const fc = FOLDER_COLORS[activeSection] || FOLDER_COLORS.physical_as;
+    return (
+      <div style={base}>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+        <Header sub={section.label} back={goBack} />
+        <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "4px" }}>
+            {section.topics.map(id => {
+              const s = SETS[id];
+              const k = (known[id] || new Set()).size;
+              const pct = Math.round((k / s.cards.length) * 100);
+              return (
+                <button key={id} onClick={() => selectTopic(id)} style={{
+                  padding: "14px 16px", borderRadius: "14px",
+                  background: fc.bg, border: `1px solid ${fc.accent}22`,
+                  color: "#e0e8f0", cursor: "pointer", textAlign: "left",
+                  fontFamily: "inherit", position: "relative", overflow: "hidden", width: "100%",
+                }}>
+                  <div style={{ position: "absolute", bottom: 0, left: 0, height: "3px", width: `${pct}%`, background: `linear-gradient(90deg, ${fc.accent}, ${fc.accent}99)`, borderRadius: "0 2px 0 0", transition: "width 0.3s" }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <span style={{ fontSize: "11px", color: fc.accent, fontWeight: 800, marginRight: "8px", letterSpacing: "0.3px" }}>{id}</span>
+                      <span style={{ fontSize: "14px", fontWeight: 500 }}>{s.title}</span>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0, marginLeft: "8px" }}>
+                      <div style={{ fontSize: "12px", color: "#7a9ab8" }}>{s.cards.length} cards</div>
+                      {k > 0 && <div style={{ fontSize: "11px", color: "#4ecb71", fontWeight: 600 }}>{k} ✓</div>}
+                    </div>
+                  </div>
+                  {pct > 0 && <div style={{ marginTop: "6px", fontSize: "10px", color: fc.accent, opacity: 0.7 }}>{pct}% mastered</div>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (screen === "topics") return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       <Header sub="AQA · A-Level Chemistry" back={goBack} />
-      <div style={{ padding: "8px 20px 20px", flex: 1, overflowY: "auto" }}>
-        {SECTIONS.map(section => {
-          const sectionCards = section.topics.reduce((sum, id) => sum + SETS[id].cards.length, 0);
-          const sectionKnown = section.topics.reduce((sum, id) => sum + (known[id] || new Set()).size, 0);
-          return (
-            <div key={section.id} style={{ marginBottom: "20px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", margin: "8px 0 10px" }}>
-                <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#8aa0b8", margin: 0 }}>{section.label}</h2>
-                <span style={{ fontSize: "11px", color: "#4a6a8a" }}>{sectionCards} cards {sectionKnown > 0 && `· ${sectionKnown}✓`}</span>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {section.topics.map(id => {
-                  const s = SETS[id];
-                  const k = (known[id] || new Set()).size;
-                  const pct = Math.round((k / s.cards.length) * 100);
-                  return (
-                    <button key={id} onClick={() => selectTopic(id)} style={{
-                      padding: "14px 16px", borderRadius: "12px",
-                      background: "linear-gradient(135deg, #0f1e4a, #1a2d6e)",
-                      border: "1px solid rgba(41,171,226,0.12)",
-                      color: "#e0e8f0", cursor: "pointer", textAlign: "left",
-                      fontFamily: "inherit", transition: "all 0.2s", position: "relative", overflow: "hidden",
-                    }}>
-                      <div style={{ position: "absolute", bottom: 0, left: 0, height: "3px", width: `${pct}%`, background: "linear-gradient(90deg, #29ABE2, #50C8F4)", borderRadius: "0 2px 0 0", transition: "width 0.3s" }} />
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <div>
-                          <span style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700, marginRight: "8px" }}>{id}</span>
-                          <span style={{ fontSize: "14px", fontWeight: 500 }}>{s.title}</span>
-                        </div>
-                        <div style={{ fontSize: "12px", color: "#5a7a9a" }}>{s.cards.length} cards {k > 0 && `· ${k}✓`}</div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-        <div style={{ textAlign: "center", marginTop: "12px", fontSize: "12px", color: "#4a6070" }}>
-          {Object.values(SETS).reduce((a, s) => a + s.cards.length, 0)} cards across {TOPIC_ORDER.length} topics
+      <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
+          {SECTIONS.map(section => {
+            const fc = FOLDER_COLORS[section.id] || FOLDER_COLORS.physical_as;
+            const totalCards = section.topics.reduce((sum, id) => sum + SETS[id].cards.length, 0);
+            const totalKnown = section.topics.reduce((sum, id) => sum + (known[id] || new Set()).size, 0);
+            const pct = totalCards > 0 ? Math.round((totalKnown / totalCards) * 100) : 0;
+            return (
+              <button key={section.id} onClick={() => setActiveSection(section.id)} style={{
+                padding: "16px 14px 14px", borderRadius: "16px",
+                background: fc.bg, border: `1px solid ${fc.accent}30`,
+                cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                position: "relative", overflow: "hidden", minHeight: "110px",
+                display: "flex", flexDirection: "column", justifyContent: "space-between",
+              }}>
+                <div>
+                  <div style={{ fontSize: "22px", marginBottom: "8px" }}>{fc.icon}</div>
+                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#e0e8f0", lineHeight: 1.3 }}>{section.label}</div>
+                  <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
+                </div>
+                <div style={{ marginTop: "10px" }}>
+                  <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
+                  </div>
+                  {pct > 0 && <div style={{ fontSize: "10px", color: fc.accent, marginTop: "4px", opacity: 0.8 }}>{pct}% mastered</div>}
+                </div>
+                <div style={{ position: "absolute", top: "12px", right: "12px", fontSize: "18px", opacity: 0.15 }}>📁</div>
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ textAlign: "center", marginTop: "16px", fontSize: "12px", color: "#4a6070" }}>
+          {Object.values(SETS).reduce((a, s) => a + s.cards.length, 0)} cards · {TOPIC_ORDER.length} topics
         </div>
       </div>
     </div>
