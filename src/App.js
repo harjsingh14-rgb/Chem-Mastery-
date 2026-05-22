@@ -952,7 +952,14 @@ export default function App() {
   const [activeSection, setActiveSection] = useState(null);
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [known, setKnown] = useState({});
+  const [known, setKnown] = useState(() => {
+    try {
+      const saved = localStorage.getItem('hsj-chem-known');
+      if (!saved) return {};
+      const parsed = JSON.parse(saved);
+      return Object.fromEntries(Object.entries(parsed).map(([k, v]) => [k, new Set(v)]));
+    } catch { return {}; }
+  });
   const [order, setOrder] = useState([]);
   const [shuffled, setShuffled] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -973,8 +980,17 @@ export default function App() {
     setIndex(0); setFlipped(false); setShuffled(false); setShowMenu(false);
     setScreen("cards");
   };
+  // Save progress to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      const serialisable = Object.fromEntries(Object.entries(known).map(([k, v]) => [k, [...v]]));
+      localStorage.setItem('hsj-chem-known', JSON.stringify(serialisable));
+    } catch {}
+  }, [known]);
+
   const goBack = () => {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
+    else if (screen === "dashboard") { setScreen("topics"); }
     else if (screen === "topics" && activeSection) { setActiveSection(null); }
     else if (screen === "topics") { setScreen("board"); setBoard(null); }
   };
@@ -1063,6 +1079,126 @@ export default function App() {
     </div>
   );
 
+  // DASHBOARD
+  if (screen === "dashboard") {
+    const allTopics = TOPIC_ORDER.map(id => {
+      const s = SETS[id];
+      const k = (known[id] || new Set()).size;
+      const pct = Math.round((k / s.cards.length) * 100);
+      return { id, title: s.title, total: s.cards.length, mastered: k, pct };
+    });
+    const totalCards = allTopics.reduce((a, t) => a + t.total, 0);
+    const totalMastered = allTopics.reduce((a, t) => a + t.mastered, 0);
+    const overallPct = Math.round((totalMastered / totalCards) * 100);
+    const started = allTopics.filter(t => t.mastered > 0);
+    const needsWork = [...allTopics].filter(t => t.pct < 70).sort((a, b) => a.pct - b.pct).slice(0, 5);
+    const goingWell = [...allTopics].filter(t => t.pct >= 70).sort((a, b) => b.pct - a.pct);
+
+    const StatCard = ({ label, value, sub, color }) => (
+      <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", flex: 1, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderTop: `4px solid ${color}` }}>
+        <div style={{ fontSize: "28px", fontWeight: 800, color }}>{value}</div>
+        <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginTop: "2px" }}>{label}</div>
+        {sub && <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "2px" }}>{sub}</div>}
+      </div>
+    );
+
+    const TopicRow = ({ t, showBar }) => (
+      <div onClick={() => { setActiveSection(null); selectTopic(t.id); }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 14px", background: "#ffffff", borderRadius: "12px", cursor: "pointer", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showBar ? "5px" : 0 }}>
+            <div>
+              <span style={{ fontSize: "11px", fontWeight: 800, color: "#29ABE2", marginRight: "6px" }}>{t.id}</span>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: "#1a2d45" }}>{t.title}</span>
+            </div>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: t.pct === 0 ? "#b0c4d4" : t.pct === 100 ? "#29ABE2" : "#1a8fc4", flexShrink: 0, marginLeft: "8px" }}>{t.pct}%</span>
+          </div>
+          {showBar && <div style={{ height: "4px", background: "#e8edf3", borderRadius: "2px", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${t.pct}%`, background: "linear-gradient(90deg, #29ABE2, #1a8fc4)", borderRadius: "2px" }} />
+          </div>}
+        </div>
+        <div style={{ fontSize: "11px", color: "#7a95b0", flexShrink: 0 }}>{t.mastered}/{t.total}</div>
+      </div>
+    );
+
+    return (
+      <div style={base}>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+        <Header sub="Progress Dashboard" back={goBack} />
+        <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "16px" }}>
+
+          {/* Hero stats */}
+          <div style={{ background: "linear-gradient(135deg, #29ABE2, #1a8fc4)", borderRadius: "20px", padding: "20px", color: "#fff", boxShadow: "0 8px 24px rgba(41,171,226,0.3)" }}>
+            <div style={{ fontSize: "13px", fontWeight: 600, opacity: 0.85, marginBottom: "4px" }}>Overall Progress</div>
+            <div style={{ fontSize: "48px", fontWeight: 800, lineHeight: 1 }}>{overallPct}%</div>
+            <div style={{ fontSize: "14px", opacity: 0.85, marginTop: "4px" }}>{totalMastered} of {totalCards} cards mastered</div>
+            <div style={{ marginTop: "12px", height: "6px", background: "rgba(255,255,255,0.25)", borderRadius: "3px", overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${overallPct}%`, background: "#ffffff", borderRadius: "3px", transition: "width 0.5s" }} />
+            </div>
+          </div>
+
+          {/* Quick stats row */}
+          <div style={{ display: "flex", gap: "10px" }}>
+            <StatCard label="Topics Started" value={started.length} sub={`of ${TOPIC_ORDER.length} total`} color="#29ABE2" />
+            <StatCard label="Fully Mastered" value={allTopics.filter(t => t.pct === 100).length} sub="100% complete" color="#1a8fc4" />
+            <StatCard label="Not Started" value={allTopics.filter(t => t.mastered === 0).length} sub="topics" color="#b0c4d4" />
+          </div>
+
+          {/* Section breakdown */}
+          <div>
+            <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>By Section</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {SECTIONS.map(sec => {
+                const secTotal = sec.topics.reduce((a, id) => a + SETS[id].cards.length, 0);
+                const secMastered = sec.topics.reduce((a, id) => a + (known[id] || new Set()).size, 0);
+                const secPct = Math.round((secMastered / secTotal) * 100);
+                return (
+                  <div key={sec.id} style={{ background: "#ffffff", borderRadius: "12px", padding: "12px 14px", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>{sec.label}</span>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#29ABE2" }}>{secPct}%</span>
+                    </div>
+                    <div style={{ height: "5px", background: "#e8edf3", borderRadius: "3px", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${secPct}%`, background: "linear-gradient(90deg, #29ABE2, #1a8fc4)", borderRadius: "3px" }} />
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "4px" }}>{secMastered} / {secTotal} cards</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Needs work */}
+          {needsWork.length > 0 && (
+            <div>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>⚠️ Needs Attention</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                {needsWork.map(t => <TopicRow key={t.id} t={t} showBar={true} />)}
+              </div>
+            </div>
+          )}
+
+          {/* Going well */}
+          {goingWell.length > 0 && (
+            <div>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>✅ Going Well</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                {goingWell.map(t => <TopicRow key={t.id} t={t} showBar={false} />)}
+              </div>
+            </div>
+          )}
+
+          {totalMastered === 0 && (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
+              <div style={{ fontSize: "40px", marginBottom: "12px" }}>📚</div>
+              <div style={{ fontSize: "16px", fontWeight: 600 }}>No progress yet</div>
+              <div style={{ fontSize: "13px", marginTop: "6px" }}>Start studying and your progress will appear here</div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   // TOPIC SELECT
   const FOLDER_COLORS = {
     physical_as:   { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2", icon: "⚛️" },
@@ -1122,7 +1258,16 @@ export default function App() {
   if (screen === "topics") return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-      <Header sub="AQA · A-Level Chemistry" back={goBack} />
+      <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
+          <div>
+            <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#29ABE2" }}>HSJ TUITION</div>
+            <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>AQA · A-Level Chemistry</div>
+          </div>
+        </div>
+        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>📊 My Progress</button>
+      </div>
       <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
           {SECTIONS.map(section => {
