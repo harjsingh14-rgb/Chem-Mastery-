@@ -1025,15 +1025,15 @@ export default function App() {
     touchStart.current = null; touchEnd.current = null;
   };
 
-  const bg = "linear-gradient(145deg, #0d1b2a 0%, #1b2d45 40%, #162238 100%)";
-  const base = { minHeight: "100vh", background: bg, fontFamily: "'DM Sans', 'Segoe UI', sans-serif", color: "#e8edf3", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
+  const bg = "#f0f4f8";
+  const base = { minHeight: "100vh", background: bg, fontFamily: "'DM Sans', 'Segoe UI', sans-serif", color: "#1a2d45", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
 
   const Header = ({ title, sub, back }) => (
-    <div style={{ padding: "16px 20px 8px", display: "flex", alignItems: "center", gap: "12px", position: "relative", zIndex: 2 }}>
-      {back && <button onClick={back} style={{ background: "rgba(41,171,226,0.1)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit" }}>← Back</button>}
+    <div style={{ padding: "16px 20px 10px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
+      {back && <button onClick={back} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
       <div style={{ flex: 1 }}>
         <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "18px", color: "#29ABE2", letterSpacing: "-0.5px" }}>HSJ TUITION</div>
-        <div style={{ fontSize: "10px", color: "#5a7a9a", letterSpacing: "2px", textTransform: "uppercase", marginTop: "2px" }}>{sub || "A-Level Chemistry · Mastered"}</div>
+        <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase", marginTop: "2px" }}>{sub || "A-Level Chemistry · Mastered"}</div>
       </div>
     </div>
   );
@@ -1044,19 +1044,19 @@ export default function App() {
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       <Header />
       <div style={{ padding: "20px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "16px", maxWidth: "500px", margin: "0 auto", width: "100%" }}>
-        <h2 style={{ textAlign: "center", fontSize: "22px", fontWeight: 700, color: "#e0e8f0", margin: "0 0 8px" }}>Choose your exam board</h2>
+        <h2 style={{ textAlign: "center", fontSize: "22px", fontWeight: 700, color: "#1a2d45", margin: "0 0 8px" }}>Choose your exam board</h2>
         {[{ id: "aqa", label: "AQA", count: TOPIC_ORDER.length + " topics" }, { id: "ocr", label: "OCR A", count: "Coming soon" }].map(b => (
           <button key={b.id} onClick={() => b.id === "aqa" && selectBoard(b.id)} disabled={b.id !== "aqa"} style={{
             padding: "24px 20px", borderRadius: "16px",
-            background: b.id === "aqa" ? "linear-gradient(135deg, #0f1e4a, #1a2d6e)" : "rgba(30,45,65,0.4)",
-            border: `1px solid ${b.id === "aqa" ? "rgba(41,171,226,0.2)" : "rgba(41,171,226,0.08)"}`,
-            color: b.id === "aqa" ? "#e0e8f0" : "#4a6070",
+            background: b.id === "aqa" ? "#ffffff" : "#f8f9fb",
+            border: `1px solid ${b.id === "aqa" ? "#29ABE2" : "#dde4ed"}`,
+            color: b.id === "aqa" ? "#1a2d45" : "#9ab0c4",
             cursor: b.id === "aqa" ? "pointer" : "default",
             textAlign: "left", fontFamily: "inherit", transition: "all 0.2s",
-            boxShadow: b.id === "aqa" ? "0 4px 20px rgba(0,0,0,0.2)" : "none",
+            boxShadow: b.id === "aqa" ? "0 4px 20px rgba(41,171,226,0.15)" : "none",
           }}>
             <div style={{ fontSize: "20px", fontWeight: 700 }}>{b.label}</div>
-            <div style={{ fontSize: "13px", color: b.id === "aqa" ? "#29ABE2" : "#3a5060", marginTop: "4px" }}>{b.count}</div>
+            <div style={{ fontSize: "13px", color: b.id === "aqa" ? "#29ABE2" : "#b0c4d4", marginTop: "4px" }}>{b.count}</div>
           </button>
         ))}
       </div>
@@ -1065,14 +1065,14 @@ export default function App() {
 
   // TOPIC SELECT
   const FOLDER_COLORS = {
-    physical_as:   { accent: "#29ABE2", bg: "linear-gradient(135deg, #0d2137, #0f2d4a)", icon: "⚛️" },
-    physical_a2:   { accent: "#00D4FF", bg: "linear-gradient(135deg, #0a1f35, #0d2d47)", icon: "⚛️" },
-    inorganic_as:  { accent: "#26D9B0", bg: "linear-gradient(135deg, #0a2830, #0d3530)", icon: "🧪" },
-    inorganic_a2:  { accent: "#00F5C8", bg: "linear-gradient(135deg, #082830, #0b3530)", icon: "🧪" },
-    organic:       { accent: "#A78BFA", bg: "linear-gradient(135deg, #1a1035, #241545)", icon: "🔗" },
-    organic2:      { accent: "#C4B5FD", bg: "linear-gradient(135deg, #160e30, #1e1342)", icon: "🔗" },
-    practicals_as: { accent: "#FBB040", bg: "linear-gradient(135deg, #2a1a05, #352208)", icon: "🔬" },
-    practicals_a2: { accent: "#FFD166", bg: "linear-gradient(135deg, #251805, #302006)", icon: "🔬" },
+    physical_as:   { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2", icon: "⚛️" },
+    physical_a2:   { accent: "#0090cc", bg: "#e0f2fa", border: "#0090cc", icon: "⚛️" },
+    inorganic_as:  { accent: "#16a97d", bg: "#e6f9f3", border: "#16a97d", icon: "🧪" },
+    inorganic_a2:  { accent: "#0d8c68", bg: "#dcf5ed", border: "#0d8c68", icon: "🧪" },
+    organic:       { accent: "#7c3aed", bg: "#f3eeff", border: "#7c3aed", icon: "🔗" },
+    organic2:      { accent: "#6d28d9", bg: "#ede9ff", border: "#6d28d9", icon: "🔗" },
+    practicals_as: { accent: "#d97706", bg: "#fef6e4", border: "#d97706", icon: "🔬" },
+    practicals_a2: { accent: "#b45309", bg: "#fef0d0", border: "#b45309", icon: "🔬" },
   };
 
   if (screen === "topics" && activeSection) {
@@ -1091,21 +1091,22 @@ export default function App() {
               return (
                 <button key={id} onClick={() => selectTopic(id)} style={{
                   padding: "14px 12px 12px", borderRadius: "16px",
-                  background: fc.bg, border: `1px solid ${fc.accent}35`,
-                  color: "#e0e8f0", cursor: "pointer", textAlign: "left",
+                  background: "#ffffff", border: `2px solid ${fc.accent}40`,
+                  color: "#1a2d45", cursor: "pointer", textAlign: "left",
                   fontFamily: "inherit", position: "relative", overflow: "hidden",
                   minHeight: "100px", display: "flex", flexDirection: "column", justifyContent: "space-between",
+                  boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
                 }}>
-                  <div>
-                    <div style={{ fontSize: "11px", color: fc.accent, fontWeight: 800, letterSpacing: "0.3px", marginBottom: "5px" }}>{id}</div>
-                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#e0e8f0", lineHeight: 1.3 }}>{s.title}</div>
+                  <div style={{ borderLeft: `3px solid ${fc.accent}`, paddingLeft: "8px" }}>
+                    <div style={{ fontSize: "11px", color: fc.accent, fontWeight: 800, letterSpacing: "0.3px", marginBottom: "4px" }}>{id}</div>
+                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a2d45", lineHeight: 1.3 }}>{s.title}</div>
                   </div>
                   <div style={{ marginTop: "10px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
-                      <span style={{ fontSize: "11px", color: "#7a9ab8" }}>{s.cards.length} cards</span>
-                      {k > 0 && <span style={{ fontSize: "11px", color: "#4ecb71", fontWeight: 600 }}>{k} ✓</span>}
+                      <span style={{ fontSize: "11px", color: "#7a95b0" }}>{s.cards.length} cards</span>
+                      {k > 0 && <span style={{ fontSize: "11px", color: "#16a97d", fontWeight: 700 }}>{k} ✓</span>}
                     </div>
-                    <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                    <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
                     </div>
                   </div>
@@ -1132,23 +1133,23 @@ export default function App() {
             return (
               <button key={section.id} onClick={() => setActiveSection(section.id)} style={{
                 padding: "16px 14px 14px", borderRadius: "16px",
-                background: fc.bg, border: `1px solid ${fc.accent}30`,
+                background: fc.bg, border: `2px solid ${fc.border}40`,
                 cursor: "pointer", textAlign: "left", fontFamily: "inherit",
                 position: "relative", overflow: "hidden", minHeight: "110px",
                 display: "flex", flexDirection: "column", justifyContent: "space-between",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
               }}>
-                <div>
-                  <div style={{ fontSize: "22px", marginBottom: "8px" }}>{fc.icon}</div>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#e0e8f0", lineHeight: 1.3 }}>{section.label}</div>
+                <div style={{ borderLeft: `4px solid ${fc.accent}`, paddingLeft: "10px" }}>
+                  <div style={{ fontSize: "20px", marginBottom: "6px" }}>{fc.icon}</div>
+                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>{section.label}</div>
                   <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
                 </div>
                 <div style={{ marginTop: "10px" }}>
-                  <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                  <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
                     <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
                   </div>
-                  {pct > 0 && <div style={{ fontSize: "10px", color: fc.accent, marginTop: "4px", opacity: 0.8 }}>{pct}% mastered</div>}
+                  {pct > 0 && <div style={{ fontSize: "10px", color: fc.accent, marginTop: "4px", fontWeight: 600 }}>{pct}% mastered</div>}
                 </div>
-                <div style={{ position: "absolute", top: "12px", right: "12px", fontSize: "18px", opacity: 0.15 }}>📁</div>
               </button>
             );
           })}
@@ -1165,46 +1166,44 @@ export default function App() {
   return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-      <div style={{ padding: "16px 20px 8px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative", zIndex: 2 }}>
+      <div style={{ padding: "12px 20px 10px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ffffff", borderBottom: "1px solid #dde4ed", position: "relative", zIndex: 2 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <button onClick={goBack} style={{ background: "rgba(41,171,226,0.1)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit" }}>← Topics</button>
-          <div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "16px", color: "#29ABE2" }}>HSJ TUITION</div>
-          </div>
+          <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Topics</button>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "15px", color: "#29ABE2" }}>HSJ TUITION</div>
         </div>
-        <button onClick={() => setShowMenu(!showMenu)} style={{ background: "rgba(41,171,226,0.1)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit" }}>⚙</button>
+        <button onClick={() => setShowMenu(!showMenu)} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit" }}>⚙</button>
       </div>
 
       {showMenu && (
-        <div style={{ position: "absolute", top: "56px", right: "20px", zIndex: 10, background: "#0f1e4a", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "12px", padding: "8px", minWidth: "180px", boxShadow: "0 12px 40px rgba(0,0,0,0.4)" }}>
+        <div style={{ position: "absolute", top: "56px", right: "20px", zIndex: 10, background: "#ffffff", border: "1px solid #dde4ed", borderRadius: "12px", padding: "8px", minWidth: "200px", boxShadow: "0 8px 30px rgba(0,0,0,0.12)" }}>
           {[
-            { label: shuffled ? "⟲ Reset order" : "🔀 Shuffle", action: shuffled ? reset : shuffle },
+            { label: shuffled ? "⟲ Reset order" : "🔀 Shuffle cards", action: shuffled ? reset : shuffle },
             { label: `📚 Unknown only (${cards.length - knownCount})`, action: studyUnknown },
             { label: "✕ Clear progress", action: () => { setKnown(p => ({ ...p, [knownKey]: new Set() })); setShowMenu(false); } },
           ].map((item, i) => (
-            <button key={i} onClick={item.action} style={{ display: "block", width: "100%", padding: "10px 14px", background: "none", border: "none", color: "#c0d0e0", fontSize: "13px", textAlign: "left", cursor: "pointer", borderRadius: "8px", fontFamily: "inherit" }}
-              onMouseEnter={e => e.target.style.background = "rgba(41,171,226,0.1)"}
+            <button key={i} onClick={item.action} style={{ display: "block", width: "100%", padding: "10px 14px", background: "none", border: "none", color: "#1a2d45", fontSize: "13px", textAlign: "left", cursor: "pointer", borderRadius: "8px", fontFamily: "inherit" }}
+              onMouseEnter={e => e.target.style.background = "#f0f4f8"}
               onMouseLeave={e => e.target.style.background = "none"}
             >{item.label}</button>
           ))}
         </div>
       )}
 
-      <div style={{ padding: "0 20px 4px", position: "relative", zIndex: 2 }}>
-        <h2 style={{ margin: "0 0 6px", fontSize: "14px", fontWeight: 500, color: "#8aa0b8" }}>{topic} {SETS[topic]?.title}</h2>
-        <div style={{ height: "3px", background: "rgba(41,171,226,0.12)", borderRadius: "2px", overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg, #29ABE2, #50C8F4)", borderRadius: "2px", transition: "width 0.3s ease" }} />
+      <div style={{ padding: "10px 20px 4px", position: "relative", zIndex: 2 }}>
+        <h2 style={{ margin: "0 0 6px", fontSize: "13px", fontWeight: 600, color: "#29ABE2" }}>{topic} · {SETS[topic]?.title}</h2>
+        <div style={{ height: "5px", background: "#dde4ed", borderRadius: "3px", overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg, #29ABE2, #50C8F4)", borderRadius: "3px", transition: "width 0.3s ease" }} />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px", fontSize: "12px", color: "#5a7a9a" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "5px", fontSize: "12px", color: "#7a95b0" }}>
           <span>{index + 1} / {order.length}</span>
-          <span>{knownCount} mastered</span>
+          <span style={{ color: "#16a97d", fontWeight: knownCount > 0 ? 600 : 400 }}>{knownCount} mastered</span>
         </div>
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 16px", position: "relative", zIndex: 2 }}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 24px", position: "relative", zIndex: 2 }}
         onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}>
-        <div onClick={() => setFlipped(f => !f)} style={{ width: "100%", maxWidth: "560px", minHeight: "400px", perspective: "1200px", cursor: "pointer" }}>
-          <div style={{ position: "relative", width: "100%", minHeight: "400px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
+        <div onClick={() => setFlipped(f => !f)} style={{ width: "100%", maxWidth: "700px", minHeight: "440px", perspective: "1200px", cursor: "pointer" }}>
+          <div style={{ position: "relative", width: "100%", minHeight: "440px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
             {/* Front */}
             <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(145deg, #1e3a6e 0%, #254a8a 60%, #1a3870 100%)", border: "1px solid rgba(41,171,226,0.45)", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(41,171,226,0.08)" }}>
               <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "#29ABE2", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Question</div>
@@ -1222,16 +1221,16 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ padding: "8px 20px 20px", display: "flex", gap: "10px", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
-        <button onClick={prev} disabled={index === 0} style={{ width: "48px", height: "48px", borderRadius: "14px", background: index === 0 ? "rgba(30,50,70,0.5)" : "rgba(41,171,226,0.12)", border: "1px solid rgba(41,171,226,0.15)", color: index === 0 ? "#3a5060" : "#29ABE2", fontSize: "20px", cursor: index === 0 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>←</button>
-        <button onClick={toggleKnown} style={{ height: "48px", borderRadius: "14px", padding: "0 20px", background: knownSet.has(currentCardIndex) ? "rgba(78,203,113,0.15)" : "rgba(41,171,226,0.08)", border: `1px solid ${knownSet.has(currentCardIndex) ? "rgba(78,203,113,0.3)" : "rgba(41,171,226,0.15)"}`, color: knownSet.has(currentCardIndex) ? "#4ecb71" : "#7a9ab8", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-          {knownSet.has(currentCardIndex) ? "✓ Mastered" : "Mark known"}
+      <div style={{ padding: "8px 24px 20px", display: "flex", gap: "10px", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
+        <button onClick={prev} disabled={index === 0} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === 0 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === 0 ? "#dde4ed" : "#29ABE2"}`, color: index === 0 ? "#b0c4d4" : "#29ABE2", fontSize: "20px", cursor: index === 0 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === 0 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>←</button>
+        <button onClick={toggleKnown} style={{ height: "52px", borderRadius: "14px", padding: "0 24px", background: knownSet.has(currentCardIndex) ? "#16a97d" : "#29ABE2", border: "none", color: "#ffffff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 12px rgba(41,171,226,0.25)" }}>
+          {knownSet.has(currentCardIndex) ? "✓ Mastered" : "Mark as known"}
         </button>
-        <button onClick={next} disabled={index === order.length - 1} style={{ width: "48px", height: "48px", borderRadius: "14px", background: index === order.length - 1 ? "rgba(30,50,70,0.5)" : "rgba(41,171,226,0.12)", border: "1px solid rgba(41,171,226,0.15)", color: index === order.length - 1 ? "#3a5060" : "#29ABE2", fontSize: "20px", cursor: index === order.length - 1 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>→</button>
+        <button onClick={next} disabled={index === order.length - 1} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === order.length - 1 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === order.length - 1 ? "#dde4ed" : "#29ABE2"}`, color: index === order.length - 1 ? "#b0c4d4" : "#29ABE2", fontSize: "20px", cursor: index === order.length - 1 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === order.length - 1 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>→</button>
       </div>
 
       {knownCount === cards.length && (
-        <div style={{ margin: "0 20px 16px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg, rgba(78,203,113,0.12), rgba(41,171,226,0.12))", border: "1px solid rgba(78,203,113,0.2)", textAlign: "center", fontSize: "14px", color: "#4ecb71", fontWeight: 600 }}>
+        <div style={{ margin: "0 24px 16px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg, #e6f9f3, #eaf6fd)", border: "1px solid #16a97d40", textAlign: "center", fontSize: "14px", color: "#16a97d", fontWeight: 700 }}>
           🎉 All {cards.length} cards mastered!
         </div>
       )}
