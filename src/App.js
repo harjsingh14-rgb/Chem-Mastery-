@@ -991,7 +991,7 @@ export default function App() {
           {/* Going well */}
           {goingWell.length > 0 && (
             <div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>✅ Going Well</div>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Going Well</div>
               <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                 {goingWell.map(t => <TopicRow key={t.id} t={t} showBar={false} />)}
               </div>
@@ -1000,7 +1000,7 @@ export default function App() {
 
           {totalMastered === 0 && (
             <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
-              <div style={{ fontSize: "40px", marginBottom: "12px" }}>📚</div>
+              <div style={{ fontSize: "40px", marginBottom: "12px", color: "#29ABE2", fontWeight: 700 }}>0%</div>
               <div style={{ fontSize: "16px", fontWeight: 600 }}>No progress yet</div>
               <div style={{ fontSize: "13px", marginTop: "6px" }}>Start studying and your progress will appear here</div>
             </div>
@@ -1012,14 +1012,14 @@ export default function App() {
 
   // TOPIC SELECT
   const FOLDER_COLORS = {
-    physical_as:   { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2", icon: "⚛️" },
-    physical_a2:   { accent: "#0090cc", bg: "#e0f2fa", border: "#0090cc", icon: "⚛️" },
-    inorganic_as:  { accent: "#16a97d", bg: "#e6f9f3", border: "#16a97d", icon: "🧪" },
-    inorganic_a2:  { accent: "#0d8c68", bg: "#dcf5ed", border: "#0d8c68", icon: "🧪" },
-    organic:       { accent: "#7c3aed", bg: "#f3eeff", border: "#7c3aed", icon: "🔗" },
-    organic2:      { accent: "#6d28d9", bg: "#ede9ff", border: "#6d28d9", icon: "🔗" },
-    practicals_as: { accent: "#d97706", bg: "#fef6e4", border: "#d97706", icon: "🔬" },
-    practicals_a2: { accent: "#b45309", bg: "#fef0d0", border: "#b45309", icon: "🔬" },
+    physical_as:   { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2" },
+    physical_a2:   { accent: "#0090cc", bg: "#e0f2fa", border: "#0090cc" },
+    inorganic_as:  { accent: "#16a97d", bg: "#e6f9f3", border: "#16a97d" },
+    inorganic_a2:  { accent: "#0d8c68", bg: "#dcf5ed", border: "#0d8c68" },
+    organic:       { accent: "#7c3aed", bg: "#f3eeff", border: "#7c3aed" },
+    organic2:      { accent: "#6d28d9", bg: "#ede9ff", border: "#6d28d9" },
+    practicals_as: { accent: "#d97706", bg: "#fef6e4", border: "#d97706" },
+    practicals_a2: { accent: "#b45309", bg: "#fef0d0", border: "#b45309" },
   };
 
   if (screen === "topics" && activeSection) {
@@ -1051,7 +1051,7 @@ export default function App() {
                   <div style={{ marginTop: "10px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
                       <span style={{ fontSize: "11px", color: "#7a95b0" }}>{s.cards.length} cards</span>
-                      {k > 0 && <span style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700 }}>{k} ✓</span>}
+                      {k > 0 && <span style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700 }}>{k} known</span>}
                     </div>
                     <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
@@ -1077,7 +1077,7 @@ export default function App() {
             <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>AQA · A-Level Chemistry</div>
           </div>
         </div>
-        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>📊 My Progress</button>
+        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
       </div>
       <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
@@ -1096,7 +1096,6 @@ export default function App() {
                 boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
               }}>
                 <div style={{ borderLeft: `4px solid ${fc.accent}`, paddingLeft: "10px" }}>
-                  <div style={{ fontSize: "20px", marginBottom: "6px" }}>{fc.icon}</div>
                   <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>{section.label}</div>
                   <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
                 </div>
@@ -1134,7 +1133,7 @@ export default function App() {
         <div style={{ position: "absolute", top: "56px", right: "20px", zIndex: 10, background: "#ffffff", border: "1px solid #dde4ed", borderRadius: "12px", padding: "8px", minWidth: "200px", boxShadow: "0 8px 30px rgba(0,0,0,0.12)" }}>
           {[
             { label: shuffled ? "⟲ Reset order" : "🔀 Shuffle cards", action: shuffled ? reset : shuffle },
-            { label: `📚 Unknown only (${cards.length - knownCount})`, action: studyUnknown },
+            { label: `Unknown only (${cards.length - knownCount})`, action: studyUnknown },
             { label: "✕ Clear progress", action: () => { setKnown(p => ({ ...p, [knownKey]: new Set() })); setShowMenu(false); } },
           ].map((item, i) => (
             <button key={i} onClick={item.action} style={{ display: "block", width: "100%", padding: "10px 14px", background: "none", border: "none", color: "#1a2d45", fontSize: "13px", textAlign: "left", cursor: "pointer", borderRadius: "8px", fontFamily: "inherit" }}
@@ -1163,7 +1162,7 @@ export default function App() {
             {/* Front */}
             <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(145deg, #29ABE2 0%, #1a8fc4 100%)", border: "none", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.35)" }}>
               <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "rgba(255,255,255,0.75)", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Question</div>
-              {knownSet.has(currentCardIndex) && <div style={{ position: "absolute", top: "13px", right: "18px", fontSize: "11px", color: "#ffffff", fontWeight: 600, background: "rgba(255,255,255,0.25)", padding: "3px 10px", borderRadius: "20px" }}>✓ Mastered</div>}
+              {knownSet.has(currentCardIndex) && <div style={{ position: "absolute", top: "13px", right: "18px", fontSize: "11px", color: "#ffffff", fontWeight: 600, background: "rgba(255,255,255,0.25)", padding: "3px 10px", borderRadius: "20px" }}>Mastered</div>}
               <p style={{ fontSize: card.q.length > 120 ? "16px" : card.q.length > 60 ? "18px" : "21px", lineHeight: 1.55, textAlign: "center", fontWeight: 700, color: "#ffffff", margin: 0 }}>{card.q}</p>
               <div style={{ position: "absolute", bottom: "16px", fontSize: "11px", color: "rgba(255,255,255,0.6)", letterSpacing: "0.5px" }}>Tap to reveal answer</div>
             </div>
@@ -1180,7 +1179,7 @@ export default function App() {
       <div style={{ padding: "8px 24px 20px", display: "flex", gap: "10px", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
         <button onClick={prev} disabled={index === 0} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === 0 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === 0 ? "#dde4ed" : "#29ABE2"}`, color: index === 0 ? "#b0c4d4" : "#29ABE2", fontSize: "20px", cursor: index === 0 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === 0 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>←</button>
         <button onClick={toggleKnown} style={{ height: "52px", borderRadius: "14px", padding: "0 24px", background: knownSet.has(currentCardIndex) ? "#1a8fc4" : "#29ABE2", border: "none", color: "#ffffff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 12px rgba(41,171,226,0.25)" }}>
-          {knownSet.has(currentCardIndex) ? "✓ Mastered" : "Mark as known"}
+          {knownSet.has(currentCardIndex) ? "Mastered" : "Mark as Known"}
         </button>
         <button onClick={next} disabled={index === order.length - 1} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === order.length - 1 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === order.length - 1 ? "#dde4ed" : "#29ABE2"}`, color: index === order.length - 1 ? "#b0c4d4" : "#29ABE2", fontSize: "20px", cursor: index === order.length - 1 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === order.length - 1 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>→</button>
       </div>
