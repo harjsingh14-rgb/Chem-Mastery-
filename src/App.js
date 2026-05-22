@@ -1083,30 +1083,32 @@ export default function App() {
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
         <Header sub={section.label} back={goBack} />
         <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "4px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
             {section.topics.map(id => {
               const s = SETS[id];
               const k = (known[id] || new Set()).size;
               const pct = Math.round((k / s.cards.length) * 100);
               return (
                 <button key={id} onClick={() => selectTopic(id)} style={{
-                  padding: "14px 16px", borderRadius: "14px",
-                  background: fc.bg, border: `1px solid ${fc.accent}22`,
+                  padding: "14px 12px 12px", borderRadius: "16px",
+                  background: fc.bg, border: `1px solid ${fc.accent}35`,
                   color: "#e0e8f0", cursor: "pointer", textAlign: "left",
-                  fontFamily: "inherit", position: "relative", overflow: "hidden", width: "100%",
+                  fontFamily: "inherit", position: "relative", overflow: "hidden",
+                  minHeight: "100px", display: "flex", flexDirection: "column", justifyContent: "space-between",
                 }}>
-                  <div style={{ position: "absolute", bottom: 0, left: 0, height: "3px", width: `${pct}%`, background: `linear-gradient(90deg, ${fc.accent}, ${fc.accent}99)`, borderRadius: "0 2px 0 0", transition: "width 0.3s" }} />
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div>
-                      <span style={{ fontSize: "11px", color: fc.accent, fontWeight: 800, marginRight: "8px", letterSpacing: "0.3px" }}>{id}</span>
-                      <span style={{ fontSize: "14px", fontWeight: 500 }}>{s.title}</span>
+                  <div>
+                    <div style={{ fontSize: "11px", color: fc.accent, fontWeight: 800, letterSpacing: "0.3px", marginBottom: "5px" }}>{id}</div>
+                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#e0e8f0", lineHeight: 1.3 }}>{s.title}</div>
+                  </div>
+                  <div style={{ marginTop: "10px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+                      <span style={{ fontSize: "11px", color: "#7a9ab8" }}>{s.cards.length} cards</span>
+                      {k > 0 && <span style={{ fontSize: "11px", color: "#4ecb71", fontWeight: 600 }}>{k} ✓</span>}
                     </div>
-                    <div style={{ textAlign: "right", flexShrink: 0, marginLeft: "8px" }}>
-                      <div style={{ fontSize: "12px", color: "#7a9ab8" }}>{s.cards.length} cards</div>
-                      {k > 0 && <div style={{ fontSize: "11px", color: "#4ecb71", fontWeight: 600 }}>{k} ✓</div>}
+                    <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
                     </div>
                   </div>
-                  {pct > 0 && <div style={{ marginTop: "6px", fontSize: "10px", color: fc.accent, opacity: 0.7 }}>{pct}% mastered</div>}
                 </button>
               );
             })}
@@ -1199,22 +1201,22 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 20px", position: "relative", zIndex: 2 }}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 16px", position: "relative", zIndex: 2 }}
         onTouchStart={onTS} onTouchMove={onTM} onTouchEnd={onTE}>
-        <div onClick={() => setFlipped(f => !f)} style={{ width: "100%", maxWidth: "500px", minHeight: "300px", perspective: "1000px", cursor: "pointer" }}>
-          <div style={{ position: "relative", width: "100%", minHeight: "300px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
+        <div onClick={() => setFlipped(f => !f)} style={{ width: "100%", maxWidth: "560px", minHeight: "400px", perspective: "1200px", cursor: "pointer" }}>
+          <div style={{ position: "relative", width: "100%", minHeight: "400px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
             {/* Front */}
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(135deg, #0f1e4a, #1a2d6e)", border: "1px solid rgba(41,171,226,0.15)", borderRadius: "20px", padding: "28px 24px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
-              <div style={{ position: "absolute", top: "14px", left: "18px", fontSize: "10px", color: "#29ABE2", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700, opacity: 0.7 }}>Question</div>
-              {knownSet.has(currentCardIndex) && <div style={{ position: "absolute", top: "12px", right: "16px", fontSize: "11px", color: "#4ecb71", fontWeight: 600, background: "rgba(78,203,113,0.1)", padding: "3px 10px", borderRadius: "20px" }}>✓</div>}
-              <p style={{ fontSize: card.q.length > 100 ? "16px" : "19px", lineHeight: 1.5, textAlign: "center", fontWeight: 500, color: "#e0e8f0", margin: 0 }}>{card.q}</p>
-              <div style={{ position: "absolute", bottom: "14px", fontSize: "11px", color: "#4a6a8a" }}>Tap to reveal</div>
+            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(145deg, #1e3a6e 0%, #254a8a 60%, #1a3870 100%)", border: "1px solid rgba(41,171,226,0.45)", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(41,171,226,0.08)" }}>
+              <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "#29ABE2", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Question</div>
+              {knownSet.has(currentCardIndex) && <div style={{ position: "absolute", top: "13px", right: "18px", fontSize: "11px", color: "#4ecb71", fontWeight: 600, background: "rgba(78,203,113,0.15)", padding: "3px 10px", borderRadius: "20px" }}>✓ Mastered</div>}
+              <p style={{ fontSize: card.q.length > 120 ? "16px" : card.q.length > 60 ? "18px" : "21px", lineHeight: 1.55, textAlign: "center", fontWeight: 600, color: "#f0f6ff", margin: 0 }}>{card.q}</p>
+              <div style={{ position: "absolute", bottom: "16px", fontSize: "11px", color: "#5a8aaa", letterSpacing: "0.5px" }}>Tap to reveal answer</div>
             </div>
             {/* Back */}
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(135deg, #0a1640, #122060)", border: "1px solid rgba(41,171,226,0.25)", borderRadius: "20px", padding: "28px 24px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}>
-              <div style={{ position: "absolute", top: "14px", left: "18px", fontSize: "10px", color: "#50C8F4", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700, opacity: 0.7 }}>Answer</div>
-              <div style={{ fontSize: card.a.length > 150 ? "13px" : card.a.length > 80 ? "14px" : "16px", lineHeight: 1.65, textAlign: "center", color: "#d0dce8", margin: 0, whiteSpace: "pre-line" }}>{card.a}</div>
-              <div style={{ position: "absolute", bottom: "14px", fontSize: "11px", color: "#4a6a8a" }}>Tap to flip back</div>
+            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(145deg, #0e2d1a 0%, #14401f 60%, #0c2918 100%)", border: "1px solid rgba(78,203,113,0.4)", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(78,203,113,0.06)" }}>
+              <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "#4ecb71", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Answer</div>
+              <div style={{ fontSize: card.a.length > 200 ? "13px" : card.a.length > 100 ? "15px" : "17px", lineHeight: 1.7, textAlign: "center", color: "#e8f5ec", margin: 0, whiteSpace: "pre-line", fontWeight: 500 }}>{card.a}</div>
+              <div style={{ position: "absolute", bottom: "16px", fontSize: "11px", color: "#3a6a4a", letterSpacing: "0.5px" }}>Tap to flip back</div>
             </div>
           </div>
         </div>
