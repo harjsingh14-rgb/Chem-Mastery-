@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/harj2807/Documents/**)",
+      "Read(//Users/harj2807/**)",
+      "Bash(python3 -c ' *)",
+      "Bash(npm install *)",
+      "Bash(brew --version)",
+      "Bash(ls /usr/local/bin/node /usr/bin/node ~/.nvm/versions/node 2>/dev/null || echo \"no node found anywhere\")",
+      "Bash(sw_vers -productVersion)",
+      "Bash(curl -fsSL https://nodejs.org/dist/v20.19.2/node-v20.19.2-darwin-arm64.tar.gz -o /tmp/node.tar.gz)",
+      "Read(//private/tmp/**)",
+      "Bash(tar -xzf node.tar.gz)",
+      "Read(//tmp/node-v20.19.2-darwin-arm64/**)",
+      "Bash(export PATH=\"/tmp/node-v20.19.2-darwin-arm64/bin:$PATH\")",
+      "Bash(npm --version)",
+      "Bash(npm run *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
