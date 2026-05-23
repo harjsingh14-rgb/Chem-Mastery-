@@ -1755,10 +1755,23 @@ export default function App() {
         </div>
         <div style={{ display: "flex", gap: "8px" }}>
           <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
-          <button onClick={() => { setSelectedFrom(null); setRevealedRoutes(new Set()); setScreen("synth"); }} style={{ background: "#ffffff", border: "2px solid #29ABE2", borderRadius: "10px", padding: "9px 14px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700 }}>Synthesis Routes</button>
         </div>
       </div>
       <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
+        {/* Synthesis Routes shortcut card */}
+        <button onClick={() => { setSelectedFrom(null); setRevealedRoutes(new Set()); setScreen("synth"); }} style={{
+          width: "100%", marginBottom: "14px", padding: "14px 18px",
+          background: "linear-gradient(135deg, #1a2d45 0%, #29ABE2 100%)",
+          border: "none", borderRadius: "14px", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          boxShadow: "0 3px 12px rgba(41,171,226,0.3)", fontFamily: "inherit",
+        }}>
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff" }}>Organic Synthesis Routes</div>
+            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)", marginTop: "2px" }}>Reagents · Conditions · Mechanisms for every transformation</div>
+          </div>
+          <div style={{ fontSize: "22px", color: "rgba(255,255,255,0.9)", fontWeight: 700 }}>→</div>
+        </button>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
           {CURRENT_SECTIONS.map(section => {
             const fc = FOLDER_COLORS[section.id] || FOLDER_COLORS.physical_as;
