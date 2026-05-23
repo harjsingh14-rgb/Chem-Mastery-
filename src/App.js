@@ -1350,7 +1350,12 @@ const GROUP_SMILES = {
 
 const SYNTH_ROUTES = [
   // FROM: Alkane
-  { from:"Alkane", to:"Halogenoalkane", reagents:"Cl₂ or Br₂", conditions:"UV light (hν), room temperature", mechanism:"Free Radical Substitution", notes:"Mixture of products (mono, di, tri-substituted). Cl₂ more reactive than Br₂. Initiation: X₂ → 2X•; Propagation: X•+RH→R•+HX, R•+X₂→RX+X•; Termination: two radicals combine.", board:"both" },
+  { from:"Alkane", to:"Halogenoalkane", reagents:"Cl₂ or Br₂", conditions:"UV light (hν), room temperature", mechanism:"Free Radical Substitution", notes:"Mixture of products formed (mono-, di-, tri-substituted etc.). Cl₂ is more reactive than Br₂ but Br₂ is more selective.", steps:[
+    { stage:"Initiation", equation:"Cl₂  →  2Cl•", arrow:"hν (UV light)", note:"UV light supplies energy to break the Cl–Cl bond homolytically. Each chlorine atom takes one electron, forming two highly reactive chlorine radicals. This is the only step that requires an energy input." },
+    { stage:"Propagation 1", equation:"Cl•  +  CH₄  →  CH₃•  +  HCl", arrow:"", note:"A chlorine radical abstracts a hydrogen atom from methane (takes the H along with its electron). A methyl radical (CH₃•) is produced alongside HCl. The chlorine radical is consumed but a new radical is generated — the chain continues." },
+    { stage:"Propagation 2", equation:"CH₃•  +  Cl₂  →  CH₃Cl  +  Cl•", arrow:"", note:"The methyl radical reacts with a Cl₂ molecule, abstracting one chlorine atom. Chloromethane (the product) is formed, and a chlorine radical is regenerated — restarting Propagation 1. Steps 1 and 2 repeat thousands of times." },
+    { stage:"Termination", equation:"Cl•  +  Cl•  →  Cl₂\nCH₃•  +  Cl•  →  CH₃Cl\nCH₃•  +  CH₃•  →  C₂H₆", arrow:"", note:"Any two radicals collide and combine, destroying both radicals and ending the chain. Three possible termination reactions are shown. The formation of ethane (C₂H₆) as a minor byproduct is evidence that CH₃• radicals exist during the reaction." },
+  ], board:"both" },
 
   // FROM: Alkene
   { from:"Alkene", to:"Alkane", reagents:"H₂, Ni catalyst", conditions:"150°C", mechanism:"Catalytic Hydrogenation", notes:"Heterogeneous catalysis. H atoms adsorb onto Ni surface, then transferred to alkene.", board:"both" },
@@ -1546,31 +1551,7 @@ export default function App() {
     return () => window.removeEventListener("keydown", h);
   }, [screen, next, prev]);
 
-  useEffect(() => {
-    if (topicsTab !== "synth" || !selectedFrom || typeof window === "undefined" || !window.SmilesDrawer) return;
-    const SD = window.SmilesDrawer;
-    const options = { width: 160, height: 110, bondThickness: 1.4, fontSizeLarge: 8, fontSizeSmall: 6, bondLength: 28, padding: 8, themes: { light: { C: "#1a2d45", N: "#2563eb", O: "#dc2626", S: "#ca8a04", Cl: "#16a34a", Br: "#92400e", F: "#7c3aed", H: "#6b7280", BACKGROUND: "#f8fafc" } } };
-    const routes = SYNTH_ROUTES.filter(r => (r.board === "both" || r.board === board) && r.from === selectedFrom);
-    const timer = setTimeout(() => {
-      routes.forEach((route, i) => {
-        const fromSmiles = GROUP_SMILES[route.from];
-        const toSmiles = GROUP_SMILES[route.to];
-        const fromCanvas = document.getElementById(`mol-from-${i}`);
-        const toCanvas = document.getElementById(`mol-to-${i}`);
-        if (fromCanvas && fromSmiles) {
-          try {
-            SD.parse(fromSmiles, tree => { const d = new SD.Drawer(options); d.draw(tree, fromCanvas, "light"); }, err => console.warn("SMILES parse error:", err));
-          } catch(e) {}
-        }
-        if (toCanvas && toSmiles) {
-          try {
-            SD.parse(toSmiles, tree => { const d = new SD.Drawer(options); d.draw(tree, toCanvas, "light"); }, err => console.warn("SMILES parse error:", err));
-          } catch(e) {}
-        }
-      });
-    }, 80);
-    return () => clearTimeout(timer);
-  }, [topicsTab, selectedFrom, board]);
+  // SmilesDrawer molecule rendering — coming soon
 
   const onTS = e => { touchStart.current = e.targetTouches[0].clientX; };
   const onTM = e => { touchEnd.current = e.targetTouches[0].clientX; };
@@ -1899,17 +1880,9 @@ export default function App() {
                       boxShadow: "0 2px 8px rgba(0,0,0,0.07)", cursor: "pointer",
                       overflow: "hidden", border: "1px solid #e8eef4"
                     }}>
-                      {/* Structure diagrams row */}
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "14px 18px 8px", background: "#f8fafc" }}>
-                        <div style={{ textAlign: "center" }}>
-                          <canvas id={`mol-from-${i}`} width="160" height="110" style={{ display: "block" }} />
-                          <div style={{ fontSize: "11px", color: "#7a95b0", fontWeight: 600, marginTop: "2px" }}>{route.from}</div>
-                        </div>
-                        <div style={{ fontSize: "24px", color: "#29ABE2", fontWeight: 700, flexShrink: 0 }}>→</div>
-                        <div style={{ textAlign: "center" }}>
-                          <canvas id={`mol-to-${i}`} width="160" height="110" style={{ display: "block" }} />
-                          <div style={{ fontSize: "11px", color: "#7a95b0", fontWeight: 600, marginTop: "2px" }}>{route.to}</div>
-                        </div>
+                      {/* Structure diagrams — coming soon */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 18px 8px", background: "#f8fafc" }}>
+                        <div style={{ fontSize: "12px", color: "#b0bec5", fontStyle: "italic", fontWeight: 500, letterSpacing: "0.3px" }}>Structure diagrams coming soon</div>
                       </div>
                       {/* Route header */}
                       <div style={{ padding: "10px 18px 6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -1935,10 +1908,26 @@ export default function App() {
                               <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 500 }}>{route.conditions}</div>
                             </div>
                           </div>
-                          <div style={{ background: "#eaf6fd", borderRadius: "8px", padding: "10px 12px" }}>
+                          <div style={{ background: "#eaf6fd", borderRadius: "8px", padding: "10px 12px", marginBottom: route.steps ? "10px" : "0" }}>
                             <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Mechanism: {route.mechanism}</div>
                             <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.5 }}>{route.notes}</div>
                           </div>
+                          {route.steps && (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                              {route.steps.map((step, si) => (
+                                <div key={si} style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid #e0e8f0" }}>
+                                  <div style={{ background: si === 0 ? "#fff3e0" : si === route.steps.length - 1 ? "#fce4ec" : "#e8f5e9", padding: "6px 12px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                    <span style={{ fontSize: "11px", fontWeight: 800, color: si === 0 ? "#e65100" : si === route.steps.length - 1 ? "#c62828" : "#2e7d32", textTransform: "uppercase", letterSpacing: "0.5px" }}>{step.stage}</span>
+                                    {step.arrow && <span style={{ fontSize: "11px", color: "#7a95b0" }}>— {step.arrow}</span>}
+                                  </div>
+                                  <div style={{ background: "#ffffff", padding: "8px 12px" }}>
+                                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "13px", color: "#1a2d45", fontWeight: 600, marginBottom: "5px", whiteSpace: "pre-line" }}>{step.equation}</div>
+                                    <div style={{ fontSize: "12px", color: "#4a6080", lineHeight: 1.5 }}>{step.note}</div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
