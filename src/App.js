@@ -1316,6 +1316,38 @@ const SETS = {
   ]},
 };
 
+const GROUP_SMILES = {
+  "Alkane":              "CCCC",
+  "Alkene":              "CC=CC",
+  "Halogenoalkane":      "CCBr",
+  "Dihalide":            "BrCCBr",
+  "Primary Alcohol":     "CCO",
+  "Secondary Alcohol":   "CC(O)C",
+  "Aldehyde":            "CC=O",
+  "Ketone":              "CC(=O)C",
+  "Carboxylic Acid":     "CC(=O)O",
+  "Ester":               "CC(=O)OCC",
+  "Acyl Chloride":       "CC(=O)Cl",
+  "Nitrile":             "CC#N",
+  "Primary Amine":       "CCN",
+  "Amide":               "CC(=O)N",
+  "Hydroxynitrile":      "CC(O)C#N",
+  "Carboxylate Salt":    "CC(=O)[O-]",
+  "Ether":               "CCOCC",
+  "Addition Polymer":    "CCCC",
+  "Arene":               "c1ccccc1",
+  "Halogenobenzene":     "Clc1ccccc1",
+  "Nitrobenzene":        "O=[N+]([O-])c1ccccc1",
+  "Alkylbenzene":        "Cc1ccccc1",
+  "Phenyl Ketone (Aryl Ketone)": "CC(=O)c1ccccc1",
+  "Arylamine":           "Nc1ccccc1",
+  "Diazonium Salt":      "[N+]#Nc1ccccc1",
+  "Azo Dye":             "c1ccc(/N=N/c2ccccc2)cc1",
+  "Phenol":              "Oc1ccccc1",
+  "N-substituted Amide": "CC(=O)NCC",
+  "Primary Amide":       "CC(=O)N",
+};
+
 const SYNTH_ROUTES = [
   // FROM: Alkane
   { from:"Alkane", to:"Halogenoalkane", reagents:"Cl₂ or Br₂", conditions:"UV light (hν), room temperature", mechanism:"Free Radical Substitution", notes:"Mixture of products (mono, di, tri-substituted). Cl₂ more reactive than Br₂. Initiation: X₂ → 2X•; Propagation: X•+RH→R•+HX, R•+X₂→RX+X•; Termination: two radicals combine.", board:"both" },
@@ -1444,6 +1476,7 @@ export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
+  const [topicsTab, setTopicsTab] = useState("flashcards"); // "flashcards" | "synth"
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
 
@@ -1473,7 +1506,6 @@ export default function App() {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
     else if (screen === "dashboard") { setScreen("topics"); }
     else if (screen === "topics" && activeSection) { setActiveSection(null); }
-    else if (screen === "synth") { setScreen("topics"); }
     else if (screen === "topics") { setScreen("board"); setBoard(null); }
   };
 
@@ -1513,6 +1545,32 @@ export default function App() {
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [screen, next, prev]);
+
+  useEffect(() => {
+    if (topicsTab !== "synth" || !selectedFrom || typeof window === "undefined" || !window.SmilesDrawer) return;
+    const SD = window.SmilesDrawer;
+    const options = { width: 160, height: 110, bondThickness: 1.4, fontSizeLarge: 8, fontSizeSmall: 6, bondLength: 28, padding: 8, themes: { light: { C: "#1a2d45", N: "#2563eb", O: "#dc2626", S: "#ca8a04", Cl: "#16a34a", Br: "#92400e", F: "#7c3aed", H: "#6b7280", BACKGROUND: "#f8fafc" } } };
+    const routes = SYNTH_ROUTES.filter(r => (r.board === "both" || r.board === board) && r.from === selectedFrom);
+    const timer = setTimeout(() => {
+      routes.forEach((route, i) => {
+        const fromSmiles = GROUP_SMILES[route.from];
+        const toSmiles = GROUP_SMILES[route.to];
+        const fromCanvas = document.getElementById(`mol-from-${i}`);
+        const toCanvas = document.getElementById(`mol-to-${i}`);
+        if (fromCanvas && fromSmiles) {
+          try {
+            SD.parse(fromSmiles, tree => { const d = new SD.Drawer(options); d.draw(tree, fromCanvas, "light"); }, err => console.warn("SMILES parse error:", err));
+          } catch(e) {}
+        }
+        if (toCanvas && toSmiles) {
+          try {
+            SD.parse(toSmiles, tree => { const d = new SD.Drawer(options); d.draw(tree, toCanvas, "light"); }, err => console.warn("SMILES parse error:", err));
+          } catch(e) {}
+        }
+      });
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [topicsTab, selectedFrom, board]);
 
   const onTS = e => { touchStart.current = e.targetTouches[0].clientX; };
   const onTM = e => { touchEnd.current = e.targetTouches[0].clientX; };
@@ -1757,157 +1815,149 @@ export default function App() {
           <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
         </div>
       </div>
-      <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
-        {/* Synthesis Routes shortcut card */}
-        <button onClick={() => { setSelectedFrom(null); setRevealedRoutes(new Set()); setScreen("synth"); }} style={{
-          width: "100%", marginBottom: "14px", padding: "14px 18px",
-          background: "linear-gradient(135deg, #1a2d45 0%, #29ABE2 100%)",
-          border: "none", borderRadius: "14px", cursor: "pointer",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          boxShadow: "0 3px 12px rgba(41,171,226,0.3)", fontFamily: "inherit",
-        }}>
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff" }}>Organic Synthesis Routes</div>
-            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)", marginTop: "2px" }}>Reagents · Conditions · Mechanisms for every transformation</div>
-          </div>
-          <div style={{ fontSize: "22px", color: "rgba(255,255,255,0.9)", fontWeight: 700 }}>→</div>
-        </button>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
-          {CURRENT_SECTIONS.map(section => {
-            const fc = FOLDER_COLORS[section.id] || FOLDER_COLORS.physical_as;
-            const totalCards = section.topics.reduce((sum, id) => sum + SETS[id].cards.length, 0);
-            const totalKnown = section.topics.reduce((sum, id) => sum + (known[id] || new Set()).size, 0);
-            const pct = totalCards > 0 ? Math.round((totalKnown / totalCards) * 100) : 0;
-            return (
-              <button key={section.id} onClick={() => setActiveSection(section.id)} style={{
-                padding: "16px 14px 14px", borderRadius: "16px",
-                background: fc.bg, border: `2px solid ${fc.border}40`,
-                cursor: "pointer", textAlign: "left", fontFamily: "inherit",
-                position: "relative", overflow: "hidden", minHeight: "110px",
-                display: "flex", flexDirection: "column", justifyContent: "space-between",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-              }}>
-                <div style={{ borderLeft: `4px solid ${fc.accent}`, paddingLeft: "10px" }}>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>{section.label}</div>
-                  <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
-                </div>
-                <div style={{ marginTop: "10px" }}>
-                  <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
-                  </div>
-                  {pct > 0 && <div style={{ fontSize: "10px", color: fc.accent, marginTop: "4px", fontWeight: 600 }}>{pct}% mastered</div>}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-        <div style={{ textAlign: "center", marginTop: "16px", fontSize: "12px", color: "#4a6070" }}>
-          {CURRENT_TOPIC_ORDER.map(id => SETS[id]?.cards.length || 0).reduce((a,b)=>a+b,0)} cards · {CURRENT_TOPIC_ORDER.length} topics
-        </div>
+      {/* Tab bar */}
+      <div style={{ display: "flex", gap: "0", borderBottom: "2px solid #e0e8f0", margin: "0 16px", marginBottom: "0" }}>
+        {["flashcards", "synth"].map(tab => (
+          <button key={tab} onClick={() => setTopicsTab(tab)} style={{
+            padding: "12px 20px", border: "none", background: "none",
+            fontFamily: "inherit", fontSize: "14px", fontWeight: 700, cursor: "pointer",
+            color: topicsTab === tab ? "#29ABE2" : "#7a95b0",
+            borderBottom: topicsTab === tab ? "3px solid #29ABE2" : "3px solid transparent",
+            marginBottom: "-2px", transition: "color 0.15s",
+          }}>
+            {tab === "flashcards" ? "Flashcards" : "Synthesis Routes"}
+          </button>
+        ))}
       </div>
-    </div>
-  );
-
-  if (screen === "synth") {
-    const fromGroups = [...new Set(SYNTH_ROUTES.map(r => r.from))];
-    const boardRoutes = SYNTH_ROUTES.filter(r => r.board === "both" || r.board === board);
-    const filtered = selectedFrom ? boardRoutes.filter(r => r.from === selectedFrom) : [];
-    const toggleReveal = (key) => {
-      setRevealedRoutes(prev => {
-        const next = new Set(prev);
-        next.has(key) ? next.delete(key) : next.add(key);
-        return next;
-      });
-    };
-    return (
-      <div style={base}>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-        <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
-            <div>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#29ABE2" }}>SYNTHESIS ROUTES</div>
-              <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>{board === "ocr" ? "OCR A" : "AQA"} · A-Level Chemistry</div>
-            </div>
+      {topicsTab === "flashcards" && (
+        <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
+            {CURRENT_SECTIONS.map(section => {
+              const fc = FOLDER_COLORS[section.id] || FOLDER_COLORS.physical_as;
+              const totalCards = section.topics.reduce((sum, id) => sum + SETS[id].cards.length, 0);
+              const totalKnown = section.topics.reduce((sum, id) => sum + (known[id] || new Set()).size, 0);
+              const pct = totalCards > 0 ? Math.round((totalKnown / totalCards) * 100) : 0;
+              return (
+                <button key={section.id} onClick={() => setActiveSection(section.id)} style={{
+                  padding: "16px 14px 14px", borderRadius: "16px",
+                  background: fc.bg, border: `2px solid ${fc.border}40`,
+                  cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                  position: "relative", overflow: "hidden", minHeight: "110px",
+                  display: "flex", flexDirection: "column", justifyContent: "space-between",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
+                }}>
+                  <div style={{ borderLeft: `4px solid ${fc.accent}`, paddingLeft: "10px" }}>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>{section.label}</div>
+                    <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
+                  </div>
+                  <div style={{ marginTop: "10px" }}>
+                    <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
+                    </div>
+                    {pct > 0 && <div style={{ fontSize: "10px", color: fc.accent, marginTop: "4px", fontWeight: 600 }}>{pct}% mastered</div>}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          <div style={{ textAlign: "center", marginTop: "16px", fontSize: "12px", color: "#4a6070" }}>
+            {CURRENT_TOPIC_ORDER.map(id => SETS[id]?.cards.length || 0).reduce((a,b)=>a+b,0)} cards · {CURRENT_TOPIC_ORDER.length} topics
           </div>
         </div>
-        <div style={{ padding: "12px 16px 0", overflowX: "auto", whiteSpace: "nowrap", borderBottom: "1px solid #dde4ed", background: "#f8fafc" }}>
-          <div style={{ display: "inline-flex", gap: "8px", paddingBottom: "12px" }}>
-            {fromGroups.filter(g => boardRoutes.some(r => r.from === g)).map(group => (
-              <button
-                key={group}
-                onClick={() => setSelectedFrom(selectedFrom === group ? null : group)}
-                style={{
-                  padding: "7px 14px", borderRadius: "20px", border: "2px solid",
-                  borderColor: selectedFrom === group ? "#29ABE2" : "#dde4ed",
-                  background: selectedFrom === group ? "#29ABE2" : "#ffffff",
-                  color: selectedFrom === group ? "#ffffff" : "#1a2d45",
-                  cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600,
-                  whiteSpace: "nowrap", transition: "all 0.15s"
-                }}
-              >{group}</button>
+      )}
+      {topicsTab === "synth" && (
+        <div style={{ padding: "16px 16px 40px", flex: 1, overflowY: "auto" }}>
+          <p style={{ color: "#4a6080", fontSize: "14px", marginBottom: "16px", lineHeight: 1.5 }}>
+            Select a starting functional group to see all possible transformations.
+          </p>
+          {/* FROM group pills */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
+            {[...new Set(SYNTH_ROUTES.filter(r => r.board === "both" || r.board === board).map(r => r.from))].map(g => (
+              <button key={g} onClick={() => setSelectedFrom(selectedFrom === g ? null : g)} style={{
+                padding: "7px 14px", borderRadius: "20px", border: "2px solid",
+                borderColor: selectedFrom === g ? "#29ABE2" : "#d0dce8",
+                background: selectedFrom === g ? "#29ABE2" : "#ffffff",
+                color: selectedFrom === g ? "#ffffff" : "#4a6080",
+                fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit"
+              }}>{g}</button>
             ))}
           </div>
-        </div>
-        <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 24px" }}>
-          {!selectedFrom && (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
-              <div style={{ fontSize: "32px", marginBottom: "12px" }}>⚗️</div>
-              <div style={{ fontSize: "16px", fontWeight: 600, color: "#1a2d45", marginBottom: "8px" }}>Select a starting material</div>
-              <div style={{ fontSize: "13px" }}>Choose a functional group above to see all its synthesis routes.</div>
-            </div>
-          )}
-          {selectedFrom && filtered.length === 0 && (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
-              <div style={{ fontSize: "13px" }}>No routes available for this board.</div>
-            </div>
-          )}
-          {selectedFrom && filtered.map((route, i) => {
-            const key = `${route.from}→${route.to}→${i}`;
-            const revealed = revealedRoutes.has(key);
+          {/* Route cards */}
+          {selectedFrom && (() => {
+            const routes = SYNTH_ROUTES.filter(r => (r.board === "both" || r.board === board) && r.from === selectedFrom);
             return (
-              <div key={key} style={{ background: "#ffffff", border: "1px solid #dde4ed", borderRadius: "12px", marginBottom: "10px", overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
-                <div
-                  onClick={() => toggleReveal(key)}
-                  style={{ padding: "14px 16px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", userSelect: "none" }}
-                >
-                  <div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45" }}>
-                      <span style={{ color: "#29ABE2" }}>{route.from}</span>
-                      <span style={{ margin: "0 8px", color: "#7a95b0" }}>→</span>
-                      <span style={{ color: "#e85d04" }}>{route.to}</span>
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#7a95b0", marginTop: "3px" }}>{route.mechanism}</div>
-                  </div>
-                  <div style={{ fontSize: "18px", color: "#29ABE2", transform: revealed ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>›</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "2px" }}>
+                  {routes.length} route{routes.length !== 1 ? "s" : ""} from {selectedFrom}
                 </div>
-                {revealed && (
-                  <div style={{ padding: "0 16px 14px", borderTop: "1px solid #f0f4f8" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginTop: "10px" }}>
-                      <div style={{ background: "#f0f9ff", borderRadius: "8px", padding: "10px 12px" }}>
-                        <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Reagents</div>
-                        <div style={{ fontSize: "13px", color: "#1a2d45" }}>{route.reagents}</div>
+                {routes.map((route, i) => {
+                  const key = `${route.from}→${route.to}`;
+                  const revealed = revealedRoutes.has(key);
+                  return (
+                    <div key={i} onClick={() => setRevealedRoutes(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; })} style={{
+                      background: "#ffffff", borderRadius: "12px", padding: "0",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.07)", cursor: "pointer",
+                      overflow: "hidden", border: "1px solid #e8eef4"
+                    }}>
+                      {/* Structure diagrams row */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "14px 18px 8px", background: "#f8fafc" }}>
+                        <div style={{ textAlign: "center" }}>
+                          <canvas id={`mol-from-${i}`} width="160" height="110" style={{ display: "block" }} />
+                          <div style={{ fontSize: "11px", color: "#7a95b0", fontWeight: 600, marginTop: "2px" }}>{route.from}</div>
+                        </div>
+                        <div style={{ fontSize: "24px", color: "#29ABE2", fontWeight: 700, flexShrink: 0 }}>→</div>
+                        <div style={{ textAlign: "center" }}>
+                          <canvas id={`mol-to-${i}`} width="160" height="110" style={{ display: "block" }} />
+                          <div style={{ fontSize: "11px", color: "#7a95b0", fontWeight: 600, marginTop: "2px" }}>{route.to}</div>
+                        </div>
                       </div>
-                      <div style={{ background: "#fff8f0", borderRadius: "8px", padding: "10px 12px" }}>
-                        <div style={{ fontSize: "10px", fontWeight: 700, color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Conditions</div>
-                        <div style={{ fontSize: "13px", color: "#1a2d45" }}>{route.conditions}</div>
+                      {/* Route header */}
+                      <div style={{ padding: "10px 18px 6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a2d45" }}>→ {route.to}</div>
+                        <div style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 600, background: "#eaf6fd", padding: "3px 10px", borderRadius: "20px" }}>
+                          {route.mechanism.split(" ").slice(0, 3).join(" ")}
+                        </div>
                       </div>
+                      {!revealed && (
+                        <div style={{ padding: "6px 18px 14px", fontSize: "13px", color: "#7a95b0", fontStyle: "italic" }}>
+                          Tap to reveal reagents and conditions
+                        </div>
+                      )}
+                      {revealed && (
+                        <div style={{ padding: "6px 18px 14px" }}>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                            <div style={{ background: "#f0f4f8", borderRadius: "8px", padding: "10px 12px" }}>
+                              <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Reagents</div>
+                              <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 500 }}>{route.reagents}</div>
+                            </div>
+                            <div style={{ background: "#f0f4f8", borderRadius: "8px", padding: "10px 12px" }}>
+                              <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Conditions</div>
+                              <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 500 }}>{route.conditions}</div>
+                            </div>
+                          </div>
+                          <div style={{ background: "#eaf6fd", borderRadius: "8px", padding: "10px 12px" }}>
+                            <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Mechanism: {route.mechanism}</div>
+                            <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.5 }}>{route.notes}</div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    {route.notes && (
-                      <div style={{ marginTop: "8px", background: "#f8fafc", borderRadius: "8px", padding: "10px 12px", borderLeft: "3px solid #29ABE2" }}>
-                        <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Notes</div>
-                        <div style={{ fontSize: "12px", color: "#4a6070", lineHeight: 1.6 }}>{route.notes}</div>
-                      </div>
-                    )}
-                  </div>
-                )}
+                  );
+                })}
               </div>
             );
-          })}
+          })()}
+          {!selectedFrom && (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: "#d0dce8", marginBottom: "10px" }}>→</div>
+              <div style={{ fontSize: "15px", fontWeight: 600 }}>Choose a starting group above</div>
+              <div style={{ fontSize: "13px", marginTop: "6px" }}>Reagents, conditions and mechanisms shown for each route</div>
+            </div>
+          )}
         </div>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 
   // FLASHCARD VIEW
   const progress = ((index + 1) / order.length) * 100;
