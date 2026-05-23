@@ -1317,35 +1317,51 @@ const SETS = {
 };
 
 const GROUP_SMILES = {
-  "Alkane":              "CCCC",
-  "Alkene":              "CC=CC",
-  "Halogenoalkane":      "CCBr",
-  "Dihalide":            "BrCCBr",
-  "Primary Alcohol":     "CCO",
-  "Secondary Alcohol":   "CC(O)C",
-  "Aldehyde":            "CC=O",
-  "Ketone":              "CC(=O)C",
-  "Carboxylic Acid":     "CC(=O)O",
-  "Ester":               "CC(=O)OCC",
-  "Acyl Chloride":       "CC(=O)Cl",
-  "Nitrile":             "CC#N",
-  "Primary Amine":       "CCN",
-  "Amide":               "CC(=O)N",
-  "Hydroxynitrile":      "CC(O)C#N",
-  "Carboxylate Salt":    "CC(=O)[O-]",
-  "Ether":               "CCOCC",
-  "Addition Polymer":    "CCCC",
-  "Arene":               "c1ccccc1",
-  "Halogenobenzene":     "Clc1ccccc1",
-  "Nitrobenzene":        "O=[N+]([O-])c1ccccc1",
-  "Alkylbenzene":        "Cc1ccccc1",
-  "Phenyl Ketone (Aryl Ketone)": "CC(=O)c1ccccc1",
-  "Arylamine":           "Nc1ccccc1",
-  "Diazonium Salt":      "[N+]#Nc1ccccc1",
-  "Azo Dye":             "c1ccc(/N=N/c2ccccc2)cc1",
-  "Phenol":              "Oc1ccccc1",
-  "N-substituted Amide": "CC(=O)NCC",
-  "Primary Amide":       "CC(=O)N",
+  // Aliphatic carbon frameworks
+  "Alkane":              "CCCC",           // butane
+  "Alkene":              "CC=CC",          // but-2-ene
+  "Dihalide":            "BrCCBr",         // 1,2-dibromoethane
+  "Addition Polymer":    "CCCCCC",         // hexane fragment represents polymer chain
+  // Halogenoalkanes
+  "Halogenoalkane":      "CCBr",           // bromoethane
+  // Alcohols
+  "Alcohol":             "CCO",            // ethanol (generic)
+  "Primary Alcohol":     "CCO",            // ethanol
+  "Secondary Alcohol":   "CC(O)C",         // propan-2-ol
+  // Diol
+  "Diol":                "OCCO",           // ethane-1,2-diol
+  // Carbonyl compounds
+  "Aldehyde":            "CC=O",           // ethanal (CH3CHO)
+  "Ketone":              "CC(=O)C",        // propanone
+  "Hydroxynitrile":      "CC(O)C#N",       // 2-hydroxypropanenitrile
+  // Carboxylic acid derivatives
+  "Carboxylic Acid":     "CC(=O)O",        // ethanoic acid
+  "Carboxylic Acid + Alcohol": "CC(=O)O",  // show acid component
+  "Acyl Chloride":       "CC(=O)Cl",       // ethanoyl chloride
+  "Ester":               "CC(=O)OCC",      // ethyl ethanoate
+  "Amide":               "CC(=O)N",        // ethanamide
+  "Primary Amide":       "CC(=O)N",        // ethanamide
+  "N-substituted Amide": "CC(=O)NCC",      // N-ethylethanamide
+  // Salts
+  "Carboxylate Salt":         "CC(=O)[O-]",     // acetate ion
+  "Carboxylate Salt + Alcohol": "CC(=O)[O-]",   // show salt component
+  "Ammonium Salt":            "CC[NH3+]",       // ethylammonium ion
+  // Nitrogen compounds
+  "Nitrile":             "CC#N",           // ethanenitrile
+  "Amine":               "CCN",            // ethylamine (generic)
+  "Primary Amine":       "CCN",            // ethylamine
+  "Ether":               "CCOCC",          // diethyl ether
+  // Aromatic compounds
+  "Arene":               "c1ccccc1",                     // benzene
+  "Nitrobenzene":        "O=[N+]([O-])c1ccccc1",         // nitrobenzene
+  "Halogenobenzene":     "Clc1ccccc1",                   // chlorobenzene
+  "Alkylbenzene":        "Cc1ccccc1",                    // methylbenzene (toluene)
+  "Phenyl Ketone (Aryl Ketone)": "CC(=O)c1ccccc1",       // acetophenone
+  "Phenol":              "Oc1ccccc1",                    // phenol
+  "Arylamine":           "Nc1ccccc1",                    // aniline
+  "Arylamine (Aniline)": "Nc1ccccc1",                    // aniline (alternate label)
+  "Diazonium Salt":      "c1ccc([N+]#N)cc1",             // benzenediazonium (N+ on ring carbon)
+  "Azo Dye":             "c1ccc(/N=N/c2ccccc2)cc1",      // (E)-azobenzene
 };
 
 const SYNTH_ROUTES = [
@@ -1551,7 +1567,26 @@ export default function App() {
     return () => window.removeEventListener("keydown", h);
   }, [screen, next, prev]);
 
-  // SmilesDrawer molecule rendering — coming soon
+  useEffect(() => {
+    if (topicsTab !== "synth" || !selectedFrom) return;
+    if (typeof window === "undefined" || !window.SmilesDrawer) return;
+    const timer = setTimeout(() => {
+      try {
+        window.SmilesDrawer.apply({
+          width: 160, height: 110,
+          bondThickness: 1.5, bondLength: 30,
+          fontSizeLarge: 8, fontSizeSmall: 6,
+          padding: 10,
+          themes: {
+            light: { C:"#1a2d45", N:"#1d4ed8", O:"#dc2626", S:"#b45309",
+                     Cl:"#15803d", Br:"#92400e", F:"#7c3aed", H:"#9ca3af",
+                     BACKGROUND:"#f8fafc" }
+          }
+        });
+      } catch(e) {}
+    }, 120);
+    return () => clearTimeout(timer);
+  }, [topicsTab, selectedFrom, board, revealedRoutes]);
 
   const onTS = e => { touchStart.current = e.targetTouches[0].clientX; };
   const onTM = e => { touchEnd.current = e.targetTouches[0].clientX; };
@@ -1880,9 +1915,23 @@ export default function App() {
                       boxShadow: "0 2px 8px rgba(0,0,0,0.07)", cursor: "pointer",
                       overflow: "hidden", border: "1px solid #e8eef4"
                     }}>
-                      {/* Structure diagrams — coming soon */}
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "10px 18px 8px", background: "#f8fafc" }}>
-                        <div style={{ fontSize: "12px", color: "#b0bec5", fontStyle: "italic", fontWeight: 500, letterSpacing: "0.3px" }}>Structure diagrams coming soon</div>
+                      {/* Structure diagrams */}
+                      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"8px", padding:"12px 16px 6px", background:"#f8fafc", flexWrap:"wrap" }}>
+                        <div style={{ textAlign:"center" }}>
+                          {GROUP_SMILES[route.from]
+                            ? <canvas data-smiles={GROUP_SMILES[route.from]} width="160" height="110" style={{ display:"block", borderRadius:"6px" }} />
+                            : <div style={{ width:160, height:110, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"13px", color:"#9ca3af" }}>{route.from}</div>
+                          }
+                          <div style={{ fontSize:"11px", color:"#64748b", fontWeight:600, marginTop:"3px" }}>{route.from}</div>
+                        </div>
+                        <div style={{ fontSize:"22px", color:"#29ABE2", fontWeight:700, flexShrink:0, paddingBottom:"18px" }}>→</div>
+                        <div style={{ textAlign:"center" }}>
+                          {GROUP_SMILES[route.to]
+                            ? <canvas data-smiles={GROUP_SMILES[route.to]} width="160" height="110" style={{ display:"block", borderRadius:"6px" }} />
+                            : <div style={{ width:160, height:110, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"13px", color:"#9ca3af" }}>{route.to}</div>
+                          }
+                          <div style={{ fontSize:"11px", color:"#64748b", fontWeight:600, marginTop:"3px" }}>{route.to}</div>
+                        </div>
                       </div>
                       {/* Route header */}
                       <div style={{ padding: "10px 18px 6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
