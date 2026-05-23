@@ -257,8 +257,10 @@ const SETS = {
   ]},
 
   "ocr_3.1.4": { title: "Qualitative Analysis", cards: [
-    {q:"State the flame test colours for common metal ions.", a:"Li⁺: crimson/red\nNa⁺: persistent yellow/orange\nK⁺: lilac/violet\nCa²⁺: brick-red/orange-red\nBa²⁺: apple green\nCu²⁺: blue-green/turquoise\nSr²⁺: crimson\nNa⁺ contaminates — test wire must be clean; use cobalt blue glass to mask Na yellow."},
-    {q:"Describe the tests for metal cations using NaOH solution.", a:"Add NaOH(aq) dropwise then in excess:\nCu²⁺: blue ppt, insoluble in excess\nFe²⁺: green ppt, insoluble in excess\nFe³⁺: red-brown ppt, insoluble in excess\nCa²⁺: white ppt, insoluble in excess\nMg²⁺: white ppt, insoluble in excess\nAl³⁺: white ppt, DISSOLVES in excess NaOH (amphoteric) → [Al(OH)₄]⁻\nZn²⁺: white ppt, DISSOLVES in excess NaOH → [Zn(OH)₄]²⁻"},
+    {q:"State the flame test colours for Group 1 metal ions (Li⁺, Na⁺, K⁺).", a:"Li⁺: crimson/red\nNa⁺: persistent yellow/orange\nK⁺: lilac/violet\nNote: Na⁺ contamination is common — always clean the wire first; use cobalt blue glass to mask any Na yellow when testing K⁺."},
+    {q:"State the flame test colours for Group 2 and transition metal ions (Ca²⁺, Sr²⁺, Ba²⁺, Cu²⁺).", a:"Ca²⁺: brick-red/orange-red\nSr²⁺: crimson (deeper than Ca)\nBa²⁺: apple green\nCu²⁺: blue-green/turquoise\nMemory tip: Ba = Green; Cu = Blue-Green."},
+    {q:"Describe the NaOH test for transition metal cations (Cu²⁺, Fe²⁺, Fe³⁺).", a:"Add NaOH(aq) dropwise then in excess:\nCu²⁺: blue precipitate of Cu(OH)₂ — insoluble in excess NaOH.\nFe²⁺: green precipitate of Fe(OH)₂ — insoluble in excess; darkens to brown on standing in air (oxidised to Fe³⁺).\nFe³⁺: red-brown precipitate of Fe(OH)₃ — insoluble in excess.\nNone of these dissolve in excess NaOH."},
+    {q:"Describe the NaOH test for Ca²⁺, Mg²⁺, Al³⁺, and Zn²⁺ — and how to distinguish them.", a:"Add NaOH(aq) dropwise then in excess:\nCa²⁺: white precipitate — insoluble in excess NaOH.\nMg²⁺: white precipitate — insoluble in excess NaOH.\nAl³⁺: white precipitate — DISSOLVES in excess NaOH → [Al(OH)₄]⁻ (amphoteric).\nZn²⁺: white precipitate — DISSOLVES in excess NaOH → [Zn(OH)₄]²⁻ (amphoteric).\nKey distinction: Al³⁺ and Zn²⁺ dissolve; Ca²⁺ and Mg²⁺ do not."},
     {q:"How do you test for the NH₄⁺ ion?", a:"Add NaOH(aq) and warm gently.\nAmmonia gas is released: NH₄⁺ + OH⁻ → NH₃(g) + H₂O\nTest with damp red litmus paper → turns blue (NH₃ is alkaline).\nAlternatively: the pungent smell of ammonia is characteristic.\nAlways confirm with damp red litmus paper."},
     {q:"How do you test for carbonate ions (CO₃²⁻)?", a:"Add dilute hydrochloric acid:\nCO₃²⁻ + 2H⁺ → H₂O + CO₂(g)\nObservation: effervescence (bubbling).\nConfirm CO₂: bubble gas through limewater [Ca(OH)₂(aq)] → milky white precipitate of CaCO₃.\nCaO(s) + CO₂(g) → CaCO₃(s)"},
     {q:"How do you test for sulfate ions (SO₄²⁻)?", a:"Acidify with dilute HCl (to remove CO₃²⁻ and SO₃²⁻ which give false positives), then add BaCl₂(aq).\nPositive test: white precipitate of BaSO₄, insoluble in dilute HCl.\nBa²⁺(aq) + SO₄²⁻(aq) → BaSO₄(s)"},
@@ -561,7 +563,8 @@ const SETS = {
   ]},
     "3.3.14": { title: "Organic Synthesis", cards: [
     {q:"What is the retrosynthesis approach and why is it useful?", a:"Retrosynthesis (working backwards): start with the target molecule and identify what simpler precursor it could be made from, and what reaction converts the precursor to the target. Repeat until you reach an available starting material. This systematic approach helps plan multi-step syntheses efficiently."},
-    {q:"Summarise key functional group interconversions in synthesis (AS level).", a:"Alkane → halogenoalkane: FRS with X₂/UV\nAlkene → halogenoalkane: add HX (Markovnikov)\nAlkene → dihaloalkane: add X₂\nAlkene → alcohol: H₂O/H₃PO₄ (direct hydration)\nHalogenoalkane → alcohol: NaOH(aq), warm\nHalogenoalkane → alkene: KOH(alc), heat (elimination)\nHalogenoalkane → nitrile: KCN/ethanol (chain +1C)\nHalogenoalkane → amine: excess NH₃/ethanol, sealed tube"},
+    {q:"Summarise AS-level synthesis routes FROM alkanes and alkenes.", a:"Alkane → halogenoalkane: FRS with X₂/UV light.\nAlkene → halogenoalkane: add HX (Markovnikov's rule).\nAlkene → dihaloalkane: add X₂ (electrophilic addition).\nAlkene → alcohol: H₂O/H₃PO₄ catalyst, 300°C (direct hydration)."},
+    {q:"Summarise AS-level synthesis routes FROM halogenoalkanes.", a:"Halogenoalkane → alcohol: NaOH(aq), warm (nucleophilic substitution).\nHalogenoalkane → alkene: KOH in ethanol, heat (elimination).\nHalogenoalkane → nitrile: KCN in ethanol, reflux (chain extended by 1C).\nHalogenoalkane → amine: excess NH₃ in ethanol, sealed tube, heat."},
     {q:"Summarise key functional group interconversions in synthesis (A2 level).", a:"Primary alcohol → aldehyde: K₂Cr₂O₇/H₂SO₄, distil\nPrimary alcohol → carboxylic acid: K₂Cr₂O₇/H₂SO₄, reflux\nSecondary alcohol → ketone: K₂Cr₂O₇/H₂SO₄, reflux\nAlcohol → ester: carboxylic acid + H₂SO₄, reflux\nCarboxylic acid → acyl chloride: PCl₅ or SOCl₂\nNitrile → amine: LiAlH₄ in dry ether\nNitrobenzene → aniline: Sn/HCl, then NaOH"},
     {q:"How do you extend a carbon chain in synthesis?", a:"Halogenoalkane + KCN → nitrile (chain extended by 1 C, can be hydrolysed to COOH or reduced to amine)\nHydroxynitrile: carbonyl compound + HCN → cyanohydrin (chain extended by 1 C)\nFriedel-Crafts acylation: ArH + RCOCl/AlCl₃ → Ar-CO-R (introduces C=O into aromatic ring)"},
     {q:"What practical techniques are used to isolate and purify organic products?", a:"Recrystallisation: dissolve crude solid in minimum hot solvent; cool to crystallise pure product; filter under vacuum.\nDistillation: separate liquids of different boiling points.\nSolvent extraction: separating funnel — shake with solvent in which product is more soluble; separate aqueous and organic layers.\nDrying: anhydrous MgSO₄, CaCl₂, or Na₂SO₄ to remove water from organic layer.\nReflux: heat reaction mixture with condenser to prevent boiling away."},
@@ -1000,7 +1003,8 @@ const SETS = {
 
   "ocr_4.1.1": { title: "Basic Concepts of Organic Chemistry", cards: [
     {q:"Define organic chemistry and a homologous series.", a:"Organic chemistry: study of carbon-based compounds (with H, and often O, N, halogens, S).\nHomologous series: a family of compounds sharing the same functional group and general formula, differing by CH₂ between adjacent members.\nProperties: same chemical reactions; gradual change in physical properties (e.g. bp increases with chain length)."},
-    {q:"Name the major functional groups and their structural features.", a:"Alkene: C=C double bond\nHalogenoalkane: C−X (X = F, Cl, Br, I)\nAlcohol: −OH\nAldehyde: −CHO (C=O at chain end)\nKetone: C=O within chain\nCarboxylic acid: −COOH\nEster: −COO−\nAmine: −NH₂\nAmide: −CONH₂\nNitrile: −C≡N"},
+    {q:"Name the carbon-framework functional groups and their structural features (alkene, aldehyde, ketone, carboxylic acid, ester).", a:"Alkene: C=C double bond (π bond, electrophilic addition).\nAldehyde: −CHO (C=O at chain end, can be oxidised).\nKetone: C=O within chain (cannot be oxidised further).\nCarboxylic acid: −COOH (weakly acidic).\nEster: −COO− (formed from acid + alcohol, pleasant smell)."},
+    {q:"Name the heteroatom-containing functional groups and their features (halogenoalkane, alcohol, amine, amide, nitrile).", a:"Halogenoalkane: C−X (X = F, Cl, Br, I; polar bond → nucleophilic substitution).\nAlcohol: −OH (H-bonding; can be oxidised).\nAmine: −NH₂ (basic, lone pair on N; nucleophile).\nAmide: −CONH₂ (formed from acid chloride + amine; condensation linkage in proteins).\nNitrile: −C≡N (triple bond; can be hydrolysed to acid or reduced to amine)."},
     {q:"Describe the three types of structural formula.", a:"Displayed formula: shows ALL bonds explicitly (every C−H bond drawn).\nStructural formula (condensed): shows groups in sequence without individual bond lines, e.g. CH₃CH₂OH.\nSkeletal formula: carbon backbone as zigzag lines, C atoms and their H atoms implied at each vertex/end; functional groups and heteroatoms shown."},
     {q:"Give the general formulae of alkanes, alkenes, alkynes, alcohols, carboxylic acids.", a:"Alkanes: CₙH₂ₙ₊₂\nAlkenes: CₙH₂ₙ\nAlkynes: CₙH₂ₙ₋₂\nCycloalkanes: CₙH₂ₙ\nAlcohols (monol): CₙH₂ₙ₊₂O (or CₙH₂ₙ₊₁OH)\nCarboxylic acids: CₙH₂ₙO₂ (or CₙH₂ₙ₋₁COOH)"},
     {q:"State the IUPAC rules for naming organic compounds.", a:"1. Find the longest continuous carbon chain → parent name (1C=meth, 2C=eth, 3C=prop, 4C=but, 5C=pent, 6C=hex)\n2. Identify principal functional group → suffix (−ane, −ene, −ol, −al, −one, −oic acid, −amine, −anoate)\n3. Number chain from end giving lowest locant to principal group\n4. Name substituents alphabetically as prefixes (methyl−, ethyl−, chloro−, bromo−, hydroxy−) with their position numbers"},
@@ -1312,6 +1316,90 @@ const SETS = {
   ]},
 };
 
+const SYNTH_ROUTES = [
+  // FROM: Alkane
+  { from:"Alkane", to:"Halogenoalkane", reagents:"Cl₂ or Br₂", conditions:"UV light (hν), room temperature", mechanism:"Free Radical Substitution", notes:"Mixture of products (mono, di, tri-substituted). Cl₂ more reactive than Br₂. Initiation: X₂ → 2X•; Propagation: X•+RH→R•+HX, R•+X₂→RX+X•; Termination: two radicals combine.", board:"both" },
+
+  // FROM: Alkene
+  { from:"Alkene", to:"Alkane", reagents:"H₂, Ni catalyst", conditions:"150°C", mechanism:"Catalytic Hydrogenation", notes:"Heterogeneous catalysis. H atoms adsorb onto Ni surface, then transferred to alkene.", board:"both" },
+  { from:"Alkene", to:"Halogenoalkane", reagents:"HBr or HCl", conditions:"Room temperature, no catalyst", mechanism:"Electrophilic Addition", notes:"Markovnikov's rule for unsymmetrical alkenes: H adds to C with more H (via more stable secondary carbocation). Produces single haloalkane.", board:"both" },
+  { from:"Alkene", to:"Dihalide", reagents:"Br₂ (bromine water or pure)", conditions:"Room temperature, no catalyst", mechanism:"Electrophilic Addition", notes:"Bromine water decolourises — test for C=C. Anti addition gives trans product. Produces 1,2-dibromoalkane.", board:"both" },
+  { from:"Alkene", to:"Alcohol", reagents:"H₂O (steam), H₃PO₄ catalyst", conditions:"300°C, 60–70 atm", mechanism:"Electrophilic Addition (hydration)", notes:"Reversible reaction. H₃PO₄ is the acid catalyst. Markovnikov's rule applies for unsymmetrical alkenes → secondary alcohol preferred.", board:"both" },
+  { from:"Alkene", to:"Diol", reagents:"Cold dilute KMnO₄ (alkaline)", conditions:"Room temperature, alkaline conditions", mechanism:"Oxidation (dihydroxylation)", notes:"OCR only. KMnO₄ is decolourised from purple → colourless. Syn addition. Alternatively O₃ then H₂O₂ gives carbonyl products.", board:"ocr" },
+  { from:"Alkene", to:"Addition Polymer", reagents:"Monomer only (no other reagents)", conditions:"High pressure, Ziegler-Natta catalyst or radical initiator", mechanism:"Addition Polymerisation", notes:"n(CH₂=CHX) → (–CH₂–CHX–)ₙ. No atoms lost. Polymer is not biodegradable. Draw repeat unit with bonds through brackets.", board:"both" },
+
+  // FROM: Halogenoalkane
+  { from:"Halogenoalkane", to:"Alcohol", reagents:"NaOH(aq) or KOH(aq)", conditions:"Aqueous, reflux", mechanism:"Nucleophilic Substitution (SN2 for 1°, SN1 for 3°)", notes:"OH⁻ is the nucleophile. 1°: SN2 — backside attack, inversion of configuration. 3°: SN1 — carbocation intermediate, racemic mixture. Rate: I > Br > Cl (bond strength).", board:"both" },
+  { from:"Halogenoalkane", to:"Alkene", reagents:"KOH (or NaOH) in ethanol", conditions:"Alcoholic solvent, heat (reflux)", mechanism:"Elimination (E2)", notes:"Hot ethanolic KOH favours elimination. HX eliminated. Produces alkene. Cold aqueous KOH favours substitution.", board:"both" },
+  { from:"Halogenoalkane", to:"Nitrile", reagents:"KCN (or NaCN) in ethanol", conditions:"Ethanol solvent, reflux", mechanism:"Nucleophilic Substitution (SN2)", notes:"CN⁻ is the nucleophile. Chain extended by ONE carbon. Product can be hydrolysed to carboxylic acid or reduced to amine.", board:"both" },
+  { from:"Halogenoalkane", to:"Amine", reagents:"Excess concentrated NH₃ in ethanol", conditions:"Sealed tube (pressure), heat", mechanism:"Nucleophilic Substitution", notes:"Excess NH₃ needed to avoid polyalkylation. 1° amine formed first, then 2° and 3° amines and quaternary ammonium salts as side products.", board:"both" },
+  { from:"Halogenoalkane", to:"Ether", reagents:"NaOR (sodium alkoxide)", conditions:"Ethanol solvent, reflux", mechanism:"Nucleophilic Substitution (Williamson synthesis)", notes:"Alkoxide ion RO⁻ acts as nucleophile. Used for Williamson ether synthesis.", board:"ocr" },
+
+  // FROM: Primary Alcohol
+  { from:"Primary Alcohol", to:"Aldehyde", reagents:"K₂Cr₂O₇/H₂SO₄ (acidified dichromate)", conditions:"Warm, distil off product immediately", mechanism:"Oxidation", notes:"Distil as formed to prevent further oxidation to carboxylic acid. K₂Cr₂O₇ turns orange → green. Can also use [O] notation.", board:"both" },
+  { from:"Primary Alcohol", to:"Carboxylic Acid", reagents:"Excess K₂Cr₂O₇/H₂SO₄", conditions:"Reflux (to prevent product escaping)", mechanism:"Oxidation", notes:"Primary alcohol oxidised twice: 1° alcohol → aldehyde → carboxylic acid. Excess oxidising agent and reflux ensures full conversion.", board:"both" },
+  { from:"Primary Alcohol", to:"Alkene", reagents:"Conc H₃PO₄ or Al₂O₃", conditions:"~180°C (H₃PO₄) or 350°C (Al₂O₃)", mechanism:"Acid-catalysed Elimination (dehydration)", notes:"Loss of H₂O across adjacent C atoms. If multiple alkenes possible, Zaitsev's rule gives more substituted alkene as major product.", board:"both" },
+  { from:"Primary Alcohol", to:"Halogenoalkane", reagents:"NaBr + conc H₂SO₄, or PCl₅, or SOCl₂", conditions:"Reflux (NaBr/H₂SO₄); room temperature (PCl₅)", mechanism:"Nucleophilic Substitution", notes:"NaBr/H₂SO₄ gives bromoalkane. PCl₅ gives chloroalkane + HCl fumes (test). SOCl₂ gives chloroalkane + SO₂ + HCl. OH replaced by halide.", board:"both" },
+  { from:"Primary Alcohol", to:"Ester", reagents:"Carboxylic acid + conc H₂SO₄ catalyst", conditions:"Reflux (reversible reaction — Fischer esterification)", mechanism:"Condensation (Esterification)", notes:"Reversible — equilibrium mixture. Remove product or add excess of one reagent to improve yield. H₂O eliminated.", board:"both" },
+
+  // FROM: Secondary Alcohol
+  { from:"Secondary Alcohol", to:"Ketone", reagents:"K₂Cr₂O₇/H₂SO₄ (acidified)", conditions:"Reflux", mechanism:"Oxidation", notes:"Secondary alcohol → ketone only. No further oxidation possible. K₂Cr₂O₇ orange → green. Ketone cannot be oxidised further by Cr₂O₇²⁻.", board:"both" },
+  { from:"Secondary Alcohol", to:"Alkene", reagents:"Conc H₃PO₄ or Al₂O₃", conditions:"~180°C", mechanism:"Acid-catalysed Elimination (dehydration)", notes:"Elimination of H₂O. May give mixture of alkenes if unsymmetrical.", board:"both" },
+  { from:"Secondary Alcohol", to:"Halogenoalkane", reagents:"PCl₅ or HBr", conditions:"Room temperature", mechanism:"Nucleophilic Substitution", notes:"PCl₅ → chloroalkane; HBr → bromoalkane. Tertiary alcohols react fastest with HX (more stable carbocation).", board:"both" },
+
+  // FROM: Aldehyde
+  { from:"Aldehyde", to:"Primary Alcohol", reagents:"NaBH₄ in water/ethanol, or LiAlH₄ in dry ether", conditions:"Room temperature (NaBH₄); 0°C then careful hydrolysis (LiAlH₄)", mechanism:"Reduction (nucleophilic addition of H⁻)", notes:"NaBH₄ is milder and safer — used in aqueous solution. LiAlH₄ is more powerful but reacts violently with water — used in dry ether. H⁻ (hydride) is the nucleophile.", board:"both" },
+  { from:"Aldehyde", to:"Carboxylic Acid", reagents:"K₂Cr₂O₇/H₂SO₄ or Tollens' reagent or Fehling's", conditions:"Reflux (Cr₂O₇²⁻); room temperature (Tollens'/Fehling's)", mechanism:"Oxidation", notes:"Aldehydes are easily oxidised. Tollens': silver mirror formed. Fehling's/Benedict's: blue → brick-red Cu₂O. Ketones NOT oxidised by these reagents.", board:"both" },
+  { from:"Aldehyde", to:"Hydroxynitrile", reagents:"HCN + KCN catalyst (or NaCN then dilute HCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition", notes:"CN⁻ is the nucleophile — attacks Cδ+ of C=O. New C–C bond formed. Chain extended by 1C. Creates chiral centre → racemic mixture. HCN alone is too slow (no CN⁻ catalyst).", board:"both" },
+
+  // FROM: Ketone
+  { from:"Ketone", to:"Secondary Alcohol", reagents:"NaBH₄ in water/ethanol, or LiAlH₄ in dry ether", conditions:"Room temperature (NaBH₄); 0°C (LiAlH₄)", mechanism:"Reduction", notes:"H⁻ adds to carbonyl. Ketone → secondary alcohol. Not oxidised by Tollens'/Fehling's — can use this to distinguish from aldehyde.", board:"both" },
+  { from:"Ketone", to:"Hydroxynitrile", reagents:"HCN + KCN (or NaCN + dil HCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition", notes:"Same mechanism as aldehyde. CN⁻ attacks Cδ+. Racemic mixture produced at new chiral centre.", board:"both" },
+
+  // FROM: Carboxylic Acid
+  { from:"Carboxylic Acid", to:"Ester", reagents:"Alcohol + conc H₂SO₄ catalyst", conditions:"Reflux (reversible)", mechanism:"Condensation (Fischer Esterification)", notes:"Acid-catalysed, reversible. H₂SO₄ protonates C=O making it more electrophilic. H₂O eliminated. Named: alkyl alkanoate (e.g. ethyl ethanoate).", board:"both" },
+  { from:"Carboxylic Acid", to:"Acyl Chloride", reagents:"PCl₅ or SOCl₂", conditions:"Room temperature (PCl₅) or reflux (SOCl₂)", mechanism:"Nucleophilic Substitution", notes:"PCl₅ gives acyl chloride + POCl₃ + HCl. SOCl₂ gives acyl chloride + SO₂ + HCl (both gaseous byproducts — easy workup). Steamy fumes of HCl confirm reaction with PCl₅.", board:"both" },
+  { from:"Carboxylic Acid", to:"Primary Alcohol", reagents:"LiAlH₄ in dry ether", conditions:"Reflux in dry ether, then careful aqueous workup", mechanism:"Reduction", notes:"LiAlH₄ reduces C=O twice: RCOOH → RCHO → RCH₂OH. NaBH₄ cannot reduce carboxylic acids.", board:"both" },
+  { from:"Carboxylic Acid", to:"Amide", reagents:"NH₃ (forms ammonium salt first, then heat)", conditions:"Heat ammonium carboxylate salt to ~200°C", mechanism:"Condensation", notes:"RCOOH + NH₃ → RCOONH₄ (salt) → RCONH₂ + H₂O (on strong heating). More easily done via acyl chloride + NH₃.", board:"both" },
+  { from:"Carboxylic Acid", to:"Carboxylate Salt", reagents:"NaOH(aq), Na₂CO₃, or NaHCO₃", conditions:"Room temperature (aqueous)", mechanism:"Acid-Base Neutralisation", notes:"RCOOH + NaOH → RCOONa + H₂O. Effervescence (CO₂) with carbonates confirms carboxylic acid. Forms soap when RCOOH = long-chain fatty acid.", board:"both" },
+
+  // FROM: Acyl Chloride
+  { from:"Acyl Chloride", to:"Carboxylic Acid", reagents:"Water (cold)", conditions:"Room temperature (vigorous, steamy fumes)", mechanism:"Nucleophilic Addition-Elimination", notes:"Water is the nucleophile. HCl fumes produced. Very fast, exothermic. RCOCl + H₂O → RCOOH + HCl.", board:"both" },
+  { from:"Acyl Chloride", to:"Ester", reagents:"Alcohol (ROH)", conditions:"Room temperature or gentle warming", mechanism:"Nucleophilic Addition-Elimination", notes:"Faster and irreversible (unlike Fischer esterification). RCOCl + R'OH → RCOOR' + HCl. HCl fumes produced.", board:"both" },
+  { from:"Acyl Chloride", to:"Primary Amide", reagents:"Ammonia (NH₃, anhydrous or aqueous)", conditions:"Room temperature", mechanism:"Nucleophilic Addition-Elimination", notes:"RCOCl + NH₃ → RCONH₂ + HCl. HCl reacts with excess NH₃ to form NH₄Cl (white solid). Very rapid reaction.", board:"both" },
+  { from:"Acyl Chloride", to:"N-substituted Amide", reagents:"Primary amine (RNH₂)", conditions:"Room temperature", mechanism:"Nucleophilic Addition-Elimination", notes:"RCOCl + R'NH₂ → RCONHR' + HCl. Product is N-substituted amide. Important step in peptide bond formation.", board:"both" },
+
+  // FROM: Nitrile
+  { from:"Nitrile", to:"Primary Amine", reagents:"LiAlH₄ in dry ether, or H₂/Ni catalyst", conditions:"Reflux in dry ether then aqueous workup (LiAlH₄); high pressure/temp (H₂/Ni)", mechanism:"Reduction", notes:"RCN + 2[H₂] → RCH₂NH₂. Chain extended by 1C compared to halogenoalkane used to make the nitrile. Very important for chain extension.", board:"both" },
+  { from:"Nitrile", to:"Carboxylic Acid", reagents:"Dilute HCl(aq) or NaOH(aq)", conditions:"Reflux (acid or base hydrolysis)", mechanism:"Hydrolysis", notes:"RCN + H₂O + HCl → RCOOH + NH₄Cl (acid conditions). Or: RCN + H₂O + NaOH → RCOONa + NH₃ (base conditions). Chain still extended by 1C.", board:"both" },
+
+  // FROM: Primary Amine
+  { from:"Primary Amine", to:"Amide", reagents:"Acyl chloride (RCOCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition-Elimination", notes:"R'NH₂ + RCOCl → RCONHR' + HCl. Clean, fast reaction. Useful for making amides without polyalkylation problem.", board:"both" },
+  { from:"Primary Amine", to:"Ammonium Salt", reagents:"Dilute HCl or other acid", conditions:"Room temperature (aqueous)", mechanism:"Acid-Base reaction", notes:"RNH₂ + HCl → RNH₃⁺Cl⁻. Amines are bases due to lone pair on N. Salts are water-soluble, non-volatile.", board:"both" },
+
+  // FROM: Ester
+  { from:"Ester", to:"Carboxylic Acid + Alcohol", reagents:"Dilute H₂SO₄ or HCl (acid hydrolysis)", conditions:"Reflux with excess water", mechanism:"Acid-catalysed Hydrolysis (reversible)", notes:"Reverse of Fischer esterification. Acid catalyst, reversible. Excess water drives equilibrium toward products.", board:"both" },
+  { from:"Ester", to:"Carboxylate Salt + Alcohol", reagents:"NaOH(aq) — saponification", conditions:"Reflux", mechanism:"Base-catalysed Hydrolysis (irreversible)", notes:"Saponification — irreversible because carboxylate salt formed is not reactive toward alcohol. Used in soap manufacture. Soap = sodium salt of long-chain fatty acid.", board:"both" },
+
+  // FROM: Arene (Benzene)
+  { from:"Arene", to:"Nitrobenzene", reagents:"Conc HNO₃ + conc H₂SO₄ (nitrating mixture)", conditions:"Below 55°C (avoid dinitration)", mechanism:"Electrophilic Aromatic Substitution (nitration)", notes:"H₂SO₄ protonates HNO₃ → NO₂⁺ (nitronium ion, electrophile). Above 55°C gives dinitration. Step 1: NO₂⁺ attacks ring (loss of aromaticity). Step 2: H⁺ lost (aromaticity restored).", board:"both" },
+  { from:"Arene", to:"Halogenobenzene", reagents:"Br₂ (or Cl₂) + halogen carrier (AlBr₃ or AlCl₃)", conditions:"Room temperature, anhydrous", mechanism:"Electrophilic Aromatic Substitution (halogenation)", notes:"AlBr₃/AlCl₃ is a Lewis acid catalyst — polarises Br–Br to generate Br⁺. Reaction gives HBr as byproduct. No UV light needed (unlike alkane halogenation).", board:"both" },
+  { from:"Arene", to:"Alkylbenzene", reagents:"RCl + AlCl₃ (Friedel-Crafts alkylation)", conditions:"Room temperature, anhydrous", mechanism:"Friedel-Crafts Alkylation (EAS)", notes:"AlCl₃ generates R⁺ carbocation or polarised R–Cl. Problem: multiple alkylation occurs because product is more reactive than starting material.", board:"both" },
+  { from:"Arene", to:"Phenyl Ketone (Aryl Ketone)", reagents:"RCOCl + AlCl₃ (Friedel-Crafts acylation)", conditions:"Room temperature, anhydrous", mechanism:"Friedel-Crafts Acylation (EAS)", notes:"AlCl₃ generates acylium ion RCO⁺. Product is a phenyl ketone (aryl ketone). Acyl group deactivates ring → no further substitution. Preferred over alkylation industrially.", board:"both" },
+
+  // FROM: Nitrobenzene
+  { from:"Nitrobenzene", to:"Arylamine (Aniline)", reagents:"Sn (tin) + conc HCl, then NaOH(aq)", conditions:"Reflux with Sn/HCl; then add NaOH to liberate free amine", mechanism:"Reduction", notes:"Step 1: Sn + conc HCl reduces NO₂ → NH₃⁺ (phenylammonium salt). Step 2: NaOH added → free amine PhNH₂ liberated. Fe/HCl can also be used industrially.", board:"both" },
+
+  // FROM: Arylamine (Aniline)
+  { from:"Arylamine", to:"Diazonium Salt", reagents:"NaNO₂ + HCl(aq)", conditions:"0–5°C (ice bath essential)", mechanism:"Diazotisation", notes:"ArNH₂ + NaNO₂ + HCl → ArN₂⁺Cl⁻ + 2H₂O. MUST keep below 5°C — diazonium salts decompose above 10°C releasing N₂. Cold solution kept for immediate use.", board:"both" },
+  { from:"Arylamine", to:"Amide", reagents:"Acyl chloride (RCOCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition-Elimination", notes:"ArNH₂ + RCOCl → ArNHCOR + HCl. N-acylation. Important for protecting the amine group during synthesis.", board:"both" },
+
+  // FROM: Diazonium Salt
+  { from:"Diazonium Salt", to:"Azo Dye", reagents:"Phenol or naphthol in NaOH(aq)", conditions:"0–5°C (cold, alkaline solution)", mechanism:"Coupling Reaction (Electrophilic Aromatic Substitution)", notes:"ArN₂⁺ is a weak electrophile — only attacks very reactive rings (phenol, naphthol, arylamines). Product Ar–N=N–Ar' is an azo dye. Brightly coloured due to extended conjugation.", board:"both" },
+  { from:"Diazonium Salt", to:"Phenol", reagents:"H₂O (warm)", conditions:"Warm aqueous solution", mechanism:"Substitution with loss of N₂", notes:"ArN₂⁺ + H₂O → ArOH + N₂ + HCl. N₂ gas evolved (driving force). One of the Sandmeyer-type reactions.", board:"both" },
+  { from:"Diazonium Salt", to:"Halogenobenzene", reagents:"CuCl/HCl (→ ArCl) or CuBr/HBr (→ ArBr)", conditions:"Warm", mechanism:"Sandmeyer Reaction", notes:"Cu(I) catalyst required. ArN₂⁺ + CuX → ArX + N₂. Allows introduction of Cl or Br onto benzene ring at position occupied by NH₂ group.", board:"both" },
+];
+
 const SECTIONS = [
   { id: "physical_as", label: "Physical Chemistry (AS)", sub: "3.1 Year 1", topics: ["3.1.1","3.1.2","3.1.3","3.1.4","3.1.5","3.1.6","3.1.7"] },
   { id: "physical_a2", label: "Physical Chemistry (A2)", sub: "3.1 Year 2", topics: ["3.1.8","3.1.9","3.1.10","3.1.11","3.1.12"] },
@@ -1354,6 +1442,8 @@ export default function App() {
   const [order, setOrder] = useState([]);
   const [shuffled, setShuffled] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [selectedFrom, setSelectedFrom] = useState(null);
+  const [revealedRoutes, setRevealedRoutes] = useState(new Set());
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
 
@@ -1383,6 +1473,7 @@ export default function App() {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
     else if (screen === "dashboard") { setScreen("topics"); }
     else if (screen === "topics" && activeSection) { setActiveSection(null); }
+    else if (screen === "synth") { setScreen("topics"); }
     else if (screen === "topics") { setScreen("board"); setBoard(null); }
   };
 
@@ -1662,7 +1753,10 @@ export default function App() {
             <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>{board === "ocr" ? "OCR A · A-Level Chemistry" : "AQA · A-Level Chemistry"}</div>
           </div>
         </div>
-        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
+          <button onClick={() => { setSelectedFrom(null); setRevealedRoutes(new Set()); setScreen("synth"); }} style={{ background: "#ffffff", border: "2px solid #29ABE2", borderRadius: "10px", padding: "9px 14px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700 }}>Synthesis Routes</button>
+        </div>
       </div>
       <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
@@ -1700,6 +1794,107 @@ export default function App() {
       </div>
     </div>
   );
+
+  if (screen === "synth") {
+    const fromGroups = [...new Set(SYNTH_ROUTES.map(r => r.from))];
+    const boardRoutes = SYNTH_ROUTES.filter(r => r.board === "both" || r.board === board);
+    const filtered = selectedFrom ? boardRoutes.filter(r => r.from === selectedFrom) : [];
+    const toggleReveal = (key) => {
+      setRevealedRoutes(prev => {
+        const next = new Set(prev);
+        next.has(key) ? next.delete(key) : next.add(key);
+        return next;
+      });
+    };
+    return (
+      <div style={base}>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+        <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
+            <div>
+              <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#29ABE2" }}>SYNTHESIS ROUTES</div>
+              <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>{board === "ocr" ? "OCR A" : "AQA"} · A-Level Chemistry</div>
+            </div>
+          </div>
+        </div>
+        <div style={{ padding: "12px 16px 0", overflowX: "auto", whiteSpace: "nowrap", borderBottom: "1px solid #dde4ed", background: "#f8fafc" }}>
+          <div style={{ display: "inline-flex", gap: "8px", paddingBottom: "12px" }}>
+            {fromGroups.filter(g => boardRoutes.some(r => r.from === g)).map(group => (
+              <button
+                key={group}
+                onClick={() => setSelectedFrom(selectedFrom === group ? null : group)}
+                style={{
+                  padding: "7px 14px", borderRadius: "20px", border: "2px solid",
+                  borderColor: selectedFrom === group ? "#29ABE2" : "#dde4ed",
+                  background: selectedFrom === group ? "#29ABE2" : "#ffffff",
+                  color: selectedFrom === group ? "#ffffff" : "#1a2d45",
+                  cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600,
+                  whiteSpace: "nowrap", transition: "all 0.15s"
+                }}
+              >{group}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 24px" }}>
+          {!selectedFrom && (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
+              <div style={{ fontSize: "32px", marginBottom: "12px" }}>⚗️</div>
+              <div style={{ fontSize: "16px", fontWeight: 600, color: "#1a2d45", marginBottom: "8px" }}>Select a starting material</div>
+              <div style={{ fontSize: "13px" }}>Choose a functional group above to see all its synthesis routes.</div>
+            </div>
+          )}
+          {selectedFrom && filtered.length === 0 && (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
+              <div style={{ fontSize: "13px" }}>No routes available for this board.</div>
+            </div>
+          )}
+          {selectedFrom && filtered.map((route, i) => {
+            const key = `${route.from}→${route.to}→${i}`;
+            const revealed = revealedRoutes.has(key);
+            return (
+              <div key={key} style={{ background: "#ffffff", border: "1px solid #dde4ed", borderRadius: "12px", marginBottom: "10px", overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}>
+                <div
+                  onClick={() => toggleReveal(key)}
+                  style={{ padding: "14px 16px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", userSelect: "none" }}
+                >
+                  <div>
+                    <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45" }}>
+                      <span style={{ color: "#29ABE2" }}>{route.from}</span>
+                      <span style={{ margin: "0 8px", color: "#7a95b0" }}>→</span>
+                      <span style={{ color: "#e85d04" }}>{route.to}</span>
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#7a95b0", marginTop: "3px" }}>{route.mechanism}</div>
+                  </div>
+                  <div style={{ fontSize: "18px", color: "#29ABE2", transform: revealed ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>›</div>
+                </div>
+                {revealed && (
+                  <div style={{ padding: "0 16px 14px", borderTop: "1px solid #f0f4f8" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginTop: "10px" }}>
+                      <div style={{ background: "#f0f9ff", borderRadius: "8px", padding: "10px 12px" }}>
+                        <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Reagents</div>
+                        <div style={{ fontSize: "13px", color: "#1a2d45" }}>{route.reagents}</div>
+                      </div>
+                      <div style={{ background: "#fff8f0", borderRadius: "8px", padding: "10px 12px" }}>
+                        <div style={{ fontSize: "10px", fontWeight: 700, color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Conditions</div>
+                        <div style={{ fontSize: "13px", color: "#1a2d45" }}>{route.conditions}</div>
+                      </div>
+                    </div>
+                    {route.notes && (
+                      <div style={{ marginTop: "8px", background: "#f8fafc", borderRadius: "8px", padding: "10px 12px", borderLeft: "3px solid #29ABE2" }}>
+                        <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Notes</div>
+                        <div style={{ fontSize: "12px", color: "#4a6070", lineHeight: 1.6 }}>{route.notes}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   // FLASHCARD VIEW
   const progress = ((index + 1) / order.length) * 100;
