@@ -1460,6 +1460,372 @@ const CALC_SETS = [
   },
 ];
 
+const EXTENDED_QUESTIONS = [
+  // ── ATOMIC STRUCTURE & PERIODICITY ──────────────────────
+  { id:"ext1", board:"aqa", category:"Atomic Structure & Periodicity",
+    question:"Describe and explain the trend in first ionisation energy across Period 3 (sodium to argon). Your answer must include the anomalies observed at aluminium and sulfur.",
+    marks:6,
+    markScheme:[
+      "First ionisation energy generally increases from Na to Ar across Period 3",
+      "Nuclear charge increases (atomic number increases from 11 to 18) whilst shielding remains approximately constant — electrons are added to the same n=3 shell",
+      "The outer electron therefore experiences a greater effective nuclear charge and requires more energy to remove",
+      "Anomaly at Al (Group 13): the outer 3p electron is at a slightly higher energy than the 3s and is shielded by the full 3s subshell, so it is easier to remove than Mg's 3s electron",
+      "Anomaly at S (Group 16): the fourth 3p electron must pair in an already-occupied orbital; the resulting electron–electron repulsion reduces the energy needed to remove it compared to P",
+      "Both anomalies cause a lower first IE than expected, but the overall trend across Period 3 is still increasing",
+    ],
+    examTip:"State the general trend first (1 mark). Then give two separate reasons — 'nuclear charge increases' AND 'shielding stays approximately constant'. Treat each anomaly as its own separate mark. Never say 'more electrons' — say 'nuclear charge increases whilst shielding is approximately constant'.",
+  },
+  { id:"ext2", board:"aqa", category:"Atomic Structure & Periodicity",
+    question:"Explain why first ionisation energies decrease going down Group 2 (beryllium to barium).",
+    marks:6,
+    markScheme:[
+      "First ionisation energy decreases going down Group 2",
+      "Each successive element has one additional electron shell — the outermost electron is in a shell further from the nucleus",
+      "Atomic radius increases going down the group",
+      "There is greater electron shielding because more inner shells of electrons lie between the outer electron and the nucleus",
+      "The effective nuclear charge experienced by the outer electron decreases — shielding outweighs the increase in nuclear charge",
+      "Therefore the outer electron is less strongly attracted to the nucleus and less energy is required to remove it",
+    ],
+    examTip:"Three effects must all appear: increased distance, increased shielding, reduced effective nuclear charge. Many students mention distance but omit shielding — or confuse nuclear charge (which increases) with effective nuclear charge (which decreases).",
+  },
+  { id:"ext3", board:"aqa", category:"Atomic Structure & Periodicity",
+    question:"The first six successive ionisation energies (kJ mol⁻¹) of element X are: 738 · 1451 · 7733 · 10 541 · 13 630 · 17 995. Identify the group of element X and use the data to explain what the pattern reveals about its electronic structure.",
+    marks:6,
+    markScheme:[
+      "Element X is in Group 2",
+      "There is a large jump between the 2nd and 3rd ionisation energies (1451 → 7733 kJ mol⁻¹)",
+      "The first two electrons are relatively easy to remove — these are the outer (valence) shell electrons",
+      "The large jump indicates the 3rd electron is being removed from an inner shell, much closer to the nucleus with less shielding",
+      "Inner-shell electrons are far more strongly attracted to the nucleus and require significantly more energy to remove",
+      "The pattern supports the shell model of atomic structure — electrons exist in distinct energy levels at different distances from the nucleus",
+    ],
+    examTip:"State the group first (easy mark). Identify WHERE the large jump is (between 2nd and 3rd IE) and WHY — reference a new inner shell, not just 'closer to nucleus'. The final mark links the pattern to the concept of electron shells/energy levels.",
+  },
+  // ── BONDING & STRUCTURE ──────────────────────────────────
+  { id:"ext4", board:"aqa", category:"Bonding & Structure",
+    question:"Using VSEPR theory, predict and explain the shapes and bond angles of BF₃, NH₃ and H₂O. Explain why the bond angles differ between these three molecules.",
+    marks:6,
+    markScheme:[
+      "BF₃: trigonal planar, bond angle 120° — 3 bonding pairs, 0 lone pairs; electron pairs arrange symmetrically to maximise separation",
+      "NH₃: trigonal pyramidal, bond angle 107° — 3 bonding pairs and 1 lone pair",
+      "H₂O: bent (V-shaped), bond angle 104.5° — 2 bonding pairs and 2 lone pairs",
+      "Lone pairs occupy more space than bonding pairs: lone pair–lone pair repulsion > lone pair–bonding pair repulsion > bonding pair–bonding pair repulsion",
+      "In NH₃, one lone pair compresses the H–N–H angle below the ideal tetrahedral 109.5°",
+      "In H₂O, two lone pairs cause greater compression, so the bond angle is smaller in H₂O than in NH₃",
+    ],
+    examTip:"Give exact shape name + bond angle + lone pair/bonding pair count for all three molecules. Examiners penalise 'V-shaped' without stating it as bent, or giving 105° instead of 104.5°. The comparison of lone pair repulsion must be stated explicitly to get the compression marks.",
+  },
+  { id:"ext5", board:"aqa", category:"Bonding & Structure",
+    question:"Explain why water has an unexpectedly high boiling point compared with the other Group 6 hydrides (H₂S, H₂Se, H₂Te).",
+    marks:6,
+    markScheme:[
+      "H₂S, H₂Se and H₂Te show a trend of increasing boiling point as Mr increases — due to stronger London (dispersion) forces as the molecules become larger and more polarisable",
+      "Water has a much higher boiling point than this trend would predict",
+      "Water molecules form hydrogen bonds with each other",
+      "Hydrogen bonding arises because oxygen is highly electronegative and has lone pairs; the O–H bond is strongly polarised (δ+ on H, δ– on O)",
+      "A hydrogen bond forms between the δ+ hydrogen of one water molecule and a lone pair on the oxygen of an adjacent water molecule",
+      "Hydrogen bonds are significantly stronger than London/van der Waals forces, so considerably more energy is required to separate water molecules, giving water its anomalously high boiling point",
+    ],
+    examTip:"Begin by establishing the trend in H₂S → H₂Se → H₂Te (increasing LDF with Mr) so you can contrast water. For full hydrogen bonding marks: state O is electronegative + has lone pairs + δ+ on H. Don't just write 'H-bonding makes it higher' — explain WHY it forms.",
+  },
+  // ── KINETICS ─────────────────────────────────────────────
+  { id:"ext6", board:"aqa", category:"Kinetics",
+    question:"Explain, with reference to Maxwell-Boltzmann distribution curves, how increasing temperature increases the rate of a chemical reaction.",
+    marks:6,
+    markScheme:[
+      "The Maxwell-Boltzmann distribution shows the spread of molecular energies in a gas sample at a given temperature",
+      "At higher temperature the curve shifts to the right (towards higher energies), becomes broader and flatter, and the peak moves to higher energy",
+      "The total area under both curves is the same (same number of molecules)",
+      "The activation energy Ea is shown as a vertical line; the area under the curve to the right of Ea represents the proportion of molecules with energy ≥ Ea",
+      "At higher temperature, this area (proportion of molecules with energy ≥ Ea) is significantly greater",
+      "There are therefore more successful collisions per unit time and the rate of reaction increases",
+    ],
+    examTip:"Describe the curve changes explicitly: shifts right, lower peak, broader/flatter — these are separate marks. The crucial link is: area to right of Ea → proportion of molecules with E ≥ Ea → frequency of successful collisions → rate. Each step in that chain is a potential mark.",
+  },
+  { id:"ext7", board:"aqa", category:"Kinetics",
+    question:"Explain how a catalyst increases the rate of a chemical reaction. Include reference to activation energy and the Maxwell-Boltzmann distribution in your answer.",
+    marks:6,
+    markScheme:[
+      "A catalyst provides an alternative reaction pathway with a lower activation energy (Ea)",
+      "The catalyst is not consumed overall in the reaction",
+      "On the Maxwell-Boltzmann distribution the activation energy is shown as a vertical line — the catalyst moves this line to the left (lower Ea)",
+      "At the same temperature the curve itself is unchanged, but a greater proportion of molecules now have energy ≥ the lower Ea",
+      "The area under the distribution curve to the right of the new lower Ea is larger than before",
+      "More collisions are therefore successful per unit time and the rate of reaction increases",
+    ],
+    examTip:"Critical mistake: do NOT say the catalyst gives energy to molecules or raises their energy — the temperature (and therefore the curve) stays the same. It is the activation energy that changes. Distinguish clearly between the curve (unchanged) and the Ea line (moves left).",
+  },
+  // ── EQUILIBRIUM ──────────────────────────────────────────
+  { id:"ext8", board:"aqa", category:"Equilibrium",
+    question:"The Haber process: N₂(g) + 3H₂(g) ⇌ 2NH₃(g)  ΔH = −92 kJ mol⁻¹. Explain the choice of conditions used (~450 °C, ~200 atm, iron catalyst) in terms of both yield and rate.",
+    marks:6,
+    markScheme:[
+      "High pressure (200 atm) shifts the equilibrium to the right — 4 mol gas on the left, 2 mol gas on the right; Le Chatelier's principle predicts the system will oppose the high pressure by reducing moles of gas",
+      "Higher pressure gives a greater equilibrium yield of NH₃, but very high pressures are expensive to maintain and create safety/engineering challenges",
+      "Low temperature favours the forward (exothermic) reaction — Le Chatelier: system opposes cooling by releasing heat; low T gives higher yield",
+      "However, low temperature gives a very slow rate (fewer molecules with E ≥ Ea), making production uneconomical",
+      "A compromise temperature of ~450 °C is used — acceptable rate while maintaining a reasonable yield; the NH₃ is removed continuously to shift equilibrium right",
+      "The iron catalyst increases the rate of forward and reverse reactions equally without affecting equilibrium position, allowing equilibrium to be reached faster at the compromise temperature",
+    ],
+    examTip:"For temperature and pressure separately, you must address both the YIELD effect AND the RATE effect — this is where most marks come from. A conflict exists for temperature (lower T → better yield but slower rate) but not pressure (higher P → better yield AND faster rate). State that the catalyst does NOT shift equilibrium position.",
+  },
+  { id:"ext9", board:"aqa", category:"Equilibrium",
+    question:"A buffer solution is prepared from ethanoic acid (CH₃COOH) and sodium ethanoate (CH₃COONa). Explain how this buffer resists changes in pH when (a) a small amount of HCl is added and (b) a small amount of NaOH is added.",
+    marks:6,
+    markScheme:[
+      "The buffer contains a reservoir of ethanoic acid (weak acid — proton donor) and ethanoate ions CH₃COO⁻ (conjugate base — proton acceptor)",
+      "(a) When HCl is added: H⁺ ions react with the ethanoate ions: CH₃COO⁻(aq) + H⁺(aq) → CH₃COOH(aq)",
+      "The added H⁺ is removed, so [H⁺] and pH remain approximately constant",
+      "(b) When NaOH is added: OH⁻ ions react with the ethanoic acid: CH₃COOH(aq) + OH⁻(aq) → CH₃COO⁻(aq) + H₂O(l)",
+      "The OH⁻ is neutralised by the weak acid, so [H⁺] and pH remain approximately constant",
+      "Both responses are effective because there is a sufficient reservoir of both CH₃COOH and CH₃COO⁻ to absorb small additions of acid or base",
+    ],
+    examTip:"State what each component does BEFORE saying what happens when acid/base is added. Write full ionic equations for BOTH scenarios — this is where marks are commonly lost. Many students correctly explain part (a) then write a vague answer for (b). The final mark about 'reservoir' is often missed.",
+  },
+  // ── ORGANIC MECHANISMS ──────────────────────────────────
+  { id:"ext10", board:"aqa", category:"Organic Mechanisms",
+    question:"Describe the mechanism for the free radical substitution of methane with chlorine in UV light to produce chloromethane. Include the three stages with equations.",
+    marks:6,
+    markScheme:[
+      "Initiation: UV light provides energy to break the Cl–Cl bond homolytically; Cl₂ → 2Cl•  (each atom takes one electron)",
+      "Propagation step 1: Cl• + CH₄ → CH₃• + HCl  (chlorine radical abstracts a hydrogen from methane, generating a methyl radical)",
+      "Propagation step 2: CH₃• + Cl₂ → CH₃Cl + Cl•  (methyl radical reacts with Cl₂, regenerating a Cl• — chain reaction continues)",
+      "Termination (any two radicals combine): Cl• + Cl• → Cl₂ ; or CH₃• + Cl• → CH₃Cl ; or CH₃• + CH₃• → C₂H₆",
+      "The chain reaction means thousands of product molecules are formed for every UV photon absorbed",
+      "C₂H₆ as a minor byproduct is evidence for the existence of CH₃• radicals during the reaction",
+    ],
+    examTip:"Use the words 'initiation', 'propagation' and 'termination'. Write an equation for EACH step. For termination, give at least 2 different equations. Formation of C₂H₆ as evidence for CH₃• radicals is a mark many students miss.",
+  },
+  { id:"ext11", board:"aqa", category:"Organic Mechanisms",
+    question:"Describe the mechanism for the reaction of 1-bromopropane with aqueous sodium hydroxide. Name the mechanism type and explain why primary halogenoalkanes react via this pathway.",
+    marks:6,
+    markScheme:[
+      "The mechanism is SN2 (nucleophilic substitution, bimolecular)",
+      "The C–Br bond is polar (Br is more electronegative than C), making the carbon δ+",
+      "OH⁻ is the nucleophile — it has a lone pair of electrons and attacks the δ+ carbon",
+      "OH⁻ attacks from the back (180° to the leaving group) in a concerted one-step mechanism, forming a transition state",
+      "In the transition state, the C–O bond is forming and the C–Br bond is breaking simultaneously; carbon has five partial bonds",
+      "Br⁻ leaves as the bromide ion (a good, stable leaving group); propan-1-ol is formed",
+    ],
+    examTip:"'SN2' name is worth a mark. Key mechanistic points: (1) δ+ carbon due to polar C–Br bond, (2) back attack, (3) concerted single step, (4) pentavalent transition state, (5) Br⁻ leaves. If drawing curly arrows, the arrow goes from the lone pair on O to the C, and from the C–Br bond to the Br.",
+  },
+  { id:"ext12", board:"aqa", category:"Organic Mechanisms",
+    question:"Describe the mechanism for the electrophilic addition of HBr to propene (CH₃CH=CH₂). State the major product and explain using carbocation stability why it is formed in preference.",
+    marks:6,
+    markScheme:[
+      "The C=C π bond is electron-rich and acts as a nucleophile; HBr is polarised H(δ+)–Br(δ–) and acts as the electrophile",
+      "The π electrons attack the δ+ hydrogen of HBr; the H–Br bond breaks heterolytically, Br⁻ is released",
+      "Two possible carbocation intermediates: H adds to C1 → secondary carbocation (CH₃CH⁺CH₃); H adds to C2 → primary carbocation (CH₃CH₂CH₂⁺)",
+      "The secondary carbocation is more stable: alkyl groups donate electron density towards the positive carbon, dispersing the charge (inductive effect)",
+      "The more stable secondary carbocation forms preferentially and then Br⁻ attacks it",
+      "The major product is 2-bromopropane (Markovnikov addition: H adds to the carbon already bearing more H atoms)",
+    ],
+    examTip:"Draw out both carbocation structures. The major product mark requires you to justify carbocation stability with electron donation by alkyl groups — not just state Markovnikov's rule. Examiners award marks for mechanism AND reasoning.",
+  },
+  { id:"ext13", board:"aqa", category:"Organic Mechanisms",
+    question:"Describe the mechanism for the nucleophilic addition of hydrogen cyanide to propanone. Explain why this reaction requires KCN/HCN rather than HCN alone.",
+    marks:6,
+    markScheme:[
+      "The carbonyl carbon in propanone is δ+ due to the high electronegativity of oxygen pulling electron density away from carbon: C=O is polarised C(δ+)–O(δ–)",
+      "CN⁻ (cyanide ion) is the nucleophile — it has a lone pair on the carbon of the cyanide group",
+      "CN⁻ attacks the δ+ carbonyl carbon; the C=O π bond breaks heterolytically, with both electrons going to oxygen to form an alkoxide intermediate (O⁻, tetrahedral carbon)",
+      "The alkoxide intermediate is protonated by HCN (or H⁺ from water) to give the hydroxynitrile product: (CH₃)₂C(OH)CN",
+      "HCN alone cannot provide sufficient CN⁻ concentration (very weak acid, low [CN⁻]); KCN provides CN⁻ and HCN provides the proton source for the second step",
+      "The product (2-hydroxy-2-methylpropanenitrile) contains a chiral centre, so a racemic mixture of enantiomers is formed",
+    ],
+    examTip:"Identify CN⁻ as the nucleophile (NOT HCN). Explain why the carbonyl carbon is δ+. Describe the two steps: (1) nucleophilic attack forming alkoxide, (2) protonation. Mentioning the chiral centre and racemic mixture is an easy top-mark point many students forget.",
+  },
+  // ── ORGANIC CHEMISTRY ────────────────────────────────────
+  { id:"ext14", board:"aqa", category:"Organic Chemistry",
+    question:"Explain why benzene undergoes electrophilic substitution rather than electrophilic addition. Your answer should reference the delocalised electron system and thermodynamic stability.",
+    marks:6,
+    markScheme:[
+      "Benzene has a delocalised π electron system — 6 electrons are spread uniformly over all 6 carbon atoms above and below the plane of the ring",
+      "This delocalisation gives benzene exceptional thermodynamic stability (delocalisation/resonance energy)",
+      "The delocalised system makes benzene susceptible to attack by electrophiles (electron-rich ring attracts positive species)",
+      "If electrophilic addition occurred, the ring would have to rehybridise and the delocalised system would be permanently destroyed — requiring significant energy input",
+      "In electrophilic substitution, a hydrogen is replaced by the electrophile and the aromatic ring is restored after the reaction — the delocalised system is preserved",
+      "Substitution is strongly preferred because it retains the thermodynamic stability of the aromatic ring, whereas addition would destroy this stability",
+    ],
+    examTip:"The key concept is 'delocalisation stability'. Say explicitly: addition DESTROYS the ring stability; substitution PRESERVES it. You can reference the enthalpy of hydrogenation as supporting evidence: benzene's actual value (−208 kJ mol⁻¹) is much less negative than predicted for cyclohexatriene (−360 kJ mol⁻¹).",
+  },
+  { id:"ext15", board:"aqa", category:"Organic Chemistry",
+    question:"Compare the relative rates of hydrolysis of chloroethane, bromoethane and iodoethane when warmed with aqueous silver nitrate in ethanol. Explain the trend.",
+    marks:6,
+    markScheme:[
+      "Order of reactivity: iodoethane > bromoethane > chloroethane (fastest hydrolysis to slowest)",
+      "Hydrolysis requires breaking the C–halogen bond (as part of the nucleophilic substitution with OH⁻/water)",
+      "Bond enthalpy decreases going down Group 17: C–I is the weakest bond, C–Cl is the strongest",
+      "Bond enthalpy decreases because the halogen atoms become larger and the bonding electrons are further from both nuclei, so the bond is weaker",
+      "The weaker the C–X bond, the lower the activation energy required for substitution — so iodoethane reacts fastest",
+      "Observed with AgNO₃: AgI precipitate (yellow) forms fastest; AgBr (cream) slower; AgCl (white) slowest",
+    ],
+    examTip:"The trend is driven by C–X BOND ENTHALPY, NOT electronegativity. Electronegativity actually decreases down the group (Cl > Br > I), but reactivity increases — this confuses students. Always link bond enthalpy to activation energy to rate. State the precipitate colours to show experimental evidence.",
+  },
+  // ── INORGANIC CHEMISTRY ──────────────────────────────────
+  { id:"ext16", board:"aqa", category:"Inorganic Chemistry",
+    question:"Describe and explain the reactions of Na₂O, SiO₂, P₄O₁₀ and SO₃ with water. Give the pH of each resulting solution and explain the trend across Period 3.",
+    marks:6,
+    markScheme:[
+      "Na₂O (basic oxide): reacts vigorously with water → 2NaOH; solution is strongly alkaline (pH 13–14): Na₂O + H₂O → 2NaOH",
+      "SiO₂ (acidic oxide): does NOT react with water — it is an insoluble giant covalent structure; no change in pH",
+      "P₄O₁₀ reacts with water to form phosphoric(V) acid: P₄O₁₀ + 6H₂O → 4H₃PO₄; acidic solution (pH ~2)",
+      "SO₃ reacts vigorously with water to form sulfuric acid: SO₃ + H₂O → H₂SO₄; strongly acidic solution (pH ~1)",
+      "The trend reflects the change from metallic to non-metallic character across Period 3 — metal oxides are basic (ionic O²⁻ accepts protons); non-metal oxides form oxyacids (covalent, react to give H⁺)",
+      "The acidic strength increases from P₄O₁₀ to SO₃ because H₂SO₄ is a stronger acid than H₃PO₄ (fully dissociates vs partially)",
+    ],
+    examTip:"SiO₂ NOT reacting with water is a specific mark — many students incorrectly say it forms silicic acid. Give an equation AND a pH description for each oxide. Al₂O₃ and MgO are amphoteric and weakly basic respectively — know them even if not in this specific question.",
+  },
+  { id:"ext17", board:"aqa", category:"Inorganic Chemistry",
+    question:"Describe the tests to distinguish between aqueous solutions of Cl⁻, Br⁻ and I⁻ ions using silver nitrate solution and ammonia. Include the reagents, observations and equations.",
+    marks:6,
+    markScheme:[
+      "Add dilute nitric acid (to prevent interference from CO₃²⁻ or SO₄²⁻), then aqueous silver nitrate solution",
+      "Cl⁻: white precipitate of AgCl; Br⁻: pale yellow/cream precipitate of AgBr; I⁻: yellow precipitate of AgI",
+      "Ionic equations: Ag⁺(aq) + X⁻(aq) → AgX(s)  (X = Cl, Br or I)",
+      "Add dilute ammonia solution: AgCl dissolves (white precipitate disappears); AgBr is insoluble in dilute NH₃",
+      "Add concentrated ammonia: AgBr dissolves; AgI is insoluble in both dilute and concentrated NH₃",
+      "The ammonia solubility test is required to distinguish between AgCl, AgBr and AgI because precipitate colour alone is not sufficiently reliable",
+    ],
+    examTip:"Why add HNO₃ first? To remove CO₃²⁻ and SO₄²⁻ that could form precipitates with Ag⁺ and give false results. This is a commonly missed mark. The ammonia solubility distinction is the key discriminating test — just colour is not enough for full marks.",
+  },
+  { id:"ext18", board:"aqa", category:"Inorganic Chemistry",
+    question:"Transition metals have a number of characteristic properties. Describe and explain variable oxidation states, the formation of coloured ions, and catalytic activity in transition metals.",
+    marks:6,
+    markScheme:[
+      "Variable oxidation states: the 3d and 4s subshells are very close in energy; electrons can be removed from either, giving multiple stable oxidation states (e.g. Fe²⁺ [Ar]3d⁶ and Fe³⁺ [Ar]3d⁵)",
+      "All transition metals have at least one ion with an incomplete 3d subshell",
+      "Coloured ions: in isolation, the five 3d orbitals are degenerate (same energy); when ligands coordinate, they split the 3d orbitals into two groups of different energies",
+      "Electrons can be promoted from lower to higher energy 3d orbitals by absorbing a photon of visible light; the complementary colour is transmitted and observed",
+      "Catalytic activity: transition metals can readily change oxidation state (gain/lose electrons), allowing them to act as electron carriers in redox reactions",
+      "Example of heterogeneous catalysis: Fe in the Haber process — reactants adsorb onto the surface, bonds are weakened and Ea is lowered; example of homogeneous: MnO₄⁻ / Mn²⁺ in reactions in aqueous solution",
+    ],
+    examTip:"For coloured ions: you MUST state that 3d orbitals SPLIT in the presence of ligands (crystal field splitting). Simply saying 'absorbs light' misses the mechanism. Give examples for catalysis — both heterogeneous (surface adsorption) and homogeneous (oxidation state change in solution) if possible.",
+  },
+  // ── ENERGETICS ───────────────────────────────────────────
+  { id:"ext19", board:"aqa", category:"Energetics",
+    question:"Define each enthalpy change used in a Born-Haber cycle for NaCl and explain why lattice enthalpy cannot be measured directly.",
+    marks:6,
+    markScheme:[
+      "Enthalpy of formation: enthalpy change when 1 mol NaCl(s) is formed from elements in standard states — Na(s) + ½Cl₂(g) → NaCl(s)",
+      "Enthalpy of atomisation of Na: energy to produce 1 mol gaseous Na atoms — Na(s) → Na(g); always endothermic",
+      "First ionisation energy of Na: energy to remove 1 mol of electrons from 1 mol gaseous Na atoms — Na(g) → Na⁺(g) + e⁻",
+      "Bond dissociation enthalpy (atomisation of Cl₂): ½Cl₂(g) → Cl(g); endothermic",
+      "First electron affinity of Cl: Cl(g) + e⁻ → Cl⁻(g); exothermic for Cl",
+      "Lattice enthalpy cannot be measured directly because it is impossible to carry out the direct formation of an ionic lattice from individual gaseous ions in a single measurable experiment; Born-Haber cycles use Hess's law to calculate it indirectly from other measurable quantities",
+    ],
+    examTip:"Define each enthalpy change with a precise equation and state symbols — marks require this level of precision. Lattice enthalpy = enthalpy change when 1 mol ionic lattice forms from gaseous ions (exothermic as defined by most AQA mark schemes). Know which steps are endo- and exothermic.",
+  },
+  // ── ACIDS & BASES ────────────────────────────────────────
+  { id:"ext20", board:"aqa", category:"Acids, Bases & pH",
+    question:"Explain what is meant by a weak acid and Ka. Describe how Ka is used to calculate the pH of a weak acid solution, stating clearly any assumptions made.",
+    marks:6,
+    markScheme:[
+      "A weak acid only partially dissociates in aqueous solution — the equilibrium lies to the left: HA(aq) ⇌ H⁺(aq) + A⁻(aq)",
+      "Ka is the acid dissociation constant: Ka = [H⁺][A⁻] / [HA] (mol dm⁻³); a larger Ka means a stronger weak acid",
+      "To find [H⁺]: [H⁺] = √(Ka × c), where c is the initial concentration of the acid",
+      "Then pH = −log[H⁺]",
+      "Assumption 1: [H⁺] from water is negligible — the acid is the only significant source of H⁺",
+      "Assumption 2: the degree of dissociation is small enough that the equilibrium concentration of HA ≈ initial concentration c (i.e. very little acid has dissociated)",
+    ],
+    examTip:"Both assumptions are worth individual marks — state both explicitly. 'Partially dissociates' is the key phrase for the definition mark. Do not say 'weak acids are dilute' — strength and concentration are different concepts.",
+  },
+  // ── YEAR 2 ORGANIC ──────────────────────────────────────
+  { id:"ext21", board:"aqa", category:"Year 2 Organic Chemistry",
+    question:"Explain what is meant by optical isomerism. Describe the conditions required for a molecule to exhibit optical isomerism and explain why optical isomers have identical physical properties but can differ in biological activity.",
+    marks:6,
+    markScheme:[
+      "Optical isomers are non-superimposable mirror images of each other (enantiomers)",
+      "They arise when a molecule contains a chiral carbon centre — a carbon atom bonded to four different groups",
+      "One enantiomer rotates plane-polarised light clockwise (+, dextrorotatory); the other rotates it anticlockwise (−, laevorotatory)",
+      "Optical isomers have identical physical properties (same boiling point, melting point, solubility, density) because they have identical intermolecular forces and bond enthalpies",
+      "Biological activity can differ because enzymes and receptors are themselves chiral — the 3D shape of the active site is complementary to only one enantiomer",
+      "One enantiomer may be pharmacologically active whilst the other is inactive or harmful — thalidomide is the classic example",
+    ],
+    examTip:"'Non-superimposable mirror images' is the definition mark — use this exact phrase. Four different groups on the chiral carbon is essential. For the biological activity mark: reference the 3D shape of enzymes/receptor active sites, not just 'they interact differently'.",
+  },
+  { id:"ext22", board:"aqa", category:"Year 2 Organic Chemistry",
+    question:"Describe the primary, secondary and tertiary structures of proteins, explaining the bonding responsible for maintaining each level of structure.",
+    marks:6,
+    markScheme:[
+      "Proteins are condensation polymers of amino acids joined by peptide bonds (–CO–NH–) with elimination of water",
+      "Primary structure: the specific sequence of amino acids along the polypeptide chain — maintained by covalent peptide bonds",
+      "Secondary structure: regular repeating folding patterns (α-helix or β-pleated sheet) — maintained by hydrogen bonds between the N–H and C=O groups of the peptide backbone",
+      "Tertiary structure: the overall 3D fold of the entire polypeptide chain, giving a unique shape essential for biological function",
+      "Tertiary structure is maintained by interactions between R-groups: hydrogen bonds, ionic interactions (between oppositely charged R-groups), disulfide bridges (covalent S–S between cysteine residues), and London/van der Waals forces",
+      "Disulfide bridges are the strongest interaction in tertiary structure (covalent); the other interactions are weaker but numerous",
+    ],
+    examTip:"Know all four types of interaction in tertiary structure — examiners ask for multiple types. Hydrogen bonds in SECONDARY structure are between backbone N–H and C=O groups, NOT between R-groups (that's tertiary). Disulfide bridges are covalent — this is why they are the strongest.",
+  },
+  // ── ELECTROCHEMISTRY ─────────────────────────────────────
+  { id:"ext23", board:"aqa", category:"Electrochemistry",
+    question:"Explain what is meant by standard electrode potential. Describe how the standard hydrogen electrode (SHE) works and how it is used to measure the standard electrode potential of a Cu²⁺/Cu half-cell.",
+    marks:6,
+    markScheme:[
+      "Standard electrode potential (E°) is the potential of a half-cell measured relative to the standard hydrogen electrode under standard conditions: 298 K, 100 kPa, 1 mol dm⁻³ ionic concentrations",
+      "The SHE: H⁺(aq) at 1 mol dm⁻³, H₂(g) at 100 kPa, a platinum electrode; half-reaction: 2H⁺(aq) + 2e⁻ ⇌ H₂(g); E° defined as 0.00 V",
+      "The SHE is connected to the Cu²⁺/Cu half-cell (1 mol dm⁻³ CuSO₄, copper electrode) by a salt bridge (e.g. KNO₃ in agar) and a high-resistance voltmeter",
+      "The salt bridge maintains electrical neutrality by allowing ion flow without the solutions mixing",
+      "The voltmeter reading gives E°(cell) = E°(Cu²⁺/Cu) − E°(SHE) = E°(Cu²⁺/Cu) − 0 = +0.34 V",
+      "The positive E° indicates Cu²⁺ is a better oxidising agent than H⁺; at the copper electrode, Cu²⁺ + 2e⁻ → Cu (reduction occurs)",
+    ],
+    examTip:"Define standard conditions precisely — 298 K, 100 kPa, 1 mol dm⁻³. The SHE needs: Pt electrode, H₂ gas at 100 kPa, [H⁺] = 1 mol dm⁻³. State the purpose of the salt bridge. Relate the sign of E° to oxidising/reducing power for the final mark.",
+  },
+  // ── OCR A QUESTIONS ──────────────────────────────────────
+  { id:"ext_ocr1", board:"ocr", category:"Atomic Structure & Periodicity",
+    question:"Explain the trend in atomic radius across Period 3 and down Group 1. Give reasons for each trend.",
+    marks:6,
+    markScheme:[
+      "Across Period 3: atomic radius decreases from Na to Cl",
+      "Nuclear charge increases from Na (11) to Cl (17) whilst electrons are added to the same n=3 shell — shielding is approximately constant",
+      "The effective nuclear charge on outer electrons increases, pulling them closer to the nucleus",
+      "Down Group 1: atomic radius increases from Li to Cs",
+      "Each successive element has one additional electron shell, placing the outer electron further from the nucleus",
+      "Increased shielding from additional inner shells reduces the effective nuclear charge on the outer electron, further increasing atomic radius",
+    ],
+    examTip:"Two trends, two explanations — make each one distinct. Both require nuclear charge AND shielding. Across the period: nuclear charge up, shielding roughly constant → smaller radius. Down the group: extra shells → more shielding → effective nuclear charge falls → larger radius.",
+  },
+  { id:"ext_ocr2", board:"ocr", category:"Equilibrium",
+    question:"For 2SO₂(g) + O₂(g) ⇌ 2SO₃(g)  ΔH = −197 kJ mol⁻¹, explain separately the effect of (a) increasing pressure, (b) increasing temperature and (c) adding V₂O₅ catalyst on the position of equilibrium and rate of reaction.",
+    marks:6,
+    markScheme:[
+      "(a) Increasing pressure shifts equilibrium RIGHT — 3 mol gas on the left, 2 on the right; Le Chatelier: system opposes high pressure by reducing moles of gas, increasing SO₃ yield",
+      "(a) Increasing pressure also increases concentration of all gaseous species, increasing the rate of both forward and reverse reactions",
+      "(b) Increasing temperature shifts equilibrium LEFT — the reaction is exothermic; Le Chatelier: system opposes increased temperature by absorbing heat (endothermic reverse reaction favoured), decreasing SO₃ yield",
+      "(b) Increasing temperature increases the rate of both forward and reverse reactions (more molecules have E ≥ Ea)",
+      "(c) V₂O₅ catalyst does NOT shift the position of equilibrium — it does not affect the thermodynamics (relative energy of reactants and products)",
+      "(c) The catalyst increases the rate of both forward and reverse reactions equally by providing an alternative pathway with lower Ea, so equilibrium is reached faster",
+    ],
+    examTip:"For each condition you must address BOTH rate AND equilibrium position separately — this is where most marks come from. The catalyst mark specifically: it does NOT change equilibrium position. Pressure is unusual in that it benefits both rate AND yield simultaneously.",
+  },
+  { id:"ext_ocr3", board:"ocr", category:"Organic Chemistry",
+    question:"Explain, with reference to the structure and bonding of benzene, why it is more stable than the hypothetical molecule cyclohexatriene. Describe one piece of experimental evidence supporting this.",
+    marks:6,
+    markScheme:[
+      "Cyclohexatriene would be expected to have alternating C–C (0.154 nm) and C=C (0.134 nm) bonds",
+      "X-ray diffraction of benzene shows all C–C bond lengths are equal and intermediate (0.140 nm) — evidence for delocalisation",
+      "In benzene, the 6 π electrons are delocalised in a system above and below the ring plane, involving all 6 carbon atoms equally",
+      "Delocalisation lowers the energy of benzene significantly below that of a hypothetical non-delocalised structure — this extra stability is the delocalisation/resonance energy (~152 kJ mol⁻¹)",
+      "Experimental evidence from enthalpies of hydrogenation: cyclohexene (one C=C) has ΔHhyd = −120 kJ mol⁻¹; three isolated double bonds would predict −360 kJ mol⁻¹",
+      "Actual ΔHhyd of benzene = −208 kJ mol⁻¹ — 152 kJ mol⁻¹ less negative than predicted, confirming benzene is significantly more stable than cyclohexatriene",
+    ],
+    examTip:"Two types of evidence: (1) equal bond lengths from X-ray diffraction, (2) enthalpy of hydrogenation being less exothermic than predicted. Know the actual numbers (−208 vs −360 kJ mol⁻¹). 'Delocalisation energy' or 'resonance stabilisation energy' are key terms.",
+  },
+  { id:"ext_ocr4", board:"ocr", category:"Physical Chemistry",
+    question:"Explain what is meant by entropy and the second law of thermodynamics. Explain how the sign of ΔG predicts whether a reaction is feasible, with reference to the equation ΔG = ΔH − TΔS.",
+    marks:6,
+    markScheme:[
+      "Entropy (S) is a measure of the disorder or randomness of a system — the number of ways energy can be distributed among the particles",
+      "The second law of thermodynamics: the total entropy of the universe (system + surroundings) increases in any spontaneous process",
+      "ΔS is positive when disorder increases: gases formed from solids/liquids, dissolving, or increasing moles of gas",
+      "Gibbs free energy change: ΔG = ΔH − TΔS; a reaction is thermodynamically feasible when ΔG ≤ 0",
+      "When ΔH < 0 and ΔS > 0, ΔG is always negative — the reaction is feasible at all temperatures",
+      "When ΔH > 0 and ΔS > 0, the reaction becomes feasible only above a critical temperature T = ΔH/ΔS (where TΔS > ΔH)",
+    ],
+    examTip:"ΔG = ΔH − TΔS is the core equation — you must know it perfectly. A reaction is feasible when ΔG ≤ 0 (not just < 0). Know all four sign combinations of ΔH and ΔS and when each is feasible. The temperature threshold T = ΔH/ΔS comes up frequently.",
+  },
+];
+
 const SYNTH_ROUTES = [
   // FROM: Alkane
   { from:"Alkane", to:"Halogenoalkane", reagents:"Cl₂ or Br₂", conditions:"UV light (hν), room temperature", mechanism:"Free Radical Substitution", notes:"Mixture of products formed (mono-, di-, tri-substituted etc.). Cl₂ is more reactive than Br₂ but Br₂ is more selective.", steps:[
@@ -1593,7 +1959,13 @@ export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
-  const [topicsTab, setTopicsTab] = useState("flashcards"); // "flashcards" | "synth" | "calc"
+  const [topicsTab, setTopicsTab] = useState("flashcards"); // "flashcards" | "synth" | "calc" | "extended"
+  const [extCategory, setExtCategory] = useState(null);
+  const [extIndex, setExtIndex] = useState(0);
+  const [extRevealed, setExtRevealed] = useState(false);
+  const [extMarked, setExtMarked] = useState(new Set());
+  const [extDraft, setExtDraft] = useState("");
+  const [extScore, setExtScore] = useState({}); // { questionId: marksAwarded }
   const [calcTopic, setCalcTopic] = useState(null);
   const [calcIndex, setCalcIndex] = useState(0);
   const [calcInput, setCalcInput] = useState("");
@@ -1935,15 +2307,15 @@ export default function App() {
       </div>
       {/* Tab bar */}
       <div style={{ display: "flex", gap: "0", borderBottom: "2px solid #e0e8f0", margin: "0 16px", marginBottom: "0" }}>
-        {["flashcards", "synth", "calc"].map(tab => (
+        {["flashcards", "synth", "calc", "extended"].map(tab => (
           <button key={tab} onClick={() => setTopicsTab(tab)} style={{
             padding: "12px 16px", border: "none", background: "none",
             fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
-            color: topicsTab === tab ? "#29ABE2" : "#7a95b0",
-            borderBottom: topicsTab === tab ? "3px solid #29ABE2" : "3px solid transparent",
+            color: topicsTab === tab ? (tab === "extended" ? "#7c3aed" : "#29ABE2") : "#7a95b0",
+            borderBottom: topicsTab === tab ? `3px solid ${tab === "extended" ? "#7c3aed" : "#29ABE2"}` : "3px solid transparent",
             marginBottom: "-2px", transition: "color 0.15s", whiteSpace: "nowrap",
           }}>
-            {tab === "flashcards" ? "Flashcards" : tab === "synth" ? "Synthesis" : "Calculations"}
+            {tab === "flashcards" ? "Flashcards" : tab === "synth" ? "Synthesis" : tab === "calc" ? "Calculations" : "6-Mark ✍"}
           </button>
         ))}
       </div>
@@ -2096,6 +2468,169 @@ export default function App() {
           )}
         </div>
       )}
+      {topicsTab === "extended" && (() => {
+        const purple = "#7c3aed";
+        const purpleLight = "#f3f0ff";
+        const purpleMid = "#ede9fe";
+        const filteredQs = EXTENDED_QUESTIONS.filter(q => q.board === "both" || q.board === board);
+        const categories = [...new Set(filteredQs.map(q => q.category))];
+
+        // Category picker
+        if (!extCategory) return (
+          <div style={{ padding: "16px", flex: 1, overflowY: "auto" }}>
+            <p style={{ color: "#4a6080", fontSize: "14px", marginBottom: "6px", lineHeight: 1.5, fontWeight: 600 }}>6-Mark Extended Responses</p>
+            <p style={{ color: "#7a95b0", fontSize: "12px", marginBottom: "16px", lineHeight: 1.5 }}>
+              Read the question, think through your answer, then reveal the mark scheme. Tick each point you covered to track your score.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+              {categories.map(cat => {
+                const qs = filteredQs.filter(q => q.category === cat);
+                const scores = qs.map(q => extScore[q.id]).filter(Boolean);
+                const totalMarks = qs.length * 6;
+                const earnedMarks = scores.reduce((a, b) => a + b, 0);
+                return (
+                  <button key={cat} onClick={() => { setExtCategory(cat); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); }}
+                    style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
+                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: purple, marginBottom: "8px" }} />
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{cat}</div>
+                    <div style={{ fontSize: "11px", color: purple, fontWeight: 600 }}>{qs.length} question{qs.length > 1 ? "s" : ""} · 6 marks each</div>
+                    {scores.length > 0 && <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "4px" }}>{earnedMarks}/{scores.length * 6} marks scored</div>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+
+        // Question view
+        const catQs = filteredQs.filter(q => q.category === extCategory);
+        const q = catQs[extIndex];
+        if (!q) return null;
+        const isLast = extIndex === catQs.length - 1;
+        const marksThisQ = extMarked.size;
+
+        const handleReveal = () => {
+          if (!extRevealed) {
+            setExtRevealed(true);
+          }
+        };
+        const toggleMark = (i) => {
+          setExtMarked(prev => {
+            const next = new Set(prev);
+            if (next.has(i)) next.delete(i); else next.add(i);
+            // save score
+            setExtScore(s => ({ ...s, [q.id]: next.size }));
+            return next;
+          });
+        };
+        const goNext = () => {
+          setExtIndex(i => i + 1);
+          setExtRevealed(false);
+          setExtMarked(new Set());
+          setExtDraft("");
+        };
+
+        const scoreColour = marksThisQ >= 5 ? "#16a34a" : marksThisQ >= 3 ? "#d97706" : "#dc2626";
+
+        return (
+          <div style={{ padding: "16px", flex: 1, overflowY: "auto" }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+              <button onClick={() => setExtCategory(null)} style={{ background: "none", border: "none", color: purple, fontWeight: 700, cursor: "pointer", fontSize: "14px", fontFamily: "inherit" }}>← Topics</button>
+              <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{extCategory} · {extIndex + 1} / {catQs.length}</div>
+            </div>
+            {/* Progress bar */}
+            <div style={{ height: "4px", background: "#e0e8f0", borderRadius: "2px", marginBottom: "16px", overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${((extIndex + 1) / catQs.length) * 100}%`, background: purple, borderRadius: "2px", transition: "width 0.3s" }} />
+            </div>
+            {/* Question card */}
+            <div style={{ background: "#fff", borderRadius: "14px", padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,0.07)", marginBottom: "12px", border: `1px solid ${purpleMid}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", background: purpleLight, padding: "3px 8px", borderRadius: "6px" }}>{q.category}</div>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", background: "#f0f4f8", padding: "3px 8px", borderRadius: "6px" }}>{q.marks} marks</div>
+              </div>
+              <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line" }}>{q.question}</div>
+            </div>
+            {/* Draft answer box */}
+            {!extRevealed && (
+              <div style={{ marginBottom: "12px" }}>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Draft your answer (optional)</div>
+                <textarea
+                  value={extDraft}
+                  onChange={e => setExtDraft(e.target.value)}
+                  placeholder="Write your answer here before revealing the mark scheme..."
+                  rows={5}
+                  style={{ width: "100%", padding: "12px 14px", borderRadius: "10px", border: "2px solid #d0dce8", fontSize: "13px", fontFamily: "inherit", outline: "none", color: "#1a2d45", resize: "vertical", lineHeight: 1.6 }}
+                />
+              </div>
+            )}
+            {/* Reveal button */}
+            {!extRevealed && (
+              <button onClick={handleReveal} style={{ width: "100%", padding: "13px", background: purple, border: "none", borderRadius: "12px", color: "#fff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 14px rgba(124,58,237,0.3)" }}>
+                Reveal Mark Scheme
+              </button>
+            )}
+            {/* Mark scheme */}
+            {extRevealed && (
+              <div>
+                {/* Draft reminder */}
+                {extDraft.trim() && (
+                  <div style={{ background: "#f8f9fa", borderRadius: "10px", padding: "12px 14px", marginBottom: "12px", border: "1px solid #e0e8f0" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Your Answer</div>
+                    <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{extDraft}</div>
+                  </div>
+                )}
+                {/* Score badge */}
+                {extMarked.size > 0 && (
+                  <div style={{ textAlign: "center", marginBottom: "12px" }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#fff", border: `2px solid ${scoreColour}`, borderRadius: "50px", padding: "6px 20px" }}>
+                      <span style={{ fontSize: "22px", fontWeight: 900, color: scoreColour }}>{marksThisQ}</span>
+                      <span style={{ fontSize: "14px", color: "#7a95b0", fontWeight: 600 }}>/ {q.marks} marks</span>
+                    </div>
+                  </div>
+                )}
+                {/* Mark scheme points */}
+                <div style={{ background: "#fff", borderRadius: "14px", padding: "16px", border: `1px solid ${purpleMid}`, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme — tick each point you covered</div>
+                  {q.markScheme.map((point, i) => {
+                    const ticked = extMarked.has(i);
+                    return (
+                      <button key={i} onClick={() => toggleMark(i)}
+                        style={{ display: "flex", gap: "10px", alignItems: "flex-start", width: "100%", textAlign: "left", background: ticked ? "#f0fdf4" : "transparent", border: `1px solid ${ticked ? "#16a34a" : "#e8eef4"}`, borderRadius: "10px", padding: "10px 12px", marginBottom: "8px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}>
+                        <div style={{ flexShrink: 0, width: "22px", height: "22px", borderRadius: "6px", border: `2px solid ${ticked ? "#16a34a" : "#c8d6e4"}`, background: ticked ? "#16a34a" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "1px", transition: "all 0.15s" }}>
+                          {ticked && <span style={{ color: "#fff", fontSize: "13px", fontWeight: 900, lineHeight: 1 }}>✓</span>}
+                        </div>
+                        <div style={{ fontSize: "13px", color: ticked ? "#15803d" : "#1a2d45", lineHeight: 1.6, fontWeight: ticked ? 600 : 400 }}>{point}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* Examiner tip */}
+                <div style={{ background: "#fffbeb", borderRadius: "12px", padding: "14px 16px", border: "1px solid #fde68a", marginBottom: "12px" }}>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: "#d97706", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Examiner Tip</div>
+                  <div style={{ fontSize: "13px", color: "#78350f", lineHeight: 1.65 }}>{q.examTip}</div>
+                </div>
+                {/* Navigation */}
+                <div style={{ display: "flex", gap: "8px" }}>
+                  {!isLast ? (
+                    <button onClick={goNext} style={{ flex: 1, padding: "13px", background: purple, border: "none", borderRadius: "12px", color: "#fff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                      Next Question →
+                    </button>
+                  ) : (
+                    <button onClick={() => { setExtCategory(null); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); }}
+                      style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#fff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                      Finish — Back to Topics
+                    </button>
+                  )}
+                  <button onClick={() => { setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); }} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                    Retry
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
       {topicsTab === "calc" && (
         <div style={{ padding: "16px", flex: 1, overflowY: "auto" }}>
           {!calcTopic && (
