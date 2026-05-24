@@ -23,7 +23,30 @@
       "Bash(git push *)",
       "mcp__mcp-registry__list_connectors",
       "Bash(gh --version)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(pip3 install *)",
+      "Bash(/tmp/node-v20.19.2-darwin-arm64/bin/npx -y pdftotext)",
+      "Bash(python3.11 --version)",
+      "Bash(python3.10 --version)",
+      "Bash(/Users/harj2807/anaconda3/bin/python3 -m pip install pdfminer.six)",
+      "Bash(/Users/harj2807/anaconda3/bin/python3 -m pip install --upgrade pip)",
+      "Bash(/Users/harj2807/anaconda3/bin/python3 -c ' *)",
+      "Bash(/Users/harj2807/anaconda3/bin/python3 -m pip install importlib_metadata)",
+      "Bash(/Users/harj2807/anaconda3/bin/python3 -m pip install \"pdfminer.six==20200726\")",
+      "Bash(cp \"/Users/harj2807/Downloads/AQA-7404-7405-SP-2015.PDF\" /tmp/aqa_spec.pdf)",
+      "Read(//tmp/**)",
+      "Bash(sed -n '1,3p' \"/Users/harj2807/Documents/ChemMastery App/src/App.js\")",
+      "Bash(sed -n '930,950p' \"/Users/harj2807/Documents/ChemMastery App/src/App.js\")",
+      "Bash(node --input-type=module)",
+      "Bash(node -e \"require\\('./src/App.js'\\)\")",
+      "Bash(python3)",
+      "Bash(brew install *)",
+      "Bash(node -e ' *)",
+      "Bash(ls /opt/homebrew/bin/pdftoppm 2>/dev/null || ls /usr/local/bin/pdftoppm 2>/dev/null || find /Users/harj2807 -name \"pdftoppm\" 2>/dev/null | head -3)",
+      "Bash(grep -n \"^};$\" \"/Users/harj2807/Documents/ChemMastery App/src/App.js\")",
+      "Bash(awk -F'\"' '{print length\\($4\\), NR}')",
+      "Bash(node -e \"require\\('smiles-drawer'\\); console.log\\('OK'\\)\")",
+      "Bash(node /tmp/test-sd.mjs)"
     ]
   }
 }
