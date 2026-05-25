@@ -47,7 +47,8 @@
       "Bash(awk -F'\"' '{print length\\($4\\), NR}')",
       "Bash(node -e \"require\\('smiles-drawer'\\); console.log\\('OK'\\)\")",
       "Bash(node /tmp/test-sd.mjs)",
-      "WebFetch(domain:www.hsjtuition.co.uk)"
+      "WebFetch(domain:www.hsjtuition.co.uk)",
+      "Bash(/Users/harj2807/anaconda3/bin/python3)"
     ]
   }
 }
