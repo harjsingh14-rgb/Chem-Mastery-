@@ -2330,6 +2330,337 @@ const EXTENDED_QUESTIONS = [
     ],
     examTip: "This question is worth 20 marks. Make sure you address all parts systematically."
   }
+,
+  {
+    id: "ocr01",
+    board: "ocr",
+    category: "Bonding & Structure",
+    marks: 8,
+    question: `The table below gives some information about the elements magnesium and oxygen and the compound magnesium oxide. Substance Magnesium Oxygen Magnesium oxide Melting point /K 922 55 3125 Electrical conductivity Conducts when solid or molten None Conducts when molten or aqueous Explain the differences in physical properties between these three substances, referring to  the structure and bonding present.`,
+    markScheme: [
+      "Magnesium has metallic bonding – a lattice of positive metal ions surrounded by a sea of delocalised electrons.",
+      "There are strong electrostatic forces of attraction between the positive ions and delocalised electrons – these require a lot of energy to overcome so magnesium has a high melting point.",
+      "The delocalised electrons are free to move through the structure and carry charge, so magnesium conducts electricity.",
+      "Magnesium oxide has an ionic lattice structure – strong electrostatic forces of attraction between oppositely charged ions.",
+      "The attractions require a lot of energy to overcome so magnesium has a very high melting point.",
+      "As a solid, the ions are fixed in place by the strong ionic bonds so are not free to move.",
+      "When molten or aqueous, ions are free to move and carry charge so magnesium oxide conducts when molten or aqueous but not when solid.",
+      "Oxygen has a covalent molecular structure.",
+      "Although there are strong covalent bonds between oxygen atoms, there are only weak intermolecular forces between molecules which do not require a lot of energy to overcome, so oxygen has a very low melting point.",
+      "There are no delocalised electrons or free moving ions in oxygen, so it does not conduct electricity."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr02",
+    board: "ocr",
+    category: "Bonding & Structure",
+    marks: 6,
+    question: `Aluminium forms compounds with group 7 elements with the empirical formula AlX3. Aluminium chloride and aluminium fluoride are both solids which sublime (they turn from a solid to a gas when heated). The sublimation temperature of aluminium fluoride is over 1000°C higher than that of aluminium fluoride. Explain why the two halides have such different sublimation temperatures. You should refer to the structure and bonding present in the two compounds and also refer to the electronegativity values given below: Element Electronegativity value Aluminium 1.5 Chlorine 3.0 Fluorine 4.0`,
+    markScheme: [
+      "Fluorine is more electronegative than chlorine.",
+      "When aluminium bonds with fluorine, the electronegativity difference is large and aluminium fluoride is an ionic compound.",
+      "When aluminium bonds with chlorine, the electronegativity difference is smaller and aluminium chloride is a covalent compound.",
+      "Aluminium fluoride is an ionic lattice – there are strong electrostatic forces of attraction between oppositely charged ions.",
+      "These take a lot of energy to overcome, so aluminium fluoride has a high sublimation temperature.",
+      "Aluminium chloride is a covalent molecule – there are only weak intermolecular forces between molecules, so it sublimes at a much lower temperature than aluminium fluoride."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr03",
+    board: "ocr",
+    category: "Bonding & Structure",
+    marks: 6,
+    question: `Water molecules can accept hydrogen ions from acids to form the H3O+ ion. Use electron pair repulsion theory to predict and explain why the shapes and bond angles in water and the H3O+ ion differ. You can use diagrams in your answer.`,
+    markScheme: [
+      "In water the oxygen atom has four areas of electrons: two lone pairs and two bonds.",
+      "Electron pairs repel, so move apart to minimise repulsion.",
+      "The largest angle they could move apart would be 109.5°, but lone pairs repel more than bonded pairs so the angle is reduced to 104.5°.",
+      "The shape is non-linear.",
+      "In H3O+ the oxygen atom also has four areas of electrons: one lone pair and three bonds.",
+      "There is only one lone pair, so the bond angle is reduced less than in water, to 107°.",
+      "The shape is (trigonal) pyramidal."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr04",
+    board: "ocr",
+    category: "Bonding & Structure",
+    marks: 6,
+    question: `The graph opposite shows the boiling point of the hydrogen halides. Explain the pattern in boiling points in relation to the bonding, structure and intermolecular forces present in the four compounds.  HF HI HBr HCl`,
+    markScheme: [
+      "HF HI HBr HCl All four compounds are covalent molecular.",
+      "HF has hydrogen bonding, which is the strongest intermolecular force and takes the most energy to overcome.",
+      "This gives HF the highest boiling point.",
+      "HCl, HBr and HI all have permanent dipole attractions and Van der Waals forces.",
+      "These are weaker than hydrogen bonding.",
+      "As you go down the group, the halide molecule becomes larger and contains more electrons.",
+      "The strength of the Van der Waals forces therefore increases as you go down the group, so the boiling points of the molecules increase as it takes more energy to overcome these forces."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr05",
+    board: "ocr",
+    category: "Atomic Structure & Periodicity",
+    marks: 6,
+    question: `The first 5 ionisation energies of the elements magnesium and aluminium are given below: Magnesium Aluminium 1st 738 578 Ionisation Energy / kJ mol-1 3rd 7733 2745 4th 10541 11578 2nd 1451 1817 5th 13629 14831 With reference to the electron configurations of the elements, explain the differences between: • The first ionisation energies of the two elements • The second ionisation energies of the two elements`,
+    markScheme: [
+      "Electron configurations: Mg 1s2 2s2 2p6 3s2, Al 1s2 2s2 2p6 3s2 3p1 First ionisation energies: The electron removed from Mg is from the 3s subshell, whereas the electron removed from Al is from the 3p subshell.",
+      "The 3p subshell is higher in energy than the 3s, so (despite the increased nuclear charge of Al) the attraction between the nucleus and outer electron is weaker so the electron takes less energy to remove from aluminium.",
+      "Second ionisation energies: The second electron is removed from the same subshell (3s) for both Mg and Al.",
+      "Aluminium has a greater nuclear charge, so the electron being removed is more strongly attracted to the nucleus.",
+      "The second electron is therefore more difficult to remove from Al and the second I.E is higher."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr06",
+    board: "ocr",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `Outline a two-stage procedure to produce the ester, ethyl ethanoate using ethanol as the only organic reagent. For each step in the procedure you should include: reagents and conditions, chemical equations and the type of reaction taking place. Details of reaction mechanisms or purification steps are not required.`,
+    markScheme: [
+      "Prepare a sample of ethanoic acid from some of the ethanol: Reflux ethanol with excess acidified potassium dichromate to produce ethanoic acid.",
+      "Equation: CH3CH2OH + 2[O] → CH3COOH + H2O Type of reaction: oxidation React ethanoic acid with ethanol: Reflux ethanoic acid and ethanol in the presence of concentrated sulfuric acid (catalyst).",
+      "Equation: CH3CH2OH + CH3COOH → CH3COOCH2CH3 + H2O Type of reaction: condensation"
+    ],
+    examTip: "OCR A: structured answers score best. Cover each stage in order with reagents, conditions and equations."
+  },
+  {
+    id: "ocr07",
+    board: "ocr",
+    category: "Inorganic Chemistry",
+    marks: 6,
+    question: `Using calcium as an example, describe the reactions of group 2 metals with cold water. You should include a balanced equation, observations you would make and an explanation of why this is a redox reaction. Describe and explain the trend in reactivity of group 2 metals as you go down the group.`,
+    markScheme: [
+      "Reactions of group 2 metals with water: Balanced equation: Ca + 2H2O → Ca(OH)2 + H2 Observations: bubbling, the metal disappears. (For calcium there will be a slight white precipitate formed as calcium hydroxide is only slightly soluble).",
+      "The calcium goes from oxidation state/charge of zero to +2: it loses electrons and is oxidised.",
+      "Hydrogen (in water) goes from oxidation state +1 to zero: it gains electrons and is reduced.",
+      "Trend in reactivity: Metals get more reactive as you go down the group.",
+      "There are more electron shells, so more shielding and the outer electrons are further from the nucleus.",
+      "The attraction between outer electrons and nucleus is weaker down the group so it takes less energy to remove the electrons."
+    ],
+    examTip: "OCR A extended response: you must both describe AND explain. Don't just state observations - link them to underlying chemistry."
+  },
+  {
+    id: "ocr08",
+    board: "ocr",
+    category: "Inorganic Chemistry",
+    marks: 8,
+    question: `You are given aqueous solutions of chlorine, bromine and iodine along with solid samples of potassium chloride, potassium bromide and potassium iodide. Describe how you could use these chemicals to demonstrate the trend in oxidising ability as you go down the group.. You should include observations you would make along with examples of full balanced and ionic equations for reactions that take place. You do not need to include details of practical equipment.`,
+    markScheme: [
+      "Practical procedure and observations: Add the aqueous halogens to small samples of the solid halides and observe colour changes.",
+      "A stronger oxidising agent (more reactive halogen) will displace a weaker oxidising agent (less reactive halogen) from its compound.",
+      "Observations and deductions: Chlorine + potassium bromide turns from colourless to orange (bromine formed) - Chlorine stronger oxidising agent than bromine Chlorine + potassium iodide turns from colourless to brown (iodine produced) - Chlorine stronger oxidising agent than iodine",
+      "Example equations: chlorine + potassium bromide: Full equation: Cl2 + 2KBr → 2KCl + Br2 Ionic equation: Cl2 + 2Br- → 2Cl- + Br2"
+    ],
+    examTip: "OCR A: be specific and systematic. List reagents, observations and conclusions clearly."
+  },
+  {
+    id: "ocr09",
+    board: "ocr",
+    category: "Energetics",
+    marks: 6,
+    question: `The graph opposite shows the standard enthalpy of combustion against carbon chain length for the first eight straight chain alkanes (because all the reactions are exothermic, for simplicity -ΔHc has been plotted). Give the definition for standard enthalpy of combustion, and write a balanced equation (including state symbols) for this reaction using butane as an example. 1 - l o m J k / c H Δ - Number of carbons in chain Explain, in terms of bond making and breaking, why the reactions are exothermic and why  the graph shows a linear relationship.`,
+    markScheme: [
+      "Number of carbons in chain [6 marks] Definition and equation: The enthalpy change/energy released when one mole of a substance/compound burns completely/in excess oxygen under standard conditions.",
+      "C4H10 (g) + 6.5 O2 (g) → 4 CO2 (g) + 5 H2O (l) Explanation Reactions are exothermic because the energy required/absorbed to break bonds in the reactants is less than the energy released when new bonds are made in the products.",
+      "As the number of carbons increases, the number of C-C, C-H and O=O bonds broken increases by the same amount each time.",
+      "The number of C=O bonds and O-H bonds made also increases by the same amount each time.",
+      "Therefore the difference in ΔHc values is the same each time the carbon chain length increases."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr10",
+    board: "ocr",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `You are provided with unlabelled samples of three isomeric alcohols: • Butan-1-ol • Butan-2-ol • 2-methylpropan-2-ol You also have access to common laboratory equipment and chemicals. Outline a practical procedure which would identify each of the three alcohols using chemical reactions and observations alone. You do not need to include descriptions or diagrams of practical apparatus, nor refer to safety procedures.`,
+    markScheme: [
+      "Identification of 2-methylpropan-2-ol: Heat/warm each sample with acidified potassium dichromate.",
+      "Butan-1-ol (primary alcohol) and butan-2-ol (secondary alcohol) will both turn the mixture from orange to green. 2- methylpropan-2-ol (tertiary alcohol) will not change.",
+      "Identification of butan-1-ol and butan-2-ol: Take fresh samples of each of the remaining alcohols.",
+      "Heat with acidified potassium dichromate and separate the product immediately with distillation.",
+      "Test the product with Tollen’s reagent.",
+      "Butan-1-ol will produce an aldehyde as the distillate, which will produce a silver mirror.",
+      "Butan-2-ol will produce a ketone, which will not react with Tollen’s."
+    ],
+    examTip: "OCR A: structured answers score best. Cover each stage in order with reagents, conditions and equations."
+  },
+  {
+    id: "ocr11",
+    board: "ocr",
+    category: "Inorganic Chemistry",
+    marks: 6,
+    question: `You are given three unlabelled solids that are known to be: sodium carbonate, sodium chloride and sodium bromide. Outline a procedure that could be used to identify each sample using simple laboratory tests and write ionic equations for the reactions that take place.`,
+    markScheme: [
+      "Dissolve the solids in distilled/deionised water and carry out the following tests, using fresh samples each time.",
+      "Identifying the carbonate: Add hydrochloric acid (could also be sulfuric or nitric acid): the sample that produces bubbles/effervesces contains sodium carbonate.",
+      "Equation: 2H+ + CO3 Identifying halides: Add nitric acid and silver nitrate solution.",
+      "Sodium chloride will give a white precipitate and sodium bromide will give a cream precipitate.",
+      "Equations: Ag+ (aq) + Cl- (aq) → AgCl (s) Ag+ (aq) + Br- (aq) → AgBr (s) 2- → CO2 + H2O"
+    ],
+    examTip: "OCR A: structured answers score best. Cover each stage in order with reagents, conditions and equations."
+  },
+  {
+    id: "ocr12",
+    board: "ocr",
+    category: "Organic Chemistry",
+    marks: 8,
+    question: `Three different organic compounds are isomers with the molecular formula C5H10O. None of the compounds exist as stereoisomers. More information about each isomer is presented in the table below: Isomer Information from IR spectrum Information from chemical tests Information from mass spectrum X Broad peak around 3500 cm-1 Peak at 1650 cm-1 Reacts with bromine water but does not react with acidified potassium dichromate Peaks include m/z values: 15, 27, 59 Y Broad peak around 3500 cm-1 Does not react with bromine water but does react with acidified potassium dichromate Peaks include m/z values: 17 and 69 Z Broad peak around 3500 cm-1 Peak at 1650 cm-1 Reacts with bromine water and with acidif`,
+    markScheme: [
+      "Mass spec peaks: 17 = OH+, 69 = C5H9 + Compound Z: IR spectrum shows O-H (3500) and C=C (1650).",
+      "Must be a cyclic alcohol; does react with dichromate so could be primary or secondary alcohol.",
+      "No reaction with bromine water and no C=C on IR spectrum, but does contain C:H ratio 1:2.",
+      "C=C bond needs to have two of the same groups on one side and peak at 27 matches CH2=CH-.",
+      "This leaves 3 carbons – OH must be on the end otherwise there would be optical isomers.",
+      "+, 27 = C2H3 +, 59 = C3H6OH+ Compound X: IR spectrum shows C=C (1650) and O-H (3500).",
+      "Mass spec peaks: 15 = CH3 Compound Y: IR spectrum shows O-H (3500).",
+      "It does not react with dichromate so must be a tertiary alcohol.",
+      "Reacts with dichromate so could be primary or secondary alcohol.",
+      "Mass spec peaks: 27 = C2H3 +, 31 = CH2OH+, 59 = CH2CH2CH2OH+"
+    ],
+    examTip: "OCR A 8-mark question: aim for clear, concise points covering structure, bonding and relevant chemistry."
+  },
+  {
+    id: "ocr13",
+    board: "ocr",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `Draw the structures of all the possible isomers with the formula C4H8 that contain a C=C bond. Name the isomers and use them as examples to explain the different types of isomerism occurring. You should include any relevant definitions in your answer.`,
+    markScheme: [
+      "Structural isomers: (Molecules with) the same molecular formula and different structure/structural formula.",
+      "Structural isomers are but-1-ene, but-2-ene and methylpropene as shown below: But-1-ene and but-2-ene are position isomers.",
+      "Methylpropene is a chain isomer.",
+      "Stereoisomers/geometric isomers/E/Z isomers: But-2-ene has E/Z isomerism.",
+      "This occurs due to restricted rotation around the C=C bond, and the fact that but-2-ene has 2 different groups attached to each carbon on the C=C bond.",
+      "In (Z) but-2-ene, the two highest priority groups (the methyl groups) are on the same side of the C=C bond relative to each other.",
+      "In the E isomer they are on opposite sides of the C=C bond."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr14",
+    board: "ocr",
+    category: "Equilibrium",
+    marks: 8,
+    question: `Hydrogen is produced in industry from the reaction between methane and steam. The first stage in this process is shown below. CH4 (g) + H2O (g) ⇌ CO (g) + 3H2 (g) ΔH = +206 kJ mol-1 Use ideas about rates of reaction, collision theory and Le Chatelier’s principle to explain why conditions of high temperature and high pressure are used in this process.`,
+    markScheme: [
+      "The forward reaction is endothermic, so increasing temperature will shift the position of equilibrium to the right hand side, producing more hydrogen.",
+      "Particles therefore collide more often, and a greater proportion of collisions are successful as more particles have at least the activation energy.",
+      "This is because there are more particles in a given volume, so particles collide more often and there will be more successful collisions per second.",
+      "Increasing pressure shifts the position of equilibrium to the side with fewer moles of gas, which is the left hand side.",
+      "So high pressure produces a lower yield, but lower pressures would result in too slow a rate of reaction.",
+      "High temperature: High temperature increases rate of reaction.",
+      "High pressure: High pressure increases rate of reaction.",
+      "So there will be more successful collisions per second.",
+      "This is because particles have more kinetic energy.",
+      "High temperature also increases yield."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr15",
+    board: "ocr",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `The structure of three organic compounds - benzene, ethylamine and phenylamine – are shown opposite. • Explain whether you would expect phenylamine to be a stronger or weaker base than ethylamine • Explain whether you would expect phenylamine to be more or less reactive than benzene in electrophilic substitution reactions. In your answer you should include relevant definitions and examples, but do not need to include equations or mechanisms.`,
+    markScheme: [
+      "Comparison of base behaviour: Phenylamine is a weaker base than ethylamine.",
+      "A base is a proton acceptor – both contain an amine functional group which acts as a base when the lone pair on the nitrogen bonds with H+.",
+      "In phenylamine, the lone pair on the nitrogen delocalises into the benzene ring – this makes it less available to donate to H+ and therefore phenylamine is a weaker base.",
+      "Comparison of electrophilic substitution reactions: Phenylamine would be more reactive than benzene in electrophilic substitution reactions.",
+      "Electrophiles are attracted to the electron density of the benzene ring and accept a pair of electrons from the system in the first part of the electrophilic substitution mechanism.",
+      "In phenylamine, the lone pair of the nitrogen delocalises into the benzene ring, increasing the electron density of the ring and therefore making it react more readily with electrophiles."
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr16",
+    board: "ocr",
+    category: "Acid-Base Chemistry",
+    marks: 6,
+    question: `Ethanoic acid is a weak acid that can be used to prepare a buffer solution. Describe how you would use a solution of ethanoic acid and a solution of sodium hydroxide, both of equal concentrations, to prepare a buffer solution. Explain how your solution could act as a buffer when small amounts of hydrochloric acid are added. You may illustrate your answer with equations, but do not need to include calculations.`,
+    markScheme: [
+      "Preparation of buffer: Mix together the acid and sodium hydroxide – approximately half the volume of sodium hydroxide compared to ethanoic acid.",
+      "The sodium hydroxide will react with the ethanoic acid to form its salt/conjugate base (sodium ethanoate): CH3COOH + NaOH → CH3COONa + H2O CH3COOH ⇌ CH3COO- + H+ A buffer solution contains a mixture of a weak acid and its conjugate base.",
+      "How the solution acts as a buffer: The buffer contains both the weak acid and its conjugate base in equilibrium: When a small amount of acid is added, the H+ ions react with the CH3COO- ions to form CH3COOH.",
+      "Therefore, the concentration of CH3COOH increases slightly and the concentration of CH3COO- decreases slightly.",
+      "However, because the buffer solution contains relatively large amounts of both, the ratio does not change significantly and neither does the pH."
+    ],
+    examTip: "OCR A extended response: you must both describe AND explain. Don't just state observations - link them to underlying chemistry."
+  },
+  {
+    id: "ocr17",
+    board: "ocr",
+    category: "Inorganic Chemistry",
+    marks: 6,
+    question: `Transition metal ions can form complex ions with different coordination numbers and shapes, depending on the transition metal and ligand involved. Some of these complexes can exist as stereoisomers. Describe the types of stereoisomerism that can exist in transition metal complexes. You should refer to specific examples where possible, and illustrate your answer with relevant diagrams.`,
+    markScheme: [
+      "Cis/trans isomers: Platinum forms square planar complexes with a coordination number of 4.",
+      "If there are two different ligands then cis/trans isomers can form, for example: Cisplatin (left) – both same type of ligand on the same side.",
+      "Transplatin (right) – both same type of ligand on opposite sides.",
+      "Cis/trans isomerism also occurs in octahedral complexes with coordination number of 6, so long as there are two different ligands.",
+      "For example: The left hand complex is trans as the two water molecules are 180° apart.",
+      "The complex on the right is cis, as the two water molecules are 90° apart.",
+      "Optical isomers: Octahedral complexes can form optical isomers if they contain at least two bidentate ligands.",
+      "Optical isomers are non-superimposable mirror images, as shown in the diagram:"
+    ],
+    examTip: "OCR A: be specific and systematic. List reagents, observations and conclusions clearly."
+  },
+  {
+    id: "ocr18",
+    board: "ocr",
+    category: "Organic Chemistry",
+    marks: 8,
+    question: `1-chloropropane can be prepared in two different reactions: • The electrophilic addition reaction between HCl and propene • The free radical substitution reaction between chlorine and propane in the presence of UV light For each reaction, outline the mechanism and explain why neither reaction will produce a high yield of the desired product. You should refer to how the reaction mechanisms give rise to alternative products.`,
+    markScheme: [
+      "Electrophilic addition mechanism: The reaction proceeds via a carbocation intermediate.",
+      "There are two possible carbocations that can form, primary or secondary.",
+      "The secondary carbocation is more stable, so the reaction will be more likely to proceed by this route and the major product will be 2-chloropropane.",
+      "Free radical substitution mechanism: Initiation: Propagation: Termination: It is random which hydrogen is replaced in the propagation steps, so C3H7Cl could be 1-chloropropane or 2-chloropropane.",
+      "If there is an excess of alkane then an alternative termination is more likely: 2 C3H7• → C6H14 If there is an excess of chlorine then multiple substitutions can occur to produce dichloroalkanes, trichloroalkanes etc.",
+      "Cl2 → 2Cl• Cl• + C3H8 → HCl + C3H7• C3H7• + Cl2 → C3H7Cl + Cl• Cl• + C3H7•→ C3H7Cl"
+    ],
+    examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
+  },
+  {
+    id: "ocr19",
+    board: "ocr",
+    category: "Energetics",
+    marks: 6,
+    question: `Describe how you could carry out an experiment to calculate enthalpy of neutralisation in kJmol-1. You are provided with solutions of hydrochloric acid and sodium hydroxide of equal concentrations along with standard laboratory equipment. In your answer you should clearly state the measurements you would take. You should also explain how results from the experiment would be used to calculate the enthalpy of neutralisation, and what assumptions you made in this calculation.`,
+    markScheme: [
+      "Measure out 25cm3 hydrochloric acid using a volumetric pipette and add to a polystyrene",
+      "Place the polystyrene cup in a beaker and use a thermometer to take its temperature – repeat every 30 seconds for two minutes to ensure temperature is not changing",
+      "Add 25cm3 sodium hydroxide solution using a volumetric pipette.",
+      "Stir with the thermometer and record the highest temperature reached.",
+      "Calculate the change in temperature Calculations:",
+      "Moles of acid (or alkali) = concentration x volume in dm3",
+      "Heat energy transferred (in J) = mass of solution x 4.18 x change in temperature",
+      "Convert energy in J to kJ (/1000) and divide by moles to get enthalpy change"
+    ],
+    examTip: "OCR A extended response: you must both describe AND explain. Don't just state observations - link them to underlying chemistry."
+  },
+  {
+    id: "ocr20",
+    board: "ocr",
+    category: "Practical Chemistry",
+    marks: 6,
+    question: `Hydrated sodium carbonate (Na2CO3.10H2O) is a solid at room temperature and is soluble in water. Describe how you would prepare 250cm3 of a solution of hydrated sodium carbonate (Na2CO3.10H2O) with an accurately known concentration of approximately 0.0100 moldm-3. You should include a calculation with your answer.  Mark scheme and notes If you’re a student, make sure you try the question under exam conditions before you look at the mark scheme to get the most out of the practice. You can allow a little more than one minute per mark, as these questions usually take a bit longer (other questions will take less than one minute usually). Each question comes with a “model answer” – this does not `,
+    markScheme: [
+      "Weighing the solid/calculations: Moles of solid = 0.01 x 0.25 = 0.0025 Mr = 106 + (10 x 18) = 286 Mass of solid required = 0.0025 x 286 = 0.715g • Zero the balance and add an empty weighing boat.",
+      "Note the mass and add approximately 0.715g solid.",
+      "Write down the mass of solid and weighing boat. • Add the solid to a clean dry beaker, then reweigh the weighing boat.",
+      "Subtract the mass of the empty boat to obtain the accurate mass of solid used.",
+      "Making the solution: • Add around 100 cm3 distilled water to the beaker and stir to dissolve the solid • Pour the solution into a 250cm3 volumetric flask using a funnel • Rinse the beaker with more distilled water and add to the flask • Add distilled water to the flask until just"
+    ],
+    examTip: "OCR A: be specific and systematic. List reagents, observations and conclusions clearly."
+  }
 ];
 
 const SYNTH_ROUTES = [
