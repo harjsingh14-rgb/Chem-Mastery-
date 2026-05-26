@@ -663,7 +663,7 @@ const SETS = {
     {q: "Does adding a catalyst shift the position of equilibrium?", a: "No. A catalyst increases the rates of both forward and reverse reactions equally, so equilibrium is reached faster but the position (yield) is unchanged."}
   ]},
 
-  "RP4": { title: "Distillation of a Mixture", cards: [
+  "RP4": { title: "Distillation of a Product from a Reaction (Activity 5)", cards: [
     {q: "What is the purpose of simple distillation?", a: "To separate a volatile liquid from a non-volatile solute or to separate two liquids with very different boiling points (greater than ~25°C apart)."},
     {q: "What is fractional distillation used for?", a: "Separating liquids with similar boiling points (e.g. ethanol/water mixture), by passing vapours through a fractionating column that provides multiple condensation–evaporation cycles."},
     {q: "Describe the apparatus required for simple distillation.", a: "Round-bottomed flask with the mixture, anti-bumping granules, thermometer with bulb at the side-arm junction, condenser with water flowing in at the bottom, collection flask (receiver)."},
@@ -679,10 +679,14 @@ const SETS = {
     {q: "What does it mean if the thermometer reading rises during distillation?", a: "A different fraction with a higher boiling point is beginning to distil over. The collector should be changed at this point to separate fractions."},
     {q: "What safety precautions are required during distillation of flammable liquids?", a: "No naked flames — use an electric heating mantle.\nEnsure all glassware joints are secure to avoid vapour leaks.\nWork in a fume cupboard.\nDo not allow the flask to boil dry."},
     {q: "Why should the distillation apparatus never be sealed (closed system)?", a: "Pressure would build up as vapour is produced, potentially causing the glassware to shatter explosively."},
-    {q: "How does simple distillation differ from fractional distillation in terms of apparatus?", a: "Simple distillation uses no fractionating column — just a flask, condenser and receiver. Fractional distillation adds a fractionating column between flask and condenser for better separation."}
+    {q: "How does simple distillation differ from fractional distillation in terms of apparatus?", a: "Simple distillation uses no fractionating column -- just a flask, condenser and receiver. Fractional distillation adds a fractionating column between flask and condenser for better separation."},
+    {q: "What is the specific reaction used in AQA Required Activity 5?", a: "The partial oxidation of a primary alcohol (e.g. propan-1-ol) to an aldehyde (propanal) using acidified potassium dichromate(VI):\nCH₃CH₂CH₂OH + [O] → CH₃CH₂CHO + H₂O\nA limited quantity of oxidising agent is used and the aldehyde is distilled off as it forms to prevent further oxidation to the carboxylic acid."},
+    {q: "Why is a limited quantity of oxidising agent used and the product distilled off as it forms in Activity 5?", a: "To achieve PARTIAL oxidation (alcohol to aldehyde) rather than full oxidation (to carboxylic acid).\nIf the aldehyde remains in the reaction mixture it would be oxidised further to propanoic acid.\nDistilling it off immediately prevents this and maximises aldehyde yield."},
+    {q: "What colour change is observed during the partial oxidation of propan-1-ol with K₂Cr₂O₇?", a: "The orange dichromate ion (Cr₂O₇²⁻) is reduced to the green Cr³⁺ ion as the alcohol is oxidised.\nOrange → green indicates the oxidation reaction is occurring."},
+    {q: "What safety precautions are specific to the Activity 5 oxidation experiment?", a: "Potassium dichromate(VI) is highly toxic and a category 1B carcinogen: wear gloves, avoid skin contact, do not inhale dust.\nConcentrated H₂SO₄ is corrosive: add carefully.\nPropan-1-ol and propanal are flammable: use an electric heating mantle, no naked flames.\nCarry out in a well-ventilated area or fume cupboard."}
   ]},
 
-  "RP5": { title: "Column Chromatography & TLC", cards: [
+  "RP5": { title: "TLC Separation (Activity 12)", cards: [
     {q: "What are the two phases in chromatography, and what is their role?", a: "Stationary phase: stays still (e.g. silica on TLC plate or in column). Mobile phase: moves (solvent). Compounds travel at different rates depending on their relative attraction to each phase."},
     {q: "How is Rf value defined and calculated?", a: "Rf = distance travelled by spot ÷ distance travelled by solvent front.\nRf has no units and is always between 0 and 1."},
     {q: "What does a high Rf value indicate about a compound?", a: "The compound has a greater affinity for the mobile phase (solvent) than the stationary phase — it is more soluble in the solvent and less adsorbed onto the silica."},
@@ -851,6 +855,99 @@ const SETS = {
     {q: "Describe the preparation of a standard KMnO₄ solution.", a: "Weigh the required mass of KMnO₄ accurately. Dissolve in distilled water in a beaker. Transfer to a volumetric flask and make up to the mark. KMnO₄ is a strong oxidant — do not use a rubber bung and clean apparatus thoroughly."},
     {q: "What is a standard solution?", a: "A solution of precisely known concentration, prepared by dissolving a known mass of a primary standard (or by standardisation) and making up to an accurate volume in a volumetric flask."},
     {q: "How is concordance assessed in titration results?", a: "Two or more titres that agree within 0.10 cm³ of each other are described as concordant. The mean of concordant titres is used in calculations (rough titre is excluded)."}
+  ]},
+
+  // ═══════════════════════════════════════════════
+  // AQA REQUIRED PRACTICALS (NEW / MISSING ACTIVITIES)
+  // ═══════════════════════════════════════════════
+
+  "RP_A3": { title: "Rate vs Temperature (Activity 3)", cards: [
+    {q: "What reaction is used in AQA Required Activity 3 to investigate how rate changes with temperature?", a: "Sodium thiosulfate and hydrochloric acid:\nNa₂S₂O₃(aq) + 2HCl(aq) → 2NaCl(aq) + SO₂(g) + S(s) + H₂O(l)\nSulfur precipitates gradually, making the solution cloudy until a cross placed beneath the flask can no longer be seen."},
+    {q: "How is reaction rate measured in the sodium thiosulfate and HCl experiment?", a: "A cross is placed beneath the reaction flask. The time t is measured for the cross to disappear as the sulfur precipitate forms. Rate is taken as 1/t.\nThis approximates the initial rate because the same fixed amount of sulfur is produced before the cross disappears in every run."},
+    {q: "Why is rate = 1/t a valid approximation for initial rate in this experiment?", a: "Each run uses the same initial concentration of thiosulfate, so the same fixed amount of sulfur is produced before the cross disappears. The change in concentration of sulfur to the end-point is constant across runs, so only the time differs -- making 1/t proportional to rate."},
+    {q: "Describe the method for Required Activity 3.", a: "1. Measure 10 cm³ of 0.2 M HCl and 10 cm³ of Na₂S₂O₃ separately in measuring cylinders.\n2. Use a water bath to equilibrate both solutions to the chosen temperature.\n3. Place the flask on a paper cross. Add Na₂S₂O₃ first, then HCl and start the timer immediately.\n4. Swirl and stop the timer when the cross is no longer visible.\n5. Repeat at four more temperatures up to a maximum of 70°C."},
+    {q: "What graph is plotted to determine activation energy (Ea) from the rate-temperature data?", a: "ln(rate) or ln(1/t) on the y-axis against 1/T (in K⁻¹) on the x-axis.\nThis is the linearised Arrhenius equation. A straight line with a negative gradient is obtained. Gradient = -Ea/R."},
+    {q: "State the Arrhenius equation in its linear form and identify each term.", a: "ln k = ln A - Ea/(RT)\nGradient = -Ea/R; y-intercept = ln A.\nEa = activation energy (J mol⁻¹), R = 8.31 J K⁻¹ mol⁻¹, T = temperature in Kelvin, A = pre-exponential (frequency) factor."},
+    {q: "How is Ea calculated from the gradient of an Arrhenius plot?", a: "Ea = -gradient × R = -gradient × 8.31 (units: J mol⁻¹).\nDivide by 1000 to convert to kJ mol⁻¹.\nChoose two points far apart on the line of best fit to calculate the gradient accurately."},
+    {q: "Why must temperature be converted to Kelvin before plotting 1/T?", a: "The Arrhenius equation requires absolute temperature T in Kelvin. Using °C would produce a non-linear result and give an incorrect value of Ea."},
+    {q: "What are the main sources of error in the sodium thiosulfate and HCl experiment?", a: "Subjective judgement of when the cross disappears (inconsistent timing).\nTemperature of the water bath may fluctuate during the experiment.\nBoth solutions must be at the same temperature before mixing; a temperature difference introduces error.\nDelay in starting or stopping the timer."},
+    {q: "Why should a maximum temperature of 70°C be used in this experiment?", a: "Above 70°C the reaction is too fast to time accurately, giving large percentage errors in t. At high temperatures the solutions may also begin to decompose, and the risk from hot acid increases."},
+    {q: "If the gradient of the ln(1/t) vs 1/T graph is -5680, calculate Ea.", a: "Ea = -gradient × R = 5680 × 8.31 = 47 200 J mol⁻¹ = 47.2 kJ mol⁻¹.\n(The gradient is negative, so -gradient is positive, giving a positive Ea as expected.)"},
+    {q: "What safety precautions are required for the sodium thiosulfate and HCl experiment?", a: "HCl is corrosive at higher concentrations and an irritant at lower concentrations: wear goggles.\nSO₂ gas is produced: work in a well-ventilated area or fume cupboard.\nNa₂S₂O₃ is a mild irritant: wash hands after use.\nAvoid splashing solutions, especially when heating."}
+  ]},
+
+  "RP_A4": { title: "Testing for Cations and Anions (Activity 4)", cards: [
+    {q: "Describe the test for Group 2 metal ions using sodium hydroxide solution.", a: "Add NaOH(aq) dropwise to the metal ion solution.\nMg²⁺: white precipitate of Mg(OH)₂ (insoluble).\nCa²⁺: white precipitate of Ca(OH)₂ (sparingly soluble; more NaOH may be needed).\nSr²⁺ and Ba²⁺: no precipitate (hydroxides are soluble); the solution becomes strongly alkaline."},
+    {q: "Write the ionic equation for magnesium hydroxide forming when NaOH is added to Mg²⁺(aq).", a: "Mg²⁺(aq) + 2OH⁻(aq) → Mg(OH)₂(s)\nWhite precipitate formed. This also applies to Ca²⁺ forming Ca(OH)₂(s)."},
+    {q: "How do you test for ammonium ions (NH₄⁺)?", a: "Add dilute NaOH(aq) and warm the mixture gently in a water bath.\nAmmonia gas is released, turning damp red litmus paper blue (alkaline gas).\nNH₄⁺(aq) + OH⁻(aq) → NH₃(g) + H₂O(l)"},
+    {q: "Describe the test for sulfate ions (SO₄²⁻) and explain the role of HCl.", a: "Add acidified barium chloride solution (BaCl₂ acidified with dilute HCl) to the test solution.\nA white precipitate of barium sulfate confirms sulfate ions: Ba²⁺(aq) + SO₄²⁻(aq) → BaSO₄(s).\nHCl prevents barium carbonate (BaCO₃) forming (carbonate impurities would give a false white precipitate)."},
+    {q: "Why must the barium chloride be acidified with HCl and NOT with H₂SO₄ when testing for sulfate ions?", a: "H₂SO₄ contains sulfate ions -- adding it would produce a false positive precipitate of BaSO₄ even if no sulfate were present in the original sample.\nHCl is used instead because chloride ions do not form precipitates with Ba²⁺."},
+    {q: "Describe the silver nitrate test for halide ions.", a: "Acidify the test solution with dilute HNO₃, then add AgNO₃(aq) dropwise.\nCl⁻: white precipitate of AgCl.\nBr⁻: cream precipitate of AgBr.\nI⁻: pale yellow precipitate of AgI.\nHNO₃ prevents carbonate interference (Ag₂CO₃ would give a white precipitate masking the result)."},
+    {q: "How can AgCl, AgBr and AgI precipitates be distinguished after they have formed?", a: "Treat with ammonia solution:\nAgCl dissolves in dilute NH₃: AgCl(s) + 2NH₃(aq) → [Ag(NH₃)₂]⁺(aq) + Cl⁻(aq) -- colourless solution.\nAgBr dissolves only in concentrated NH₃.\nAgI does not dissolve in either dilute or concentrated NH₃ (too insoluble)."},
+    {q: "Describe the test for carbonate ions (CO₃²⁻).", a: "Add dilute acid (e.g. dilute HCl). Effervescence (fizzing) is observed as CO₂ is released.\nBubble the gas through limewater: limewater turns cloudy if CO₂ is present.\n2HCl(aq) + Na₂CO₃(aq) → 2NaCl(aq) + H₂O(l) + CO₂(g)"},
+    {q: "How do you test for the presence of hydroxide ions (OH⁻)?", a: "Test with damp red litmus paper held in the test tube: the paper turns blue because OH⁻ ions make the solution alkaline.\nAlternatively, measure the pH: a value significantly above 7 indicates OH⁻ ions are present."},
+    {q: "How does the solubility trend of Group 2 hydroxides affect the NaOH precipitate test?", a: "Mg(OH)₂ is insoluble: a clear white precipitate always forms.\nCa(OH)₂ is sparingly soluble: a precipitate forms but may need more NaOH to become visible.\nSr(OH)₂ and Ba(OH)₂ are soluble: no precipitate; the solution turns very alkaline.\n(Hydroxide solubility increases down Group 2.)"},
+    {q: "How does the solubility trend of Group 2 sulfates apply to the BaCl₂ anion test?", a: "MgSO₄ and CaSO₄ are soluble: Mg²⁺ and Ca²⁺ solutions give no precipitate with SO₄²⁻.\nSrSO₄ and BaSO₄ are insoluble: Sr²⁺ and Ba²⁺ solutions give a white precipitate.\n(Sulfate solubility DECREASES down Group 2 -- opposite trend to hydroxides.)"},
+    {q: "What ionic equations represent the three silver halide precipitate reactions?", a: "Ag⁺(aq) + Cl⁻(aq) → AgCl(s) -- white\nAg⁺(aq) + Br⁻(aq) → AgBr(s) -- cream\nAg⁺(aq) + I⁻(aq) → AgI(s) -- pale yellow"}
+  ]},
+
+  "RP_A6": { title: "Functional Group Tests (Activity 6)", cards: [
+    {q: "How do you test for an alkene using bromine water?", a: "Add a few drops of the unknown liquid or solution to 0.5 cm³ of bromine water in a test tube and shake.\nResult: alkenes decolourise the orange/brown bromine water, turning it colourless (Br₂ adds across the C=C).\nAlkanes and most other compounds do not decolourise bromine water in the absence of UV light."},
+    {q: "How do you test for an aldehyde using Tollens' reagent?", a: "Prepare Tollens' reagent (silver nitrate + NaOH + NH₃ until precipitate dissolves). Add a few drops of the unknown and heat gently in a warm water bath (50-60°C).\nResult with aldehydes: a silver mirror forms on the inside of the test tube.\nKetones give no change.\nReaction: RCHO + 2Ag⁺ + H₂O → RCOOH + 2Ag(s) + 2H⁺"},
+    {q: "How is Tollens' reagent prepared in the laboratory?", a: "1. Place 1 cm³ of AgNO₃(aq) in a test tube.\n2. Add one drop of NaOH(aq): a brown Ag₂O precipitate forms.\n3. Add NH₃(aq) dropwise with shaking until the precipitate just dissolves to give a clear, colourless solution.\nUse immediately. Do NOT store: dried silver residues can be shock-sensitive."},
+    {q: "How do you test for an aldehyde using Fehling's solution?", a: "Mix equal volumes of Fehling's A (copper sulfate) and Fehling's B (NaOH + sodium potassium tartrate). Add a few drops of the unknown and heat in a warm water bath.\nResult with aldehydes: the blue Cu²⁺ solution forms a brick-red precipitate of copper(I) oxide, Cu₂O.\nKetones give no change.\nReaction: RCHO + 2Cu²⁺ + 2H₂O → RCOOH + Cu₂O(s) + 4H⁺"},
+    {q: "How do you test for a carboxylic acid?", a: "Add a small amount of sodium carbonate (Na₂CO₃) solid or solution to the unknown.\nResult: effervescence (fizzing) due to CO₂ gas evolving confirms a carboxylic acid.\n2RCOOH + Na₂CO₃ → 2RCOONa + H₂O + CO₂"},
+    {q: "How do you test for an alcohol using acidified potassium dichromate(VI)?", a: "Add a few drops of the unknown to acidified K₂Cr₂O₇ solution (orange) and warm gently.\nResult: the orange solution turns green if a primary or secondary alcohol is present (oxidised to aldehyde or ketone).\nTertiary alcohols give no colour change (cannot be oxidised under these conditions).\nNote: aldehydes also give orange to green with K₂Cr₂O₇."},
+    {q: "What is the key difference between the aldehyde and ketone tests using Tollens' and Fehling's reagents?", a: "Aldehydes react with BOTH Tollens' (silver mirror) and Fehling's (red precipitate of Cu₂O) because they can be oxidised to carboxylic acids.\nKetones do NOT react with either reagent; they cannot be oxidised under these mild conditions.\nThis is the standard test to distinguish between aldehydes and ketones."},
+    {q: "Summarise the key functional group tests and their results.", a: "Alkene: bromine water decolourised (orange to colourless).\nAldehyde: Tollens' gives silver mirror; Fehling's gives red Cu₂O precipitate.\nKetone: no reaction with Tollens' or Fehling's.\nCarboxylic acid: effervescence with Na₂CO₃.\nPrimary/secondary alcohol: orange to green with acidified K₂Cr₂O₇.\nTertiary alcohol: no reaction with acidified K₂Cr₂O₇."},
+    {q: "How does the bromine water test distinguish an alkene from an alkane?", a: "Alkenes decolourise bromine water in the dark (electrophilic addition of Br₂ across C=C).\nAlkanes do NOT decolourise bromine water in the dark; they react only under UV light (free radical substitution), producing HBr gas.\nNo UV light: decolouration indicates an alkene."},
+    {q: "What result does a halogenoalkane give with warm silver nitrate solution in ethanol?", a: "Warm with AgNO₃(aq) in ethanol.\nChloroalkane: slow white precipitate of AgCl.\nBromoalkane: cream precipitate of AgBr forms faster.\nIodoalkane: pale yellow precipitate of AgI forms first.\nThe rate of precipitate formation reflects the C-X bond strength (C-I weakest, hydrolyses fastest)."},
+    {q: "What safety precautions are required for functional group tests?", a: "Tollens' reagent must be prepared fresh and disposed of immediately: dried silver compounds are potentially explosive.\nK₂Cr₂O₇ is toxic and a carcinogen: wear gloves, avoid skin contact.\nH₂SO₄ is corrosive: add carefully.\nBromine water is corrosive and toxic: use small volumes in a fume cupboard.\nAll heating should be in a water bath -- no naked flames with organic compounds."}
+  ]},
+
+  "RP_A7b": { title: "Continuous Monitoring Method (Activity 7b)", cards: [
+    {q: "What is the continuous monitoring method for measuring reaction rate?", a: "One reaction is followed over time by recording a measurable quantity (e.g. gas volume, mass, absorbance) at regular time intervals. A concentration-time or volume-time graph is plotted from the data."},
+    {q: "What does the gradient of a concentration-time graph represent?", a: "The gradient equals the rate of reaction at that moment. A steeper gradient means a faster rate.\nThe gradient is greatest at t = 0 (initial rate, highest reactant concentrations) and decreases toward zero as reactants are consumed."},
+    {q: "How is the initial rate found from a continuous monitoring graph?", a: "Draw a tangent to the curve at t = 0. The gradient of this tangent equals the initial rate.\nGradient = change in y / change in x, using the tangent line -- NOT a chord through the curve."},
+    {q: "Describe the gas syringe method for measuring rate continuously.", a: "Connect a gas syringe to the reaction flask via a sealed bung. Record the volume of gas collected at regular time intervals (e.g. every 15 seconds). Plot volume of gas vs time.\nExample: Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)"},
+    {q: "Describe the method for the magnesium and hydrochloric acid continuous monitoring experiment.", a: "1. Measure 50 cm³ of 1.0 mol dm⁻³ HCl into a conical flask.\n2. Set up the gas syringe in a stand.\n3. Weigh 0.20 g of magnesium ribbon.\n4. Add Mg to the flask, insert the bung firmly and start the timer immediately.\n5. Record the volume of H₂ gas collected every 15 seconds for 3 minutes."},
+    {q: "What are the main methods used for continuous monitoring of a reaction?", a: "1. Gas syringe: measure volume of gas produced (requires gas to be released).\n2. Mass change: place the flask on a balance; mass decreases if a gas escapes (e.g. CO₂ from acid + carbonate).\n3. Colorimetry: measure absorbance at regular intervals if a coloured reactant or product is involved.\n4. Titration of withdrawn samples: remove small aliquots, quench, then titrate."},
+    {q: "When is the mass loss method used, and what is its limitation?", a: "Used when a gas escapes from the reaction mixture (e.g. CO₂ from HCOOH + Br₂ or CaCO₃ + HCl).\nLimitation: works best with dense gases like CO₂. Light gases like H₂ or HCl escape too quickly for reliable measurements. The balance must be sensitive enough for the expected mass change."},
+    {q: "What does 'pseudo-zero order' mean in a continuous monitoring experiment?", a: "If one reactant is in large excess, its concentration remains approximately constant throughout the reaction. This reactant appears to have no effect on rate and is treated as pseudo-zero order in that experiment. The method isolates the effect of the other reactant on rate."},
+    {q: "Why does a volume-time or concentration-time graph eventually become horizontal?", a: "The rate approaches zero as reactants are consumed. When the limiting reactant is completely used up, no further reaction occurs and the graph plateaus. The final horizontal value represents the maximum extent of reaction."},
+    {q: "How does colorimetry enable continuous monitoring of a reaction rate?", a: "If a reactant or product is coloured, place the reaction mixture in a colorimeter cuvette and record absorbance at regular time intervals.\nAbsorbance is directly proportional to concentration (Beer-Lambert law), so changing absorbance reflects changing concentration over time."},
+    {q: "What safety precautions are needed for the Mg + HCl gas syringe experiment?", a: "HCl is corrosive at higher concentrations: wear goggles and gloves.\nH₂ gas produced is highly flammable: no naked flames; ensure good ventilation.\nInsert the bung immediately when Mg is added to prevent gas loss at the start.\nDo not overfill the syringe: standard gas syringes have a maximum volume of about 100 cm³."},
+    {q: "What is the difference in purpose between the initial rate method (Activity 7a) and continuous monitoring (Activity 7b)?", a: "Initial rate method (7a): many separate experiments with varying starting concentrations; determines reaction order and rate equation.\nContinuous monitoring (7b): one experiment followed over time; gives the full rate profile (how rate changes as concentrations fall) and allows half-life to be measured for first-order reactions."}
+  ]},
+
+  "RP_A9": { title: "Titration Curves (Activity 9)", cards: [
+    {q: "Describe the method for constructing a pH curve by adding alkali to acid.", a: "1. Pipette 25 cm³ of acid into a conical flask.\n2. Calibrate the pH meter using a buffer solution of known pH, then measure the initial pH.\n3. Add alkali from a burette in 1-2 cm³ increments; stir and record pH after each addition.\n4. Near the equivalence point, add smaller volumes (0.1-0.5 cm³) to capture the steep section accurately.\n5. Continue until alkali is in excess.\n6. Plot pH on the y-axis vs volume of alkali added on the x-axis."},
+    {q: "Why must a pH meter be calibrated before use?", a: "pH meters can drift and lose accuracy on storage. Calibration corrects the reading by placing the probe in a buffer solution of known pH (e.g. pH 4.00) and pressing the calibration button. This sets the meter to give accurate pH values for the test solutions."},
+    {q: "Describe the shape of a strong acid-strong base pH curve.", a: "Starts at low pH (about 1-2 for 0.1 mol dm⁻³ HCl).\nRises slowly, then has a near-vertical section from pH 3 to pH 11.\nEquivalence point at pH = 7 (midpoint of the steep section).\nEnds at high pH (about 13 in excess NaOH)."},
+    {q: "Describe the shape of a weak acid-strong base pH curve.", a: "Starts at a higher pH than strong acid (typically pH 3-4 for 0.1 mol dm⁻³ ethanoic acid).\nHas a flattened buffer region before the equivalence point.\nSteep section is above pH 7 (approximately pH 7-11).\nEquivalence point is above pH 7 (the salt is alkaline by hydrolysis).\nAt half the equivalence volume, pH = pKa."},
+    {q: "What is the buffer region on a weak acid-strong base titration curve?", a: "The flat section of the pH curve before the equivalence point, where the pH changes very little as alkali is added. It forms because a buffer solution is present: both the weak acid HA and its conjugate base A⁻ are in significant amounts. The buffer resists pH change by consuming added OH⁻ or H⁺."},
+    {q: "At what volume is pH = pKa in a weak acid-strong base titration, and why?", a: "At the half-equivalence point (half the volume needed to reach equivalence).\nAt this point [HA] = [A⁻], so Ka = [H⁺][A⁻]/[HA] = [H⁺].\nTherefore pH = pKa. This allows Ka of the weak acid to be determined directly from the titration curve."},
+    {q: "Describe the shape of a strong acid-weak base pH curve.", a: "Starts at low pH (about 1-2).\nSteep section is below pH 7 (approximately pH 3-7).\nEquivalence point is below pH 7 (the salt formed is slightly acidic due to hydrolysis of the ammonium ion).\nNo buffer region in the basic region."},
+    {q: "Describe the shape of a weak acid-weak base pH curve.", a: "There is NO steep section on the curve.\nThe pH changes gradually throughout the titration.\nNo indicator can be used reliably (indicators need a steep region to give a sharp colour change at the endpoint).\nA pH meter must be used to identify the equivalence point."},
+    {q: "How do you identify the equivalence point from a pH curve?", a: "The equivalence point is at the midpoint of the steepest part (the inflection point) of the curve.\nStrong acid/strong base: pH = 7.\nWeak acid/strong base: pH > 7.\nStrong acid/weak base: pH < 7."},
+    {q: "How do you use a pH curve to choose an appropriate indicator?", a: "The indicator's colour change range (approximately 2 pH units wide, centred on its pKIn) must fall within the steep section of the titration curve.\nStrong/strong: methyl orange (3.1-4.4) or phenolphthalein (8.2-10.0) both work.\nWeak acid/strong base: phenolphthalein only (equivalence point above pH 7).\nStrong acid/weak base: methyl orange only (equivalence point below pH 7)."},
+    {q: "Why is phenolphthalein unsuitable for a strong acid-weak base titration?", a: "Phenolphthalein changes colour between pH 8.2 and 10.0. For a strong acid-weak base titration, the equivalence point is below pH 7. The indicator colour change would occur well before the equivalence point is reached, giving an inaccurate result."},
+    {q: "Why should temperature be kept constant during a titration curve experiment?", a: "pH depends on temperature: Kw and Ka values change with temperature, shifting all equilibria. If temperature varies during the experiment, pH readings will be inconsistent and the shape of the curve will be distorted. A constant temperature (e.g. 25°C) is maintained for reliable results."}
+  ]},
+
+  "RP_A11": { title: "Testing Transition Metal Ions (Activity 11)", cards: [
+    {q: "What colour precipitate does Cu²⁺(aq) form when NaOH(aq) is added?", a: "A blue precipitate of copper(II) hydroxide.\nIonic equation: [Cu(H₂O)₆]²⁺(aq) + 2OH⁻(aq) → Cu(H₂O)₄(OH)₂(s) + 2H₂O(l)"},
+    {q: "What colour precipitate does Fe²⁺(aq) form when NaOH(aq) is added?", a: "A green precipitate of iron(II) hydroxide.\nIonic equation: [Fe(H₂O)₆]²⁺(aq) + 2OH⁻(aq) → Fe(H₂O)₄(OH)₂(s) + 2H₂O(l)\nNote: the green precipitate may turn brown at the surface as Fe²⁺ is oxidised to Fe³⁺ in air."},
+    {q: "What colour precipitate does Fe³⁺(aq) form when NaOH(aq) is added?", a: "A brown precipitate of iron(III) hydroxide.\nIonic equation: [Fe(H₂O)₆]³⁺(aq) + 3OH⁻(aq) → Fe(H₂O)₃(OH)₃(s) + 3H₂O(l)"},
+    {q: "What happens when excess NaOH(aq) is added to Al³⁺(aq)?", a: "A white precipitate of aluminium hydroxide forms first. With excess NaOH the precipitate dissolves to give a colourless solution of [Al(OH)₄]⁻.\nAl(H₂O)₃(OH)₃(s) + OH⁻(aq) → [Al(OH)₄]⁻(aq) + 3H₂O(l)\nAluminium hydroxide is amphoteric: it dissolves in both acid and alkali."},
+    {q: "What happens when excess NH₃(aq) is added to Cu²⁺(aq)?", a: "A blue precipitate of copper hydroxide forms first with limited NH₃. With excess NH₃ the precipitate dissolves as NH₃ acts as a ligand, forming the deep blue complex [Cu(NH₃)₄(H₂O)₂]²⁺.\nCu(OH)₂(s) + 4NH₃(aq) → [Cu(NH₃)₄(H₂O)₂]²⁺(aq) + 2OH⁻(aq)"},
+    {q: "What is the colour change when excess NH₃(aq) is added to Cu²⁺(aq)?", a: "Limited NH₃: blue precipitate of Cu(OH)₂ forms.\nExcess NH₃: the precipitate dissolves to give a deep blue/royal blue solution of the tetraamminecopper(II) complex [Cu(NH₃)₄(H₂O)₂]²⁺.\nThe deep blue complex is more intensely coloured than the original pale blue Cu²⁺(aq)."},
+    {q: "What result does Fe²⁺ or Fe³⁺ give with excess NH₃(aq)?", a: "Both Fe²⁺ (green ppt) and Fe³⁺ (brown ppt) form hydroxide precipitates with limited NH₃. The precipitates do NOT dissolve in excess NH₃ because Fe²⁺ and Fe³⁺ do not form stable ammine complexes (unlike Cu²⁺)."},
+    {q: "What is observed when Na₂CO₃(aq) is added to Fe³⁺(aq)?", a: "A brown precipitate of iron(III) hydroxide forms AND CO₂ gas evolves (effervescence).\n2[Fe(H₂O)₆]³⁺ + 3CO₃²⁻ → 2Fe(OH)₃·3H₂O(s) + 3CO₂(g)\nThe high charge density of Fe³⁺ polarises the carbonate, causing hydrolysis to OH⁻ and CO₂. Fe³⁺ forms a hydroxide, not a carbonate."},
+    {q: "What is observed when Na₂CO₃(aq) is added to Cu²⁺(aq)?", a: "A blue-green precipitate of copper(II) carbonate (CuCO₃) forms. No gas is evolved.\nCu²⁺(aq) + CO₃²⁻(aq) → CuCO₃(s)\n2+ metal ions have lower charge density than 3+ ions and do not polarise carbonate enough to cause hydrolysis, so M(CO₃) precipitates form instead of hydroxides."},
+    {q: "Describe the method for Required Activity 11.", a: "1. Place about 10 drops of the metal ion solution in a test tube.\n2. NaOH test: add NaOH(aq) dropwise with gentle shaking until in excess; note precipitate colour and whether it dissolves.\n3. NH₃ test: add NH₃(aq) dropwise until in excess; note initial precipitate colour and whether it dissolves.\n4. Na₂CO₃ test: add Na₂CO₃(aq); note precipitate colour and whether gas is evolved.\n5. Record all observations carefully."},
+    {q: "Summarise the colours of hydroxide precipitates formed with NaOH for key metal ions.", a: "Cu²⁺: blue precipitate, does not dissolve in excess NaOH.\nFe²⁺: green precipitate, does not dissolve in excess NaOH.\nFe³⁺: brown precipitate, does not dissolve in excess NaOH.\nAl³⁺: white precipitate, dissolves in excess NaOH to give colourless [Al(OH)₄]⁻."},
+    {q: "Why do 3+ metal ions form hydroxide precipitates (not carbonates) when Na₂CO₃ is added?", a: "The high charge density (small, highly charged ion) of 3+ ions strongly polarises the carbonate ion CO₃²⁻, causing it to hydrolyse: CO₃²⁻ is effectively converted to OH⁻ and CO₂.\nSo M³⁺ + CO₃²⁻ → M(OH)₃ + CO₂, not M₂(CO₃)₃.\n2+ ions have lower charge density and form insoluble M(CO₃) precipitates without decomposing the carbonate."}
   ]},
 
   // ═══════════════════════════════════════════════
@@ -2759,8 +2856,8 @@ const SECTIONS = [
   { id: "inorganic_a2", label: "Inorganic Chemistry (A2)", sub: "3.2 Year 2", topics: ["3.2.4","3.2.5","3.2.6"] },
   { id: "organic", label: "Organic Chemistry", sub: "3.3", topics: ["3.3.1","3.3.2","3.3.3","3.3.4","3.3.5","3.3.6","3.3.7"] },
   { id: "organic2", label: "Organic Chemistry (A2)", sub: "3.3 (A2)", topics: ["3.3.9","3.3.10","3.3.11","3.3.12","3.3.13","3.3.14","3.3.15"] },
-  { id: "practicals_as", label: "Required Practicals (AS)", sub: "RP Year 1", topics: ["RP1a","RP1b","RP2","RP3","RP4","RP5","RP6","RP7"] },
-  { id: "practicals_a2", label: "Required Practicals (A2)", sub: "RP Year 2", topics: ["RP8","RP9","RP10a","RP10b","RP11","RP12"] },
+  { id: "practicals_as", label: "Required Practicals (AS)", sub: "Activities 1-7 (Year 1)", topics: ["RP1a","RP1b","RP12","RP_A3","RP_A4","RP4","RP_A6","RP2","RP_A7b"] },
+  { id: "practicals_a2", label: "Required Practicals (A2)", sub: "Activities 8-12 (Year 2)", topics: ["RP8","RP_A9","RP10a","RP6","RP_A11","RP5"] },
 ];
 
 const TOPIC_ORDER = SECTIONS.flatMap(s => s.topics);
@@ -2773,6 +2870,90 @@ const OCR_SECTIONS = [
   { id: "ocr_mod6", label: "Module 6 – Organic & Analysis", sub: "Organic Chemistry and Analysis", topics: ["ocr_6.1.1","ocr_6.1.2","ocr_6.2.1","ocr_6.2.2","ocr_6.3.1","ocr_6.4.1","ocr_6.5.1","ocr_6.5.2"] },
 ];
 const OCR_TOPIC_ORDER = OCR_SECTIONS.flatMap(s => s.topics);
+
+// === ORGANIC SYNTHESIS MAP DATA ===
+const SYNTH_ALI_NODES = [
+  ["alkylAmm",    "Alkyl\nAmm. Salts",              72,  36, "#4f46e5", 66, 22],
+  ["quatAmm",     "Quat.\nAmm. Salts",             238,  36, "#6d28d9", 84, 22],
+  ["tertAmines",  "Tertiary\nAmines",              400,  36, "#7c3aed", 56, 22],
+  ["alkanes",     "Alkanes",                        55, 112, "#475569", 48, 14],
+  ["haloalkanes", "Haloalkanes",                   195, 112, "#c2410c", 66, 14],
+  ["primAmines",  "Primary\nAmines",               345, 112, "#be185d", 60, 20],
+  ["secAmines",   "Secondary\nAmines",             435, 164, "#9d174d", 50, 20],
+  ["alkenes",     "Alkenes",                       182, 200, "#15803d", 52, 14],
+  ["nitriles",    "Nitriles",                      390, 200, "#4338ca", 50, 14],
+  ["dihalides",   "Di-\nhaloalkanes",               65, 288, "#9a3412", 58, 20],
+  ["alcohols",    "Alcohols",                      258, 274, "#1d4ed8", 54, 14],
+  ["diols",       "Diols",                          65, 372, "#0369a1", 46, 14],
+  ["ketones",     "Ketones",                       165, 372, "#7e22ce", 52, 14],
+  ["aldehydes",   "Aldehydes",                     280, 372, "#a21caf", 54, 14],
+  ["esters",      "Esters",                        415, 350, "#0e7490", 48, 14],
+  ["carbAcids",   "Carboxylic\nAcids",             280, 456, "#b91c1c", 68, 20],
+  ["carboxylate", "Carboxylate\nSalts",            108, 540, "#be123c", 68, 20],
+  ["amides",      "Amides",                        272, 540, "#5b21b6", 50, 14],
+  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  416, 540, "#0369a1", 58, 24],
+];
+const SYNTH_ALI_RXNS = [
+  [1,  "alkanes",    "haloalkanes", 124, 112, "Alkanes",             "Haloalkanes",              "Halogen",                "UV light",               "Free radical",  "Substitution"],
+  [2,  "haloalkanes","primAmines",  272, 107, "Haloalkanes",         "Primary Amines",           "Conc. NH3",              "Heat, under pressure",   "Nucleophilic",  "Substitution"],
+  [3,  "primAmines", "alkylAmm",   200,  68, "Primary Amines",      "Alkyl Ammonium Salts",     "Dilute HCl",             "Room temperature",       "--",            "Acid-base"],
+  [4,  "tertAmines", "quatAmm",    320,  33, "Tertiary Amines",     "Quaternary Ammonium Salts","Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [5,  "secAmines",  "tertAmines", 420,  96, "Secondary Amines",    "Tertiary Amines",          "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [6,  "primAmines", "secAmines",  393, 134, "Primary Amines",      "Secondary Amines",         "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [7,  "haloalkanes","alkenes",    166, 153, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
+  [8,  "alkenes",   "haloalkanes", 214, 152, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
+  [9,  "haloalkanes","alcohols",   220, 192, "Haloalkanes",         "Alcohols",                 "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [10, "haloalkanes","nitriles",   290, 152, "Haloalkanes",         "Nitriles",                 "KCN in ethanol",         "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [11, "nitriles",  "primAmines",  368, 152, "Nitriles",            "Primary Amines",           "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
+  [12, "alkenes",   "dihalides",   118, 246, "Alkenes",             "Dihaloalkanes",            "Halogen",                "Room temperature",        "Electrophilic", "Addition"],
+  [13, "alkenes",   "alcohols",    218, 238, "Alkenes",             "Alcohols",                 "Steam + H2SO4",          "Heat",                   "--",            "Hydration"],
+  [14, "alcohols",  "alkenes",     242, 222, "Alcohols",            "Alkenes",                  "Al2O3 or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
+  [15, "dihalides", "diols",        65, 330, "Dihaloalkanes",       "Diols",                    "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [16, "alcohols",  "ketones",     208, 320, "Alcohols (secondary)","Ketones",                  "K2Cr2O7 / H2SO4",       "Heat",                   "--",            "Oxidation"],
+  [17, "ketones",   "alcohols",    228, 332, "Ketones",             "Alcohols (secondary)",     "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
+  [18, "alcohols",  "aldehydes",   268, 322, "Alcohols (primary)",  "Aldehydes",                "K2Cr2O7 / H2SO4",       "Heat, limited oxidant",  "--",            "Oxidation"],
+  [19, "aldehydes", "alcohols",    286, 312, "Aldehydes",           "Alcohols (primary)",       "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
+  [20, "nitriles",  "carbAcids",   340, 328, "Nitriles",            "Carboxylic Acids",         "Dilute HCl(aq)",         "Heat under reflux",      "--",            "Hydrolysis"],
+  [21, "aldehydes", "carbAcids",   280, 412, "Aldehydes",           "Carboxylic Acids",         "K2Cr2O7 / H2SO4",       "Heat under reflux",      "--",            "Oxidation"],
+  [22, "carbAcids", "alcohols",    300, 366, "Carboxylic Acids",    "Primary Alcohols",         "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
+  [23, "carbAcids", "esters",      352, 404, "Carboxylic Acids",    "Esters",                   "Alcohol + conc. H2SO4", "Heat",                   "--",            "Esterification"],
+  [24, "acylCl",    "esters",      416, 448, "Acyl Chlorides",      "Esters",                   "Alcohol",                "Room temperature",        "Nucleophilic",  "Acylation"],
+  [25, "carbAcids", "carboxylate", 192, 500, "Carboxylic Acids",    "Carboxylate Salts",        "NaOH(aq)",               "Room temperature",        "--",            "Acid-base"],
+  [26, "acylCl",    "carbAcids",   352, 498, "Acyl Chlorides",      "Carboxylic Acids",         "H2O",                    "Room temperature",        "--",            "Hydrolysis"],
+  [27, "acylCl",    "amides",      344, 540, "Acyl Chlorides",      "Amides",                   "Amines",                 "Room temperature",        "Nucleophilic",  "Acylation"],
+];
+const SYNTH_ARO_NODES = [
+  ["benzene",      "Benzene",                       250, 196, "#1d4ed8", 52, 14],
+  ["methylbenz",   "Methylbenzene\n(Toluene)",      140, 196, "#15803d", 72, 22],
+  ["acetophenone", "Acetophenone\n(COCH3)",         380, 112, "#0e7490", 72, 22],
+  ["ethylbenzene", "Ethylbenzene",                  415, 196, "#0369a1", 64, 14],
+  ["chloromethyl", "Chloromethyl-\nbenzene",         55, 284, "#9a3412", 72, 22],
+  ["nitrobenzene", "Nitrobenzene",                  375, 284, "#b45309", 66, 14],
+  ["dinitrotol",   "Di-nitro-\ntoluene",             55, 368, "#92400e", 60, 22],
+  ["aniline",      "Aniline\n(Aminobenzene)",       342, 368, "#15803d", 78, 22],
+  ["diazonium",    "Benzenediazonium\nChloride",    255, 456, "#dc2626", 94, 22],
+  ["azoDye",       "Azo Dye",                       125, 456, "#9333ea", 52, 14],
+];
+const SYNTH_ARO_RXNS = [
+  [1, "benzene",     "acetophenone", 316, 150, "Benzene",                    "Acetophenone",
+      "Ethanoyl chloride + AlCl3",  "Heat",              "Electrophilic", "Friedel-Crafts Acylation"],
+  [2, "benzene",     "ethylbenzene", 332, 196, "Benzene",                    "Ethylbenzene",
+      "Chloroethane + AlCl3",       "Heat",              "Electrophilic", "Friedel-Crafts Alkylation"],
+  [3, "methylbenz",  "chloromethyl",  97, 240, "Methylbenzene",              "Chloromethylbenzene",
+      "Chlorine",                    "UV light",          "Free radical",  "Substitution"],
+  [4, "benzene",     "methylbenz",   194, 196, "Benzene",                    "Methylbenzene",
+      "Chloromethane + AlCl3",      "Heat",              "Electrophilic", "Friedel-Crafts Alkylation"],
+  [5, "benzene",     "nitrobenzene", 312, 240, "Benzene",                    "Nitrobenzene",
+      "Conc. HNO3 + H2SO4",        "25-60 degrees C",   "Electrophilic", "Nitration"],
+  [6, "methylbenz",  "dinitrotol",    97, 328, "Methylbenzene",              "Di-nitrotoluene",
+      "Conc. HNO3 + H2SO4",        "25-60 degrees C",   "Electrophilic", "Nitration"],
+  [7, "nitrobenzene","aniline",      360, 326, "Nitrobenzene",               "Aniline",
+      "Sn + conc. HCl",             "Heat",              "--",             "Reduction"],
+  [8, "aniline",     "diazonium",    298, 414, "Aniline",                    "Benzenediazonium Chloride",
+      "NaNO2 / HCl",                "Below 10 degrees C","--",             "Diazotisation"],
+  [9, "diazonium",   "azoDye",       190, 456, "Benzenediazonium Chloride",  "Azo Dye",
+      "Phenol",                      "Alkaline conditions","--",            "Azo Coupling"],
+];
 
 export default function App() {
   const [screen, setScreen] = useState("board");
@@ -2811,6 +2992,9 @@ export default function App() {
   const [calcScore, setCalcScore] = useState({}); // { topicId: { correct, attempted } }
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
+  const [synthTab, setSynthTab] = useState("ali");
+  const [selectedRxn, setSelectedRxn] = useState(null);
+  const [synthQuiz, setSynthQuiz] = useState(false);
 
   const cards = topic ? SETS[topic].cards : [];
   const currentCardIndex = order[index];
@@ -3145,7 +3329,7 @@ export default function App() {
       {/* Tab bar */}
       <div style={{ display: "flex", gap: "0", borderBottom: "2px solid #e0e8f0", margin: "0 16px", marginBottom: "0" }}>
         {["flashcards", "synth", "calc", "extended"].map(tab => (
-          <button key={tab} onClick={() => setTopicsTab(tab)} style={{
+          <button key={tab} onClick={() => { setTopicsTab(tab); if (tab !== "synth") setSelectedRxn(null); }} style={{
             padding: "12px 16px", border: "none", background: "none",
             fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
             color: topicsTab === tab ? (tab === "extended" ? "#7c3aed" : "#29ABE2") : "#7a95b0",
@@ -3192,119 +3376,167 @@ export default function App() {
           </div>
         </div>
       )}
-      {topicsTab === "synth" && (
-        <div style={{ padding: "16px 16px 40px", flex: 1, overflowY: "auto" }}>
-          <p style={{ color: "#4a6080", fontSize: "14px", marginBottom: "16px", lineHeight: 1.5 }}>
-            Select a starting functional group to see all possible transformations.
-          </p>
-          {/* FROM group pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
-            {[...new Set(SYNTH_ROUTES.filter(r => r.board === "both" || r.board === board).map(r => r.from))].map(g => (
-              <button key={g} onClick={() => setSelectedFrom(selectedFrom === g ? null : g)} style={{
-                padding: "7px 14px", borderRadius: "20px", border: "2px solid",
-                borderColor: selectedFrom === g ? "#29ABE2" : "#d0dce8",
-                background: selectedFrom === g ? "#29ABE2" : "#ffffff",
-                color: selectedFrom === g ? "#ffffff" : "#4a6080",
-                fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit"
-              }}>{g}</button>
-            ))}
-          </div>
-          {/* Route cards */}
-          {selectedFrom && (() => {
-            const routes = SYNTH_ROUTES.filter(r => (r.board === "both" || r.board === board) && r.from === selectedFrom);
-            return (
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                <div style={{ fontSize: "12px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "2px" }}>
-                  {routes.length} route{routes.length !== 1 ? "s" : ""} from {selectedFrom}
-                </div>
-                {routes.map((route, i) => {
-                  const key = `${route.from}→${route.to}`;
-                  const revealed = revealedRoutes.has(key);
+      {topicsTab === "synth" && (() => {
+        const sNodes = synthTab === "ali" ? SYNTH_ALI_NODES : SYNTH_ARO_NODES;
+        const sRxns  = synthTab === "ali" ? SYNTH_ALI_RXNS  : SYNTH_ARO_RXNS;
+        const vbW = 480;
+        const vbH = synthTab === "ali" ? 590 : 490;
+        const nodeMap = Object.fromEntries(sNodes.map(n => [n[0], n]));
+        const edgePt = (fcx, fcy, fhw, fhh, tcx, tcy) => {
+          const dx = tcx - fcx, dy = tcy - fcy;
+          const absDx = Math.abs(dx), absDy = Math.abs(dy);
+          if (!absDx && !absDy) return [fcx, fcy];
+          let t;
+          if (!absDx) t = (fhh + 5) / absDy;
+          else if (!absDy) t = (fhw + 5) / absDx;
+          else t = (absDx * fhh >= absDy * fhw) ? (fhw + 5) / absDx : (fhh + 5) / absDy;
+          return [fcx + dx * t, fcy + dy * t];
+        };
+        const selRxn = sRxns.find(r => r[0] === selectedRxn);
+        return (
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+            {/* Sub-tab bar + quiz toggle */}
+            <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #e0e8f0", padding: "0 12px", background: "#fff", flexShrink: 0 }}>
+              {[["ali", "Aliphatic (27)"], ["aro", "Aromatic (9)"]].map(([id, lbl]) => (
+                <button key={id} onClick={() => { setSynthTab(id); setSelectedRxn(null); }} style={{
+                  padding: "10px 12px", border: "none", background: "none", fontFamily: "inherit",
+                  fontSize: "12px", fontWeight: 700, cursor: "pointer",
+                  color: synthTab === id ? "#29ABE2" : "#7a95b0",
+                  borderBottom: synthTab === id ? "3px solid #29ABE2" : "3px solid transparent",
+                  marginBottom: "-1px", whiteSpace: "nowrap"
+                }}>{lbl}</button>
+              ))}
+              <div style={{ flex: 1 }} />
+              <button onClick={() => setSynthQuiz(q => !q)} style={{
+                padding: "5px 12px", borderRadius: "20px", border: "none",
+                background: synthQuiz ? "#f97316" : "#f0f4f8",
+                color: synthQuiz ? "#fff" : "#7a95b0",
+                fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit"
+              }}>Quiz {synthQuiz ? "ON" : "OFF"}</button>
+            </div>
+            <div style={{ fontSize: "11px", color: "#7a95b0", padding: "5px 16px 2px", textAlign: "center", flexShrink: 0 }}>
+              Tap a numbered circle to see reagents and conditions
+            </div>
+            {/* SVG network - scrollable */}
+            <div style={{ flex: 1, overflow: "auto", padding: "4px 6px", paddingBottom: selRxn ? "190px" : "16px" }}>
+              <svg viewBox={`0 0 ${vbW} ${vbH}`} width="100%" style={{ display: "block", minWidth: "320px" }}>
+                <defs>
+                  <marker id="sarr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L6,3z" fill="#c4cdd6" />
+                  </marker>
+                  <marker id="sarr-sel" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L6,3z" fill="#f97316" />
+                  </marker>
+                </defs>
+                {/* Arrows */}
+                {sRxns.map(r => {
+                  const [n, fromId, toId] = r;
+                  const fN = nodeMap[fromId];
+                  const tN = nodeMap[toId];
+                  if (!fN || !tN) return null;
+                  const [x1, y1] = edgePt(fN[2], fN[3], fN[5], fN[6], tN[2], tN[3]);
+                  const [x2, y2] = edgePt(tN[2], tN[3], tN[5], tN[6], fN[2], fN[3]);
+                  const isSel = selectedRxn === n;
                   return (
-                    <div key={i} onClick={() => setRevealedRoutes(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; })} style={{
-                      background: "#ffffff", borderRadius: "12px", padding: "0",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.07)", cursor: "pointer",
-                      overflow: "hidden", border: "1px solid #e8eef4"
-                    }}>
-                      {/* Structure diagrams */}
-                      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"8px", padding:"12px 16px 6px", background:"#f8fafc", flexWrap:"wrap" }}>
-                        <div style={{ textAlign:"center" }}>
-                          {GROUP_SMILES[route.from]
-                            ? <canvas data-smiles={GROUP_SMILES[route.from]} width="160" height="110" style={{ display:"block", borderRadius:"6px" }} />
-                            : <div style={{ width:160, height:110, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"13px", color:"#9ca3af" }}>{route.from}</div>
-                          }
-                          <div style={{ fontSize:"11px", color:"#64748b", fontWeight:600, marginTop:"3px" }}>{route.from}</div>
-                        </div>
-                        <div style={{ fontSize:"22px", color:"#29ABE2", fontWeight:700, flexShrink:0, paddingBottom:"18px" }}>→</div>
-                        <div style={{ textAlign:"center" }}>
-                          {GROUP_SMILES[route.to]
-                            ? <canvas data-smiles={GROUP_SMILES[route.to]} width="160" height="110" style={{ display:"block", borderRadius:"6px" }} />
-                            : <div style={{ width:160, height:110, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"13px", color:"#9ca3af" }}>{route.to}</div>
-                          }
-                          <div style={{ fontSize:"11px", color:"#64748b", fontWeight:600, marginTop:"3px" }}>{route.to}</div>
-                        </div>
-                      </div>
-                      {/* Route header */}
-                      <div style={{ padding: "10px 18px 6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a2d45" }}>→ {route.to}</div>
-                        <div style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 600, background: "#eaf6fd", padding: "3px 10px", borderRadius: "20px" }}>
-                          {route.mechanism.split(" ").slice(0, 3).join(" ")}
-                        </div>
-                      </div>
-                      {!revealed && (
-                        <div style={{ padding: "6px 18px 14px", fontSize: "13px", color: "#7a95b0", fontStyle: "italic" }}>
-                          Tap to reveal reagents and conditions
-                        </div>
-                      )}
-                      {revealed && (
-                        <div style={{ padding: "6px 18px 14px" }}>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
-                            <div style={{ background: "#f0f4f8", borderRadius: "8px", padding: "10px 12px" }}>
-                              <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Reagents</div>
-                              <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 500 }}>{route.reagents}</div>
-                            </div>
-                            <div style={{ background: "#f0f4f8", borderRadius: "8px", padding: "10px 12px" }}>
-                              <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Conditions</div>
-                              <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 500 }}>{route.conditions}</div>
-                            </div>
-                          </div>
-                          <div style={{ background: "#eaf6fd", borderRadius: "8px", padding: "10px 12px", marginBottom: route.steps ? "10px" : "0" }}>
-                            <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Mechanism: {route.mechanism}</div>
-                            <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.5 }}>{route.notes}</div>
-                          </div>
-                          {route.steps && (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                              {route.steps.map((step, si) => (
-                                <div key={si} style={{ borderRadius: "8px", overflow: "hidden", border: "1px solid #e0e8f0" }}>
-                                  <div style={{ background: si === 0 ? "#fff3e0" : si === route.steps.length - 1 ? "#fce4ec" : "#e8f5e9", padding: "6px 12px", display: "flex", alignItems: "center", gap: "8px" }}>
-                                    <span style={{ fontSize: "11px", fontWeight: 800, color: si === 0 ? "#e65100" : si === route.steps.length - 1 ? "#c62828" : "#2e7d32", textTransform: "uppercase", letterSpacing: "0.5px" }}>{step.stage}</span>
-                                    {step.arrow && <span style={{ fontSize: "11px", color: "#7a95b0" }}>— {step.arrow}</span>}
-                                  </div>
-                                  <div style={{ background: "#ffffff", padding: "8px 12px" }}>
-                                    <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "13px", color: "#1a2d45", fontWeight: 600, marginBottom: "5px", whiteSpace: "pre-line" }}>{step.equation}</div>
-                                    <div style={{ fontSize: "12px", color: "#4a6080", lineHeight: 1.5 }}>{step.note}</div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    <line key={"a" + n} x1={x1} y1={y1} x2={x2} y2={y2}
+                      stroke={isSel ? "#f97316" : "#c4cdd6"}
+                      strokeWidth={isSel ? 2.5 : 1.5}
+                      markerEnd={isSel ? "url(#sarr-sel)" : "url(#sarr)"}
+                    />
                   );
                 })}
-              </div>
-            );
-          })()}
-          {!selectedFrom && (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
-              <div style={{ fontSize: "28px", fontWeight: 700, color: "#d0dce8", marginBottom: "10px" }}>→</div>
-              <div style={{ fontSize: "15px", fontWeight: 600 }}>Choose a starting group above</div>
-              <div style={{ fontSize: "13px", marginTop: "6px" }}>Reagents, conditions and mechanisms shown for each route</div>
+                {/* Nodes */}
+                {sNodes.map(([id, label, cx, cy, fill, hw, hh]) => {
+                  const lines = label.split("\n");
+                  const lh = 11;
+                  const th = lines.length * lh;
+                  return (
+                    <g key={id}>
+                      <rect x={cx - hw} y={cy - hh} width={hw * 2} height={hh * 2}
+                        rx={5} fill={fill} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                      {lines.map((ln, li) => (
+                        <text key={li} x={cx} y={cy - th / 2 + li * lh + lh * 0.9}
+                          textAnchor="middle" fontSize="9" fontWeight="700" fill="#ffffff"
+                          style={{ userSelect: "none", pointerEvents: "none" }}>{ln}</text>
+                      ))}
+                    </g>
+                  );
+                })}
+                {/* Reaction number buttons */}
+                {sRxns.map(r => {
+                  const [n, , , bx, by] = r;
+                  const isSel = selectedRxn === n;
+                  return (
+                    <g key={"b" + n} onClick={() => setSelectedRxn(selectedRxn === n ? null : n)} style={{ cursor: "pointer" }}>
+                      <circle cx={bx} cy={by} r={13} fill="transparent" />
+                      <circle cx={bx} cy={by} r={9}
+                        fill={isSel ? "#f97316" : "#ffffff"}
+                        stroke={isSel ? "#ea580c" : "#c4cdd6"}
+                        strokeWidth={1.5}
+                      />
+                      <text x={bx} y={by + 0.5} textAnchor="middle" dominantBaseline="middle"
+                        fontSize="8" fontWeight="800"
+                        fill={isSel ? "#ffffff" : "#374151"}
+                        style={{ userSelect: "none", pointerEvents: "none" }}>{n}</text>
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
-          )}
-        </div>
-      )}
+            {/* Detail panel - fixed to viewport bottom */}
+            {selRxn && (
+              <div style={{
+                position: "fixed", bottom: 0, left: 0, right: 0,
+                background: "#ffffff",
+                borderTop: "3px solid #f97316",
+                borderRadius: "18px 18px 0 0",
+                padding: "14px 18px 28px",
+                boxShadow: "0 -4px 24px rgba(0,0,0,0.14)",
+                zIndex: 300, maxHeight: "50vh", overflowY: "auto"
+              }}>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "10px" }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "4px", flexWrap: "wrap" }}>
+                      <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <span style={{ fontSize: "11px", fontWeight: 800, color: "#fff" }}>{selRxn[0]}</span>
+                      </div>
+                      <span style={{ fontSize: "11px", fontWeight: 700, color: "#f97316", background: "#fff7ed", padding: "2px 9px", borderRadius: "20px" }}>{selRxn[10]}</span>
+                      {selRxn[9] !== "--" && (
+                        <span style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", background: "#eaf6fd", padding: "2px 9px", borderRadius: "20px" }}>{selRxn[9]}</span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>
+                      {selRxn[5]} <span style={{ color: "#f97316" }}>to</span> {selRxn[6]}
+                    </div>
+                  </div>
+                  <button onClick={() => setSelectedRxn(null)} style={{
+                    background: "#f0f4f8", border: "none", borderRadius: "8px",
+                    width: "30px", height: "30px", fontSize: "17px", cursor: "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0, marginLeft: "8px", color: "#7a95b0"
+                  }}>x</button>
+                </div>
+                {synthQuiz ? (
+                  <div style={{ padding: "13px 16px", background: "#fff7ed", borderRadius: "12px", textAlign: "center", color: "#ea580c", fontWeight: 600, fontSize: "13px" }}>
+                    Quiz mode is ON - tap "Quiz OFF" to reveal reagents and conditions
+                  </div>
+                ) : (
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                    <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 12px" }}>
+                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Reagents</div>
+                      <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.4 }}>{selRxn[7]}</div>
+                    </div>
+                    <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 12px" }}>
+                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Conditions</div>
+                      <div style={{ fontSize: "13px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.4 }}>{selRxn[8]}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })()}
       {topicsTab === "extended" && (() => {
         const purple = "#7c3aed";
         const purpleLight = "#f3f0ff";
