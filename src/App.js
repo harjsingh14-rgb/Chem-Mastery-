@@ -3564,7 +3564,27 @@ export default function App() {
       {topicsTab === "pathways" && (() => {
         const sNodes = synthTab === "ali" ? SYNTH_ALI_NODES : SYNTH_ARO_NODES;
         const sRxns  = synthTab === "ali" ? SYNTH_ALI_RXNS  : SYNTH_ARO_RXNS;
-        // Build adjacency maps: nodeId -> list of reactions going out / coming in
+        const vbW = 480, vbH = synthTab === "ali" ? 590 : 490;
+        const SW = 0.76; // scale nodes down so they don't dominate the map
+        const nodeMap = Object.fromEntries(sNodes.map(n => [n[0], n]));
+        const edgePt = (fcx, fcy, fhw, fhh, tcx, tcy) => {
+          const dx = tcx - fcx, dy = tcy - fcy;
+          const adx = Math.abs(dx), ady = Math.abs(dy);
+          if (!adx && !ady) return [fcx, fcy];
+          let t;
+          if (!adx) t = (fhh + 4) / ady;
+          else if (!ady) t = (fhw + 4) / adx;
+          else t = (adx * fhh >= ady * fhw) ? (fhw + 4) / adx : (fhh + 4) / ady;
+          return [fcx + dx * t, fcy + dy * t];
+        };
+        const selId = selectedFrom;
+        const connRxnIds = selId ? new Set(sRxns.filter(r => r[1] === selId || r[2] === selId).map(r => r[0])) : null;
+        const connNodeIds = selId ? new Set(sRxns.filter(r => r[1] === selId || r[2] === selId).flatMap(r => [r[1], r[2]])) : null;
+        const selNodeData = selId ? sNodes.find(n => n[0] === selId) : null;
+        const outRxns = selId ? sRxns.filter(r => r[1] === selId) : [];
+        const inRxns  = selId ? sRxns.filter(r => r[2] === selId) : [];
+        const selRxn  = selectedRxn ? sRxns.find(r => r[0] === selectedRxn) : null;
+        // unused adjacency map stub kept for lint safety
         const outMap = {};
         const inMap = {};
         sNodes.forEach(([id]) => { outMap[id] = []; inMap[id] = []; });
@@ -3572,188 +3592,197 @@ export default function App() {
           if (outMap[r[1]]) outMap[r[1]].push(r);
           if (inMap[r[2]])  inMap[r[2]].push(r);
         });
-        const selId = selectedFrom; // reuse selectedFrom to store selected node id
-        const selNode = selId ? sNodes.find(n => n[0] === selId) : null;
-        const selLabel = selNode ? selNode[1].replace(/\n/g, " ") : "";
-        const selColor = selNode ? selNode[4] : "#059669";
         return (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
             {/* Sub-tabs + quiz */}
             <div style={{ display: "flex", alignItems: "center", borderBottom: "2px solid #e0e8f0", padding: "0 12px", background: "#fff", flexShrink: 0 }}>
-              {[["ali", "Aliphatic", "27"], ["aro", "Aromatic", "9"]].map(([id, lbl, cnt]) => (
+              {[["ali","Aliphatic","27"],["aro","Aromatic","9"]].map(([id,lbl,cnt]) => (
                 <button key={id} onClick={() => { setSynthTab(id); setSelectedFrom(null); setSelectedRxn(null); }} style={{
-                  padding: "11px 13px", border: "none", background: "none", fontFamily: "inherit",
-                  fontSize: "13px", fontWeight: 700, cursor: "pointer",
-                  color: synthTab === id ? "#059669" : "#7a95b0",
-                  borderBottom: synthTab === id ? "3px solid #059669" : "3px solid transparent",
-                  marginBottom: "-2px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px"
+                  padding:"11px 13px", border:"none", background:"none", fontFamily:"inherit",
+                  fontSize:"13px", fontWeight:700, cursor:"pointer",
+                  color: synthTab===id ? "#059669" : "#7a95b0",
+                  borderBottom: synthTab===id ? "3px solid #059669" : "3px solid transparent",
+                  marginBottom:"-2px", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:"6px"
                 }}>
                   {lbl}
-                  <span style={{ fontSize: "10px", fontWeight: 700, background: synthTab === id ? "#dcfce7" : "#f0f4f8", color: synthTab === id ? "#059669" : "#94a3b8", padding: "1px 6px", borderRadius: "10px" }}>{cnt}</span>
+                  <span style={{ fontSize:"10px", fontWeight:700, background:synthTab===id?"#dcfce7":"#f0f4f8", color:synthTab===id?"#059669":"#94a3b8", padding:"1px 6px", borderRadius:"10px" }}>{cnt}</span>
                 </button>
               ))}
-              <div style={{ flex: 1 }} />
+              <div style={{ flex:1 }} />
               <button onClick={() => setSynthQuiz(q => !q)} style={{
-                padding: "5px 12px", borderRadius: "20px", border: "none",
-                background: synthQuiz ? "#f97316" : "#f0f4f8",
-                color: synthQuiz ? "#fff" : "#7a95b0",
-                fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit"
-              }}>Quiz {synthQuiz ? "ON" : "OFF"}</button>
+                padding:"5px 12px", borderRadius:"20px", border:"none",
+                background:synthQuiz?"#f97316":"#f0f4f8", color:synthQuiz?"#fff":"#7a95b0",
+                fontSize:"11px", fontWeight:700, cursor:"pointer", fontFamily:"inherit"
+              }}>Quiz {synthQuiz?"ON":"OFF"}</button>
             </div>
-            {!selId ? (
-              /* ── Compound grid ── */
-              <div style={{ flex: 1, overflowY: "auto", padding: "12px 14px 28px" }}>
-                <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px", lineHeight: 1.6 }}>
-                  Tap any compound to see every reaction going <strong style={{ color: "#059669" }}>out</strong> of it and every reaction coming <strong style={{ color: "#1d4ed8" }}>in</strong>.
+            {/* Hint bar */}
+            <div style={{ fontSize:"11px", color:"#94a3b8", padding:"4px 0 3px", textAlign:"center", flexShrink:0, background:"#fff", borderBottom:"1px solid #f0f4f8" }}>
+              {selId ? `${selNodeData ? selNodeData[1].replace(/\n/g," ") : ""} — tap another node or clear` : "Scroll to explore · tap a compound to highlight its routes"}
+            </div>
+            {/* SVG map — scrollable */}
+            <div style={{ flex:1, overflow:"auto", WebkitOverflowScrolling:"touch", background:"#f0f4f8" }}>
+              <svg
+                viewBox={`0 0 ${vbW} ${vbH}`}
+                width={vbW + 16} height={vbH + 16}
+                style={{ display:"block", margin:"8px" }}
+                onClick={() => { setSelectedFrom(null); setSelectedRxn(null); }}
+              >
+                <defs>
+                  <marker id="mn" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                    <path d="M0,0 L5,2.5 L0,5z" fill="#b0bec5" />
+                  </marker>
+                  <marker id="mo" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                    <path d="M0,0 L5,2.5 L0,5z" fill="#059669" />
+                  </marker>
+                  <marker id="mi" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                    <path d="M0,0 L5,2.5 L0,5z" fill="#2563eb" />
+                  </marker>
+                </defs>
+                <rect x={0} y={0} width={vbW} height={vbH} fill="#f0f4f8" />
+                {/* Edges */}
+                {sRxns.map(r => {
+                  const [n, fromId, toId] = r;
+                  const fN = nodeMap[fromId], tN = nodeMap[toId];
+                  if (!fN || !tN) return null;
+                  const frw = fN[5]*SW, frh = fN[6]*SW, trw = tN[5]*SW, trh = tN[6]*SW;
+                  const [x1,y1] = edgePt(fN[2],fN[3],frw,frh,tN[2],tN[3]);
+                  const [x2,y2] = edgePt(tN[2],tN[3],trw,trh,fN[2],fN[3]);
+                  const isOut = selId && fromId === selId;
+                  const isIn  = selId && toId   === selId;
+                  const isDim = connRxnIds && !connRxnIds.has(n);
+                  return (
+                    <line key={"e"+n} x1={x1} y1={y1} x2={x2} y2={y2}
+                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : "#adb8c4"}
+                      strokeWidth={isOut||isIn ? 2 : 1.2}
+                      opacity={isDim ? 0.15 : 1}
+                      markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
+                    />
+                  );
+                })}
+                {/* Nodes — tappable */}
+                {sNodes.map(([id, label, cx, cy, fill, hw, hh]) => {
+                  const rw = hw*SW, rh = hh*SW;
+                  const lines = label.split("\n");
+                  const lh = 9.5, th = lines.length * lh;
+                  const isSel = id === selId;
+                  const isDim = connNodeIds && !connNodeIds.has(id);
+                  return (
+                    <g key={id} onClick={e => { e.stopPropagation(); setSelectedFrom(id === selId ? null : id); setSelectedRxn(null); }} style={{ cursor:"pointer" }}>
+                      {isSel && <rect x={cx-rw-4} y={cy-rh-4} width={(rw+4)*2} height={(rh+4)*2} rx={10} fill="rgba(5,150,105,0.18)" stroke="#059669" strokeWidth={2.5} />}
+                      <rect x={cx-rw} y={cy-rh} width={rw*2} height={rh*2}
+                        rx={6} fill={fill} opacity={isDim ? 0.18 : 1}
+                        stroke={isSel ? "#fff" : "rgba(255,255,255,0.22)"} strokeWidth={isSel ? 1.5 : 1}
+                      />
+                      {lines.map((ln,li) => (
+                        <text key={li} x={cx} y={cy - th/2 + li*lh + lh*0.88}
+                          textAnchor="middle" fontSize="8" fontWeight="700"
+                          fill={isDim ? "rgba(255,255,255,0.25)" : "#fff"}
+                          style={{ userSelect:"none", pointerEvents:"none" }}>{ln}</text>
+                      ))}
+                    </g>
+                  );
+                })}
+                {/* Reaction number circles */}
+                {sRxns.map(r => {
+                  const [n,,,bx,by] = r;
+                  const isAct = selectedRxn === n;
+                  const isDim = connRxnIds && !connRxnIds.has(n);
+                  return (
+                    <g key={"b"+n} onClick={e => { e.stopPropagation(); setSelectedRxn(isAct ? null : n); }} style={{ cursor:"pointer" }}>
+                      <circle cx={bx} cy={by} r={10} fill="transparent" />
+                      <circle cx={bx} cy={by} r={7}
+                        fill={isAct ? "#1a2d45" : "#fff"}
+                        stroke={isDim ? "#d4dae0" : isAct ? "#1a2d45" : "#94a3b8"}
+                        strokeWidth={1.5} opacity={isDim ? 0.25 : 1}
+                      />
+                      <text x={bx} y={by+0.5} textAnchor="middle" dominantBaseline="middle"
+                        fontSize="7" fontWeight="800"
+                        fill={isAct ? "#fff" : isDim ? "#aaa" : "#374151"}
+                        opacity={isDim ? 0.25 : 1}
+                        style={{ userSelect:"none", pointerEvents:"none" }}>{n}</text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+            {/* Bottom panel: compound connections */}
+            {selId && !selRxn && (
+              <div style={{ background:"#fff", borderTop:"2px solid #e8edf2", padding:"12px 14px 20px", maxHeight:"38vh", overflowY:"auto", flexShrink:0, boxShadow:"0 -4px 20px rgba(0,0,0,0.1)" }}>
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"10px" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+                    <div style={{ width:"4px", height:"22px", borderRadius:"2px", background: selNodeData ? selNodeData[4] : "#059669" }} />
+                    <div style={{ fontSize:"14px", fontWeight:800, color:"#1a2d45" }}>{selNodeData ? selNodeData[1].replace(/\n/g," ") : ""}</div>
+                  </div>
+                  <button onClick={() => { setSelectedFrom(null); setSelectedRxn(null); }} style={{
+                    background:"#f0f4f8", border:"none", borderRadius:"8px", padding:"5px 10px",
+                    fontSize:"11px", color:"#7a95b0", fontWeight:700, cursor:"pointer", fontFamily:"inherit"
+                  }}>✕</button>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                  {sNodes.map(([id, label, , , fill]) => {
-                    const cleanLabel = label.replace(/\n/g, " ");
-                    const outCount = (outMap[id] || []).length;
-                    const inCount  = (inMap[id]  || []).length;
-                    return (
-                      <button key={id} onClick={() => { setSelectedFrom(id); setSelectedRxn(null); }} style={{
-                        padding: "12px 12px 10px", borderRadius: "14px", border: "none",
-                        background: "#fff", cursor: "pointer", textAlign: "left", fontFamily: "inherit",
-                        borderLeft: `4px solid ${fill}`, boxShadow: "0 2px 8px rgba(0,0,0,0.07)"
-                      }}>
-                        <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "7px" }}>{cleanLabel}</div>
-                        <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
-                          {outCount > 0 && <span style={{ fontSize: "10px", fontWeight: 700, color: "#059669", background: "#dcfce7", padding: "2px 7px", borderRadius: "8px" }}>↗ {outCount} out</span>}
-                          {inCount  > 0 && <span style={{ fontSize: "10px", fontWeight: 700, color: "#1d4ed8", background: "#dbeafe", padding: "2px 7px", borderRadius: "8px" }}>↙ {inCount} in</span>}
-                        </div>
-                      </button>
-                    );
-                  })}
+                <div style={{ display:"flex", gap:"10px" }}>
+                  {outRxns.length > 0 && (
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:"10px", fontWeight:700, color:"#059669", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:"7px" }}>→ Makes ({outRxns.length})</div>
+                      {outRxns.map(r => (
+                        <button key={r[0]} onClick={() => setSelectedRxn(r[0])} style={{
+                          width:"100%", textAlign:"left", padding:"7px 9px", borderRadius:"10px", marginBottom:"5px",
+                          border:"1.5px solid #e8edf2", background:"#fafcff", cursor:"pointer", fontFamily:"inherit",
+                          display:"flex", alignItems:"center", gap:"7px"
+                        }}>
+                          <span style={{ width:"18px", height:"18px", borderRadius:"50%", background:"#dcfce7", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:"9px", fontWeight:800, color:"#059669", flexShrink:0 }}>{r[0]}</span>
+                          <span style={{ fontSize:"11px", fontWeight:600, color:"#1a2d45", lineHeight:1.3 }}>{r[6]}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {inRxns.length > 0 && (
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:"10px", fontWeight:700, color:"#2563eb", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:"7px" }}>← From ({inRxns.length})</div>
+                      {inRxns.map(r => (
+                        <button key={r[0]} onClick={() => setSelectedRxn(r[0])} style={{
+                          width:"100%", textAlign:"left", padding:"7px 9px", borderRadius:"10px", marginBottom:"5px",
+                          border:"1.5px solid #e8edf2", background:"#fafcff", cursor:"pointer", fontFamily:"inherit",
+                          display:"flex", alignItems:"center", gap:"7px"
+                        }}>
+                          <span style={{ width:"18px", height:"18px", borderRadius:"50%", background:"#dbeafe", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:"9px", fontWeight:800, color:"#2563eb", flexShrink:0 }}>{r[0]}</span>
+                          <span style={{ fontSize:"11px", fontWeight:600, color:"#1a2d45", lineHeight:1.3 }}>{r[5]}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-            ) : (
-              /* ── Compound detail ── */
-              <div style={{ flex: 1, overflowY: "auto" }}>
-                {/* Sticky header */}
-                <div style={{ padding: "11px 14px", background: "#fff", borderBottom: "1px solid #e8edf2", display: "flex", alignItems: "center", gap: "10px", position: "sticky", top: 0, zIndex: 10 }}>
-                  <button onClick={() => { setSelectedFrom(null); setSelectedRxn(null); }} style={{
-                    padding: "6px 13px", borderRadius: "20px", border: "1px solid #e0e8f0",
-                    background: "#f8fafc", color: "#7a95b0", fontSize: "12px", fontWeight: 600,
-                    cursor: "pointer", fontFamily: "inherit", flexShrink: 0
-                  }}>← All</button>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ height: "3px", borderRadius: "2px", background: selColor, marginBottom: "4px", width: "100%" }} />
-                    <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{selLabel}</div>
+            )}
+            {/* Bottom panel: reaction detail */}
+            {selRxn && (
+              <div style={{ background:"#fff", borderTop:"3px solid #1a2d45", padding:"13px 14px 22px", flexShrink:0, boxShadow:"0 -4px 20px rgba(0,0,0,0.1)" }}>
+                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:"10px" }}>
+                  <div style={{ flex:1, minWidth:0 }}>
+                    <div style={{ display:"flex", gap:"6px", flexWrap:"wrap", marginBottom:"5px" }}>
+                      <span style={{ fontSize:"11px", fontWeight:700, color:"#059669", background:"#dcfce7", padding:"2px 8px", borderRadius:"20px" }}>{selRxn[10]}</span>
+                      {selRxn[9] !== "--" && <span style={{ fontSize:"11px", fontWeight:700, color:"#29ABE2", background:"#eaf6fd", padding:"2px 8px", borderRadius:"20px" }}>{selRxn[9]}</span>}
+                    </div>
+                    <div style={{ fontSize:"14px", fontWeight:800, color:"#1a2d45" }}>
+                      {selRxn[5]} <span style={{ color:"#94a3b8" }}>→</span> {selRxn[6]}
+                    </div>
                   </div>
+                  <button onClick={() => setSelectedRxn(null)} style={{ background:"#f0f4f8", border:"none", borderRadius:"8px", width:"30px", height:"30px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:"#7a95b0", flexShrink:0, marginLeft:"8px", fontSize:"15px" }}>✕</button>
                 </div>
-                <div style={{ padding: "12px 14px 32px" }}>
-                  {/* Outgoing reactions */}
-                  {outMap[selId] && outMap[selId].length > 0 && (
-                    <div style={{ marginBottom: "22px" }}>
-                      <div style={{ fontSize: "11px", fontWeight: 700, color: "#059669", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "7px" }}>
-                        <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#dcfce7", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, flexShrink: 0 }}>→</span>
-                        Can make · {outMap[selId].length} reaction{outMap[selId].length !== 1 ? "s" : ""}
-                      </div>
-                      {outMap[selId].map(r => {
-                        const isExp = selectedRxn === r[0];
-                        const targetNode = sNodes.find(n => n[0] === r[2]);
-                        const targetColor = targetNode ? targetNode[4] : "#475569";
-                        return (
-                          <div key={r[0]} style={{ background: "#fff", borderRadius: "14px", marginBottom: "8px", border: "1.5px solid #e8edf2", overflow: "hidden", boxShadow: "0 1px 6px rgba(0,0,0,0.05)" }}>
-                            <button onClick={() => setSelectedRxn(isExp ? null : r[0])} style={{
-                              width: "100%", padding: "12px 14px", border: "none", background: "none",
-                              cursor: "pointer", textAlign: "left", fontFamily: "inherit",
-                              display: "flex", alignItems: "center", gap: "10px"
-                            }}>
-                              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#dcfce7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                <span style={{ fontSize: "11px", fontWeight: 800, color: "#059669" }}>{r[0]}</span>
-                              </div>
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                                  <span style={{ color: "#059669", fontSize: "15px" }}>→</span>
-                                  <span style={{ color: targetColor }}>{r[6]}</span>
-                                </div>
-                                <div style={{ fontSize: "10px", color: "#94a3b8", marginTop: "2px", fontWeight: 600 }}>{r[10]}</div>
-                              </div>
-                              <span style={{ fontSize: "12px", color: "#c4cdd6", transform: isExp ? "rotate(180deg)" : "none", transition: "transform 0.2s", display: "inline-block", flexShrink: 0 }}>▾</span>
-                            </button>
-                            {isExp && (
-                              <div style={{ borderTop: "1px solid #f0f4f8", padding: "10px 14px 14px" }}>
-                                {synthQuiz ? (
-                                  <div style={{ padding: "11px 14px", background: "#fff7ed", borderRadius: "10px", textAlign: "center", color: "#ea580c", fontWeight: 600, fontSize: "12px" }}>
-                                    Quiz mode — try to recall before looking
-                                  </div>
-                                ) : (
-                                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                                    <div style={{ background: "#f0f7ff", borderRadius: "10px", padding: "10px 12px", borderLeft: "3px solid #29ABE2" }}>
-                                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Reagents</div>
-                                      <div style={{ fontSize: "12px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.5 }}>{r[7]}</div>
-                                    </div>
-                                    <div style={{ background: "#f0fdf4", borderRadius: "10px", padding: "10px 12px", borderLeft: "3px solid #16a34a" }}>
-                                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Conditions</div>
-                                      <div style={{ fontSize: "12px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.5 }}>{r[8]}</div>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                {synthQuiz ? (
+                  <div style={{ padding:"11px 14px", background:"#fff7ed", borderRadius:"10px", textAlign:"center", color:"#ea580c", fontWeight:600, fontSize:"12px" }}>
+                    Quiz mode — tap "Quiz OFF" to reveal
+                  </div>
+                ) : (
+                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px" }}>
+                    <div style={{ background:"#f0f7ff", borderRadius:"10px", padding:"9px 12px", borderLeft:"3px solid #29ABE2" }}>
+                      <div style={{ fontSize:"10px", fontWeight:700, color:"#7a95b0", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:"3px" }}>Reagents</div>
+                      <div style={{ fontSize:"12px", color:"#1a2d45", fontWeight:600, lineHeight:1.4 }}>{selRxn[7]}</div>
                     </div>
-                  )}
-                  {/* Incoming reactions */}
-                  {inMap[selId] && inMap[selId].length > 0 && (
-                    <div>
-                      <div style={{ fontSize: "11px", fontWeight: 700, color: "#1d4ed8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "7px" }}>
-                        <span style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#dbeafe", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, flexShrink: 0 }}>←</span>
-                        Made from · {inMap[selId].length} reaction{inMap[selId].length !== 1 ? "s" : ""}
-                      </div>
-                      {inMap[selId].map(r => {
-                        const isExp = selectedRxn === r[0];
-                        const srcNode = sNodes.find(n => n[0] === r[1]);
-                        const srcColor = srcNode ? srcNode[4] : "#475569";
-                        return (
-                          <div key={r[0]} style={{ background: "#fff", borderRadius: "14px", marginBottom: "8px", border: "1.5px solid #e8edf2", overflow: "hidden", boxShadow: "0 1px 6px rgba(0,0,0,0.05)" }}>
-                            <button onClick={() => setSelectedRxn(isExp ? null : r[0])} style={{
-                              width: "100%", padding: "12px 14px", border: "none", background: "none",
-                              cursor: "pointer", textAlign: "left", fontFamily: "inherit",
-                              display: "flex", alignItems: "center", gap: "10px"
-                            }}>
-                              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#dbeafe", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                <span style={{ fontSize: "11px", fontWeight: 800, color: "#1d4ed8" }}>{r[0]}</span>
-                              </div>
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                                  <span style={{ color: srcColor }}>{r[5]}</span>
-                                  <span style={{ color: "#1d4ed8", fontSize: "15px" }}>→</span>
-                                </div>
-                                <div style={{ fontSize: "10px", color: "#94a3b8", marginTop: "2px", fontWeight: 600 }}>{r[10]}</div>
-                              </div>
-                              <span style={{ fontSize: "12px", color: "#c4cdd6", transform: isExp ? "rotate(180deg)" : "none", transition: "transform 0.2s", display: "inline-block", flexShrink: 0 }}>▾</span>
-                            </button>
-                            {isExp && (
-                              <div style={{ borderTop: "1px solid #f0f4f8", padding: "10px 14px 14px" }}>
-                                {synthQuiz ? (
-                                  <div style={{ padding: "11px 14px", background: "#fff7ed", borderRadius: "10px", textAlign: "center", color: "#ea580c", fontWeight: 600, fontSize: "12px" }}>
-                                    Quiz mode — try to recall before looking
-                                  </div>
-                                ) : (
-                                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                                    <div style={{ background: "#f0f7ff", borderRadius: "10px", padding: "10px 12px", borderLeft: "3px solid #29ABE2" }}>
-                                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Reagents</div>
-                                      <div style={{ fontSize: "12px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.5 }}>{r[7]}</div>
-                                    </div>
-                                    <div style={{ background: "#f0fdf4", borderRadius: "10px", padding: "10px 12px", borderLeft: "3px solid #16a34a" }}>
-                                      <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Conditions</div>
-                                      <div style={{ fontSize: "12px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.5 }}>{r[8]}</div>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                    <div style={{ background:"#f0fdf4", borderRadius:"10px", padding:"9px 12px", borderLeft:"3px solid #16a34a" }}>
+                      <div style={{ fontSize:"10px", fontWeight:700, color:"#7a95b0", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:"3px" }}>Conditions</div>
+                      <div style={{ fontSize:"12px", color:"#1a2d45", fontWeight:600, lineHeight:1.4 }}>{selRxn[8]}</div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
