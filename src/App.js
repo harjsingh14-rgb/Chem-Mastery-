@@ -3000,6 +3000,9 @@ export default function App() {
   const [extMarked, setExtMarked] = useState(new Set());
   const [extDraft, setExtDraft] = useState("");
   const [extScore, setExtScore] = useState({}); // { questionId: marksAwarded }
+  const [extAiResult, setExtAiResult] = useState(null);    // AI Examiner result
+  const [extAiLoading, setExtAiLoading] = useState(false); // waiting for API
+  const [extShowModel, setExtShowModel] = useState(false); // model answer toggle
   const [calcTopic, setCalcTopic] = useState(null);
   const [calcIndex, setCalcIndex] = useState(0);
   const [calcInput, setCalcInput] = useState("");
@@ -4144,7 +4147,7 @@ export default function App() {
                 const totalMarks = qs.length * 6;
                 const earnedMarks = scores.reduce((a, b) => a + b, 0);
                 return (
-                  <button key={cat} onClick={() => { setExtCategory(cat); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); }}
+                  <button key={cat} onClick={() => { setExtCategory(cat); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); }}
                     style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
                     <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: purple, marginBottom: "8px" }} />
                     <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{cat}</div>
@@ -4164,9 +4167,27 @@ export default function App() {
         const isLast = extIndex === catQs.length - 1;
         const marksThisQ = extMarked.size;
 
-        const handleReveal = () => {
-          if (!extRevealed) {
+        const canSubmit = extDraft.trim().length >= 20;
+        const handleSubmit = async () => {
+          setExtAiLoading(true);
+          try {
+            const res = await fetch('/api/examine', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ question: q.question, markScheme: q.markScheme, studentAnswer: extDraft, maxMarks: q.marks }),
+            });
+            if (!res.ok) throw new Error('API error');
+            const data = await res.json();
+            setExtAiResult(data);
+            const covered = new Set((data.coveredPoints || []).map((c, i) => c ? i : -1).filter(i => i >= 0));
+            setExtMarked(covered);
+            setExtScore(s => ({ ...s, [q.id]: data.score }));
             setExtRevealed(true);
+          } catch {
+            // Fallback: reveal without AI
+            setExtRevealed(true);
+          } finally {
+            setExtAiLoading(false);
           }
         };
         const toggleMark = (i) => {
@@ -4178,12 +4199,15 @@ export default function App() {
             return next;
           });
         };
-        const goNext = () => {
-          setExtIndex(i => i + 1);
+        const resetExt = () => {
           setExtRevealed(false);
           setExtMarked(new Set());
           setExtDraft("");
+          setExtAiResult(null);
+          setExtAiLoading(false);
+          setExtShowModel(false);
         };
+        const goNext = () => { setExtIndex(i => i + 1); resetExt(); };
 
         const scoreColour = marksThisQ >= q.marks * 0.75 ? "#16a34a" : marksThisQ >= q.marks * 0.5 ? "#d97706" : "#dc2626";
 
@@ -4206,60 +4230,119 @@ export default function App() {
               </div>
               <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line" }}>{q.question}</div>
             </div>
-            {/* Draft answer box */}
-            {!extRevealed && (
+            {/* Answer box — required */}
+            {!extRevealed && !extAiLoading && (
               <div style={{ marginBottom: "12px" }}>
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Draft your answer (optional)</div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: "#1a2d45", textTransform: "uppercase", letterSpacing: "1px" }}>Your Answer <span style={{ color: "#dc2626" }}>*</span></div>
+                  <div style={{ fontSize: "11px", color: canSubmit ? "#16a34a" : "#7a95b0", fontWeight: 600 }}>{canSubmit ? "Ready to submit" : `${Math.max(0, 20 - extDraft.trim().length)} chars to unlock`}</div>
+                </div>
                 <textarea
                   value={extDraft}
                   onChange={e => setExtDraft(e.target.value)}
-                  placeholder="Write your answer here before revealing the mark scheme..."
-                  rows={5}
-                  style={{ width: "100%", padding: "12px 14px", borderRadius: "10px", border: "2px solid #d0dce8", fontSize: "13px", fontFamily: "inherit", outline: "none", color: "#1a2d45", resize: "vertical", lineHeight: 1.6 }}
+                  placeholder={`Write your full answer to this ${q.marks}-mark question here. Cover every point you know — the AI Examiner will mark it against the mark scheme.`}
+                  rows={7}
+                  style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", border: `2px solid ${canSubmit ? "#7c3aed" : "#d0dce8"}`, fontSize: "13px", fontFamily: "inherit", outline: "none", color: "#1a2d45", resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", transition: "border-color 0.2s" }}
                 />
               </div>
             )}
-            {/* Reveal button */}
-            {!extRevealed && (
-              <button onClick={handleReveal} style={{ width: "100%", padding: "13px", background: purple, border: "none", borderRadius: "12px", color: "#fff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 14px rgba(124,58,237,0.3)" }}>
-                Reveal Mark Scheme
+            {/* Submit to AI Examiner */}
+            {!extRevealed && !extAiLoading && (
+              <button onClick={handleSubmit} disabled={!canSubmit} style={{
+                width: "100%", padding: "14px", borderRadius: "12px", border: "none",
+                background: canSubmit ? "linear-gradient(135deg,#7c3aed,#6d28d9)" : "#e0e8f0",
+                color: canSubmit ? "#fff" : "#9ca3af",
+                fontSize: "15px", fontWeight: 800, cursor: canSubmit ? "pointer" : "not-allowed",
+                fontFamily: "inherit", boxShadow: canSubmit ? "0 4px 16px rgba(124,58,237,0.35)" : "none",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                transition: "all 0.2s",
+              }}>
+                <span>🤖</span> Submit to AI Examiner
               </button>
             )}
-            {/* Mark scheme */}
+            {/* Loading state */}
+            {extAiLoading && (
+              <div style={{ textAlign: "center", padding: "40px 16px" }}>
+                <div style={{ fontSize: "32px", marginBottom: "12px", animation: "spin 1s linear infinite", display: "inline-block" }}>⏳</div>
+                <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a2d45", marginBottom: "4px" }}>AI Examiner is reading your answer...</div>
+                <div style={{ fontSize: "12px", color: "#7a95b0" }}>Marking against the mark scheme</div>
+                <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+              </div>
+            )}
+            {/* AI Results */}
             {extRevealed && (
               <div>
-                {/* Draft reminder */}
+                {/* Your answer reminder */}
                 {extDraft.trim() && (
-                  <div style={{ background: "#f8f9fa", borderRadius: "10px", padding: "12px 14px", marginBottom: "12px", border: "1px solid #e0e8f0" }}>
+                  <div style={{ background: "#f8f9fa", borderRadius: "12px", padding: "12px 14px", marginBottom: "12px", border: "1px solid #e0e8f0" }}>
                     <div style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Your Answer</div>
                     <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{extDraft}</div>
                   </div>
                 )}
-                {/* Score badge */}
-                {extMarked.size > 0 && (
-                  <div style={{ textAlign: "center", marginBottom: "12px" }}>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#fff", border: `2px solid ${scoreColour}`, borderRadius: "50px", padding: "6px 20px" }}>
-                      <span style={{ fontSize: "22px", fontWeight: 900, color: scoreColour }}>{marksThisQ}</span>
-                      <span style={{ fontSize: "14px", color: "#7a95b0", fontWeight: 600 }}>/ {q.marks} marks</span>
+                {/* AI score & feedback */}
+                {extAiResult && (
+                  <>
+                    <div style={{ background: "linear-gradient(135deg,#1a2d45,#7c3aed)", borderRadius: "16px", padding: "18px", marginBottom: "12px", color: "#fff" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                        <div style={{ fontSize: "11px", fontWeight: 700, opacity: 0.8, letterSpacing: "1px", textTransform: "uppercase" }}>🤖 AI Examiner</div>
+                        <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
+                          <span style={{ fontSize: "32px", fontWeight: 900, color: scoreColour === "#16a34a" ? "#86efac" : scoreColour === "#d97706" ? "#fcd34d" : "#fca5a5" }}>{marksThisQ}</span>
+                          <span style={{ fontSize: "16px", opacity: 0.7 }}>/ {q.marks}</span>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "13px", lineHeight: 1.6, opacity: 0.95 }}>{extAiResult.feedback}</div>
                     </div>
+                    {/* Covered / missed points */}
+                    <div style={{ background: "#fff", borderRadius: "14px", padding: "16px", border: `1px solid ${purpleMid}`, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
+                      <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme — tap to adjust</div>
+                      {q.markScheme.map((point, i) => {
+                        const ticked = extMarked.has(i);
+                        const aiSaid = extAiResult.coveredPoints[i];
+                        return (
+                          <button key={i} onClick={() => toggleMark(i)}
+                            style={{ display: "flex", gap: "10px", alignItems: "flex-start", width: "100%", textAlign: "left", background: ticked ? "#f0fdf4" : "#fff8f8", border: `1.5px solid ${ticked ? "#16a34a" : "#fecaca"}`, borderRadius: "10px", padding: "10px 12px", marginBottom: "8px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}>
+                            <div style={{ flexShrink: 0, width: "22px", height: "22px", borderRadius: "6px", border: `2px solid ${ticked ? "#16a34a" : "#f87171"}`, background: ticked ? "#16a34a" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "1px", transition: "all 0.15s" }}>
+                              {ticked ? <span style={{ color: "#fff", fontSize: "13px", fontWeight: 900 }}>✓</span> : <span style={{ color: "#f87171", fontSize: "13px", fontWeight: 900 }}>✗</span>}
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: "13px", color: ticked ? "#15803d" : "#7f1d1d", lineHeight: 1.5, fontWeight: ticked ? 600 : 400 }}>{point}</div>
+                              {aiSaid !== ticked && <div style={{ fontSize: "10px", color: "#7a95b0", marginTop: "3px" }}>AI said: {aiSaid ? "covered ✓" : "missed ✗"} — tap to override</div>}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Model answer toggle */}
+                    <button onClick={() => setExtShowModel(v => !v)} style={{ width: "100%", padding: "12px 16px", borderRadius: "12px", border: "2px solid #e9d5ff", background: extShowModel ? "#f3f0ff" : "#faf5ff", color: purple, fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span>📝 Show Model Answer</span>
+                      <span style={{ transform: extShowModel ? "rotate(180deg)" : "none", transition: "transform 0.2s", display: "inline-block" }}>▾</span>
+                    </button>
+                    {extShowModel && (
+                      <div style={{ background: "#f3f0ff", borderRadius: "12px", padding: "14px 16px", border: "1px solid #ddd6fe", marginBottom: "12px" }}>
+                        <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Model Answer</div>
+                        <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.7 }}>{extAiResult.modelAnswer}</div>
+                      </div>
+                    )}
+                  </>
+                )}
+                {/* No AI result — fallback manual mark scheme */}
+                {!extAiResult && (
+                  <div style={{ background: "#fff", borderRadius: "14px", padding: "16px", border: `1px solid ${purpleMid}`, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme — tick each point you covered</div>
+                    {q.markScheme.map((point, i) => {
+                      const ticked = extMarked.has(i);
+                      return (
+                        <button key={i} onClick={() => toggleMark(i)}
+                          style={{ display: "flex", gap: "10px", alignItems: "flex-start", width: "100%", textAlign: "left", background: ticked ? "#f0fdf4" : "transparent", border: `1px solid ${ticked ? "#16a34a" : "#e8eef4"}`, borderRadius: "10px", padding: "10px 12px", marginBottom: "8px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}>
+                          <div style={{ flexShrink: 0, width: "22px", height: "22px", borderRadius: "6px", border: `2px solid ${ticked ? "#16a34a" : "#c8d6e4"}`, background: ticked ? "#16a34a" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "1px", transition: "all 0.15s" }}>
+                            {ticked && <span style={{ color: "#fff", fontSize: "13px", fontWeight: 900 }}>✓</span>}
+                          </div>
+                          <div style={{ fontSize: "13px", color: ticked ? "#15803d" : "#1a2d45", lineHeight: 1.6, fontWeight: ticked ? 600 : 400 }}>{point}</div>
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
-                {/* Mark scheme points */}
-                <div style={{ background: "#fff", borderRadius: "14px", padding: "16px", border: `1px solid ${purpleMid}`, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
-                  <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme — tick each point you covered</div>
-                  {q.markScheme.map((point, i) => {
-                    const ticked = extMarked.has(i);
-                    return (
-                      <button key={i} onClick={() => toggleMark(i)}
-                        style={{ display: "flex", gap: "10px", alignItems: "flex-start", width: "100%", textAlign: "left", background: ticked ? "#f0fdf4" : "transparent", border: `1px solid ${ticked ? "#16a34a" : "#e8eef4"}`, borderRadius: "10px", padding: "10px 12px", marginBottom: "8px", cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }}>
-                        <div style={{ flexShrink: 0, width: "22px", height: "22px", borderRadius: "6px", border: `2px solid ${ticked ? "#16a34a" : "#c8d6e4"}`, background: ticked ? "#16a34a" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "1px", transition: "all 0.15s" }}>
-                          {ticked && <span style={{ color: "#fff", fontSize: "13px", fontWeight: 900, lineHeight: 1 }}>✓</span>}
-                        </div>
-                        <div style={{ fontSize: "13px", color: ticked ? "#15803d" : "#1a2d45", lineHeight: 1.6, fontWeight: ticked ? 600 : 400 }}>{point}</div>
-                      </button>
-                    );
-                  })}
-                </div>
                 {/* Examiner tip */}
                 <div style={{ background: "#fffbeb", borderRadius: "12px", padding: "14px 16px", border: "1px solid #fde68a", marginBottom: "12px" }}>
                   <div style={{ fontSize: "11px", fontWeight: 700, color: "#d97706", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Examiner Tip</div>
@@ -4272,12 +4355,12 @@ export default function App() {
                       Next Question →
                     </button>
                   ) : (
-                    <button onClick={() => { setExtCategory(null); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); }}
+                    <button onClick={() => { setExtCategory(null); setExtIndex(0); resetExt(); }}
                       style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#fff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
                       Finish — Back to Topics
                     </button>
                   )}
-                  <button onClick={() => { setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); }} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                  <button onClick={resetExt} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
                     Retry
                   </button>
                 </div>
