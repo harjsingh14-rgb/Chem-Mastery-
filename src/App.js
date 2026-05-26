@@ -3639,6 +3639,21 @@ export default function App() {
                   </marker>
                 </defs>
                 <rect x={0} y={0} width={vbW} height={vbH} fill="#f0f4f8" />
+                {/* Group zone backgrounds — aliphatic only */}
+                {synthTab === "ali" && (<>
+                  {/* Ammonium Salts row */}
+                  <rect x={8} y={14} rx={7} width={175} height={48} fill="rgba(79,70,229,0.07)" stroke="rgba(79,70,229,0.18)" strokeWidth={1} strokeDasharray="3 2" />
+                  <text x={16} y={25} fontSize="7" fontWeight="700" fill="rgba(79,70,229,0.45)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">AMMONIUM SALTS</text>
+                  {/* Amine family (right column) */}
+                  <rect x={305} y={14} rx={7} width={168} height={204} fill="rgba(124,58,237,0.06)" stroke="rgba(124,58,237,0.16)" strokeWidth={1} strokeDasharray="3 2" />
+                  <text x={313} y={25} fontSize="7" fontWeight="700" fill="rgba(124,58,237,0.45)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">AMINE FAMILY</text>
+                  {/* Carbonyl compounds cluster */}
+                  <rect x={128} y={346} rx={7} width={180} height={132} fill="rgba(162,28,175,0.05)" stroke="rgba(162,28,175,0.14)" strokeWidth={1} strokeDasharray="3 2" />
+                  <text x={136} y={357} fontSize="7" fontWeight="700" fill="rgba(162,28,175,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">CARBONYL COMPOUNDS</text>
+                  {/* Acid derivatives row */}
+                  <rect x={10} y={512} rx={7} width={455} height={66} fill="rgba(3,105,144,0.06)" stroke="rgba(3,105,144,0.16)" strokeWidth={1} strokeDasharray="3 2" />
+                  <text x={18} y={523} fontSize="7" fontWeight="700" fill="rgba(3,105,144,0.45)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">ACID DERIVATIVES</text>
+                </>)}
                 {/* Edges */}
                 {sRxns.map(r => {
                   const [n, fromId, toId] = r;
@@ -3652,9 +3667,9 @@ export default function App() {
                   const isDim = connRxnIds && !connRxnIds.has(n);
                   return (
                     <line key={"e"+n} x1={x1} y1={y1} x2={x2} y2={y2}
-                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : "#adb8c4"}
-                      strokeWidth={isOut||isIn ? 2 : 1.2}
-                      opacity={isDim ? 0.15 : 1}
+                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#c5ced8" : "#b8c5d0"}
+                      strokeWidth={isOut||isIn ? 2.2 : selId ? 1 : 0.9}
+                      opacity={isDim ? 0.12 : 1}
                       markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
                     />
                   );
