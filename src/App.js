@@ -3003,6 +3003,7 @@ export default function App() {
   const [extAiResult, setExtAiResult] = useState(null);    // AI Examiner result
   const [extAiLoading, setExtAiLoading] = useState(false); // waiting for API
   const [extShowModel, setExtShowModel] = useState(false); // model answer toggle
+  const [extAiError, setExtAiError] = useState(null);      // error message if API fails
   const [calcTopic, setCalcTopic] = useState(null);
   const [calcIndex, setCalcIndex] = useState(0);
   const [calcInput, setCalcInput] = useState("");
@@ -4147,7 +4148,7 @@ export default function App() {
                 const totalMarks = qs.length * 6;
                 const earnedMarks = scores.reduce((a, b) => a + b, 0);
                 return (
-                  <button key={cat} onClick={() => { setExtCategory(cat); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); }}
+                  <button key={cat} onClick={() => { setExtCategory(cat); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); }}
                     style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
                     <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: purple, marginBottom: "8px" }} />
                     <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{cat}</div>
@@ -4170,22 +4171,22 @@ export default function App() {
         const canSubmit = extDraft.trim().length >= 20;
         const handleSubmit = async () => {
           setExtAiLoading(true);
+          setExtAiError(null);
           try {
             const res = await fetch('/api/examine', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ question: q.question, markScheme: q.markScheme, studentAnswer: extDraft, maxMarks: q.marks }),
             });
-            if (!res.ok) throw new Error('API error');
             const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Server error');
             setExtAiResult(data);
             const covered = new Set((data.coveredPoints || []).map((c, i) => c ? i : -1).filter(i => i >= 0));
             setExtMarked(covered);
             setExtScore(s => ({ ...s, [q.id]: data.score }));
             setExtRevealed(true);
-          } catch {
-            // Fallback: reveal without AI
-            setExtRevealed(true);
+          } catch (err) {
+            setExtAiError(err.message || 'Could not reach AI Examiner');
           } finally {
             setExtAiLoading(false);
           }
@@ -4206,6 +4207,7 @@ export default function App() {
           setExtAiResult(null);
           setExtAiLoading(false);
           setExtShowModel(false);
+          setExtAiError(null);
         };
         const goNext = () => { setExtIndex(i => i + 1); resetExt(); };
 
@@ -4259,6 +4261,20 @@ export default function App() {
               }}>
                 <span>🤖</span> Submit to AI Examiner
               </button>
+            )}
+            {/* Error state */}
+            {extAiError && !extAiLoading && (
+              <div style={{ background: "#fff1f2", border: "1.5px solid #fecdd3", borderRadius: "14px", padding: "16px 18px", marginTop: "10px" }}>
+                <div style={{ fontSize: "13px", fontWeight: 700, color: "#be123c", marginBottom: "6px" }}>⚠️ AI Examiner unavailable</div>
+                <div style={{ fontSize: "12px", color: "#9f1239", lineHeight: 1.6, marginBottom: "12px" }}>
+                  {extAiError === 'API key not configured'
+                    ? 'The API key hasn\'t been added to Vercel yet. Add ANTHROPIC_API_KEY in Vercel → Settings → Environment Variables, then redeploy.'
+                    : `Something went wrong: ${extAiError}. Check your internet connection and try again.`}
+                </div>
+                <button onClick={handleSubmit} style={{ width: "100%", padding: "11px", borderRadius: "10px", border: "none", background: "#be123c", color: "#fff", fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+                  Try Again
+                </button>
+              </div>
             )}
             {/* Loading state */}
             {extAiLoading && (
