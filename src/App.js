@@ -3011,6 +3011,17 @@ export default function App() {
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
+  // ── Random Quiz ──────────────────────────────────────────────────────────────
+  const [quizScreen, setQuizScreen] = useState(null); // null | "setup" | "running" | "done"
+  const [quizYear, setQuizYear] = useState("as");      // "as" | "a2" | "all"
+  const [quizDeck, setQuizDeck] = useState([]);        // [{topicId, cardIdx, q, a}]
+  const [quizPos, setQuizPos] = useState(0);
+  const [quizFlipped, setQuizFlipped] = useState(false);
+  const [quizSessionScore, setQuizSessionScore] = useState({ correct: 0, wrong: 0 });
+  const [quizHistory, setQuizHistory] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('hsj-quiz-history') || '{}'); }
+    catch { return {}; }
+  });
 
   const cards = topic ? SETS[topic].cards : [];
   const currentCardIndex = order[index];
@@ -3033,6 +3044,102 @@ export default function App() {
       localStorage.setItem('hsj-chem-known', JSON.stringify(serialisable));
     } catch {}
   }, [known]);
+
+  // Save quiz history to localStorage
+  useEffect(() => {
+    try { localStorage.setItem('hsj-quiz-history', JSON.stringify(quizHistory)); }
+    catch {}
+  }, [quizHistory]);
+
+  // ── Quiz helpers ─────────────────────────────────────────────────────────────
+  const AQA_AS_SECTIONS = ["physical_as", "inorganic_as", "organic", "practicals_as"];
+  const AQA_A2_SECTIONS = ["physical_a2", "inorganic_a2", "organic2", "practicals_a2"];
+  const OCR_AS_SECTIONS = ["ocr_mod2", "ocr_mod3", "ocr_mod4"];
+  const OCR_A2_SECTIONS = ["ocr_mod5", "ocr_mod6"];
+
+  const buildQuizDeck = (year) => {
+    const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
+    let sectionFilter;
+    const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
+    const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
+    if (year === "as") sectionFilter = asSecs;
+    else if (year === "a2") sectionFilter = a2Secs;
+    else sectionFilter = [...asSecs, ...a2Secs];
+
+    const eligibleTopics = allSections
+      .filter(s => sectionFilter.includes(s.id))
+      .flatMap(s => s.topics)
+      .filter(id => SETS[id]);
+
+    // Build weighted pool
+    const pool = [];
+    for (const topicId of eligibleTopics) {
+      const cards = SETS[topicId].cards;
+      cards.forEach((card, cardIdx) => {
+        const key = `${topicId}-${cardIdx}`;
+        const h = quizHistory[key];
+        let weight;
+        if (!h) {
+          weight = 3; // never seen
+        } else {
+          const { c = 0, w = 0 } = h;
+          const total = c + w;
+          if (total === 0) { weight = 3; }
+          else if (c >= 3 && c / total >= 0.7) { weight = 0.5; } // mastered
+          else if (w > c) { weight = 4; } // more wrong than correct
+          else { weight = 2; }
+        }
+        pool.push({ topicId, cardIdx, q: card.q, a: card.a, weight });
+      });
+    }
+    if (pool.length === 0) return [];
+
+    // Weighted random sample of 25 cards (no repeats)
+    const DECK_SIZE = Math.min(25, pool.length);
+    const selected = [];
+    const remaining = [...pool];
+    for (let i = 0; i < DECK_SIZE; i++) {
+      const totalW = remaining.reduce((s, c) => s + c.weight, 0);
+      let r = Math.random() * totalW;
+      let idx = 0;
+      while (idx < remaining.length - 1 && r > remaining[idx].weight) {
+        r -= remaining[idx].weight;
+        idx++;
+      }
+      selected.push(remaining[idx]);
+      remaining.splice(idx, 1);
+    }
+    return selected;
+  };
+
+  const startQuiz = () => {
+    const deck = buildQuizDeck(quizYear);
+    setQuizDeck(deck);
+    setQuizPos(0);
+    setQuizFlipped(false);
+    setQuizSessionScore({ correct: 0, wrong: 0 });
+    setQuizScreen("running");
+  };
+
+  const recordQuizAnswer = (correct) => {
+    const card = quizDeck[quizPos];
+    const key = `${card.topicId}-${card.cardIdx}`;
+    setQuizHistory(prev => {
+      const h = prev[key] || { c: 0, w: 0 };
+      return { ...prev, [key]: correct ? { c: h.c + 1, w: h.w } : { c: h.c, w: h.w + 1 } };
+    });
+    setQuizSessionScore(prev => correct
+      ? { ...prev, correct: prev.correct + 1 }
+      : { ...prev, wrong: prev.wrong + 1 }
+    );
+    const isLast = quizPos >= quizDeck.length - 1;
+    if (isLast) {
+      setQuizScreen("done");
+    } else {
+      setQuizFlipped(false);
+      setTimeout(() => setQuizPos(p => p + 1), 120);
+    }
+  };
 
   const goBack = () => {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
@@ -3356,8 +3463,205 @@ export default function App() {
           </button>
         ))}
       </div>
-      {topicsTab === "flashcards" && (
+      {topicsTab === "flashcards" && quizScreen === "setup" && (
+        <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ width: "100%", maxWidth: "360px" }}>
+            <button onClick={() => setQuizScreen(null)} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600, padding: "0 0 16px 0", display: "flex", alignItems: "center", gap: "4px" }}>← Back to Topics</button>
+            <div style={{ background: "linear-gradient(135deg,#29ABE2,#0090cc)", borderRadius: "20px", padding: "24px 20px", color: "#fff", marginBottom: "24px", boxShadow: "0 6px 20px rgba(41,171,226,0.35)" }}>
+              <div style={{ fontSize: "24px", marginBottom: "6px" }}>🎯</div>
+              <div style={{ fontSize: "20px", fontWeight: 800, letterSpacing: "-0.5px" }}>Random Quiz</div>
+              <div style={{ fontSize: "12px", opacity: 0.85, marginTop: "4px" }}>Cards you struggle with appear more often</div>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Year Level</div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                {[["as","AS Year 1"],["a2","A2 Year 2"],["all","All Topics"]].map(([v,label]) => (
+                  <button key={v} onClick={() => setQuizYear(v)} style={{
+                    flex: 1, padding: "12px 8px", borderRadius: "12px", border: "2px solid",
+                    borderColor: quizYear === v ? "#29ABE2" : "#dde4ed",
+                    background: quizYear === v ? "#eaf6fd" : "#ffffff",
+                    color: quizYear === v ? "#29ABE2" : "#7a95b0",
+                    fontFamily: "inherit", fontSize: "12px", fontWeight: 700, cursor: "pointer",
+                    transition: "all 0.15s",
+                  }}>{label}</button>
+                ))}
+              </div>
+            </div>
+            {(() => {
+              const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
+              const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
+              const filter = quizYear === "as" ? asSecs : quizYear === "a2" ? a2Secs : [...asSecs, ...a2Secs];
+              const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
+              const total = allSections.filter(s => filter.includes(s.id)).flatMap(s => s.topics).filter(id => SETS[id]).reduce((sum, id) => sum + SETS[id].cards.length, 0);
+              return (
+                <div style={{ fontSize: "12px", color: "#7a95b0", textAlign: "center", marginBottom: "20px" }}>
+                  Drawing from <strong style={{ color: "#1a2d45" }}>{total}</strong> cards · Session size: <strong style={{ color: "#1a2d45" }}>25</strong>
+                </div>
+              );
+            })()}
+            <div style={{ background: "#f8fafc", borderRadius: "14px", padding: "14px 16px", marginBottom: "24px", border: "1px solid #e0e8f0" }}>
+              <div style={{ fontSize: "11px", fontWeight: 700, color: "#4a6070", marginBottom: "8px", letterSpacing: "0.5px" }}>HOW IT WORKS</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                {[["🔴","Cards you miss → shown 4× more often"],["🟡","New cards → shown 3× more often"],["🟢","Cards you know → shown less often"],["✅","Mastered (3+ correct, ≥70%) → rare"]].map(([icon,text]) => (
+                  <div key={text} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px", color: "#4a6070" }}>
+                    <span style={{ flexShrink: 0 }}>{icon}</span><span>{text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button onClick={startQuiz} style={{
+              width: "100%", padding: "16px", borderRadius: "14px", border: "none",
+              background: "linear-gradient(135deg,#29ABE2,#0090cc)", color: "#ffffff",
+              fontFamily: "inherit", fontSize: "16px", fontWeight: 800, cursor: "pointer",
+              boxShadow: "0 4px 16px rgba(41,171,226,0.4)", letterSpacing: "-0.3px",
+            }}>Start Quiz →</button>
+          </div>
+        </div>
+      )}
+      {topicsTab === "flashcards" && quizScreen === "running" && (() => {
+        const card = quizDeck[quizPos];
+        const progress = Math.round(((quizPos) / quizDeck.length) * 100);
+        const topicTitle = SETS[card?.topicId]?.title || card?.topicId || "";
+        return (
+          <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ width: "100%", maxWidth: "400px" }}>
+              {/* Header */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                <button onClick={() => setQuizScreen("setup")} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>✕ Exit</button>
+                <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{quizPos + 1} / {quizDeck.length}</div>
+                <div style={{ fontSize: "12px", fontWeight: 700 }}>
+                  <span style={{ color: "#22c55e" }}>✓ {quizSessionScore.correct}</span>
+                  <span style={{ color: "#d1d5db", margin: "0 4px" }}>|</span>
+                  <span style={{ color: "#ef4444" }}>✗ {quizSessionScore.wrong}</span>
+                </div>
+              </div>
+              {/* Progress bar */}
+              <div style={{ height: "5px", background: "#e0e8f0", borderRadius: "3px", overflow: "hidden", marginBottom: "16px" }}>
+                <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#29ABE2,#22c55e)", borderRadius: "3px", transition: "width 0.3s" }} />
+              </div>
+              {/* Topic label */}
+              <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", textAlign: "center", marginBottom: "10px" }}>{topicTitle}</div>
+              {/* Card */}
+              <div onClick={() => setQuizFlipped(f => !f)} style={{
+                minHeight: "200px", borderRadius: "20px", padding: "28px 22px",
+                background: quizFlipped ? "linear-gradient(135deg,#f0fdf4,#dcfce7)" : "#ffffff",
+                border: `2px solid ${quizFlipped ? "#86efac" : "#dde4ed"}`,
+                boxShadow: "0 4px 20px rgba(0,0,0,0.08)", cursor: "pointer",
+                display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
+                textAlign: "center", transition: "all 0.2s", userSelect: "none",
+                marginBottom: "16px",
+              }}>
+                {!quizFlipped ? (
+                  <>
+                    <div style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>QUESTION</div>
+                    <div style={{ fontSize: "15px", fontWeight: 600, color: "#1a2d45", lineHeight: 1.5 }}>{card?.q}</div>
+                    <div style={{ marginTop: "20px", fontSize: "11px", color: "#aab5c2" }}>Tap to reveal answer</div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: "11px", color: "#16a34a", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>ANSWER</div>
+                    <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, whiteSpace: "pre-line" }}>{card?.a}</div>
+                  </>
+                )}
+              </div>
+              {/* Answer buttons */}
+              {quizFlipped ? (
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button onClick={() => recordQuizAnswer(false)} style={{
+                    flex: 1, padding: "16px 10px", borderRadius: "14px", border: "2px solid #fecaca",
+                    background: "#fff5f5", color: "#dc2626", fontFamily: "inherit", fontSize: "14px",
+                    fontWeight: 800, cursor: "pointer",
+                  }}>✗ Missed it</button>
+                  <button onClick={() => recordQuizAnswer(true)} style={{
+                    flex: 1, padding: "16px 10px", borderRadius: "14px", border: "none",
+                    background: "linear-gradient(135deg,#22c55e,#16a34a)", color: "#ffffff",
+                    fontFamily: "inherit", fontSize: "14px", fontWeight: 800, cursor: "pointer",
+                    boxShadow: "0 4px 12px rgba(34,197,94,0.35)",
+                  }}>✓ Got it</button>
+                </div>
+              ) : (
+                <div style={{ height: "54px" }} />
+              )}
+            </div>
+          </div>
+        );
+      })()}
+      {topicsTab === "flashcards" && quizScreen === "done" && (() => {
+        const total = quizSessionScore.correct + quizSessionScore.wrong;
+        const pct = total > 0 ? Math.round((quizSessionScore.correct / total) * 100) : 0;
+        const emoji = pct >= 90 ? "🏆" : pct >= 70 ? "🎯" : pct >= 50 ? "📚" : "💪";
+        const msg = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep practising!";
+        // Find weakest topics from this session
+        const topicWrong = {};
+        quizDeck.forEach((card, i) => {
+          const key = `${card.topicId}-${card.cardIdx}`;
+          const h = quizHistory[key];
+          if (h && h.w > 0) {
+            topicWrong[card.topicId] = (topicWrong[card.topicId] || 0) + h.w;
+          }
+        });
+        const weakTopics = Object.entries(topicWrong).sort((a,b) => b[1]-a[1]).slice(0,3);
+        return (
+          <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ width: "100%", maxWidth: "360px" }}>
+              {/* Score card */}
+              <div style={{ background: "linear-gradient(135deg,#1a2d45,#29ABE2)", borderRadius: "24px", padding: "32px 24px", textAlign: "center", color: "#fff", marginBottom: "20px", boxShadow: "0 8px 28px rgba(41,171,226,0.3)" }}>
+                <div style={{ fontSize: "48px", marginBottom: "8px" }}>{emoji}</div>
+                <div style={{ fontSize: "22px", fontWeight: 800, marginBottom: "4px" }}>{msg}</div>
+                <div style={{ fontSize: "52px", fontWeight: 800, lineHeight: 1, margin: "12px 0" }}>{pct}%</div>
+                <div style={{ fontSize: "14px", opacity: 0.85 }}>{quizSessionScore.correct} correct · {quizSessionScore.wrong} missed · {total} cards</div>
+              </div>
+              {/* Weak topics */}
+              {weakTopics.length > 0 && (
+                <div style={{ background: "#fff9f0", border: "1px solid #fed7aa", borderRadius: "16px", padding: "16px", marginBottom: "20px" }}>
+                  <div style={{ fontSize: "11px", fontWeight: 800, color: "#c2410c", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Focus Areas</div>
+                  {weakTopics.map(([topicId, wrongCount]) => (
+                    <div key={topicId} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid #fed7aa20" }}>
+                      <span style={{ fontSize: "12px", color: "#1a2d45", fontWeight: 600 }}>{SETS[topicId]?.title || topicId}</span>
+                      <span style={{ fontSize: "12px", color: "#ef4444", fontWeight: 700 }}>{wrongCount} missed</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* Action buttons */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <button onClick={() => { startQuiz(); }} style={{
+                  width: "100%", padding: "16px", borderRadius: "14px", border: "none",
+                  background: "linear-gradient(135deg,#29ABE2,#0090cc)", color: "#ffffff",
+                  fontFamily: "inherit", fontSize: "15px", fontWeight: 800, cursor: "pointer",
+                  boxShadow: "0 4px 16px rgba(41,171,226,0.4)",
+                }}>Play Again →</button>
+                <button onClick={() => setQuizScreen("setup")} style={{
+                  width: "100%", padding: "14px", borderRadius: "14px", border: "2px solid #dde4ed",
+                  background: "#ffffff", color: "#4a6070", fontFamily: "inherit", fontSize: "14px",
+                  fontWeight: 700, cursor: "pointer",
+                }}>Change Settings</button>
+                <button onClick={() => setQuizScreen(null)} style={{
+                  width: "100%", padding: "14px", borderRadius: "14px", border: "none",
+                  background: "none", color: "#7a95b0", fontFamily: "inherit", fontSize: "13px",
+                  fontWeight: 600, cursor: "pointer",
+                }}>Back to Topics</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+      {topicsTab === "flashcards" && !quizScreen && (
         <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
+          {/* Random Quiz launch card */}
+          <button onClick={() => setQuizScreen("setup")} style={{
+            width: "100%", padding: "14px 16px", borderRadius: "16px", border: "none",
+            background: "linear-gradient(135deg,#29ABE2 0%,#0090cc 100%)", color: "#ffffff",
+            cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            boxShadow: "0 4px 16px rgba(41,171,226,0.35)", marginBottom: "12px", marginTop: "4px",
+          }}>
+            <div>
+              <div style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.3px" }}>🎯 Random Quiz</div>
+              <div style={{ fontSize: "11px", opacity: 0.85, marginTop: "2px" }}>Spaced repetition · 25 cards · adapts to your gaps</div>
+            </div>
+            <div style={{ fontSize: "20px", opacity: 0.8 }}>→</div>
+          </button>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
             {CURRENT_SECTIONS.map(section => {
               const fc = FOLDER_COLORS[section.id] || FOLDER_COLORS.physical_as;
