@@ -4210,78 +4210,99 @@ export default function App() {
     const W = "100%", H = "100%";
     if (id === "aqa") return (
       <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
-        {/* AQA — organic chemistry. Top-right corner kept clear for the faded "AQA" label */}
-        {/* Large benzene — centre-right, NOT top-right corner */}
-        <polygon points="296,88 324,104 324,136 296,152 268,136 268,104" stroke="white" strokeWidth="2.5"/>
-        <circle cx="296" cy="120" r="20" stroke="white" strokeWidth="1.5"/>
-        {/* Medium benzene — left-centre */}
-        <polygon points="56,76 74,86 74,106 56,116 38,106 38,86" stroke="white" strokeWidth="2"/>
-        <circle cx="56" cy="96" r="12" stroke="white" strokeWidth="1.2"/>
-        {/* Skeletal chain — mid-top band */}
-        <polyline points="14,64 36,42 58,64 80,42 102,64 124,42 146,64" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* AQA — dense organic chemistry art filling the whole card */}
+        {/* Naphthalene (two fused benzene rings) — top-right */}
+        <polygon points="238,10 260,22 260,46 238,58 216,46 216,22" stroke="white" strokeWidth="2.2" fill="none"/>
+        <polygon points="282,10 304,22 304,46 282,58 260,46 260,22" stroke="white" strokeWidth="2.2" fill="none"/>
+        {/* Naphthalene double bonds */}
+        <line x1="216" y1="22" x2="238" y2="10" stroke="white" strokeWidth="1.4"/>
+        <line x1="238" y1="58" x2="260" y2="46" stroke="white" strokeWidth="1.4"/>
+        <line x1="260" y1="22" x2="282" y2="10" stroke="white" strokeWidth="1.4"/>
+        <line x1="282" y1="58" x2="304" y2="46" stroke="white" strokeWidth="1.4"/>
+        {/* Flask — far right filling top gap */}
+        <path d="M348,8 L348,40 L328,78 Q323,88 333,92 L379,92 Q389,88 384,78 L364,40 L364,8 Z" stroke="white" strokeWidth="2" fill="none"/>
+        <line x1="344" y1="22" x2="368" y2="22" stroke="white" strokeWidth="1.5"/>
+        <ellipse cx="356" cy="76" rx="10" ry="5" stroke="white" strokeWidth="1.5"/>
+        <circle cx="348" cy="68" r="3" fill="white"/>
+        <circle cx="362" cy="74" r="2.5" fill="white"/>
+        <circle cx="355" cy="62" r="2" fill="white"/>
+        {/* Long skeletal chain top-left */}
+        <polyline points="12,62 34,40 56,62 78,40 100,62 122,40 144,62 166,40" stroke="white" strokeWidth="2" strokeLinecap="round"/>
         {/* Double bond */}
-        <line x1="36" y1="42" x2="58" y2="64" stroke="white" strokeWidth="1.5"/>
-        <line x1="39" y1="38" x2="61" y2="60" stroke="white" strokeWidth="1.5"/>
-        {/* OH end group */}
-        <line x1="146" y1="64" x2="162" y2="48" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-        <text x="164" y="46" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">OH</text>
+        <line x1="34" y1="40" x2="56" y2="62" stroke="white" strokeWidth="1.5"/>
+        <line x1="37" y1="36" x2="59" y2="58" stroke="white" strokeWidth="1.5"/>
         {/* NH₂ branch */}
-        <line x1="80" y1="42" x2="80" y2="20" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-        <text x="72" y="14" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">NH₂</text>
-        {/* Reaction arrow — centre */}
-        <line x1="180" y1="55" x2="246" y2="55" stroke="white" strokeWidth="2"/>
-        <polygon points="242,50 254,55 242,60" fill="white"/>
-        <text x="194" y="47" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">HBr</text>
-        <text x="204" y="70" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Δ</text>
-        {/* Flask — far right */}
-        <path d="M346,20 L346,50 L328,86 Q324,96 334,100 L376,100 Q386,96 382,86 L364,50 L364,20 Z" stroke="white" strokeWidth="2" fill="none"/>
-        <line x1="342" y1="34" x2="368" y2="34" stroke="white" strokeWidth="1.5"/>
-        <ellipse cx="355" cy="84" rx="8" ry="4" stroke="white" strokeWidth="1.5"/>
+        <line x1="78" y1="40" x2="78" y2="18" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <text x="70" y="13" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">NH₂</text>
+        {/* OH end */}
+        <line x1="166" y1="40" x2="182" y2="24" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <text x="184" y="22" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">OH</text>
+        {/* Reaction arrow centre */}
+        <line x1="174" y1="76" x2="234" y2="76" stroke="white" strokeWidth="2"/>
+        <polygon points="230,71 242,76 230,81" fill="white"/>
+        <text x="184" y="68" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">HBr/Δ</text>
+        {/* Cyclohexane ring bottom-left */}
+        <polygon points="44,120 66,108 88,120 88,144 66,156 44,144" stroke="white" strokeWidth="2" fill="none"/>
+        {/* Cyclohexane chair bond angles */}
+        <line x1="44" y1="120" x2="28" y2="130" stroke="white" strokeWidth="1.5"/>
+        <line x1="88" y1="120" x2="104" y2="130" stroke="white" strokeWidth="1.5"/>
+        {/* Benzene — centre-bottom */}
+        <polygon points="160,108 180,97 200,108 200,130 180,141 160,130" stroke="white" strokeWidth="2.2" fill="none"/>
+        <circle cx="180" cy="119" r="13" stroke="white" strokeWidth="1.3" fill="none"/>
+        {/* COOH attached to benzene */}
+        <line x1="200" y1="119" x2="218" y2="119" stroke="white" strokeWidth="1.8"/>
+        <text x="220" y="123" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">COOH</text>
+        {/* Ester linkage bottom-right */}
+        <text x="268" y="130" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">-COO-</text>
+        <polyline points="268,140 288,155 308,140 328,155" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     );
     if (id === "ocr") return (
       <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
-        {/* OCR A — physical/inorganic chemistry theme */}
-        {/* Atom orbital circles */}
-        <circle cx="320" cy="52" r="44" stroke="white" strokeWidth="1.5" strokeDasharray="6 4"/>
-        <circle cx="320" cy="52" r="28" stroke="white" strokeWidth="1.5" strokeDasharray="4 5"/>
-        <circle cx="320" cy="52" r="10" stroke="white" strokeWidth="2"/>
-        {/* Electron dots around orbit */}
-        <circle cx="320" cy="8" r="4" fill="white"/>
-        <circle cx="364" cy="52" r="4" fill="white"/>
-        <circle cx="320" cy="96" r="4" fill="white"/>
-        <circle cx="276" cy="52" r="4" fill="white"/>
+        {/* OCR A — physical/inorganic chemistry, fills whole card */}
+        {/* Atomic orbitals top-right */}
+        <circle cx="330" cy="48" r="42" stroke="white" strokeWidth="1.5" strokeDasharray="6 4"/>
+        <circle cx="330" cy="48" r="26" stroke="white" strokeWidth="1.5" strokeDasharray="4 5"/>
+        <circle cx="330" cy="48" r="9" stroke="white" strokeWidth="2.5"/>
+        <circle cx="330" cy="6" r="4" fill="white"/>
+        <circle cx="372" cy="48" r="4" fill="white"/>
+        <circle cx="330" cy="90" r="4" fill="white"/>
+        <circle cx="288" cy="48" r="4" fill="white"/>
         {/* Energy level diagram left */}
-        <line x1="16" y1="140" x2="16" y2="20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <polygon points="12,24 16,12 20,24" fill="white"/>
-        <text x="8" y="15" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">E</text>
-        <line x1="24" y1="130" x2="70" y2="130" stroke="white" strokeWidth="2.5"/>
-        <line x1="24" y1="108" x2="70" y2="108" stroke="white" strokeWidth="2.5"/>
-        <line x1="24" y1="86" x2="70" y2="86" stroke="white" strokeWidth="2.5"/>
-        <line x1="24" y1="56" x2="70" y2="56" stroke="white" strokeWidth="2.5"/>
-        <line x1="24" y1="34" x2="70" y2="34" stroke="white" strokeWidth="2.5"/>
-        {/* Curly arrows on energy levels */}
-        <path d="M 50 128 C 60 118, 60 112, 50 106" stroke="white" strokeWidth="1.8" fill="none"/>
-        <polygon points="46,108 50,98 56,108" fill="white"/>
-        {/* ΔH arrow between levels */}
-        <line x1="76" y1="130" x2="76" y2="56" stroke="white" strokeWidth="1.5"/>
-        <polygon points="72,60 76,48 80,60" fill="white"/>
-        <text x="80" y="96" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">ΔH</text>
+        <line x1="14" y1="142" x2="14" y2="16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="10,20 14,8 18,20" fill="white"/>
+        <text x="6" y="10" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">E</text>
+        <line x1="22" y1="132" x2="68" y2="132" stroke="white" strokeWidth="2.5"/>
+        <line x1="22" y1="110" x2="68" y2="110" stroke="white" strokeWidth="2.5"/>
+        <line x1="22" y1="88" x2="68" y2="88" stroke="white" strokeWidth="2.5"/>
+        <line x1="22" y1="58" x2="68" y2="58" stroke="white" strokeWidth="2.5"/>
+        <line x1="22" y1="36" x2="68" y2="36" stroke="white" strokeWidth="2.5"/>
+        <path d="M 48 130 C 58 120, 58 114, 48 108" stroke="white" strokeWidth="1.8" fill="none"/>
+        <polygon points="44,110 48,100 54,110" fill="white"/>
+        <line x1="74" y1="132" x2="74" y2="58" stroke="white" strokeWidth="1.5"/>
+        <polygon points="70,62 74,50 78,62" fill="white"/>
+        <text x="78" y="98" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">ΔH</text>
+        {/* Activation energy curve — upper-middle fills gap */}
+        <path d="M 96,90 C 116,90 126,18 156,14 C 186,10 196,90 216,90" stroke="white" strokeWidth="2" fill="none"/>
+        <line x1="96" y1="90" x2="96" y2="110" stroke="white" strokeWidth="1.5" strokeDasharray="3 3"/>
+        <line x1="216" y1="90" x2="216" y2="110" stroke="white" strokeWidth="1.5" strokeDasharray="3 3"/>
+        <line x1="155" y1="14" x2="155" y2="90" stroke="white" strokeWidth="1.5" strokeDasharray="3 3"/>
+        <text x="158" y="55" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Ea</text>
+        <text x="85" y="105" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">R</text>
+        <text x="210" y="105" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">P</text>
         {/* Equilibrium arrows */}
-        <line x1="104" y1="95" x2="178" y2="95" stroke="white" strokeWidth="2"/>
-        <polygon points="174,90 186,95 174,100" fill="white"/>
-        <line x1="178" y1="108" x2="104" y2="108" stroke="white" strokeWidth="2"/>
-        <polygon points="108,103 96,108 108,113" fill="white"/>
-        {/* Reactant / product labels */}
-        <text x="96" y="85" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">A + B</text>
-        <text x="188" y="108" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">C + D</text>
-        {/* Kc = ... */}
-        <text x="96" y="140" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Kc = [C][D]</text>
-        <line x1="96" y1="145" x2="192" y2="145" stroke="white" strokeWidth="1.5"/>
-        <text x="110" y="160" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">[A][B]</text>
-        {/* Skeletal fragment bottom-right */}
-        <polyline points="230,155 250,138 270,155 290,138" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-        <line x1="290" y1="138" x2="306" y2="150" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <line x1="96" y1="128" x2="168" y2="128" stroke="white" strokeWidth="2"/>
+        <polygon points="164,123 176,128 164,133" fill="white"/>
+        <line x1="168" y1="140" x2="96" y2="140" stroke="white" strokeWidth="2"/>
+        <polygon points="100,135 88,140 100,145" fill="white"/>
+        {/* Kc expression */}
+        <text x="86" y="158" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Kc=[C][D]/[A][B]</text>
+        {/* pH titration S-curve bottom-right */}
+        <path d="M 228,162 C 238,162 244,150 248,138 C 256,112 268,106 278,80 C 288,54 292,42 302,28" stroke="white" strokeWidth="2" fill="none"/>
+        <line x1="222" y1="90" x2="310" y2="90" stroke="white" strokeWidth="1.3"/>
+        <line x1="228" y1="28" x2="228" y2="166" stroke="white" strokeWidth="1.3"/>
+        <text x="230" y="26" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">pH</text>
+        <text x="296" y="102" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">V</text>
       </svg>
     );
     if (id === "flashcards") return (
@@ -4449,7 +4470,7 @@ export default function App() {
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       <Header />
       <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>A-Level Chemistry</p>
+        <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#29ABE2", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>ChemMastery</p>
         <h2 style={{ textAlign: "center", fontSize: "30px", fontWeight: 800, color: "#1a2d45", margin: "0 0 36px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
           {[
