@@ -4473,8 +4473,8 @@ export default function App() {
                 <div>
                   <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.65)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "6px" }}>Exam Board</div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1 }}>
-                    <span style={{ fontSize: "18px", color: "rgba(255,255,255,0.75)", display: "block" }}>{b.label}</span>
-                    <span style={{ fontSize: "44px", color: "#ffffff", letterSpacing: "-1px" }}>{b.sub}</span>
+                    <span style={{ fontSize: "48px", color: "#ffffff", letterSpacing: "-2px", display: "block" }}>{b.label}</span>
+                    <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.7)", letterSpacing: "0.5px" }}>{b.sub}</span>
                   </div>
                 </div>
               </div>
