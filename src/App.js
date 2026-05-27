@@ -3974,6 +3974,10 @@ export default function App() {
   // ── Random Quiz ──────────────────────────────────────────────────────────────
   const [quizScreen, setQuizScreen] = useState(null); // null | "setup" | "running" | "done"
   const [quizYear, setQuizYear] = useState("as");      // "as" | "a2" | "all"
+  const [quizMode, setQuizMode] = useState("year");    // "year" | "topics"
+  const [quizCount, setQuizCount] = useState(25);      // 25 | 50 | "custom"
+  const [quizCustomCount, setQuizCustomCount] = useState(25);
+  const [quizSelectedTopics, setQuizSelectedTopics] = useState([]);
   const [quizDeck, setQuizDeck] = useState([]);        // [{topicId, cardIdx, q, a}]
   const [quizPos, setQuizPos] = useState(0);
   const [quizFlipped, setQuizFlipped] = useState(false);
@@ -4017,19 +4021,23 @@ export default function App() {
   const OCR_AS_SECTIONS = ["ocr_mod2", "ocr_mod3", "ocr_mod4"];
   const OCR_A2_SECTIONS = ["ocr_mod5", "ocr_mod6"];
 
-  const buildQuizDeck = (year) => {
-    const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
-    let sectionFilter;
-    const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
-    const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
-    if (year === "as") sectionFilter = asSecs;
-    else if (year === "a2") sectionFilter = a2Secs;
-    else sectionFilter = [...asSecs, ...a2Secs];
-
-    const eligibleTopics = allSections
-      .filter(s => sectionFilter.includes(s.id))
-      .flatMap(s => s.topics)
-      .filter(id => SETS[id]);
+  const buildQuizDeck = (year, deckSize = 25, topicIds = null) => {
+    let eligibleTopics;
+    if (topicIds && topicIds.length > 0) {
+      eligibleTopics = topicIds.filter(id => SETS[id]);
+    } else {
+      const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
+      const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
+      const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
+      let sectionFilter;
+      if (year === "as") sectionFilter = asSecs;
+      else if (year === "a2") sectionFilter = a2Secs;
+      else sectionFilter = [...asSecs, ...a2Secs];
+      eligibleTopics = allSections
+        .filter(s => sectionFilter.includes(s.id))
+        .flatMap(s => s.topics)
+        .filter(id => SETS[id]);
+    }
 
     // Build weighted pool
     const pool = [];
@@ -4054,8 +4062,8 @@ export default function App() {
     }
     if (pool.length === 0) return [];
 
-    // Weighted random sample of 25 cards (no repeats)
-    const DECK_SIZE = Math.min(25, pool.length);
+    // Weighted random sample, capped at available pool
+    const DECK_SIZE = Math.min(deckSize, pool.length);
     const selected = [];
     const remaining = [...pool];
     for (let i = 0; i < DECK_SIZE; i++) {
@@ -4073,7 +4081,9 @@ export default function App() {
   };
 
   const startQuiz = () => {
-    const deck = buildQuizDeck(quizYear);
+    const count = quizCount === "custom" ? Math.min(99, Math.max(25, quizCustomCount || 25)) : quizCount;
+    const topicFilter = quizMode === "topics" && quizSelectedTopics.length > 0 ? quizSelectedTopics : null;
+    const deck = buildQuizDeck(quizYear, count, topicFilter);
     setQuizDeck(deck);
     setQuizPos(0);
     setQuizFlipped(false);
@@ -4765,124 +4775,222 @@ export default function App() {
           </div>
         </div>
       )}
-      {topicsTab === "flashcards" && quizScreen === "setup" && (
-        <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ width: "100%", maxWidth: "360px" }}>
-            <button onClick={() => setQuizScreen(null)} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600, padding: "0 0 16px 0", display: "flex", alignItems: "center", gap: "4px" }}>← Back to Topics</button>
-            <div style={{ background: "linear-gradient(135deg,#29ABE2,#0090cc)", borderRadius: "20px", padding: "24px 20px", color: "#fff", marginBottom: "24px", boxShadow: "0 6px 20px rgba(41,171,226,0.35)" }}>
-              <div style={{ fontSize: "24px", marginBottom: "6px" }}>🎯</div>
-              <div style={{ fontSize: "20px", fontWeight: 800, letterSpacing: "-0.5px" }}>Random Quiz</div>
-              <div style={{ fontSize: "12px", opacity: 0.85, marginTop: "4px" }}>Cards you struggle with appear more often</div>
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Year Level</div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                {[["as","AS Year 1"],["a2","A2 Year 2"],["all","All Topics"]].map(([v,label]) => (
-                  <button key={v} onClick={() => setQuizYear(v)} style={{
-                    flex: 1, padding: "12px 8px", borderRadius: "12px", border: "2px solid",
-                    borderColor: quizYear === v ? "#29ABE2" : "#dde4ed",
-                    background: quizYear === v ? "#eaf6fd" : "#ffffff",
-                    color: quizYear === v ? "#29ABE2" : "#7a95b0",
-                    fontFamily: "inherit", fontSize: "12px", fontWeight: 700, cursor: "pointer",
-                    transition: "all 0.15s",
-                  }}>{label}</button>
-                ))}
-              </div>
-            </div>
-            {(() => {
-              const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
-              const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
-              const filter = quizYear === "as" ? asSecs : quizYear === "a2" ? a2Secs : [...asSecs, ...a2Secs];
-              const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
-              const total = allSections.filter(s => filter.includes(s.id)).flatMap(s => s.topics).filter(id => SETS[id]).reduce((sum, id) => sum + SETS[id].cards.length, 0);
-              return (
-                <div style={{ fontSize: "12px", color: "#7a95b0", textAlign: "center", marginBottom: "20px" }}>
-                  Drawing from <strong style={{ color: "#1a2d45" }}>{total}</strong> cards · Session size: <strong style={{ color: "#1a2d45" }}>25</strong>
+      {topicsTab === "flashcards" && quizScreen === "setup" && (() => {
+        const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
+        const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
+        const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
+        const effectiveCount = quizCount === "custom" ? Math.min(99, Math.max(25, quizCustomCount || 25)) : quizCount;
+
+        // Card pool size for current selection
+        let poolSize = 0;
+        if (quizMode === "topics") {
+          poolSize = quizSelectedTopics.filter(id => SETS[id]).reduce((sum, id) => sum + SETS[id].cards.length, 0);
+        } else {
+          const filter = quizYear === "as" ? asSecs : quizYear === "a2" ? a2Secs : [...asSecs, ...a2Secs];
+          poolSize = allSections.filter(s => filter.includes(s.id)).flatMap(s => s.topics).filter(id => SETS[id]).reduce((sum, id) => sum + SETS[id].cards.length, 0);
+        }
+
+        const toggleTopic = (id) => setQuizSelectedTopics(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+        const toggleSection = (sec) => {
+          const all = sec.topics.filter(id => SETS[id]);
+          const allSelected = all.every(id => quizSelectedTopics.includes(id));
+          setQuizSelectedTopics(prev => allSelected ? prev.filter(id => !all.includes(id)) : [...new Set([...prev, ...all])]);
+        };
+        const canStart = quizMode === "year" || quizSelectedTopics.length > 0;
+
+        return (
+          <div style={{ flex: 1, overflowY: "auto", padding: "24px 20px 40px" }}>
+            <div style={{ maxWidth: "560px", margin: "0 auto" }}>
+              <button onClick={() => setQuizScreen(null)} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600, padding: "0 0 18px 0" }}>← Back to Topics</button>
+
+              {/* Hero */}
+              <div style={{ background: "linear-gradient(135deg,#29ABE2,#0090cc)", borderRadius: "20px", padding: "22px 24px", color: "#fff", marginBottom: "24px", boxShadow: "0 6px 20px rgba(41,171,226,0.35)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px" }}>Random Quiz</div>
+                  <div style={{ fontSize: "13px", opacity: 0.85, marginTop: "4px" }}>Weak cards shown more often</div>
                 </div>
-              );
-            })()}
-            <div style={{ background: "#f8fafc", borderRadius: "14px", padding: "14px 16px", marginBottom: "24px", border: "1px solid #e0e8f0" }}>
-              <div style={{ fontSize: "11px", fontWeight: 700, color: "#4a6070", marginBottom: "8px", letterSpacing: "0.5px" }}>HOW IT WORKS</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                {[["🔴","Cards you miss → shown 4× more often"],["🟡","New cards → shown 3× more often"],["🟢","Cards you know → shown less often"],["✅","Mastered (3+ correct, ≥70%) → rare"]].map(([icon,text]) => (
-                  <div key={text} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px", color: "#4a6070" }}>
-                    <span style={{ flexShrink: 0 }}>{icon}</span><span>{text}</span>
-                  </div>
-                ))}
+                <div style={{ fontSize: "36px" }}>🎯</div>
               </div>
+
+              {/* Mode toggle */}
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Question Source</div>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  {[["year","By Year Level"],["topics","Choose Topics"]].map(([v,label]) => (
+                    <button key={v} onClick={() => setQuizMode(v)} style={{
+                      flex: 1, padding: "13px 8px", borderRadius: "12px", border: "2px solid",
+                      borderColor: quizMode === v ? "#29ABE2" : "#dde4ed",
+                      background: quizMode === v ? "#eaf6fd" : "#ffffff",
+                      color: quizMode === v ? "#29ABE2" : "#7a95b0",
+                      fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
+                    }}>{label}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Year selector (mode = year) */}
+              {quizMode === "year" && (
+                <div style={{ marginBottom: "20px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Year Level</div>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    {[["as","AS Year 1"],["a2","A2 Year 2"],["all","All Topics"]].map(([v,label]) => (
+                      <button key={v} onClick={() => setQuizYear(v)} style={{
+                        flex: 1, padding: "13px 8px", borderRadius: "12px", border: "2px solid",
+                        borderColor: quizYear === v ? "#29ABE2" : "#dde4ed",
+                        background: quizYear === v ? "#eaf6fd" : "#ffffff",
+                        color: quizYear === v ? "#29ABE2" : "#7a95b0",
+                        fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
+                      }}>{label}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Topic picker (mode = topics) */}
+              {quizMode === "topics" && (
+                <div style={{ marginBottom: "20px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase" }}>Pick Topics</div>
+                    <button onClick={() => setQuizSelectedTopics([])} style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Clear all</button>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {allSections.map(sec => {
+                      const secTopics = sec.topics.filter(id => SETS[id]);
+                      const allSel = secTopics.every(id => quizSelectedTopics.includes(id));
+                      const someSel = secTopics.some(id => quizSelectedTopics.includes(id));
+                      return (
+                        <div key={sec.id} style={{ background: "#f8fafc", borderRadius: "12px", border: "1px solid #e0e8f0", overflow: "hidden" }}>
+                          <button onClick={() => toggleSection(sec)} style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
+                            <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>{sec.label}</span>
+                            <span style={{ fontSize: "12px", fontWeight: 700, color: allSel ? "#29ABE2" : someSel ? "#7a95b0" : "#bcc8d4" }}>{allSel ? "All selected" : someSel ? `${secTopics.filter(id => quizSelectedTopics.includes(id)).length}/${secTopics.length}` : "Select all"}</span>
+                          </button>
+                          <div style={{ padding: "0 10px 10px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                            {secTopics.map(id => {
+                              const sel = quizSelectedTopics.includes(id);
+                              return (
+                                <button key={id} onClick={() => toggleTopic(id)} style={{
+                                  padding: "6px 12px", borderRadius: "8px", border: "2px solid",
+                                  borderColor: sel ? "#29ABE2" : "#dde4ed",
+                                  background: sel ? "#eaf6fd" : "#ffffff",
+                                  color: sel ? "#29ABE2" : "#7a95b0",
+                                  fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
+                                }}>{SETS[id]?.title || id}</button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Card count */}
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Cards per Session</div>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  {[[25,"25"],[50,"50"],["custom","Custom"]].map(([v,label]) => (
+                    <button key={v} onClick={() => setQuizCount(v)} style={{
+                      flex: 1, padding: "13px 8px", borderRadius: "12px", border: "2px solid",
+                      borderColor: quizCount === v ? "#29ABE2" : "#dde4ed",
+                      background: quizCount === v ? "#eaf6fd" : "#ffffff",
+                      color: quizCount === v ? "#29ABE2" : "#7a95b0",
+                      fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
+                    }}>{label}</button>
+                  ))}
+                </div>
+                {quizCount === "custom" && (
+                  <div style={{ marginTop: "10px", display: "flex", alignItems: "center", gap: "10px" }}>
+                    <input
+                      type="number" min={25} max={99} value={quizCustomCount}
+                      onChange={e => setQuizCustomCount(Math.min(99, Math.max(25, Number(e.target.value))))}
+                      style={{ flex: 1, padding: "12px 14px", borderRadius: "10px", border: "2px solid #dde4ed", fontSize: "16px", fontFamily: "inherit", fontWeight: 700, color: "#1a2d45", outline: "none", textAlign: "center" }}
+                    />
+                    <span style={{ fontSize: "13px", color: "#7a95b0", fontWeight: 600 }}>cards (25–99)</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Pool summary */}
+              <div style={{ fontSize: "13px", color: "#7a95b0", textAlign: "center", marginBottom: "20px", padding: "12px", background: "#f8fafc", borderRadius: "10px" }}>
+                Drawing <strong style={{ color: "#29ABE2" }}>{Math.min(effectiveCount, poolSize)}</strong> cards from a pool of <strong style={{ color: "#1a2d45" }}>{poolSize}</strong>
+                {quizMode === "topics" && quizSelectedTopics.length === 0 && <div style={{ color: "#ef4444", marginTop: "4px", fontSize: "12px" }}>Select at least one topic above</div>}
+              </div>
+
+              <button onClick={startQuiz} disabled={!canStart} style={{
+                width: "100%", padding: "18px", borderRadius: "14px", border: "none",
+                background: canStart ? "linear-gradient(135deg,#29ABE2,#0090cc)" : "#e0e8f0",
+                color: canStart ? "#ffffff" : "#aab5c2",
+                fontFamily: "inherit", fontSize: "17px", fontWeight: 800, cursor: canStart ? "pointer" : "not-allowed",
+                boxShadow: canStart ? "0 4px 16px rgba(41,171,226,0.4)" : "none",
+              }}>Start Quiz →</button>
             </div>
-            <button onClick={startQuiz} style={{
-              width: "100%", padding: "16px", borderRadius: "14px", border: "none",
-              background: "linear-gradient(135deg,#29ABE2,#0090cc)", color: "#ffffff",
-              fontFamily: "inherit", fontSize: "16px", fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 4px 16px rgba(41,171,226,0.4)", letterSpacing: "-0.3px",
-            }}>Start Quiz →</button>
           </div>
-        </div>
-      )}
+        );
+      })()}
       {topicsTab === "flashcards" && quizScreen === "running" && (() => {
         const card = quizDeck[quizPos];
         const progress = Math.round(((quizPos) / quizDeck.length) * 100);
         const topicTitle = SETS[card?.topicId]?.title || card?.topicId || "";
         return (
-          <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ width: "100%", maxWidth: "400px" }}>
+          <div style={{ padding: "20px 20px 32px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ width: "100%", maxWidth: "580px" }}>
               {/* Header */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                <button onClick={() => setQuizScreen("setup")} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>✕ Exit</button>
-                <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{quizPos + 1} / {quizDeck.length}</div>
-                <div style={{ fontSize: "12px", fontWeight: 700 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                <button onClick={() => setQuizScreen("setup")} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "14px", fontFamily: "inherit", fontWeight: 600 }}>✕ Exit</button>
+                <div style={{ fontSize: "14px", color: "#7a95b0", fontWeight: 600 }}>{quizPos + 1} / {quizDeck.length}</div>
+                <div style={{ fontSize: "14px", fontWeight: 700 }}>
                   <span style={{ color: "#22c55e" }}>✓ {quizSessionScore.correct}</span>
-                  <span style={{ color: "#d1d5db", margin: "0 4px" }}>|</span>
+                  <span style={{ color: "#d1d5db", margin: "0 6px" }}>|</span>
                   <span style={{ color: "#ef4444" }}>✗ {quizSessionScore.wrong}</span>
                 </div>
               </div>
               {/* Progress bar */}
-              <div style={{ height: "5px", background: "#e0e8f0", borderRadius: "3px", overflow: "hidden", marginBottom: "16px" }}>
+              <div style={{ height: "6px", background: "#e0e8f0", borderRadius: "3px", overflow: "hidden", marginBottom: "14px" }}>
                 <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#29ABE2,#22c55e)", borderRadius: "3px", transition: "width 0.3s" }} />
               </div>
               {/* Topic label */}
-              <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", textAlign: "center", marginBottom: "10px" }}>{topicTitle}</div>
+              <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", textAlign: "center", marginBottom: "12px" }}>{topicTitle}</div>
               {/* Card */}
               <div onClick={() => setQuizFlipped(f => !f)} style={{
-                minHeight: "200px", borderRadius: "20px", padding: "28px 22px",
+                minHeight: "260px", borderRadius: "24px", padding: "36px 32px",
                 background: quizFlipped ? "linear-gradient(135deg,#f0fdf4,#dcfce7)" : "#ffffff",
                 border: `2px solid ${quizFlipped ? "#86efac" : "#dde4ed"}`,
-                boxShadow: "0 4px 20px rgba(0,0,0,0.08)", cursor: "pointer",
+                boxShadow: "0 6px 28px rgba(0,0,0,0.09)", cursor: "pointer",
                 display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
                 textAlign: "center", transition: "all 0.2s", userSelect: "none",
-                marginBottom: "16px",
+                marginBottom: "18px",
               }}>
                 {!quizFlipped ? (
                   <>
-                    <div style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>QUESTION</div>
-                    <div style={{ fontSize: "15px", fontWeight: 600, color: "#1a2d45", lineHeight: 1.5 }}>{card?.q}</div>
-                    <div style={{ marginTop: "20px", fontSize: "11px", color: "#aab5c2" }}>Tap to reveal answer</div>
+                    <div style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "18px" }}>QUESTION</div>
+                    <div style={{ fontSize: "19px", fontWeight: 600, color: "#1a2d45", lineHeight: 1.55 }}>{card?.q}</div>
+                    <div style={{ marginTop: "24px", fontSize: "12px", color: "#aab5c2" }}>Tap to reveal answer</div>
                   </>
                 ) : (
                   <>
-                    <div style={{ fontSize: "11px", color: "#16a34a", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>ANSWER</div>
-                    <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, whiteSpace: "pre-line" }}>{card?.a}</div>
+                    <div style={{ fontSize: "11px", color: "#16a34a", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "18px" }}>ANSWER</div>
+                    <div style={{ fontSize: "17px", color: "#1a2d45", lineHeight: 1.65, whiteSpace: "pre-line" }}>{card?.a}</div>
                   </>
                 )}
               </div>
               {/* Answer buttons */}
               {quizFlipped ? (
-                <div style={{ display: "flex", gap: "10px" }}>
+                <div style={{ display: "flex", gap: "12px" }}>
                   <button onClick={() => recordQuizAnswer(false)} style={{
-                    flex: 1, padding: "16px 10px", borderRadius: "14px", border: "2px solid #fecaca",
-                    background: "#fff5f5", color: "#dc2626", fontFamily: "inherit", fontSize: "14px",
+                    flex: 1, padding: "18px 10px", borderRadius: "16px", border: "2px solid #fecaca",
+                    background: "#fff5f5", color: "#dc2626", fontFamily: "inherit", fontSize: "16px",
                     fontWeight: 800, cursor: "pointer",
                   }}>✗ Missed it</button>
                   <button onClick={() => recordQuizAnswer(true)} style={{
-                    flex: 1, padding: "16px 10px", borderRadius: "14px", border: "none",
+                    flex: 1, padding: "18px 10px", borderRadius: "16px", border: "none",
                     background: "linear-gradient(135deg,#22c55e,#16a34a)", color: "#ffffff",
-                    fontFamily: "inherit", fontSize: "14px", fontWeight: 800, cursor: "pointer",
+                    fontFamily: "inherit", fontSize: "16px", fontWeight: 800, cursor: "pointer",
                     boxShadow: "0 4px 12px rgba(34,197,94,0.35)",
                   }}>✓ Got it</button>
                 </div>
               ) : (
-                <div style={{ height: "54px" }} />
+                <div style={{ height: "58px" }} />
               )}
             </div>
           </div>
