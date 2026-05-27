@@ -4192,9 +4192,15 @@ export default function App() {
   );
 
   const Header = ({ sub, back }) => (
-    <div style={{ padding: "12px 20px 10px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
-      {back && <button onClick={back} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
-      <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "72px", objectFit: "contain", mixBlendMode: "multiply" }} />
+    <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", position: "relative", zIndex: 2, flexShrink: 0 }}>
+      {back && <button onClick={back} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
+      <div style={{ background: "#fff", borderRadius: "10px", padding: "4px 8px", display: "flex", alignItems: "center", flexShrink: 0 }}>
+        <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "52px", objectFit: "contain", display: "block" }} />
+      </div>
+      <div>
+        <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "18px", color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.1 }}>HSJ TUITION</div>
+        <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "11px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>A-Level Chemistry. Mastered.</div>
+      </div>
     </div>
   );
 
@@ -4202,35 +4208,83 @@ export default function App() {
   const ChemArt = ({ id }) => {
     const s = { position: "absolute", inset: 0, pointerEvents: "none", userSelect: "none", opacity: 0.2 };
     const W = "100%", H = "100%";
-    if (id === "board") return (
+    if (id === "aqa") return (
       <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
-        {/* Large benzene ring right */}
+        {/* AQA — organic chemistry theme */}
+        {/* Large benzene right */}
         <polygon points="328,8 360,26 360,62 328,80 296,62 296,26" stroke="white" strokeWidth="2.5"/>
         <circle cx="328" cy="44" r="22" stroke="white" strokeWidth="1.5"/>
         {/* Medium benzene left */}
-        <polygon points="58,78 76,89 76,111 58,122 40,111 40,89" stroke="white" strokeWidth="2"/>
-        <circle cx="58" cy="100" r="13" stroke="white" strokeWidth="1.2"/>
+        <polygon points="56,76 74,86 74,106 56,116 38,106 38,86" stroke="white" strokeWidth="2"/>
+        <circle cx="56" cy="96" r="12" stroke="white" strokeWidth="1.2"/>
+        {/* Long skeletal organic chain */}
+        <polyline points="86,150 110,126 134,150 158,126 182,150 206,126 230,150" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* Double bond on chain */}
+        <line x1="110" y1="126" x2="134" y2="150" stroke="white" strokeWidth="1.5"/>
+        <line x1="113" y1="122" x2="137" y2="146" stroke="white" strokeWidth="1.5"/>
+        {/* COOH end group */}
+        <line x1="230" y1="150" x2="248" y2="132" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <text x="250" y="130" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">COOH</text>
+        {/* Reaction arrow with reagent */}
+        <line x1="130" y1="52" x2="210" y2="52" stroke="white" strokeWidth="2"/>
+        <polygon points="206,47 218,52 206,57" fill="white"/>
+        <text x="143" y="45" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">HBr</text>
+        <text x="150" y="67" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Δ</text>
+        {/* Flask */}
+        <path d="M232,18 L232,44 L215,76 Q211,84 219,88 L261,88 Q269,84 265,76 L248,44 L248,18 Z" stroke="white" strokeWidth="2" fill="none"/>
+        <line x1="228" y1="30" x2="252" y2="30" stroke="white" strokeWidth="1.5"/>
+        <ellipse cx="240" cy="73" rx="8" ry="4" stroke="white" strokeWidth="1.5"/>
         {/* Small benzene top-left */}
-        <polygon points="28,18 40,25 40,39 28,46 16,39 16,25" stroke="white" strokeWidth="1.8"/>
-        <circle cx="28" cy="32" r="8" stroke="white" strokeWidth="1.2"/>
-        {/* Skeletal chain across bottom */}
-        <polyline points="90,148 114,124 138,148 162,124 186,148 210,124 234,148" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        {/* Double bond */}
-        <line x1="114" y1="124" x2="138" y2="148" stroke="white" strokeWidth="1.5"/>
-        <line x1="117" y1="120" x2="141" y2="144" stroke="white" strokeWidth="1.5"/>
-        {/* Reaction arrow */}
-        <line x1="138" y1="55" x2="210" y2="55" stroke="white" strokeWidth="2"/>
-        <polygon points="206,50 218,55 206,60" fill="white"/>
-        {/* Reagents above/below arrow */}
-        <text x="149" y="48" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">H₂SO₄</text>
-        <text x="152" y="70" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Δ</text>
-        {/* Flask outline */}
-        <path d="M228,22 L228,48 L210,82 Q206,90 214,94 L258,94 Q266,90 262,82 L244,48 L244,22 Z" stroke="white" strokeWidth="2" fill="none"/>
-        <line x1="224" y1="34" x2="248" y2="34" stroke="white" strokeWidth="1.5"/>
-        <ellipse cx="236" cy="78" rx="8" ry="4" stroke="white" strokeWidth="1.5"/>
-        {/* OH end group */}
-        <line x1="234" y1="148" x2="252" y2="130" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <text x="254" y="128" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">OH</text>
+        <polygon points="24,16 36,23 36,37 24,44 12,37 12,23" stroke="white" strokeWidth="1.8"/>
+        <circle cx="24" cy="30" r="8" stroke="white" strokeWidth="1.2"/>
+        {/* NH₂ branch off chain */}
+        <line x1="158" y1="126" x2="158" y2="104" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <text x="150" y="98" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">NH₂</text>
+      </svg>
+    );
+    if (id === "ocr") return (
+      <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* OCR A — physical/inorganic chemistry theme */}
+        {/* Atom orbital circles */}
+        <circle cx="320" cy="52" r="44" stroke="white" strokeWidth="1.5" strokeDasharray="6 4"/>
+        <circle cx="320" cy="52" r="28" stroke="white" strokeWidth="1.5" strokeDasharray="4 5"/>
+        <circle cx="320" cy="52" r="10" stroke="white" strokeWidth="2"/>
+        {/* Electron dots around orbit */}
+        <circle cx="320" cy="8" r="4" fill="white"/>
+        <circle cx="364" cy="52" r="4" fill="white"/>
+        <circle cx="320" cy="96" r="4" fill="white"/>
+        <circle cx="276" cy="52" r="4" fill="white"/>
+        {/* Energy level diagram left */}
+        <line x1="16" y1="140" x2="16" y2="20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="12,24 16,12 20,24" fill="white"/>
+        <text x="8" y="15" fill="white" fontSize="9" fontFamily="'Space Mono',monospace">E</text>
+        <line x1="24" y1="130" x2="70" y2="130" stroke="white" strokeWidth="2.5"/>
+        <line x1="24" y1="108" x2="70" y2="108" stroke="white" strokeWidth="2.5"/>
+        <line x1="24" y1="86" x2="70" y2="86" stroke="white" strokeWidth="2.5"/>
+        <line x1="24" y1="56" x2="70" y2="56" stroke="white" strokeWidth="2.5"/>
+        <line x1="24" y1="34" x2="70" y2="34" stroke="white" strokeWidth="2.5"/>
+        {/* Curly arrows on energy levels */}
+        <path d="M 50 128 C 60 118, 60 112, 50 106" stroke="white" strokeWidth="1.8" fill="none"/>
+        <polygon points="46,108 50,98 56,108" fill="white"/>
+        {/* ΔH arrow between levels */}
+        <line x1="76" y1="130" x2="76" y2="56" stroke="white" strokeWidth="1.5"/>
+        <polygon points="72,60 76,48 80,60" fill="white"/>
+        <text x="80" y="96" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">ΔH</text>
+        {/* Equilibrium arrows */}
+        <line x1="104" y1="95" x2="178" y2="95" stroke="white" strokeWidth="2"/>
+        <polygon points="174,90 186,95 174,100" fill="white"/>
+        <line x1="178" y1="108" x2="104" y2="108" stroke="white" strokeWidth="2"/>
+        <polygon points="108,103 96,108 108,113" fill="white"/>
+        {/* Reactant / product labels */}
+        <text x="96" y="85" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">A + B</text>
+        <text x="188" y="108" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">C + D</text>
+        {/* Kc = ... */}
+        <text x="96" y="140" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Kc = [C][D]</text>
+        <line x1="96" y1="145" x2="192" y2="145" stroke="white" strokeWidth="1.5"/>
+        <text x="110" y="160" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">[A][B]</text>
+        {/* Skeletal fragment bottom-right */}
+        <polyline points="230,155 250,138 270,155 290,138" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <line x1="290" y1="138" x2="306" y2="150" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     );
     if (id === "flashcards") return (
@@ -4418,8 +4472,8 @@ export default function App() {
               <div style={{ height: "170px", background: b.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "22px 24px", position: "relative", overflow: "hidden" }}>
                 {/* Big faded background text */}
                 <div style={{ position: "absolute", top: "-10px", right: "-8px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "90px", color: "rgba(255,255,255,0.07)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{b.label}</div>
-                {/* Chemistry art */}
-                <ChemArt id="board" />
+                {/* Chemistry art — unique per board */}
+                <ChemArt id={b.id} />
                 {/* Label */}
                 <div>
                   <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.65)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "6px" }}>Exam Board</div>
@@ -4645,15 +4699,21 @@ export default function App() {
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       {/* Header — always visible */}
-      <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff", flexShrink: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <div style={{ padding: "0 20px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0f1d35", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {topicsTab !== "home"
-            ? <button onClick={goHome} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Home</button>
-            : <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
+            ? <button onClick={goHome} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Home</button>
+            : <button onClick={goBack} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
           }
-          <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "68px", objectFit: "contain", mixBlendMode: "multiply" }} />
+          <div style={{ background: "#fff", borderRadius: "10px", padding: "4px 8px", display: "flex", alignItems: "center" }}>
+            <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "48px", objectFit: "contain", display: "block" }} />
+          </div>
+          <div>
+            <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "17px", color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.1 }}>HSJ TUITION</div>
+            <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "10px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>{board === "ocr" ? "OCR A" : "AQA"} · A-Level Chemistry</div>
+          </div>
         </div>
-        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
+        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
       </div>
 
       {/* HOME card grid */}
