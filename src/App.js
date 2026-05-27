@@ -4176,7 +4176,7 @@ export default function App() {
   };
 
   const bg = "#f0f4f8";
-  const base = { minHeight: "100vh", background: bg, fontFamily: "'DM Sans', 'Segoe UI', sans-serif", color: "#1a2d45", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
+  const base = { minHeight: "100vh", background: bg, fontFamily: "'Outfit', 'DM Sans', 'Segoe UI', sans-serif", color: "#1a2d45", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
 
   // Inline SVG flask logo
   const FlaskLogo = ({ size = 36 }) => (
@@ -4191,25 +4191,75 @@ export default function App() {
     </svg>
   );
 
-  const Header = ({ title, sub, back }) => (
+  const Header = ({ sub, back }) => (
     <div style={{ padding: "14px 20px 12px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
       {back && <button onClick={back} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1 }}>
-        <FlaskLogo size={38} />
-        <div>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "16px", color: "#1a2d45", letterSpacing: "-0.5px", lineHeight: 1.1 }}>
-            <span style={{ color: "#29ABE2" }}>Chem</span>Mastery
-          </div>
-          <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>{sub || "A-Level Chemistry"}</div>
-        </div>
-      </div>
+      <FlaskLogo size={40} />
     </div>
   );
+
+  // Chemistry artwork for card thumbnails
+  const ChemArt = ({ id }) => {
+    const s = { position: "absolute", top: "8px", right: "10px", opacity: 0.22, pointerEvents: "none", userSelect: "none" };
+    if (id === "board") return (
+      <svg style={s} width="74" height="74" viewBox="0 0 74 74" fill="none">
+        <polygon points="37,4 68,21 68,53 37,70 6,53 6,21" stroke="white" strokeWidth="2.5" fill="none"/>
+        <circle cx="37" cy="37" r="18" stroke="white" strokeWidth="1.5" fill="none"/>
+      </svg>
+    );
+    if (id === "flashcards") return (
+      <svg style={s} width="72" height="72" viewBox="0 0 72 72" fill="none">
+        <polygon points="36,4 65,21 65,51 36,68 7,51 7,21" stroke="white" strokeWidth="2.5" fill="none"/>
+        <circle cx="36" cy="36" r="17" stroke="white" strokeWidth="1.5" fill="none"/>
+      </svg>
+    );
+    if (id === "synth") return (
+      <svg style={s} width="82" height="56" viewBox="0 0 82 56" fill="none">
+        <line x1="4" y1="40" x2="20" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="20" y1="18" x2="36" y2="40" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="50" y1="40" x2="66" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="66" y1="18" x2="78" y2="34" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="36" y1="28" x2="48" y2="28" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="48,23 56,28 48,33" fill="white"/>
+      </svg>
+    );
+    if (id === "pathways") return (
+      <svg style={s} width="70" height="70" viewBox="0 0 70 70" fill="none">
+        <line x1="35" y1="4" x2="35" y2="30" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="35" y1="30" x2="12" y2="56" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="35" y1="30" x2="58" y2="56" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        <circle cx="12" cy="57" r="4" fill="white"/>
+        <circle cx="58" cy="57" r="4" fill="white"/>
+        <circle cx="35" cy="4" r="4" fill="white"/>
+      </svg>
+    );
+    if (id === "calc") return (
+      <svg style={s} width="84" height="62" viewBox="0 0 84 62" fill="none">
+        <text x="4" y="24" fill="white" fontSize="20" fontFamily="'Space Mono',monospace" fontWeight="700">n = m</text>
+        <line x1="4" y1="32" x2="60" y2="32" stroke="white" strokeWidth="2.2"/>
+        <text x="14" y="54" fill="white" fontSize="20" fontFamily="'Space Mono',monospace" fontWeight="700">Mᵣ</text>
+      </svg>
+    );
+    if (id === "extended") return (
+      <svg style={s} width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <rect x="4" y="4" width="56" height="56" rx="10" stroke="white" strokeWidth="2.5" fill="none"/>
+        <polyline points="14,32 26,46 50,20" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      </svg>
+    );
+    if (id === "mechanisms") return (
+      <svg style={s} width="82" height="62" viewBox="0 0 82 62" fill="none">
+        <path d="M 12 50 C 12 20, 50 8, 58 28 C 64 42, 52 54, 42 48" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+        <polygon points="36,42 42,54 50,44" fill="white"/>
+        <circle cx="12" cy="50" r="3.5" fill="white"/>
+      </svg>
+    );
+    return null;
+  };
 
   // BOARD SELECT
   if (screen === "board") return (
     <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       <Header />
       <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>A-Level Chemistry</p>
@@ -4217,7 +4267,7 @@ export default function App() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
           {[
             { id: "aqa", label: "AQA", sub: "Chemistry", count: TOPIC_ORDER.length, desc: "Full coverage of the AQA A-Level Chemistry specification — Year 1 and Year 2.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["AS + A2 content","Required practicals"] },
-            { id: "ocr", label: "OCR", sub: "A Chemistry", count: OCR_TOPIC_ORDER.length, desc: "OCR A Chemistry H432 — Modules 2-6 covered. Module 1 (Practical Skills) is assessed through PAGs, not written exams.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","PAG practicals"] },
+            { id: "ocr", label: "OCR A", sub: "Chemistry", count: OCR_TOPIC_ORDER.length, desc: "OCR A Chemistry H432 — Modules 2-6 covered. Module 1 (Practical Skills) is assessed through PAGs, not written exams.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","PAG practicals"] },
           ].map(b => (
             <button key={b.id} onClick={() => selectBoard(b.id)} style={{
               display: "flex", flexDirection: "column", borderRadius: "24px",
@@ -4231,11 +4281,9 @@ export default function App() {
               {/* Fancy thumbnail */}
               <div style={{ height: "170px", background: b.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "22px 24px", position: "relative", overflow: "hidden" }}>
                 {/* Big faded background text */}
-                <div style={{ position: "absolute", top: "-10px", right: "-8px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "90px", color: "rgba(255,255,255,0.1)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{b.label}</div>
-                {/* Decorative circle */}
-                <div style={{ position: "absolute", top: "18px", right: "20px", width: "48px", height: "48px", borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
-                </div>
+                <div style={{ position: "absolute", top: "-10px", right: "-8px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "90px", color: "rgba(255,255,255,0.07)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{b.label}</div>
+                {/* Chemistry art */}
+                <ChemArt id="board" />
                 {/* Label */}
                 <div>
                   <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "4px" }}>Exam Board</div>
@@ -4450,7 +4498,7 @@ export default function App() {
     { id: "flashcards", label: "Flashcards",            labelBig: "Flash",    labelSmall: "cards",   desc: "Master every topic with smart revision cards.", color: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2,#0e7ab5,#085f8f)", stat: `${CURRENT_TOPIC_ORDER.length} topics` },
     { id: "synth",      label: "Synthesis",             labelBig: "Synth",    labelSmall: "esis",    desc: "Build multi-step reaction routes from scratch.", color: "#0ea5e9", grad: "linear-gradient(145deg,#38bdf8,#0ea5e9,#0369a1)", stat: "Route builder" },
     { id: "pathways",   label: "Pathways",              labelBig: "Path",     labelSmall: "ways",    desc: "Explore all routes between functional groups.",  color: "#059669", grad: "linear-gradient(145deg,#10b981,#059669,#047857)", stat: "Reaction map" },
-    { id: "calc",       label: "Calculations",          labelBig: "Calc",     labelSmall: "ulations",desc: "Practise every calculation type with worked steps.", color: "#0284c7", grad: "linear-gradient(145deg,#0ea5e9,#0284c7,#075985)", stat: "Step-by-step" },
+    { id: "calc",       label: "Calculations",          labelBig: "Worked",   labelSmall: "Calcs",   desc: "Practise every calculation type with worked steps.", color: "#0284c7", grad: "linear-gradient(145deg,#0ea5e9,#0284c7,#075985)", stat: "Step-by-step" },
     { id: "extended",   label: "AI Examiner",           labelBig: "AI",       labelSmall: "Examiner",desc: "ChemMastery AI marks your extended answers.",    color: "#7c3aed", grad: "linear-gradient(145deg,#a855f7,#7c3aed,#5b21b6)", stat: "AI powered" },
     { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Animated curly arrow mechanisms step by step.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Animated" },
   ];
@@ -4459,7 +4507,7 @@ export default function App() {
 
   if (screen === "topics") return (
     <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       {/* Header — always visible */}
       <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -4467,44 +4515,41 @@ export default function App() {
             ? <button onClick={goHome} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Home</button>
             : <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
           }
-          <div>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#29ABE2" }}>HSJ TUITION</div>
-            <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>{board === "ocr" ? "OCR A · A-Level Chemistry" : "AQA · A-Level Chemistry"}</div>
-          </div>
+          <FlaskLogo size={36} />
         </div>
         <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
       </div>
 
       {/* HOME card grid */}
       {topicsTab === "home" && (
-        <div style={{ flex: 1, overflowY: "auto", padding: "28px 20px 48px" }}>
-          <p style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 6px" }}>ChemMastery</p>
-          <h2 style={{ fontSize: "26px", fontWeight: 800, color: "#1a2d45", margin: "0 0 24px", letterSpacing: "-0.5px" }}>What would you like to practise?</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "18px" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "32px 24px 56px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <p style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 6px", alignSelf: "flex-start" }}>ChemMastery</p>
+          <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", margin: "0 0 28px", letterSpacing: "-0.5px", alignSelf: "flex-start" }}>What would you like to practise?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => (
               <button key={card.id} onClick={() => { setTopicsTab(card.id); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
-                style={{ display: "flex", flexDirection: "column", borderRadius: "20px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 20px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s" }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(0,0,0,0.15)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.09)"; }}
+                style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s" }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
               >
-                {/* Fancy thumbnail - styled like reference with two-tone text */}
-                <div style={{ height: "120px", background: card.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "14px 16px", position: "relative", overflow: "hidden" }}>
-                  {/* Large faded background letter */}
-                  <div style={{ position: "absolute", top: "-4px", right: "-6px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "72px", color: "rgba(255,255,255,0.12)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{card.labelBig[0]}</div>
-                  {/* Stat badge top-right */}
-                  <div style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "3px 8px" }}>
+                {/* Thumbnail */}
+                <div style={{ height: "140px", background: card.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "16px 18px", position: "relative", overflow: "hidden" }}>
+                  {/* Chemistry artwork */}
+                  <ChemArt id={card.id} />
+                  {/* Stat badge top-left */}
+                  <div style={{ position: "absolute", top: "14px", left: "16px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "3px 10px" }}>
                     <span style={{ fontSize: "9px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
                   </div>
-                  {/* Two-tone title like reference screenshot */}
+                  {/* Two-tone title */}
                   <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1.1 }}>
-                    <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", display: "block", letterSpacing: "0.5px" }}>{card.labelBig}</span>
-                    <span style={{ fontSize: "26px", color: "#ffffff" }}>{card.labelSmall}</span>
+                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", display: "block", letterSpacing: "0.5px" }}>{card.labelBig}</span>
+                    <span style={{ fontSize: "28px", color: "#ffffff" }}>{card.labelSmall}</span>
                   </div>
                 </div>
                 {/* Card body */}
-                <div style={{ padding: "14px 16px 18px", flex: 1 }}>
-                  <div style={{ fontSize: "14px", fontWeight: 800, color: "#1a2d45", marginBottom: "5px" }}>{card.label}</div>
-                  <div style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.5 }}>{card.desc}</div>
+                <div style={{ padding: "16px 18px 20px", flex: 1 }}>
+                  <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", marginBottom: "5px" }}>{card.label}</div>
+                  <div style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.55 }}>{card.desc}</div>
                 </div>
               </button>
             ))}
