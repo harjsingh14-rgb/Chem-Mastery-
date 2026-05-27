@@ -4192,9 +4192,9 @@ export default function App() {
   );
 
   const Header = ({ sub, back }) => (
-    <div style={{ padding: "14px 20px 12px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
+    <div style={{ padding: "12px 20px 10px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
       {back && <button onClick={back} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
-      <FlaskLogo size={40} />
+      <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "48px", objectFit: "contain" }} />
     </div>
   );
 
@@ -4651,7 +4651,7 @@ export default function App() {
             ? <button onClick={goHome} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Home</button>
             : <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
           }
-          <FlaskLogo size={36} />
+          <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "44px", objectFit: "contain" }} />
         </div>
         <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
       </div>
