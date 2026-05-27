@@ -3944,7 +3944,7 @@ export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
-  const [topicsTab, setTopicsTab] = useState("flashcards"); // "flashcards" | "synth" | "calc" | "extended"
+  const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms"
   const [extCategory, setExtCategory] = useState(null);
   const [extIndex, setExtIndex] = useState(0);
   const [extRevealed, setExtRevealed] = useState(false);
@@ -3990,7 +3990,7 @@ export default function App() {
   const knownSet = known[knownKey] || new Set();
   const knownCount = knownSet.size;
 
-  const selectBoard = (b) => { setBoard(b); setScreen("topics"); };
+  const selectBoard = (b) => { setBoard(b); setScreen("topics"); setTopicsTab("home"); };
   const selectTopic = (t) => {
     setTopic(t);
     setOrder(SETS[t].cards.map((_, i) => i));
@@ -4105,7 +4105,7 @@ export default function App() {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
     else if (screen === "dashboard") { setScreen("topics"); }
     else if (screen === "topics" && activeSection) { setActiveSection(null); }
-    else if (screen === "topics") { setScreen("board"); setBoard(null); }
+    else if (screen === "topics") { setScreen("board"); setBoard(null); setTopicsTab("home"); }
   };
 
   const next = useCallback(() => { setFlipped(false); setTimeout(() => setIndex(i => Math.min(i + 1, order.length - 1)), 100); }, [order.length]);
@@ -4193,22 +4193,41 @@ export default function App() {
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       <Header />
-      <div style={{ padding: "20px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "16px", maxWidth: "500px", margin: "0 auto", width: "100%" }}>
-        <h2 style={{ textAlign: "center", fontSize: "22px", fontWeight: 700, color: "#1a2d45", margin: "0 0 8px" }}>Choose your exam board</h2>
-        {[{ id: "aqa", label: "AQA", count: TOPIC_ORDER.length + " topics" }, { id: "ocr", label: "OCR A", count: OCR_TOPIC_ORDER.length + " topics" }].map(b => (
-          <button key={b.id} onClick={() => selectBoard(b.id)} style={{
-            padding: "24px 20px", borderRadius: "16px",
-            background: "#ffffff",
-            border: "1px solid #29ABE2",
-            color: "#1a2d45",
-            cursor: "pointer",
-            textAlign: "left", fontFamily: "inherit", transition: "all 0.2s",
-            boxShadow: "0 4px 20px rgba(41,171,226,0.15)",
-          }}>
-            <div style={{ fontSize: "20px", fontWeight: 700 }}>{b.label}</div>
-            <div style={{ fontSize: "13px", color: "#29ABE2", marginTop: "4px" }}>{b.count}</div>
-          </button>
-        ))}
+      <div style={{ flex: 1, overflowY: "auto", padding: "28px 20px 40px" }}>
+        <div style={{ maxWidth: "520px", margin: "0 auto" }}>
+          <p style={{ textAlign: "center", fontSize: "13px", fontWeight: 600, color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase", margin: "0 0 6px" }}>A-Level Chemistry</p>
+          <h2 style={{ textAlign: "center", fontSize: "26px", fontWeight: 800, color: "#1a2d45", margin: "0 0 28px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {[
+              { id: "aqa", label: "AQA", count: TOPIC_ORDER.length, desc: "Full coverage of the AQA A-Level Chemistry specification — AS and A2.", accent: "#29ABE2", grad: "linear-gradient(135deg, #29ABE2 0%, #0e7ab5 100%)" },
+              { id: "ocr", label: "OCR A", count: OCR_TOPIC_ORDER.length, desc: "Complete OCR A Chemistry H432 — modules 2 through 6.", accent: "#7c3aed", grad: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)" },
+            ].map(b => (
+              <button key={b.id} onClick={() => selectBoard(b.id)} style={{
+                display: "flex", alignItems: "stretch", borderRadius: "20px",
+                border: "none", cursor: "pointer", fontFamily: "inherit",
+                background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)",
+                overflow: "hidden", transition: "transform 0.15s, box-shadow 0.15s", textAlign: "left",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.14)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
+              >
+                {/* Thumbnail */}
+                <div style={{ width: "110px", flexShrink: 0, background: b.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 12px" }}>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "22px", color: "#ffffff", lineHeight: 1 }}>{b.label}</div>
+                  <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.75)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Chemistry</div>
+                </div>
+                {/* Content */}
+                <div style={{ padding: "18px 20px", flex: 1 }}>
+                  <div style={{ fontSize: "18px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{b.label} Chemistry</div>
+                  <div style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.5, marginBottom: "12px" }}>{b.desc}</div>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: `${b.accent}18`, borderRadius: "8px", padding: "4px 10px" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 700, color: b.accent }}>{b.count} topics</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -4394,55 +4413,63 @@ export default function App() {
     );
   }
 
+  // Activity card data used by both the home grid and the back-to-home helper
+  const ACTIVITY_CARDS = [
+    { id: "flashcards", label: "Flashcards",  desc: "Master every topic with spaced-repetition style cards.",   color: "#29ABE2", grad: "linear-gradient(135deg,#29ABE2,#0e7ab5)", stat: `${CURRENT_TOPIC_ORDER.length} topics` },
+    { id: "synth",      label: "Synthesis",   desc: "Build multi-step reaction routes from scratch.",           color: "#0ea5e9", grad: "linear-gradient(135deg,#0ea5e9,#0369a1)", stat: "Route builder" },
+    { id: "pathways",   label: "Pathways",    desc: "Explore all routes between functional groups.",            color: "#059669", grad: "linear-gradient(135deg,#059669,#047857)", stat: "Reaction map" },
+    { id: "calc",       label: "Calculations",desc: "Practise every calculation type with worked steps.",       color: "#0284c7", grad: "linear-gradient(135deg,#0284c7,#075985)", stat: "Step-by-step" },
+    { id: "extended",   label: "6-Mark",      desc: "AI-marked extended response and exam-style questions.",   color: "#7c3aed", grad: "linear-gradient(135deg,#7c3aed,#5b21b6)", stat: "AI examiner" },
+    { id: "mechanisms", label: "Mechanisms",  desc: "Animated curly arrow mechanisms step by step.",            color: "#d97706", grad: "linear-gradient(135deg,#d97706,#b45309)", stat: "Animated" },
+  ];
+
+  const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechArrowIdx(0); };
+
   if (screen === "topics") return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-      <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff" }}>
+      {/* Header — always visible */}
+      <div style={{ padding: "12px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #dde4ed", background: "#ffffff", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
+          {topicsTab !== "home"
+            ? <button onClick={goHome} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Home</button>
+            : <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
+          }
           <div>
             <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#29ABE2" }}>HSJ TUITION</div>
             <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase" }}>{board === "ocr" ? "OCR A · A-Level Chemistry" : "AQA · A-Level Chemistry"}</div>
           </div>
         </div>
-        <div style={{ display: "flex", gap: "8px" }}>
-          <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
+        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 14px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.3)" }}>My Progress</button>
+      </div>
+
+      {/* HOME card grid */}
+      {topicsTab === "home" && (
+        <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px 40px" }}>
+          <p style={{ fontSize: "12px", fontWeight: 600, color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase", margin: "0 0 4px" }}>ChemMastery</p>
+          <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#1a2d45", margin: "0 0 20px", letterSpacing: "-0.4px" }}>What would you like to practise?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))", gap: "14px" }}>
+            {ACTIVITY_CARDS.map(card => (
+              <button key={card.id} onClick={() => { setTopicsTab(card.id); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
+                style={{ display: "flex", flexDirection: "column", borderRadius: "18px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 3px 16px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.15s, box-shadow 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.13)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.09)"; }}
+              >
+                {/* Thumbnail */}
+                <div style={{ height: "90px", background: card.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "12px" }}>
+                  <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#ffffff", textAlign: "center", lineHeight: 1.2 }}>{card.label}</div>
+                  <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.7)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "1.5px" }}>{card.stat}</div>
+                </div>
+                {/* Text */}
+                <div style={{ padding: "12px 13px 14px" }}>
+                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "4px" }}>{card.label}</div>
+                  <div style={{ fontSize: "11px", color: "#7a95b0", lineHeight: 1.45 }}>{card.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
-      {/* Tab bar */}
-      <style>{`.hsjTabBar::-webkit-scrollbar{display:none}`}</style>
-      <div className="hsjTabBar" style={{
-        display: "flex", gap: "6px", padding: "10px 14px",
-        background: "#f0f4f8", borderBottom: "1px solid #dde4ed",
-        overflowX: "auto", WebkitOverflowScrolling: "touch",
-        scrollbarWidth: "none", msOverflowStyle: "none", flexShrink: 0,
-      }}>
-        {[
-          { id: "flashcards", label: "Cards",      color: "#29ABE2" },
-          { id: "synth",      label: "Synthesis",  color: "#29ABE2" },
-          { id: "pathways",   label: "Pathways",   color: "#059669" },
-          { id: "calc",       label: "Calcs",      color: "#29ABE2" },
-          { id: "extended",   label: "6-Mark",     color: "#7c3aed" },
-          { id: "mechanisms", label: "Mechanisms", color: "#d97706" },
-        ].map(({ id, label, color }) => {
-          const active = topicsTab === id;
-          return (
-            <button key={id}
-              onClick={() => { setTopicsTab(id); setSelectedRxn(null); if (id === "pathways") setSelectedFrom(null); if (id === "synth") setSelectedFrom(null); if (id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
-              style={{
-                padding: "8px 16px", borderRadius: "22px", border: "none",
-                cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
-                fontWeight: 700, flexShrink: 0, whiteSpace: "nowrap",
-                transition: "all 0.15s ease",
-                background: active ? color : "#ffffff",
-                color: active ? "#ffffff" : "#4a6080",
-                boxShadow: active ? `0 2px 10px ${color}45` : "0 1px 3px rgba(0,0,0,0.08)",
-              }}>
-              {label}
-            </button>
-          );
-        })}
-      </div>
+      )}
       {topicsTab === "flashcards" && quizScreen === "setup" && (
         <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div style={{ width: "100%", maxWidth: "360px" }}>
