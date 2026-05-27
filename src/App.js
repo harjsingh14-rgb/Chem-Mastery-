@@ -278,7 +278,9 @@ const SETS = {
     {q:"Why must solutions be acidified with HNO₃ (not HCl or H₂SO₄) before testing for halides?", a:"HCl would introduce Cl⁻ ions → give a false positive for chloride.\nH₂SO₄ would introduce SO₄²⁻ ions → could interfere with other tests.\nHNO₃ does not introduce any ions that would form precipitates with Ag⁺, so it is the correct acid for acidifying before halide testing."},
     {q:"What observations confirm the presence of Cu²⁺ ions in solution?", a:"1. Blue colour of solution ([Cu(H₂O)₆]²⁺)\n2. Flame test: blue-green/turquoise flame\n3. Add NaOH: blue precipitate of Cu(OH)₂, insoluble in excess NaOH.\n4. Add excess NH₃: blue precipitate initially, then dissolves to give deep blue solution ([Cu(NH₃)₄(H₂O)₂]²⁺)."},
     {q:"How do you test for the presence of water and confirm that water is pure?", a:"Test for water presence: add anhydrous CuSO₄ (white) → turns blue if water present; or blue cobalt chloride paper → turns pink.\nConfirm purity: measure boiling point (pure water = exactly 100°C at 1 atm) and freezing point (exactly 0°C).\nImpure water: boils above 100°C (dissolved solutes raise bp) and freezes below 0°C."},
-    {q:"What is the purpose of the brown ring test for nitrates?", a:"Nitrate ion (NO₃⁻) test: add iron(II) sulfate solution to the sample, then carefully add concentrated H₂SO₄ down the side of the tube.\nA brown ring forms at the junction where the layers meet — due to formation of [Fe(H₂O)₅(NO)]²⁺ (nitroso complex).\nPositive result: brown ring at interface.\nNote: Br⁻ can give a similar appearance — test should be done carefully."},
+    {q:"What precipitate does Cr³⁺ form with NaOH, and what is distinctive about it?", a:"Cr³⁺ + NaOH(aq) → grey-green precipitate of Cr(OH)₃.\nDistinctive feature: Cr(OH)₃ is AMPHOTERIC — it dissolves in excess NaOH to give a green solution of [Cr(OH)₄]⁻ (or [Cr(OH)₆]³⁻).\nCr(OH)₃ also dissolves in excess NH₃ to give violet [Cr(NH₃)₆]³⁺.\nThis distinguishes Cr³⁺ from Fe³⁺ (red-brown ppt, insoluble in both excess NaOH and NH₃)."},
+    {q:"What precipitate does Co²⁺ form with NaOH, and how does it behave with excess NH₃?", a:"Co²⁺ + NaOH(aq) → blue/green precipitate of Co(OH)₂.\nThe precipitate does NOT dissolve in excess NaOH.\nWith excess NH₃: Co(OH)₂ dissolves to give straw/yellow [Co(NH₃)₆]²⁺, which oxidises in air to brown [Co(NH₃)₆]³⁺.\nThis distinguishes Co²⁺ from Fe²⁺ (green ppt with NaOH, insoluble in excess NH₃)."},
+    {q:"What precipitate does Mn²⁺ form with NaOH?", a:"Mn²⁺ + NaOH(aq) → cream/pale buff precipitate of Mn(OH)₂.\nThe precipitate does NOT dissolve in excess NaOH.\nOn standing in air: cream Mn(OH)₂ slowly darkens to brown as Mn²⁺ is oxidised to higher oxidation states (MnO(OH) or MnO₂).\nDistinguishes Mn²⁺ from Cu²⁺ (blue ppt), Fe²⁺ (green ppt), Fe³⁺ (red-brown ppt)."},
   ]},
 
   "ocr_3.2.1": { title: "Enthalpy Changes", cards: [
@@ -330,7 +332,7 @@ const SETS = {
     {q:"Explain the melting point trend across Period 3.", a:"Na, Mg, Al: metallic structures; melting point increases (Na⁺ < Mg²⁺ < Al³⁺, more delocalised electrons, stronger metallic bonding).\nSi: giant covalent structure, very high mp (~1414°C).\nP₄, S₈, Cl₂, Ar: simple molecular; melting points decrease sharply (S₈ largest/most Van der Waals; Ar monatomic/smallest)."},
     {q:"Why do Na, Mg, and Al have increasingly high melting points?", a:"All three have giant metallic structures. The charge on the metal ion increases (Na⁺, Mg²⁺, Al³⁺) and the number of delocalised electrons per atom increases, strengthening the electrostatic attraction between the ions and the electron sea."},
     {q:"Why does silicon have such a high melting point?", a:"Silicon has a giant covalent (macromolecular) structure in which each Si atom is covalently bonded to four others in a tetrahedral arrangement (similar to diamond). Breaking this requires enormous energy."},
-    {q:"Why does the melting point order S₈ > P₄ > Cl₂ > Ar hold for the simple molecular elements?", a:"All four are simple molecular with only Van der Waals forces between molecules. Larger molecules have more electrons and greater surface contact, giving stronger Van der Waals forces and higher melting points. S₈ (32 electrons per molecule) > P₄ (60 electrons per molecule — wait, actually S has more electrons per molecule due to molecular size) > Cl₂ > Ar(monatomic)."},
+    {q:"Why does the melting point order S₈ > P₄ > Cl₂ > Ar hold for the simple molecular elements?", a:"All four are simple molecular with only Van der Waals (London dispersion) forces between molecules. Larger molecules have more electrons, giving stronger London forces and higher melting points.\nS₈: 8 S atoms, 128 electrons per molecule — largest, strongest London forces, highest mp.\nP₄: 4 P atoms, 60 electrons — intermediate.\nCl₂: 2 Cl atoms, 34 electrons — smaller molecule, weaker forces.\nAr: monatomic, 18 electrons — weakest London forces, lowest mp."},
     {q:"Describe the reactions of sodium and magnesium with water.", a:"Na: vigorous reaction with cold water: 2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g); solution strongly alkaline, fizzing.\nMg: very slow reaction with cold water; reacts rapidly with steam: Mg(s) + H₂O(g) → MgO(s) + H₂(g)."},
     {q:"How does the oxide character change across Period 3?", a:"Na₂O and MgO are basic (react with acids). Al₂O₃ is amphoteric (reacts with both acids and alkalis). SiO₂ is weakly acidic. P₄O₁₀, SO₂, SO₃ are increasingly acidic and react with water to form acidic solutions."},
     {q:"What is electronegativity and how does it vary across Period 3?", a:"Electronegativity is the ability of a bonded atom to attract the shared electron pair. It increases from Na to Cl across Period 3 due to increasing nuclear charge and decreasing atomic radius (fluorine is the most electronegative element overall)."},
@@ -364,7 +366,6 @@ const SETS = {
     {q:"Write the equation for chlorine reacting with cold dilute NaOH and give the commercial application.", a:"Cl₂ + 2NaOH → NaCl + NaClO + H₂O\nIonic: Cl₂ + 2OH⁻ → Cl⁻ + ClO⁻ + H₂O\nNaClO (sodium hypochlorite) is the active ingredient in household bleach."},
     {q:"How is chlorine used in water treatment?", a:"Chlorine is added in small, carefully controlled doses to drinking water and swimming pool water. It kills harmful microorganisms (bacteria and viruses) by reaction with water to form HClO, which destroys cell membranes. The dose must be carefully monitored as excess Cl₂ is toxic."},
     {q:"What are the risks and benefits of chlorinating drinking water?", a:"Benefits: kills waterborne pathogens, greatly reduces diseases like cholera and typhoid, cheap and effective.\nRisks: chlorine reacts with organic compounds in water to form trihalomethanes (e.g. CHCl₃), which are potential carcinogens. Chlorine gas itself is toxic."},
-    {q:"Describe the test for chloride, bromide, and iodide ions using silver nitrate and ammonia.", a:"Add AgNO₃(aq) acidified with dilute HNO₃:\nAgCl: white ppt; dissolves in dilute NH₃(aq).\nAgBr: cream ppt; does not dissolve in dilute NH₃ but dissolves in concentrated NH₃.\nAgI: yellow ppt; insoluble in both dilute and concentrated NH₃."},
   ]},
   "3.2.4": { title: "Period 3 Elements", cards: [
     {q:"Describe the structures and bonding of Period 3 elements from Na to Ar.", a:"Na, Mg, Al: giant metallic (properties improve with more delocalised electrons).\nSi: giant covalent (diamond-like structure, very high mp).\nP (P₄), S (S₈), Cl (Cl₂): simple molecular, held by Van der Waals forces.\nAr: monatomic, no bonding."},
@@ -402,7 +403,14 @@ const SETS = {
     {q:"Explain how carbon monoxide poisoning involves haemoglobin.", a:"In haemoglobin, Fe²⁺ has a porphyrin ring as a multidentate ligand and O₂ as the reversible monodentate ligand. CO binds to Fe²⁺ much more strongly and irreversibly than O₂, forming a very stable complex that cannot carry O₂. This causes oxygen starvation (hypoxia)."},
     {q:"Describe iron chemistry: Fe²⁺ and Fe³⁺ colours, and their interconversion.", a:"Fe²⁺ [Fe(H₂O)₆]²⁺: pale green solution.\nFe³⁺ [Fe(H₂O)₆]³⁺: pale violet/lilac solution (in practice appears yellow-brown due to hydrolysis, but the pure hexaqua ion is pale violet).\nFe²⁺ is a reducing agent (easily oxidised to Fe³⁺ in air).\nFe³⁺ is an oxidising agent (reduced back to Fe²⁺ by e.g. I⁻)."},
     {q:"What colour is [Fe(H₂O)₆]²⁺ (iron(II) hexaqua complex)?", a:"Pale green. This is the colour of Fe²⁺ in aqueous solution."},
-    {q:"What colour is [Fe(H₂O)₆]³⁺ (iron(III) hexaqua complex)?", a:"Pale violet/lilac. Note: Fe³⁺ solutions commonly appear yellow-brown in practice due to partial hydrolysis (formation of hydroxo-aqua complexes), but the pure hexaqua ion is pale violet/lilac — this is what AQA expects."},
+    {q:"What colour is [Fe(H₂O)₆]³⁺ (iron(III) hexaqua complex)?", a:"Pale violet/lilac. Note: Fe³⁺ solutions commonly appear yellow-brown in practice due to partial hydrolysis (formation of hydroxo-aqua complexes), but the pure hexaqua ion is pale violet/lilac — this is the colour AQA expects for the pure complex."},
+    {q:"What colour is the Mn²⁺ aqua complex [Mn(H₂O)₆]²⁺?", a:"Very pale pink (almost colourless). Mn²⁺ has a d⁵ configuration; d-d transitions are spin-forbidden → very weak colour absorption → nearly colourless aqueous solution."},
+    {q:"What colour is the Co²⁺ aqua complex [Co(H₂O)₆]²⁺?", a:"Pink. This is the characteristic colour of cobalt(II) in aqueous solution. Adding concentrated Cl⁻ (e.g. conc HCl) converts it to the tetrahedral [CoCl₄]²⁻ complex which is blue."},
+    {q:"What precipitate forms when NaOH(aq) is added to Co²⁺(aq)?", a:"Blue/green precipitate of Co(OH)₂ initially forms, which turns pink on standing.\nEquation: [Co(H₂O)₆]²⁺ + 2OH⁻ → Co(OH)₂(s) + 6H₂O\nCo(OH)₂ does not dissolve in excess NaOH.\nWith excess NH₃: the precipitate dissolves to give [Co(NH₃)₆]²⁺ (straw/yellow colour)."},
+    {q:"What precipitate forms when NaOH(aq) is added to Mn²⁺(aq)?", a:"Cream/pale brown precipitate of Mn(OH)₂.\nEquation: [Mn(H₂O)₆]²⁺ + 2OH⁻ → Mn(OH)₂(s) + 6H₂O\nMn(OH)₂ does not dissolve in excess NaOH.\nOn standing in air, the cream ppt darkens to brown MnO(OH) or MnO₂ as Mn²⁺ is slowly oxidised."},
+    {q:"Summarise the colours of the aqua complex ions [M(H₂O)₆]ⁿ⁺ for the first-row transition metals.", a:"Ti³⁺: purple\nV²⁺: violet; V³⁺: green\nCr²⁺: blue; Cr³⁺: violet/green\nMn²⁺: very pale pink (almost colourless)\nFe²⁺: pale green; Fe³⁺: pale violet/lilac (in practice yellow-brown)\nCo²⁺: pink\nNi²⁺: green\nCu²⁺: blue\nZn²⁺: colourless (d¹⁰, no d-d transition)"},
+    {q:"Describe the colour changes when NaOH(aq) is added to aqueous solutions of Cu²⁺, Fe²⁺, Fe³⁺, Cr³⁺, Co²⁺, and Mn²⁺.", a:"Cu²⁺: pale blue solution → blue ppt Cu(OH)₂ (insoluble in excess NaOH)\nFe²⁺: pale green solution → green ppt Fe(OH)₂ (turns red-brown on standing: oxidised to Fe(OH)₃)\nFe³⁺: yellow-brown solution → red-brown ppt Fe(OH)₃ (insoluble in excess NaOH)\nCr³⁺: violet/green solution → grey-green ppt Cr(OH)₃ → dissolves in excess NaOH: [Cr(OH)₄]⁻ (green)\nCo²⁺: pink solution → blue/green ppt Co(OH)₂ (insoluble in excess NaOH)\nMn²⁺: pale pink solution → cream ppt Mn(OH)₂ (insoluble in excess NaOH; darkens in air)"},
+    {q:"Describe what happens when excess NH₃(aq) is added to Cu²⁺, Co²⁺, Cr³⁺, and Fe²⁺/Fe³⁺ precipitates.", a:"Cu(OH)₂ (blue ppt) + excess NH₃ → deep blue solution [Cu(NH₃)₄(H₂O)₂]²⁺\nCo(OH)₂ (blue/green ppt) + excess NH₃ → straw/yellow solution [Co(NH₃)₆]²⁺ (oxidises to brown [Co(NH₃)₆]³⁺ in air)\nCr(OH)₃ (grey-green ppt) + excess NH₃ → violet solution [Cr(NH₃)₆]³⁺\nFe(OH)₂ and Fe(OH)₃: do NOT dissolve in excess NH₃"},
   ]},
   "3.2.6": { title: "Aqueous Ions", cards: [
     {q:"Why do transition metal ions form acidic solutions when dissolved in water?", a:"Metal ions attract water molecules as ligands, forming [M(H₂O)₆]ⁿ⁺. The metal ion polarises the O–H bond in coordinated water, making it easier for a proton to be released. Higher charge density (smaller or higher-charged ions) gives a lower pH."},
@@ -604,6 +612,20 @@ const SETS = {
     {q:"How does ¹³C NMR help with structure determination?", a:"Each distinct carbon environment gives exactly one peak in the ¹³C spectrum. Comparing the number of peaks with the molecular formula reveals whether any carbons are equivalent (fewer peaks than C atoms = some equivalent carbons). Example: benzene gives only 1 ¹³C peak (all 6 C equivalent); methylbenzene gives 4 peaks."},
     {q:"What solvent is typically used in NMR and why?", a:"Deuterated solvents (e.g. CDCl₃, D₂O, DMSO-d₆) are used because they do not produce ¹H NMR signals that would overlap with the sample. Deuterium (²H) has a very different resonance frequency from ¹H and does not interfere with the spectrum."},
   ]},
+  "3.3.16": { title: "Chromatography", cards: [
+    {q:"State the general principle of chromatography.", a:"All chromatography separates mixtures based on the differential distribution of components between:\n• Stationary phase — does not move (e.g. silica in TLC, liquid film in GC).\n• Mobile phase — moves through the stationary phase (e.g. solvent in TLC, carrier gas in GC).\nComponents that interact more strongly with the stationary phase move more slowly; those that interact more with the mobile phase move faster. Separation arises from differences in these interactions."},
+    {q:"Define Rf value and explain what it tells you.", a:"Rf = distance moved by compound ÷ distance moved by solvent front.\nRf is dimensionless and always between 0 and 1.\nA high Rf: compound has greater affinity for the mobile phase (less attracted to stationary phase).\nA low Rf: compound is more strongly adsorbed onto the stationary phase.\nRf values are characteristic of a compound under fixed conditions (same solvent, stationary phase, temperature) and can be used for identification."},
+    {q:"Describe how TLC is carried out and how compounds are visualised.", a:"1. Draw a pencil baseline 1 cm from the bottom of a silica-coated TLC plate.\n2. Apply a small spot of sample using a capillary tube.\n3. Place plate in a sealed developing chamber with solvent level below the baseline.\n4. Allow solvent to rise; remove plate before solvent reaches the top.\n5. Mark solvent front immediately and allow to dry.\nVisualisation: UV lamp (dark spots on fluorescent plate); iodine vapour (yellow-brown spots); ninhydrin spray (purple spots for amino acids)."},
+    {q:"How is TLC used to identify a compound and check purity?", a:"Identification: co-spot the unknown alongside a known reference compound on the same plate; if both give a single spot at the same Rf, they are likely the same compound. Use a second different solvent to confirm.\nPurity: a pure compound gives a single spot. Multiple spots indicate impurities are present."},
+    {q:"How does column chromatography work and what is its advantage over TLC?", a:"A column is packed with silica (stationary phase). The mixture is loaded at the top and solvent (mobile phase) flows through under gravity.\nComponents with less affinity for silica (less polar) elute first; more polar compounds elute later.\nFractions are collected separately and analysed by TLC.\nAdvantage over TLC: column chromatography is preparative — it separates and collects useful quantities of pure compound; TLC is purely analytical (small scale, cannot collect product)."},
+    {q:"Describe the principle and operation of gas chromatography (GC).", a:"In GC:\n• Stationary phase: high-boiling liquid coated on a solid support inside a long, coiled column housed in a thermostatted oven.\n• Mobile phase: inert carrier gas (N₂ or He).\nThe sample is injected and vaporised; the carrier gas sweeps it through the column.\nSeparation is based on boiling point AND interaction with the stationary phase. Components with lower boiling points or weaker interactions with the stationary phase elute earlier.\nA detector (often FID or mass spectrometer) generates a peak when each component exits the column."},
+    {q:"What is retention time in gas chromatography and how is it used?", a:"Retention time (tR): the time from sample injection to the peak maximum at the detector, for a given compound.\nRetention time is characteristic of a compound under fixed conditions (column type, temperature, carrier gas flow rate).\nUse: compare the retention time of an unknown with those of reference standards run under identical conditions to identify the unknown.\nLonger retention time: compound has a higher boiling point or interacts more strongly with the stationary phase."},
+    {q:"Describe GC-MS (gas chromatography–mass spectrometry) and its advantages.", a:"GC separates the components of a mixture by retention time. As each component elutes, it enters a mass spectrometer:\n• The MS ionises and fragments the compound → characteristic mass spectrum.\n• The fragmentation pattern is compared against a database for definitive identification.\nAdvantages of GC-MS:\n• Combines separation (GC) with unambiguous identification (MS database match).\n• Extremely sensitive (parts per billion).\n• Rapid analysis of complex mixtures.\n• Applications: forensics (drug testing, fire investigation), environmental monitoring, food safety, pharmaceutical QC."},
+    {q:"Describe HPLC (high-performance liquid chromatography) and when it is used.", a:"In HPLC, a high-pressure pump forces solvent (mobile phase) through a column of very fine silica particles (stationary phase) at high pressure.\nThis gives much higher resolution and faster analysis than standard column chromatography.\nUsed for: non-volatile or thermally unstable compounds that cannot be vaporised for GC (e.g. proteins, drugs, polar biomolecules).\nApplications: pharmaceutical analysis (drug purity, blood levels), protein analysis, environmental water testing.\nDetectors: UV/visible absorbance, fluorescence, or mass spectrometer.\nReverse-phase HPLC (most common): non-polar C18 stationary phase, polar solvent (water/methanol) mobile phase."},
+    {q:"Compare the four main chromatographic techniques: TLC, column chromatography, GC, and HPLC.", a:"TLC: stationary = silica on plate; mobile = organic solvent; analytical only; Rf values; room temperature.\nColumn chromatography: stationary = silica in column; mobile = organic solvent; preparative; fractions collected.\nGC: stationary = liquid film on solid support; mobile = inert carrier gas; sample must be volatile; retention times; detectors include MS.\nHPLC: stationary = fine silica (or C18 reverse phase); mobile = solvent at high pressure; used for non-volatile compounds; high resolution.\nAll exploit differential affinity for stationary vs mobile phase."},
+    {q:"How does the polarity of the mobile phase affect Rf values in TLC on a silica plate?", a:"Silica is polar; it adsorbs polar compounds more strongly (lower Rf) and non-polar compounds less strongly (higher Rf).\nMore polar mobile phase (solvent): competes more effectively with compound–silica interactions → all compounds move further → higher Rf values.\nLess polar mobile phase: compounds remain closer to baseline → lower Rf.\nOptimal separation: choose a solvent that spreads spots across Rf = 0.2–0.8; if spots are too close, increase solvent polarity."},
+  ]},
+
   "RP1a": { title: "Measurement of Enthalpy of Combustion", cards: [
     {q: "What is the standard enthalpy of combustion?", a: "The enthalpy change when one mole of a substance is completely burned in excess oxygen under standard conditions (298 K, 100 kPa)."},
     {q: "What apparatus is used to measure enthalpy of combustion experimentally?", a: "A spirit burner containing the fuel, a metal calorimeter (copper or aluminium can) holding a known mass of water, a thermometer, and a clamp stand."},
@@ -1042,6 +1064,7 @@ const SETS = {
     {q:"What is the reaction of dilute hydrochloric acid with a base (metal hydroxide)?", a:"Base + acid → salt + water (neutralisation)\nNaOH(aq) + HCl(aq) → NaCl(aq) + H₂O(l)\nCu(OH)₂(s) + 2HCl(aq) → CuCl₂(aq) + 2H₂O(l)\nIonic equation: H⁺(aq) + OH⁻(aq) → H₂O(l)"},
     {q:"How do you balance the redox equation for the reaction of Cr₂O₇²⁻ with Fe²⁺ in acid?", a:"Reduction: Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O\nOxidation: Fe²⁺ → Fe³⁺ + e⁻ (×6)\nOverall: Cr₂O₇²⁻ + 14H⁺ + 6Fe²⁺ → 2Cr³⁺ + 6Fe³⁺ + 7H₂O"},
     {q:"What colour change is observed when dichromate(VI) is used as an oxidising agent?", a:"K₂Cr₂O₇ solution is orange (Cr in +6 state).\nWhen reduced (acting as oxidising agent), Cr³⁺ forms → solution turns green.\nOrange → green is the colour change observed in this redox reaction."},
+    {q:"Define conjugate acid-base pairs in the Brønsted-Lowry theory.", a:"A conjugate acid-base pair differs by one proton (H⁺).\nWhen an acid donates H⁺, it forms its conjugate base.\nWhen a base accepts H⁺, it forms its conjugate acid.\nExample: CH₃COOH (acid) / CH₃COO⁻ (conjugate base); NH₃ (base) / NH₄⁺ (conjugate acid).\nThe stronger the acid, the weaker its conjugate base (and vice versa)."},
   ]},
 
   "ocr_2.2.1": { title: "Atomic Structure and Ionisation Energies", cards: [
@@ -1106,7 +1129,6 @@ const SETS = {
     {q:"Describe the trend in metallic character across a period and down a group.", a:"Across a period: metallic character decreases (Na→Mg→Al are metals; Si is metalloid; P, S, Cl, Ar are non-metals).\nDown a group: metallic character increases (e.g. C is non-metal; Si is metalloid; Ge is metalloid; Sn, Pb are metals).\nMetals lose electrons easily (low IE); non-metals gain electrons (high EA/electronegativity)."},
     {q:"What are the s, p, d, and f blocks of the periodic table?", a:"s block: Groups 1 and 2 — outer electrons in s subshell (e.g. Na [Ne]3s¹).\np block: Groups 13–18 — outer electrons in p subshell (e.g. Cl [Ne]3s²3p⁵).\nd block: transition metals (Groups 3–12) — outer electrons in d subshell (e.g. Fe [Ar]3d⁶4s²).\nf block: lanthanides and actinides — outer electrons in f subshell."},
     {q:"Explain the periodic trend in first ionisation energy and identify the anomalies.", a:"General trend: first IE increases across a period (increasing nuclear charge, similar shielding).\nAnomalies: \n• Group 13 < Group 2 (e.g. Al < Mg): p electron is higher energy and shielded by s².\n• Group 16 < Group 15 (e.g. S < P): paired p electron experiences extra repulsion.\nThese anomalies reveal subshell structure."},
-    {q:"Describe the diagonal relationship in the periodic table.", a:"Elements in Period 2 often have similar properties to elements diagonally below-right in Period 3.\nKey diagonal pairs: Li/Mg (similar reactivity, form covalent organometallics), Be/Al (both amphoteric oxides, form covalent halides).\nReason: similar charge density (charge/radius ratio) → similar polarising power and bonding behaviour."},
     {q:"What are metalloids and give examples.", a:"Metalloids (semi-metals) are elements that have properties intermediate between metals and non-metals.\nExamples: Silicon (Si), Germanium (Ge), Arsenic (As), Antimony (Sb), Tellurium (Te).\nSi and Ge are semiconductors (electrical conductivity between metals and non-metals) — essential in electronics."},
     {q:"Explain why noble gases (Group 18) are chemically inert.", a:"Noble gases have full outer electron shells (He: 1s²; Ne: 2s²2p⁶; Ar: 3s²3p⁶).\nFull outer shells mean there is no tendency to gain, lose, or share electrons.\nVery high ionisation energies (especially for He and Ne) make electron removal extremely difficult.\nResult: noble gases rarely form chemical bonds (a few Xe compounds exist under extreme conditions)."},
     {q:"Describe the trend in melting and boiling points of Group 1 metals down the group.", a:"Melting and boiling points generally decrease down Group 1 (Li: mp 181°C → Cs: mp 28°C).\nReason: as atomic radius increases, the metallic bond (between positive ions and delocalised electrons) weakens — the delocalised electrons are further from the nuclear charge and interaction is weaker.\nGroup 1 metals have the weakest metallic bonding (only 1 delocalised electron per atom)."},
@@ -1145,7 +1167,6 @@ const SETS = {
     {q:"What is addition polymerisation? Draw the repeat unit of poly(ethene).", a:"Addition polymerisation: alkene monomers join together by opening the C=C double bond, forming a long-chain polymer with no small molecule by-product.\nnCH₂=CH₂ → −(CH₂−CH₂)ₙ−\nRepeat unit: −CH₂−CH₂− (drawn with bonds extending from each carbon).\nPoly(propene): monomer CH₃CH=CH₂; repeat unit −CH(CH₃)−CH₂−\nNo functional group in backbone of simple addition polymer."},
     {q:"What is hydrogenation of alkenes and what are its conditions?", a:"Alkene + H₂ → alkane (addition of H₂ across C=C).\nConditions: Ni catalyst, 150°C (Raney Ni) or Pt/Pd at room temperature.\nCH₂=CH₂ + H₂ → CH₃CH₃\nIndustrial importance: hardening vegetable oils to make margarine (liquid unsaturated oils → solid saturated fats).\nEnthalpy of hydrogenation measures stability of alkene."},
     {q:"Describe the test for alkenes using bromine water.", a:"Add bromine water (orange/brown) to the compound.\nAlkene: bromine decolourises rapidly (electrophilic addition of Br₂ across C=C → dibromoalkane).\nAlkane or other saturated compound: no colour change (no reaction with Br₂ in absence of UV light).\nNote: KMnO₄ solution (purple) also decolourises with alkenes → purple to colourless/brown MnO₂."},
-    {q:"Describe the use of ozonolysis to determine alkene structure.", a:"Ozonolysis: treat alkene with O₃ then H₂O₂ (oxidative workup) or Zn/H₂O (reductive workup).\nThe C=C bond is cleaved — each carbon of the double bond becomes a C=O group.\nWith oxidative workup: internal C gives ketone; terminal C gives carboxylic acid.\nWith reductive workup: both give aldehydes.\nThe carbonyl products are identified by spectroscopy to deduce original alkene structure."},
     {q:"Explain why addition reactions of alkenes are thermodynamically favourable.", a:"In electrophilic addition to alkenes, a relatively weak π bond (~265 kJ mol⁻¹) is broken while two stronger σ bonds (C−H, C−X) are formed.\nNet: bond breaking < bond forming → ΔH negative → exothermic → thermodynamically favourable.\nThe reaction is spontaneous (ΔG < 0) under standard conditions for most additions (H₂, HX, X₂)."},
     {q:"Give the boiling point trend for the first six alkanes and explain it.", a:"Methane (−162°C) < ethane (−89°C) < propane (−42°C) < butane (−1°C) < pentane (36°C) < hexane (69°C).\nBoiling point increases steadily with carbon chain length.\nReason: larger molecules have more electrons → stronger London dispersion forces (LDFs) → more energy needed to overcome intermolecular attractions → higher bp."},
     {q:"What is cracking and why is it important industrially?", a:"Cracking: breaking long-chain alkanes into shorter, more useful alkanes and alkenes.\nThermal cracking: high temperature (700–1200°C), high pressure → predominantly alkenes (free radical mechanism).\nCatalytic cracking: zeolite catalyst, ~500°C, lower pressure → more branched alkanes and aromatic hydrocarbons (carbocation mechanism).\nImportance: supplies alkenes for polymerisation and shorter alkanes for petrol/aviation fuel demand."},
@@ -1251,9 +1272,9 @@ const SETS = {
     {q:"Calculate ΔG at 298 K for: N₂(g) + 3H₂(g) → 2NH₃(g), ΔH° = −92 kJ mol⁻¹, ΔS° = −199 J K⁻¹ mol⁻¹.", a:"Convert ΔS°: −199/1000 = −0.199 kJ K⁻¹ mol⁻¹\nΔG = ΔH − TΔS = −92 − (298 × −0.199) = −92 − (−59.3) = −92 + 59.3 = −32.7 kJ mol⁻¹\nΔG < 0 → feasible at 298 K.\nAt high T: TΔS becomes more negative → ΔG becomes positive → reaction becomes infeasible above ~462 K."},
     {q:"Why can an exothermic reaction have ΔG > 0 at high temperatures?", a:"If ΔH < 0 (exothermic) but ΔS < 0 (entropy decreases, e.g. gases combining):\nΔG = ΔH − TΔS = negative − T(negative) = negative + T(positive)\nAt high T, the +TΔS term dominates → ΔG becomes positive → no longer feasible.\nExample: N₂ + 3H₂ → 2NH₃ becomes infeasible above ~460 K (explains why high T gives poor yield in Haber process)."},
     {q:"Explain why ΔG < 0 does not guarantee a reaction will occur in practice.", a:"ΔG < 0 (thermodynamic feasibility) tells us the reaction is energetically downhill — the products are more stable than reactants.\nHowever, if the activation energy Ea is very high, the reaction will proceed extremely slowly at room temperature.\nExample: N₂ + 3H₂ → 2NH₃ has ΔG < 0 but requires high temperature and iron catalyst to proceed at a useful rate.\nThermodynamic feasibility ≠ kinetic feasibility."},
-    {q:"What is the relationship between ΔG and the equilibrium constant K?", a:"ΔG° = −RT ln K\nwhere R = 8.314 J mol⁻¹ K⁻¹, T = temperature (K), K = equilibrium constant.\nIf ΔG° < 0 → K > 1 (products favoured at equilibrium).\nIf ΔG° > 0 → K < 1 (reactants favoured).\nIf ΔG° = 0 → K = 1.\nThis links thermodynamics to equilibrium chemistry."},
     {q:"How does the entropy change for dissolving NaCl in water?", a:"NaCl(s) → Na⁺(aq) + Cl⁻(aq)\nΔSsystem: positive (solid → ions in solution, more disorder).\nΔSsurroundings: slightly negative (dissolution is slightly endothermic, ΔHsol ≈ +18 kJ mol⁻¹, so ΔSsurr = −18/298 ≈ −0.06 kJ K⁻¹ mol⁻¹ = −60 J K⁻¹ mol⁻¹).\nΔStotal = ΔSsystem + ΔSsurr > 0 (net entropy increase drives dissolution even though slightly endothermic)."},
     {q:"Compare the entropy of diamond and graphite at 298 K and explain.", a:"S°(diamond) = 2.4 J K⁻¹ mol⁻¹; S°(graphite) = 5.7 J K⁻¹ mol⁻¹.\nBoth are giant covalent solids, so both have relatively low entropy.\nGraphite has higher entropy because its layered structure with weaker interlayer forces allows more vibrational modes and slight structural disorder.\nDiamond is a rigid 3D network with very constrained atomic positions → lower entropy."},
+    {q:"What is the relationship between ΔG° and the equilibrium constant K?", a:"ΔG° = −RT ln K\nwhere R = 8.314 J mol⁻¹ K⁻¹, T = temperature (K), K = equilibrium constant.\nIf ΔG° < 0 → ln K > 0 → K > 1 (products favoured at equilibrium).\nIf ΔG° > 0 → ln K < 0 → K < 1 (reactants favoured).\nIf ΔG° = 0 → K = 1 (equal concentrations of reactants and products).\nThis equation links thermodynamic feasibility directly to the position of equilibrium."},
   ]},
 
   "ocr_5.3.1": { title: "Electrode Potentials and Cells", cards: [
@@ -1268,9 +1289,11 @@ const SETS = {
     {q:"Explain the Nernst equation qualitatively.", a:"The Nernst equation: E = E° − (RT/nF) ln Q\nshows that the actual electrode potential E depends on concentration.\nIf [oxidised form] > standard → E more positive than E°.\nIf [reduced form] > standard → E more negative than E°.\nPractical implication: as a battery discharges, concentrations change → E decreases → terminal voltage drops → battery goes 'flat'.\nQualitative understanding required at A-level."},
     {q:"Describe a rechargeable lithium-ion cell.", a:"Anode: lithium-graphite (LiC₆) — Li⁺ intercalated in graphite.\nCathode: lithium metal oxide (e.g. LiCoO₂).\nElectrolyte: lithium salt in organic solvent.\nDischarging: Li in anode → Li⁺ + e⁻ (oxidation at anode); Li⁺ migrates to cathode; e⁻ flow through external circuit.\nCharging: reverse process — Li⁺ returns to anode.\nHigh energy density, rechargeable, used in phones/EVs."},
     {q:"Compare electrochemical cells and electrolytic cells.", a:"Electrochemical cell: chemical energy → electrical energy; spontaneous redox reaction drives current; E°cell > 0.\nElectrolytic cell: electrical energy → chemical energy; non-spontaneous reaction driven by external voltage; used for electroplating, electrolysis of brine, aluminium extraction.\nKey difference: electrochemical cell generates EMF; electrolytic cell requires external power supply."},
-    {q:"What is a concentration cell and how does it generate an EMF?", a:"A concentration cell consists of two identical half-cells but with different ion concentrations.\nThe more concentrated half-cell has a higher E° (by Nernst) → acts as cathode (reduction).\nThe more dilute half-cell acts as anode (oxidation).\nEMF is generated until both concentrations are equal (E°cell → 0 at equilibrium).\nExample: two Cu²⁺/Cu half-cells with different [Cu²⁺]."},
     {q:"Give the half-equations and overall equation for the hydrogen-oxygen fuel cell in alkaline conditions.", a:"Anode (oxidation): H₂(g) + 2OH⁻(aq) → 2H₂O(l) + 2e⁻\nCathode (reduction): ½O₂(g) + H₂O(l) + 2e⁻ → 2OH⁻(aq)\nOverall: H₂(g) + ½O₂(g) → H₂O(l)\nThe overall equation is the same in acid and alkaline conditions — only the electrolyte and form of water differ."},
     {q:"What is the salt bridge and what is its function?", a:"The salt bridge (usually saturated KNO₃ solution in a U-tube or filter paper) connects the two half-cells.\nFunctions:\n1. Allows ions to migrate to maintain electrical neutrality in each half-cell (prevents charge build-up).\n2. Completes the electrical circuit without allowing the half-cell solutions to mix.\nKNO₃ used because K⁺ and NO₃⁻ are unlikely to react with either half-cell solution."},
+    {q:"Describe an iodometric (iodine–thiosulfate) redox titration.", a:"An oxidising agent (e.g. Cu²⁺, H₂O₂, Cl₂, IO₃⁻) is added to excess KI(aq) in acidic solution → liberates a known amount of I₂.\nThe I₂ produced is titrated with standard Na₂S₂O₃ solution (sodium thiosulfate).\nNear endpoint: solution turns pale yellow → add starch indicator → deep blue-black colour.\nEndpoint: blue-black colour disappears permanently on addition of the last drop of thiosulfate.\nMoles of oxidising agent calculated from moles of Na₂S₂O₃ used and stoichiometry."},
+    {q:"Write the half-equations and overall equation for the iodine–thiosulfate titration.", a:"Reduction: I₂(aq) + 2e⁻ → 2I⁻(aq)\nOxidation: 2S₂O₃²⁻(aq) → S₄O₆²⁻(aq) + 2e⁻\nOverall: I₂(aq) + 2S₂O₃²⁻(aq) → 2I⁻(aq) + S₄O₆²⁻(aq)\nMole ratio: 1 mol I₂ : 2 mol S₂O₃²⁻\nThe tetrathionate ion (S₄O₆²⁻) is the oxidation product of thiosulfate."},
+    {q:"Describe a KMnO₄ redox titration to find the concentration of Fe²⁺.", a:"Acidify Fe²⁺ solution with dilute H₂SO₄ (provides H⁺ required for MnO₄⁻ reduction; avoid HCl — Cl⁻ can be oxidised).\nFill burette with standardised KMnO₄ solution.\nRun KMnO₄ from burette into Fe²⁺ solution in conical flask; no indicator needed (KMnO₄ is self-indicating).\nEach drop of purple KMnO₄ decolourises as it reacts with Fe²⁺ → Mn²⁺ + Fe³⁺.\nEndpoint: first permanent pale pink colour (slight excess KMnO₄).\nMole ratio: 1 MnO₄⁻ : 5 Fe²⁺"},
   ]},
 
   "ocr_5.4.1": { title: "Transition Elements", cards: [
@@ -1284,11 +1307,25 @@ const SETS = {
     {q:"Describe optical isomerism in octahedral complexes with bidentate ligands.", a:"Bidentate ligands (e.g. en = 1,2-diaminoethane) coordinate to the metal as chelates.\nIn octahedral [M(en)₃]ⁿ⁺: the three bidentate ligands create a helical arrangement.\nTwo non-superimposable mirror image structures form (Δ and Λ enantiomers).\nBoth rotate plane-polarised light in opposite directions.\nOptical isomerism requires a non-superimposable mirror image (no plane of symmetry)."},
     {q:"Describe the ligand substitution reaction of [Cu(H₂O)₆]²⁺ with NH₃.", a:"[Cu(H₂O)₆]²⁺ + 4NH₃ → [Cu(NH₃)₄(H₂O)₂]²⁺ + 4H₂O\nWith limited NH₃: pale blue precipitate Cu(OH)₂ forms first.\nWith excess NH₃: Cu(OH)₂ dissolves → deep/royal blue solution of tetraamminecopper(II).\nColour change: pale blue → deep blue (characteristic observation)."},
     {q:"Describe the ligand substitution reaction of [Co(H₂O)₆]²⁺ with Cl⁻.", a:"[Co(H₂O)₆]²⁺(aq) + 4Cl⁻(aq) ⇌ [CoCl₄]²⁻(aq) + 6H₂O(l)\nForward: add conc HCl or concentrated Cl⁻ solution.\nReverse: add water (dilute).\nColour change: pink (octahedral [Co(H₂O)₆]²⁺) ⇌ blue (tetrahedral [CoCl₄]²⁻).\nAlso: shape changes from octahedral to tetrahedral — Cl⁻ is a larger ligand."},
+    {q:"What colour is [Cu(H₂O)₆]²⁺?", a:"Pale blue. The hexaaquacopper(II) ion gives the characteristic pale blue colour of copper(II) sulfate solution and any other Cu²⁺ aqueous solution."},
+    {q:"What colour is [Cu(NH₃)₄(H₂O)₂]²⁺?", a:"Deep/royal blue. Formed when excess aqueous ammonia is added to a Cu²⁺ solution. Much more intense than the pale blue of [Cu(H₂O)₆]²⁺ because NH₃ causes greater d-orbital splitting than H₂O."},
+    {q:"What colour is [CuCl₄]²⁻?", a:"Yellow-green. Formed when concentrated chloride (e.g. conc HCl) is added to Cu²⁺ solution. The coordination number drops from 6 to 4, shape changes from octahedral to tetrahedral, and the colour shifts dramatically from blue to yellow-green."},
+    {q:"What colour is [Fe(H₂O)₆]²⁺?", a:"Pale green. Fe²⁺ aqueous solution is pale green. Adding NaOH gives a green Fe(OH)₂ precipitate. Fe²⁺ is easily oxidised in air to Fe³⁺ (green → red-brown)."},
+    {q:"What colour is [Fe(H₂O)₆]³⁺?", a:"Pale violet/lilac in pure water; appears yellow-orange in acidic solution due to partial hydrolysis to [Fe(H₂O)₅(OH)]²⁺. Adding NaOH gives a red-brown precipitate of Fe(OH)₃."},
+    {q:"What colour is [Co(H₂O)₆]²⁺?", a:"Pink. The hexaaquacobalt(II) ion is pink. Adding excess Cl⁻ converts it to the blue tetrahedral [CoCl₄]²⁻. This reversible pink/blue colour change is used to detect water (water drives equilibrium back to pink)."},
+    {q:"What colour is [CoCl₄]²⁻?", a:"Blue (tetrahedral). Formed when excess Cl⁻ (concentrated HCl) displaces water ligands from [Co(H₂O)₆]²⁺. The equilibrium [Co(H₂O)₆]²⁺ (pink) ⇌ [CoCl₄]²⁻ (blue) can be shifted by changing Cl⁻ concentration or adding water."},
+    {q:"What colour is Mn²⁺ in aqueous solution?", a:"Very pale pink, almost colourless. The Mn²⁺ aqua complex is extremely pale. Adding NaOH gives a cream/buff Mn(OH)₂ precipitate that slowly darkens in air (Mn²⁺ → higher oxides)."},
+    {q:"What colour is MnO₄⁻ (permanganate)?", a:"Intense purple/violet. KMnO₄ solution is deep purple. When acting as an oxidising agent in acidic solution, Mn(VII) is reduced to Mn²⁺ — colour changes from purple to almost colourless. In neutral/alkaline solution, reduced to brown MnO₂."},
+    {q:"What colour is Cr²⁺?", a:"Blue. Cr²⁺ is an unstable oxidation state readily oxidised in air to Cr³⁺ (green/violet). Its blue colour is distinct from the violet of [Cr(H₂O)₆]³⁺."},
+    {q:"What colour is [Cr(H₂O)₆]³⁺ (Cr³⁺ in water)?", a:"Violet/purple in pure water. In acidic solutions (with Cl⁻ or SO₄²⁻), partial ligand substitution gives a green colour. Adding NaOH gives a grey-green Cr(OH)₃ precipitate (amphoteric — dissolves in excess NaOH)."},
+    {q:"What colour is CrO₄²⁻ (chromate)?", a:"Yellow. Chromate(VI) is stable in alkaline conditions. Adding acid converts it to the orange dichromate: 2CrO₄²⁻ + 2H⁺ ⇌ Cr₂O₇²⁻ + H₂O."},
+    {q:"What colour is Cr₂O₇²⁻ (dichromate)?", a:"Orange. Dichromate(VI) is stable in acidic conditions. When used as an oxidising agent, it is reduced to Cr³⁺ and the colour changes from orange to green. Adding alkali converts it back to yellow CrO₄²⁻."},
     {q:"List the key catalytic applications of transition metals.", a:"Iron (Fe): Haber process N₂ + 3H₂ ⇌ 2NH₃\nVanadium(V) oxide (V₂O₅): Contact process 2SO₂ + O₂ ⇌ 2SO₃\nMnO₂: catalytic decomposition of H₂O₂: 2H₂O₂ → 2H₂O + O₂\nNickel (Ni): hydrogenation of alkenes/oils\nPlatinum/Palladium/Rhodium: catalytic converters (CO + NO → CO₂ + N₂)\nMechanism: variable oxidation states allow redox cycling."},
     {q:"Describe the chemistry of chromium ions: Cr²⁺, Cr³⁺, CrO₄²⁻, Cr₂O₇²⁻.", a:"Cr²⁺: [Ar]3d⁴; blue solution; unstable in air (oxidised to Cr³⁺).\nCr³⁺: [Ar]3d³; violet/green in solution; precipitates grey-green Cr(OH)₃ with NaOH (amphoteric).\nCrO₄²⁻: chromate(VI); yellow; stable in alkaline solution.\nCr₂O₇²⁻: dichromate(VI); orange; stable in acid solution.\nConversion: Cr₂O₇²⁻ (orange) + 2OH⁻ → 2CrO₄²⁻ (yellow) + H₂O and reverse."},
     {q:"Describe the chemistry of manganese: Mn²⁺, MnO₂, MnO₄⁻.", a:"Mn²⁺: [Ar]3d⁵; very pale pink solution; cream precipitate with NaOH.\nMnO₂: manganese(IV) oxide; black solid; oxidation state +4; catalyst for H₂O₂ decomposition.\nMnO₄⁻: permanganate/manganate(VII); intense purple; powerful oxidising agent in acid:\nMnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O (purple → colourless/pale pink).\nIn neutral/alkaline: MnO₄⁻ reduced to MnO₂ (brown precipitate)."},
-    {q:"Explain the chelate effect and why EDTA⁴⁻ forms very stable complexes.", a:"Chelate effect: polydentate ligands form more thermodynamically stable complexes than monodentate ligands.\nReason: entropy — replacing 6 water ligands with 1 EDTA⁴⁻ (hexadentate) releases 6 water molecules → large increase in entropy (ΔS >> 0) → very negative ΔG.\nEDTA⁴⁻ has 6 donor atoms (4 carboxylate O + 2 amine N) → coordinates strongly to metal through 6 bonds simultaneously.\nApplication: EDTA used in water softening (sequesters Ca²⁺, Mg²⁺)."},
     {q:"Describe how haemoglobin uses Fe²⁺ to carry oxygen.", a:"Haemoglobin has four subunits, each containing haem — a porphyrin ring with Fe²⁺ at its centre.\nFe²⁺ (not Fe³⁺) binds O₂ reversibly in lungs and releases it in tissues (where pO₂ is low).\nCO binds to Fe²⁺ ~200× more strongly than O₂ → forms stable carboxyhaemoglobin → CO poisoning.\nCO poisoning treatment: high concentration O₂ to compete with CO; hyperbaric O₂ therapy."},
+    {q:"Define monodentate and bidentate ligands with examples.", a:"Monodentate: donates ONE lone pair per ligand molecule.\nExamples: H₂O (aqua), NH₃ (ammine), Cl⁻ (chloro), CN⁻ (cyano), OH⁻ (hydroxo)\nBidentate: donates TWO lone pairs from TWO different donor atoms in the same ligand.\nExamples: 1,2-diaminoethane (en, H₂NCH₂CH₂NH₂), ethanedioate (oxalate, C₂O₄²⁻)\nBidentate ligands form chelate rings → enhanced stability."},
+    {q:"Describe the successive oxidation states and colours of vanadium.", a:"V(V): VO₂⁺ ion — yellow (present as V₂O₅ solid, used as catalyst in Contact process)\nV(IV): VO²⁺ ion — blue\nV(III): V³⁺ ion — green\nV(II): V²⁺ ion — violet\nReduction sequence (e.g. zinc in H₂SO₄): yellow → blue → green → violet\nThis demonstrates variable oxidation states of transition metals."},
   ]},
 
   "ocr_6.1.1": { title: "Aromatic Chemistry", cards: [
@@ -1305,21 +1342,18 @@ const SETS = {
     {q:"What is the mechanism for nitration and what controls the rate?", a:"Rate-determining step: attack of NO₂⁺ on the benzene ring (forming the arenium ion/Wheland intermediate).\nRate depends on: concentration of NO₂⁺ (determined by H₂SO₄ protonating HNO₃), and reactivity of the aromatic ring (electron density).\nDeactivated rings (e.g. nitrobenzene) react more slowly and require harsher conditions (higher T or more concentrated acid)."},
     {q:"What is the role of H₂SO₄ in the nitration of benzene?", a:"H₂SO₄ acts as a Brønsted-Lowry acid to protonate HNO₃:\nHNO₃ + H₂SO₄ → H₂NO₃⁺ + HSO₄⁻ → NO₂⁺ + H₂O + HSO₄⁻\nH₂SO₄ generates the reactive electrophile NO₂⁺ (nitronium ion).\nH₂SO₄ is regenerated after the reaction → acts as a catalyst.\nWithout H₂SO₄, nitration would be extremely slow."},
     {q:"Why is the temperature kept below 55°C in the nitration of benzene?", a:"Above 55°C, further nitration occurs more readily → dinitrobenzene and trinitrobenzene form.\nBelow 55°C: mainly mononitration → nitrobenzene as the primary product.\nHigh temperatures can also cause side reactions and decomposition of the product.\nFor industrial explosives (TNT = 2,4,6-trinitrotoluene), higher temperatures and three stages of nitration are used deliberately."},
-    {q:"Describe the test for phenol using FeCl₃ solution.", a:"Add a few drops of iron(III) chloride solution (FeCl₃) to the suspected phenol.\nPositive result: intense purple/violet colour forms immediately.\nThis is due to formation of an iron-phenoxide complex [Fe(OC₆H₅)₆]³⁻.\nDistinguishes phenol from alcohols (no colour with FeCl₃) and carboxylic acids.\nIntensity of colour depends on the specific phenol."},
   ]},
 
   "ocr_6.1.2": { title: "Amines and Nitrogen Compounds", cards: [
     {q:"Classify amines as primary, secondary, tertiary, or quaternary.", a:"Primary (1°): RNH₂ (one alkyl/aryl group on N, e.g. methylamine CH₃NH₂, aniline C₆H₅NH₂)\nSecondary (2°): R₂NH (two groups on N, e.g. dimethylamine (CH₃)₂NH)\nTertiary (3°): R₃N (three groups on N, e.g. trimethylamine (CH₃)₃N)\nQuaternary ammonium salt: R₄N⁺X⁻ (four groups on N, permanent positive charge, no lone pair available)"},
     {q:"Explain why amines are bases and compare basicity of aliphatic, aromatic, and ammonia.", a:"Amines act as Brønsted-Lowry bases: lone pair on N accepts H⁺.\nRNH₂ + H₂O ⇌ RNH₃⁺ + OH⁻\nRelative basicity: aliphatic amines (CH₃NH₂) > NH₃ > aromatic amines (C₆H₅NH₂)\nAliphatic: alkyl groups donate electrons to N → more available lone pair → stronger base.\nAromatic: lone pair delocalised into benzene ring → less available for protonation → weaker base."},
     {q:"Explain why aniline is a much weaker base than methylamine.", a:"In aniline, the lone pair on N overlaps with the π system of the benzene ring.\nThis delocalisation reduces the availability of the lone pair for accepting H⁺.\npKb(aniline) ≈ 9.4; pKb(methylamine) ≈ 3.4 — aniline is ~10⁶ times weaker as a base.\nIn methylamine, the methyl group is electron-donating → lone pair more available."},
-    {q:"Describe the reaction of amines with halogenoalkanes.", a:"RNH₂ + R'X → RR'NH₂⁺X⁻ → RR'NH + HX (secondary amine)\nContinues: RR'NH + R'X → RR'₂N → RR'₂NH⁺X⁻ → tertiary amine, then quaternary salt.\nProblem: mixture of 1°, 2°, 3° amines and quaternary salt forms (difficult to control).\nSolution: use Gabriel synthesis for pure primary amines; or use large excess of amine."},
+    {q:"Describe the reaction of amines with halogenoalkanes.", a:"RNH₂ + R'X → RR'NH₂⁺X⁻ → RR'NH + HX (secondary amine)\nContinues: RR'NH + R'X → RR'₂N → RR'₂NH⁺X⁻ → tertiary amine, then quaternary salt.\nProblem: mixture of 1°, 2°, 3° amines and quaternary salt forms (difficult to control).\nSolution: use large excess of amine to favour monoalkylation."},
     {q:"Describe the reaction of amines with acyl chlorides.", a:"RNH₂ + R'COCl → RNHCOR' + HCl (amide formed + HCl)\nReaction is fast and essentially irreversible (unlike esterification).\nHCl is immediately neutralised by excess amine: RNH₂ + HCl → RNH₃⁺Cl⁻\nAdvantage over alkylation: gives only one product (primary amine gives one N-substituted amide).\nProduct: amide (−CONH− linkage)."},
     {q:"Describe the preparation of amines by reduction of nitriles.", a:"Nitrile + 2H₂ (or LiAlH₄ in dry ether) → primary amine\nRCN + 4[H] → RCH₂NH₂ (chain extended by one carbon)\nExample: CH₃CN + 4[H] → CH₃CH₂NH₂ (ethanenitrile → ethylamine)\nThis is a useful method for making primary amines with one extra carbon.\nLiAlH₄ is a powerful reducing agent — used in dry ether; hydrolyse workup with water carefully."},
     {q:"Describe the preparation of aniline from nitrobenzene.", a:"Step 1: reduce nitrobenzene using Sn (tin) + concentrated HCl under reflux.\nC₆H₅NO₂ + 6[H] → C₆H₅NH₃⁺Cl⁻ (phenylammonium chloride salt, acidic conditions)\nStep 2: add NaOH to neutralise and liberate free amine:\nC₆H₅NH₃⁺ + OH⁻ → C₆H₅NH₂ + H₂O\nAniline is an oily liquid; carcinogenic — handle in fume cupboard, avoid skin contact."},
-    {q:"Describe the Gabriel synthesis for making primary amines.", a:"1. Phthalimide + KOH → potassium phthalimide (K⁺ salt).\n2. Potassium phthalimide + RX → N-alkylphthalimide (SN2 alkylation).\n3. N-alkylphthalimide + KOH(aq), heat → primary amine RNH₂ + potassium phthalate.\nAdvantage: gives pure primary amine without secondary or tertiary amine contamination.\nPhthalimide blocks both H atoms on N, preventing multiple alkylation."},
     {q:"Describe the preparation of a diazonium salt (diazotisation).", a:"ArNH₂ + NaNO₂ + HCl → ArN₂⁺Cl⁻ + NaCl + H₂O\nConditions: keep solution at 0–5°C (ice bath); NaNO₂ + HCl generates HNO₂ in situ.\nDiazonium salt (ArN₂⁺) is unstable above 10°C → decomposes to phenol + N₂.\nKeep ice cold throughout.\nExample: aniline + NaNO₂ + HCl (0–5°C) → benzenediazonium chloride."},
     {q:"Describe azo coupling and the formation of azo dyes.", a:"ArN₂⁺ + ArOH (in NaOH) → Ar-N=N-Ar'OH + H⁺ (azo compound, coloured)\nOr: ArN₂⁺ + Ar'NH₂ → Ar-N=N-Ar'NH₂\nThe coupling reaction: N₂⁺ group acts as electrophile; attacks electron-rich coupling component (phenol or amine in alkaline solution) at para position.\nAzo compounds (−N=N− chromophore) are intensely coloured (yellow/orange/red).\nUsed extensively as fabric dyes (e.g. tartrazine, methyl orange, Sudan Red)."},
-    {q:"List the Sandmeyer reactions: conversions from diazonium salts.", a:"ArN₂⁺ + H₂O (warm) → ArOH + N₂ (phenol)\nArN₂⁺ + Cu₂Cl₂/HCl → ArCl + N₂ (chlorobenzene — Sandmeyer)\nArN₂⁺ + Cu₂Br₂/HBr → ArBr + N₂ (bromobenzene — Sandmeyer)\nArN₂⁺ + CuCN → ArCN + N₂ (benzonitrile — Sandmeyer)\nArN₂⁺ + KI → ArI + N₂ (iodobenzene — simple, no copper needed)\nArN₂⁺ + H₃PO₂ → ArH + N₂ (reduction to benzene)"},
     {q:"What is the importance of diazonium salts in synthesis?", a:"Diazonium salts are key intermediates for introducing various substituents onto aromatic rings that cannot be introduced by direct electrophilic substitution:\n• −Cl, −Br, −I, −CN, −OH can all be introduced via diazonium chemistry.\n• Starting material (ArNH₂) made by nitration + reduction.\n• This allows making many substituted arenes with precise regiochemistry.\n• Azo dye synthesis also uses diazonium coupling."},
     {q:"Why are aromatic amines (e.g. aniline) considered hazardous?", a:"Many aromatic amines are carcinogens (cause cancer) — they can be absorbed through the skin or by inhalation.\nAniline is highly toxic: absorbed dermally → converted to metabolites that damage DNA.\nSome azo dyes derived from certain aromatic amines are also carcinogenic (certain azo dyes banned in textiles).\nPrecautions: use in fume cupboard; wear gloves, lab coat, goggles; avoid skin contact."},
     {q:"Describe the basicity of amines quantitatively using Kb and pKb.", a:"Kb = [RNH₃⁺][OH⁻] / [RNH₂]\npKb = −log Kb\nLarger Kb (smaller pKb) = stronger base (more OH⁻ produced).\nMethylamine: pKb ≈ 3.4 (relatively strong base)\nNH₃: pKb ≈ 4.7\nAniline: pKb ≈ 9.4 (very weak base)\nRelationship: pKa(conjugate acid) + pKb = pKw = 14 (at 25°C)"},
@@ -1334,7 +1368,6 @@ const SETS = {
     {q:"Describe the Tollens' reagent test (silver mirror test) for aldehydes.", a:"Reagent: ammoniacal silver nitrate solution [Ag(NH₃)₂]⁺(aq).\nAldehyde (reducing): reduces Ag⁺ to Ag metal → silver mirror on inside of test tube.\nRCHO + 2[Ag(NH₃)₂]⁺ + 2OH⁻ → RCOO⁻ + 2Ag(s) + 4NH₃ + H₂O\nKetone: no reaction (cannot be oxidised under mild conditions).\nDistinguishes aldehydes from ketones."},
     {q:"Describe the Fehling's/Benedict's solution test for aldehydes.", a:"Reagent: Fehling's or Benedict's solution (blue Cu²⁺ complex in alkaline solution).\nAldehyde: reduces Cu²⁺ to Cu₂O → brick-red precipitate on warming.\nKetone: no reaction.\nGlucose (an aldehyde sugar) gives positive result → used clinically to test for glucose in urine.\nDistinguishes aliphatic aldehydes from ketones; aromatic aldehydes may not always react."},
     {q:"Describe the iodoform reaction and which compounds give a positive result.", a:"Reagent: I₂ + NaOH (aq) (or KI + I₂ → iodine in NaOH).\nPositive result: yellow crystalline precipitate of CHI₃ (iodoform/triiodomethane) with antiseptic smell.\nGive positive result: CH₃COR (methyl ketones), CH₃CHO (ethanal), CH₃CH(OH)R (secondary alcohols with methyl group adjacent to CHOH), ethanol (CH₃CH₂OH).\nDoes NOT react: propanal (CH₃CH₂CHO — no methyl adjacent to C=O), most other aldehydes."},
-    {q:"What is the aldol condensation?", a:"Aldehyde or ketone with α-H + NaOH catalyst → β-hydroxy carbonyl compound (aldol product).\nWith continued heating: elimination of water → α,β-unsaturated carbonyl compound.\nExample: 2CH₃CHO + NaOH → CH₃CH(OH)CH₂CHO (aldol) → CH₃CH=CHCHO + H₂O\nImportance: forms new C−C bonds; key reaction in biosynthesis and organic synthesis."},
     {q:"How are aldehydes and ketones distinguished by oxidation?", a:"Oxidation with acidified K₂Cr₂O₇ or KMnO₄:\nAldehyde (RCHO): readily oxidised to carboxylic acid (RCOOH); orange → green colour change with Cr₂O₇²⁻.\nKetone (RCOR'): NOT oxidised by mild oxidising agents.\nAlso: Tollens' and Fehling's only react with aldehydes (weaker oxidants)\nFor positional determination: 2,4-DNPH confirms C=O; Tollens'/Fehling's confirm aldehyde."},
     {q:"Describe the nucleophilic addition mechanism for the reaction of CN⁻ with ethanal.", a:"Step 1: CN⁻ (nucleophile) attacks the δ+ carbon of C=O in CH₃CHO.\nStep 2: C=O π bond breaks; O becomes O⁻; tetrahedral intermediate forms (CH₃CH(CN)O⁻).\nStep 3: O⁻ picks up H⁺ from HCN (or from water) → hydroxynitrile CH₃CH(OH)CN.\nNote: a new chiral centre is created at the α-carbon → both enantiomers form → racemic mixture.\nHCN is highly toxic (volatile, easily inhaled); use NaCN + dilute acid for safety."},
     {q:"What is the significance of forming a racemic mixture in nucleophilic addition to carbonyl compounds?", a:"When a nucleophile attacks a planar carbonyl group, it can approach from either face (above or below the C=O plane) with equal probability.\nBoth approaches give enantiomeric products.\nResult: racemic mixture (50:50 mixture of both enantiomers).\nImportance in pharmacy: two enantiomers of a drug often have very different biological activities (e.g. thalidomide); racemic mixtures of drugs require resolution or asymmetric synthesis."},
@@ -1388,8 +1421,6 @@ const SETS = {
     {q:"Describe how ¹³C NMR gives structural information.", a:"Each chemically distinct carbon gives one peak.\nNumber of peaks = number of different C environments in the molecule.\nChemical shift indicates type of C environment (similar ranges to ¹H but ×10–20 ppm).\nC=O carbons appear at ~160–220 ppm; aromatic C ~110–160 ppm; alkyl C ~0–50 ppm.\nIntegration NOT routinely used in ¹³C NMR (peak heights not proportional to number of C).\nKey use: counting distinct C environments and identifying functional groups."},
     {q:"Describe how degrees of unsaturation (DoU) helps in structure determination.", a:"DoU = (2C + 2 + N − H − X) / 2\nDoU = 1: one ring OR one double bond.\nDoU = 4: benzene ring (1 ring + 3 double bonds) OR other combination.\nDoU = 0: fully saturated, no rings.\nUse: if Mr and molecular formula known, calculate DoU → narrows structural possibilities.\nExample: C₆H₅Cl → DoU = (12+2−5−1)/2 = 4 → likely benzene derivative (4 DoU for benzene ring)."},
     {q:"Describe a complete analytical strategy for identifying an unknown organic compound.", a:"1. Elemental analysis: combustion → % C, H, N, O → empirical formula.\n2. Mass spectrometry: Mr from molecular ion → molecular formula.\n3. Calculate degrees of unsaturation → ring/double bond information.\n4. Infrared spectroscopy: identify functional groups from key absorptions.\n5. ¹H NMR: number of environments, integration, splitting, chemical shifts.\n6. ¹³C NMR: number of distinct C environments.\n7. Chemical tests: 2,4-DNPH (carbonyl), Tollens' (aldehyde), iodoform (methyl ketone/ethanol).\n8. Combine all data to propose and confirm structure."},
-    {q:"How are protecting groups used in organic synthesis?", a:"A protecting group temporarily blocks one functional group from reacting while another transformation occurs elsewhere in the molecule.\nExample: to selectively reduce one ester in a molecule with both an ester and a carboxylic acid:\n1. Protect the acid as its methyl ester (CH₃OH/H⁺).\n2. Reduce the original ester with LiAlH₄.\n3. Remove protecting group by hydrolysis.\nCommon protecting groups: acetyl (Ac) for OH; Boc for NH₂.\nKey principle: must be easily installed and removed under mild conditions."},
-    {q:"What is the E-factor and how does it measure the environmental impact of a synthesis?", a:"E-factor = total mass of waste (kg) / mass of desired product (kg)\nLower E-factor = greener synthesis.\nIncludes: solvents, by-products, excess reagents, water used in workup.\nIndustrial pharmaceuticals: E-factor ~25–100 (complex multi-step syntheses with large solvent use).\nBulk chemicals: E-factor ~1–5 (simpler processes, fewer steps).\nStrategies to reduce E-factor: use catalysts, water as solvent, atom-economical reactions, fewer steps, recyclable reagents."},
   ]},
 
   "ocr_6.5.1": { title: "NMR Spectroscopy", cards: [
@@ -1401,7 +1432,6 @@ const SETS = {
     {q:"Interpret the ¹H NMR spectrum of ethanol (CH₃CH₂OH).", a:"CH₃ group: 3H, triplet (split by adjacent CH₂ with 2H: n+1=3), δ ~1.2 ppm.\nCH₂ group: 2H, quartet (split by adjacent CH₃ with 3H: n+1=4), δ ~3.7 ppm.\nOH group: 1H, singlet (OH is exchangeable; coupling to CH₂ not always observed), δ ~2–5 ppm (variable).\nRatio of integration: 3:2:1.\nAdding D₂O: OH peak disappears (H exchanged for D)."},
     {q:"How are exchangeable protons (OH, NH) identified in ¹H NMR?", a:"Add D₂O to the sample and re-run the spectrum (D₂O shake).\nExchangeable H (O−H and N−H) are replaced by D → their ¹H NMR peaks disappear.\nNon-exchangeable C−H peaks are unaffected.\nThis confirms which signals correspond to OH or NH groups.\nExchangeable protons often appear as broad peaks at variable chemical shifts (affected by concentration, temperature, solvent, hydrogen bonding)."},
     {q:"Describe ¹³C NMR and how it differs from ¹H NMR.", a:"¹³C NMR: each peak corresponds to one type (environment) of carbon.\nNumber of peaks = number of distinct C environments (symmetry reduces number of peaks).\nBroader range: δ 0–220 ppm.\nKey regions: alkyl C (0–50 ppm), C−O/C−N (50–90 ppm), aromatic/alkene C (110–160 ppm), C=O (160–220 ppm).\nIntegration is NOT proportional to number of C atoms (unlike ¹H NMR).\nUseful for counting distinct C environments and identifying C=O/aromatic groups."},
-    {q:"Describe COSY and DEPT as advanced NMR techniques.", a:"COSY (Correlation Spectroscopy): 2D ¹H NMR that shows which protons are on adjacent carbons (coupled protons).\nOff-diagonal cross-peaks connect pairs of coupled H → reveals connectivity.\nDEPT (Distortionless Enhancement by Polarisation Transfer): ¹³C technique that distinguishes CH, CH₂, and CH₃ carbons.\nCH and CH₃ point up; CH₂ points down; quaternary C absent.\nUsed to assign ¹³C peaks to specific carbon types."},
     {q:"How do you use ¹H NMR to distinguish between propan-1-ol and propan-2-ol?", a:"Propan-1-ol (CH₃CH₂CH₂OH):\n3 distinct environments: CH₃ (triplet, δ~0.9), CH₂ (sextet, δ~1.5), CH₂OH (triplet, δ~3.6), OH (singlet).\nPropan-2-ol ((CH₃)₂CHOH):\n2 distinct H environments (excluding OH): 2×CH₃ (doublet, δ~1.2, 6H), CH (septet, δ~4.0, 1H), OH.\nPropan-2-ol shows septet (from CH split by 6 adjacent H from 2×CH₃) — distinct from propan-1-ol."},
     {q:"How can ¹H NMR spectroscopy be used to determine the number of different proton environments in a molecule?", a:"Count the number of distinct peaks in the NMR spectrum (ignoring splitting patterns).\nEach distinct peak (or multiplet) = one type of H environment.\nSymmetry reduces apparent number of environments: e.g. benzene has 6H but all equivalent → 1 peak.\nFor 1,4-disubstituted benzene: H₂ and H₃ are equivalent pairs → 2 environments → 2 peaks.\nIntegration of each signal gives the ratio of H in each environment."},
     {q:"Explain the effect of electronegative groups on chemical shift.", a:"Electronegative groups (O, Cl, Br, N) withdraw electrons from adjacent H through inductive effect.\nH near electronegative group: deshielded → higher chemical shift (downfield).\nH farther from electronegative group: more shielded → lower δ.\nExample: CH₃Br (δ ~2.7) vs CH₃CH₃ (δ ~0.9) — Br deshields α-protons.\nC=O group (π system + electronegativity): aldehyde H very deshielded → δ ~9.5–10 ppm."},
@@ -1423,9 +1453,7 @@ const SETS = {
     {q:"Describe how amino acids are detected in paper chromatography.", a:"Amino acids are colourless and cannot be seen under UV.\nDetection: spray the dry chromatogram with ninhydrin solution; heat at 100°C.\nNinhydrin reacts with primary amine groups of amino acids → purple colour (Ruhemann's purple).\nProline (secondary amine) → yellow colour.\nEach amino acid gives a spot at a characteristic Rf value.\nUsed to: identify amino acid composition of a protein hydrolysate; detect amino acids in body fluids (diagnosis of metabolic disorders)."},
     {q:"What is the retention factor and retention time in chromatography?", a:"Retention factor (Rf): in TLC/paper chromatography = distance compound / distance solvent front. Dimensionless, 0–1.\nRetention time (tR): in GC/HPLC = time from injection to peak maximum at detector.\nRetention time is characteristic of a compound under fixed conditions (column, temperature, solvent flow rate).\nLonger retention time: compound interacts more strongly with stationary phase and/or has higher boiling point (GC).\nUsed for identification by comparison with retention times of standards."},
     {q:"Why must the TLC developing chamber be sealed and solvent-saturated?", a:"If the chamber is open or not saturated with solvent vapour:\n• Solvent evaporates from the TLC plate as it rises.\n• Evaporation causes uneven migration → distorted/smeared spots.\n• Rf values become unreliable and non-reproducible.\nSealing and saturating the atmosphere (by placing solvent-soaked filter paper in chamber) ensures:\n• Uniform solvent migration.\n• Reproducible Rf values.\n• Reliable separation."},
-    {q:"How does gradient elution improve column chromatography?", a:"Gradient elution: gradually increase the polarity of the eluting solvent during the separation.\nStart with non-polar solvent: elutes non-polar compounds.\nGradually add more polar solvent: elutes increasingly polar compounds.\nAdvantages:\n• Non-polar and polar compounds can all be eluted efficiently in one run.\n• Prevents polar compounds from being stuck on column indefinitely.\n• Improves resolution between compounds of different polarities.\nUsed in both column chromatography and HPLC."},
     {q:"Compare the stationary and mobile phases in TLC, column chromatography, GC, and HPLC.", a:"TLC:\nStationary: silica/alumina on plate\nMobile: organic solvent\n\nColumn chromatography:\nStationary: silica in column\nMobile: organic solvent (liquid)\n\nGC:\nStationary: liquid film on solid support in column\nMobile: inert gas (N₂/He)\n\nHPLC:\nStationary: fine silica (or C18 for reverse phase) under pressure\nMobile: solvent pumped at high pressure\n\nKey: all exploit differential affinity for stationary vs mobile phase."},
-    {q:"What is the significance of using an internal standard in GC analysis?", a:"An internal standard is a known compound added in a known amount to the sample before injection.\nUse: allows quantitative analysis by comparing peak areas of unknown vs internal standard.\nCompensates for: variations in injection volume, detector response, sample preparation losses.\nRequirements: must be separated from all analytes; similar structure/properties; not naturally present in sample.\nExample: add a known amount of a deuterated analogue (heavy isotope version of compound of interest) → ratio of peak areas gives accurate concentration."},
   ]},
 };
 
@@ -2871,7 +2899,7 @@ const SECTIONS = [
   { id: "inorganic_as", label: "Inorganic Chemistry (AS)", sub: "3.2 Year 1", topics: ["3.2.1","3.2.2","3.2.3"] },
   { id: "inorganic_a2", label: "Inorganic Chemistry (A2)", sub: "3.2 Year 2", topics: ["3.2.4","3.2.5","3.2.6"] },
   { id: "organic", label: "Organic Chemistry", sub: "3.3", topics: ["3.3.1","3.3.2","3.3.3","3.3.4","3.3.5","3.3.6","3.3.7"] },
-  { id: "organic2", label: "Organic Chemistry (A2)", sub: "3.3 (A2)", topics: ["3.3.9","3.3.10","3.3.11","3.3.12","3.3.13","3.3.14","3.3.15"] },
+  { id: "organic2", label: "Organic Chemistry (A2)", sub: "3.3 (A2)", topics: ["3.3.9","3.3.10","3.3.11","3.3.12","3.3.13","3.3.14","3.3.15","3.3.16"] },
   { id: "practicals_as", label: "Required Practicals (AS)", sub: "Activities 1-7 (Year 1)", topics: ["RP1a","RP1b","RP12","RP_A3","RP_A4","RP4","RP_A6","RP2","RP_A7b"] },
   { id: "practicals_a2", label: "Required Practicals (A2)", sub: "Activities 8-12 (Year 2)", topics: ["RP8","RP_A9","RP10a","RP6","RP_A11","RP5"] },
 ];
@@ -2971,6 +2999,698 @@ const SYNTH_ARO_RXNS = [
       "Phenol",                      "Alkaline conditions","--",            "Azo Coupling"],
 ];
 
+// ====================================================================
+// MECHANISM VIEWER DATA & RENDERING
+// ====================================================================
+
+const MECHS = [
+  {
+    id: "nuc_sub",
+    title: "Nucleophilic Substitution",
+    subtitle: "HO⁻ + CH₃Br → CH₃OH + Br⁻",
+    category: "Nucleophilic Substitution",
+    color: "#3182ce",
+    specs: ["AQA","OCR_A"],
+    description: "The nucleophile (a species with a lone pair) attacks the δ+ carbon of the halogenoalkane. The C–X bond breaks heterolytically — X leaves as X⁻ (the leaving group) taking both bonding electrons. Both bond formation and bond breaking are shown with simultaneous curly arrows.",
+    steps: [
+      { title: "Identify: nucleophile and electrophile",
+        explanation: "The C–Br bond is polarised because bromine is more electronegative than carbon. This gives Cδ+ and Brδ−. The hydroxide ion (OH⁻) has a lone pair of electrons and is the nucleophile. The δ+ carbon is the electrophile. Bromine is the leaving group — it can accommodate the negative charge as a stable halide ion Br⁻.",
+        arrows: [] },
+      { title: "Nucleophile attacks; leaving group departs",
+        explanation: "Arrow ①: the lone pair on O⁻ attacks the δ+ carbon, starting to form a new O–C bond. Arrow ②: at the same time, the C–Br bonding electrons shift towards Br, breaking the C–Br bond. Br leaves as Br⁻ (a stable bromide ion). Both arrows are drawn together — the nucleophile donates electrons in and the leaving group takes electrons out simultaneously.",
+        arrows: ["a1","a2"] },
+      { title: "Products: CH₃OH + Br⁻",
+        explanation: "The product CH₃OH (methanol) has formed as the nucleophile bonded to the carbon. Br⁻ is released as a free bromide ion. The overall reaction is a substitution — the –Br group has been replaced by –OH. This mechanism applies whenever a nucleophile reacts with a primary or secondary halogenoalkane.",
+        arrows: [], past: ["a1","a2"], showProducts: true },
+    ],
+    arrowPaths: {
+      a1: { d:"M 102,108 C 158,68 218,70 252,104", label:"① O lone pair → δ+C (forms O–C bond)", type:"full" },
+      a2: { d:"M 294,107 C 332,90 367,91 398,106", label:"② C–Br bond electrons → Br (forms Br⁻)", type:"full" },
+    },
+  },
+  {
+    id: "ea_br2",
+    title: "Electrophilic Addition: Br₂",
+    subtitle: "CH₂=CH₂ + Br₂ → CH₂BrCH₂Br",
+    category: "Electrophilic Addition",
+    color: "#c05621",
+    specs: ["AQA","OCR_A"],
+    description: "The electron-rich π bond of ethene induces a dipole in Br₂, making the near Br atom δ+. The π electrons attack this Br, forming a cyclic bromonium ion and releasing Br⁻. Br⁻ then attacks from the back to give 1,2-dibromoethane.",
+    steps: [
+      { title: "Electron-rich π bond polarises Br₂",
+        explanation: "The π electrons of the C=C double bond create a region of high electron density. As Br₂ approaches, the near bromine atom becomes δ+ (electron density is repelled away from it) and the far bromine becomes δ−. This is temporary induced polarisation — without the approaching alkene, Br₂ is non-polar.",
+        arrows: [] },
+      { title: "π electrons attack δ+ Br; Br–Br breaks",
+        explanation: "Arrow ①: the π bonding electrons attack the δ+ bromine atom, forming a C–Br bond (a carbocation intermediate or cyclic bromonium ion forms). Arrow ②: simultaneously, the Br–Br bonding electrons shift to the distant Br, forming Br⁻ (the leaving group). The π bond is completely used up in this step.",
+        arrows: ["a1","a2"] },
+      { title: "Br⁻ attacks the carbocation",
+        explanation: "Arrow ③: the Br⁻ ion attacks the empty orbital on the positive carbon from the back face. This anti (trans) addition means the two Br atoms end up on opposite faces of the molecule, giving 1,2-dibromoethane. The orange colour of Br₂ disappears as the product is colourless — this is the standard alkene test.",
+        arrows: ["a3"], past: ["a1","a2"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 230,98 C 255,68 300,62 330,87", label:"① π electrons → δ+Br", type:"full" },
+      a2: { d:"M 342,95 C 368,72 400,72 422,90", label:"② Br–Br bond → Br⁻", type:"full" },
+      a3: { d:"M 440,112 C 420,138 380,142 348,127", label:"③ Br⁻ attacks C⁺", type:"full" },
+    },
+  },
+  {
+    id: "ea_hbr",
+    title: "Electrophilic Addition: HBr (Markovnikov)",
+    subtitle: "CH₃CH=CH₂ + HBr → CH₃CHBrCH₃",
+    category: "Electrophilic Addition",
+    color: "#b45309",
+    specs: ["AQA","OCR_A"],
+    description: "H⁺ (from HBr) is the electrophile. It adds to the carbon with MORE hydrogens (Markovnikov's rule), forming the MORE stable secondary carbocation. Br⁻ then attacks the carbocation. The major product has Br on the central carbon.",
+    steps: [
+      { title: "H–Br polarisation",
+        explanation: "The H–Br bond is polarised: Hδ+ and Brδ−. The electron-rich π bond of propene is attracted to the δ+ hydrogen. The π electrons will attack the Hδ+, and H is the electrophile in this reaction.",
+        arrows: [] },
+      { title: "π electrons attack H; H–Br breaks → carbocation",
+        explanation: "Arrow ①: the π electrons attack the δ+ H atom of HBr, forming a new C–H bond on C-1 (the CH₂ end). Arrow ②: the H–Br bond electrons shift to Br, forming Br⁻. A carbocation forms. Crucially, H adds to C-1 (the carbon with MORE hydrogens) because this gives the more stable SECONDARY carbocation at C-2, not the less stable primary carbocation at C-1. This is Markovnikov's rule.",
+        arrows: ["a1","a2"] },
+      { title: "Br⁻ attacks secondary carbocation",
+        explanation: "Arrow ③: Br⁻ (a nucleophile) attacks the secondary carbocation at C-2 using a lone pair. The product is 2-bromopropane (the Markovnikov product). If H had added to C-2, a less stable primary carbocation at C-1 would form and the minor product 1-bromopropane would result.",
+        arrows: ["a3"], past: ["a1","a2"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 230,105 C 250,72 298,62 328,84", label:"① π electrons → Hδ+", type:"full" },
+      a2: { d:"M 342,82 C 365,60 398,62 418,82", label:"② H–Br bond → Br⁻", type:"full" },
+      a3: { d:"M 430,114 C 415,138 378,142 350,127", label:"③ Br⁻ lone pair → C⁺", type:"full" },
+    },
+  },
+  {
+    id: "nuc_add",
+    title: "Nucleophilic Addition: HCN",
+    subtitle: "CH₃CHO + HCN → CH₃CH(OH)CN",
+    category: "Nucleophilic Addition",
+    color: "#7c3aed",
+    specs: ["AQA","OCR_A"],
+    description: "The carbonyl carbon (C=O) is electrophilic (δ+) because O is more electronegative. CN⁻ is the nucleophile. Addition of HCN across C=O gives a hydroxynitrile (cyanohydrin). A racemic mixture is produced because the flat carbonyl carbon can be attacked from either face.",
+    steps: [
+      { title: "Identify: electrophilic C=O carbon",
+        explanation: "Oxygen is more electronegative than carbon, so the C=O bond is polarised: Cδ+ and Oδ−. The CN⁻ ion (from NaCN/KCN) is the nucleophile with its lone pair on carbon. Pure HCN is avoided (toxic volatile liquid) — NaCN + dilute acid generates CN⁻ safely.",
+        arrows: [] },
+      { title: "CN⁻ attacks δ+ carbonyl carbon",
+        explanation: "Arrow ①: the lone pair on the carbon of CN⁻ attacks the δ+ carbonyl carbon. A new C–CN bond forms. The carbon changes from trigonal planar (sp²) to tetrahedral (sp³).",
+        arrows: ["a1"] },
+      { title: "C=O π bond breaks; O⁻ forms",
+        explanation: "Arrow ②: as CN⁻ attacks, the C=O π bond electrons shift entirely to the oxygen atom, forming an alkoxide (O⁻) intermediate. The C=O double bond becomes a C–O single bond. This alkoxide intermediate is negatively charged and relatively stable.",
+        arrows: ["a2"], past: ["a1"] },
+      { title: "Protonation of O⁻ → hydroxynitrile",
+        explanation: "Arrow ③: a proton (H⁺) from the HCN molecule in solution protonates the O⁻, forming the –OH group. The final product is 2-hydroxypropanenitrile (a cyanohydrin/hydroxynitrile). The carbon that was attacked is now a new chiral centre — equal amounts of both enantiomers are formed (racemic mixture) because the flat carbonyl was equally accessible from both faces.",
+        arrows: ["a3"], past: ["a1","a2"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 112,112 C 162,74 215,74 252,106", label:"① CN⁻ lone pair → δ+C", type:"full" },
+      a2: { d:"M 272,102 C 284,76 306,68 330,80", label:"② C=O π bond → O⁻", type:"full" },
+      a3: { d:"M 388,100 C 372,80 352,72 334,82", label:"③ H⁺ protonates O⁻", type:"full" },
+    },
+  },
+  {
+    id: "nuc_add_elim",
+    title: "Nucleophilic Addition-Elimination",
+    subtitle: "CH₃COCl + 2NH₃ → CH₃CONH₂ + NH₄Cl",
+    category: "Nucleophilic Add-Elimination",
+    color: "#059669",
+    specs: ["AQA","OCR_A"],
+    description: "Acyl chlorides are very reactive toward nucleophiles. Step 1: NH₃ donates a lone pair to the carbonyl C, forming a tetrahedral intermediate. Step 2: Cl⁻ is expelled as the leaving group, reforming a C=O bond (the amide). The HCl produced is mopped up by a second NH₃.",
+    steps: [
+      { title: "Identify: electrophilic acyl carbon",
+        explanation: "The acyl carbon (C=O carbon bonded to Cl) is highly electrophilic: both O and Cl withdraw electron density, making the carbon strongly δ+. NH₃ has a lone pair on nitrogen — it is the nucleophile. Acyl chloride reactions are much faster and irreversible compared to esterification with a carboxylic acid.",
+        arrows: [] },
+      { title: "NH₃ attacks acyl carbon; C=O π breaks",
+        explanation: "Arrow ①: the lone pair on N of NH₃ attacks the δ+ acyl carbon, forming a new N–C bond. Arrow ②: simultaneously, the C=O π bond electrons shift to O, forming O⁻. A tetrahedral intermediate forms with N, Cl, O⁻, and CH₃ all attached to the same carbon.",
+        arrows: ["a1","a2"] },
+      { title: "Cl⁻ expelled; C=O reforms",
+        explanation: "Arrow ③: the electrons on O⁻ reform the C=O π bond. Arrow ④: simultaneously, the C–Cl bonding electrons shift to Cl, expelling Cl⁻. The carbonyl group is restored and the amide product CH₃CONH₂ is formed. The overall result is substitution of Cl by NH₂.",
+        arrows: ["a3","a4"], past: ["a1","a2"] },
+      { title: "HCl neutralised by second NH₃",
+        explanation: "The HCl produced (from NH₄⁺ Cl⁻ in solution) is mopped up by a second equivalent of NH₃: NH₃ + HCl → NH₄Cl. This is why 2 mol of NH₃ are shown in the overall equation. Using an excess of ammonia ensures the acidic HCl is neutralised and the product is the free amide.",
+        arrows: [], past: ["a1","a2","a3","a4"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 112,110 C 162,72 215,72 252,105", label:"① N lone pair → acyl C", type:"full" },
+      a2: { d:"M 272,100 C 284,74 310,66 334,80", label:"② C=O π bond → O⁻", type:"full" },
+      a3: { d:"M 336,85 C 310,70 284,76 274,102", label:"③ O⁻ lone pair → C=O reforms", type:"full" },
+      a4: { d:"M 296,108 C 325,92 358,92 390,108", label:"④ C–Cl bond → Cl⁻", type:"full" },
+    },
+  },
+  {
+    id: "fc_acyl",
+    title: "Friedel-Crafts Acylation",
+    subtitle: "C₆H₆ + CH₃COCl → C₆H₅COCH₃ + HCl",
+    category: "Electrophilic Aromatic Substitution",
+    color: "#7c3aed",
+    specs: ["AQA","OCR_A"],
+    description: "AlCl₃ (Lewis acid catalyst) generates the acylium ion (RCO⁺) from the acyl chloride. The acylium ion is the electrophile that attacks benzene's π system. The mechanism follows the general EAS pathway: π attack → arenium ion → H⁺ lost to restore aromaticity. AlCl₃ is regenerated at the end.",
+    steps: [
+      { title: "Generate the acylium ion (electrophile)",
+        explanation: "AlCl₃ is a Lewis acid — it has an empty orbital and accepts electron pairs. Arrow ①: the lone pair on the Cl of CH₃COCl donates to AlCl₃, forming a coordinate bond. Arrow ②: the C–Cl bond electrons shift to Cl, forming the acylium ion CH₃CO⁺ and [AlCl₄]⁻. The acylium ion CH₃CO⁺ is stabilised by the positive charge on carbon being delocalised onto oxygen.",
+        arrows: ["a1","a2"] },
+      { title: "Acylium ion attacks benzene π system",
+        explanation: "Arrow ③: the delocalised π electrons of benzene attack the electrophilic carbon of the acylium ion CH₃CO⁺, forming a new C–C bond. Aromaticity is temporarily lost. A positively charged arenium ion (Wheland intermediate) forms — one carbon in the ring is now sp³ and the positive charge is delocalised around the ring.",
+        arrows: ["a3"], past: [] },
+      { title: "H⁺ lost; aromaticity restored",
+        explanation: "Arrow ④: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored — this is what drives the reaction forward. The H⁺ is accepted by [AlCl₄]⁻, regenerating AlCl₃ and HCl. Overall: one H replaced by –COCH₃ (an acyl group). Product: methyl phenyl ketone (acetophenone).",
+        arrows: ["a4"], past: ["a3"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 398,145 C 410,128 418,115 415,102", label:"① Cl lone pair → Al (Lewis acid)", type:"full" },
+      a2: { d:"M 380,108 C 365,90 345,88 330,100", label:"② C–Cl bond → Cl (acylium forms)", type:"full" },
+      a3: { d:"M 238,95 C 258,60 295,55 318,78", label:"③ π electrons → acylium C", type:"full" },
+      a4: { d:"M 248,105 C 240,130 252,148 268,155", label:"④ C–H bond → H⁺ expelled", type:"full" },
+    },
+  },
+  {
+    id: "eas",
+    title: "Electrophilic Aromatic Substitution (Nitration)",
+    subtitle: "C₆H₆ + NO₂⁺ → C₆H₅NO₂ + H⁺",
+    category: "Electrophilic Aromatic Substitution",
+    color: "#b91c1c",
+    specs: ["AQA","OCR_A"],
+    description: "The nitronium ion (NO₂⁺) is generated from conc. HNO₃ + conc. H₂SO₄. The delocalised π electrons of benzene attack NO₂⁺, forming a positively charged arenium ion. H⁺ is then lost to restore aromaticity. Substitution (not addition) preserves the stable delocalised π system.",
+    steps: [
+      { title: "Generate the electrophile: NO₂⁺",
+        explanation: "Conc. H₂SO₄ donates a proton to HNO₃: HNO₃ + H₂SO₄ → NO₂⁺ + H₂O + HSO₄⁻. The nitronium ion (NO₂⁺) is the electrophile. The temperature is kept below 55°C — at higher temperatures, further nitration to give di- and tri-nitro products occurs.",
+        arrows: [] },
+      { title: "π electrons attack NO₂⁺",
+        explanation: "Arrow ①: the delocalised π electrons of benzene attack the nitrogen of NO₂⁺, forming a new C–N bond. Aromaticity is temporarily lost — this is the slow, rate-determining step. A positively charged arenium ion (Wheland intermediate / sigma complex) is formed. One ring carbon is now sp³.",
+        arrows: ["a1"] },
+      { title: "H⁺ lost; aromaticity restored",
+        explanation: "Arrow ②: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored. H⁺ is released into the acid mixture. This second step is fast. The overall result is substitution of one H by NO₂ — aromaticity is preserved because the energy gained by restoring delocalisation drives the reaction.",
+        arrows: ["a2"], past: ["a1"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 248,100 C 272,60 312,52 344,78", label:"① π electrons → NO₂⁺", type:"full" },
+      a2: { d:"M 258,108 C 248,134 262,148 280,152", label:"② C–H bond → H⁺ expelled", type:"full" },
+    },
+  },
+  {
+    id: "elimination",
+    title: "Elimination (E2)",
+    subtitle: "CH₃CH₂Br + KOH(ethanol) → CH₂=CH₂ + KBr + H₂O",
+    category: "Elimination",
+    color: "#9333ea",
+    specs: ["AQA","OCR_A"],
+    description: "Hot ethanolic KOH acts as a strong base. The OH⁻ abstracts an H from the β-carbon (adjacent to the C–X carbon). Simultaneously, the C–H electrons form a π bond and the C–Br bond breaks. All three events occur concertedly (E2). The conditions that favour elimination: hot, ethanolic KOH; aqueous KOH favours substitution.",
+    steps: [
+      { title: "Identify: β-hydrogen & leaving group",
+        explanation: "The β-carbon is the carbon adjacent to the carbon bearing the Br. OH⁻ is a strong base (not just a nucleophile) — it abstracts the β-hydrogen rather than attacking the carbon (which would give SN2). Hot ethanolic conditions favour the more hindered approach (elimination) over back-face attack (substitution).",
+        arrows: [] },
+      { title: "Concerted: base removes H, π forms, Br⁻ leaves",
+        explanation: "Arrow ①: the OH⁻ base uses its lone pair to abstract the β-H (H on the carbon adjacent to C–Br). Arrow ②: the C–H bonding electrons shift to form the C=C π bond between the two carbons. Arrow ③: simultaneously, the C–Br bonding electrons shift entirely to Br, forming Br⁻. All three bonds break/form at the same time (E2). The reaction produces ethene + H₂O + Br⁻.",
+        arrows: ["a1","a2","a3"] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 145,107 C 165,72 200,68 225,94", label:"① O lone pair → β-H", type:"full" },
+      a2: { d:"M 235,108 C 248,88 272,88 285,108", label:"② C–H electrons → π bond forms", type:"full" },
+      a3: { d:"M 297,108 C 328,90 362,92 395,108", label:"③ C–Br electrons → Br⁻", type:"full" },
+    },
+  },
+  {
+    id: "frs",
+    title: "Free Radical Substitution (FRS)",
+    subtitle: "CH₄ + Cl₂  →(UV)→  CH₃Cl + HCl",
+    category: "Radical",
+    color: "#d97706",
+    specs: ["AQA","OCR_A"],
+    description: "A chain reaction using fish-hook (half-headed) arrows — each represents ONE electron. Three stages: initiation (UV breaks Cl–Cl homolytically), propagation (chain-carrying steps), termination (radicals combine). The mechanism uses fish-hook arrows, NOT full curly arrows.",
+    steps: [
+      { title: "Initiation: homolytic fission of Cl–Cl",
+        explanation: "UV light provides energy for homolytic fission of the Cl–Cl bond — one electron from the bond goes to each chlorine atom. Fish-hook arrows (half-headed, ↷) each represent ONE electron moving. Two Cl• radicals are formed. Each has an unpaired electron shown as a dot (•). This step starts the chain.",
+        arrows: ["a1","a2"] },
+      { title: "Propagation Step 1: Cl• + CH₄",
+        explanation: "Arrow ③: one electron from the C–H bond moves to pair with the unpaired electron on Cl•, forming H–Cl. Arrow ④: the remaining electron on carbon creates a methyl radical •CH₃. The Cl• radical is consumed but a new radical (•CH₃) is produced — this is why it's a chain reaction. Propagation continues while reactants are available.",
+        arrows: ["a3","a4"], past: [] },
+      { title: "Propagation Step 2: •CH₃ + Cl₂",
+        explanation: "Arrow ⑤: one electron from the Cl–Cl bond pairs with the unpaired electron on •CH₃, forming CH₃–Cl (the product). Arrow ⑥: the other Cl atom becomes a new Cl• radical, which goes on to repeat propagation Step 1. Each propagation cycle produces one molecule of CH₃Cl and one molecule of HCl.",
+        arrows: ["a5","a6"], past: [] },
+      { title: "Termination: two radicals combine",
+        explanation: "Termination occurs when any two radicals collide and combine, using up their unpaired electrons: Cl• + Cl• → Cl₂, or •CH₃ + Cl• → CH₃Cl, or •CH₃ + •CH₃ → C₂H₆. No radicals are produced in termination — the chain is ended. C₂H₆ forming is why trace amounts of ethane are always found as a by-product.",
+        arrows: [], past: [] },
+    ],
+    arrowPaths: {
+      a1: { d:"M 255,108 C 228,78 200,76 182,96", label:"① one e⁻ → left Cl", type:"fish" },
+      a2: { d:"M 265,108 C 292,78 320,76 338,96", label:"② one e⁻ → right Cl", type:"fish" },
+      a3: { d:"M 235,108 C 248,78 268,74 286,96", label:"③ one e⁻ from C–H → Cl•", type:"fish" },
+      a4: { d:"M 285,112 C 268,130 248,132 232,118", label:"④ remaining e⁻ on C → •CH₃", type:"fish" },
+      a5: { d:"M 240,108 C 265,78 290,76 308,96", label:"⑤ one e⁻ from Cl–Cl → •CH₃", type:"fish" },
+      a6: { d:"M 318,100 C 345,78 368,78 382,96", label:"⑥ other e⁻ → new Cl•", type:"fish" },
+    },
+  },
+];
+
+function MechSVGBase({ children, animKey }) {
+  return (
+    <svg viewBox="0 0 560 220" style={{ width:"100%", height:"auto", display:"block", maxHeight:"220px" }}>
+      <defs>
+        <marker id={`arr-red-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+        </marker>
+        <marker id={`arr-grey-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+        </marker>
+        <marker id={`fish-red-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 5 z" fill="#dc2626"/>
+        </marker>
+        <marker id={`fish-grey-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 5 z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+      {children}
+    </svg>
+  );
+}
+
+// Atom label helper
+function A({ x, y, el, charge, partial, size=16, color }) {
+  const c = color || (el==="O"||el==="OH"||el==="OH⁻"?"#b91c1c":el==="N"||el==="NH₃"||el==="NH₂"?"#1d4ed8":el==="Br"?"#9a3412":el==="Cl"?"#166534":el==="H"?"#64748b":"#1a202c");
+  return (
+    <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
+      style={{ fontSize:`${size}px`, fontFamily:"Georgia,'Times New Roman',serif", fontWeight:700, fill:c, userSelect:"none" }}>
+      {el}{charge&&<tspan style={{fontSize:`${size*0.72}px`, baselineShift:"super"}}>{charge}</tspan>}
+      {partial&&<tspan style={{fontSize:`${size*0.68}px`, fill:"#64748b"}}>{partial}</tspan>}
+    </text>
+  );
+}
+
+// Bond line helper
+function Bond({ x1,y1,x2,y2,dbl,dash,color="#1a202c",width=2.5 }) {
+  if (dbl) {
+    const dx=y2-y1, dy=x1-x2, len=Math.sqrt(dx*dx+dy*dy)||1;
+    const ox=dx/len*3, oy=dy/len*3;
+    return <g><line x1={x1+ox} y1={y1+oy} x2={x2+ox} y2={y2+oy} stroke={color} strokeWidth={width} strokeLinecap="round"/>
+              <line x1={x1-ox} y1={y1-oy} x2={x2-ox} y2={y2-oy} stroke={color} strokeWidth={width} strokeLinecap="round"/></g>;
+  }
+  return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth={width}
+    strokeDasharray={dash?"6,4":undefined} strokeLinecap="round"/>;
+}
+
+// Lone pair helper (two dots)
+function LP({ x, y, angle=0, color="#1a202c" }) {
+  const rad=(angle*Math.PI)/180;
+  const dx=Math.cos(rad)*5, dy=Math.sin(rad)*5;
+  return <g><circle cx={x-dx} cy={y-dy} r={2.4} fill={color}/><circle cx={x+dx} cy={y+dy} r={2.4} fill={color}/></g>;
+}
+
+// Curly arrow helper (animated or static grey, or still=always red no animation)
+function CurlyArrow({ d, active, animKey, delay=0, type="full", label, labelX, labelY, still }) {
+  const isRed = active || still;
+  const markerId = isRed
+    ? (type==="fish" ? `fish-red-${animKey}` : `arr-red-${animKey}`)
+    : (type==="fish" ? `fish-grey-${animKey}` : `arr-grey-${animKey}`);
+  return (
+    <g>
+      <path
+        key={active && !still ? `${d}-${animKey}` : d}
+        d={d}
+        fill="none"
+        stroke={isRed ? "#dc2626" : "#94a3b8"}
+        strokeWidth={isRed ? 2.6 : 1.8}
+        markerEnd={`url(#${markerId})`}
+        style={active && !still ? {
+          strokeDasharray:350,
+          strokeDashoffset:0,
+          animation:`mechDrawArrow 0.65s ease-out ${delay}s both`
+        } : {}}
+      />
+      {label && labelX && <text x={labelX} y={labelY||0} fill={isRed?"#dc2626":"#94a3b8"}
+        style={{fontSize:"11px",fontFamily:"sans-serif",fontWeight:600,userSelect:"none"}}>{label}</text>}
+    </g>
+  );
+}
+
+// Charge badge
+function Charge({ x, y, val, color }) {
+  return <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
+    style={{ fontSize:"13px", fontFamily:"Georgia,serif", fontWeight:700, fill: color||"#1a202c", userSelect:"none" }}>{val}</text>;
+}
+
+// Delta label
+function Delta({ x, y, sign }) {
+  return <text x={x} y={y} textAnchor="middle"
+    style={{ fontSize:"11px", fontFamily:"Georgia,serif", fill:"#64748b", userSelect:"none" }}>δ{sign}</text>;
+}
+
+function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
+  const step = mech.steps[Math.min(stepIdx, mech.steps.length-1)];
+  const activeIds = step.arrows || [];
+  const pastIds = step.past || [];
+  // In stillMode, show ALL arrows as red (no animation)
+  const allArrowIds = Object.keys(mech.arrowPaths);
+  const allVisibleIds = stillMode ? allArrowIds : [...pastIds, ...activeIds];
+  const showProducts = step.showProducts;
+
+  const renderArrows = () => allVisibleIds.map((id) => {
+    const ap = mech.arrowPaths[id];
+    if (!ap) return null;
+    const isActive = !stillMode && activeIds.includes(id);
+    const delay = isActive ? activeIds.indexOf(id) * 0.18 : 0;
+    return <CurlyArrow key={id} d={ap.d} active={isActive} still={stillMode} animKey={animKey} delay={delay} type={ap.type||"full"}/>;
+  });
+
+  // ── Per-mechanism base molecule drawings ──────────────────────────
+  if (mech.id === "nuc_sub") {
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* HO- on left */}
+        <A x={68} y={115} el="H" size={15} color="#64748b"/>
+        <Bond x1={79} y1={115} x2={90} y2={115}/>
+        <A x={100} y={115} el="O" size={17}/>
+        <Charge x={118} y={103} val="−" color="#b91c1c"/>
+        <LP x={100} y={98} angle={0} color="#b91c1c"/>
+
+        {/* CH3Br */}
+        <A x={275} y={115} el="C" size={17}/>
+        <Delta x={265} y={98} sign="+"/>
+        <A x={275} y={87} el="H" size={14} color="#64748b"/>
+        <Bond x1={275} y1={107} x2={275} y2={94}/>
+        <A x={248} y={137} el="H" size={14} color="#64748b"/>
+        <Bond x1={267} y1={121} x2={252} y2={134}/>
+        <A x={302} y={137} el="H" size={14} color="#64748b"/>
+        <Bond x1={283} y1={121} x2={298} y2={134}/>
+        <Bond x1={289} y1={115} x2={390} y2={115}/>
+        <A x={405} y={115} el="Br" size={17}/>
+        <Delta x={415} y={98} sign="−"/>
+        <LP x={420} y={103} angle={80} color="#9a3412"/>
+        <LP x={432} y={115} angle={170} color="#9a3412"/>
+
+        {/* Nucleophile label */}
+        <text x={90} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
+        {/* Electrophile label */}
+        <text x={275} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#b91c1c",fontWeight:700}}>electrophile</text>
+        {/* Leaving group label */}
+        <text x={405} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+
+        {showProducts && <>
+          <text x={480} y={175} textAnchor="middle" style={{fontSize:"14px",fontFamily:"Georgia,serif",fontWeight:700,fill:"#9a3412"}}>Br⁻</text>
+        </>}
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "fc_acyl") {
+    const cx=225, cy=118, r=52;
+    const pts = Array.from({length:6},(_,i)=>{ const a=(i*60-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* Benzene ring */}
+        {pts.map(([x,y],i)=>{ const [nx,ny]=pts[(i+1)%6]; return <line key={i} x1={x} y1={y} x2={nx} y2={ny} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; })}
+        {[0,2,4].map(i=>{ const [x,y]=pts[i],[nx,ny]=pts[(i+1)%6]; const dx=ny-y,dy=x-nx,len=Math.sqrt(dx*dx+dy*dy)||1; const ox=dx/len*5,oy=dy/len*5; return <line key={`d${i}`} x1={x+ox} y1={y+oy} x2={nx+ox} y2={ny+oy} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; })}
+        {/* H on top carbon */}
+        <A x={225} y={53} el="H" size={14} color="#64748b"/>
+        <Bond x1={225} y1={63} x2={225} y2={66}/>
+
+        {/* Acyl chloride CH3COCl */}
+        <A x={348} y={85} el="CH₃" size={13}/>
+        <Bond x1={364} y1={89} x2={378} y2={97}/>
+        <A x={385} y={104} el="C" size={16}/>
+        <Bond x1={391} y1={98} x2={402} y2={84} dbl/>  {/* C=O */}
+        <A x={407} y={76} el="O" size={15}/>
+        <Bond x1={392} y1={111} x2={402} y2={125}/>
+        <A x={407} y={132} el="Cl" size={16}/>
+        <LP x={418} y={142} angle={60} color="#166534"/>
+
+        {/* AlCl3 */}
+        <A x={458} y={152} el="AlCl₃" size={13} color="#64748b"/>
+        <text x={360} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#7c3aed",fontWeight:700}}>acyl chloride</text>
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "ea_br2") {
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* Ethene: C=C */}
+        <A x={195} y={115} el="C" size={17}/>
+        <Bond x1={209} y1={115} x2={267} y2={115} dbl/>
+        <A x={281} y={115} el="C" size={17}/>
+        {/* H atoms on ethene */}
+        <A x={175} y={88} el="H" size={14} color="#64748b"/><Bond x1={192} y1={108} x2={178} y2={93}/>
+        <A x={175} y={142} el="H" size={14} color="#64748b"/><Bond x1={192} y1={122} x2={178} y2={137}/>
+        <A x={301} y={88} el="H" size={14} color="#64748b"/><Bond x1={284} y1={108} x2={298} y2={93}/>
+        <A x={301} y={142} el="H" size={14} color="#64748b"/><Bond x1={284} y1={122} x2={298} y2={137}/>
+        {/* Br2 */}
+        <Bond x1={295} y1={115} x2={355} y2={115}/>
+        <A x={370} y={115} el="Br" size={17}/>
+        <Delta x={358} y={98} sign="+"/>
+        <Bond x1={384} y1={115} x2={415} y2={115}/>
+        <A x={430} y={115} el="Br" size={17}/>
+        <Delta x={445} y={98} sign="−"/>
+        <LP x={445} y={103} angle={80} color="#9a3412"/>
+        {/* Lone pairs on near Br - shown fewer since it's δ+ */}
+        <LP x={370} y={103} angle={0} color="#9a3412"/>
+        {stepIdx >= 1 && <>
+          <text x={215} y={60} textAnchor="middle" style={{fontSize:"12px",fill:"#64748b",fontFamily:"Georgia,serif",fontStyle:"italic"}}>π cloud</text>
+        </>}
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "ea_hbr") {
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* Propene: CH3-CH=CH2 */}
+        <A x={115} y={115} el="CH₃" size={15}/>
+        <Bond x1={137} y1={115} x2={162} y2={115}/>
+        <A x={175} y={115} el="C" size={17}/>
+        <Bond x1={189} y1={115} x2={247} y2={115} dbl/>
+        <A x={261} y={115} el="C" size={17}/>
+        <Bond x1={268} y1={108} x2={282} y2={94}/><A x={286} y={88} el="H" size={14} color="#64748b"/>
+        <Bond x1={268} y1={122} x2={282} y2={136}/><A x={286} y={142} el="H" size={14} color="#64748b"/>
+        <Bond x1={168} y1={108} x2={162} y2={94}/><A x={160} y={88} el="H" size={14} color="#64748b"/>
+        {/* HBr */}
+        <Bond x1={295} y1={115} x2={355} y2={115}/>
+        <A x={367} y={115} el="H" size={16} color="#64748b"/>
+        <Delta x={360} y={98} sign="+"/>
+        <Bond x1={378} y1={115} x2={415} y2={115}/>
+        <A x={427} y={115} el="Br" size={17}/>
+        <Delta x={438} y={98} sign="−"/>
+        <LP x={442} y={104} angle={80} color="#9a3412"/>
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "nuc_add") {
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* CN- */}
+        <A x={72} y={115} el="N" size={17} color="#1d4ed8"/>
+        <Bond x1={84} y1={115} x2={102} y2={115} dbl={false}/>
+        <Bond x1={87} y1={115} x2={105} y2={115}/>
+        {/* triple bond visual */}
+        <line x1={84} y1={111} x2={102} y2={111} stroke="#1d4ed8" strokeWidth={2}/>
+        <line x1={84} y1={115} x2={102} y2={115} stroke="#1d4ed8" strokeWidth={2}/>
+        <line x1={84} y1={119} x2={102} y2={119} stroke="#1d4ed8" strokeWidth={2}/>
+        <A x={112} y={115} el="C" size={17} color="#1d4ed8"/>
+        <Charge x={130} y={102} val="−" color="#1d4ed8"/>
+        <LP x={60} y={115} angle={90} color="#1d4ed8"/>
+
+        {/* Ethanal CH3-CHO */}
+        <A x={210} y={115} el="CH₃" size={15}/>
+        <Bond x1={232} y1={115} x2={257} y2={115}/>
+        <A x={270} y={115} el="C" size={17}/>
+        <Delta x={260} y={98} sign="+"/>
+        {/* C=O double bond */}
+        <Bond x1={280} y1={110} x2={310} y2={97} dbl/>
+        <A x={323} y={90} el="O" size={17}/>
+        <Delta x={338} y={78} sign="−"/>
+        <LP x={336} y={88} angle={40} color="#b91c1c"/>
+        {/* H on CHO carbon */}
+        <Bond x1={265} y1={123} x2={258} y2={140}/>
+        <A x={255} y={150} el="H" size={14} color="#64748b"/>
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "nuc_add_elim") {
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* NH3 nucleophile */}
+        <A x={80} y={115} el="NH₃" size={15} color="#1d4ed8"/>
+        <LP x={104} y={110} angle={0} color="#1d4ed8"/>
+
+        {/* CH3COCl */}
+        <A x={190} y={115} el="CH₃" size={15}/>
+        <Bond x1={212} y1={115} x2={237} y2={115}/>
+        <A x={252} y={115} el="C" size={17}/>
+        <Delta x={242} y={97} sign="+"/>
+        {/* C=O */}
+        <Bond x1={262} y1={108} x2={295} y2={95} dbl/>
+        <A x={308} y={88} el="O" size={17}/>
+        <Delta x={322} y={76} sign="−"/>
+        <LP x={322} y={86} angle={40} color="#b91c1c"/>
+        {/* C-Cl */}
+        <Bond x1={262} y1={122} x2={295} y2={135}/>
+        <A x={308} y={143} el="Cl" size={17}/>
+        <LP x={322} y={150} angle={80} color="#166534"/>
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "eas") {
+    // Draw benzene ring + NO2+
+    const cx=225, cy=115, r=55;
+    const pts = Array.from({length:6},(_,i)=>{
+      const a = (i*60-90)*Math.PI/180;
+      return [cx+r*Math.cos(a), cy+r*Math.sin(a)];
+    });
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* Benzene ring */}
+        {pts.map(([x,y],i)=>{
+          const [nx,ny]=pts[(i+1)%6];
+          return <line key={i} x1={x} y1={y} x2={nx} y2={ny} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>;
+        })}
+        {/* Alternating double bonds (Kekulé) */}
+        {[0,2,4].map(i=>{
+          const [x,y]=pts[i],[nx,ny]=pts[(i+1)%6];
+          const dx=ny-y, dy=x-nx, len=Math.sqrt(dx*dx+dy*dy)||1;
+          const ox=dx/len*5,oy=dy/len*5;
+          return <line key={`d${i}`} x1={x+ox} y1={y+oy} x2={nx+ox} y2={ny+oy} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>;
+        })}
+        {/* H on top carbon (attack site) */}
+        <A x={225} y={50} el="H" size={14} color="#64748b"/>
+        <Bond x1={225} y1={59} x2={225} y2={60}/>
+
+        {/* NO2+ electrophile */}
+        <A x={370} y={115} el="NO₂" size={16} color="#b91c1c"/>
+        <Charge x={400} y={102} val="+" color="#b91c1c"/>
+
+        {/* Arrow showing approach */}
+        <Bond x1={310} y1={115} x2={345} y2={115} dash color="#94a3b8" width={1.5}/>
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "elimination") {
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* OH- base */}
+        <A x={95} y={115} el="HO" size={16} color="#b91c1c"/>
+        <Charge x={118} y={103} val="−" color="#b91c1c"/>
+        <LP x={105} y={99} angle={0} color="#b91c1c"/>
+
+        {/* CH3-CH2-Br: β-C then α-C */}
+        {/* β-carbon (left) */}
+        <A x={210} y={115} el="C" size={17}/>
+        <text x={210} y={160} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"sans-serif"}}>β-C</text>
+        {/* H on beta carbon (the one being removed) */}
+        <A x={198} y={87} el="H" size={15} color="#64748b"/>
+        <Bond x1={205} y1={107} x2={200} y2={93}/>
+        <A x={183} y={138} el="H" size={14} color="#64748b"/>
+        <Bond x1={203} y1={121} x2={188} y2={135}/>
+
+        {/* C-C bond */}
+        <Bond x1={222} y1={115} x2={280} y2={115}/>
+
+        {/* α-carbon (right) */}
+        <A x={293} y={115} el="C" size={17}/>
+        <text x={293} y={160} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"sans-serif"}}>α-C</text>
+        <A x={310} y={87} el="H" size={14} color="#64748b"/>
+        <Bond x1={295} y1={107} x2={308} y2={93}/>
+        <A x={310} y={143} el="H" size={14} color="#64748b"/>
+        <Bond x1={295} y1={123} x2={307} y2={138}/>
+
+        {/* C-Br bond */}
+        <Bond x1={307} y1={115} x2={395} y2={115}/>
+        <A x={410} y={115} el="Br" size={17}/>
+        <LP x={424} y={104} angle={80} color="#9a3412"/>
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  if (mech.id === "frs") {
+    if (stepIdx === 0) {
+      // Initiation: Cl-Cl
+      return (
+        <MechSVGBase animKey={animKey}>
+          <text x={280} y={40} textAnchor="middle" style={{fontSize:"14px",fontFamily:"sans-serif",fill:"#d97706",fontWeight:700}}>UV light (hν)</text>
+          <text x={280} y={58} textAnchor="middle" style={{fontSize:"11px",fontFamily:"sans-serif",fill:"#64748b"}}>↓</text>
+          <A x={180} y={115} el="Cl" size={18}/>
+          <LP x={164} y={104} angle={150} color="#166534"/>
+          <LP x={166} y={126} angle={120} color="#166534"/>
+          <Bond x1={200} y1={115} x2={355} y2={115}/>
+          <A x={375} y={115} el="Cl" size={18}/>
+          <LP x={390} y={104} angle={30} color="#166534"/>
+          <LP x={392} y={126} angle={60} color="#166534"/>
+          {renderArrows()}
+        </MechSVGBase>
+      );
+    }
+    if (stepIdx === 1) {
+      // Propagation 1: Cl• + CH4
+      return (
+        <MechSVGBase animKey={animKey}>
+          <A x={95} y={115} el="Cl" size={18}/>
+          <text x={110} y={100} style={{fontSize:"14px",fill:"#166534",fontWeight:700}}>•</text>
+          <LP x={80} y={104} angle={150} color="#166534"/>
+
+          {/* CH4 */}
+          <A x={280} y={115} el="C" size={17}/>
+          <A x={280} y={83} el="H" size={15} color="#64748b"/><Bond x1={280} y1={107} x2={280} y2={90}/>
+          <A x={250} y={138} el="H" size={15} color="#64748b"/><Bond x1={272} y1={122} x2={255} y2={135}/>
+          <A x={310} y={138} el="H" size={15} color="#64748b"/><Bond x1={288} y1={122} x2={307} y2={135}/>
+          <A x={315} y={91} el="H" size={15} color="#64748b"/><Bond x1={285} y1={108} x2={308} y2={94}/>
+          {renderArrows()}
+        </MechSVGBase>
+      );
+    }
+    if (stepIdx === 2) {
+      // Propagation 2: •CH3 + Cl2
+      return (
+        <MechSVGBase animKey={animKey}>
+          {/* •CH3 */}
+          <A x={100} y={115} el="C" size={17}/>
+          <text x={118} y={100} style={{fontSize:"15px",fill:"#1a202c",fontWeight:700}}>•</text>
+          <A x={100} y={83} el="H" size={14} color="#64748b"/><Bond x1={100} y1={107} x2={100} y2={90}/>
+          <A x={74} y={138} el="H" size={14} color="#64748b"/><Bond x1={93} y1={122} x2={78} y2={135}/>
+          <A x={126} y={138} el="H" size={14} color="#64748b"/><Bond x1={107} y1={122} x2={122} y2={135}/>
+
+          {/* Cl2 */}
+          <A x={295} y={115} el="Cl" size={18}/>
+          <LP x={279} y={104} angle={150} color="#166534"/>
+          <Bond x1={315} y1={115} x2={375} y2={115}/>
+          <A x={390} y={115} el="Cl" size={18}/>
+          <LP x={405} y={104} angle={30} color="#166534"/>
+          <LP x={407} y={126} angle={60} color="#166534"/>
+          {renderArrows()}
+        </MechSVGBase>
+      );
+    }
+    // Termination (step 3)
+    return (
+      <MechSVGBase animKey={animKey}>
+        <text x={280} y={60} textAnchor="middle" style={{fontSize:"14px",fontFamily:"Georgia,serif",fill:"#1a202c",fontWeight:600}}>Termination: any two radicals combine</text>
+        <text x={280} y={90} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#64748b"}}>Cl• + Cl• → Cl₂</text>
+        <text x={280} y={115} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#64748b"}}>Cl• + •CH₃ → CH₃Cl</text>
+        <text x={280} y={140} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#64748b"}}>•CH₃ + •CH₃ → C₂H₆</text>
+        <text x={280} y={170} textAnchor="middle" style={{fontSize:"11px",fontFamily:"sans-serif",fill:"#94a3b8"}}>No curly arrows — radicals combine directly</text>
+      </MechSVGBase>
+    );
+  }
+
+  return <MechSVGBase animKey={animKey}><text x={280} y={110} textAnchor="middle" fill="#94a3b8">Diagram coming soon</text></MechSVGBase>;
+}
+
+// Still version: renders all arrows simultaneously for exam practice
+// Uses MechSVG with stillMode=true which shows all arrows red, no animation
+function MechSVGStill({ mech }) {
+  return <MechSVG mech={mech} stepIdx={mech.steps.length - 1} animKey={999} stillMode={true}/>;
+}
+
 export default function App() {
   const [screen, setScreen] = useState("board");
   const [board, setBoard] = useState(null);
@@ -3012,6 +3732,10 @@ export default function App() {
   const [calcScore, setCalcScore] = useState({}); // { topicId: { correct, attempted } }
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
+  const [mechId, setMechId] = useState(null);
+  const [mechStep, setMechStep] = useState(0);
+  const [mechAnimKey, setMechAnimKey] = useState(0);
+  const [mechStill, setMechStill] = useState(false);
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
@@ -3454,16 +4178,17 @@ export default function App() {
         </div>
       </div>
       {/* Tab bar */}
-      <div style={{ display: "flex", gap: "0", borderBottom: "2px solid #e0e8f0", margin: "0 16px", marginBottom: "0" }}>
-        {["flashcards", "synth", "pathways", "calc", "extended"].map(tab => (
-          <button key={tab} onClick={() => { setTopicsTab(tab); setSelectedRxn(null); if (tab === "pathways") setSelectedFrom(null); if (tab === "synth") setSelectedFrom(null); }} style={{
-            padding: "10px 10px", border: "none", background: "none",
+      <div style={{ display: "flex", gap: "0", borderBottom: "2px solid #e0e8f0", margin: "0 16px", marginBottom: "0", overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        <style>{`.topicTabBar::-webkit-scrollbar{display:none}`}</style>
+        {["flashcards", "synth", "pathways", "calc", "extended", "mechanisms"].map(tab => (
+          <button key={tab} onClick={() => { setTopicsTab(tab); setSelectedRxn(null); if (tab === "pathways") setSelectedFrom(null); if (tab === "synth") setSelectedFrom(null); if (tab === "mechanisms") { setMechId(null); setMechStep(0); } }} style={{
+            padding: "10px 9px", border: "none", background: "none",
             fontFamily: "inherit", fontSize: "12px", fontWeight: 700, cursor: "pointer",
-            color: topicsTab === tab ? (tab === "extended" ? "#7c3aed" : tab === "pathways" ? "#059669" : "#29ABE2") : "#7a95b0",
-            borderBottom: topicsTab === tab ? `3px solid ${tab === "extended" ? "#7c3aed" : tab === "pathways" ? "#059669" : "#29ABE2"}` : "3px solid transparent",
-            marginBottom: "-2px", transition: "color 0.15s", whiteSpace: "nowrap",
+            color: topicsTab === tab ? (tab === "extended" ? "#7c3aed" : tab === "pathways" ? "#059669" : tab === "mechanisms" ? "#d97706" : "#29ABE2") : "#7a95b0",
+            borderBottom: topicsTab === tab ? `3px solid ${tab === "extended" ? "#7c3aed" : tab === "pathways" ? "#059669" : tab === "mechanisms" ? "#d97706" : "#29ABE2"}` : "3px solid transparent",
+            marginBottom: "-2px", transition: "color 0.15s", whiteSpace: "nowrap", flexShrink: 0,
           }}>
-            {tab === "flashcards" ? "Cards" : tab === "synth" ? "Synthesis" : tab === "pathways" ? "Pathways" : tab === "calc" ? "Calcs" : "6-Mark ✍"}
+            {tab === "flashcards" ? "Cards" : tab === "synth" ? "Synth" : tab === "pathways" ? "Paths" : tab === "calc" ? "Calcs" : tab === "extended" ? "6-Mark" : "Mechs ⚗"}
           </button>
         ))}
       </div>
@@ -4515,6 +5240,194 @@ export default function App() {
           })()}
         </div>
       )}
+
+      {/* ── MECHANISMS TAB ────────────────────────────────── */}
+      {topicsTab === "mechanisms" && (() => {
+        const activeMech = mechId ? MECHS.find(m => m.id === mechId) : null;
+
+        // ── List view ──
+        if (!activeMech) return (
+          <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
+            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}`}</style>
+            <p style={{ color:"#4a6080", fontSize:"14px", marginBottom:"16px", lineHeight:1.5 }}>
+              Step-by-step animated curly-arrow mechanisms. Each arrow is explained. Tap a mechanism to start.
+            </p>
+            {Object.entries(
+              MECHS.reduce((acc,m)=>{ (acc[m.category]=acc[m.category]||[]).push(m); return acc; }, {})
+            ).map(([cat, list]) => (
+              <div key={cat} style={{ marginBottom:"18px" }}>
+                <div style={{ fontSize:"11px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"8px" }}>{cat}</div>
+                <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+                  {list.map(m => (
+                    <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechAnimKey(k=>k+1); setMechStill(false); }}
+                      style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
+                        padding:"14px 16px", textAlign:"left", cursor:"pointer", fontFamily:"inherit",
+                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                        <div style={{ width:"10px", height:"10px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
+                        <div>
+                          <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45", marginBottom:"2px" }}>{m.title}</div>
+                          <div style={{ fontSize:"12px", color:"#64748b", fontFamily:"Georgia,serif" }}>{m.subtitle}</div>
+                        </div>
+                        <div style={{ marginLeft:"auto", display:"flex", gap:"4px" }}>
+                          {m.specs.map(s=><span key={s} style={{ fontSize:"10px", fontWeight:700, background:`${m.color}20`, color:m.color, padding:"2px 6px", borderRadius:"6px" }}>{s.replace("_"," ")}</span>)}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+
+        // ── Mechanism viewer ──
+        const totalSteps = activeMech.steps.length;
+        const currentStepData = activeMech.steps[mechStep];
+        const arrowLabels = (currentStepData.arrows||[]).map(id => activeMech.arrowPaths[id]?.label).filter(Boolean);
+        const isFirst = mechStep === 0;
+        const isLast = mechStep === totalSteps - 1;
+
+        const goNext = () => { setMechStep(s=>s+1); setMechAnimKey(k=>k+1); };
+        const goPrev = () => { setMechStep(s=>Math.max(0,s-1)); setMechAnimKey(k=>k+1); };
+
+        return (
+          <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
+            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}`}</style>
+
+            {/* Header */}
+            <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
+              <button onClick={()=>{ setMechId(null); setMechStep(0); }}
+                style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
+                  color:"#29ABE2", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
+                ← Back
+              </button>
+              <div>
+                <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45" }}>{activeMech.title}</div>
+                <div style={{ fontSize:"11px", color:"#64748b", fontFamily:"Georgia,serif" }}>{activeMech.subtitle}</div>
+              </div>
+            </div>
+
+            {/* Overview banner */}
+            <div style={{ margin:"12px 16px 0", padding:"12px 14px", background:`${activeMech.color}12`,
+              borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"12px",
+              color:"#1a2d45", lineHeight:1.6 }}>
+              {activeMech.description}
+            </div>
+
+            {/* Toggle animated / still */}
+            <div style={{ display:"flex", gap:"8px", padding:"10px 16px 4px" }}>
+              {["animated","still"].map(mode => (
+                <button key={mode} onClick={()=>setMechStill(mode==="still")}
+                  style={{ padding:"6px 16px", borderRadius:"20px", border:"none", cursor:"pointer",
+                    fontFamily:"inherit", fontSize:"12px", fontWeight:700,
+                    background: (mechStill ? mode==="still" : mode==="animated") ? activeMech.color : "#f0f4f8",
+                    color: (mechStill ? mode==="still" : mode==="animated") ? "#fff" : "#4a6080" }}>
+                  {mode==="animated" ? "▶ Animated" : "📄 Still (Exam)"}
+                </button>
+              ))}
+            </div>
+
+            {!mechStill && <>
+              {/* Step indicator */}
+              <div style={{ padding:"8px 16px 4px", display:"flex", alignItems:"center", gap:"10px" }}>
+                <div style={{ fontSize:"12px", color:"#94a3b8", fontWeight:600 }}>
+                  Step {mechStep + 1} of {totalSteps}
+                </div>
+                <div style={{ flex:1, height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
+                  <div style={{ height:"100%", width:`${((mechStep+1)/totalSteps)*100}%`,
+                    background:activeMech.color, borderRadius:"2px", transition:"width 0.3s ease" }}/>
+                </div>
+              </div>
+
+              {/* Step title */}
+              <div style={{ padding:"4px 16px 8px" }}>
+                <div style={{ fontSize:"15px", fontWeight:700, color:"#1a2d45" }}>{currentStepData.title}</div>
+              </div>
+
+              {/* SVG diagram */}
+              <div style={{ margin:"0 16px", background:"#f8fafc", border:"1.5px solid #e2e8f0",
+                borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
+                <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey}/>
+              </div>
+
+              {/* Arrow legend for current step */}
+              {arrowLabels.length > 0 && (
+                <div style={{ margin:"10px 16px 0", display:"flex", flexDirection:"column", gap:"4px" }}>
+                  {arrowLabels.map((lbl,i) => (
+                    <div key={i} style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"12px" }}>
+                      <div style={{ width:"28px", height:"2px", background:"#dc2626", borderRadius:"1px", flexShrink:0 }}/>
+                      <span style={{ color:"#1a2d45", fontFamily:"Georgia,serif" }}>{lbl}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Explanation */}
+              <div style={{ margin:"10px 16px", padding:"14px", background:"#ffffff",
+                border:"1.5px solid #e2e8f0", borderRadius:"14px" }}>
+                <div style={{ fontSize:"11px", fontWeight:700, color:activeMech.color, textTransform:"uppercase",
+                  letterSpacing:"0.8px", marginBottom:"6px" }}>Why this arrow?</div>
+                <p style={{ margin:0, fontSize:"13px", lineHeight:1.75, color:"#1a2d45" }}>
+                  {currentStepData.explanation}
+                </p>
+              </div>
+
+              {/* Prev / Next */}
+              <div style={{ padding:"12px 16px 20px", display:"flex", gap:"10px" }}>
+                <button onClick={goPrev} disabled={isFirst}
+                  style={{ flex:1, padding:"13px", borderRadius:"12px", border:"none", cursor: isFirst?"default":"pointer",
+                    background: isFirst?"#e8edf3":"#f0f4f8", color: isFirst?"#b0c4d4":"#4a6080",
+                    fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
+                  ← Previous
+                </button>
+                {!isLast ? (
+                  <button onClick={goNext}
+                    style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
+                      background:activeMech.color, color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit",
+                      boxShadow:`0 4px 14px ${activeMech.color}50` }}>
+                    Next Step →
+                  </button>
+                ) : (
+                  <button onClick={()=>{ setMechId(null); setMechStep(0); }}
+                    style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
+                      background:"#1a2d45", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
+                    ✓ Done — Back to List
+                  </button>
+                )}
+              </div>
+            </>}
+
+            {/* STILL / EXAM version */}
+            {mechStill && (
+              <div style={{ padding:"12px 16px 24px" }}>
+                <div style={{ fontSize:"13px", color:"#64748b", marginBottom:"10px", lineHeight:1.6 }}>
+                  This is what you need to draw in an exam. All curly arrows shown at once with labels.
+                </div>
+                {/* Show all steps' arrows simultaneously, all red */}
+                <div style={{ background:"#f8fafc", border:"1.5px solid #e2e8f0", borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
+                  <MechSVGStill mech={activeMech}/>
+                </div>
+                {/* Step-by-step key */}
+                <div style={{ marginTop:"14px", display:"flex", flexDirection:"column", gap:"10px" }}>
+                  {activeMech.steps.filter(s=>(s.arrows||[]).length>0).map((s,i) => (
+                    <div key={i} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:"12px", padding:"12px" }}>
+                      <div style={{ fontSize:"12px", fontWeight:700, color:activeMech.color, marginBottom:"4px" }}>{s.title}</div>
+                      {(s.arrows||[]).map(id => {
+                        const ap = activeMech.arrowPaths[id];
+                        return ap ? <div key={id} style={{ fontSize:"12px", color:"#1a2d45", lineHeight:1.6, display:"flex", gap:"6px", alignItems:"flex-start" }}>
+                          <span style={{ color:"#dc2626", fontWeight:700, marginTop:"1px" }}>↷</span>
+                          <span style={{ fontFamily:"Georgia,serif" }}>{ap.label}</span>
+                        </div> : null;
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 
