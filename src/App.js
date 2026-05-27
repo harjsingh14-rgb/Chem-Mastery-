@@ -4467,8 +4467,6 @@ export default function App() {
             >
               {/* Fancy thumbnail */}
               <div style={{ height: "170px", background: b.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "22px 24px", position: "relative", overflow: "hidden" }}>
-                {/* Big faded background text */}
-                <div style={{ position: "absolute", top: "-10px", right: "-8px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "90px", color: "rgba(255,255,255,0.07)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{b.label}</div>
                 {/* Chemistry art — unique per board */}
                 <ChemArt id={b.id} />
                 {/* Label */}
