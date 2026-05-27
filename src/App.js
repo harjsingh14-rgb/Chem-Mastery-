@@ -4412,20 +4412,19 @@ export default function App() {
         scrollbarWidth: "none", msOverflowStyle: "none", flexShrink: 0,
       }}>
         {[
-          { id: "flashcards", icon: "🃏", label: "Cards",       color: "#29ABE2" },
-          { id: "synth",      icon: "⚗️",  label: "Synthesis",  color: "#29ABE2" },
-          { id: "pathways",   icon: "🗺️",  label: "Pathways",   color: "#059669" },
-          { id: "calc",       icon: "🔢",  label: "Calcs",      color: "#29ABE2" },
-          { id: "extended",   icon: "✍️",  label: "6-Mark",     color: "#7c3aed" },
-          { id: "mechanisms", icon: "⚡",  label: "Mechanisms", color: "#d97706" },
-        ].map(({ id, icon, label, color }) => {
+          { id: "flashcards", label: "Cards",      color: "#29ABE2" },
+          { id: "synth",      label: "Synthesis",  color: "#29ABE2" },
+          { id: "pathways",   label: "Pathways",   color: "#059669" },
+          { id: "calc",       label: "Calcs",      color: "#29ABE2" },
+          { id: "extended",   label: "6-Mark",     color: "#7c3aed" },
+          { id: "mechanisms", label: "Mechanisms", color: "#d97706" },
+        ].map(({ id, label, color }) => {
           const active = topicsTab === id;
           return (
             <button key={id}
               onClick={() => { setTopicsTab(id); setSelectedRxn(null); if (id === "pathways") setSelectedFrom(null); if (id === "synth") setSelectedFrom(null); if (id === "mechanisms") { setMechId(null); setMechStep(0); } }}
               style={{
-                display: "flex", alignItems: "center", gap: "5px",
-                padding: "8px 14px", borderRadius: "22px", border: "none",
+                padding: "8px 16px", borderRadius: "22px", border: "none",
                 cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
                 fontWeight: 700, flexShrink: 0, whiteSpace: "nowrap",
                 transition: "all 0.15s ease",
@@ -4433,8 +4432,7 @@ export default function App() {
                 color: active ? "#ffffff" : "#4a6080",
                 boxShadow: active ? `0 2px 10px ${color}45` : "0 1px 3px rgba(0,0,0,0.08)",
               }}>
-              <span style={{ fontSize: "14px", lineHeight: 1 }}>{icon}</span>
-              <span>{label}</span>
+              {label}
             </button>
           );
         })}
