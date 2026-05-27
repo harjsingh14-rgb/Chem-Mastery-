@@ -52,7 +52,7 @@ const SETS = {
   "3.1.3": { title: "Bonding", cards: [
     {q:"Describe ionic bonding and the structure of an ionic compound.", a:"Electron transfer → oppositely charged ions attract electrostatically. Giant ionic lattice. High mp, brittle, conducts when molten or dissolved."},
     {q:"Describe covalent bonding.", a:"Shared pair of electrons; both nuclei attracted to the shared pair. Can be single, double, or triple."},
-    {q:"What is a dative (coordinate) covalent bond?", a:"A covalent bond where both electrons come from one atom. Identical to a normal covalent bond once formed. Example: NH₄⁺ — N lone pair donated to H⁺."},
+    {q:"What is a dative (coordinate) covalent bond?", a:"A covalent bond where both electrons come from one atom. Identical to a normal covalent bond once formed. Example: NH₄⁺ - N lone pair donated to H⁺."},
     {q:"Describe metallic bonding.", a:"Positive ions in a lattice; delocalised electrons. Electrostatic attraction → high conductivity, malleability, ductility."},
     {q:"Define electronegativity and describe its periodic trends.", a:"Ability of a bonded atom to attract the shared electron pair.\nIncreases across a period; decreases down a group. F most electronegative (4.0)."},
     {q:"What makes a bond polar, and when does a polar molecule result?", a:"A bond is polar when atoms have different electronegativities → δ+/δ−. A molecule is polar if bond dipoles do not cancel.\nPolar: H₂O (bent). Non-polar: CO₂ (linear, dipoles cancel)."},
@@ -74,7 +74,7 @@ const SETS = {
     {q:"What is standard enthalpy of neutralisation, and what is the typical value for a strong acid and strong base?", a:"Enthalpy change when 1 mol H₂O forms from acid + base. Strong/strong ≈ −57 kJ mol⁻¹. Net equation: H⁺(aq) + OH⁻(aq) → H₂O(l)."},
     {q:"State Hess's law and explain its basis.", a:"Total enthalpy change is independent of pathway (same initial and final states). Consequence of conservation of energy."},
     {q:"How do you apply Hess's law using standard enthalpies of formation?", a:"ΔHr° = Σ ΔHf°(products) − Σ ΔHf°(reactants)"},
-    {q:"How do you apply Hess's law using standard enthalpies of combustion?", a:"ΔHr° = Σ ΔHc°(reactants) − Σ ΔHc°(products)\n(Note: reactants minus products — opposite to formation.)"},
+    {q:"How do you apply Hess's law using standard enthalpies of combustion?", a:"ΔHr° = Σ ΔHc°(reactants) − Σ ΔHc°(products)\n(Note: reactants minus products - opposite to formation.)"},
     {q:"What is the calorimetry equation and what do each symbol represent?", a:"q = mcΔT\nq = heat (J), m = mass of solution (g), c = 4.18 J g⁻¹ K⁻¹, ΔT = temperature change (K or °C)"},
     {q:"How is molar enthalpy change calculated from a calorimetry experiment?", a:"1. q = mcΔT\n2. n = moles of substance\n3. ΔH = −q/n (÷1000 for kJ mol⁻¹; negative sign for exothermic)"},
     {q:"Why is the experimental enthalpy of combustion always less exothermic than the data book value?", a:"Heat lost to surroundings; incomplete combustion; not at standard conditions."},
@@ -104,7 +104,7 @@ const SETS = {
     {q:"How does increasing the concentration of a reactant affect equilibrium position?", a:"Shifts right (towards products) to reduce the added reactant."},
     {q:"How does changing pressure affect a gaseous equilibrium?", a:"Increasing pressure → shifts towards fewer moles of gas.\nDecreasing pressure → shifts towards more moles of gas."},
     {q:"How does temperature affect equilibrium position?", a:"Increasing temperature → shifts in the endothermic direction.\nDecreasing temperature → shifts in the exothermic direction."},
-    {q:"What effect does a catalyst have on the equilibrium position?", a:"No effect on position or yield. Speeds up both directions equally — equilibrium reached faster."},
+    {q:"What effect does a catalyst have on the equilibrium position?", a:"No effect on position or yield. Speeds up both directions equally - equilibrium reached faster."},
     {q:"Write the Kc expression for aA + bB ⇌ cC + dD.", a:"Kc = [C]ᶜ[D]ᵈ / ([A]ᵃ[B]ᵇ)\nOnly temperature changes Kc."},
     {q:"What does the magnitude of Kc indicate about the position of equilibrium?", a:"Kc >> 1: products predominate.\nKc << 1: reactants predominate.\nKc ≈ 1: significant amounts of both."},
     {q:"What are the conditions and compromise rationale for the Haber process?", a:"N₂(g) + 3H₂(g) ⇌ 2NH₃(g)  ΔH = −92 kJ mol⁻¹\n~450°C (compromise: lower T gives better yield but too slow), 200 atm, Fe catalyst.\nHigher P increases yield but costly/dangerous."},
@@ -130,7 +130,7 @@ const SETS = {
     {q:"What two factors determine the magnitude of lattice enthalpy?", a:"1. Ionic charge: higher charge → larger lattice enthalpy.\n2. Ionic radius: smaller ions → larger lattice enthalpy (ions closer together)."},
     {q:"List all the steps included in a Born-Haber cycle for NaCl.", a:"1. Na(s) → Na(g)  (atomisation)\n2. Na(g) → Na⁺(g) + e⁻  (1st IE)\n3. ½Cl₂(g) → Cl(g)  (atomisation)\n4. Cl(g) + e⁻ → Cl⁻(g)  (1st EA)\n5. Na⁺(g) + Cl⁻(g) → NaCl(s)  (lattice formation)\nAll steps link via Hess's law to ΔHf°(NaCl)."},
     {q:"Define enthalpy of atomisation.", a:"Enthalpy change when 1 mol gaseous atoms forms from element in its standard state. Always endothermic (+). E.g. ½Cl₂(g) → Cl(g)."},
-    {q:"Define first electron affinity and explain why first electron affinity is usually exothermic but second is endothermic.", a:"1st EA: Cl(g) + e⁻ → Cl⁻(g); exothermic — electron attracted to nucleus.\n2nd EA (e.g. O⁻ + e⁻ → O²⁻): endothermic — electron repelled by negative ion."},
+    {q:"Define first electron affinity and explain why first electron affinity is usually exothermic but second is endothermic.", a:"1st EA: Cl(g) + e⁻ → Cl⁻(g); exothermic - electron attracted to nucleus.\n2nd EA (e.g. O⁻ + e⁻ → O²⁻): endothermic - electron repelled by negative ion."},
     {q:"When does the experimental (Born-Haber) lattice enthalpy differ from the theoretical (ionic model) value, and what does this mean?", a:"If experimental (Born-Haber) lattice enthalpy is more exothermic than theoretical, the compound has covalent character. Greater with higher charge and smaller cation (greater polarising power)."},
     {q:"Define enthalpy of hydration.", a:"Enthalpy change when 1 mol gaseous ions → aqueous ions. Always exothermic (−)."},
     {q:"How is enthalpy of solution related to lattice enthalpy and hydration enthalpies?", a:"ΔHsol = ΔHlatt(dissociation) + ΔHhyd(cation) + ΔHhyd(anion)"},
@@ -176,7 +176,7 @@ const SETS = {
     {q:"Describe the standard hydrogen electrode.", a:"Pt electrode in 1.00 mol dm⁻³ H⁺(aq), H₂ at 100 kPa, 298 K. 2H⁺(aq) + 2e⁻ ⇌ H₂(g). E° = 0.00 V by definition."},
     {q:"How is the EMF of an electrochemical cell calculated?", a:"E°cell = E°(cathode) − E°(anode)\nCathode = more positive (reduction); anode = more negative (oxidation)."},
     {q:"How is the feasibility of a reaction predicted from electrode potentials?", a:"Feasible if E°cell > 0."},
-    {q:"What is the purpose of the salt bridge in an electrochemical cell?", a:"Allows ions to flow between half-cells to maintain electrical neutrality. KNO₃ used — doesn't interfere with electrode reactions."},
+    {q:"What is the purpose of the salt bridge in an electrochemical cell?", a:"Allows ions to flow between half-cells to maintain electrical neutrality. KNO₃ used - doesn't interfere with electrode reactions."},
     {q:"Write the conventional cell notation for a Zn/Zn²⁺ || Cu²⁺/Cu cell.", a:"Zn(s) | Zn²⁺(aq) || Cu²⁺(aq) | Cu(s)\n| = phase boundary; || = salt bridge. Anode left, cathode right."},
     {q:"What does a more positive E° value indicate about a species?", a:"Greater tendency to be reduced → stronger oxidising agent. More negative E° → stronger reducing agent."},
     {q:"Give two limitations when predicting feasibility from electrode potentials.", a:"1. Non-standard conditions alter E values.\n2. High Ea can make a feasible reaction very slow (kinetic limitation)."},
@@ -217,17 +217,17 @@ const SETS = {
     {q:"Give the formula and acid/base nature of the oxides of Na, Mg, Al, Si, P, S.", a:"Na₂O: basic\nMgO: basic\nAl₂O₃: amphoteric\nSiO₂: weakly acidic\nP₄O₁₀: acidic → H₃PO₄\nSO₂: acidic → H₂SO₃\nSO₃: acidic → H₂SO₄"},
     {q:"What is the structure of white phosphorus (P₄) and how does it affect its properties?", a:"P₄ molecules: tetrahedral, each P bonded to 3 others (60° bond angles, strained). Simple molecular → low mp, soluble in non-polar solvents, very reactive."},
     {q:"Explain why sodium oxide reacts with water to form a strongly alkaline solution while SiO₂ does not.", a:"Na₂O: ionic; O²⁻ + H₂O → 2OH⁻ → strongly alkaline.\nSiO₂: giant covalent; strong Si−O bonds; insoluble in water at room T."},
-    {q:"What happens when Period 3 chlorides (AlCl₃, SiCl₄) are added to water — describe observations.", a:"AlCl₃: vigorous, white fumes of HCl, acidic solution.\nSiCl₄: violent hydrolysis, steamy HCl fumes, white SiO₂ solid.\nContrast: NaCl dissolves neutrally; MgCl₂ gives slightly acidic solution."},
+    {q:"What happens when Period 3 chlorides (AlCl₃, SiCl₄) are added to water - describe observations.", a:"AlCl₃: vigorous, white fumes of HCl, acidic solution.\nSiCl₄: violent hydrolysis, steamy HCl fumes, white SiO₂ solid.\nContrast: NaCl dissolves neutrally; MgCl₂ gives slightly acidic solution."},
   ]},
 
-  "ocr_3.1.2": { title: "Group 2 — The Alkaline Earth Metals", cards: [
+  "ocr_3.1.2": { title: "Group 2 - The Alkaline Earth Metals", cards: [
     {q:"State the electronic configurations of Group 2 elements and how they form ions.", a:"Be [He]2s²; Mg [Ne]3s²; Ca [Ar]4s²; Sr [Kr]5s²; Ba [Xe]6s².\nAll lose 2 s electrons → M²⁺. Reactivity increases down group."},
     {q:"Describe the trend in atomic/ionic radius down Group 2.", a:"Increases Be → Ba. Each extra shell adds shielding and distance → reduced effective nuclear charge."},
     {q:"Describe the trend in first ionisation energy down Group 2.", a:"Decreases Be → Ba. Larger radius, more shielding → outer electrons less tightly held."},
     {q:"Why does reactivity of Group 2 metals increase down the group?", a:"Larger radius, more shielding → lower IE₁ and IE₂ → 2 electrons lost more easily."},
     {q:"Describe the reactions of Group 2 metals with water.", a:"Be: no reaction. Mg: very slow with cold water; steam: MgO + H₂.\nCa: vigorous, Ca(OH)₂ + H₂. Sr/Ba: increasingly vigorous, M(OH)₂ + H₂."},
     {q:"Describe the reactions of Group 2 metals with oxygen.", a:"All: 2M + O₂ → 2MO. Mg burns with intense white flame. Ba can also form BaO₂ (peroxide) with excess O₂."},
-    {q:"Describe the reactions of Group 2 metals with dilute acids.", a:"M + 2HCl → MCl₂ + H₂. With H₂SO₄: slows for Ca/Sr/Ba — insoluble MSO₄ coats the metal."},
+    {q:"Describe the reactions of Group 2 metals with dilute acids.", a:"M + 2HCl → MCl₂ + H₂. With H₂SO₄: slows for Ca/Sr/Ba - insoluble MSO₄ coats the metal."},
     {q:"Describe the trend in solubility of Group 2 hydroxides down the group.", a:"Increases down the group: Be(OH)₂ insoluble → Ba(OH)₂ soluble. pH increases down the group."},
     {q:"Describe the trend in solubility of Group 2 sulfates down the group.", a:"Decreases: MgSO₄ very soluble → BaSO₄ essentially insoluble. Opposite trend to hydroxides."},
     {q:"What is the thermal stability trend in Group 2 carbonates and explain it.", a:"Increases down group. Smaller cations polarise CO₃²⁻ more → C−O weakened → lower decomposition T. MgCO₃ least stable; BaCO₃ most stable."},
@@ -265,7 +265,7 @@ const SETS = {
     {q:"What colour does Ba²⁺ produce in a flame test?", a:"Apple green."},
     {q:"What colour does Cu²⁺ produce in a flame test?", a:"Blue-green/turquoise."},
     {q:"Describe the NaOH test for transition metal cations (Cu²⁺, Fe²⁺, Fe³⁺).", a:"Cu²⁺: blue ppt Cu(OH)₂, insoluble in excess.\nFe²⁺: green ppt Fe(OH)₂, darkens to brown in air.\nFe³⁺: red-brown ppt Fe(OH)₃, insoluble in excess."},
-    {q:"Describe the NaOH test for Ca²⁺, Mg²⁺, Al³⁺, and Zn²⁺ — and how to distinguish them.", a:"All give white ppt. In excess NaOH:\nAl³⁺ and Zn²⁺: dissolve (amphoteric) → [Al(OH)₄]⁻ / [Zn(OH)₄]²⁻.\nCa²⁺ and Mg²⁺: do not dissolve."},
+    {q:"Describe the NaOH test for Ca²⁺, Mg²⁺, Al³⁺, and Zn²⁺ - and how to distinguish them.", a:"All give white ppt. In excess NaOH:\nAl³⁺ and Zn²⁺: dissolve (amphoteric) → [Al(OH)₄]⁻ / [Zn(OH)₄]²⁻.\nCa²⁺ and Mg²⁺: do not dissolve."},
     {q:"How do you test for the NH₄⁺ ion?", a:"Add NaOH(aq) and warm: NH₄⁺ + OH⁻ → NH₃ + H₂O.\nDamp red litmus → turns blue. Pungent smell."},
     {q:"How do you test for carbonate ions (CO₃²⁻)?", a:"Add dilute HCl → effervescence (CO₂).\nCO₂ turns limewater milky."},
     {q:"How do you test for sulfate ions (SO₄²⁻)?", a:"Acidify with dilute HCl, add BaCl₂(aq) → white ppt BaSO₄ (insoluble in HCl)."},
@@ -461,8 +461,8 @@ const SETS = {
     {q:"How does bond strength of C–X vary down the group and what is its effect on reactivity?", a:"C–F > C–Cl > C–Br > C–I. Weaker bond → more easily broken → reactivity increases F → I."},
     {q:"Describe SN2 nucleophilic substitution (primary halogenoalkanes).", a:"One-step concerted. Nucleophile attacks Cδ+ from back (180° to leaving group). Bond forms and C–X breaks simultaneously → inversion of configuration (Walden inversion)."},
     {q:"Describe SN1 nucleophilic substitution (tertiary halogenoalkanes).", a:"Two steps. Step 1: C–X breaks → planar carbocation. Step 2: nucleophile attacks from either face → racemic mixture."},
-    {q:"How are halogenoalkanes hydrolysed and how is the rate compared for C–Cl, C–Br, and C–I?", a:"Warm with NaOH(aq); OH⁻ replaces X → alcohol. Rate: C–I > C–Br > C–Cl. Test: AgNO₃/ethanol — yellow AgI ppt fastest."},
-    {q:"How is a nitrile made from a halogenoalkane, and what is the significance of this reaction?", a:"RX + KCN (ethanol/water) → RCN + KX. CN⁻ is nucleophile. Chain extended by one C — useful in synthesis. Nitrile can be hydrolysed → carboxylic acid or reduced → amine."},
+    {q:"How are halogenoalkanes hydrolysed and how is the rate compared for C–Cl, C–Br, and C–I?", a:"Warm with NaOH(aq); OH⁻ replaces X → alcohol. Rate: C–I > C–Br > C–Cl. Test: AgNO₃/ethanol - yellow AgI ppt fastest."},
+    {q:"How is a nitrile made from a halogenoalkane, and what is the significance of this reaction?", a:"RX + KCN (ethanol/water) → RCN + KX. CN⁻ is nucleophile. Chain extended by one C - useful in synthesis. Nitrile can be hydrolysed → carboxylic acid or reduced → amine."},
     {q:"How is a primary amine made from a halogenoalkane?", a:"RX + excess NH₃ (sealed tube/ethanol) → RNH₂ + HX. Excess NH₃ minimises secondary/tertiary amine formation."},
     {q:"What happens when a halogenoalkane is treated with KOH in ethanol (not aqueous) and what product forms?", a:"Elimination: KOH/ethanol removes H from adjacent C → alkene + HX.\nEthanolic KOH → elimination; aqueous KOH → substitution."},
     {q:"What are CFCs and why are they harmful?", a:"Chlorofluorocarbons (C, Cl, F only). UV breaks C–Cl → Cl• radicals in stratosphere.\nCl• + O₃ → ClO• + O₂; ClO• + O₃ → 2O₂ + Cl•. One Cl• destroys thousands of O₃ molecules."},
@@ -599,7 +599,7 @@ const SETS = {
     {q:"What information do IR and MS data give you when planning a synthesis or confirming a product?", a:"MS: M⁺ peak = Mr; fragmentation = structural clues.\nIR: identifies functional groups. Compare starting material and product IR to confirm transformation (e.g. loss of O–H peak, gain of C=O → oxidation of alcohol)."},
   ]},
     "3.3.15": { title: "NMR Spectroscopy", cards: [
-    {q:"What is the physical basis of NMR spectroscopy?", a:"Nuclei with spin (¹H, ¹³C) align in an external field. RF radiation flips spins between energy states, absorbing energy at characteristic frequencies — this resonance is detected."},
+    {q:"What is the physical basis of NMR spectroscopy?", a:"Nuclei with spin (¹H, ¹³C) align in an external field. RF radiation flips spins between energy states, absorbing energy at characteristic frequencies - this resonance is detected."},
     {q:"What is chemical shift (δ) and why is TMS used as the reference standard?", a:"δ (ppm): resonance position relative to TMS (δ = 0). TMS: all 12 H equivalent (one peak); inert; low bp; peak away from organic signals."},
     {q:"How does ¹³C NMR differ from ¹H NMR in the information it provides?", a:"¹³C: each peak = distinct C environment; no splitting; peak height not proportional to number of C.\n¹H: integration = relative number of H; splitting observed; shift identifies environment."},
     {q:"What is the n+1 rule (spin-spin splitting)?", a:"n adjacent H → n+1 peaks. 0 adj H = singlet; 1 = doublet; 2 = triplet; 3 = quartet."},
@@ -638,21 +638,21 @@ const SETS = {
     {q: "Why should the base of the calorimeter be close to the flame but not touching it?", a: "Maximises heat transfer; avoids soot deposits that reduce conduction."},
     {q: "What safety precautions are needed when burning flammable liquids?", a: "Cap on spirit burner when not lit. Keep away from flames. Well-ventilated area. Do not overfill."},
     {q: "What is soot formation and why is it a problem in this practical?", a: "Incomplete combustion deposits carbon on the can, reducing heat transfer to the water."},
-    {q: "Why is a copper or aluminium can preferred over glass as the calorimeter?", a: "Metals are good heat conductors — transfer heat to water more efficiently than glass."},
+    {q: "Why is a copper or aluminium can preferred over glass as the calorimeter?", a: "Metals are good heat conductors - transfer heat to water more efficiently than glass."},
     {q: "How does the mass of water in the calorimeter affect the temperature rise?", a: "Larger mass → smaller ΔT (less precise). Smaller mass → larger, more measurable ΔT."},
     {q: "What is the specific heat capacity of water and what are its units?", a: "c = 4.18 J g⁻¹ K⁻¹"},
-    {q: "What does it mean for combustion to be incomplete, and how does it affect the result?", a: "CO or soot formed instead of CO₂ — less energy released, so measured ΔcH is less exothermic."},
+    {q: "What does it mean for combustion to be incomplete, and how does it affect the result?", a: "CO or soot formed instead of CO₂ - less energy released, so measured ΔcH is less exothermic."},
     {q: "How would you improve the accuracy of the enthalpy of combustion experiment?", a: "Use a bomb calorimeter. Ensure excess O₂. Use thermometer to 0.1°C. Repeat and average."}
   ]},
 
   "RP1b": { title: "Measurement of Enthalpy of Reaction", cards: [
-    {q: "What type of calorimeter is used to measure enthalpy changes in solution?", a: "Polystyrene cup — good insulation, minimises heat loss."},
+    {q: "What type of calorimeter is used to measure enthalpy changes in solution?", a: "Polystyrene cup - good insulation, minimises heat loss."},
     {q: "What reactions can be studied using a polystyrene cup calorimeter?", a: "Neutralisation (acid + base), displacement (e.g. Zn + CuSO₄), dissolution."},
     {q: "Describe the method for measuring enthalpy of neutralisation using a polystyrene cup.", a: "1. Pipette 25 cm³ alkali into cup. Record temperature every minute for 3 min.\n2. Add 25 cm³ acid at minute 4. Stir; record every minute for minutes 5–10.\n3. Extrapolate cooling curve back to minute 4 to find maximum ΔT."},
     {q: "Why is the temperature recorded before the reaction as well as after?", a: "Establishes a baseline; allows extrapolation to mixing time, giving a more accurate ΔT."},
-    {q: "Why is a polystyrene cup preferred over a glass beaker?", a: "Polystyrene is a poor heat conductor — minimises heat loss to surroundings."},
+    {q: "Why is a polystyrene cup preferred over a glass beaker?", a: "Polystyrene is a poor heat conductor - minimises heat loss to surroundings."},
     {q: "How is ΔH per mole calculated from a neutralisation experiment?", a: "q = mcΔT (m = total mass of solution). n = moles of limiting reagent. ΔH = −q ÷ n (kJ mol⁻¹)."},
-    {q: "Why is the sign of ΔH negative for neutralisation reactions?", a: "Neutralisation is exothermic — heat is released into the solution."},
+    {q: "Why is the sign of ΔH negative for neutralisation reactions?", a: "Neutralisation is exothermic - heat is released into the solution."},
     {q: "What assumptions are made when calculating ΔH from a polystyrene cup experiment?", a: "Density = 1 g cm⁻³. c = 4.18 J g⁻¹ K⁻¹. No heat lost to cup or thermometer."},
     {q: "How does the polystyrene cup experiment differ from a bomb calorimeter?", a: "Polystyrene cup: open (constant pressure), measures ΔH, significant heat losses.\nBomb calorimeter: closed (constant volume), measures ΔU, much more accurate."},
     {q: "What sources of error exist in the polystyrene cup method?", a: "Heat loss to surroundings/cup. Density ≈ 1 g cm⁻³ (approximation). Heat capacity of cup/thermometer ignored. Poor stirring."},
@@ -660,7 +660,7 @@ const SETS = {
     {q: "How do you extrapolate a temperature–time graph to find the maximum temperature rise?", a: "Extrapolate cooling curve back to the time of mixing → temperature at maximum reaction."},
     {q: "What is the enthalpy of neutralisation for all strong acid–strong base reactions, and why?", a: "≈ −57 kJ mol⁻¹; net ionic equation is always H⁺(aq) + OH⁻(aq) → H₂O(l)."},
     {q: "Why is the enthalpy of neutralisation less exothermic for weak acids or weak bases?", a: "Energy needed to dissociate the weak acid/base offsets some heat from H⁺ + OH⁻ → H₂O."},
-    {q: "In a displacement reaction such as Zn(s) + CuSO₄(aq), what mass is used in q = mcΔT?", a: "Mass of the solution only (not the zinc solid) — only the aqueous solution absorbs the heat."}
+    {q: "In a displacement reaction such as Zn(s) + CuSO₄(aq), what mass is used in q = mcΔT?", a: "Mass of the solution only (not the zinc solid) - only the aqueous solution absorbs the heat."}
   ]},
 
   "RP2": { title: "Rates of Reaction – Clock Reaction", cards: [
@@ -669,44 +669,44 @@ const SETS = {
     {q: "What is the overall equation for the iodine clock reaction?", a: "H₂O₂ + 2I⁻ + 2H⁺ → I₂ + 2H₂O\nThen: I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻\nClock triggers when all S₂O₃²⁻ is consumed."},
     {q: "How is the rate of reaction calculated from a clock reaction experiment?", a: "Rate ∝ 1/t (t = time in seconds for colour change)."},
     {q: "How is the effect of concentration on rate investigated using the clock reaction?", a: "Keep temperature, total volume, starch and thiosulfate constant. Vary one reactant's volume; make up to same total volume with distilled water. Record t; calculate rate = 1/t."},
-    {q: "Why is distilled water added when changing the volume of reactant in a clock experiment?", a: "To keep total volume constant, so concentrations of other reagents are unchanged — fair test."},
+    {q: "Why is distilled water added when changing the volume of reactant in a clock experiment?", a: "To keep total volume constant, so concentrations of other reagents are unchanged - fair test."},
     {q: "How is the order with respect to a reactant determined from clock reaction data?", a: "Plot rate (1/t) vs [A]. Straight line through origin = first order. Upward curve = second order."},
-    {q: "What graph would indicate first order kinetics in a clock experiment?", a: "Straight line through origin: rate (1/t) vs [A] — shows rate ∝ [A]."},
+    {q: "What graph would indicate first order kinetics in a clock experiment?", a: "Straight line through origin: rate (1/t) vs [A] - shows rate ∝ [A]."},
     {q: "How is the effect of temperature on reaction rate investigated?", a: "Keep concentrations constant. Heat reactants in water bath to different temperatures before mixing. Record t; calculate rate = 1/t. Plot rate vs T (or ln k vs 1/T for Arrhenius)."},
-    {q: "What happens to the time t as temperature increases in the clock reaction?", a: "t decreases — more energetic collisions exceed Ea, so rate increases."},
-    {q: "What safety precautions are needed for the iodine clock reaction?", a: "H₂O₂: oxidiser/irritant — gloves and goggles. H₂SO₄: corrosive. Well-ventilated area. Dispose of iodine safely."},
-    {q: "What is the role of starch in the iodine clock reaction?", a: "Forms a deep blue-black complex with I₂ — visual indicator for the endpoint."},
+    {q: "What happens to the time t as temperature increases in the clock reaction?", a: "t decreases - more energetic collisions exceed Ea, so rate increases."},
+    {q: "What safety precautions are needed for the iodine clock reaction?", a: "H₂O₂: oxidiser/irritant - gloves and goggles. H₂SO₄: corrosive. Well-ventilated area. Dispose of iodine safely."},
+    {q: "What is the role of starch in the iodine clock reaction?", a: "Forms a deep blue-black complex with I₂ - visual indicator for the endpoint."},
     {q: "What is the role of sodium thiosulfate in the iodine clock reaction?", a: "Immediately converts I₂ back to I⁻, preventing accumulation. Clock triggers only when all thiosulfate is consumed."},
-    {q: "Why must the amount of sodium thiosulfate remain constant in all trials of the clock experiment?", a: "The clock triggers when a fixed amount of I₂ forms (= moles of thiosulfate). Changing it means different extents of reaction are being compared — unfair test."},
+    {q: "Why must the amount of sodium thiosulfate remain constant in all trials of the clock experiment?", a: "The clock triggers when a fixed amount of I₂ forms (= moles of thiosulfate). Changing it means different extents of reaction are being compared - unfair test."},
     {q: "What is a typical source of error in a clock reaction experiment?", a: "Subjective colour-change judgement. Temperature fluctuations. Inaccurate small-volume measurement. Timer delay."},
     {q: "How can you verify that the reaction is first order from concentration–time data?", a: "Constant half-life on concentration–time graph, or straight line on ln[A] vs time graph."}
   ]},
 
   "RP3": { title: "Equilibrium – Le Chatelier's", cards: [
-    {q: "What is the chromate/dichromate equilibrium used to demonstrate in this practical?", a: "2CrO₄²⁻(aq) + 2H⁺(aq) ⇌ Cr₂O₇²⁻(aq) + H₂O(l)\nAdding acid/alkali shifts equilibrium — visible by colour change."},
+    {q: "What is the chromate/dichromate equilibrium used to demonstrate in this practical?", a: "2CrO₄²⁻(aq) + 2H⁺(aq) ⇌ Cr₂O₇²⁻(aq) + H₂O(l)\nAdding acid/alkali shifts equilibrium - visible by colour change."},
     {q: "What colour change is observed when acid (H⁺) is added to yellow chromate solution?", a: "Yellow → orange: equilibrium shifts right (more Cr₂O₇²⁻) to consume added H⁺."},
     {q: "What colour change is observed when alkali (OH⁻) is added to orange dichromate solution?", a: "Orange → yellow: OH⁻ removes H⁺, equilibrium shifts left (more CrO₄²⁻)."},
     {q: "How does the iron(III) thiocyanate equilibrium demonstrate Le Chatelier's principle?", a: "Fe³⁺ + SCN⁻ ⇌ [FeSCN]²⁺ (blood red). Adding Fe³⁺/SCN⁻ deepens colour (shift right). Adding NaF removes Fe³⁺ → colour fades (shift left)."},
-    {q: "What is observed when more Fe³⁺ ions are added to the iron(III) thiocyanate equilibrium?", a: "Blood-red colour deepens — equilibrium shifts right, more [FeSCN]²⁺ formed."},
-    {q: "What is observed when Na₂HPO₄ or NaF is added to [FeSCN]²⁺ solution?", a: "Red colour fades — Fe³⁺ is removed, equilibrium shifts left."},
+    {q: "What is observed when more Fe³⁺ ions are added to the iron(III) thiocyanate equilibrium?", a: "Blood-red colour deepens - equilibrium shifts right, more [FeSCN]²⁺ formed."},
+    {q: "What is observed when Na₂HPO₄ or NaF is added to [FeSCN]²⁺ solution?", a: "Red colour fades - Fe³⁺ is removed, equilibrium shifts left."},
     {q: "How is Le Chatelier's principle stated?", a: "When conditions change, equilibrium shifts to oppose that change."},
     {q: "How can you confirm a colour change is due to equilibrium shift and not just dilution?", a: "Run a control with the same volume of distilled water. If the control shows no colour change (or smaller change), the effect is due to equilibrium shift."},
     {q: "What does a shift to the right in an equilibrium mean in terms of concentrations?", a: "Product concentrations increase; reactant concentrations decrease."},
     {q: "What effect does adding water (diluting) have on the chromate/dichromate equilibrium?", a: "Decreases [H⁺] → shifts left → solution becomes more yellow (more CrO₄²⁻)."},
     {q: "Why does adding NaOH to the chromate/dichromate system shift the equilibrium left?", a: "OH⁻ + H⁺ → H₂O, reducing [H⁺]. Equilibrium shifts left to replace H⁺ → more CrO₄²⁻ (yellow)."},
-    {q: "What safety precautions are needed when working with chromate/dichromate solutions?", a: "Toxic and carcinogenic — wear gloves. Fume cupboard if possible. Dispose in heavy metals waste."},
+    {q: "What safety precautions are needed when working with chromate/dichromate solutions?", a: "Toxic and carcinogenic - wear gloves. Fume cupboard if possible. Dispose in heavy metals waste."},
     {q: "What is the colour of CrO₄²⁻ and Cr₂O₇²⁻?", a: "CrO₄²⁻: yellow. Cr₂O₇²⁻: orange."},
-    {q: "Why is a dynamic equilibrium described as 'dynamic'?", a: "Forward and reverse reactions continue at equal rates — constant molecular movement, but no overall concentration change."},
+    {q: "Why is a dynamic equilibrium described as 'dynamic'?", a: "Forward and reverse reactions continue at equal rates - constant molecular movement, but no overall concentration change."},
     {q: "What are the conditions required for a dynamic equilibrium to be established?", a: "Closed system; forward and reverse reactions occurring at equal rates."},
-    {q: "Does adding a catalyst shift the position of equilibrium?", a: "No — catalyst speeds both directions equally; equilibrium reached faster but position unchanged."}
+    {q: "Does adding a catalyst shift the position of equilibrium?", a: "No - catalyst speeds both directions equally; equilibrium reached faster but position unchanged."}
   ]},
 
   "RP4": { title: "Distillation of a Product from a Reaction (Activity 5)", cards: [
     {q: "What is the purpose of simple distillation?", a: "Separate a volatile liquid from a non-volatile solute, or two liquids with bp differing by >25°C."},
     {q: "What is fractional distillation used for?", a: "Separating liquids with similar boiling points (e.g. ethanol/water) via repeated condensation–evaporation in a fractionating column."},
     {q: "Describe the apparatus required for simple distillation.", a: "Round-bottomed flask, anti-bumping granules, thermometer (bulb at side-arm junction), Liebig condenser (water in at bottom), receiver flask."},
-    {q: "Why is the thermometer bulb positioned at the side-arm junction in distillation?", a: "Measures vapour temperature — indicates bp of fraction being collected."},
-    {q: "Why does water enter the condenser at the bottom and exit at the top?", a: "Counter-current flow — maximises cooling efficiency."},
+    {q: "Why is the thermometer bulb positioned at the side-arm junction in distillation?", a: "Measures vapour temperature - indicates bp of fraction being collected."},
+    {q: "Why does water enter the condenser at the bottom and exit at the top?", a: "Counter-current flow - maximises cooling efficiency."},
     {q: "Why are anti-bumping granules added to the distillation flask?", a: "Nucleation sites for bubbles → prevent superheating and violent bumping."},
     {q: "How can purity of the distillate be checked?", a: "Measure boiling point (pure = sharp, constant). TLC against known sample. Melting point for solids."},
     {q: "How does fractional distillation separate ethanol from water?", a: "Ethanol bp 78.4°C, water bp 100°C. Fractionating column allows repeated condensation/re-evaporation. Collect when thermometer reads ~78°C."},
@@ -714,50 +714,50 @@ const SETS = {
     {q: "What is the purpose of the Liebig condenser?", a: "Cools and condenses vapour back to liquid via cold water in outer jacket."},
     {q: "How is TLC used to assess purity of a distillate?", a: "Spot distillate alongside pure reference. Single spot at matching Rf = pure product."},
     {q: "What is a suitable test for the purity of a solid product?", a: "Melting point: pure solid = sharp, matches data book value. Impure = broad range, lower temperature."},
-    {q: "What does it mean if the thermometer reading rises during distillation?", a: "Higher-boiling fraction distilling over — change the collection vessel."},
-    {q: "What safety precautions are required during distillation of flammable liquids?", a: "No naked flames — electric heating mantle. Secure all joints. Fume cupboard. Do not boil dry."},
+    {q: "What does it mean if the thermometer reading rises during distillation?", a: "Higher-boiling fraction distilling over - change the collection vessel."},
+    {q: "What safety precautions are required during distillation of flammable liquids?", a: "No naked flames - electric heating mantle. Secure all joints. Fume cupboard. Do not boil dry."},
     {q: "Why should the distillation apparatus never be sealed (closed system)?", a: "Vapour pressure builds up → glassware could shatter."},
     {q: "How does simple distillation differ from fractional distillation in terms of apparatus?", a: "Simple: flask + condenser + receiver (no fractionating column). Fractional: adds fractionating column for closer boiling points."},
     {q: "What is the specific reaction used in AQA Required Activity 5?", a: "Partial oxidation of propan-1-ol → propanal: CH₃CH₂CH₂OH + [O] → CH₃CH₂CHO + H₂O.\nLimited K₂Cr₂O₇/H₂SO₄; aldehyde distilled off immediately to prevent further oxidation."},
     {q: "Why is a limited quantity of oxidising agent used and the product distilled off as it forms in Activity 5?", a: "Prevents further oxidation of aldehyde to carboxylic acid. Distilling off immediately maximises aldehyde yield."},
     {q: "What colour change is observed during the partial oxidation of propan-1-ol with K₂Cr₂O₇?", a: "Orange → green (Cr₂O₇²⁻ reduced to Cr³⁺)."},
-    {q: "What safety precautions are specific to the Activity 5 oxidation experiment?", a: "K₂Cr₂O₇: toxic, carcinogenic — gloves. H₂SO₄: corrosive. Propan-1-ol/propanal: flammable — electric mantle. Fume cupboard."}
+    {q: "What safety precautions are specific to the Activity 5 oxidation experiment?", a: "K₂Cr₂O₇: toxic, carcinogenic - gloves. H₂SO₄: corrosive. Propan-1-ol/propanal: flammable - electric mantle. Fume cupboard."}
   ]},
 
   "RP5": { title: "TLC Separation (Activity 12)", cards: [
     {q: "What are the two phases in chromatography, and what is their role?", a: "Stationary phase: stays still (silica). Mobile phase: moves (solvent). Compounds separate by differential attraction to each phase."},
     {q: "How is Rf value defined and calculated?", a: "Rf = distance moved by spot ÷ distance moved by solvent front. No units; always 0–1."},
-    {q: "What does a high Rf value indicate about a compound?", a: "Greater affinity for the mobile phase — more soluble in solvent, less adsorbed to silica."},
+    {q: "What does a high Rf value indicate about a compound?", a: "Greater affinity for the mobile phase - more soluble in solvent, less adsorbed to silica."},
     {q: "Describe the TLC procedure step by step.", a: "1. Pencil baseline 1 cm from bottom.\n2. Spot sample with capillary tube.\n3. Develop in chamber with solvent below baseline.\n4. Remove before solvent front reaches top; mark front.\n5. Visualise (UV lamp or ninhydrin)."},
     {q: "Why must the pencil line on a TLC plate be drawn in pencil and not pen?", a: "Ink dissolves in solvent and travels up the plate, interfering with the chromatography."},
     {q: "Why must the solvent level be below the baseline in TLC?", a: "If solvent covers the spots, compounds dissolve into it directly rather than being carried up by capillary action."},
-    {q: "How are colourless compounds visualised on a TLC plate?", a: "UV light (dark spots on fluorescent plate). Ninhydrin spray (purple — amino acids). Iodine vapour (yellow/brown — organics)."},
+    {q: "How are colourless compounds visualised on a TLC plate?", a: "UV light (dark spots on fluorescent plate). Ninhydrin spray (purple - amino acids). Iodine vapour (yellow/brown - organics)."},
     {q: "How can TLC be used to identify a compound?", a: "Co-spot unknown alongside reference compounds. Same Rf as reference = likely the same compound."},
     {q: "How can TLC confirm the purity of a product?", a: "Single spot = pure. Multiple spots = impurities present. Rf should match literature value."},
     {q: "How does column chromatography work?", a: "Silica-packed column. Mixture loaded at top; solvent runs down by gravity. Components elute at different times based on silica interactions."},
     {q: "How are fractions collected in column chromatography?", a: "Separate tubes collected as solvent elutes. Each fraction analysed by TLC to identify desired product."},
-    {q: "What is the advantage of column chromatography over TLC?", a: "Preparative — isolates and collects pure compound. TLC is analytical only."},
+    {q: "What is the advantage of column chromatography over TLC?", a: "Preparative - isolates and collects pure compound. TLC is analytical only."},
     {q: "Why is ninhydrin used specifically for amino acids on TLC?", a: "Reacts with –NH₂ group → purple/pink (Ruhemann's purple)."},
-    {q: "What does it mean for two compounds to have the same Rf value?", a: "They may be the same, but not conclusive — test with a second solvent to confirm."},
-    {q: "Why should a TLC developing chamber have a lid?", a: "Saturates atmosphere with solvent vapour — prevents evaporation from plate, which would distort Rf values."},
-    {q: "What stationary phase is typically used in TLC and column chromatography?", a: "Silica (SiO₂) — polar, adsorbs polar compounds more strongly. Coated on aluminium/glass backing."}
+    {q: "What does it mean for two compounds to have the same Rf value?", a: "They may be the same, but not conclusive - test with a second solvent to confirm."},
+    {q: "Why should a TLC developing chamber have a lid?", a: "Saturates atmosphere with solvent vapour - prevents evaporation from plate, which would distort Rf values."},
+    {q: "What stationary phase is typically used in TLC and column chromatography?", a: "Silica (SiO₂) - polar, adsorbs polar compounds more strongly. Coated on aluminium/glass backing."}
   ]},
 
   "RP6": { title: "Synthesis of Halogenoalkane", cards: [
     {q: "What is the overall reaction for the preparation of 1-bromobutane from butan-1-ol?", a: "CH₃CH₂CH₂CH₂OH + NaBr + H₂SO₄ → CH₃CH₂CH₂CH₂Br + NaHSO₄ + H₂O\n(H₂SO₄ + NaBr → HBr in situ; HBr then reacts with the alcohol.)"},
-    {q: "Why is concentrated H₂SO₄ used rather than HBr directly in this synthesis?", a: "HBr gas is hazardous. H₂SO₄ generates HBr in situ from NaBr — safer and more convenient."},
-    {q: "What type of reaction mechanism is involved in this synthesis?", a: "Nucleophilic substitution (SN2) — Br⁻ substitutes the –OH group."},
+    {q: "Why is concentrated H₂SO₄ used rather than HBr directly in this synthesis?", a: "HBr gas is hazardous. H₂SO₄ generates HBr in situ from NaBr - safer and more convenient."},
+    {q: "What type of reaction mechanism is involved in this synthesis?", a: "Nucleophilic substitution (SN2) - Br⁻ substitutes the –OH group."},
     {q: "Describe the reflux stage of the 1-bromobutane preparation.", a: "Mix butan-1-ol, NaBr, water; add H₂SO₄ carefully. Reflux 30–45 min to drive reaction to completion without losing volatile product."},
     {q: "Why is the reaction mixture refluxed rather than just heated in an open flask?", a: "1-bromobutane is volatile; reflux condenses vapour back into flask → retains product."},
-    {q: "How is 1-bromobutane separated from the reaction mixture after reflux?", a: "Distillation — collect fraction boiling at ~101–105°C (bp of 1-bromobutane = 101.6°C)."},
-    {q: "What impurities are present in the crude distillate after distillation?", a: "Unreacted butan-1-ol, water, HBr, sulfate esters — removed by washing."},
-    {q: "How is the crude product washed with concentrated H₂SO₄ and what does this remove?", a: "H₂SO₄ protonates butan-1-ol → water-soluble (removed in aqueous layer). 1-BrBu is denser — sinks."},
+    {q: "How is 1-bromobutane separated from the reaction mixture after reflux?", a: "Distillation - collect fraction boiling at ~101–105°C (bp of 1-bromobutane = 101.6°C)."},
+    {q: "What impurities are present in the crude distillate after distillation?", a: "Unreacted butan-1-ol, water, HBr, sulfate esters - removed by washing."},
+    {q: "How is the crude product washed with concentrated H₂SO₄ and what does this remove?", a: "H₂SO₄ protonates butan-1-ol → water-soluble (removed in aqueous layer). 1-BrBu is denser - sinks."},
     {q: "How is the crude 1-bromobutane washed with sodium hydrogencarbonate solution?", a: "NaHCO₃ neutralises HBr/H₂SO₄: HBr + NaHCO₃ → NaBr + H₂O + CO₂. Release tap frequently to vent CO₂."},
     {q: "Why must the tap of the separating funnel be opened frequently during washing with NaHCO₃?", a: "CO₂ produced → pressure builds up and could force out the stopper."},
     {q: "How is the organic layer dried after washing?", a: "Add anhydrous MgSO₄ to the organic layer; swirl until no clumping. Filter off drying agent."},
     {q: "Why is anhydrous MgSO₄ used as a drying agent?", a: "Absorbs water (→ MgSO₄·7H₂O) without reacting with product; removed by filtration."},
     {q: "How is the identity of the product confirmed in this synthesis?", a: "bp ≈ 101.6°C. AgNO₃/ethanol → cream AgBr ppt confirms C–Br bond."},
-    {q: "What safety precautions are required for this synthesis?", a: "Conc. H₂SO₄: corrosive — add carefully. 1-bromobutane: volatile/irritant — fume cupboard. NaBr dust: avoid inhalation. Gloves and goggles."},
+    {q: "What safety precautions are required for this synthesis?", a: "Conc. H₂SO₄: corrosive - add carefully. 1-bromobutane: volatile/irritant - fume cupboard. NaBr dust: avoid inhalation. Gloves and goggles."},
     {q: "Why is the organic layer the lower layer in the separating funnel during this purification?", a: "1-bromobutane density (~1.28 g cm⁻³) > water → sinks below aqueous layer."},
     {q: "How is percentage yield calculated for this synthesis?", a: "% yield = (actual mass ÷ theoretical mass) × 100. Theoretical mass = moles of limiting reagent × Mr(1-bromobutane)."}
   ]},
@@ -767,14 +767,14 @@ const SETS = {
     {q: "What is observed when bromine water is shaken with an alkene?", a: "Orange/brown bromine water decolourises (Br₂ adds across C=C → dibromoalkane)."},
     {q: "Write the equation for the addition of bromine to ethene.", a: "CH₂=CH₂ + Br₂ → CH₂BrCH₂Br (1,2-dibromoethane)"},
     {q: "Describe the mechanism of electrophilic addition of Br₂ to ethene.", a: "1. Pi electrons polarise Br–Br: δ+ Br acts as electrophile.\n2. Br⁺ attacks C=C → carbocation + Br⁻.\n3. Br⁻ attacks carbocation → 1,2-dibromoalkane."},
-    {q: "What is the carbocation intermediate in electrophilic addition?", a: "Carbon atom with a positive charge — formed when electrophile bonds to one C of the double bond."},
+    {q: "What is the carbocation intermediate in electrophilic addition?", a: "Carbon atom with a positive charge - formed when electrophile bonds to one C of the double bond."},
     {q: "What is free radical substitution, and which type of compound undergoes it?", a: "H replaced by halogen via free radical chain. Alkanes + Cl₂/Br₂ under UV light."},
     {q: "What are the three stages of the free radical substitution mechanism?", a: "1. Initiation: UV → Cl–Cl → 2Cl•\n2. Propagation: Cl• + CH₄ → •CH₃ + HCl; •CH₃ + Cl₂ → CH₃Cl + Cl•\n3. Termination: two radicals combine."},
     {q: "What is homolytic fission?", a: "Bond breaks so each atom receives one electron → two neutral radicals. Shown with fish-hook arrows."},
     {q: "What conditions are required for free radical substitution of alkanes?", a: "UV light (or high T). No catalyst. Cl₂ or Br₂. (F₂ too reactive/explosive; I₂ too unreactive.)"},
     {q: "What is observed when chlorine gas is mixed with methane under UV light?", a: "Mixture of CH₃Cl, CH₂Cl₂, CHCl₃, CCl₄ + HCl. Pale green Cl₂ colour fades."},
     {q: "Why does free radical substitution produce a mixture of products?", a: "Each product (e.g. CH₃Cl) can react further with Cl• to give more substituted products."},
-    {q: "What safety precautions are needed when handling bromine and chlorine in organic reactions?", a: "Toxic/corrosive — fume cupboard, gloves and goggles. Bromine: irritant. Chlorine: suffocant. Emergency procedures for spillages."},
+    {q: "What safety precautions are needed when handling bromine and chlorine in organic reactions?", a: "Toxic/corrosive - fume cupboard, gloves and goggles. Bromine: irritant. Chlorine: suffocant. Emergency procedures for spillages."},
     {q: "How can you distinguish between electrophilic addition and free radical substitution in the lab?", a: "Addition (alkene + Br₂ water): decolourises in dark; no HBr produced.\nSubstitution (alkane + Cl₂): requires UV; HCl produced; mixture of products."},
     {q: "What is the test to confirm an alkene has undergone addition with bromine?", a: "Bromine water decolourises without UV light. Colourless dibromoalkane product."},
     {q: "Write the two propagation steps for the free radical chlorination of methane.", a: "Cl• + CH₄ → •CH₃ + HCl\n•CH₃ + Cl₂ → CH₃Cl + Cl•"},
@@ -785,45 +785,45 @@ const SETS = {
     {q: "What is a standard electrode potential (E°)?", a: "EMF of a half-cell vs the SHE under standard conditions (298 K, 100 kPa, 1.00 mol dm⁻³ ions)."},
     {q: "What is the standard hydrogen electrode (SHE) and what is its E° value?", a: "H₂(g) at 100 kPa bubbled over Pt in 1.00 mol dm⁻³ H⁺(aq). E° = 0.00 V by definition."},
     {q: "Describe how to construct a Zn/Cu electrochemical cell to measure EMF.", a: "Zn in ZnSO₄(aq); Cu in CuSO₄(aq) (both 1.00 mol dm⁻³). Connect with KNO₃ salt bridge. Connect electrodes via high-resistance voltmeter."},
-    {q: "What is the purpose of the salt bridge in an electrochemical cell?", a: "Allows ion flow between half-cells to maintain electrical neutrality — completes the circuit without mixing solutions."},
+    {q: "What is the purpose of the salt bridge in an electrochemical cell?", a: "Allows ion flow between half-cells to maintain electrical neutrality - completes the circuit without mixing solutions."},
     {q: "Why must the voltmeter have a very high resistance?", a: "Prevents current flow; if current flowed, concentrations would change → measured value ≠ equilibrium E°."},
     {q: "How is E°cell calculated from two standard electrode potentials?", a: "E°cell = E°(cathode) − E°(anode). More positive E° = cathode (reduction)."},
     {q: "For a Zn/Cu cell: E°(Cu²⁺/Cu) = +0.34 V, E°(Zn²⁺/Zn) = −0.76 V. Calculate E°cell.", a: "E°cell = +0.34 − (−0.76) = +1.10 V. Cu²⁺ reduced at cathode; Zn oxidised at anode."},
     {q: "What does a positive E°cell indicate?", a: "Reaction is thermodynamically feasible (spontaneous) under standard conditions."},
-    {q: "What does a negative E°cell indicate?", a: "Reaction not feasible in the forward direction — reverse reaction favoured."},
+    {q: "What does a negative E°cell indicate?", a: "Reaction not feasible in the forward direction - reverse reaction favoured."},
     {q: "Why is KNO₃ solution used in the salt bridge rather than KCl?", a: "NO₃⁻ does not precipitate with common metal ions. Cl⁻ would precipitate AgCl if Ag⁺ is present."},
     {q: "What cell notation (cell diagram) represents the Zn/Cu cell?", a: "Zn(s) | Zn²⁺(aq) || Cu²⁺(aq) | Cu(s). LHS = anode (oxidation); RHS = cathode (reduction); || = salt bridge."},
     {q: "What are the limitations of using E° values to predict feasibility?", a: "E° only valid at standard conditions. Feasible reaction may still be very slow (high Ea). Overpotential effects in electrolysis."},
     {q: "How does the SHE provide a reference for measuring other E° values?", a: "Connect unknown half-cell to SHE; voltmeter reads E° of unknown (since SHE = 0.00 V)."},
     {q: "How does a hydrogen fuel cell work?", a: "Anode: H₂ → 2H⁺ + 2e⁻. Cathode: O₂ + 4H⁺ + 4e⁻ → 2H₂O. Overall: 2H₂ + O₂ → 2H₂O. Only water produced."},
     {q: "What are the advantages of hydrogen fuel cells over conventional batteries?", a: "No recharging (fuel supplied continuously). Only water as waste. High efficiency."},
-    {q: "What are the disadvantages of hydrogen fuel cells?", a: "H₂ is flammable/explosive — storage hazardous. H₂ usually made from fossil fuels. Expensive Pt catalyst. Lack of infrastructure."}
+    {q: "What are the disadvantages of hydrogen fuel cells?", a: "H₂ is flammable/explosive - storage hazardous. H₂ usually made from fossil fuels. Expensive Pt catalyst. Lack of infrastructure."}
   ]},
 
   "RP9": { title: "Colorimetry & Beer-Lambert Law", cards: [
     {q: "State the Beer-Lambert law.", a: "A = εcl (A = absorbance, ε = molar absorption coefficient, c = concentration mol dm⁻³, l = path length cm)."},
-    {q: "What does the Beer-Lambert law tell us about the relationship between absorbance and concentration?", a: "A ∝ c — linear at constant path length and wavelength."},
+    {q: "What does the Beer-Lambert law tell us about the relationship between absorbance and concentration?", a: "A ∝ c - linear at constant path length and wavelength."},
     {q: "How is a colorimeter used to measure the concentration of a coloured solution?", a: "1. Select complementary colour filter.\n2. Zero with blank (distilled water).\n3. Measure absorbance of standard solutions → calibration curve.\n4. Measure absorbance of unknown → read concentration from curve."},
     {q: "Why is a filter used in a colorimeter, and how is the correct filter selected?", a: "Selects the complementary colour (wavelength of maximum absorption) → maximises sensitivity."},
-    {q: "What is a calibration curve and how is it constructed?", a: "Absorbance (y) vs concentration (x) for standard solutions — straight line through origin (Beer-Lambert)."},
+    {q: "What is a calibration curve and how is it constructed?", a: "Absorbance (y) vs concentration (x) for standard solutions - straight line through origin (Beer-Lambert)."},
     {q: "How is the concentration of an unknown solution found using a calibration curve?", a: "Measure absorbance of unknown; read off concentration from the linear portion of the calibration curve."},
-    {q: "What is λmax and why is it used in colorimetry?", a: "Wavelength of maximum absorbance — gives greatest sensitivity and most linear Beer-Lambert response."},
+    {q: "What is λmax and why is it used in colorimetry?", a: "Wavelength of maximum absorbance - gives greatest sensitivity and most linear Beer-Lambert response."},
     {q: "How can colorimetry be used to find the equilibrium constant Kc of a coloured equilibrium?", a: "Measure A at equilibrium → [coloured species] from calibration curve → mass balance for other species → substitute into Kc."},
-    {q: "What is a blank in colorimetry and why is it used?", a: "Distilled water with no solute — zeros the colorimeter to correct for solvent/cuvette absorbance."},
+    {q: "What is a blank in colorimetry and why is it used?", a: "Distilled water with no solute - zeros the colorimeter to correct for solvent/cuvette absorbance."},
     {q: "What errors can affect colorimetry measurements?", a: "Fingerprints on cuvette. Air bubbles. Not zeroing with blank. Solution too concentrated (outside linear range). Poor calibration."},
     {q: "Why does Beer-Lambert law fail at very high concentrations?", a: "Solute–solute interactions alter ε; scattered light increases → A vs c no longer linear."},
     {q: "Give an example of a transition metal complex studied by colorimetry.", a: "[Cu(H₂O)₆]²⁺ (blue). Absorbance at ~620 nm used to determine Cu²⁺ concentration."},
     {q: "What is the path length l in a standard colorimetry cuvette?", a: "Typically 1 cm."},
     {q: "How would you prepare a series of standard solutions for a calibration curve?", a: "Make stock solution; serial dilutions into volumetric flasks (make up to mark with distilled water) covering expected concentration range."},
     {q: "What units does absorbance have?", a: "Dimensionless (no units). A = log₁₀(I₀/I)."},
-    {q: "How can colorimetry be used to monitor a reaction rate?", a: "Measure absorbance at regular time intervals — changing absorbance reflects changing concentration, allowing a rate curve to be plotted."}
+    {q: "How can colorimetry be used to monitor a reaction rate?", a: "Measure absorbance at regular time intervals - changing absorbance reflects changing concentration, allowing a rate curve to be plotted."}
   ]},
 
   "RP10a": { title: "Preparation of Aspirin", cards: [
     {q: "What are the starting materials for the synthesis of aspirin?", a: "Salicylic acid + ethanoic anhydride; H₃PO₄ as catalyst."},
-    {q: "Write the equation for the synthesis of aspirin.", a: "Salicylic acid + ethanoic anhydride → aspirin + ethanoic acid\n(–OH of salicylic acid reacts with acyl group — esterification/acylation.)"},
-    {q: "What type of reaction is used to make aspirin from salicylic acid?", a: "Esterification/acylation — phenol –OH reacts with ethanoic anhydride."},
-    {q: "Why is ethanoic anhydride used rather than ethanoic acid (acetic acid) for aspirin synthesis?", a: "More reactive acylating agent — faster, more complete reaction."},
+    {q: "Write the equation for the synthesis of aspirin.", a: "Salicylic acid + ethanoic anhydride → aspirin + ethanoic acid\n(–OH of salicylic acid reacts with acyl group - esterification/acylation.)"},
+    {q: "What type of reaction is used to make aspirin from salicylic acid?", a: "Esterification/acylation - phenol –OH reacts with ethanoic anhydride."},
+    {q: "Why is ethanoic anhydride used rather than ethanoic acid (acetic acid) for aspirin synthesis?", a: "More reactive acylating agent - faster, more complete reaction."},
     {q: "Why is phosphoric acid added to the reaction mixture?", a: "Catalyst; protonates the acyl group of ethanoic anhydride → better electrophile."},
     {q: "How is the crude aspirin product collected after the reaction?", a: "Pour into ice-cold water → aspirin precipitates. Collect by vacuum filtration (Buchner funnel)."},
     {q: "Why is ice-cold water used to precipitate the aspirin?", a: "Low solubility in cold water → maximum yield. Cold also prevents hydrolysis back to salicylic acid."},
@@ -832,7 +832,7 @@ const SETS = {
     {q: "Why is the FeCl₃ test appropriate for checking aspirin purity and not Tollens' test?", a: "No aldehyde → Tollens' irrelevant. FeCl₃ detects free phenol –OH of salicylic acid impurity → purple colour."},
     {q: "What colour does salicylic acid give with FeCl₃ solution?", a: "Purple/violet (iron(III)–phenol complex). Pure aspirin: no colour (phenol is esterified)."},
     {q: "How is percentage yield calculated for the aspirin synthesis?", a: "% yield = (actual mass ÷ theoretical mass) × 100. Theoretical mass = moles of limiting reagent × 180."},
-    {q: "What safety precautions are needed for the aspirin synthesis?", a: "Ethanoic anhydride: corrosive/pungent — fume cupboard, gloves. H₃PO₄: corrosive. Ethanol: flammable — no naked flames."},
+    {q: "What safety precautions are needed for the aspirin synthesis?", a: "Ethanoic anhydride: corrosive/pungent - fume cupboard, gloves. H₃PO₄: corrosive. Ethanol: flammable - no naked flames."},
     {q: "How does recrystallisation improve the purity of aspirin?", a: "Dissolve in hot solvent; cool → aspirin crystallises (less soluble at low T). Impurities remain in solution."},
     {q: "What is the molecular formula of aspirin?", a: "C₉H₈O₄ (acetylsalicylic acid), Mr = 180 g mol⁻¹."},
     {q: "Why might the percentage yield of aspirin be less than 100%?", a: "Product lost in filtration/washing. Some dissolves in filtrate. Side reactions. Hydrolysis in water."}
@@ -844,16 +844,16 @@ const SETS = {
     {q: "What reagents are used in the diazotisation of phenylamine (aniline)?", a: "Phenylamine + NaNO₂(aq) + dilute HCl(aq) at 0–5°C (ice bath)."},
     {q: "Write the equation for the diazotisation of phenylamine.", a: "C₆H₅NH₂ + NaNO₂ + 2HCl → C₆H₅N₂⁺Cl⁻ + NaCl + 2H₂O"},
     {q: "What is a coupling reaction in azo dye synthesis?", a: "ArN₂⁺ reacts with aromatic coupling component (e.g. phenol) in alkaline conditions to form azo compound with –N=N– group."},
-    {q: "Why is the coupling reaction carried out in alkaline conditions?", a: "NaOH converts phenol → phenoxide (C₆H₅O⁻) — stronger activating group → more reactive towards the diazonium electrophile."},
+    {q: "Why is the coupling reaction carried out in alkaline conditions?", a: "NaOH converts phenol → phenoxide (C₆H₅O⁻) - stronger activating group → more reactive towards the diazonium electrophile."},
     {q: "Write the equation for the coupling of benzenediazonium chloride with phenol.", a: "C₆H₅N₂⁺ + C₆H₅OH → C₆H₅–N=N–C₆H₄–OH + H⁺ (yellow-orange dye)"},
     {q: "What is the functional group in all azo dyes?", a: "–N=N– (azo group). Responsible for intense colour via delocalisation across the conjugated system."},
-    {q: "What colours are typical azo dyes?", a: "Yellow, orange, red, or brown — depends on aryl groups and degree of delocalisation."},
+    {q: "What colours are typical azo dyes?", a: "Yellow, orange, red, or brown - depends on aryl groups and degree of delocalisation."},
     {q: "Why do azo dyes have intense colours?", a: "Extended conjugated π system (–N=N– + aromatic rings) → small HOMO-LUMO gap → absorbs visible light."},
     {q: "What is the role of the naphthol (2-naphthol) coupling component?", a: "Activated aromatic ring undergoes electrophilic substitution with diazonium ion. Larger conjugated system → deeper colour."},
-    {q: "What safety hazard is associated with aromatic amines such as phenylamine?", a: "Carcinogenic — absorbed through skin. Gloves, goggles, fume cupboard essential."},
-    {q: "How is the azo dye product isolated from the reaction mixture?", a: "Dye precipitates as coloured solid — collect by vacuum filtration, wash with cold water, dry."},
-    {q: "What test is used to confirm a successful coupling reaction?", a: "Vivid colour (yellow/orange/red) appears instantly on addition to coupling component — colour is the product."},
-    {q: "What industrial importance do azo dyes have?", a: "Largest class of synthetic dyes — textiles, food colouring (tartrazine), printing inks, cosmetics."},
+    {q: "What safety hazard is associated with aromatic amines such as phenylamine?", a: "Carcinogenic - absorbed through skin. Gloves, goggles, fume cupboard essential."},
+    {q: "How is the azo dye product isolated from the reaction mixture?", a: "Dye precipitates as coloured solid - collect by vacuum filtration, wash with cold water, dry."},
+    {q: "What test is used to confirm a successful coupling reaction?", a: "Vivid colour (yellow/orange/red) appears instantly on addition to coupling component - colour is the product."},
+    {q: "What industrial importance do azo dyes have?", a: "Largest class of synthetic dyes - textiles, food colouring (tartrazine), printing inks, cosmetics."},
     {q: "Why must ice be used throughout the diazotisation step?", a: "Reaction exothermic; diazonium salt decomposes even at modest T. Continuous ice cooling keeps T below 5°C."}
   ]},
 
@@ -862,17 +862,17 @@ const SETS = {
     {q: "How can co-spotting identify an unknown compound by TLC?", a: "Apply unknown, reference, and mixed spot. Single spot in the mixture at the same Rf as both = same compound."},
     {q: "What is the formula for Rf value?", a: "Rf = distance moved by compound ÷ distance moved by solvent front. Dimensionless; 0–1."},
     {q: "How does solvent polarity affect Rf values in TLC on a silica plate?", a: "More polar solvent → higher Rf (compounds move further). More polar compound → lower Rf (more attracted to polar silica)."},
-    {q: "Describe how column chromatography separates a mixture of dyes.", a: "Pack column with silica; load mixture at top. Add solvent (eluent) — less polar compounds elute first. Collect separate coloured fractions."},
-    {q: "How is the purity of each fraction from column chromatography assessed?", a: "Run TLC of each fraction — single spot = pure. Multiple spots = mixture, more separation needed."},
-    {q: "Why do amino acids require a special visualisation technique in chromatography?", a: "Colourless — visualised by ninhydrin spray + heat → purple (Ruhemann's purple) via reaction with –NH₂."},
+    {q: "Describe how column chromatography separates a mixture of dyes.", a: "Pack column with silica; load mixture at top. Add solvent (eluent) - less polar compounds elute first. Collect separate coloured fractions."},
+    {q: "How is the purity of each fraction from column chromatography assessed?", a: "Run TLC of each fraction - single spot = pure. Multiple spots = mixture, more separation needed."},
+    {q: "Why do amino acids require a special visualisation technique in chromatography?", a: "Colourless - visualised by ninhydrin spray + heat → purple (Ruhemann's purple) via reaction with –NH₂."},
     {q: "What is the significance of Rf values being consistent between experiments?", a: "Under fixed conditions, Rf is compound-specific → identification by comparison with references."},
-    {q: "Why must the TLC developing chamber be sealed with a lid?", a: "Saturates atmosphere with solvent vapour — prevents evaporation from plate, which distorts Rf values."},
+    {q: "Why must the TLC developing chamber be sealed with a lid?", a: "Saturates atmosphere with solvent vapour - prevents evaporation from plate, which distorts Rf values."},
     {q: "What effect does changing the solvent in TLC have on separation?", a: "More polar solvent → higher Rf. Adjust polarity to separate compounds with similar Rf values."},
     {q: "How is column chromatography used preparatively (not just analytically)?", a: "Collect fractions; combine pure-fraction aliquots; evaporate solvent → isolated pure compound on useful (mg–g) scale."},
-    {q: "What is gradient elution in column chromatography?", a: "Progressively increase solvent polarity during separation — elutes more polar compounds adsorbed on silica."},
-    {q: "What is the stationary phase in a standard TLC plate?", a: "Silica gel (SiO₂) on glass/aluminium/plastic backing — polar, adsorbs polar compounds more strongly."},
-    {q: "Give one advantage of column chromatography over TLC for purification.", a: "Preparative — isolates mg–g of pure compound. TLC is analytical only."},
-    {q: "Why is a UV-fluorescent TLC plate used for many organic compounds?", a: "Silica contains fluorescent indicator — organic compounds quench fluorescence, appearing as dark spots under UV."},
+    {q: "What is gradient elution in column chromatography?", a: "Progressively increase solvent polarity during separation - elutes more polar compounds adsorbed on silica."},
+    {q: "What is the stationary phase in a standard TLC plate?", a: "Silica gel (SiO₂) on glass/aluminium/plastic backing - polar, adsorbs polar compounds more strongly."},
+    {q: "Give one advantage of column chromatography over TLC for purification.", a: "Preparative - isolates mg–g of pure compound. TLC is analytical only."},
+    {q: "Why is a UV-fluorescent TLC plate used for many organic compounds?", a: "Silica contains fluorescent indicator - organic compounds quench fluorescence, appearing as dark spots under UV."},
     {q: "What is the mobile phase in TLC and column chromatography?", a: "The solvent (e.g. ethyl acetate, hexane, DCM) that carries compounds through the stationary phase."}
   ]},
 
@@ -882,12 +882,12 @@ const SETS = {
     {q: "What acid is used to acidify KMnO₄ titrations and why?", a: "Dilute H₂SO₄: provides H⁺ without interfering. Not HCl (Cl⁻ oxidised by MnO₄⁻); not HNO₃ (itself an oxidising agent)."},
     {q: "Write the overall ionic equation for the reaction of KMnO₄ with Fe²⁺.", a: "MnO₄⁻ + 8H⁺ + 5Fe²⁺ → Mn²⁺ + 4H₂O + 5Fe³⁺\nRatio MnO₄⁻ : Fe²⁺ = 1 : 5"},
     {q: "How is the percentage of iron in iron tablets determined by KMnO₄ titration?", a: "1. Dissolve tablets in dilute H₂SO₄; make up to 250 cm³.\n2. Pipette 25.0 cm³ aliquots; titrate with standard KMnO₄.\n3. Endpoint = permanent pale pink. Calculate moles Fe²⁺ → mass Fe → %."},
-    {q: "What is an iodometric (iodine–thiosulfate) titration?", a: "Oxidising agent liberates I₂ from excess KI. Titrate I₂ with Na₂S₂O₃. Add starch near endpoint — blue-black disappears at endpoint."},
+    {q: "What is an iodometric (iodine–thiosulfate) titration?", a: "Oxidising agent liberates I₂ from excess KI. Titrate I₂ with Na₂S₂O₃. Add starch near endpoint - blue-black disappears at endpoint."},
     {q: "Write the half-equation for the reaction of I₂ with thiosulfate in iodometric titrations.", a: "I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻"},
-    {q: "Why is starch indicator added near the endpoint in iodometric titrations rather than at the start?", a: "Starch forms a very stable complex with high [I₂] — difficult to break. Add when solution is pale yellow; blue disappears sharply at endpoint."},
-    {q: "What indicator is used for strong acid vs. strong base titrations and why?", a: "Either phenolphthalein or methyl orange — both change within the steep pH 3–10 section."},
-    {q: "What indicator is used for weak acid vs. strong base titrations?", a: "Phenolphthalein (pH 8.2–10.0) — equivalence point above pH 7."},
-    {q: "What indicator is used for strong acid vs. weak base titrations?", a: "Methyl orange (pH 3.1–4.4) — equivalence point below pH 7."},
+    {q: "Why is starch indicator added near the endpoint in iodometric titrations rather than at the start?", a: "Starch forms a very stable complex with high [I₂] - difficult to break. Add when solution is pale yellow; blue disappears sharply at endpoint."},
+    {q: "What indicator is used for strong acid vs. strong base titrations and why?", a: "Either phenolphthalein or methyl orange - both change within the steep pH 3–10 section."},
+    {q: "What indicator is used for weak acid vs. strong base titrations?", a: "Phenolphthalein (pH 8.2–10.0) - equivalence point above pH 7."},
+    {q: "What indicator is used for strong acid vs. weak base titrations?", a: "Methyl orange (pH 3.1–4.4) - equivalence point below pH 7."},
     {q: "Why is phenolphthalein unsuitable for strong acid vs. weak base titrations?", a: "Colour change at pH 8.2–10; equivalence point below pH 7 → indicator changes before the equivalence point."},
     {q: "What is a back titration and when is it used?", a: "Add excess known reagent; titrate remaining excess. Used when analyte is insoluble (e.g. CaCO₃) or reacts too slowly for direct titration."},
     {q: "Describe the preparation of a standard KMnO₄ solution.", a: "Accurately weigh KMnO₄; dissolve; transfer to volumetric flask; make up to mark. No rubber bung (KMnO₄ oxidises rubber)."},
@@ -911,18 +911,18 @@ const SETS = {
     {q: "What are the main sources of error in the sodium thiosulfate and HCl experiment?", a: "Subjective cross-disappearance judgement. Temperature fluctuations. Solutions not equilibrated before mixing. Timer delay."},
     {q: "Why should a maximum temperature of 70°C be used in this experiment?", a: "Above ~70°C, reaction too fast to time accurately → large % error in t. Hot acid also more hazardous."},
     {q: "If the gradient of the ln(1/t) vs 1/T graph is -5680, calculate Ea.", a: "Ea = 5680 × 8.31 = 47 200 J mol⁻¹ = 47.2 kJ mol⁻¹."},
-    {q: "What safety precautions are required for the sodium thiosulfate and HCl experiment?", a: "HCl: corrosive/irritant — goggles. SO₂ produced: fume cupboard or well-ventilated area. Wash hands after handling Na₂S₂O₃."}
+    {q: "What safety precautions are required for the sodium thiosulfate and HCl experiment?", a: "HCl: corrosive/irritant - goggles. SO₂ produced: fume cupboard or well-ventilated area. Wash hands after handling Na₂S₂O₃."}
   ]},
 
   "RP_A4": { title: "Testing for Cations and Anions (Activity 4)", cards: [
     {q: "Describe the test for Group 2 metal ions using sodium hydroxide solution.", a: "Mg²⁺: white ppt Mg(OH)₂ (insoluble).\nCa²⁺: white ppt Ca(OH)₂ (slightly soluble).\nSr²⁺/Ba²⁺: no ppt (hydroxides soluble)."},
     {q: "Write the ionic equation for magnesium hydroxide forming when NaOH is added to Mg²⁺(aq).", a: "Mg²⁺(aq) + 2OH⁻(aq) → Mg(OH)₂(s) (white ppt). Same for Ca²⁺ → Ca(OH)₂(s)."},
-    {q: "How do you test for ammonium ions (NH₄⁺)?", a: "Add NaOH(aq) and warm. NH₃ gas released — turns damp red litmus blue.\nNH₄⁺ + OH⁻ → NH₃(g) + H₂O"},
+    {q: "How do you test for ammonium ions (NH₄⁺)?", a: "Add NaOH(aq) and warm. NH₃ gas released - turns damp red litmus blue.\nNH₄⁺ + OH⁻ → NH₃(g) + H₂O"},
     {q: "Describe the test for sulfate ions (SO₄²⁻) and explain the role of HCl.", a: "Add BaCl₂(aq) acidified with dilute HCl → white ppt BaSO₄ = SO₄²⁻ present.\nHCl removes CO₃²⁻/SO₃²⁻ → prevents false BaCO₃/BaSO₃ precipitates."},
     {q: "Why must the barium chloride be acidified with HCl and NOT with H₂SO₄ when testing for sulfate ions?", a: "H₂SO₄ contains SO₄²⁻ → false positive BaSO₄. HCl: Cl⁻ does not precipitate with Ba²⁺."},
     {q: "Describe the silver nitrate test for halide ions.", a: "Acidify with dilute HNO₃; add AgNO₃(aq).\nCl⁻: white AgCl. Br⁻: cream AgBr. I⁻: pale yellow AgI.\nHNO₃ removes CO₃²⁻ → prevents Ag₂CO₃ false positive."},
     {q: "How can AgCl, AgBr and AgI precipitates be distinguished after they have formed?", a: "AgCl: dissolves in dilute NH₃.\nAgBr: dissolves only in conc. NH₃.\nAgI: insoluble in dilute or conc. NH₃."},
-    {q: "Describe the test for carbonate ions (CO₃²⁻).", a: "Add dilute HCl → effervescence. Bubble gas through limewater — turns cloudy if CO₂ present."},
+    {q: "Describe the test for carbonate ions (CO₃²⁻).", a: "Add dilute HCl → effervescence. Bubble gas through limewater - turns cloudy if CO₂ present."},
     {q: "How do you test for the presence of hydroxide ions (OH⁻)?", a: "Damp red litmus → blue. pH >> 7."},
     {q: "How does the solubility trend of Group 2 hydroxides affect the NaOH precipitate test?", a: "Mg(OH)₂: insoluble → clear white ppt. Ca(OH)₂: slightly soluble → faint ppt. Sr/Ba(OH)₂: soluble → no ppt. Solubility increases down Group 2."},
     {q: "How does the solubility trend of Group 2 sulfates apply to the BaCl₂ anion test?", a: "MgSO₄/CaSO₄: soluble → no ppt. SrSO₄/BaSO₄: insoluble → white ppt. Sulfate solubility decreases down Group 2 (opposite to hydroxides)."},
@@ -930,17 +930,17 @@ const SETS = {
   ]},
 
   "RP_A6": { title: "Functional Group Tests (Activity 6)", cards: [
-    {q: "How do you test for an alkene using bromine water?", a: "Shake with bromine water — alkenes decolourise orange/brown to colourless (Br₂ adds across C=C). No UV needed."},
+    {q: "How do you test for an alkene using bromine water?", a: "Shake with bromine water - alkenes decolourise orange/brown to colourless (Br₂ adds across C=C). No UV needed."},
     {q: "How do you test for an aldehyde using Tollens' reagent?", a: "Add unknown to Tollens' reagent; warm in water bath.\nAldehydes: silver mirror. Ketones: no change.\nRCHO + 2[Ag(NH₃)₂]⁺ + 2OH⁻ → RCOOH + 2Ag(s) + 4NH₃ + H₂O"},
-    {q: "How is Tollens' reagent prepared in the laboratory?", a: "AgNO₃(aq) + 1 drop NaOH → Ag₂O ppt; add NH₃(aq) dropwise until ppt just dissolves. Use immediately — do NOT store (dried silver = shock-sensitive explosive)."},
+    {q: "How is Tollens' reagent prepared in the laboratory?", a: "AgNO₃(aq) + 1 drop NaOH → Ag₂O ppt; add NH₃(aq) dropwise until ppt just dissolves. Use immediately - do NOT store (dried silver = shock-sensitive explosive)."},
     {q: "How do you test for an aldehyde using Fehling's solution?", a: "Mix equal volumes Fehling's A + B; add unknown; heat in water bath.\nAldehydes: blue → brick-red ppt Cu₂O. Ketones: no change."},
-    {q: "How do you test for a carboxylic acid?", a: "Add Na₂CO₃ — effervescence (CO₂) confirms carboxylic acid.\n2RCOOH + Na₂CO₃ → 2RCOONa + H₂O + CO₂"},
+    {q: "How do you test for a carboxylic acid?", a: "Add Na₂CO₃ - effervescence (CO₂) confirms carboxylic acid.\n2RCOOH + Na₂CO₃ → 2RCOONa + H₂O + CO₂"},
     {q: "How do you test for an alcohol using acidified potassium dichromate(VI)?", a: "Warm with acidified K₂Cr₂O₇ (orange).\nPrimary/secondary alcohol: orange → green. Tertiary: no change."},
     {q: "What is the key difference between the aldehyde and ketone tests using Tollens' and Fehling's reagents?", a: "Aldehydes: react with both Tollens' (silver mirror) and Fehling's (red Cu₂O).\nKetones: no reaction with either (cannot be oxidised under mild conditions)."},
     {q: "Summarise the key functional group tests and their results.", a: "Alkene: bromine water decolourises.\nAldehyde: Tollens' silver mirror; Fehling's red Cu₂O ppt.\nKetone: no reaction with Tollens'/Fehling's.\nCarboxylic acid: effervescence with Na₂CO₃.\n1°/2° alcohol: orange → green with K₂Cr₂O₇.\n3° alcohol: no reaction with K₂Cr₂O₇."},
     {q: "How does the bromine water test distinguish an alkene from an alkane?", a: "Alkene: decolourises Br₂ water in dark (electrophilic addition). Alkane: no reaction in dark; requires UV (free radical substitution → HBr)."},
-    {q: "What result does a halogenoalkane give with warm silver nitrate solution in ethanol?", a: "Chloro: white AgCl ppt (slowest). Bromo: cream AgBr ppt. Iodo: pale yellow AgI ppt (fastest — C–I weakest)."},
-    {q: "What safety precautions are required for functional group tests?", a: "Tollens': prepare fresh, dispose immediately (dried silver explosive). K₂Cr₂O₇: toxic/carcinogenic — gloves. H₂SO₄: corrosive. Bromine water: corrosive/toxic — fume cupboard. Water bath — no naked flames."}
+    {q: "What result does a halogenoalkane give with warm silver nitrate solution in ethanol?", a: "Chloro: white AgCl ppt (slowest). Bromo: cream AgBr ppt. Iodo: pale yellow AgI ppt (fastest - C–I weakest)."},
+    {q: "What safety precautions are required for functional group tests?", a: "Tollens': prepare fresh, dispose immediately (dried silver explosive). K₂Cr₂O₇: toxic/carcinogenic - gloves. H₂SO₄: corrosive. Bromine water: corrosive/toxic - fume cupboard. Water bath - no naked flames."}
   ]},
 
   "RP_A7b": { title: "Continuous Monitoring Method (Activity 7b)", cards: [
@@ -951,10 +951,10 @@ const SETS = {
     {q: "Describe the method for the magnesium and hydrochloric acid continuous monitoring experiment.", a: "50 cm³ of 1.0 mol dm⁻³ HCl in flask. Weigh 0.20 g Mg ribbon. Add Mg, bung immediately, start timer. Record H₂ volume every 15 s for 3 min."},
     {q: "What are the main methods used for continuous monitoring of a reaction?", a: "Gas syringe (gas produced). Mass loss on balance (gas escapes). Colorimetry (coloured species). Titration of withdrawn aliquots."},
     {q: "When is the mass loss method used, and what is its limitation?", a: "When gas escapes (e.g. CO₂ from CaCO₃ + HCl). Limitation: unreliable for light gases (H₂, HCl escape too quickly). Balance must be sensitive enough."},
-    {q: "What does 'pseudo-zero order' mean in a continuous monitoring experiment?", a: "One reactant in large excess — concentration stays approximately constant, so it appears to have no effect on rate. Isolates the effect of the other reactant."},
-    {q: "Why does a volume-time or concentration-time graph eventually become horizontal?", a: "Limiting reactant fully consumed — rate → 0, graph plateaus."},
-    {q: "How does colorimetry enable continuous monitoring of a reaction rate?", a: "Record absorbance at regular intervals. A ∝ c (Beer-Lambert) — changing absorbance reflects changing concentration."},
-    {q: "What safety precautions are needed for the Mg + HCl gas syringe experiment?", a: "HCl: corrosive — goggles and gloves. H₂: flammable — no flames, good ventilation. Insert bung immediately. Do not overfill syringe (max ~100 cm³)."},
+    {q: "What does 'pseudo-zero order' mean in a continuous monitoring experiment?", a: "One reactant in large excess - concentration stays approximately constant, so it appears to have no effect on rate. Isolates the effect of the other reactant."},
+    {q: "Why does a volume-time or concentration-time graph eventually become horizontal?", a: "Limiting reactant fully consumed - rate → 0, graph plateaus."},
+    {q: "How does colorimetry enable continuous monitoring of a reaction rate?", a: "Record absorbance at regular intervals. A ∝ c (Beer-Lambert) - changing absorbance reflects changing concentration."},
+    {q: "What safety precautions are needed for the Mg + HCl gas syringe experiment?", a: "HCl: corrosive - goggles and gloves. H₂: flammable - no flames, good ventilation. Insert bung immediately. Do not overfill syringe (max ~100 cm³)."},
     {q: "What is the difference in purpose between the initial rate method (Activity 7a) and continuous monitoring (Activity 7b)?", a: "7a (initial rate): many experiments varying [reactant] → determines rate equation and orders.\n7b (continuous): one experiment over time → full rate profile; half-life measurable for first-order reactions."}
   ]},
 
@@ -963,10 +963,10 @@ const SETS = {
     {q: "Why must a pH meter be calibrated before use?", a: "pH meters drift. Calibration with known buffer (e.g. pH 4.00) ensures accurate readings."},
     {q: "Describe the shape of a strong acid-strong base pH curve.", a: "Starts pH ~1–2. Slow rise then near-vertical section pH 3–11. Equivalence point pH = 7. Ends pH ~13."},
     {q: "Describe the shape of a weak acid-strong base pH curve.", a: "Starts pH ~3–4. Flat buffer region before equivalence point. Steep section above pH 7. Equivalence point above pH 7. At half-equivalence volume: pH = pKa."},
-    {q: "What is the buffer region on a weak acid-strong base titration curve?", a: "Flat section before equivalence point — both HA and A⁻ present in significant amounts. Buffer resists pH change."},
+    {q: "What is the buffer region on a weak acid-strong base titration curve?", a: "Flat section before equivalence point - both HA and A⁻ present in significant amounts. Buffer resists pH change."},
     {q: "At what volume is pH = pKa in a weak acid-strong base titration, and why?", a: "At half-equivalence volume: [HA] = [A⁻] → Ka = [H⁺] → pH = pKa. Read Ka directly from curve."},
     {q: "Describe the shape of a strong acid-weak base pH curve.", a: "Starts pH ~1–2. Steep section below pH 7 (~pH 3–7). Equivalence point below pH 7."},
-    {q: "Describe the shape of a weak acid-weak base pH curve.", a: "No steep section — pH changes gradually throughout. No suitable indicator; use pH meter to find equivalence point."},
+    {q: "Describe the shape of a weak acid-weak base pH curve.", a: "No steep section - pH changes gradually throughout. No suitable indicator; use pH meter to find equivalence point."},
     {q: "How do you identify the equivalence point from a pH curve?", a: "Inflection point of the steepest section. Strong/strong: pH 7. Weak acid/strong base: pH > 7. Strong acid/weak base: pH < 7."},
     {q: "How do you use a pH curve to choose an appropriate indicator?", a: "Indicator's colour-change range must fall within the steep section.\nStrong/strong: methyl orange or phenolphthalein.\nWeak acid/strong base: phenolphthalein only.\nStrong acid/weak base: methyl orange only."},
     {q: "Why is phenolphthalein unsuitable for a strong acid-weak base titration?", a: "Changes colour at pH 8.2–10; equivalence point below pH 7 → indicator changes before equivalence point."},
@@ -980,9 +980,9 @@ const SETS = {
     {q: "What happens when excess NaOH(aq) is added to Al³⁺(aq)?", a: "White ppt Al(OH)₃ first; dissolves in excess NaOH → [Al(OH)₄]⁻ (colourless). Al(OH)₃ is amphoteric."},
     {q: "What happens when excess NH₃(aq) is added to Cu²⁺(aq)?", a: "Limited NH₃: blue Cu(OH)₂ ppt. Excess NH₃: dissolves → deep blue [Cu(NH₃)₄(H₂O)₂]²⁺."},
     {q: "What is the colour change when excess NH₃(aq) is added to Cu²⁺(aq)?", a: "Limited NH₃: blue ppt. Excess NH₃: blue ppt dissolves → deep blue/royal blue solution of [Cu(NH₃)₄(H₂O)₂]²⁺."},
-    {q: "What result does Fe²⁺ or Fe³⁺ give with excess NH₃(aq)?", a: "Both form hydroxide ppts (green for Fe²⁺, brown for Fe³⁺) that do NOT dissolve in excess NH₃ — no stable ammine complexes formed."},
+    {q: "What result does Fe²⁺ or Fe³⁺ give with excess NH₃(aq)?", a: "Both form hydroxide ppts (green for Fe²⁺, brown for Fe³⁺) that do NOT dissolve in excess NH₃ - no stable ammine complexes formed."},
     {q: "What is observed when Na₂CO₃(aq) is added to Fe³⁺(aq)?", a: "Brown Fe(OH)₃ ppt + CO₂ effervescence. Fe³⁺ high charge density polarises CO₃²⁻ → hydrolysis → OH⁻ + CO₂."},
-    {q: "What is observed when Na₂CO₃(aq) is added to Cu²⁺(aq)?", a: "Blue-green CuCO₃ ppt; no CO₂ — Cu²⁺ lower charge density → does not hydrolyse CO₃²⁻."},
+    {q: "What is observed when Na₂CO₃(aq) is added to Cu²⁺(aq)?", a: "Blue-green CuCO₃ ppt; no CO₂ - Cu²⁺ lower charge density → does not hydrolyse CO₃²⁻."},
     {q: "Describe the method for Required Activity 11.", a: "10 drops of metal ion solution. Add NaOH dropwise to excess; note ppt colour and whether it dissolves. Repeat with NH₃(aq). Add Na₂CO₃; note ppt colour and gas."},
     {q: "Summarise the colours of hydroxide precipitates formed with NaOH for key metal ions.", a: "Cu²⁺: blue ppt (stays). Fe²⁺: green ppt (stays). Fe³⁺: brown ppt (stays). Al³⁺: white ppt (dissolves in excess NaOH → [Al(OH)₄]⁻)."},
     {q: "Why do 3+ metal ions form hydroxide precipitates (not carbonates) when Na₂CO₃ is added?", a: "M³⁺ high charge density polarises CO₃²⁻ → hydrolysis → OH⁻ + CO₂ → M(OH)₃ ppt + gas.\nM²⁺: lower charge density → MCO₃ ppt, no gas."}
@@ -1003,7 +1003,7 @@ const SETS = {
     {q:"State the Aufbau principle, Pauli exclusion principle, and Hund's rule.", a:"Aufbau: lowest energy orbitals fill first.\nPauli: max 2 electrons per orbital, opposite spins.\nHund's: degenerate orbitals fill singly before pairing."},
     {q:"Give the filling order for subshells up to 4p.", a:"1s → 2s → 2p → 3s → 3p → 4s → 3d → 4p\n(4s fills before 3d but 3d lost first when forming ions.)"},
     {q:"Write the full electron configuration of iron (Fe, Z=26).", a:"Fe: [Ar] 3d⁶ 4s². Fe²⁺: [Ar] 3d⁶. Fe³⁺: [Ar] 3d⁵."},
-    {q:"Why are the electron configurations of Cr and Cu anomalous?", a:"Cr: [Ar] 3d⁵ 4s¹ (half-filled d — extra stable). Cu: [Ar] 3d¹⁰ 4s¹ (full d — extra stable). One 4s electron promoted to 3d."},
+    {q:"Why are the electron configurations of Cr and Cu anomalous?", a:"Cr: [Ar] 3d⁵ 4s¹ (half-filled d - extra stable). Cu: [Ar] 3d¹⁰ 4s¹ (full d - extra stable). One 4s electron promoted to 3d."},
     {q:"How many electrons can s, p, d, and f subshells hold?", a:"s: 2. p: 6. d: 10. f: 14."},
     {q:"Write the electron configuration of the first 10 elements.", a:"H: 1s¹. He: 1s². Li: [He]2s¹. Be: [He]2s². B: [He]2s²2p¹. C: [He]2s²2p². N: [He]2s²2p³. O: [He]2s²2p⁴. F: [He]2s²2p⁵. Ne: [He]2s²2p⁶."},
     {q:"What does it mean to write an electron configuration using noble gas shorthand?", a:"Replace inner shells with the preceding noble gas in [brackets]. e.g. Na: [Ne]3s¹; Fe: [Ar]3d⁶4s²."},
@@ -1038,7 +1038,7 @@ const SETS = {
     {q:"What is the molar volume of an ideal gas at RTP?", a:"RTP (25°C, 100 kPa): 24.0 dm³ mol⁻¹. STP (0°C, 100 kPa): 22.7 dm³ mol⁻¹."},
     {q:"How do you find the empirical formula from percentage composition by mass?", a:"Divide % by Ar → mole ratio. Divide by smallest. Scale to whole numbers. e.g. 40%C, 6.7%H, 53.3%O → 1:2:1 → CH₂O."},
     {q:"How do you determine molecular formula from empirical formula?", a:"n = Mr / empirical formula mass. Molecular formula = n × empirical formula."},
-    {q:"What is the limiting reagent and how do you identify it?", a:"Reactant fully consumed first — limits product yield. Divide moles of each reactant by its stoichiometric coefficient; smaller value = limiting reagent."},
+    {q:"What is the limiting reagent and how do you identify it?", a:"Reactant fully consumed first - limits product yield. Divide moles of each reactant by its stoichiometric coefficient; smaller value = limiting reagent."},
     {q:"Define percentage yield and calculate it.", a:"% yield = (actual mass ÷ theoretical mass) × 100. Theoretical from limiting reagent + balanced equation."},
     {q:"Define atom economy and explain its significance.", a:"% atom economy = (Mr desired product / ΣMr all products) × 100. High = less waste, more sustainable. Addition = 100%; substitution < 100%."},
     {q:"Describe how to carry out a titration to find the concentration of an unknown acid.", a:"Pipette alkali into flask + indicator. Add acid from burette; record titre at permanent colour change. Repeat for concordant titres (±0.10 cm³). n = cV; use mole ratio to find unknown concentration."},
@@ -1059,7 +1059,7 @@ const SETS = {
     {q:"Write the overall equation for the reaction of Fe²⁺ with acidified KMnO₄.", a:"MnO₄⁻ + 8H⁺ + 5Fe²⁺ → Mn²⁺ + 5Fe³⁺ + 4H₂O. Ratio 1:5. Purple → colourless."},
     {q:"Describe the reactions of dilute acids with carbonates.", a:"Carbonate + acid → salt + water + CO₂. e.g. CaCO₃ + 2HNO₃ → Ca(NO₃)₂ + H₂O + CO₂. Effervescence; CO₂ turns limewater milky."},
     {q:"What is the oxidation state of Cr in K₂Cr₂O₇ and Mn in KMnO₄?", a:"Cr in K₂Cr₂O₇: +6. Mn in KMnO₄: +7."},
-    {q:"What is the oxidising agent in a redox reaction and how does it change?", a:"Accepts electrons — is itself reduced (oxidation state decreases). e.g. MnO₄⁻ (Mn +7→+2), Cr₂O₇²⁻ (Cr +6→+3)."},
+    {q:"What is the oxidising agent in a redox reaction and how does it change?", a:"Accepts electrons - is itself reduced (oxidation state decreases). e.g. MnO₄⁻ (Mn +7→+2), Cr₂O₇²⁻ (Cr +6→+3)."},
     {q:"Write the half-equation for the oxidation of iodide ions.", a:"2I⁻ → I₂ + 2e⁻ (I: −1 → 0). e.g. Cl₂ + 2I⁻ → 2Cl⁻ + I₂."},
     {q:"What is the reaction of dilute hydrochloric acid with a base (metal hydroxide)?", a:"Base + acid → salt + water. NaOH + HCl → NaCl + H₂O. Ionic: H⁺ + OH⁻ → H₂O."},
     {q:"How do you balance the redox equation for the reaction of Cr₂O₇²⁻ with Fe²⁺ in acid?", a:"Cr₂O₇²⁻ + 14H⁺ + 6e⁻ → 2Cr³⁺ + 7H₂O\nFe²⁺ → Fe³⁺ + e⁻ (×6)\nOverall: Cr₂O₇²⁻ + 14H⁺ + 6Fe²⁺ → 2Cr³⁺ + 6Fe³⁺ + 7H₂O"},
@@ -1111,13 +1111,13 @@ const SETS = {
     {q:"Why does ice float on water?", a:"Ice: 4 H-bonds per molecule in open tetrahedral lattice → lower density (~0.917 g cm⁻³) than liquid water (~1.00 g cm⁻³)."},
     {q:"How does branching affect the boiling point of alkane isomers?", a:"More branching → less surface contact → weaker LDFs → lower bp. e.g. pentane (36°C) > 2-methylbutane (28°C) > 2,2-dimethylpropane (9°C)."},
     {q:"Compare the boiling points of ethanol (C₂H₅OH) and dimethyl ether (CH₃OCH₃), same Mr=46.", a:"Ethanol bp 78°C; DME bp −24°C. Ethanol has O–H → H-bonds. DME has no O–H → only dipole-dipole + LDFs. H-bonds require more energy to break."},
-    {q:"Why do small alcohols (methanol, ethanol, propanol) dissolve readily in water?", a:"O–H group forms H-bonds with water — compatible with water's H-bond network. As chain length ↑, non-polar tail disrupts water structure → solubility ↓."},
-    {q:"Explain why ammonia (NH₃) has a much higher boiling point than phosphine (PH₃).", a:"NH₃ (bp −33°C) forms H-bonds (N–H···N). PH₃ (bp −88°C) cannot — P not electronegative enough. H-bonds require more energy to break than LDFs."},
+    {q:"Why do small alcohols (methanol, ethanol, propanol) dissolve readily in water?", a:"O–H group forms H-bonds with water - compatible with water's H-bond network. As chain length ↑, non-polar tail disrupts water structure → solubility ↓."},
+    {q:"Explain why ammonia (NH₃) has a much higher boiling point than phosphine (PH₃).", a:"NH₃ (bp −33°C) forms H-bonds (N–H···N). PH₃ (bp −88°C) cannot - P not electronegative enough. H-bonds require more energy to break than LDFs."},
     {q:"What effect does hydrogen bonding have on the viscosity and surface tension of water?", a:"H-bond network gives water unusually high surface tension and viscosity. Enables capillary action and supports surface-dwelling insects."},
-    {q:"Compare the boiling points of HF, HCl, HBr, HI and explain the trend.", a:"HCl < HBr < HI: increasing LDFs (more electrons). HF (bp 20°C): anomalously high — strong H-bonding despite small size."},
+    {q:"Compare the boiling points of HF, HCl, HBr, HI and explain the trend.", a:"HCl < HBr < HI: increasing LDFs (more electrons). HF (bp 20°C): anomalously high - strong H-bonding despite small size."},
     {q:"How does chain length affect the boiling point of alcohols?", a:"Longer chain → more electrons → stronger LDFs → higher bp. e.g. MeOH (65°C) < EtOH (78°C) < propan-1-ol (97°C) < butan-1-ol (117°C)."},
     {q:"What is an instantaneous dipole and how does it induce a dipole in a neighbouring molecule?", a:"Random electron movement → temporary uneven charge distribution → instantaneous dipole. Distorts neighbouring electron cloud → induced dipole. Attraction = LDF."},
-    {q:"Why do carboxylic acids have higher boiling points than alcohols of similar Mr?", a:"Carboxylic acids form H-bonded dimers (2 simultaneous H-bonds between COOH groups) — effectively double molecular mass on boiling. Also, C=O makes O–H more polar → stronger H-bonds."},
+    {q:"Why do carboxylic acids have higher boiling points than alcohols of similar Mr?", a:"Carboxylic acids form H-bonded dimers (2 simultaneous H-bonds between COOH groups) - effectively double molecular mass on boiling. Also, C=O makes O–H more polar → stronger H-bonds."},
   ]},
 
   "ocr_2.3.1": { title: "The Periodic Table", cards: [
@@ -1128,8 +1128,8 @@ const SETS = {
     {q:"Describe the trend in electronegativity across periods and down groups.", a:"Across period: increases (↑ nuclear charge, ↓ radius). Down group: decreases (↑ radius, ↑ shielding). F = most electronegative (4.0)."},
     {q:"Describe the trend in metallic character across a period and down a group.", a:"Decreases across period (Na→Al metals; P, S, Cl non-metals). Increases down group (C non-metal; Sn, Pb metals). Metals lose electrons easily (low IE)."},
     {q:"What are the s, p, d, and f blocks of the periodic table?", a:"s: Groups 1–2 (outer e⁻ in s). p: Groups 13–18 (outer e⁻ in p). d: transition metals (Groups 3–12). f: lanthanides/actinides."},
-    {q:"Explain the periodic trend in first ionisation energy and identify the anomalies.", a:"Generally increases across a period. Anomalies: Gp 13 < Gp 2 (p electron shielded by s²); Gp 16 < Gp 15 (paired p electron — extra repulsion)."},
-    {q:"What are metalloids and give examples.", a:"Properties intermediate between metals and non-metals. Si, Ge, As, Sb, Te. Si and Ge are semiconductors — essential in electronics."},
+    {q:"Explain the periodic trend in first ionisation energy and identify the anomalies.", a:"Generally increases across a period. Anomalies: Gp 13 < Gp 2 (p electron shielded by s²); Gp 16 < Gp 15 (paired p electron - extra repulsion)."},
+    {q:"What are metalloids and give examples.", a:"Properties intermediate between metals and non-metals. Si, Ge, As, Sb, Te. Si and Ge are semiconductors - essential in electronics."},
     {q:"Explain why noble gases (Group 18) are chemically inert.", a:"Full outer shells → no tendency to gain, lose or share electrons. Very high IE. Rarely form bonds."},
     {q:"Describe the trend in melting and boiling points of Group 1 metals down the group.", a:"Decreases down Group 1 (Li mp 181°C → Cs mp 28°C). Increasing radius weakens metallic bond (only 1 delocalised e⁻ per atom)."},
     {q:"How does the reactivity of Group 1 metals change down the group?", a:"Increases (Li < Na < K < Rb < Cs). Larger radius + more shielding → lower IE → outer electron lost more easily."},
@@ -1155,18 +1155,18 @@ const SETS = {
     {q:"How is IUPAC nomenclature applied to esters and amides?", a:"Ester: alkyl alkanoate (e.g. ethyl ethanoate CH₃COOC₂H₅). Amide: -ic acid → -amide (e.g. ethanamide CH₃CONH₂). N-substituted: N-methylethanamide."},
   ]},
 
-  "ocr_4.2.1": { title: "Hydrocarbons — Alkanes and Alkenes", cards: [
+  "ocr_4.2.1": { title: "Hydrocarbons - Alkanes and Alkenes", cards: [
     {q:"State the general formula and key structural features of alkanes.", a:"CₙH₂ₙ₊₂. All C−C σ bonds; sp³; 109.5°. Non-polar (LDFs only). bp increases with chain length; branching lowers bp."},
     {q:"Describe the free radical substitution of methane with chlorine.", a:"Initiation: Cl₂ →(UV) 2Cl•\nPropagation: Cl• + CH₄ → •CH₃ + HCl; •CH₃ + Cl₂ → CH₃Cl + Cl•\nTermination: any two radicals combine.\nProduct: mixture (CH₃Cl, CH₂Cl₂, CHCl₃, CCl₄)."},
     {q:"Why does free radical substitution of methane produce a mixture of products?", a:"Each substitution product (CH₃Cl etc.) can react further with Cl• → statistical mixture of all possible substitution levels."},
-    {q:"Compare complete and incomplete combustion of alkanes.", a:"Complete (excess O₂): CO₂ + H₂O; blue flame. Incomplete (limited O₂): CO + soot + H₂O; yellow flame. CO: toxic — binds haemoglobin."},
+    {q:"Compare complete and incomplete combustion of alkanes.", a:"Complete (excess O₂): CO₂ + H₂O; blue flame. Incomplete (limited O₂): CO + soot + H₂O; yellow flame. CO: toxic - binds haemoglobin."},
     {q:"State the general formula and structural features of alkenes.", a:"CₙH₂ₙ. C=C (1σ + 1π). sp²; 120°. Restricted rotation → E/Z isomerism. More reactive than alkanes (π electrons attract electrophiles)."},
     {q:"Describe the electrophilic addition of Br₂ to ethene and the mechanism.", a:"1. π electrons polarise Br₂ → δ+Br acts as electrophile.\n2. Br–Br breaks heterolytically → carbocation + Br⁻.\n3. Br⁻ attacks carbocation → 1,2-dibromoethane.\nObservation: orange bromine decolourises."},
     {q:"Describe the addition of HBr to propene and Markovnikov's rule.", a:"H⁺ adds to C with more H atoms (gives more stable secondary carbocation). Br⁻ attacks → 2-bromopropane (major). Markovnikov: H to the carbon with more H."},
     {q:"Describe the addition of steam (H₂O) to ethene to make ethanol.", a:"CH₂=CH₂ + H₂O → CH₃CH₂OH. Conditions: H₃PO₄ catalyst, 300°C, 60–70 atm. Industrial (continuous, non-renewable)."},
     {q:"What is addition polymerisation? Draw the repeat unit of poly(ethene).", a:"Alkene C=C opens; monomers join with no by-product. nCH₂=CH₂ → −(CH₂CH₂)ₙ−. Poly(propene): −CH(CH₃)CH₂−."},
     {q:"What is hydrogenation of alkenes and what are its conditions?", a:"Alkene + H₂ → alkane. Ni catalyst, 150°C. Used industrially to harden vegetable oils (margarine)."},
-    {q:"Describe the test for alkenes using bromine water.", a:"Add bromine water (orange) — decolourises with alkenes (electrophilic addition). No change with alkanes (no UV)."},
+    {q:"Describe the test for alkenes using bromine water.", a:"Add bromine water (orange) - decolourises with alkenes (electrophilic addition). No change with alkanes (no UV)."},
     {q:"Explain why addition reactions of alkenes are thermodynamically favourable.", a:"Weak π bond (~265 kJ mol⁻¹) broken; two stronger σ bonds formed. Net bond making > bond breaking → ΔH negative → exothermic."},
     {q:"Give the boiling point trend for the first six alkanes and explain it.", a:"CH₄ (−162°C) < C₂H₆ (−89°C) < C₃H₈ (−42°C) < C₄H₁₀ (−1°C) < C₅H₁₂ (36°C) < C₆H₁₄ (69°C). More electrons → stronger LDFs → higher bp."},
     {q:"What is cracking and why is it important industrially?", a:"Breaks long-chain alkanes → shorter alkanes + alkenes. Thermal: 700–1200°C (free radical). Catalytic: zeolite, ~500°C (carbocation). Supplies alkenes for polymers and shorter-chain fuels."},
@@ -1175,7 +1175,7 @@ const SETS = {
   "ocr_4.3.1": { title: "Alcohols, Haloalkanes and Analysis", cards: [
     {q:"Classify alcohols as primary, secondary, or tertiary and give examples.", a:"1°: −OH on C bonded to 1 other C (e.g. ethanol). 2°: −OH on C bonded to 2 other C (e.g. propan-2-ol). 3°: −OH on C bonded to 3 other C (e.g. 2-methylpropan-2-ol)."},
     {q:"Describe the oxidation of primary and secondary alcohols.", a:"1° → aldehyde (limited K₂Cr₂O₇, distil). 1° → carboxylic acid (excess, reflux). 2° → ketone (reflux). 3°: not oxidised. Orange → green with acidified K₂Cr₂O₇."},
-    {q:"Describe the dehydration of alcohols to alkenes.", a:"Heat with conc H₃PO₄ or over Al₂O₃ at ~300°C. CH₃CH₂OH → CH₂=CH₂ + H₂O. Larger alcohols: Zaitsev's rule — more substituted alkene predominates."},
+    {q:"Describe the dehydration of alcohols to alkenes.", a:"Heat with conc H₃PO₄ or over Al₂O₃ at ~300°C. CH₃CH₂OH → CH₂=CH₂ + H₂O. Larger alcohols: Zaitsev's rule - more substituted alkene predominates."},
     {q:"Describe the production of ethanol by fermentation and compare with industrial synthesis.", a:"Fermentation: C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ (yeast, ~30°C, anaerobic). Renewable but slow, impure, batch.\nHydration: C₂H₄ + H₂O → C₂H₅OH (H₃PO₄, 300°C, 60 atm). Continuous, pure; non-renewable."},
     {q:"Describe the substitution of −OH in alcohols with halide.", a:"With NaBr/conc H₂SO₄ (HBr in situ): ROH + HBr → RBr + H₂O. With PCl₅ or SOCl₂ → RCl. OH is poor leaving group; acid converts to better leaving group."},
     {q:"Classify haloalkanes as primary, secondary, or tertiary.", a:"1°: X on C bonded to 1 other C. 2°: X on C bonded to 2 C. 3°: X on C bonded to 3 C. Classification determines SN1/SN2 preference."},
@@ -1185,9 +1185,9 @@ const SETS = {
     {q:"Describe the test for rate of hydrolysis of halogenoalkanes using silver nitrate in ethanol.", a:"Warm with AgNO₃/ethanol. C−I: immediate yellow AgI ppt. C−Br: cream AgBr (seconds). C−Cl: white AgCl (slowly/heating). C−F: no ppt."},
     {q:"Describe the reactions of haloalkanes with KCN and with ammonia (excess).", a:"KCN (ethanol, warm): RX + CN⁻ → RCN + X⁻ (nitrile, chain +1C). Excess NH₃ (sealed tube): RX → RNH₂ (primary amine); further substitution possible."},
     {q:"Describe the key absorptions in infrared spectroscopy for functional group identification.", a:"O−H (alcohol): ~3230–3550 cm⁻¹ (broad). O−H (acid): ~2500–3300 cm⁻¹ (very broad). C=O (ketone/aldehyde): ~1700–1750 cm⁻¹. C=O (ester): ~1735 cm⁻¹. N−H: ~3300–3500 cm⁻¹. Fingerprint (<1500 cm⁻¹): unique to compound."},
-    {q:"What do CFCs do to the ozone layer and what is the mechanism?", a:"UV homolysis in stratosphere: CFCl₃ → CFCl₂• + Cl•. Chain: Cl• + O₃ → ClO• + O₂; ClO• + O → Cl• + O₂. Cl• regenerated — destroys up to 100,000 O₃ per radical. → Increased UV → skin cancer."},
+    {q:"What do CFCs do to the ozone layer and what is the mechanism?", a:"UV homolysis in stratosphere: CFCl₃ → CFCl₂• + Cl•. Chain: Cl• + O₃ → ClO• + O₂; ClO• + O → Cl• + O₂. Cl• regenerated - destroys up to 100,000 O₃ per radical. → Increased UV → skin cancer."},
     {q:"How is a mass spectrum interpreted to identify organic fragments?", a:"M⁺: highest m/z = Mr. Base peak: most abundant fragment. Common losses: −15 (CH₃•), −29 (CHO• or C₂H₅•), −31 (CH₂OH•), −45 (COOH•). Combine with IR/NMR."},
-    {q:"Describe the elimination reaction of haloalkanes with KOH.", a:"Alcoholic KOH, heat. OH⁻ acts as base — removes H from adjacent C; X leaves → C=C. e.g. CH₃CHBrCH₃ + KOH(alc) → CH₃CH=CH₂. Aqueous KOH favours SN2; alcoholic KOH favours elimination."},
+    {q:"Describe the elimination reaction of haloalkanes with KOH.", a:"Alcoholic KOH, heat. OH⁻ acts as base - removes H from adjacent C; X leaves → C=C. e.g. CH₃CHBrCH₃ + KOH(alc) → CH₃CH=CH₂. Aqueous KOH favours SN2; alcoholic KOH favours elimination."},
   ]},
 
   "ocr_4.4.1": { title: "Organic Synthesis", cards: [
@@ -1248,7 +1248,7 @@ const SETS = {
     {q:"State the two factors that determine the magnitude of lattice enthalpy.", a:"1. Ionic charge: higher charge → stronger attraction → larger ΔHlatt. 2. Ionic radius: smaller ions → closer together → larger ΔHlatt. MgO >> NaCl; LiF > CsI."},
     {q:"List all the steps in a Born-Haber cycle for NaCl.", a:"1. Na(s)→Na(g): ΔHat(Na) +108. 2. Na(g)→Na⁺(g)+e⁻: IE₁ +496. 3. ½Cl₂(g)→Cl(g): ΔHat(Cl) +122. 4. Cl(g)+e⁻→Cl⁻(g): EA₁ −349. 5. Na⁺(g)+Cl⁻(g)→NaCl(s): ΔHlatt −787. Sum = ΔHf°(NaCl) = −411 kJ mol⁻¹."},
     {q:"Define enthalpy of atomisation and electron affinity.", a:"ΔHat°: ΔH to form 1 mol gaseous atoms from element in standard state. Always endothermic. ΔEA1: energy when 1 mol gaseous atoms each gains one e⁻ → −1 ions. Usually exothermic. Cl(g)+e⁻→Cl⁻(g): −349 kJ mol⁻¹."},
-    {q:"Why is the second electron affinity of oxygen endothermic?", a:"1st EA (O→O⁻): exothermic −141 kJ mol⁻¹. 2nd EA (O⁻→O²⁻): endothermic +798 kJ mol⁻¹ — must overcome repulsion from existing negative charge on O⁻."},
+    {q:"Why is the second electron affinity of oxygen endothermic?", a:"1st EA (O→O⁻): exothermic −141 kJ mol⁻¹. 2nd EA (O⁻→O²⁻): endothermic +798 kJ mol⁻¹ - must overcome repulsion from existing negative charge on O⁻."},
     {q:"Explain the difference between theoretical and experimental lattice enthalpies.", a:"Theoretical: assumes purely ionic model. Experimental: from Born-Haber cycle. If |experimental| > |theoretical|: compound has covalent character. Caused by small high-charge cation polarising large/high-charge anion (Fajans' rules). E.g. AgCl > NaCl in covalent character."},
     {q:"Define enthalpy of hydration and its sign.", a:"ΔH when 1 mol gaseous ions dissolves in excess water → aqueous ions. Always exothermic (−). Magnitude increases with higher charge and smaller radius."},
     {q:"State the equation relating enthalpy of solution, lattice enthalpy, and hydration enthalpy.", a:"ΔHsol = ΔHlatt(dissociation) + ΔHhyd(cation) + ΔHhyd(anion). NaCl: +787 + (−406) + (−363) = +18 kJ mol⁻¹ (slightly endothermic; dissolves due to entropy increase)."},
@@ -1265,7 +1265,7 @@ const SETS = {
     {q:"State factors that increase entropy and give examples.", a:"s→l→g (large increase). Dissolving. More moles of gas (e.g. N₂O₄ → 2NO₂). Mixing. Increasing T. Larger/more complex molecules."},
     {q:"How is ΔSsystem calculated for a chemical reaction?", a:"ΔS°system = ΣS°(products) − ΣS°(reactants). Multiply by stoichiometric coefficients. Units: J K⁻¹ mol⁻¹."},
     {q:"State the Gibbs free energy equation and define each term.", a:"ΔG = ΔH − TΔS. ΔH in kJ mol⁻¹; T in K; ΔS in kJ K⁻¹ mol⁻¹ (divide J value by 1000). ΔG < 0 → feasible."},
-    {q:"What is the condition for spontaneity (feasibility) of a reaction?", a:"ΔG < 0: feasible. ΔG = 0: equilibrium. ΔG > 0: not feasible. ΔG < 0 does not guarantee the reaction is fast — kinetic barriers may still prevent it."},
+    {q:"What is the condition for spontaneity (feasibility) of a reaction?", a:"ΔG < 0: feasible. ΔG = 0: equilibrium. ΔG > 0: not feasible. ΔG < 0 does not guarantee the reaction is fast - kinetic barriers may still prevent it."},
     {q:"Analyse feasibility for all four combinations of ΔH and ΔS signs.", a:"ΔH−, ΔS+: always feasible. ΔH+, ΔS−: never feasible. ΔH−, ΔS−: feasible at low T only. ΔH+, ΔS+: feasible at high T only."},
     {q:"How do you calculate the temperature at which a reaction becomes feasible?", a:"Set ΔG = 0: T = ΔH/ΔS. Use consistent units (ΔS in kJ K⁻¹ mol⁻¹). Above this T (ΔH+, ΔS+): feasible. Below this T (ΔH−, ΔS−): feasible."},
     {q:"What is ΔSsurroundings and how does it relate to ΔH?", a:"ΔSsurr = −ΔH/T. Exothermic → ΔSsurr positive. ΔStotal = ΔSsystem + ΔSsurr = −ΔG/T. Spontaneous if ΔStotal > 0."},
@@ -1293,7 +1293,7 @@ const SETS = {
     {q:"What is the salt bridge and what is its function?", a:"Saturated KNO₃ in U-tube/filter paper. Allows ions to migrate → maintains electrical neutrality. Completes circuit without mixing solutions. KNO₃: K⁺ and NO₃⁻ unreactive with most half-cell solutions."},
     {q:"Describe an iodometric (iodine–thiosulfate) redox titration.", a:"Oxidising agent + excess KI(aq) (acidic) → I₂ liberated. Titrate I₂ with standard Na₂S₂O₃. Near endpoint: add starch → blue-black. Endpoint: blue-black disappears. Calculate oxidising agent from moles Na₂S₂O₃ and stoichiometry."},
     {q:"Write the half-equations and overall equation for the iodine–thiosulfate titration.", a:"I₂ + 2e⁻ → 2I⁻. 2S₂O₃²⁻ → S₄O₆²⁻ + 2e⁻. Overall: I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻. Ratio: 1 mol I₂ : 2 mol S₂O₃²⁻."},
-    {q:"Describe a KMnO₄ redox titration to find the concentration of Fe²⁺.", a:"Acidify with H₂SO₄ (not HCl — Cl⁻ oxidised). Run KMnO₄ from burette; self-indicating (purple → colourless). Endpoint: first permanent pale pink. Ratio: 1 MnO₄⁻ : 5 Fe²⁺."},
+    {q:"Describe a KMnO₄ redox titration to find the concentration of Fe²⁺.", a:"Acidify with H₂SO₄ (not HCl - Cl⁻ oxidised). Run KMnO₄ from burette; self-indicating (purple → colourless). Endpoint: first permanent pale pink. Ratio: 1 MnO₄⁻ : 5 Fe²⁺."},
   ]},
 
   "ocr_5.4.1": { title: "Transition Elements", cards: [
@@ -1303,7 +1303,7 @@ const SETS = {
     {q:"Define ligand, complex ion, and coordination number.", a:"Ligand: molecule/ion donating lone pair to metal via coordinate bond. Complex ion: metal + ligands. Coordination number: number of coordinate bonds to metal (usually 4 or 6). Common: H₂O, NH₃, Cl⁻, CN⁻, OH⁻."},
     {q:"Describe the common shapes of transition metal complexes.", a:"Octahedral (CN=6, 90°): [Fe(H₂O)₆]²⁺. Tetrahedral (CN=4, 109.5°, large ligands): [CuCl₄]²⁻. Square planar (CN=4, 90°, Pt²⁺): cisplatin [Pt(NH₃)₂Cl₂]."},
     {q:"Explain why transition metal complexes are coloured.", a:"Ligands split d orbitals into two energy levels. Electrons absorb visible light to undergo d-d transitions (lower → upper set). Colour observed = complementary to absorbed wavelength. E.g. [Cu(H₂O)₆]²⁺ absorbs red/orange → appears blue."},
-    {q:"Describe cis-trans isomerism in square planar complexes.", a:"cis: identical ligands adjacent (90°). trans: identical ligands opposite (180°). Cisplatin cis-[Pt(NH₃)₂Cl₂]: anticancer drug — cross-links DNA. Transplatin: inactive (ligands too far apart)."},
+    {q:"Describe cis-trans isomerism in square planar complexes.", a:"cis: identical ligands adjacent (90°). trans: identical ligands opposite (180°). Cisplatin cis-[Pt(NH₃)₂Cl₂]: anticancer drug - cross-links DNA. Transplatin: inactive (ligands too far apart)."},
     {q:"Describe optical isomerism in octahedral complexes with bidentate ligands.", a:"[M(en)₃]ⁿ⁺: three bidentate ligands create helical arrangement → two non-superimposable mirror images (Δ and Λ enantiomers). Rotate plane-polarised light in opposite directions."},
     {q:"Describe the ligand substitution reaction of [Cu(H₂O)₆]²⁺ with NH₃.", a:"[Cu(H₂O)₆]²⁺ + 4NH₃ → [Cu(NH₃)₄(H₂O)₂]²⁺ + 4H₂O. Limited NH₃: pale blue Cu(OH)₂ precipitate. Excess NH₃: precipitate dissolves → deep blue solution."},
     {q:"Describe the ligand substitution reaction of [Co(H₂O)₆]²⁺ with Cl⁻.", a:"[Co(H₂O)₆]²⁺ + 4Cl⁻ ⇌ [CoCl₄]²⁻ + 6H₂O. Add conc HCl → blue (tetrahedral). Add water → pink (octahedral). Shape change: octahedral ⇌ tetrahedral."},
@@ -1317,7 +1317,7 @@ const SETS = {
     {q:"What colour is Mn²⁺ in aqueous solution?", a:"Very pale pink, almost colourless. NaOH → cream Mn(OH)₂ precipitate (darkens in air)."},
     {q:"What colour is MnO₄⁻ (permanganate)?", a:"Intense purple. In acid: Mn(VII) → Mn²⁺ (purple → colourless). In neutral/alkaline: → brown MnO₂."},
     {q:"What colour is Cr²⁺?", a:"Blue (unstable, rapidly oxidised in air to Cr³⁺)."},
-    {q:"What colour is [Cr(H₂O)₆]³⁺ (Cr³⁺ in water)?", a:"Violet/purple (pure water); green in acidic solution (partial ligand substitution). NaOH → grey-green Cr(OH)₃ (amphoteric — dissolves in excess NaOH)."},
+    {q:"What colour is [Cr(H₂O)₆]³⁺ (Cr³⁺ in water)?", a:"Violet/purple (pure water); green in acidic solution (partial ligand substitution). NaOH → grey-green Cr(OH)₃ (amphoteric - dissolves in excess NaOH)."},
     {q:"What colour is CrO₄²⁻ (chromate)?", a:"Yellow (stable in alkaline). In acid: 2CrO₄²⁻ + 2H⁺ ⇌ Cr₂O₇²⁻ (orange) + H₂O."},
     {q:"What colour is Cr₂O₇²⁻ (dichromate)?", a:"Orange (stable in acid). Reduced to Cr³⁺ (green). In alkali → CrO₄²⁻ (yellow)."},
     {q:"List the key catalytic applications of transition metals.", a:"Fe: Haber process. V₂O₅: Contact process. MnO₂: H₂O₂ decomposition. Ni: hydrogenation of alkenes. Pt/Pd/Rh: catalytic converters. Mechanism: variable oxidation states."},
@@ -1329,12 +1329,12 @@ const SETS = {
   ]},
 
   "ocr_6.1.1": { title: "Aromatic Chemistry", cards: [
-    {q:"Describe the Kekulé structure of benzene and the evidence that disproved it.", a:"Kekulé: alternating C=C and C−C (cyclohexatriene). Evidence against: 1. All C−C bonds = 0.140 nm (intermediate, not two lengths). 2. ΔH(hydrogenation) = −208 kJ mol⁻¹, not −360 (3 × cyclohexene) — benzene ~152 kJ mol⁻¹ more stable (delocalisation energy)."},
+    {q:"Describe the Kekulé structure of benzene and the evidence that disproved it.", a:"Kekulé: alternating C=C and C−C (cyclohexatriene). Evidence against: 1. All C−C bonds = 0.140 nm (intermediate, not two lengths). 2. ΔH(hydrogenation) = −208 kJ mol⁻¹, not −360 (3 × cyclohexene) - benzene ~152 kJ mol⁻¹ more stable (delocalisation energy)."},
     {q:"Describe the delocalised model of benzene.", a:"Six sp² C in regular hexagon. Each C has one e⁻ in p orbital ⊥ to ring. Six p orbitals overlap → continuous π system above and below ring. Electrons delocalised over all 6 C → aromatic stabilisation. Represented as circle in hexagon."},
-    {q:"Explain why benzene undergoes electrophilic substitution rather than addition.", a:"Addition would break the delocalised π system (lose ~152 kJ mol⁻¹ stabilisation). Substitution restores the aromatic ring — H⁺ leaves after electrophile attacks. Products more stable."},
-    {q:"Describe the nitration of benzene — reagents, conditions, electrophile, and mechanism.", a:"conc HNO₃ + conc H₂SO₄; <55°C. Electrophile: NO₂⁺ (nitronium). HNO₃ + H₂SO₄ → NO₂⁺ + HSO₄⁻ + H₂O. 1. NO₂⁺ attacks ring → arenium ion. 2. H⁺ lost → ring restored. Product: nitrobenzene (yellow oil)."},
-    {q:"Describe the halogenation of benzene — reagents, conditions, mechanism.", a:"Cl₂ or Br₂ + AlCl₃/FeBr₃ (Lewis acid catalyst), r.t. Catalyst polarises X₂ → generates X⁺ equivalent. X⁺ attacks ring → arenium ion → H⁺ lost → halobenzene + HX. Catalyst regenerated."},
-    {q:"Describe Friedel-Crafts acylation — reagents, conditions, and why it is preferred over alkylation.", a:"RCOCl + AlCl₃. Electrophile: acylium RCO⁺. Product: aryl ketone. Preferred over alkylation: C=O is electron-withdrawing → deactivates ring → stops further substitution → one product."},
+    {q:"Explain why benzene undergoes electrophilic substitution rather than addition.", a:"Addition would break the delocalised π system (lose ~152 kJ mol⁻¹ stabilisation). Substitution restores the aromatic ring - H⁺ leaves after electrophile attacks. Products more stable."},
+    {q:"Describe the nitration of benzene - reagents, conditions, electrophile, and mechanism.", a:"conc HNO₃ + conc H₂SO₄; <55°C. Electrophile: NO₂⁺ (nitronium). HNO₃ + H₂SO₄ → NO₂⁺ + HSO₄⁻ + H₂O. 1. NO₂⁺ attacks ring → arenium ion. 2. H⁺ lost → ring restored. Product: nitrobenzene (yellow oil)."},
+    {q:"Describe the halogenation of benzene - reagents, conditions, mechanism.", a:"Cl₂ or Br₂ + AlCl₃/FeBr₃ (Lewis acid catalyst), r.t. Catalyst polarises X₂ → generates X⁺ equivalent. X⁺ attacks ring → arenium ion → H⁺ lost → halobenzene + HX. Catalyst regenerated."},
+    {q:"Describe Friedel-Crafts acylation - reagents, conditions, and why it is preferred over alkylation.", a:"RCOCl + AlCl₃. Electrophile: acylium RCO⁺. Product: aryl ketone. Preferred over alkylation: C=O is electron-withdrawing → deactivates ring → stops further substitution → one product."},
     {q:"Describe Friedel-Crafts alkylation and its limitation.", a:"RCl + AlCl₃. Product: alkylbenzene. Limitation: alkyl activates ring → polyalkylation → mixture of products. Acylation preferred for clean synthesis."},
     {q:"Describe the reactions of phenol with bromine water and with dilute HNO₃.", a:"Br₂(aq): no catalyst; immediate white precipitate of 2,4,6-tribromophenol. O lone pair delocalises into ring → activates all ortho/para. Dilute HNO₃ (r.t.): 2-nitrophenol + 4-nitrophenol (no H₂SO₄ needed)."},
     {q:"Explain directing effects in electrophilic aromatic substitution.", a:"Electron-donating groups (OH, NH₂, CH₃): activate ring → ortho/para directors. Electron-withdrawing groups (NO₂, CHO, COOH): deactivate ring → meta directors."},
@@ -1351,11 +1351,11 @@ const SETS = {
     {q:"Describe the reaction of amines with halogenoalkanes.", a:"RNH₂ + R'X → 2° amine → 3° amine → quaternary salt (mixture). Use large excess amine to favour monoalkylation."},
     {q:"Describe the reaction of amines with acyl chlorides.", a:"RNH₂ + R'COCl → RNHCOR' + HCl. Fast, irreversible. Gives one product (amide). HCl neutralised by excess amine."},
     {q:"Describe the preparation of amines by reduction of nitriles.", a:"RCN + 4[H] (LiAlH₄/dry ether) → RCH₂NH₂. Chain extended by 1C. E.g. CH₃CN → CH₃CH₂NH₂."},
-    {q:"Describe the preparation of aniline from nitrobenzene.", a:"1. Sn + conc HCl, reflux → C₆H₅NH₃⁺Cl⁻. 2. Add NaOH → C₆H₅NH₂. Carcinogenic — fume cupboard; avoid skin contact."},
-    {q:"Describe the preparation of a diazonium salt (diazotisation).", a:"ArNH₂ + NaNO₂ + HCl, 0–5°C → ArN₂⁺Cl⁻. Must keep ice cold — unstable above 10°C (decomposes to phenol + N₂)."},
+    {q:"Describe the preparation of aniline from nitrobenzene.", a:"1. Sn + conc HCl, reflux → C₆H₅NH₃⁺Cl⁻. 2. Add NaOH → C₆H₅NH₂. Carcinogenic - fume cupboard; avoid skin contact."},
+    {q:"Describe the preparation of a diazonium salt (diazotisation).", a:"ArNH₂ + NaNO₂ + HCl, 0–5°C → ArN₂⁺Cl⁻. Must keep ice cold - unstable above 10°C (decomposes to phenol + N₂)."},
     {q:"Describe azo coupling and the formation of azo dyes.", a:"ArN₂⁺ + phenol (alkaline) or ArNH₂ → Ar−N=N−Ar' (azo compound). Electrophilic attack at para position. −N=N− chromophore → yellow/orange/red colour. Used as fabric dyes."},
     {q:"What is the importance of diazonium salts in synthesis?", a:"Introduce substituents (−Cl, −Br, −I, −CN, −OH) not accessible by direct EAS. ArNH₂ made by nitration + reduction. Enables precise regiochemistry. Also used in azo dye synthesis."},
-    {q:"Why are aromatic amines (e.g. aniline) considered hazardous?", a:"Carcinogenic — absorbed through skin/inhalation; metabolites damage DNA. Precautions: fume cupboard; gloves; avoid skin contact."},
+    {q:"Why are aromatic amines (e.g. aniline) considered hazardous?", a:"Carcinogenic - absorbed through skin/inhalation; metabolites damage DNA. Precautions: fume cupboard; gloves; avoid skin contact."},
     {q:"Describe the basicity of amines quantitatively using Kb and pKb.", a:"Kb = [RNH₃⁺][OH⁻]/[RNH₂]. pKb = −log Kb. Smaller pKb = stronger base. CH₃NH₂: pKb ≈ 3.4; NH₃: 4.7; aniline: 9.4. pKa(conjugate acid) + pKb = 14."},
   ]},
 
@@ -1363,7 +1363,7 @@ const SETS = {
     {q:"Distinguish aldehydes from ketones in structure and nomenclature.", a:"Aldehyde: C=O at end of chain; −CHO; suffix −al. Ketone: C=O within chain; suffix −one. Both polar (Cδ+−Oδ−)."},
     {q:"Explain the general mechanism for nucleophilic addition to the C=O group.", a:"Cδ+ attacked by Nu⁻ → C=O π bond breaks → O⁻ (tetrahedral intermediate) → O⁻ protonated → OH. New C−Nu bond formed."},
     {q:"Describe the addition of HCN to a carbonyl compound and its synthetic use.", a:"RCHO + HCN → RCH(OH)CN (hydroxynitrile). CN⁻ attacks Cδ+; O⁻ protonated by HCN. New chiral centre → racemic mixture. Synthetic use: +1C; can hydrolyse to hydroxy acid."},
-    {q:"Describe the reduction of aldehydes and ketones using NaBH₄.", a:"RCHO → RCH₂OH (1° alcohol). RCOR' → RCH(OH)R' (2° alcohol). H⁻ (hydride) from BH₄⁻ attacks Cδ+. Mild — does not reduce C=C, COOH, or esters."},
+    {q:"Describe the reduction of aldehydes and ketones using NaBH₄.", a:"RCHO → RCH₂OH (1° alcohol). RCOR' → RCH(OH)R' (2° alcohol). H⁻ (hydride) from BH₄⁻ attacks Cδ+. Mild - does not reduce C=C, COOH, or esters."},
     {q:"Describe the 2,4-DNPH (Brady's reagent) test for carbonyl compounds.", a:"Add 2,4-DNPH in acidified ethanol → orange/yellow crystalline precipitate (confirms C=O). Identify compound: filter, dry, measure melting point, compare to tables."},
     {q:"Describe the Tollens' reagent test (silver mirror test) for aldehydes.", a:"[Ag(NH₃)₂]⁺(aq). Aldehyde → silver mirror (Ag⁺ reduced to Ag). Ketone: no reaction. Distinguishes aldehyde from ketone."},
     {q:"Describe the Fehling's/Benedict's solution test for aldehydes.", a:"Blue Cu²⁺ complex. Aldehyde + heat → brick-red Cu₂O precipitate. Ketone: no reaction. Used to test for glucose (aldehyde sugar) in urine."},
@@ -1516,7 +1516,7 @@ const CALC_SETS = [
       { q: "How many moles of gas occupy 6.0 dm³ at RTP? (Molar volume at RTP = 24.0 dm³ mol⁻¹)", hint: "n = V ÷ molar volume", answer: 0.25, unit: "mol", tolerance: 0.01, steps: ["n = V ÷ Vm = 6.0 ÷ 24.0", "n = 0.25 mol"] },
       { q: "Calculate the volume (dm³) occupied by 0.40 mol of gas at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "V = n × molar volume", answer: 9.6, unit: "dm³", tolerance: 0.05, steps: ["V = n × Vm = 0.40 × 24.0", "V = 9.6 dm³"] },
       { q: "Using PV = nRT, calculate the pressure (Pa) exerted by 0.10 mol of gas in a 2.0 dm³ container at 300 K. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Rearrange PV=nRT for P. Convert V to m³ (÷1000).", answer: 124710, unit: "Pa", tolerance: 500, steps: ["V = 2.0 dm³ = 0.0020 m³", "P = nRT ÷ V", "P = (0.10 × 8.314 × 300) ÷ 0.0020", "P = 249.42 ÷ 0.0020 = 124 710 Pa"] },
-      { q: "Calculate the % atom economy for making ethanol (Mr = 46) by hydration of ethene: C₂H₄ + H₂O → C₂H₅OH. (Mr C₂H₄ = 28, Mr H₂O = 18)", hint: "Atom economy = (Mr desired product ÷ sum of Mr all reactants) × 100", answer: 100, unit: "%", tolerance: 1, steps: ["Sum of Mr of reactants = 28 + 18 = 46", "Desired product Mr = 46", "Atom economy = (46 ÷ 46) × 100 = 100%", "This is a 100% atom economy reaction — all atoms end up in the product."] },
+      { q: "Calculate the % atom economy for making ethanol (Mr = 46) by hydration of ethene: C₂H₄ + H₂O → C₂H₅OH. (Mr C₂H₄ = 28, Mr H₂O = 18)", hint: "Atom economy = (Mr desired product ÷ sum of Mr all reactants) × 100", answer: 100, unit: "%", tolerance: 1, steps: ["Sum of Mr of reactants = 28 + 18 = 46", "Desired product Mr = 46", "Atom economy = (46 ÷ 46) × 100 = 100%", "This is a 100% atom economy reaction - all atoms end up in the product."] },
       { q: "A reaction produces 4.2 g of product. The theoretical yield was 6.0 g. Calculate the % yield.", hint: "% yield = (actual ÷ theoretical) × 100", answer: 70, unit: "%", tolerance: 0.5, steps: ["% yield = (actual yield ÷ theoretical yield) × 100", "% yield = (4.2 ÷ 6.0) × 100", "% yield = 70%"] },
     ]
   },
@@ -1551,7 +1551,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_equilibrium", title: "Equilibrium — Kc and Kp", color: "#d97706", board: "both",
+    id: "calc_equilibrium", title: "Equilibrium - Kc and Kp", color: "#d97706", board: "both",
     questions: [
       { q: "At equilibrium, [H₂] = 0.30 mol dm⁻³, [I₂] = 0.10 mol dm⁻³, [HI] = 0.60 mol dm⁻³.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kc.", hint: "Kc = [products]^stoich / [reactants]^stoich. Products are raised to the power of their coefficients.", answer: 12, unit: "", tolerance: 0.2, steps: ["Kc = [HI]² ÷ ([H₂][I₂])", "Kc = (0.60)² ÷ (0.30 × 0.10)", "Kc = 0.36 ÷ 0.030 = 12", "Kc has no units here (equal moles of gas each side)."] },
       { q: "For N₂(g) + 3H₂(g) ⇌ 2NH₃(g), at equilibrium: [N₂] = 0.10, [H₂] = 0.30, [NH₃] = 0.20 mol dm⁻³. Calculate Kc (include units).", hint: "Kc = [NH₃]² ÷ ([N₂][H₂]³). Work out the units separately.", answer: 14.8, unit: "mol⁻² dm⁶", tolerance: 0.5, steps: ["Kc = [NH₃]² ÷ ([N₂] × [H₂]³)", "Kc = (0.20)² ÷ (0.10 × (0.30)³)", "Kc = 0.040 ÷ (0.10 × 0.027) = 0.040 ÷ 0.0027 = 14.8", "Units: mol²dm⁻⁶ ÷ (mol dm⁻³ × mol³dm⁻⁹) = mol⁻²dm⁶"] },
@@ -1582,7 +1582,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_thermo", title: "Thermodynamics — ΔG & Born-Haber", color: "#b45309", board: "both",
+    id: "calc_thermo", title: "Thermodynamics - ΔG & Born-Haber", color: "#b45309", board: "both",
     questions: [
       { q: "Calculate ΔG at 298 K for a reaction where ΔH = −92 kJ mol⁻¹ and ΔS = −199 J K⁻¹ mol⁻¹.", hint: "ΔG = ΔH − TΔS. Make sure units are consistent (convert ΔS to kJ).", answer: -32.7, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["ΔG = ΔH − TΔS", "ΔS in kJ = −199 ÷ 1000 = −0.199 kJ K⁻¹ mol⁻¹", "ΔG = −92 − (298 × −0.199)", "ΔG = −92 + 59.3 = −32.7 kJ mol⁻¹", "ΔG < 0 → reaction is feasible at 298 K."] },
       { q: "At what temperature (K) does a reaction with ΔH = +60 kJ mol⁻¹ and ΔS = +150 J K⁻¹ mol⁻¹ become feasible?", hint: "Feasible when ΔG = 0: T = ΔH ÷ ΔS. Convert ΔH to J.", answer: 400, unit: "K", tolerance: 5, steps: ["ΔG = 0 when ΔH = TΔS", "T = ΔH ÷ ΔS = 60 000 ÷ 150 = 400 K", "Above 400 K, ΔG < 0 and the reaction is feasible."] },
@@ -1629,7 +1629,7 @@ const EXTENDED_QUESTIONS = [
       "if there is a bond drawn to the positive chargeFor",
       ", credit attack on a partially positively charged carbocationstructure, but penalise",
       "for the structure of the carbocation.52.Aston Manor Academy",
-      "Penalise inclusion of —H bonds(allow carbonium ion in place of carbocation)",
+      "Penalise inclusion of  - H bonds(allow carbonium ion in place of carbocation)",
       "idea that 1-bromo-1-methylcyclohexane is formed from/via orhas more stable carbocationM2 and",
       "must refer to stability of carbocations (ignore referenceto stability of products)"
     ],
@@ -2161,7 +2161,7 @@ const EXTENDED_QUESTIONS = [
     marks: 17,
     question: `ve isomers are repeated to help you answer this question. State which isomer produces the spectrum in Figure 1 and which isomer produces thespectrum in Figure 2.Explain your answer.You do not need to identify every peak in each spectrum.Use Table C on the Data Sheet to answer the question.(5)(f) U and V are other isomers of P, Q, R, S and T.The 1H n.m.r. spectrum of U consists of two singlets.V is a cyclic alcohol that exists as optical isomers.Draw the structure of U and the structure of V. U V`,
     markScheme: [
-      "or M5M3150-90 (ppm) or value in range is C—O or alcohol or etherM41two peaks (so not S which would have only one)",
+      "or M5M3150-90 (ppm) or value in range is C - O or alcohol or etherM41two peaks (so not S which would have only one)",
       "(f) 1Aston Manor Academy"
     ],
     examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
@@ -2808,21 +2808,21 @@ const SYNTH_ROUTES = [
   // FROM: Alkane
   { from:"Alkane", to:"Halogenoalkane", reagents:"Cl₂ or Br₂", conditions:"UV light (hν), room temperature", mechanism:"Free Radical Substitution", notes:"Mixture of products formed (mono-, di-, tri-substituted etc.). Cl₂ is more reactive than Br₂ but Br₂ is more selective.", steps:[
     { stage:"Initiation", equation:"Cl₂  →  2Cl•", arrow:"hν (UV light)", note:"UV light supplies energy to break the Cl–Cl bond homolytically. Each chlorine atom takes one electron, forming two highly reactive chlorine radicals. This is the only step that requires an energy input." },
-    { stage:"Propagation 1", equation:"Cl•  +  CH₄  →  CH₃•  +  HCl", arrow:"", note:"A chlorine radical abstracts a hydrogen atom from methane (takes the H along with its electron). A methyl radical (CH₃•) is produced alongside HCl. The chlorine radical is consumed but a new radical is generated — the chain continues." },
-    { stage:"Propagation 2", equation:"CH₃•  +  Cl₂  →  CH₃Cl  +  Cl•", arrow:"", note:"The methyl radical reacts with a Cl₂ molecule, abstracting one chlorine atom. Chloromethane (the product) is formed, and a chlorine radical is regenerated — restarting Propagation 1. Steps 1 and 2 repeat thousands of times." },
+    { stage:"Propagation 1", equation:"Cl•  +  CH₄  →  CH₃•  +  HCl", arrow:"", note:"A chlorine radical abstracts a hydrogen atom from methane (takes the H along with its electron). A methyl radical (CH₃•) is produced alongside HCl. The chlorine radical is consumed but a new radical is generated - the chain continues." },
+    { stage:"Propagation 2", equation:"CH₃•  +  Cl₂  →  CH₃Cl  +  Cl•", arrow:"", note:"The methyl radical reacts with a Cl₂ molecule, abstracting one chlorine atom. Chloromethane (the product) is formed, and a chlorine radical is regenerated - restarting Propagation 1. Steps 1 and 2 repeat thousands of times." },
     { stage:"Termination", equation:"Cl•  +  Cl•  →  Cl₂\nCH₃•  +  Cl•  →  CH₃Cl\nCH₃•  +  CH₃•  →  C₂H₆", arrow:"", note:"Any two radicals collide and combine, destroying both radicals and ending the chain. Three possible termination reactions are shown. The formation of ethane (C₂H₆) as a minor byproduct is evidence that CH₃• radicals exist during the reaction." },
   ], board:"both" },
 
   // FROM: Alkene
   { from:"Alkene", to:"Alkane", reagents:"H₂, Ni catalyst", conditions:"150°C", mechanism:"Catalytic Hydrogenation", notes:"Heterogeneous catalysis. H atoms adsorb onto Ni surface, then transferred to alkene.", board:"both" },
   { from:"Alkene", to:"Halogenoalkane", reagents:"HBr or HCl", conditions:"Room temperature, no catalyst", mechanism:"Electrophilic Addition", notes:"Markovnikov's rule for unsymmetrical alkenes: H adds to C with more H (via more stable secondary carbocation). Produces single haloalkane.", board:"both" },
-  { from:"Alkene", to:"Dihalide", reagents:"Br₂ (bromine water or pure)", conditions:"Room temperature, no catalyst", mechanism:"Electrophilic Addition", notes:"Bromine water decolourises — test for C=C. Anti addition gives trans product. Produces 1,2-dibromoalkane.", board:"both" },
+  { from:"Alkene", to:"Dihalide", reagents:"Br₂ (bromine water or pure)", conditions:"Room temperature, no catalyst", mechanism:"Electrophilic Addition", notes:"Bromine water decolourises - test for C=C. Anti addition gives trans product. Produces 1,2-dibromoalkane.", board:"both" },
   { from:"Alkene", to:"Alcohol", reagents:"H₂O (steam), H₃PO₄ catalyst", conditions:"300°C, 60–70 atm", mechanism:"Electrophilic Addition (hydration)", notes:"Reversible reaction. H₃PO₄ is the acid catalyst. Markovnikov's rule applies for unsymmetrical alkenes → secondary alcohol preferred.", board:"both" },
   { from:"Alkene", to:"Diol", reagents:"Cold dilute KMnO₄ (alkaline)", conditions:"Room temperature, alkaline conditions", mechanism:"Oxidation (dihydroxylation)", notes:"OCR only. KMnO₄ is decolourised from purple → colourless. Syn addition. Alternatively O₃ then H₂O₂ gives carbonyl products.", board:"ocr" },
   { from:"Alkene", to:"Addition Polymer", reagents:"Monomer only (no other reagents)", conditions:"High pressure, Ziegler-Natta catalyst or radical initiator", mechanism:"Addition Polymerisation", notes:"n(CH₂=CHX) → (–CH₂–CHX–)ₙ. No atoms lost. Polymer is not biodegradable. Draw repeat unit with bonds through brackets.", board:"both" },
 
   // FROM: Halogenoalkane
-  { from:"Halogenoalkane", to:"Alcohol", reagents:"NaOH(aq) or KOH(aq)", conditions:"Aqueous, reflux", mechanism:"Nucleophilic Substitution (SN2 for 1°, SN1 for 3°)", notes:"OH⁻ is the nucleophile. 1°: SN2 — backside attack, inversion of configuration. 3°: SN1 — carbocation intermediate, racemic mixture. Rate: I > Br > Cl (bond strength).", board:"both" },
+  { from:"Halogenoalkane", to:"Alcohol", reagents:"NaOH(aq) or KOH(aq)", conditions:"Aqueous, reflux", mechanism:"Nucleophilic Substitution (SN2 for 1°, SN1 for 3°)", notes:"OH⁻ is the nucleophile. 1°: SN2 - backside attack, inversion of configuration. 3°: SN1 - carbocation intermediate, racemic mixture. Rate: I > Br > Cl (bond strength).", board:"both" },
   { from:"Halogenoalkane", to:"Alkene", reagents:"KOH (or NaOH) in ethanol", conditions:"Alcoholic solvent, heat (reflux)", mechanism:"Elimination (E2)", notes:"Hot ethanolic KOH favours elimination. HX eliminated. Produces alkene. Cold aqueous KOH favours substitution.", board:"both" },
   { from:"Halogenoalkane", to:"Nitrile", reagents:"KCN (or NaCN) in ethanol", conditions:"Ethanol solvent, reflux", mechanism:"Nucleophilic Substitution (SN2)", notes:"CN⁻ is the nucleophile. Chain extended by ONE carbon. Product can be hydrolysed to carboxylic acid or reduced to amine.", board:"both" },
   { from:"Halogenoalkane", to:"Amine", reagents:"Excess concentrated NH₃ in ethanol", conditions:"Sealed tube (pressure), heat", mechanism:"Nucleophilic Substitution", notes:"Excess NH₃ needed to avoid polyalkylation. 1° amine formed first, then 2° and 3° amines and quaternary ammonium salts as side products.", board:"both" },
@@ -2833,7 +2833,7 @@ const SYNTH_ROUTES = [
   { from:"Primary Alcohol", to:"Carboxylic Acid", reagents:"Excess K₂Cr₂O₇/H₂SO₄", conditions:"Reflux (to prevent product escaping)", mechanism:"Oxidation", notes:"Primary alcohol oxidised twice: 1° alcohol → aldehyde → carboxylic acid. Excess oxidising agent and reflux ensures full conversion.", board:"both" },
   { from:"Primary Alcohol", to:"Alkene", reagents:"Conc H₃PO₄ or Al₂O₃", conditions:"~180°C (H₃PO₄) or 350°C (Al₂O₃)", mechanism:"Acid-catalysed Elimination (dehydration)", notes:"Loss of H₂O across adjacent C atoms. If multiple alkenes possible, Zaitsev's rule gives more substituted alkene as major product.", board:"both" },
   { from:"Primary Alcohol", to:"Halogenoalkane", reagents:"NaBr + conc H₂SO₄, or PCl₅, or SOCl₂", conditions:"Reflux (NaBr/H₂SO₄); room temperature (PCl₅)", mechanism:"Nucleophilic Substitution", notes:"NaBr/H₂SO₄ gives bromoalkane. PCl₅ gives chloroalkane + HCl fumes (test). SOCl₂ gives chloroalkane + SO₂ + HCl. OH replaced by halide.", board:"both" },
-  { from:"Primary Alcohol", to:"Ester", reagents:"Carboxylic acid + conc H₂SO₄ catalyst", conditions:"Reflux (reversible reaction — Fischer esterification)", mechanism:"Condensation (Esterification)", notes:"Reversible — equilibrium mixture. Remove product or add excess of one reagent to improve yield. H₂O eliminated.", board:"both" },
+  { from:"Primary Alcohol", to:"Ester", reagents:"Carboxylic acid + conc H₂SO₄ catalyst", conditions:"Reflux (reversible reaction - Fischer esterification)", mechanism:"Condensation (Esterification)", notes:"Reversible - equilibrium mixture. Remove product or add excess of one reagent to improve yield. H₂O eliminated.", board:"both" },
 
   // FROM: Secondary Alcohol
   { from:"Secondary Alcohol", to:"Ketone", reagents:"K₂Cr₂O₇/H₂SO₄ (acidified)", conditions:"Reflux", mechanism:"Oxidation", notes:"Secondary alcohol → ketone only. No further oxidation possible. K₂Cr₂O₇ orange → green. Ketone cannot be oxidised further by Cr₂O₇²⁻.", board:"both" },
@@ -2841,17 +2841,17 @@ const SYNTH_ROUTES = [
   { from:"Secondary Alcohol", to:"Halogenoalkane", reagents:"PCl₅ or HBr", conditions:"Room temperature", mechanism:"Nucleophilic Substitution", notes:"PCl₅ → chloroalkane; HBr → bromoalkane. Tertiary alcohols react fastest with HX (more stable carbocation).", board:"both" },
 
   // FROM: Aldehyde
-  { from:"Aldehyde", to:"Primary Alcohol", reagents:"NaBH₄ in water/ethanol, or LiAlH₄ in dry ether", conditions:"Room temperature (NaBH₄); 0°C then careful hydrolysis (LiAlH₄)", mechanism:"Reduction (nucleophilic addition of H⁻)", notes:"NaBH₄ is milder and safer — used in aqueous solution. LiAlH₄ is more powerful but reacts violently with water — used in dry ether. H⁻ (hydride) is the nucleophile.", board:"both" },
+  { from:"Aldehyde", to:"Primary Alcohol", reagents:"NaBH₄ in water/ethanol, or LiAlH₄ in dry ether", conditions:"Room temperature (NaBH₄); 0°C then careful hydrolysis (LiAlH₄)", mechanism:"Reduction (nucleophilic addition of H⁻)", notes:"NaBH₄ is milder and safer - used in aqueous solution. LiAlH₄ is more powerful but reacts violently with water - used in dry ether. H⁻ (hydride) is the nucleophile.", board:"both" },
   { from:"Aldehyde", to:"Carboxylic Acid", reagents:"K₂Cr₂O₇/H₂SO₄ or Tollens' reagent or Fehling's", conditions:"Reflux (Cr₂O₇²⁻); room temperature (Tollens'/Fehling's)", mechanism:"Oxidation", notes:"Aldehydes are easily oxidised. Tollens': silver mirror formed. Fehling's/Benedict's: blue → brick-red Cu₂O. Ketones NOT oxidised by these reagents.", board:"both" },
-  { from:"Aldehyde", to:"Hydroxynitrile", reagents:"HCN + KCN catalyst (or NaCN then dilute HCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition", notes:"CN⁻ is the nucleophile — attacks Cδ+ of C=O. New C–C bond formed. Chain extended by 1C. Creates chiral centre → racemic mixture. HCN alone is too slow (no CN⁻ catalyst).", board:"both" },
+  { from:"Aldehyde", to:"Hydroxynitrile", reagents:"HCN + KCN catalyst (or NaCN then dilute HCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition", notes:"CN⁻ is the nucleophile - attacks Cδ+ of C=O. New C–C bond formed. Chain extended by 1C. Creates chiral centre → racemic mixture. HCN alone is too slow (no CN⁻ catalyst).", board:"both" },
 
   // FROM: Ketone
-  { from:"Ketone", to:"Secondary Alcohol", reagents:"NaBH₄ in water/ethanol, or LiAlH₄ in dry ether", conditions:"Room temperature (NaBH₄); 0°C (LiAlH₄)", mechanism:"Reduction", notes:"H⁻ adds to carbonyl. Ketone → secondary alcohol. Not oxidised by Tollens'/Fehling's — can use this to distinguish from aldehyde.", board:"both" },
+  { from:"Ketone", to:"Secondary Alcohol", reagents:"NaBH₄ in water/ethanol, or LiAlH₄ in dry ether", conditions:"Room temperature (NaBH₄); 0°C (LiAlH₄)", mechanism:"Reduction", notes:"H⁻ adds to carbonyl. Ketone → secondary alcohol. Not oxidised by Tollens'/Fehling's - can use this to distinguish from aldehyde.", board:"both" },
   { from:"Ketone", to:"Hydroxynitrile", reagents:"HCN + KCN (or NaCN + dil HCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition", notes:"Same mechanism as aldehyde. CN⁻ attacks Cδ+. Racemic mixture produced at new chiral centre.", board:"both" },
 
   // FROM: Carboxylic Acid
   { from:"Carboxylic Acid", to:"Ester", reagents:"Alcohol + conc H₂SO₄ catalyst", conditions:"Reflux (reversible)", mechanism:"Condensation (Fischer Esterification)", notes:"Acid-catalysed, reversible. H₂SO₄ protonates C=O making it more electrophilic. H₂O eliminated. Named: alkyl alkanoate (e.g. ethyl ethanoate).", board:"both" },
-  { from:"Carboxylic Acid", to:"Acyl Chloride", reagents:"PCl₅ or SOCl₂", conditions:"Room temperature (PCl₅) or reflux (SOCl₂)", mechanism:"Nucleophilic Substitution", notes:"PCl₅ gives acyl chloride + POCl₃ + HCl. SOCl₂ gives acyl chloride + SO₂ + HCl (both gaseous byproducts — easy workup). Steamy fumes of HCl confirm reaction with PCl₅.", board:"both" },
+  { from:"Carboxylic Acid", to:"Acyl Chloride", reagents:"PCl₅ or SOCl₂", conditions:"Room temperature (PCl₅) or reflux (SOCl₂)", mechanism:"Nucleophilic Substitution", notes:"PCl₅ gives acyl chloride + POCl₃ + HCl. SOCl₂ gives acyl chloride + SO₂ + HCl (both gaseous byproducts - easy workup). Steamy fumes of HCl confirm reaction with PCl₅.", board:"both" },
   { from:"Carboxylic Acid", to:"Primary Alcohol", reagents:"LiAlH₄ in dry ether", conditions:"Reflux in dry ether, then careful aqueous workup", mechanism:"Reduction", notes:"LiAlH₄ reduces C=O twice: RCOOH → RCHO → RCH₂OH. NaBH₄ cannot reduce carboxylic acids.", board:"both" },
   { from:"Carboxylic Acid", to:"Amide", reagents:"NH₃ (forms ammonium salt first, then heat)", conditions:"Heat ammonium carboxylate salt to ~200°C", mechanism:"Condensation", notes:"RCOOH + NH₃ → RCOONH₄ (salt) → RCONH₂ + H₂O (on strong heating). More easily done via acyl chloride + NH₃.", board:"both" },
   { from:"Carboxylic Acid", to:"Carboxylate Salt", reagents:"NaOH(aq), Na₂CO₃, or NaHCO₃", conditions:"Room temperature (aqueous)", mechanism:"Acid-Base Neutralisation", notes:"RCOOH + NaOH → RCOONa + H₂O. Effervescence (CO₂) with carbonates confirms carboxylic acid. Forms soap when RCOOH = long-chain fatty acid.", board:"both" },
@@ -2872,11 +2872,11 @@ const SYNTH_ROUTES = [
 
   // FROM: Ester
   { from:"Ester", to:"Carboxylic Acid + Alcohol", reagents:"Dilute H₂SO₄ or HCl (acid hydrolysis)", conditions:"Reflux with excess water", mechanism:"Acid-catalysed Hydrolysis (reversible)", notes:"Reverse of Fischer esterification. Acid catalyst, reversible. Excess water drives equilibrium toward products.", board:"both" },
-  { from:"Ester", to:"Carboxylate Salt + Alcohol", reagents:"NaOH(aq) — saponification", conditions:"Reflux", mechanism:"Base-catalysed Hydrolysis (irreversible)", notes:"Saponification — irreversible because carboxylate salt formed is not reactive toward alcohol. Used in soap manufacture. Soap = sodium salt of long-chain fatty acid.", board:"both" },
+  { from:"Ester", to:"Carboxylate Salt + Alcohol", reagents:"NaOH(aq) - saponification", conditions:"Reflux", mechanism:"Base-catalysed Hydrolysis (irreversible)", notes:"Saponification - irreversible because carboxylate salt formed is not reactive toward alcohol. Used in soap manufacture. Soap = sodium salt of long-chain fatty acid.", board:"both" },
 
   // FROM: Arene (Benzene)
   { from:"Arene", to:"Nitrobenzene", reagents:"Conc HNO₃ + conc H₂SO₄ (nitrating mixture)", conditions:"Below 55°C (avoid dinitration)", mechanism:"Electrophilic Aromatic Substitution (nitration)", notes:"H₂SO₄ protonates HNO₃ → NO₂⁺ (nitronium ion, electrophile). Above 55°C gives dinitration. Step 1: NO₂⁺ attacks ring (loss of aromaticity). Step 2: H⁺ lost (aromaticity restored).", board:"both" },
-  { from:"Arene", to:"Halogenobenzene", reagents:"Br₂ (or Cl₂) + halogen carrier (AlBr₃ or AlCl₃)", conditions:"Room temperature, anhydrous", mechanism:"Electrophilic Aromatic Substitution (halogenation)", notes:"AlBr₃/AlCl₃ is a Lewis acid catalyst — polarises Br–Br to generate Br⁺. Reaction gives HBr as byproduct. No UV light needed (unlike alkane halogenation).", board:"both" },
+  { from:"Arene", to:"Halogenobenzene", reagents:"Br₂ (or Cl₂) + halogen carrier (AlBr₃ or AlCl₃)", conditions:"Room temperature, anhydrous", mechanism:"Electrophilic Aromatic Substitution (halogenation)", notes:"AlBr₃/AlCl₃ is a Lewis acid catalyst - polarises Br–Br to generate Br⁺. Reaction gives HBr as byproduct. No UV light needed (unlike alkane halogenation).", board:"both" },
   { from:"Arene", to:"Alkylbenzene", reagents:"RCl + AlCl₃ (Friedel-Crafts alkylation)", conditions:"Room temperature, anhydrous", mechanism:"Friedel-Crafts Alkylation (EAS)", notes:"AlCl₃ generates R⁺ carbocation or polarised R–Cl. Problem: multiple alkylation occurs because product is more reactive than starting material.", board:"both" },
   { from:"Arene", to:"Phenyl Ketone (Aryl Ketone)", reagents:"RCOCl + AlCl₃ (Friedel-Crafts acylation)", conditions:"Room temperature, anhydrous", mechanism:"Friedel-Crafts Acylation (EAS)", notes:"AlCl₃ generates acylium ion RCO⁺. Product is a phenyl ketone (aryl ketone). Acyl group deactivates ring → no further substitution. Preferred over alkylation industrially.", board:"both" },
 
@@ -2884,11 +2884,11 @@ const SYNTH_ROUTES = [
   { from:"Nitrobenzene", to:"Arylamine (Aniline)", reagents:"Sn (tin) + conc HCl, then NaOH(aq)", conditions:"Reflux with Sn/HCl; then add NaOH to liberate free amine", mechanism:"Reduction", notes:"Step 1: Sn + conc HCl reduces NO₂ → NH₃⁺ (phenylammonium salt). Step 2: NaOH added → free amine PhNH₂ liberated. Fe/HCl can also be used industrially.", board:"both" },
 
   // FROM: Arylamine (Aniline)
-  { from:"Arylamine", to:"Diazonium Salt", reagents:"NaNO₂ + HCl(aq)", conditions:"0–5°C (ice bath essential)", mechanism:"Diazotisation", notes:"ArNH₂ + NaNO₂ + HCl → ArN₂⁺Cl⁻ + 2H₂O. MUST keep below 5°C — diazonium salts decompose above 10°C releasing N₂. Cold solution kept for immediate use.", board:"both" },
+  { from:"Arylamine", to:"Diazonium Salt", reagents:"NaNO₂ + HCl(aq)", conditions:"0–5°C (ice bath essential)", mechanism:"Diazotisation", notes:"ArNH₂ + NaNO₂ + HCl → ArN₂⁺Cl⁻ + 2H₂O. MUST keep below 5°C - diazonium salts decompose above 10°C releasing N₂. Cold solution kept for immediate use.", board:"both" },
   { from:"Arylamine", to:"Amide", reagents:"Acyl chloride (RCOCl)", conditions:"Room temperature", mechanism:"Nucleophilic Addition-Elimination", notes:"ArNH₂ + RCOCl → ArNHCOR + HCl. N-acylation. Important for protecting the amine group during synthesis.", board:"both" },
 
   // FROM: Diazonium Salt
-  { from:"Diazonium Salt", to:"Azo Dye", reagents:"Phenol or naphthol in NaOH(aq)", conditions:"0–5°C (cold, alkaline solution)", mechanism:"Coupling Reaction (Electrophilic Aromatic Substitution)", notes:"ArN₂⁺ is a weak electrophile — only attacks very reactive rings (phenol, naphthol, arylamines). Product Ar–N=N–Ar' is an azo dye. Brightly coloured due to extended conjugation.", board:"both" },
+  { from:"Diazonium Salt", to:"Azo Dye", reagents:"Phenol or naphthol in NaOH(aq)", conditions:"0–5°C (cold, alkaline solution)", mechanism:"Coupling Reaction (Electrophilic Aromatic Substitution)", notes:"ArN₂⁺ is a weak electrophile - only attacks very reactive rings (phenol, naphthol, arylamines). Product Ar–N=N–Ar' is an azo dye. Brightly coloured due to extended conjugation.", board:"both" },
   { from:"Diazonium Salt", to:"Phenol", reagents:"H₂O (warm)", conditions:"Warm aqueous solution", mechanism:"Substitution with loss of N₂", notes:"ArN₂⁺ + H₂O → ArOH + N₂ + HCl. N₂ gas evolved (driving force). One of the Sandmeyer-type reactions.", board:"both" },
   { from:"Diazonium Salt", to:"Halogenobenzene", reagents:"CuCl/HCl (→ ArCl) or CuBr/HBr (→ ArBr)", conditions:"Warm", mechanism:"Sandmeyer Reaction", notes:"Cu(I) catalyst required. ArN₂⁺ + CuX → ArX + N₂. Allows introduction of Cl or Br onto benzene ring at position occupied by NH₂ group.", board:"both" },
 ];
@@ -3011,16 +3011,16 @@ const MECHS = [
     category: "Nucleophilic Substitution",
     color: "#3182ce",
     specs: ["AQA","OCR_A"],
-    description: "The nucleophile (a species with a lone pair) attacks the δ+ carbon of the halogenoalkane. The C–X bond breaks heterolytically — X leaves as X⁻ (the leaving group) taking both bonding electrons. Both bond formation and bond breaking are shown with simultaneous curly arrows.",
+    description: "The nucleophile (a species with a lone pair) attacks the δ+ carbon of the halogenoalkane. The C–X bond breaks heterolytically - X leaves as X⁻ (the leaving group) taking both bonding electrons. Both bond formation and bond breaking are shown with simultaneous curly arrows.",
     steps: [
       { title: "Identify: nucleophile and electrophile",
-        explanation: "The C–Br bond is polarised because bromine is more electronegative than carbon. This gives Cδ+ and Brδ−. The hydroxide ion (OH⁻) has a lone pair of electrons and is the nucleophile. The δ+ carbon is the electrophile. Bromine is the leaving group — it can accommodate the negative charge as a stable halide ion Br⁻.",
+        explanation: "The C–Br bond is polarised because bromine is more electronegative than carbon. This gives Cδ+ and Brδ−. The hydroxide ion (OH⁻) has a lone pair of electrons and is the nucleophile. The δ+ carbon is the electrophile. Bromine is the leaving group - it can accommodate the negative charge as a stable halide ion Br⁻.",
         arrows: [] },
       { title: "Nucleophile attacks; leaving group departs",
-        explanation: "Arrow ①: the lone pair on O⁻ attacks the δ+ carbon, starting to form a new O–C bond. Arrow ②: at the same time, the C–Br bonding electrons shift towards Br, breaking the C–Br bond. Br leaves as Br⁻ (a stable bromide ion). Both arrows are drawn together — the nucleophile donates electrons in and the leaving group takes electrons out simultaneously.",
+        explanation: "Arrow ①: the lone pair on O⁻ attacks the δ+ carbon, starting to form a new O–C bond. Arrow ②: at the same time, the C–Br bonding electrons shift towards Br, breaking the C–Br bond. Br leaves as Br⁻ (a stable bromide ion). Both arrows are drawn together - the nucleophile donates electrons in and the leaving group takes electrons out simultaneously.",
         arrows: ["a1","a2"] },
       { title: "Products: CH₃OH + Br⁻",
-        explanation: "The product CH₃OH (methanol) has formed as the nucleophile bonded to the carbon. Br⁻ is released as a free bromide ion. The overall reaction is a substitution — the –Br group has been replaced by –OH. This mechanism applies whenever a nucleophile reacts with a primary or secondary halogenoalkane.",
+        explanation: "The product CH₃OH (methanol) has formed as the nucleophile bonded to the carbon. Br⁻ is released as a free bromide ion. The overall reaction is a substitution - the –Br group has been replaced by –OH. This mechanism applies whenever a nucleophile reacts with a primary or secondary halogenoalkane.",
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
@@ -3038,13 +3038,13 @@ const MECHS = [
     description: "The electron-rich π bond of ethene induces a dipole in Br₂, making the near Br atom δ+. The π electrons attack this Br, forming a cyclic bromonium ion and releasing Br⁻. Br⁻ then attacks from the back to give 1,2-dibromoethane.",
     steps: [
       { title: "Electron-rich π bond polarises Br₂",
-        explanation: "The π electrons of the C=C double bond create a region of high electron density. As Br₂ approaches, the near bromine atom becomes δ+ (electron density is repelled away from it) and the far bromine becomes δ−. This is temporary induced polarisation — without the approaching alkene, Br₂ is non-polar.",
+        explanation: "The π electrons of the C=C double bond create a region of high electron density. As Br₂ approaches, the near bromine atom becomes δ+ (electron density is repelled away from it) and the far bromine becomes δ−. This is temporary induced polarisation - without the approaching alkene, Br₂ is non-polar.",
         arrows: [] },
       { title: "π electrons attack δ+ Br; Br–Br breaks",
         explanation: "Arrow ①: the π bonding electrons attack the δ+ bromine atom, forming a C–Br bond (a carbocation intermediate or cyclic bromonium ion forms). Arrow ②: simultaneously, the Br–Br bonding electrons shift to the distant Br, forming Br⁻ (the leaving group). The π bond is completely used up in this step.",
         arrows: ["a1","a2"] },
       { title: "Br⁻ attacks the carbocation",
-        explanation: "Arrow ③: the Br⁻ ion attacks the empty orbital on the positive carbon from the back face. This anti (trans) addition means the two Br atoms end up on opposite faces of the molecule, giving 1,2-dibromoethane. The orange colour of Br₂ disappears as the product is colourless — this is the standard alkene test.",
+        explanation: "Arrow ③: the Br⁻ ion attacks the empty orbital on the positive carbon from the back face. This anti (trans) addition means the two Br atoms end up on opposite faces of the molecule, giving 1,2-dibromoethane. The orange colour of Br₂ disappears as the product is colourless - this is the standard alkene test.",
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
@@ -3088,16 +3088,16 @@ const MECHS = [
     description: "The carbonyl carbon (C=O) is electrophilic (δ+) because O is more electronegative. CN⁻ is the nucleophile. Addition of HCN across C=O gives a hydroxynitrile (cyanohydrin). A racemic mixture is produced because the flat carbonyl carbon can be attacked from either face.",
     steps: [
       { title: "Identify: electrophilic C=O carbon",
-        explanation: "Oxygen is more electronegative than carbon, so the C=O bond is polarised: Cδ+ and Oδ−. The CN⁻ ion (from NaCN/KCN) is the nucleophile with its lone pair on carbon. Pure HCN is avoided (toxic volatile liquid) — NaCN + dilute acid generates CN⁻ safely.",
+        explanation: "Oxygen is more electronegative than carbon, so the C=O bond is polarised: Cδ+ and Oδ−. The CN⁻ ion (from NaCN/KCN) is the nucleophile with its lone pair on carbon. Pure HCN is avoided (toxic volatile liquid) - NaCN + dilute acid generates CN⁻ safely.",
         arrows: [] },
       { title: "CN⁻ attacks δ+C; C=O π bond breaks → O⁻",
-        explanation: "Arrow ①: the lone pair on carbon of CN⁻ attacks the δ+ carbonyl carbon, forming a new C–CN bond. Arrow ②: simultaneously, the C=O π bond electrons shift entirely to oxygen, forming an alkoxide O⁻. Both arrows happen in the same step — nucleophilic addition is a single concerted event.",
+        explanation: "Arrow ①: the lone pair on carbon of CN⁻ attacks the δ+ carbonyl carbon, forming a new C–CN bond. Arrow ②: simultaneously, the C=O π bond electrons shift entirely to oxygen, forming an alkoxide O⁻. Both arrows happen in the same step - nucleophilic addition is a single concerted event.",
         arrows: ["a1","a2"] },
       { title: "Alkoxide intermediate formed",
         explanation: "The tetrahedral alkoxide intermediate has formed. The carbon that was sp² (flat, trigonal planar) is now sp³ (tetrahedral). The O⁻ is negatively charged and will be protonated by H⁺ from the HCN in solution. A molecule of HCN is shown on the right, ready to donate its proton.",
         arrows: [], past: [], showIntermediate: true },
       { title: "H⁺ from HCN protonates O⁻ → hydroxynitrile",
-        explanation: "Arrow ③: the H on HCN protonates the O⁻, forming the –OH group. The H–CN bond electrons shift towards C of CN, so CN⁻ is regenerated (it acts as a chain carrier). The final product is 2-hydroxypropanenitrile. The new carbon centre is chiral — equal attack from both faces gives a racemic mixture.",
+        explanation: "Arrow ③: the H on HCN protonates the O⁻, forming the –OH group. The H–CN bond electrons shift towards C of CN, so CN⁻ is regenerated (it acts as a chain carrier). The final product is 2-hydroxypropanenitrile. The new carbon centre is chiral - equal attack from both faces gives a racemic mixture.",
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
@@ -3116,7 +3116,7 @@ const MECHS = [
     description: "Acyl chlorides are very reactive toward nucleophiles. Step 1: NH₃ donates a lone pair to the carbonyl C, forming a tetrahedral intermediate. Step 2: Cl⁻ is expelled as the leaving group, reforming a C=O bond (the amide). The HCl produced is mopped up by a second NH₃.",
     steps: [
       { title: "Identify: electrophilic acyl carbon",
-        explanation: "The acyl carbon (C=O carbon bonded to Cl) is highly electrophilic: both O and Cl withdraw electron density, making the carbon strongly δ+. NH₃ has a lone pair on nitrogen — it is the nucleophile. Acyl chloride reactions are much faster and irreversible compared to esterification with a carboxylic acid.",
+        explanation: "The acyl carbon (C=O carbon bonded to Cl) is highly electrophilic: both O and Cl withdraw electron density, making the carbon strongly δ+. NH₃ has a lone pair on nitrogen - it is the nucleophile. Acyl chloride reactions are much faster and irreversible compared to esterification with a carboxylic acid.",
         arrows: [] },
       { title: "NH₃ attacks acyl carbon; C=O π breaks",
         explanation: "Arrow ①: the lone pair on N of NH₃ attacks the δ+ acyl carbon, forming a new N–C bond. Arrow ②: simultaneously, the C=O π bond electrons shift to O, forming O⁻. A tetrahedral intermediate forms with N, Cl, O⁻, and CH₃ all attached to the same carbon.",
@@ -3145,13 +3145,13 @@ const MECHS = [
     description: "AlCl₃ (Lewis acid catalyst) generates the acylium ion (RCO⁺) from the acyl chloride. The acylium ion is the electrophile that attacks benzene's π system. The mechanism follows the general EAS pathway: π attack → arenium ion → H⁺ lost to restore aromaticity. AlCl₃ is regenerated at the end.",
     steps: [
       { title: "Generate the acylium ion (electrophile)",
-        explanation: "AlCl₃ is a Lewis acid — it has an empty orbital and accepts electron pairs. Arrow ①: the lone pair on the Cl of CH₃COCl donates to AlCl₃, forming a coordinate bond. Arrow ②: the C–Cl bond electrons shift to Cl, forming the acylium ion CH₃CO⁺ and [AlCl₄]⁻. The acylium ion CH₃CO⁺ is stabilised by the positive charge on carbon being delocalised onto oxygen.",
+        explanation: "AlCl₃ is a Lewis acid - it has an empty orbital and accepts electron pairs. Arrow ①: the lone pair on the Cl of CH₃COCl donates to AlCl₃, forming a coordinate bond. Arrow ②: the C–Cl bond electrons shift to Cl, forming the acylium ion CH₃CO⁺ and [AlCl₄]⁻. The acylium ion CH₃CO⁺ is stabilised by the positive charge on carbon being delocalised onto oxygen.",
         arrows: ["a1","a2"] },
       { title: "Acylium ion attacks benzene π system",
-        explanation: "Arrow ③: the delocalised π electrons of benzene attack the electrophilic carbon of the acylium ion CH₃CO⁺, forming a new C–C bond. Aromaticity is temporarily lost. A positively charged arenium ion (Wheland intermediate) forms — one carbon in the ring is now sp³ and the positive charge is delocalised around the ring.",
+        explanation: "Arrow ③: the delocalised π electrons of benzene attack the electrophilic carbon of the acylium ion CH₃CO⁺, forming a new C–C bond. Aromaticity is temporarily lost. A positively charged arenium ion (Wheland intermediate) forms - one carbon in the ring is now sp³ and the positive charge is delocalised around the ring.",
         arrows: ["a3"], past: [] },
       { title: "H⁺ lost; aromaticity restored",
-        explanation: "Arrow ④: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored — this is what drives the reaction forward. The H⁺ is accepted by [AlCl₄]⁻, regenerating AlCl₃ and HCl. Overall: one H replaced by –COCH₃ (an acyl group). Product: methyl phenyl ketone (acetophenone).",
+        explanation: "Arrow ④: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored - this is what drives the reaction forward. The H⁺ is accepted by [AlCl₄]⁻, regenerating AlCl₃ and HCl. Overall: one H replaced by –COCH₃ (an acyl group). Product: methyl phenyl ketone (acetophenone).",
         arrows: ["a4"], past: [] },
     ],
     arrowPaths: {
@@ -3171,13 +3171,13 @@ const MECHS = [
     description: "The nitronium ion (NO₂⁺) is generated from conc. HNO₃ + conc. H₂SO₄. The delocalised π electrons of benzene attack NO₂⁺, forming a positively charged arenium ion. H⁺ is then lost to restore aromaticity. Substitution (not addition) preserves the stable delocalised π system.",
     steps: [
       { title: "Generate the electrophile: NO₂⁺",
-        explanation: "Conc. H₂SO₄ donates a proton to HNO₃: HNO₃ + H₂SO₄ → NO₂⁺ + H₂O + HSO₄⁻. The nitronium ion (NO₂⁺) is the electrophile. The temperature is kept below 55°C — at higher temperatures, further nitration to give di- and tri-nitro products occurs.",
+        explanation: "Conc. H₂SO₄ donates a proton to HNO₃: HNO₃ + H₂SO₄ → NO₂⁺ + H₂O + HSO₄⁻. The nitronium ion (NO₂⁺) is the electrophile. The temperature is kept below 55°C - at higher temperatures, further nitration to give di- and tri-nitro products occurs.",
         arrows: [] },
       { title: "π electrons attack NO₂⁺",
-        explanation: "Arrow ①: the delocalised π electrons of benzene attack the nitrogen of NO₂⁺, forming a new C–N bond. Aromaticity is temporarily lost — this is the slow, rate-determining step. A positively charged arenium ion (Wheland intermediate / sigma complex) is formed. One ring carbon is now sp³.",
+        explanation: "Arrow ①: the delocalised π electrons of benzene attack the nitrogen of NO₂⁺, forming a new C–N bond. Aromaticity is temporarily lost - this is the slow, rate-determining step. A positively charged arenium ion (Wheland intermediate / sigma complex) is formed. One ring carbon is now sp³.",
         arrows: ["a1"] },
       { title: "H⁺ lost; aromaticity restored",
-        explanation: "Arrow ②: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored. H⁺ is released into the acid mixture. This second step is fast. The overall result is substitution of one H by NO₂ — aromaticity is preserved because the energy gained by restoring delocalisation drives the reaction.",
+        explanation: "Arrow ②: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored. H⁺ is released into the acid mixture. This second step is fast. The overall result is substitution of one H by NO₂ - aromaticity is preserved because the energy gained by restoring delocalisation drives the reaction.",
         arrows: ["a2"], past: [] },
     ],
     arrowPaths: {
@@ -3195,7 +3195,7 @@ const MECHS = [
     description: "Hot ethanolic KOH acts as a strong base. The OH⁻ abstracts an H from the β-carbon (adjacent to the C–X carbon). Simultaneously, the C–H electrons form a π bond and the C–Br bond breaks. All three events occur concertedly (E2). The conditions that favour elimination: hot, ethanolic KOH; aqueous KOH favours substitution.",
     steps: [
       { title: "Identify: β-hydrogen & leaving group",
-        explanation: "The β-carbon is the carbon adjacent to the carbon bearing the Br. OH⁻ is a strong base (not just a nucleophile) — it abstracts the β-hydrogen rather than attacking the carbon (which would give SN2). Hot ethanolic conditions favour the more hindered approach (elimination) over back-face attack (substitution).",
+        explanation: "The β-carbon is the carbon adjacent to the carbon bearing the Br. OH⁻ is a strong base (not just a nucleophile) - it abstracts the β-hydrogen rather than attacking the carbon (which would give SN2). Hot ethanolic conditions favour the more hindered approach (elimination) over back-face attack (substitution).",
         arrows: [] },
       { title: "Concerted: base removes H, π forms, Br⁻ leaves",
         explanation: "Arrow ①: the OH⁻ base uses its lone pair to abstract the β-H (H on the carbon adjacent to C–Br). Arrow ②: the C–H bonding electrons shift to form the C=C π bond between the two carbons. Arrow ③: simultaneously, the C–Br bonding electrons shift entirely to Br, forming Br⁻. All three bonds break/form at the same time (E2). The reaction produces ethene + H₂O + Br⁻.",
@@ -3214,19 +3214,19 @@ const MECHS = [
     category: "Radical",
     color: "#d97706",
     specs: ["AQA","OCR_A"],
-    description: "A chain reaction using fish-hook (half-headed) arrows — each represents ONE electron. Three stages: initiation (UV breaks Cl–Cl homolytically), propagation (chain-carrying steps), termination (radicals combine). The mechanism uses fish-hook arrows, NOT full curly arrows.",
+    description: "A chain reaction using fish-hook (half-headed) arrows - each represents ONE electron. Three stages: initiation (UV breaks Cl–Cl homolytically), propagation (chain-carrying steps), termination (radicals combine). The mechanism uses fish-hook arrows, NOT full curly arrows.",
     steps: [
       { title: "Initiation: homolytic fission of Cl–Cl",
-        explanation: "UV light provides energy for homolytic fission of the Cl–Cl bond — one electron from the bond goes to each chlorine atom. Fish-hook arrows (half-headed, ↷) each represent ONE electron moving. Two Cl• radicals are formed. Each has an unpaired electron shown as a dot (•). This step starts the chain.",
+        explanation: "UV light provides energy for homolytic fission of the Cl–Cl bond - one electron from the bond goes to each chlorine atom. Fish-hook arrows (half-headed, ↷) each represent ONE electron moving. Two Cl• radicals are formed. Each has an unpaired electron shown as a dot (•). This step starts the chain.",
         arrows: ["a1","a2"] },
       { title: "Propagation Step 1: Cl• + CH₄",
-        explanation: "Arrow ③: one electron from the C–H bond moves to pair with the unpaired electron on Cl•, forming H–Cl. Arrow ④: the remaining electron on carbon creates a methyl radical •CH₃. The Cl• radical is consumed but a new radical (•CH₃) is produced — this is why it's a chain reaction. Propagation continues while reactants are available.",
+        explanation: "Arrow ③: one electron from the C–H bond moves to pair with the unpaired electron on Cl•, forming H–Cl. Arrow ④: the remaining electron on carbon creates a methyl radical •CH₃. The Cl• radical is consumed but a new radical (•CH₃) is produced - this is why it's a chain reaction. Propagation continues while reactants are available.",
         arrows: ["a3","a4"], past: [] },
       { title: "Propagation Step 2: •CH₃ + Cl₂",
         explanation: "Arrow ⑤: one electron from the Cl–Cl bond pairs with the unpaired electron on •CH₃, forming CH₃–Cl (the product). Arrow ⑥: the other Cl atom becomes a new Cl• radical, which goes on to repeat propagation Step 1. Each propagation cycle produces one molecule of CH₃Cl and one molecule of HCl.",
         arrows: ["a5","a6"], past: [] },
       { title: "Termination: two radicals combine",
-        explanation: "Termination occurs when any two radicals collide and combine, using up their unpaired electrons: Cl• + Cl• → Cl₂, or •CH₃ + Cl• → CH₃Cl, or •CH₃ + •CH₃ → C₂H₆. No radicals are produced in termination — the chain is ended. C₂H₆ forming is why trace amounts of ethane are always found as a by-product.",
+        explanation: "Termination occurs when any two radicals collide and combine, using up their unpaired electrons: Cl• + Cl• → Cl₂, or •CH₃ + Cl• → CH₃Cl, or •CH₃ + •CH₃ → C₂H₆. No radicals are produced in termination - the chain is ended. C₂H₆ forming is why trace amounts of ethane are always found as a by-product.",
         arrows: [], past: [] },
     ],
     arrowPaths: {
@@ -3363,7 +3363,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "nuc_sub") {
     const showProducts = step.showProducts;
     if (showProducts) {
-      // Step 2: Products — CH₃OH on left, Br⁻ on right
+      // Step 2: Products - CH₃OH on left, Br⁻ on right
       return (
         <MechSVGBase animKey={animKey}>
           {/* CH3-O-H */}
@@ -3906,7 +3906,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <text x={280} y={88} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl• + Cl• → Cl₂</text>
         <text x={280} y={113} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl• + •CH₃ → CH₃Cl</text>
         <text x={280} y={138} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>•CH₃ + •CH₃ → C₂H₆</text>
-        <text x={280} y={168} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>No curly arrows — radicals combine directly</text>
+        <text x={280} y={168} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>No curly arrows - radicals combine directly</text>
       </MechSVGBase>
     );
   }
@@ -3915,7 +3915,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 }
 
 // Still / exam version: shows the KEY step (first step with arrows) with all its arrows in red, no animation.
-// For multi-step mechanisms this shows the initial reactant layout — matching what AQA expects to be drawn.
+// For multi-step mechanisms this shows the initial reactant layout - matching what AQA expects to be drawn.
 function MechSVGStill({ mech }) {
   const keyStepIdx = mech.steps.findIndex(s => (s.arrows||[]).length > 0);
   const stepIdx = keyStepIdx >= 0 ? keyStepIdx : 0;
@@ -4737,7 +4737,7 @@ export default function App() {
             {!selectedFrom ? (
               <div style={{ flex: 1, overflowY: "auto", padding: "12px 14px 28px" }}>
                 <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px", lineHeight: 1.6 }}>
-                  Select a starting material to view all synthesis routes — with reagents, conditions, and step-by-step mechanisms.
+                  Select a starting material to view all synthesis routes - with reagents, conditions, and step-by-step mechanisms.
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                   {allFroms.map(from => {
@@ -4792,7 +4792,7 @@ export default function App() {
                       {/* Reagents + Conditions */}
                       {synthQuiz ? (
                         <div style={{ margin: "0 14px 13px", padding: "12px 14px", background: "#fff7ed", borderRadius: "12px", textAlign: "center", color: "#ea580c", fontWeight: 600, fontSize: "12px" }}>
-                          Quiz mode — try to recall the reagents and conditions before revealing
+                          Quiz mode - try to recall the reagents and conditions before revealing
                         </div>
                       ) : (
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", padding: "0 14px 12px" }}>
@@ -4917,9 +4917,9 @@ export default function App() {
             </div>
             {/* Hint bar */}
             <div style={{ fontSize:"11px", color:"#94a3b8", padding:"4px 0 3px", textAlign:"center", flexShrink:0, background:"#fff", borderBottom:"1px solid #f0f4f8" }}>
-              {selId ? `${selNodeData ? selNodeData[1].replace(/\n/g," ") : ""} — tap another node or clear` : "Scroll to explore · tap a compound to highlight its routes"}
+              {selId ? `${selNodeData ? selNodeData[1].replace(/\n/g," ") : ""} - tap another node or clear` : "Scroll to explore · tap a compound to highlight its routes"}
             </div>
-            {/* SVG map — scrollable */}
+            {/* SVG map - scrollable */}
             <div style={{ flex:1, overflow:"auto", WebkitOverflowScrolling:"touch", background:"#f0f4f8" }}>
               <svg
                 viewBox={`0 0 ${vbW} ${vbH}`}
@@ -4939,7 +4939,7 @@ export default function App() {
                   </marker>
                 </defs>
                 <rect x={0} y={0} width={vbW} height={vbH} fill="#f0f4f8" />
-                {/* Group zone backgrounds — aliphatic only */}
+                {/* Group zone backgrounds - aliphatic only */}
                 {synthTab === "ali" && (<>
                   {/* Ammonium Salts row */}
                   <rect x={8} y={14} rx={7} width={175} height={48} fill="rgba(79,70,229,0.07)" stroke="rgba(79,70,229,0.18)" strokeWidth={1} strokeDasharray="3 2" />
@@ -4974,7 +4974,7 @@ export default function App() {
                     />
                   );
                 })}
-                {/* Nodes — tappable */}
+                {/* Nodes - tappable */}
                 {sNodes.map(([id, label, cx, cy, fill, hw, hh]) => {
                   const rw = hw*SW, rh = hh*SW;
                   const lines = label.split("\n");
@@ -5084,7 +5084,7 @@ export default function App() {
                 </div>
                 {synthQuiz ? (
                   <div style={{ padding:"11px 14px", background:"#fff7ed", borderRadius:"10px", textAlign:"center", color:"#ea580c", fontWeight:600, fontSize:"12px" }}>
-                    Quiz mode — tap "Quiz OFF" to reveal
+                    Quiz mode - tap "Quiz OFF" to reveal
                   </div>
                 ) : (
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px" }}>
@@ -5208,7 +5208,7 @@ export default function App() {
               </div>
               <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line" }}>{q.question}</div>
             </div>
-            {/* Answer box — required */}
+            {/* Answer box - required */}
             {!extRevealed && !extAiLoading && (
               <div style={{ marginBottom: "12px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
@@ -5218,7 +5218,7 @@ export default function App() {
                 <textarea
                   value={extDraft}
                   onChange={e => setExtDraft(e.target.value)}
-                  placeholder={`Write your full answer to this ${q.marks}-mark question here. Cover every point you know — the AI Examiner will mark it against the mark scheme.`}
+                  placeholder={`Write your full answer to this ${q.marks}-mark question here. Cover every point you know - the AI Examiner will mark it against the mark scheme.`}
                   rows={7}
                   style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", border: `2px solid ${canSubmit ? "#7c3aed" : "#d0dce8"}`, fontSize: "13px", fontFamily: "inherit", outline: "none", color: "#1a2d45", resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", transition: "border-color 0.2s" }}
                 />
@@ -5286,7 +5286,7 @@ export default function App() {
                     </div>
                     {/* Covered / missed points */}
                     <div style={{ background: "#fff", borderRadius: "14px", padding: "16px", border: `1px solid ${purpleMid}`, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
-                      <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme — tap to adjust</div>
+                      <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme - tap to adjust</div>
                       {q.markScheme.map((point, i) => {
                         const ticked = extMarked.has(i);
                         const aiSaid = extAiResult.coveredPoints[i];
@@ -5298,7 +5298,7 @@ export default function App() {
                             </div>
                             <div style={{ flex: 1 }}>
                               <div style={{ fontSize: "13px", color: ticked ? "#15803d" : "#7f1d1d", lineHeight: 1.5, fontWeight: ticked ? 600 : 400 }}>{point}</div>
-                              {aiSaid !== ticked && <div style={{ fontSize: "10px", color: "#7a95b0", marginTop: "3px" }}>AI said: {aiSaid ? "covered ✓" : "missed ✗"} — tap to override</div>}
+                              {aiSaid !== ticked && <div style={{ fontSize: "10px", color: "#7a95b0", marginTop: "3px" }}>AI said: {aiSaid ? "covered ✓" : "missed ✗"} - tap to override</div>}
                             </div>
                           </button>
                         );
@@ -5317,10 +5317,10 @@ export default function App() {
                     )}
                   </>
                 )}
-                {/* No AI result — fallback manual mark scheme */}
+                {/* No AI result - fallback manual mark scheme */}
                 {!extAiResult && (
                   <div style={{ background: "#fff", borderRadius: "14px", padding: "16px", border: `1px solid ${purpleMid}`, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
-                    <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme — tick each point you covered</div>
+                    <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Mark Scheme - tick each point you covered</div>
                     {q.markScheme.map((point, i) => {
                       const ticked = extMarked.has(i);
                       return (
@@ -5349,7 +5349,7 @@ export default function App() {
                   ) : (
                     <button onClick={() => { setExtCategory(null); setExtIndex(0); resetExt(); }}
                       style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#fff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                      Finish — Back to Topics
+                      Finish - Back to Topics
                     </button>
                   )}
                   <button onClick={resetExt} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
@@ -5477,7 +5477,7 @@ export default function App() {
                         </button>
                       ) : (
                         <button onClick={() => { setCalcTopic(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                          Finish — Back to Topics
+                          Finish - Back to Topics
                         </button>
                       )}
                       <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
@@ -5676,7 +5676,7 @@ export default function App() {
                   <button onClick={()=>{ setMechId(null); setMechStep(0); setMechArrowIdx(0); }}
                     style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
                       background:"#1a2d45", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
-                    Done — Back to List
+                    Done - Back to List
                   </button>
                 )}
               </div>
