@@ -3244,17 +3244,17 @@ function MechSVGBase({ children, animKey }) {
   return (
     <svg viewBox="0 0 560 220" style={{ width:"100%", height:"auto", display:"block", maxHeight:"220px" }}>
       <defs>
-        <marker id={`arr-red-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
+        <marker id={`arr-blue-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#29ABE2"/>
         </marker>
         <marker id={`arr-grey-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="5" markerHeight="5" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
         </marker>
-        <marker id={`fish-red-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
+        <marker id={`fish-blue-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 5 z" fill="#dc2626"/>
+          <path d="M 0 0 L 10 5 L 0 5 z" fill="#29ABE2"/>
         </marker>
         <marker id={`fish-grey-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -3299,9 +3299,9 @@ function LP({ x, y, angle=0, color="#1a202c" }) {
 
 // Curly arrow helper (animated or static grey, or still=always red no animation)
 function CurlyArrow({ d, active, animKey, delay=0, type="full", label, labelX, labelY, still }) {
-  const isRed = active || still;
-  const markerId = isRed
-    ? (type==="fish" ? `fish-red-${animKey}` : `arr-red-${animKey}`)
+  const isBlue = active || still;
+  const markerId = isBlue
+    ? (type==="fish" ? `fish-blue-${animKey}` : `arr-blue-${animKey}`)
     : (type==="fish" ? `fish-grey-${animKey}` : `arr-grey-${animKey}`);
   return (
     <g>
@@ -3309,8 +3309,8 @@ function CurlyArrow({ d, active, animKey, delay=0, type="full", label, labelX, l
         key={active && !still ? `${d}-${animKey}` : d}
         d={d}
         fill="none"
-        stroke={isRed ? "#dc2626" : "#94a3b8"}
-        strokeWidth={isRed ? 2.6 : 1.8}
+        stroke={isBlue ? "#29ABE2" : "#94a3b8"}
+        strokeWidth={isBlue ? 2.6 : 1.8}
         markerEnd={`url(#${markerId})`}
         style={active && !still ? {
           strokeDasharray:350,
@@ -3318,7 +3318,7 @@ function CurlyArrow({ d, active, animKey, delay=0, type="full", label, labelX, l
           animation:`mechDrawArrow 0.65s ease-out ${delay}s both`
         } : {}}
       />
-      {label && labelX && <text x={labelX} y={labelY||0} fill={isRed?"#dc2626":"#94a3b8"}
+      {label && labelX && <text x={labelX} y={labelY||0} fill={isBlue?"#29ABE2":"#94a3b8"}
         style={{fontSize:"11px",fontFamily:"sans-serif",fontWeight:600,userSelect:"none"}}>{label}</text>}
     </g>
   );
@@ -3348,7 +3348,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
     const ap = mech.arrowPaths[id];
     if (!ap) return null;
     const isActive = !stillMode && activeIds.includes(id);
-    const delay = isActive ? activeIds.indexOf(id) * 0.18 : 0;
+    const delay = isActive ? activeIds.indexOf(id) * 0.72 : 0;
     // In "step" still mode: arrows are red but not animated
     const isStill = stillMode === true || stillMode === "step";
     return <CurlyArrow key={id} d={ap.d} active={isActive} still={isStill} animKey={animKey} delay={delay} type={ap.type||"full"}/>;
@@ -5601,7 +5601,7 @@ export default function App() {
                 <div style={{ margin:"10px 16px 0", display:"flex", flexDirection:"column", gap:"4px" }}>
                   {arrowLabels.map((lbl,i) => (
                     <div key={i} style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"12px" }}>
-                      <div style={{ width:"28px", height:"2px", background:"#dc2626", borderRadius:"1px", flexShrink:0 }}/>
+                      <div style={{ width:"28px", height:"2px", background:"#29ABE2", borderRadius:"1px", flexShrink:0 }}/>
                       <span style={{ color:"#1a2d45", fontFamily:"Georgia,serif" }}>{lbl}</span>
                     </div>
                   ))}
@@ -5661,7 +5661,7 @@ export default function App() {
                       {(s.arrows||[]).map(id => {
                         const ap = activeMech.arrowPaths[id];
                         return ap ? <div key={id} style={{ fontSize:"12px", color:"#1a2d45", lineHeight:1.6, display:"flex", gap:"6px", alignItems:"flex-start" }}>
-                          <span style={{ color:"#dc2626", fontWeight:700, marginTop:"1px" }}>↷</span>
+                          <span style={{ color:"#29ABE2", fontWeight:700, marginTop:"1px" }}>↷</span>
                           <span style={{ fontFamily:"Georgia,serif" }}>{ap.label}</span>
                         </div> : null;
                       })}
