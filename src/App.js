@@ -4178,12 +4178,30 @@ export default function App() {
   const bg = "#f0f4f8";
   const base = { minHeight: "100vh", background: bg, fontFamily: "'DM Sans', 'Segoe UI', sans-serif", color: "#1a2d45", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
 
+  // Inline SVG flask logo
+  const FlaskLogo = ({ size = 36 }) => (
+    <svg width={size} height={size} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="#29ABE2"/>
+      <path d="M14 8h8v1.5l5.5 11.5A5 5 0 0 1 23 28H13a5 5 0 0 1-4.5-7L14 9.5V8z" fill="white" fillOpacity="0.15"/>
+      <rect x="14" y="8" width="8" height="3" rx="1" fill="white"/>
+      <path d="M14 11l-5.5 10.5A5 5 0 0 0 13 28h10a5 5 0 0 0 4.5-6.5L22 11" stroke="white" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+      <circle cx="15" cy="22" r="1.5" fill="#29ABE2" fillOpacity="0.9"/>
+      <circle cx="20" cy="24" r="1" fill="#29ABE2" fillOpacity="0.9"/>
+      <circle cx="18" cy="20" r="1" fill="#29ABE2" fillOpacity="0.9"/>
+    </svg>
+  );
+
   const Header = ({ title, sub, back }) => (
-    <div style={{ padding: "16px 20px 10px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
+    <div style={{ padding: "14px 20px 12px", display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #dde4ed", background: "#ffffff", position: "relative", zIndex: 2 }}>
       {back && <button onClick={back} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
-      <div style={{ flex: 1 }}>
-        <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "18px", color: "#29ABE2", letterSpacing: "-0.5px" }}>HSJ TUITION</div>
-        <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase", marginTop: "2px" }}>{sub || "A-Level Chemistry · Mastered"}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1 }}>
+        <FlaskLogo size={38} />
+        <div>
+          <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "16px", color: "#1a2d45", letterSpacing: "-0.5px", lineHeight: 1.1 }}>
+            <span style={{ color: "#29ABE2" }}>Chem</span>Mastery
+          </div>
+          <div style={{ fontSize: "10px", color: "#7a95b0", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>{sub || "A-Level Chemistry"}</div>
+        </div>
       </div>
     </div>
   );
@@ -4193,40 +4211,54 @@ export default function App() {
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
       <Header />
-      <div style={{ flex: 1, overflowY: "auto", padding: "28px 20px 40px" }}>
-        <div style={{ maxWidth: "520px", margin: "0 auto" }}>
-          <p style={{ textAlign: "center", fontSize: "13px", fontWeight: 600, color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase", margin: "0 0 6px" }}>A-Level Chemistry</p>
-          <h2 style={{ textAlign: "center", fontSize: "26px", fontWeight: 800, color: "#1a2d45", margin: "0 0 28px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {[
-              { id: "aqa", label: "AQA", count: TOPIC_ORDER.length, desc: "Full coverage of the AQA A-Level Chemistry specification — AS and A2.", accent: "#29ABE2", grad: "linear-gradient(135deg, #29ABE2 0%, #0e7ab5 100%)" },
-              { id: "ocr", label: "OCR A", count: OCR_TOPIC_ORDER.length, desc: "Complete OCR A Chemistry H432 — modules 2 through 6.", accent: "#7c3aed", grad: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)" },
-            ].map(b => (
-              <button key={b.id} onClick={() => selectBoard(b.id)} style={{
-                display: "flex", alignItems: "stretch", borderRadius: "20px",
-                border: "none", cursor: "pointer", fontFamily: "inherit",
-                background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)",
-                overflow: "hidden", transition: "transform 0.15s, box-shadow 0.15s", textAlign: "left",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.14)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
-              >
-                {/* Thumbnail */}
-                <div style={{ width: "110px", flexShrink: 0, background: b.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 12px" }}>
-                  <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "22px", color: "#ffffff", lineHeight: 1 }}>{b.label}</div>
-                  <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.75)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Chemistry</div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>A-Level Chemistry</p>
+        <h2 style={{ textAlign: "center", fontSize: "30px", fontWeight: 800, color: "#1a2d45", margin: "0 0 36px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
+          {[
+            { id: "aqa", label: "AQA", sub: "Chemistry", count: TOPIC_ORDER.length, desc: "Full coverage of the AQA A-Level Chemistry specification — Year 1 and Year 2.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["48 topics","AS + A2 content","Required practicals"] },
+            { id: "ocr", label: "OCR", sub: "A Chemistry", count: OCR_TOPIC_ORDER.length, desc: "Complete OCR A Chemistry H432 — modules 2 through 6 fully covered.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["32 topics","Modules 2–6","PAG practicals"] },
+          ].map(b => (
+            <button key={b.id} onClick={() => selectBoard(b.id)} style={{
+              display: "flex", flexDirection: "column", borderRadius: "24px",
+              border: "none", cursor: "pointer", fontFamily: "inherit",
+              background: "#ffffff", boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
+              overflow: "hidden", transition: "transform 0.18s, box-shadow 0.18s", textAlign: "left",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.16)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.1)"; }}
+            >
+              {/* Fancy thumbnail */}
+              <div style={{ height: "170px", background: b.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "22px 24px", position: "relative", overflow: "hidden" }}>
+                {/* Big faded background text */}
+                <div style={{ position: "absolute", top: "-10px", right: "-8px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "90px", color: "rgba(255,255,255,0.1)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{b.label}</div>
+                {/* Decorative circle */}
+                <div style={{ position: "absolute", top: "18px", right: "20px", width: "48px", height: "48px", borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
                 </div>
-                {/* Content */}
-                <div style={{ padding: "18px 20px", flex: 1 }}>
-                  <div style={{ fontSize: "18px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{b.label} Chemistry</div>
-                  <div style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.5, marginBottom: "12px" }}>{b.desc}</div>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: `${b.accent}18`, borderRadius: "8px", padding: "4px 10px" }}>
-                    <span style={{ fontSize: "12px", fontWeight: 700, color: b.accent }}>{b.count} topics</span>
+                {/* Label */}
+                <div>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "4px" }}>Exam Board</div>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1 }}>
+                    <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.75)", display: "block" }}>{b.label}</span>
+                    <span style={{ fontSize: "36px", color: "#ffffff" }}>{b.sub}</span>
                   </div>
                 </div>
-              </button>
-            ))}
-          </div>
+              </div>
+              {/* Card body */}
+              <div style={{ padding: "20px 24px 24px", flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
+                <div style={{ fontSize: "13px", color: "#5a7090", lineHeight: 1.6 }}>{b.desc}</div>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  {b.features.map(f => (
+                    <span key={f} style={{ fontSize: "11px", fontWeight: 700, color: b.accent, background: `${b.accent}15`, borderRadius: "6px", padding: "4px 10px" }}>{f}</span>
+                  ))}
+                </div>
+                <div style={{ marginTop: "auto", background: b.grad, borderRadius: "12px", padding: "12px 16px", color: "#fff", fontWeight: 700, fontSize: "14px", textAlign: "center" }}>
+                  Start {b.label} {b.sub} →
+                </div>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -4415,12 +4447,12 @@ export default function App() {
 
   // Activity card data used by both the home grid and the back-to-home helper
   const ACTIVITY_CARDS = [
-    { id: "flashcards", label: "Flashcards",  desc: "Master every topic with spaced-repetition style cards.",   color: "#29ABE2", grad: "linear-gradient(135deg,#29ABE2,#0e7ab5)", stat: `${CURRENT_TOPIC_ORDER.length} topics` },
-    { id: "synth",      label: "Synthesis",   desc: "Build multi-step reaction routes from scratch.",           color: "#0ea5e9", grad: "linear-gradient(135deg,#0ea5e9,#0369a1)", stat: "Route builder" },
-    { id: "pathways",   label: "Pathways",    desc: "Explore all routes between functional groups.",            color: "#059669", grad: "linear-gradient(135deg,#059669,#047857)", stat: "Reaction map" },
-    { id: "calc",       label: "Calculations",desc: "Practise every calculation type with worked steps.",       color: "#0284c7", grad: "linear-gradient(135deg,#0284c7,#075985)", stat: "Step-by-step" },
-    { id: "extended",   label: "6-Mark",      desc: "AI-marked extended response and exam-style questions.",   color: "#7c3aed", grad: "linear-gradient(135deg,#7c3aed,#5b21b6)", stat: "AI examiner" },
-    { id: "mechanisms", label: "Mechanisms",  desc: "Animated curly arrow mechanisms step by step.",            color: "#d97706", grad: "linear-gradient(135deg,#d97706,#b45309)", stat: "Animated" },
+    { id: "flashcards", label: "Flashcards",            labelBig: "Flash",    labelSmall: "cards",   desc: "Master every topic with smart revision cards.", color: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2,#0e7ab5,#085f8f)", stat: `${CURRENT_TOPIC_ORDER.length} topics` },
+    { id: "synth",      label: "Synthesis",             labelBig: "Synth",    labelSmall: "esis",    desc: "Build multi-step reaction routes from scratch.", color: "#0ea5e9", grad: "linear-gradient(145deg,#38bdf8,#0ea5e9,#0369a1)", stat: "Route builder" },
+    { id: "pathways",   label: "Pathways",              labelBig: "Path",     labelSmall: "ways",    desc: "Explore all routes between functional groups.",  color: "#059669", grad: "linear-gradient(145deg,#10b981,#059669,#047857)", stat: "Reaction map" },
+    { id: "calc",       label: "Calculations",          labelBig: "Calc",     labelSmall: "ulations",desc: "Practise every calculation type with worked steps.", color: "#0284c7", grad: "linear-gradient(145deg,#0ea5e9,#0284c7,#075985)", stat: "Step-by-step" },
+    { id: "extended",   label: "AI Examiner",           labelBig: "AI",       labelSmall: "Examiner",desc: "ChemMastery AI marks your extended answers.",    color: "#7c3aed", grad: "linear-gradient(145deg,#a855f7,#7c3aed,#5b21b6)", stat: "AI powered" },
+    { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Animated curly arrow mechanisms step by step.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Animated" },
   ];
 
   const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechArrowIdx(0); };
@@ -4445,25 +4477,34 @@ export default function App() {
 
       {/* HOME card grid */}
       {topicsTab === "home" && (
-        <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px 40px" }}>
-          <p style={{ fontSize: "12px", fontWeight: 600, color: "#7a95b0", letterSpacing: "2px", textTransform: "uppercase", margin: "0 0 4px" }}>ChemMastery</p>
-          <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#1a2d45", margin: "0 0 20px", letterSpacing: "-0.4px" }}>What would you like to practise?</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))", gap: "14px" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "28px 20px 48px" }}>
+          <p style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 6px" }}>ChemMastery</p>
+          <h2 style={{ fontSize: "26px", fontWeight: 800, color: "#1a2d45", margin: "0 0 24px", letterSpacing: "-0.5px" }}>What would you like to practise?</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "18px" }}>
             {ACTIVITY_CARDS.map(card => (
               <button key={card.id} onClick={() => { setTopicsTab(card.id); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
-                style={{ display: "flex", flexDirection: "column", borderRadius: "18px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 3px 16px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.15s, box-shadow 0.15s" }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.13)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 3px 16px rgba(0,0,0,0.09)"; }}
+                style={{ display: "flex", flexDirection: "column", borderRadius: "20px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 20px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s" }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(0,0,0,0.15)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.09)"; }}
               >
-                {/* Thumbnail */}
-                <div style={{ height: "90px", background: card.grad, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "12px" }}>
-                  <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "17px", color: "#ffffff", textAlign: "center", lineHeight: 1.2 }}>{card.label}</div>
-                  <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.7)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "1.5px" }}>{card.stat}</div>
+                {/* Fancy thumbnail - styled like reference with two-tone text */}
+                <div style={{ height: "120px", background: card.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "14px 16px", position: "relative", overflow: "hidden" }}>
+                  {/* Large faded background letter */}
+                  <div style={{ position: "absolute", top: "-4px", right: "-6px", fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "72px", color: "rgba(255,255,255,0.12)", lineHeight: 1, userSelect: "none", pointerEvents: "none" }}>{card.labelBig[0]}</div>
+                  {/* Stat badge top-right */}
+                  <div style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "3px 8px" }}>
+                    <span style={{ fontSize: "9px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
+                  </div>
+                  {/* Two-tone title like reference screenshot */}
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1.1 }}>
+                    <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", display: "block", letterSpacing: "0.5px" }}>{card.labelBig}</span>
+                    <span style={{ fontSize: "26px", color: "#ffffff" }}>{card.labelSmall}</span>
+                  </div>
                 </div>
-                {/* Text */}
-                <div style={{ padding: "12px 13px 14px" }}>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "4px" }}>{card.label}</div>
-                  <div style={{ fontSize: "11px", color: "#7a95b0", lineHeight: 1.45 }}>{card.desc}</div>
+                {/* Card body */}
+                <div style={{ padding: "14px 16px 18px", flex: 1 }}>
+                  <div style={{ fontSize: "14px", fontWeight: 800, color: "#1a2d45", marginBottom: "5px" }}>{card.label}</div>
+                  <div style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.5 }}>{card.desc}</div>
                 </div>
               </button>
             ))}
