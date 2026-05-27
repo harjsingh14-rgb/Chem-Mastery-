@@ -3166,7 +3166,7 @@ const MECHS = [
     title: "Electrophilic Aromatic Substitution (Nitration)",
     subtitle: "C₆H₆ + NO₂⁺ → C₆H₅NO₂ + H⁺",
     category: "Electrophilic Aromatic Substitution",
-    color: "#b91c1c",
+    color: "#0284c7",
     specs: ["AQA","OCR_A"],
     description: "The nitronium ion (NO₂⁺) is generated from conc. HNO₃ + conc. H₂SO₄. The delocalised π electrons of benzene attack NO₂⁺, forming a positively charged arenium ion. H⁺ is then lost to restore aromaticity. Substitution (not addition) preserves the stable delocalised π system.",
     steps: [
@@ -3271,7 +3271,7 @@ function A({ x, y, el, charge, partial, size=16, color }) {
   const c = color || (el==="O"||el==="OH"||el==="OH⁻"?"#b91c1c":el==="N"||el==="NH₃"||el==="NH₂"?"#1d4ed8":el==="Br"?"#9a3412":el==="Cl"?"#166534":el==="H"?"#64748b":"#1a202c");
   return (
     <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
-      style={{ fontSize:`${size}px`, fontFamily:"Georgia,'Times New Roman',serif", fontWeight:700, fill:c, userSelect:"none" }}>
+      style={{ fontSize:`${size}px`, fontFamily:"'DM Sans',system-ui,sans-serif", fontWeight:700, fill:c, userSelect:"none" }}>
       {el}{charge&&<tspan style={{fontSize:`${size*0.72}px`, baselineShift:"super"}}>{charge}</tspan>}
       {partial&&<tspan style={{fontSize:`${size*0.68}px`, fill:"#64748b"}}>{partial}</tspan>}
     </text>
@@ -3319,7 +3319,7 @@ function CurlyArrow({ d, active, animKey, delay=0, type="full", label, labelX, l
         } : {}}
       />
       {label && labelX && <text x={labelX} y={labelY||0} fill={isBlue?"#29ABE2":"#94a3b8"}
-        style={{fontSize:"11px",fontFamily:"sans-serif",fontWeight:600,userSelect:"none"}}>{label}</text>}
+        style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:600,userSelect:"none"}}>{label}</text>}
     </g>
   );
 }
@@ -3327,31 +3327,36 @@ function CurlyArrow({ d, active, animKey, delay=0, type="full", label, labelX, l
 // Charge badge
 function Charge({ x, y, val, color }) {
   return <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
-    style={{ fontSize:"13px", fontFamily:"Georgia,serif", fontWeight:700, fill: color||"#1a202c", userSelect:"none" }}>{val}</text>;
+    style={{ fontSize:"13px", fontFamily:"'DM Sans',system-ui,sans-serif", fontWeight:700, fill: color||"#1a202c", userSelect:"none" }}>{val}</text>;
 }
 
 // Delta label
 function Delta({ x, y, sign }) {
   return <text x={x} y={y} textAnchor="middle"
-    style={{ fontSize:"11px", fontFamily:"Georgia,serif", fill:"#64748b", userSelect:"none" }}>δ{sign}</text>;
+    style={{ fontSize:"11px", fontFamily:"'DM Sans',system-ui,sans-serif", fill:"#64748b", userSelect:"none" }}>δ{sign}</text>;
 }
 
-function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
+function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=999 }) {
   const step = mech.steps[Math.min(stepIdx, mech.steps.length-1)];
-  const activeIds = step.arrows || [];
+  const allStepArrows = step.arrows || [];
   const pastIds = step.past || [];
   const allArrowIds = Object.keys(mech.arrowPaths);
-  // stillMode=true → all arrows red (legacy); stillMode="step" → only active arrows red, no animation
-  const allVisibleIds = stillMode === true ? allArrowIds : stillMode === "step" ? activeIds : [...pastIds, ...activeIds];
+  const isStill = stillMode === true || stillMode === "step";
+
+  // In still mode show all step arrows; otherwise show only the revealed ones
+  const revealedIds = isStill ? allStepArrows : allStepArrows.slice(0, visibleArrowCount);
+  // The newest revealed arrow is the one animating
+  const animatingId = !isStill && revealedIds.length > 0 ? revealedIds[revealedIds.length - 1] : null;
+
+  const allVisibleIds = stillMode === true ? allArrowIds : [...pastIds, ...revealedIds];
 
   const renderArrows = () => allVisibleIds.map((id) => {
     const ap = mech.arrowPaths[id];
     if (!ap) return null;
-    const isActive = !stillMode && activeIds.includes(id);
-    const delay = isActive ? activeIds.indexOf(id) * 0.72 : 0;
-    // In "step" still mode: arrows are red but not animated
-    const isStill = stillMode === true || stillMode === "step";
-    return <CurlyArrow key={id} d={ap.d} active={isActive} still={isStill} animKey={animKey} delay={delay} type={ap.type||"full"}/>;
+    const isAnimating = id === animatingId;
+    // Previously revealed arrows in this step: blue static (still=true, active=false)
+    const wasRevealed = !isStill && revealedIds.includes(id) && !isAnimating;
+    return <CurlyArrow key={id} d={ap.d} active={isAnimating} still={isStill || wasRevealed} animKey={animKey} delay={0} type={ap.type||"full"}/>;
   });
 
   // ── nuc_sub ─────────────────────────────────────────────────────────
@@ -3368,13 +3373,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <LP x={172} y={98} angle={0} color="#b91c1c"/>
           <Bond x1={182} y1={115} x2={205} y2={115}/>
           <A x={214} y={115} el="H" size={15} color="#64748b"/>
-          <text x={162} y={165} textAnchor="middle" style={{fontSize:"11px",fontFamily:"Georgia,serif",fill:"#059669",fontWeight:700}}>CH₃OH</text>
+          <text x={162} y={165} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>CH₃OH</text>
           {/* Br⁻ */}
           <A x={410} y={115} el="Br" size={19}/>
           <Charge x={432} y={101} val="−" color="#9a3412"/>
           <LP x={395} y={104} angle={150} color="#9a3412"/>
           <LP x={393} y={126} angle={120} color="#9a3412"/>
-          <text x={410} y={165} textAnchor="middle" style={{fontSize:"11px",fontFamily:"Georgia,serif",fill:"#9a3412",fontWeight:700}}>Br⁻</text>
+          <text x={410} y={165} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>Br⁻</text>
           {/* Past arrows (shown grey) */}
           {renderArrows()}
         </MechSVGBase>
@@ -3405,9 +3410,9 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
         <LP x={418} y={102} angle={80} color="#9a3412"/>
         <LP x={430} y={115} angle={170} color="#9a3412"/>
 
-        <text x={90} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
-        <text x={270} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#b91c1c",fontWeight:700}}>electrophile</text>
-        <text x={402} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+        <text x={90} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
+        <text x={270} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophile</text>
+        <text x={402} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -3455,7 +3460,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
         <A x={295} y={88} el="H" size={14} color="#64748b"/><Bond x1={278} y1={108} x2={292} y2={93}/>
         <A x={295} y={142} el="H" size={14} color="#64748b"/><Bond x1={278} y1={122} x2={292} y2={137}/>
         {/* π cloud label */}
-        <text x={228} y={60} textAnchor="middle" style={{fontSize:"11px",fill:"#64748b",fontFamily:"Georgia,serif",fontStyle:"italic"}}>π cloud</text>
+        <text x={228} y={60} textAnchor="middle" style={{fontSize:"11px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>π cloud</text>
         {/* Br2 */}
         <A x={355} y={115} el="Br" size={17}/>
         <Delta x={344} y={97} sign="+"/>
@@ -3485,7 +3490,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <A x={168} y={85} el="H" size={14} color="#64748b"/><Bond x1={168} y1={107} x2={168} y2={92}/>
           <Bond x1={182} y1={115} x2={225} y2={115}/>
           <A x={248} y={115} el="CH₃" size={15}/>
-          <text x={168} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#64748b"}}>secondary carbocation</text>
+          <text x={168} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>secondary carbocation</text>
           {/* Br⁻ approaching */}
           <A x={420} y={115} el="Br" size={19}/>
           <Charge x={442} y={101} val="−" color="#9a3412"/>
@@ -3546,7 +3551,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           {/* H on C */}
           <Bond x1={136} y1={121} x2={122} y2={140}/>
           <A x={117} y={150} el="H" size={14} color="#64748b"/>
-          {stepN === 2 && <text x={144} y={195} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#64748b"}}>alkoxide intermediate</text>}
+          {stepN === 2 && <text x={144} y={195} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>alkoxide intermediate</text>}
 
           {/* HCN proton source on right */}
           <A x={390} y={110} el="H" size={16} color="#64748b"/>
@@ -3556,7 +3561,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <line x1={434} y1={111} x2={452} y2={107} stroke="#1d4ed8" strokeWidth={2.2}/>
           <line x1={434} y1={115} x2={452} y2={111} stroke="#1d4ed8" strokeWidth={2.2}/>
           <A x={462} y={107} el="N" size={15} color="#1d4ed8"/>
-          <text x={430} y={145} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#64748b"}}>HCN (H⁺ source)</text>
+          <text x={430} y={145} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>HCN (H⁺ source)</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3618,7 +3623,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           {/* H */}
           <Bond x1={155} y1={122} x2={140} y2={142}/>
           <A x={135} y={152} el="H" size={14} color="#64748b"/>
-          <text x={162} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#64748b"}}>tetrahedral intermediate</text>
+          <text x={162} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>tetrahedral intermediate</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3635,12 +3640,12 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <A x={195} y={89} el="O" size={17}/>
           <Bond x1={154} y1={121} x2={185} y2={135}/>
           <A x={200} y={142} el="NH₂" size={14} color="#1d4ed8"/>
-          <text x={144} y={175} textAnchor="middle" style={{fontSize:"11px",fontFamily:"Georgia,serif",fill:"#059669",fontWeight:700}}>CH₃CONH₂</text>
+          <text x={144} y={175} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>CH₃CONH₂</text>
           {/* + sign */}
           <text x={280} y={120} textAnchor="middle" style={{fontSize:"20px",fill:"#64748b",fontWeight:300}}>+</text>
           {/* NH₄Cl */}
           <A x={370} y={115} el="NH₄Cl" size={14} color="#64748b"/>
-          <text x={370} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#64748b"}}>(2nd NH₃ + HCl)</text>
+          <text x={370} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>(2nd NH₃ + HCl)</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3665,8 +3670,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
         <Bond x1={270} y1={122} x2={302} y2={135}/>
         <A x={315} y={143} el="Cl" size={17}/>
         <LP x={330} y={152} angle={70} color="#166534"/>
-        <text x={80} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
-        <text x={260} y={175} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#b91c1c",fontWeight:700}}>electrophilic acyl C</text>
+        <text x={80} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
+        <text x={260} y={175} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic acyl C</text>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3692,8 +3697,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <A x={380} y={115} el="AlCl₃" size={14} color="#64748b"/>
           {/* dashed line showing interaction */}
           <Bond x1={268} y1={143} x2={355} y2={120} dash color="#94a3b8" width={1.5}/>
-          <text x={192} y={175} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#7c3aed",fontWeight:700}}>acyl chloride</text>
-          <text x={380} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#64748b",fontWeight:700}}>Lewis acid</text>
+          <text x={192} y={175} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#7c3aed",fontWeight:700}}>acyl chloride</text>
+          <text x={380} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b",fontWeight:700}}>Lewis acid</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3715,7 +3720,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <Bond x1={428} y1={110} x2={450} y2={97} dbl/>
           <A x={458} y={92} el="O" size={16}/>
           <Charge x={434} y={100} val="+" color="#b91c1c"/>
-          <text x={418} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#b91c1c",fontWeight:700}}>acylium ion</text>
+          <text x={418} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>acylium ion</text>
           <Bond x1={248} y1={115} x2={348} y2={115} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
@@ -3740,7 +3745,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
         <A x={346} y={97} el="CH₃" size={13}/>
         {/* + charge on ring */}
         <Charge x={155} y={155} val="+" color="#b91c1c"/>
-        <text x={195} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#b91c1c",fontWeight:700}}>arenium ion (sp³ C)</text>
+        <text x={195} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion (sp³ C)</text>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3758,12 +3763,12 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
       // Step 0: HNO3 + H2SO4 generating NO2+
       return (
         <MechSVGBase animKey={animKey}>
-          <text x={280} y={50} textAnchor="middle" style={{fontSize:"14px",fontFamily:"Georgia,serif",fill:"#b91c1c",fontWeight:700}}>Generating NO₂⁺</text>
-          <text x={280} y={78} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#1a202c"}}>HNO₃ + H₂SO₄</text>
+          <text x={280} y={50} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>Generating NO₂⁺</text>
+          <text x={280} y={78} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c"}}>HNO₃ + H₂SO₄</text>
           <text x={280} y={100} textAnchor="middle" style={{fontSize:"16px",fill:"#64748b"}}>→</text>
-          <text x={280} y={125} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#b91c1c",fontWeight:700}}>NO₂⁺</text>
-          <text x={280} y={147} textAnchor="middle" style={{fontSize:"12px",fontFamily:"Georgia,serif",fill:"#64748b"}}>+ H₂O + HSO₄⁻</text>
-          <text x={280} y={175} textAnchor="middle" style={{fontSize:"11px",fontFamily:"sans-serif",fill:"#94a3b8"}}>Temperature kept below 55°C</text>
+          <text x={280} y={125} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>NO₂⁺</text>
+          <text x={280} y={147} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>+ H₂O + HSO₄⁻</text>
+          <text x={280} y={175} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>Temperature kept below 55°C</text>
         </MechSVGBase>
       );
     }
@@ -3774,8 +3779,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           {ringLines}{dblLines}
           <A x={195} y={56} el="H" size={14} color="#64748b"/>
           <Bond x1={195} y1={65} x2={195} y2={66}/>
-          <A x={380} y={118} el="NO₂" size={16} color="#b91c1c"/>
-          <Charge x={412} y={104} val="+" color="#b91c1c"/>
+          <A x={380} y={118} el="NO₂" size={16} color="#0284c7"/>
+          <Charge x={412} y={104} val="+" color="#0284c7"/>
           <Bond x1={250} y1={118} x2={356} y2={118} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
@@ -3789,9 +3794,9 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
         <Bond x1={195} y1={65} x2={195} y2={66}/>
         {/* NO2 attached */}
         <Bond x1={195} y1={66} x2={280} y2={80}/>
-        <A x={296} y={78} el="NO₂" size={14} color="#b91c1c"/>
-        <Charge x={155} y={155} val="+" color="#b91c1c"/>
-        <text x={195} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#b91c1c",fontWeight:700}}>arenium ion</text>
+        <A x={296} y={78} el="NO₂" size={14} color="#0284c7"/>
+        <Charge x={155} y={155} val="+" color="#0284c7"/>
+        <text x={195} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion</text>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3808,7 +3813,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
 
         {/* β-carbon */}
         <A x={198} y={115} el="C" size={17}/>
-        <text x={198} y={165} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"sans-serif"}}>β-C</text>
+        <text x={198} y={165} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif"}}>β-C</text>
         {/* β-H (the one being abstracted) */}
         <A x={185} y={86} el="H" size={15} color="#64748b"/>
         <Bond x1={193} y1={107} x2={188} y2={92}/>
@@ -3820,7 +3825,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
 
         {/* α-carbon */}
         <A x={282} y={115} el="C" size={17}/>
-        <text x={282} y={165} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"sans-serif"}}>α-C</text>
+        <text x={282} y={165} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif"}}>α-C</text>
         <A x={300} y={87} el="H" size={14} color="#64748b"/>
         <Bond x1={284} y1={107} x2={298} y2={93}/>
         <A x={300} y={143} el="H" size={14} color="#64748b"/>
@@ -3843,8 +3848,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
       // Initiation: Cl–Cl with UV
       return (
         <MechSVGBase animKey={animKey}>
-          <text x={280} y={38} textAnchor="middle" style={{fontSize:"14px",fontFamily:"sans-serif",fill:"#d97706",fontWeight:700}}>UV light (hν)</text>
-          <text x={280} y={56} textAnchor="middle" style={{fontSize:"12px",fontFamily:"sans-serif",fill:"#64748b"}}>↓</text>
+          <text x={280} y={38} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>UV light (hν)</text>
+          <text x={280} y={56} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>↓</text>
           <A x={165} y={115} el="Cl" size={18}/>
           <LP x={148} y={103} angle={150} color="#166534"/>
           <LP x={150} y={127} angle={120} color="#166534"/>
@@ -3852,7 +3857,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
           <A x={365} y={115} el="Cl" size={18}/>
           <LP x={382} y={103} angle={30} color="#166534"/>
           <LP x={384} y={127} angle={60} color="#166534"/>
-          <text x={265} y={145} textAnchor="middle" style={{fontSize:"10px",fontFamily:"sans-serif",fill:"#d97706",fontWeight:700}}>homolytic fission</text>
+          <text x={265} y={145} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>homolytic fission</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3897,11 +3902,11 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false }) {
     // Termination (step 3)
     return (
       <MechSVGBase animKey={animKey}>
-        <text x={280} y={58} textAnchor="middle" style={{fontSize:"14px",fontFamily:"Georgia,serif",fill:"#1a202c",fontWeight:600}}>Termination: any two radicals combine</text>
-        <text x={280} y={88} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#64748b"}}>Cl• + Cl• → Cl₂</text>
-        <text x={280} y={113} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#64748b"}}>Cl• + •CH₃ → CH₃Cl</text>
-        <text x={280} y={138} textAnchor="middle" style={{fontSize:"13px",fontFamily:"Georgia,serif",fill:"#64748b"}}>•CH₃ + •CH₃ → C₂H₆</text>
-        <text x={280} y={168} textAnchor="middle" style={{fontSize:"11px",fontFamily:"sans-serif",fill:"#94a3b8"}}>No curly arrows — radicals combine directly</text>
+        <text x={280} y={58} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:600}}>Termination: any two radicals combine</text>
+        <text x={280} y={88} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl• + Cl• → Cl₂</text>
+        <text x={280} y={113} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl• + •CH₃ → CH₃Cl</text>
+        <text x={280} y={138} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>•CH₃ + •CH₃ → C₂H₆</text>
+        <text x={280} y={168} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>No curly arrows — radicals combine directly</text>
       </MechSVGBase>
     );
   }
@@ -3960,6 +3965,7 @@ export default function App() {
   const touchEnd = useRef(null);
   const [mechId, setMechId] = useState(null);
   const [mechStep, setMechStep] = useState(0);
+  const [mechArrowIdx, setMechArrowIdx] = useState(0); // arrows revealed in current step
   const [mechAnimKey, setMechAnimKey] = useState(0);
   const [mechStill, setMechStill] = useState(false);
   const [synthTab, setSynthTab] = useState("ali");
@@ -4422,7 +4428,7 @@ export default function App() {
           const active = topicsTab === id;
           return (
             <button key={id}
-              onClick={() => { setTopicsTab(id); setSelectedRxn(null); if (id === "pathways") setSelectedFrom(null); if (id === "synth") setSelectedFrom(null); if (id === "mechanisms") { setMechId(null); setMechStep(0); } }}
+              onClick={() => { setTopicsTab(id); setSelectedRxn(null); if (id === "pathways") setSelectedFrom(null); if (id === "synth") setSelectedFrom(null); if (id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
               style={{
                 padding: "8px 16px", borderRadius: "22px", border: "none",
                 cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
@@ -5504,7 +5510,7 @@ export default function App() {
                 <div style={{ fontSize:"11px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"8px" }}>{cat}</div>
                 <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
                   {list.map(m => (
-                    <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechAnimKey(k=>k+1); setMechStill(false); }}
+                    <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); }}
                       style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
                         padding:"14px 16px", textAlign:"left", cursor:"pointer", fontFamily:"inherit",
                         boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
@@ -5512,7 +5518,7 @@ export default function App() {
                         <div style={{ width:"10px", height:"10px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
                         <div>
                           <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45", marginBottom:"2px" }}>{m.title}</div>
-                          <div style={{ fontSize:"12px", color:"#64748b", fontFamily:"Georgia,serif" }}>{m.subtitle}</div>
+                          <div style={{ fontSize:"12px", color:"#64748b", fontFamily:"'DM Sans',system-ui,sans-serif" }}>{m.subtitle}</div>
                         </div>
                         <div style={{ marginLeft:"auto", display:"flex", gap:"4px" }}>
                           {m.specs.map(s=><span key={s} style={{ fontSize:"10px", fontWeight:700, background:`${m.color}20`, color:m.color, padding:"2px 6px", borderRadius:"6px" }}>{s.replace("_"," ")}</span>)}
@@ -5529,12 +5535,45 @@ export default function App() {
         // ── Mechanism viewer ──
         const totalSteps = activeMech.steps.length;
         const currentStepData = activeMech.steps[mechStep];
-        const arrowLabels = (currentStepData.arrows||[]).map(id => activeMech.arrowPaths[id]?.label).filter(Boolean);
-        const isFirst = mechStep === 0;
-        const isLast = mechStep === totalSteps - 1;
+        const stepArrows = currentStepData.arrows || [];
+        const totalStepArrows = stepArrows.length;
 
-        const goNext = () => { setMechStep(s=>s+1); setMechAnimKey(k=>k+1); };
-        const goPrev = () => { setMechStep(s=>Math.max(0,s-1)); setMechAnimKey(k=>k+1); };
+        // Build flat total for progress bar: sum all arrows + 1 per step (for the "intro" frame)
+        const totalFrames = activeMech.steps.reduce((n, s) => n + 1 + (s.arrows||[]).length, 0);
+        const framesBeforeStep = activeMech.steps.slice(0, mechStep).reduce((n, s) => n + 1 + (s.arrows||[]).length, 0);
+        const currentFrame = framesBeforeStep + 1 + mechArrowIdx; // +1 for step intro frame
+
+        // Currently visible arrow IDs for this step (revealed so far)
+        const visibleArrowIds = stepArrows.slice(0, mechArrowIdx);
+        // The most recently revealed arrow label (for the legend)
+        const latestArrowLabel = mechArrowIdx > 0 ? activeMech.arrowPaths[stepArrows[mechArrowIdx - 1]]?.label : null;
+
+        const isAtStart = mechStep === 0 && mechArrowIdx === 0;
+        const isAtEnd = mechStep === totalSteps - 1 && mechArrowIdx >= totalStepArrows;
+
+        const goNext = () => {
+          if (mechArrowIdx < totalStepArrows) {
+            // Reveal next arrow in current step
+            setMechArrowIdx(i => i + 1);
+            setMechAnimKey(k => k + 1);
+          } else if (mechStep < totalSteps - 1) {
+            // Advance to next step
+            setMechStep(s => s + 1);
+            setMechArrowIdx(0);
+            setMechAnimKey(k => k + 1);
+          }
+        };
+        const goPrev = () => {
+          if (mechArrowIdx > 0) {
+            setMechArrowIdx(i => i - 1);
+            setMechAnimKey(k => k + 1);
+          } else if (mechStep > 0) {
+            const prevArrows = (activeMech.steps[mechStep - 1].arrows || []).length;
+            setMechStep(s => s - 1);
+            setMechArrowIdx(prevArrows); // show all arrows of prev step
+            setMechAnimKey(k => k + 1);
+          }
+        };
 
         return (
           <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
@@ -5542,14 +5581,14 @@ export default function App() {
 
             {/* Header */}
             <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
-              <button onClick={()=>{ setMechId(null); setMechStep(0); }}
+              <button onClick={()=>{ setMechId(null); setMechStep(0); setMechArrowIdx(0); }}
                 style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
                   color:"#29ABE2", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
                 ← Back
               </button>
               <div>
                 <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45" }}>{activeMech.title}</div>
-                <div style={{ fontSize:"11px", color:"#64748b", fontFamily:"Georgia,serif" }}>{activeMech.subtitle}</div>
+                <div style={{ fontSize:"11px", color:"#64748b", fontFamily:"'DM Sans',system-ui,sans-serif" }}>{activeMech.subtitle}</div>
               </div>
             </div>
 
@@ -5574,70 +5613,70 @@ export default function App() {
             </div>
 
             {!mechStill && <>
-              {/* Step indicator */}
-              <div style={{ padding:"8px 16px 4px", display:"flex", alignItems:"center", gap:"10px" }}>
-                <div style={{ fontSize:"12px", color:"#94a3b8", fontWeight:600 }}>
+              {/* Progress bar */}
+              <div style={{ padding:"10px 16px 4px", display:"flex", alignItems:"center", gap:"10px" }}>
+                <div style={{ fontSize:"12px", color:"#94a3b8", fontWeight:600, whiteSpace:"nowrap" }}>
                   Step {mechStep + 1} of {totalSteps}
                 </div>
                 <div style={{ flex:1, height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
-                  <div style={{ height:"100%", width:`${((mechStep+1)/totalSteps)*100}%`,
-                    background:activeMech.color, borderRadius:"2px", transition:"width 0.3s ease" }}/>
+                  <div style={{ height:"100%", width:`${(currentFrame/totalFrames)*100}%`,
+                    background:"#29ABE2", borderRadius:"2px", transition:"width 0.25s ease" }}/>
                 </div>
               </div>
 
               {/* Step title */}
-              <div style={{ padding:"4px 16px 8px" }}>
+              <div style={{ padding:"2px 16px 8px" }}>
                 <div style={{ fontSize:"15px", fontWeight:700, color:"#1a2d45" }}>{currentStepData.title}</div>
               </div>
 
               {/* SVG diagram */}
               <div style={{ margin:"0 16px", background:"#f8fafc", border:"1.5px solid #e2e8f0",
                 borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
-                <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey}/>
+                <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
               </div>
 
-              {/* Arrow legend for current step */}
-              {arrowLabels.length > 0 && (
-                <div style={{ margin:"10px 16px 0", display:"flex", flexDirection:"column", gap:"4px" }}>
-                  {arrowLabels.map((lbl,i) => (
-                    <div key={i} style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"12px" }}>
-                      <div style={{ width:"28px", height:"2px", background:"#29ABE2", borderRadius:"1px", flexShrink:0 }}/>
-                      <span style={{ color:"#1a2d45", fontFamily:"Georgia,serif" }}>{lbl}</span>
-                    </div>
-                  ))}
+              {/* Latest arrow label */}
+              {latestArrowLabel && (
+                <div style={{ margin:"8px 16px 0", display:"flex", alignItems:"center", gap:"8px" }}>
+                  <div style={{ width:"24px", height:"2px", background:"#29ABE2", borderRadius:"1px", flexShrink:0 }}/>
+                  <span style={{ fontSize:"12px", color:"#1a2d45", fontWeight:600 }}>{latestArrowLabel}</span>
                 </div>
               )}
 
               {/* Explanation */}
-              <div style={{ margin:"10px 16px", padding:"14px", background:"#ffffff",
+              <div style={{ margin:"8px 16px", padding:"14px", background:"#ffffff",
                 border:"1.5px solid #e2e8f0", borderRadius:"14px" }}>
-                <div style={{ fontSize:"11px", fontWeight:700, color:activeMech.color, textTransform:"uppercase",
-                  letterSpacing:"0.8px", marginBottom:"6px" }}>Why this arrow?</div>
+                <div style={{ fontSize:"11px", fontWeight:700, color:"#29ABE2", textTransform:"uppercase",
+                  letterSpacing:"0.8px", marginBottom:"6px" }}>
+                  {mechArrowIdx === 0 ? "Overview" : "Why this arrow?"}
+                </div>
                 <p style={{ margin:0, fontSize:"13px", lineHeight:1.75, color:"#1a2d45" }}>
                   {currentStepData.explanation}
                 </p>
               </div>
 
               {/* Prev / Next */}
-              <div style={{ padding:"12px 16px 20px", display:"flex", gap:"10px" }}>
-                <button onClick={goPrev} disabled={isFirst}
-                  style={{ flex:1, padding:"13px", borderRadius:"12px", border:"none", cursor: isFirst?"default":"pointer",
-                    background: isFirst?"#e8edf3":"#f0f4f8", color: isFirst?"#b0c4d4":"#4a6080",
+              <div style={{ padding:"8px 16px 20px", display:"flex", gap:"10px" }}>
+                <button onClick={goPrev} disabled={isAtStart}
+                  style={{ flex:1, padding:"13px", borderRadius:"12px", border:"none",
+                    cursor: isAtStart ? "default" : "pointer",
+                    background: isAtStart ? "#e8edf3" : "#f0f4f8",
+                    color: isAtStart ? "#b0c4d4" : "#4a6080",
                     fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
-                  ← Previous
+                  ← Back
                 </button>
-                {!isLast ? (
+                {!isAtEnd ? (
                   <button onClick={goNext}
                     style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
-                      background:activeMech.color, color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit",
-                      boxShadow:`0 4px 14px ${activeMech.color}50` }}>
-                    Next Step →
+                      background:"#29ABE2", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit",
+                      boxShadow:"0 4px 14px rgba(41,171,226,0.35)" }}>
+                    {mechArrowIdx < totalStepArrows ? "Show Next Arrow →" : "Next Step →"}
                   </button>
                 ) : (
-                  <button onClick={()=>{ setMechId(null); setMechStep(0); }}
+                  <button onClick={()=>{ setMechId(null); setMechStep(0); setMechArrowIdx(0); }}
                     style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
                       background:"#1a2d45", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
-                    ✓ Done — Back to List
+                    Done — Back to List
                   </button>
                 )}
               </div>
@@ -5647,7 +5686,7 @@ export default function App() {
             {mechStill && (
               <div style={{ padding:"12px 16px 24px" }}>
                 <div style={{ fontSize:"13px", color:"#64748b", marginBottom:"10px", lineHeight:1.6 }}>
-                  Exam diagram: key curly arrows shown in red. All arrow labels listed below.
+                  Exam diagram: key curly arrows shown in blue. All arrow labels listed below.
                 </div>
                 {/* Show key step arrows in red on correct molecule layout */}
                 <div style={{ background:"#f8fafc", border:"1.5px solid #e2e8f0", borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
@@ -5662,7 +5701,7 @@ export default function App() {
                         const ap = activeMech.arrowPaths[id];
                         return ap ? <div key={id} style={{ fontSize:"12px", color:"#1a2d45", lineHeight:1.6, display:"flex", gap:"6px", alignItems:"flex-start" }}>
                           <span style={{ color:"#29ABE2", fontWeight:700, marginTop:"1px" }}>↷</span>
-                          <span style={{ fontFamily:"Georgia,serif" }}>{ap.label}</span>
+                          <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif" }}>{ap.label}</span>
                         </div> : null;
                       })}
                     </div>
