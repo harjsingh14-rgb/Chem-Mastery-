@@ -4210,36 +4210,33 @@ export default function App() {
     const W = "100%", H = "100%";
     if (id === "aqa") return (
       <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
-        {/* AQA — organic chemistry theme */}
-        {/* Large benzene right */}
-        <polygon points="328,8 360,26 360,62 328,80 296,62 296,26" stroke="white" strokeWidth="2.5"/>
-        <circle cx="328" cy="44" r="22" stroke="white" strokeWidth="1.5"/>
-        {/* Medium benzene left */}
+        {/* AQA — organic chemistry. Top-right corner kept clear for the faded "AQA" label */}
+        {/* Large benzene — centre-right, NOT top-right corner */}
+        <polygon points="296,88 324,104 324,136 296,152 268,136 268,104" stroke="white" strokeWidth="2.5"/>
+        <circle cx="296" cy="120" r="20" stroke="white" strokeWidth="1.5"/>
+        {/* Medium benzene — left-centre */}
         <polygon points="56,76 74,86 74,106 56,116 38,106 38,86" stroke="white" strokeWidth="2"/>
         <circle cx="56" cy="96" r="12" stroke="white" strokeWidth="1.2"/>
-        {/* Long skeletal organic chain */}
-        <polyline points="86,150 110,126 134,150 158,126 182,150 206,126 230,150" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        {/* Double bond on chain */}
-        <line x1="110" y1="126" x2="134" y2="150" stroke="white" strokeWidth="1.5"/>
-        <line x1="113" y1="122" x2="137" y2="146" stroke="white" strokeWidth="1.5"/>
-        {/* COOH end group */}
-        <line x1="230" y1="150" x2="248" y2="132" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <text x="250" y="130" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">COOH</text>
-        {/* Reaction arrow with reagent */}
-        <line x1="130" y1="52" x2="210" y2="52" stroke="white" strokeWidth="2"/>
-        <polygon points="206,47 218,52 206,57" fill="white"/>
-        <text x="143" y="45" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">HBr</text>
-        <text x="150" y="67" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Δ</text>
-        {/* Flask */}
-        <path d="M232,18 L232,44 L215,76 Q211,84 219,88 L261,88 Q269,84 265,76 L248,44 L248,18 Z" stroke="white" strokeWidth="2" fill="none"/>
-        <line x1="228" y1="30" x2="252" y2="30" stroke="white" strokeWidth="1.5"/>
-        <ellipse cx="240" cy="73" rx="8" ry="4" stroke="white" strokeWidth="1.5"/>
-        {/* Small benzene top-left */}
-        <polygon points="24,16 36,23 36,37 24,44 12,37 12,23" stroke="white" strokeWidth="1.8"/>
-        <circle cx="24" cy="30" r="8" stroke="white" strokeWidth="1.2"/>
-        {/* NH₂ branch off chain */}
-        <line x1="158" y1="126" x2="158" y2="104" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-        <text x="150" y="98" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">NH₂</text>
+        {/* Skeletal chain — mid-top band */}
+        <polyline points="14,64 36,42 58,64 80,42 102,64 124,42 146,64" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* Double bond */}
+        <line x1="36" y1="42" x2="58" y2="64" stroke="white" strokeWidth="1.5"/>
+        <line x1="39" y1="38" x2="61" y2="60" stroke="white" strokeWidth="1.5"/>
+        {/* OH end group */}
+        <line x1="146" y1="64" x2="162" y2="48" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <text x="164" y="46" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">OH</text>
+        {/* NH₂ branch */}
+        <line x1="80" y1="42" x2="80" y2="20" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <text x="72" y="14" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">NH₂</text>
+        {/* Reaction arrow — centre */}
+        <line x1="180" y1="55" x2="246" y2="55" stroke="white" strokeWidth="2"/>
+        <polygon points="242,50 254,55 242,60" fill="white"/>
+        <text x="194" y="47" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">HBr</text>
+        <text x="204" y="70" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Δ</text>
+        {/* Flask — far right */}
+        <path d="M346,20 L346,50 L328,86 Q324,96 334,100 L376,100 Q386,96 382,86 L364,50 L364,20 Z" stroke="white" strokeWidth="2" fill="none"/>
+        <line x1="342" y1="34" x2="368" y2="34" stroke="white" strokeWidth="1.5"/>
+        <ellipse cx="355" cy="84" rx="8" ry="4" stroke="white" strokeWidth="1.5"/>
       </svg>
     );
     if (id === "ocr") return (
@@ -4492,7 +4489,7 @@ export default function App() {
                   ))}
                 </div>
                 <div style={{ marginTop: "auto", background: b.grad, borderRadius: "12px", padding: "14px 16px", color: "#fff", fontWeight: 700, fontSize: "16px", textAlign: "center" }}>
-                  Start {b.label} {b.sub} →
+                  Let's Go →
                 </div>
               </div>
             </button>
