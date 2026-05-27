@@ -4453,8 +4453,8 @@ export default function App() {
         <h2 style={{ textAlign: "center", fontSize: "30px", fontWeight: 800, color: "#1a2d45", margin: "0 0 36px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
           {[
-            { id: "aqa", label: "AQA", sub: "Chemistry", count: TOPIC_ORDER.length, desc: "Full coverage of the AQA A-Level Chemistry specification — Year 1 and Year 2.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["AS + A2 content","Required practicals"] },
-            { id: "ocr", label: "OCR A", sub: "Chemistry", count: OCR_TOPIC_ORDER.length, desc: "OCR A Chemistry H432 — Modules 2-6 covered. Module 1 (Practical Skills) is assessed through PAGs, not written exams.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","PAG practicals"] },
+            { id: "aqa", label: "AQA", sub: "Chemistry", count: TOPIC_ORDER.length, desc: "Year 1 and Year 2. Full spec coverage.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["Organic","Physical","Inorganic","Req. Practicals"] },
+            { id: "ocr", label: "OCR A", sub: "Chemistry", count: OCR_TOPIC_ORDER.length, desc: "Modules 2-6 fully covered. Module 1 is PAG practical skills only.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","Organic","Physical","PAG Skills"] },
           ].map(b => (
             <button key={b.id} onClick={() => selectBoard(b.id)} style={{
               display: "flex", flexDirection: "column", borderRadius: "24px",
