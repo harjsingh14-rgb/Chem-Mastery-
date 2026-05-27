@@ -4404,19 +4404,40 @@ export default function App() {
         </div>
       </div>
       {/* Tab bar */}
-      <div style={{ display: "flex", gap: "0", borderBottom: "2px solid #e0e8f0", margin: "0 16px", marginBottom: "0", overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none" }}>
-        <style>{`.topicTabBar::-webkit-scrollbar{display:none}`}</style>
-        {["flashcards", "synth", "pathways", "calc", "extended", "mechanisms"].map(tab => (
-          <button key={tab} onClick={() => { setTopicsTab(tab); setSelectedRxn(null); if (tab === "pathways") setSelectedFrom(null); if (tab === "synth") setSelectedFrom(null); if (tab === "mechanisms") { setMechId(null); setMechStep(0); } }} style={{
-            padding: "10px 9px", border: "none", background: "none",
-            fontFamily: "inherit", fontSize: "12px", fontWeight: 700, cursor: "pointer",
-            color: topicsTab === tab ? (tab === "extended" ? "#7c3aed" : tab === "pathways" ? "#059669" : tab === "mechanisms" ? "#d97706" : "#29ABE2") : "#7a95b0",
-            borderBottom: topicsTab === tab ? `3px solid ${tab === "extended" ? "#7c3aed" : tab === "pathways" ? "#059669" : tab === "mechanisms" ? "#d97706" : "#29ABE2"}` : "3px solid transparent",
-            marginBottom: "-2px", transition: "color 0.15s", whiteSpace: "nowrap", flexShrink: 0,
-          }}>
-            {tab === "flashcards" ? "Cards" : tab === "synth" ? "Synth" : tab === "pathways" ? "Paths" : tab === "calc" ? "Calcs" : tab === "extended" ? "6-Mark" : "Mechs ⚗"}
-          </button>
-        ))}
+      <style>{`.hsjTabBar::-webkit-scrollbar{display:none}`}</style>
+      <div className="hsjTabBar" style={{
+        display: "flex", gap: "6px", padding: "10px 14px",
+        background: "#f0f4f8", borderBottom: "1px solid #dde4ed",
+        overflowX: "auto", WebkitOverflowScrolling: "touch",
+        scrollbarWidth: "none", msOverflowStyle: "none", flexShrink: 0,
+      }}>
+        {[
+          { id: "flashcards", icon: "🃏", label: "Cards",       color: "#29ABE2" },
+          { id: "synth",      icon: "⚗️",  label: "Synthesis",  color: "#29ABE2" },
+          { id: "pathways",   icon: "🗺️",  label: "Pathways",   color: "#059669" },
+          { id: "calc",       icon: "🔢",  label: "Calcs",      color: "#29ABE2" },
+          { id: "extended",   icon: "✍️",  label: "6-Mark",     color: "#7c3aed" },
+          { id: "mechanisms", icon: "⚡",  label: "Mechanisms", color: "#d97706" },
+        ].map(({ id, icon, label, color }) => {
+          const active = topicsTab === id;
+          return (
+            <button key={id}
+              onClick={() => { setTopicsTab(id); setSelectedRxn(null); if (id === "pathways") setSelectedFrom(null); if (id === "synth") setSelectedFrom(null); if (id === "mechanisms") { setMechId(null); setMechStep(0); } }}
+              style={{
+                display: "flex", alignItems: "center", gap: "5px",
+                padding: "8px 14px", borderRadius: "22px", border: "none",
+                cursor: "pointer", fontFamily: "inherit", fontSize: "13px",
+                fontWeight: 700, flexShrink: 0, whiteSpace: "nowrap",
+                transition: "all 0.15s ease",
+                background: active ? color : "#ffffff",
+                color: active ? "#ffffff" : "#4a6080",
+                boxShadow: active ? `0 2px 10px ${color}45` : "0 1px 3px rgba(0,0,0,0.08)",
+              }}>
+              <span style={{ fontSize: "14px", lineHeight: 1 }}>{icon}</span>
+              <span>{label}</span>
+            </button>
+          );
+        })}
       </div>
       {topicsTab === "flashcards" && quizScreen === "setup" && (
         <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
