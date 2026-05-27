@@ -4198,59 +4198,195 @@ export default function App() {
     </div>
   );
 
-  // Chemistry artwork for card thumbnails
+  // Rich chemistry background artwork for card thumbnails
   const ChemArt = ({ id }) => {
-    const s = { position: "absolute", top: "8px", right: "10px", opacity: 0.22, pointerEvents: "none", userSelect: "none" };
+    const s = { position: "absolute", inset: 0, pointerEvents: "none", userSelect: "none", opacity: 0.2 };
+    const W = "100%", H = "100%";
     if (id === "board") return (
-      <svg style={s} width="74" height="74" viewBox="0 0 74 74" fill="none">
-        <polygon points="37,4 68,21 68,53 37,70 6,53 6,21" stroke="white" strokeWidth="2.5" fill="none"/>
-        <circle cx="37" cy="37" r="18" stroke="white" strokeWidth="1.5" fill="none"/>
+      <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* Large benzene ring right */}
+        <polygon points="328,8 360,26 360,62 328,80 296,62 296,26" stroke="white" strokeWidth="2.5"/>
+        <circle cx="328" cy="44" r="22" stroke="white" strokeWidth="1.5"/>
+        {/* Medium benzene left */}
+        <polygon points="58,78 76,89 76,111 58,122 40,111 40,89" stroke="white" strokeWidth="2"/>
+        <circle cx="58" cy="100" r="13" stroke="white" strokeWidth="1.2"/>
+        {/* Small benzene top-left */}
+        <polygon points="28,18 40,25 40,39 28,46 16,39 16,25" stroke="white" strokeWidth="1.8"/>
+        <circle cx="28" cy="32" r="8" stroke="white" strokeWidth="1.2"/>
+        {/* Skeletal chain across bottom */}
+        <polyline points="90,148 114,124 138,148 162,124 186,148 210,124 234,148" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* Double bond */}
+        <line x1="114" y1="124" x2="138" y2="148" stroke="white" strokeWidth="1.5"/>
+        <line x1="117" y1="120" x2="141" y2="144" stroke="white" strokeWidth="1.5"/>
+        {/* Reaction arrow */}
+        <line x1="138" y1="55" x2="210" y2="55" stroke="white" strokeWidth="2"/>
+        <polygon points="206,50 218,55 206,60" fill="white"/>
+        {/* Reagents above/below arrow */}
+        <text x="149" y="48" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">H₂SO₄</text>
+        <text x="152" y="70" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Δ</text>
+        {/* Flask outline */}
+        <path d="M228,22 L228,48 L210,82 Q206,90 214,94 L258,94 Q266,90 262,82 L244,48 L244,22 Z" stroke="white" strokeWidth="2" fill="none"/>
+        <line x1="224" y1="34" x2="248" y2="34" stroke="white" strokeWidth="1.5"/>
+        <ellipse cx="236" cy="78" rx="8" ry="4" stroke="white" strokeWidth="1.5"/>
+        {/* OH end group */}
+        <line x1="234" y1="148" x2="252" y2="130" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <text x="254" y="128" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">OH</text>
       </svg>
     );
     if (id === "flashcards") return (
-      <svg style={s} width="72" height="72" viewBox="0 0 72 72" fill="none">
-        <polygon points="36,4 65,21 65,51 36,68 7,51 7,21" stroke="white" strokeWidth="2.5" fill="none"/>
-        <circle cx="36" cy="36" r="17" stroke="white" strokeWidth="1.5" fill="none"/>
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* Large benzene top-right */}
+        <polygon points="248,5 272,19 272,47 248,61 224,47 224,19" stroke="white" strokeWidth="2.5"/>
+        <circle cx="248" cy="33" r="18" stroke="white" strokeWidth="1.5"/>
+        {/* Small benzene mid-left */}
+        <polygon points="38,52 52,60 52,76 38,84 24,76 24,60" stroke="white" strokeWidth="2"/>
+        <circle cx="38" cy="68" r="11" stroke="white" strokeWidth="1.2"/>
+        {/* Skeletal chain bottom */}
+        <polyline points="20,128 42,106 64,128 86,106 108,128 130,106 152,128" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* Double bond */}
+        <line x1="42" y1="106" x2="64" y2="128" stroke="white" strokeWidth="1.5"/>
+        <line x1="45" y1="102" x2="67" y2="124" stroke="white" strokeWidth="1.5"/>
+        {/* OH end group */}
+        <line x1="152" y1="128" x2="168" y2="110" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <text x="170" y="108" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">OH</text>
+        {/* Reaction arrow */}
+        <line x1="170" y1="45" x2="214" y2="45" stroke="white" strokeWidth="1.8"/>
+        <polygon points="210,40 222,45 210,50" fill="white"/>
+        {/* NH₂ branch */}
+        <line x1="86" y1="106" x2="86" y2="84" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <text x="79" y="78" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">NH₂</text>
       </svg>
     );
     if (id === "synth") return (
-      <svg style={s} width="82" height="56" viewBox="0 0 82 56" fill="none">
-        <line x1="4" y1="40" x2="20" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="20" y1="18" x2="36" y2="40" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="50" y1="40" x2="66" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="66" y1="18" x2="78" y2="34" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="36" y1="28" x2="48" y2="28" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-        <polygon points="48,23 56,28 48,33" fill="white"/>
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* Benzene ring top-right */}
+        <polygon points="252,6 274,19 274,45 252,58 230,45 230,19" stroke="white" strokeWidth="2.5"/>
+        <circle cx="252" cy="32" r="16" stroke="white" strokeWidth="1.5"/>
+        {/* Reactant skeletal left */}
+        <polyline points="14,92 36,68 58,92 80,68" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* Double bond on reactant */}
+        <line x1="36" y1="68" x2="58" y2="92" stroke="white" strokeWidth="1.5"/>
+        <line x1="39" y1="64" x2="61" y2="88" stroke="white" strokeWidth="1.5"/>
+        {/* Big reaction arrow */}
+        <line x1="96" y1="78" x2="168" y2="78" stroke="white" strokeWidth="2.5"/>
+        <polygon points="164,72 178,78 164,84" fill="white"/>
+        {/* Δ above arrow */}
+        <text x="122" y="68" fill="white" fontSize="14" fontFamily="'Space Mono',monospace">Δ</text>
+        {/* Reagent below */}
+        <text x="102" y="96" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">H₂SO₄</text>
+        {/* Product skeletal right */}
+        <polyline points="186,92 208,68 230,92" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* Br branch on product */}
+        <line x1="208" y1="68" x2="208" y2="46" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <text x="202" y="40" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">Br</text>
+        {/* Dashed bottom chain continuation */}
+        <polyline points="14,125 36,110 58,125 80,110 102,125" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="5 4"/>
+        {/* Small benzene far right */}
+        <polygon points="278,88 292,96 292,112 278,120 264,112 264,96" stroke="white" strokeWidth="1.8"/>
+        <circle cx="278" cy="104" r="10" stroke="white" strokeWidth="1.2"/>
       </svg>
     );
     if (id === "pathways") return (
-      <svg style={s} width="70" height="70" viewBox="0 0 70 70" fill="none">
-        <line x1="35" y1="4" x2="35" y2="30" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="35" y1="30" x2="12" y2="56" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="35" y1="30" x2="58" y2="56" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-        <circle cx="12" cy="57" r="4" fill="white"/>
-        <circle cx="58" cy="57" r="4" fill="white"/>
-        <circle cx="35" cy="4" r="4" fill="white"/>
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* Benzene top-right */}
+        <polygon points="252,6 274,19 274,45 252,58 230,45 230,19" stroke="white" strokeWidth="2.5"/>
+        <circle cx="252" cy="32" r="16" stroke="white" strokeWidth="1.5"/>
+        {/* Central molecule */}
+        <circle cx="80" cy="60" r="8" stroke="white" strokeWidth="2" fill="none"/>
+        {/* Branching arrows */}
+        <line x1="80" y1="52" x2="80" y2="18" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="76,22 80,10 84,22" fill="white"/>
+        <line x1="72" y1="64" x2="22" y2="100" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="27,100 18,108 24,96" fill="white"/>
+        <line x1="88" y1="64" x2="138" y2="100" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="133,96 142,104 133,108" fill="white"/>
+        <line x1="88" y1="58" x2="140" y2="32" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <polygon points="135,34 144,26 140,38" fill="white"/>
+        {/* Labels */}
+        <text x="68" y="8" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Alkene</text>
+        <text x="143" y="30" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Alcohol</text>
+        <text x="145" y="104" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Halide</text>
+        <text x="0" y="115" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">Amine</text>
+        {/* Skeletal chain top area */}
+        <polyline points="170,18 190,38 210,18 230,38" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="4 3"/>
+        {/* Small benzene bottom right */}
+        <polygon points="240,98 256,107 256,125 240,134 224,125 224,107" stroke="white" strokeWidth="2"/>
+        <circle cx="240" cy="116" r="11" stroke="white" strokeWidth="1.2"/>
       </svg>
     );
     if (id === "calc") return (
-      <svg style={s} width="84" height="62" viewBox="0 0 84 62" fill="none">
-        <text x="4" y="24" fill="white" fontSize="20" fontFamily="'Space Mono',monospace" fontWeight="700">n = m</text>
-        <line x1="4" y1="32" x2="60" y2="32" stroke="white" strokeWidth="2.2"/>
-        <text x="14" y="54" fill="white" fontSize="20" fontFamily="'Space Mono',monospace" fontWeight="700">Mᵣ</text>
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* n = m / Mr large fraction */}
+        <text x="160" y="38" fill="white" fontSize="22" fontFamily="'Space Mono',monospace" fontWeight="700">n = m</text>
+        <line x1="160" y1="46" x2="248" y2="46" stroke="white" strokeWidth="2.2"/>
+        <text x="178" y="68" fill="white" fontSize="22" fontFamily="'Space Mono',monospace" fontWeight="700">Mᵣ</text>
+        {/* c = n/V */}
+        <text x="164" y="96" fill="white" fontSize="14" fontFamily="'Space Mono',monospace">c = n/V</text>
+        {/* PV = nRT */}
+        <text x="158" y="118" fill="white" fontSize="14" fontFamily="'Space Mono',monospace">PV = nRT</text>
+        {/* Benzene small left */}
+        <polygon points="42,30 58,39 58,57 42,66 26,57 26,39" stroke="white" strokeWidth="2"/>
+        <circle cx="42" cy="48" r="11" stroke="white" strokeWidth="1.2"/>
+        {/* ΔH = ... */}
+        <text x="16" y="96" fill="white" fontSize="13" fontFamily="'Space Mono',monospace">ΔH = −kJ</text>
+        {/* Skeletal snippet bottom-left */}
+        <polyline points="16,128 34,112 52,128 70,112" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        {/* Arrow */}
+        <line x1="80" y1="48" x2="136" y2="48" stroke="white" strokeWidth="1.8"/>
+        <polygon points="132,43 144,48 132,53" fill="white"/>
+        <text x="95" y="40" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">mol</text>
       </svg>
     );
     if (id === "extended") return (
-      <svg style={s} width="64" height="64" viewBox="0 0 64 64" fill="none">
-        <rect x="4" y="4" width="56" height="56" rx="10" stroke="white" strokeWidth="2.5" fill="none"/>
-        <polyline points="14,32 26,46 50,20" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* Large tick top-right */}
+        <polyline points="210,25 234,52 278,8" stroke="white" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Benzene left */}
+        <polygon points="40,14 58,24 58,44 40,54 22,44 22,24" stroke="white" strokeWidth="2"/>
+        <circle cx="40" cy="34" r="12" stroke="white" strokeWidth="1.2"/>
+        {/* Mark scheme lines */}
+        <rect x="16" y="72" width="10" height="10" rx="2" stroke="white" strokeWidth="1.8"/>
+        <line x1="34" y1="77" x2="120" y2="77" stroke="white" strokeWidth="1.5"/>
+        <rect x="16" y="92" width="10" height="10" rx="2" stroke="white" strokeWidth="1.8"/>
+        <line x1="34" y1="97" x2="150" y2="97" stroke="white" strokeWidth="1.5"/>
+        <rect x="16" y="112" width="10" height="10" rx="2" stroke="white" strokeWidth="1.8"/>
+        <line x1="34" y1="117" x2="100" y2="117" stroke="white" strokeWidth="1.5"/>
+        {/* Checkmarks in two boxes */}
+        <polyline points="18,76 21,80 26,72" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <polyline points="18,96 21,100 26,92" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Skeletal formula right */}
+        <polyline points="168,108 188,88 208,108 228,88 248,108" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        <line x1="248" y1="108" x2="264" y2="92" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     );
     if (id === "mechanisms") return (
-      <svg style={s} width="82" height="62" viewBox="0 0 82 62" fill="none">
-        <path d="M 12 50 C 12 20, 50 8, 58 28 C 64 42, 52 54, 42 48" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-        <polygon points="36,42 42,54 50,44" fill="white"/>
-        <circle cx="12" cy="50" r="3.5" fill="white"/>
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* Central C atom */}
+        <text x="130" y="76" fill="white" fontSize="18" fontFamily="'Space Mono',monospace" fontWeight="700">C</text>
+        {/* Bonds from central C */}
+        <line x1="140" y1="58" x2="140" y2="28" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="148" y1="70" x2="184" y2="60" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="140" y1="82" x2="140" y2="112" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        <line x1="132" y1="70" x2="96" y2="60" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+        {/* δ+ on central C */}
+        <text x="148" y="72" fill="white" fontSize="12" fontFamily="'Space Mono',monospace">δ+</text>
+        {/* Nucleophile curly arrow */}
+        <path d="M 60 68 C 60 40, 110 30, 132 62" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+        <polygon points="126,56 134,64 138,54" fill="white"/>
+        <text x="20" y="74" fill="white" fontSize="12" fontFamily="'Space Mono',monospace">Nu:</text>
+        <text x="18" y="58" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">δ–</text>
+        {/* Leaving group curly arrow */}
+        <path d="M 158 64 C 195 54, 210 68, 208 88" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+        <polygon points="203,84 208,96 214,84" fill="white"/>
+        <text x="194" y="58" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">:X</text>
+        {/* Benzene ring bottom-right */}
+        <polygon points="246,94 264,104 264,124 246,134 228,124 228,104" stroke="white" strokeWidth="2"/>
+        <circle cx="246" cy="114" r="12" stroke="white" strokeWidth="1.2"/>
+        {/* Small skeletal top-right */}
+        <polyline points="210,14 228,28 246,14 264,28" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        {/* Double bond */}
+        <line x1="228" y1="28" x2="246" y2="14" stroke="white" strokeWidth="1.5"/>
+        <line x1="231" y1="32" x2="249" y2="18" stroke="white" strokeWidth="1.5"/>
       </svg>
     );
     return null;
@@ -4286,22 +4422,22 @@ export default function App() {
                 <ChemArt id="board" />
                 {/* Label */}
                 <div>
-                  <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "4px" }}>Exam Board</div>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.65)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "6px" }}>Exam Board</div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1 }}>
-                    <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.75)", display: "block" }}>{b.label}</span>
-                    <span style={{ fontSize: "36px", color: "#ffffff" }}>{b.sub}</span>
+                    <span style={{ fontSize: "18px", color: "rgba(255,255,255,0.75)", display: "block" }}>{b.label}</span>
+                    <span style={{ fontSize: "44px", color: "#ffffff", letterSpacing: "-1px" }}>{b.sub}</span>
                   </div>
                 </div>
               </div>
               {/* Card body */}
-              <div style={{ padding: "20px 24px 24px", flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
-                <div style={{ fontSize: "13px", color: "#5a7090", lineHeight: 1.6 }}>{b.desc}</div>
+              <div style={{ padding: "22px 24px 26px", flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
+                <div style={{ fontSize: "15px", color: "#5a7090", lineHeight: 1.6 }}>{b.desc}</div>
                 <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                   {b.features.map(f => (
-                    <span key={f} style={{ fontSize: "11px", fontWeight: 700, color: b.accent, background: `${b.accent}15`, borderRadius: "6px", padding: "4px 10px" }}>{f}</span>
+                    <span key={f} style={{ fontSize: "13px", fontWeight: 700, color: b.accent, background: `${b.accent}15`, borderRadius: "6px", padding: "5px 12px" }}>{f}</span>
                   ))}
                 </div>
-                <div style={{ marginTop: "auto", background: b.grad, borderRadius: "12px", padding: "12px 16px", color: "#fff", fontWeight: 700, fontSize: "14px", textAlign: "center" }}>
+                <div style={{ marginTop: "auto", background: b.grad, borderRadius: "12px", padding: "14px 16px", color: "#fff", fontWeight: 700, fontSize: "16px", textAlign: "center" }}>
                   Start {b.label} {b.sub} →
                 </div>
               </div>
@@ -4537,19 +4673,16 @@ export default function App() {
                   {/* Chemistry artwork */}
                   <ChemArt id={card.id} />
                   {/* Stat badge top-left */}
-                  <div style={{ position: "absolute", top: "14px", left: "16px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "3px 10px" }}>
-                    <span style={{ fontSize: "9px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
+                  <div style={{ position: "absolute", top: "14px", left: "16px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "4px 10px" }}>
+                    <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
                   </div>
-                  {/* Two-tone title */}
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1.1 }}>
-                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", display: "block", letterSpacing: "0.5px" }}>{card.labelBig}</span>
-                    <span style={{ fontSize: "28px", color: "#ffffff" }}>{card.labelSmall}</span>
-                  </div>
+                  {/* Single bold title */}
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "34px", color: "#ffffff", lineHeight: 1, letterSpacing: "-1px" }}>{card.label}</div>
                 </div>
                 {/* Card body */}
-                <div style={{ padding: "16px 18px 20px", flex: 1 }}>
-                  <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", marginBottom: "5px" }}>{card.label}</div>
-                  <div style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.55 }}>{card.desc}</div>
+                <div style={{ padding: "16px 18px 22px", flex: 1 }}>
+                  <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a2d45", marginBottom: "6px" }}>{card.label}</div>
+                  <div style={{ fontSize: "13px", color: "#7a95b0", lineHeight: 1.55 }}>{card.desc}</div>
                 </div>
               </button>
             ))}
