@@ -16,11 +16,23 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
+
+  if (!apiKey) {
     return res.status(500).json({ error: "API key not configured" });
   }
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  if (!apiKey.startsWith("sk-ant-")) {
+    return res.status(500).json({ error: "API key format invalid — check Vercel environment variables" });
+  }
+
+  let client;
+  try {
+    client = new Anthropic({ apiKey });
+  } catch (err) {
+    console.error("Anthropic client init error:", err);
+    return res.status(500).json({ error: "Failed to initialise AI client", detail: err.message });
+  }
 
   const schemeLines = markScheme
     .map((point, i) => `${i + 1}. ${point}`)
