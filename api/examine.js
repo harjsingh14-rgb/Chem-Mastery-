@@ -1,40 +1,29 @@
 // Vercel serverless function — AI Examiner
 // Called by the React app at POST /api/examine
-// Requires ANTHROPIC_API_KEY environment variable in Vercel dashboard
-
-const Anthropic = require("@anthropic-ai/sdk");
+// Uses raw fetch to Anthropic API — no SDK dependency, no validation issues
 
 module.exports = async function handler(req, res) {
-  // Outer catch-all — nothing should escape unhandled
-  try {
-    // Only allow POST
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Method not allowed" });
-    }
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-    const { question, markScheme, studentAnswer, maxMarks } = req.body || {};
+  const { question, markScheme, studentAnswer, maxMarks } = req.body || {};
 
-    if (!studentAnswer || !markScheme || !question) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
+  if (!studentAnswer || !markScheme || !question) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
-    const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
+  const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
 
-    if (!apiKey) {
-      return res.status(500).json({ error: "API key not configured" });
-    }
+  if (!apiKey) {
+    return res.status(500).json({ error: "API key not configured" });
+  }
 
-    if (!apiKey.startsWith("sk-ant-")) {
-      return res.status(500).json({ error: "API key format invalid — re-paste from Anthropic console in Vercel env vars" });
-    }
+  const schemeLines = Array.isArray(markScheme)
+    ? markScheme.map((point, i) => `${i + 1}. ${point}`).join("\n")
+    : String(markScheme);
 
-    const client = new Anthropic({ apiKey });
-
-    const schemeLines = Array.isArray(markScheme)
-      ? markScheme.map((point, i) => `${i + 1}. ${point}`).join("\n")
-      : String(markScheme);
-
-    const prompt = `You are an experienced A-Level Chemistry examiner marking a student's extended response.
+  const prompt = `You are an experienced A-Level Chemistry examiner marking a student's extended response.
 
 QUESTION (${maxMarks} marks):
 ${question}
@@ -61,13 +50,32 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
   "modelAnswer": "<concise model student answer covering all mark scheme points in full connected sentences>"
 }`;
 
-    const message = await client.messages.create({
-      model: "claude-3-5-haiku-20241022",
-      max_tokens: 1024,
-      messages: [{ role: "user", content: prompt }],
+  try {
+    const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-3-5-haiku-20241022",
+        max_tokens: 1024,
+        messages: [{ role: "user", content: prompt }],
+      }),
     });
 
-    const raw = message.content[0].text.trim();
+    if (!anthropicRes.ok) {
+      const errBody = await anthropicRes.text();
+      console.error("Anthropic API error response:", anthropicRes.status, errBody);
+      return res.status(502).json({
+        error: `Anthropic API error ${anthropicRes.status}`,
+        detail: errBody,
+      });
+    }
+
+    const anthropicData = await anthropicRes.json();
+    const raw = anthropicData.content?.[0]?.text?.trim() || "";
 
     // Strip markdown code fences if the model wraps in ```json...```
     const cleaned = raw.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "");
@@ -90,12 +98,7 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
     return res.status(200).json(result);
 
   } catch (err) {
-    // Catch-all — return the real error so we can diagnose it
-    console.error("examine.js unhandled error:", err);
-    return res.status(500).json({
-      error: `Examiner error: ${err.message}`,
-      errorName: err.name,
-      errorType: err.constructor?.name,
-    });
+    console.error("examine.js error:", err);
+    return res.status(500).json({ error: `Server error: ${err.message}` });
   }
 };
