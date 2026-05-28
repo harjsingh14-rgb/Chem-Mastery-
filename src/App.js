@@ -2251,7 +2251,15 @@ Your answer should discuss the type of bonding and/or forces that must be overco
     board: "ocr",
     category: "Bonding & Structure",
     marks: 6,
-    question: `The graph opposite shows the boiling point of the hydrogen halides. Explain the pattern in boiling points in relation to the bonding, structure and intermolecular forces present in the four compounds.  HF HI HBr HCl`,
+    question: `The boiling points of the hydrogen halides are given below:
+
+Compound | Boiling point / °C
+HF       | +19.5
+HCl      | -85
+HBr      | -67
+HI       | -35
+
+Explain the pattern in boiling points in relation to the bonding, structure and intermolecular forces present in the four compounds. In your answer you should explain why HF has an anomalously high boiling point, and why the boiling points of HCl, HBr and HI increase down the group.`,
     markScheme: [
       "HF HI HBr HCl All four compounds are covalent molecular.",
       "HF has hydrogen bonding, which is the strongest intermolecular force and takes the most energy to overcome.",
@@ -2268,7 +2276,18 @@ Your answer should discuss the type of bonding and/or forces that must be overco
     board: "ocr",
     category: "Atomic Structure & Periodicity",
     marks: 6,
-    question: `The first 5 ionisation energies of the elements magnesium and aluminium are given below: Magnesium Aluminium 1st 738 578 Ionisation Energy / kJ mol-1 3rd 7733 2745 4th 10541 11578 2nd 1451 1817 5th 13629 14831 With reference to the electron configurations of the elements, explain the differences between: • The first ionisation energies of the two elements • The second ionisation energies of the two elements`,
+    question: `The first five ionisation energies (in kJ mol-1) of magnesium and aluminium are given below:
+
+Ionisation energy | Magnesium | Aluminium
+1st               | 738       | 578
+2nd               | 1451      | 1817
+3rd               | 7733      | 2745
+4th               | 10541     | 11578
+5th               | 13629     | 14831
+
+With reference to the electron configurations of the two elements, explain the differences between:
+• The first ionisation energies of magnesium and aluminium
+• The second ionisation energies of magnesium and aluminium`,
     markScheme: [
       "Electron configurations: Mg 1s2 2s2 2p6 3s2, Al 1s2 2s2 2p6 3s2 3p1 First ionisation energies: The electron removed from Mg is from the 3s subshell, whereas the electron removed from Al is from the 3p subshell.",
       "The 3p subshell is higher in energy than the 3s, so (despite the increased nuclear charge of Al) the attraction between the nucleus and outer electron is weaker so the electron takes less energy to remove from aluminium.",
@@ -2326,7 +2345,22 @@ Your answer should discuss the type of bonding and/or forces that must be overco
     board: "ocr",
     category: "Energetics",
     marks: 6,
-    question: `The graph opposite shows the standard enthalpy of combustion against carbon chain length for the first eight straight chain alkanes (because all the reactions are exothermic, for simplicity -ΔHc has been plotted). Give the definition for standard enthalpy of combustion, and write a balanced equation (including state symbols) for this reaction using butane as an example. 1 - l o m J k / c H Δ - Number of carbons in chain Explain, in terms of bond making and breaking, why the reactions are exothermic and why  the graph shows a linear relationship.`,
+    question: `The table below shows the standard enthalpy of combustion for the first eight straight-chain alkanes (all values are negative as the reactions are exothermic):
+
+Alkane         | Number of C atoms | ΔHc° / kJ mol-1
+Methane        | 1                 | -890
+Ethane         | 2                 | -1560
+Propane        | 3                 | -2220
+Butane         | 4                 | -2877
+Pentane        | 5                 | -3537
+Hexane         | 6                 | -4163
+Heptane        | 7                 | -4817
+Octane         | 8                 | -5471
+
+(a) Give the definition of standard enthalpy of combustion.
+(b) Write a balanced equation, including state symbols, for the complete combustion of butane (C4H10).
+(c) Explain, in terms of bond making and breaking, why these combustion reactions are exothermic.
+(d) Explain why the data shows an approximately linear relationship between ΔHc° and the number of carbon atoms in the chain.`,
     markScheme: [
       "Number of carbons in chain [6 marks] Definition and equation: The enthalpy change/energy released when one mole of a substance/compound burns completely/in excess oxygen under standard conditions.",
       "C4H10 (g) + 6.5 O2 (g) → 4 CO2 (g) + 5 H2O (l) Explanation Reactions are exothermic because the energy required/absorbed to break bonds in the reactants is less than the energy released when new bonds are made in the products.",
