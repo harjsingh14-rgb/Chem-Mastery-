@@ -4327,9 +4327,9 @@ export default function App() {
         {/* Benzene — centre-bottom */}
         <polygon points="160,108 180,97 200,108 200,130 180,141 160,130" stroke="white" strokeWidth="2.2" fill="none"/>
         <circle cx="180" cy="119" r="13" stroke="white" strokeWidth="1.3" fill="none"/>
-        {/* COOH attached to benzene */}
-        <line x1="200" y1="119" x2="218" y2="119" stroke="white" strokeWidth="1.8"/>
-        <text x="220" y="123" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">COOH</text>
+        {/* COOH attached to benzene — at top-right vertex (200,108) */}
+        <line x1="200" y1="108" x2="222" y2="100" stroke="white" strokeWidth="1.8"/>
+        <text x="224" y="104" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">COOH</text>
         {/* Ester linkage bottom-right */}
         <text x="268" y="130" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">-COO-</text>
         <polyline points="268,140 288,155 308,140 328,155" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
