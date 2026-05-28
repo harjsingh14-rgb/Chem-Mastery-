@@ -2501,10 +2501,9 @@ Octane         | 8                 | -5471
       "If there are two different ligands then cis/trans isomers can form, for example: Cisplatin (left) – both same type of ligand on the same side.",
       "Transplatin (right) – both same type of ligand on opposite sides.",
       "Cis/trans isomerism also occurs in octahedral complexes with coordination number of 6, so long as there are two different ligands.",
-      "For example: The left hand complex is trans as the two water molecules are 180° apart.",
-      "The complex on the right is cis, as the two water molecules are 90° apart.",
-      "Optical isomers: Octahedral complexes can form optical isomers if they contain at least two bidentate ligands.",
-      "Optical isomers are non-superimposable mirror images, as shown in the diagram:"
+      "For example in [CoCl2(NH3)4]+: the trans isomer has the two Cl ligands 180° apart; the cis isomer has the two Cl ligands 90° apart",
+      "Optical isomers: Octahedral complexes can form optical isomers if they contain three bidentate ligands (e.g. [Co(en)3]3+) or two bidentate and two identical monodentate ligands in the correct arrangement",
+      "Optical isomers are non-superimposable mirror images of each other (enantiomers); they rotate plane-polarised light in opposite directions; neither isomer has a plane of symmetry"
     ],
     examTip: "OCR A: be specific and systematic. List reagents, observations and conclusions clearly."
   },
@@ -2515,12 +2514,12 @@ Octane         | 8                 | -5471
     marks: 8,
     question: `1-chloropropane can be prepared in two different reactions: • The electrophilic addition reaction between HCl and propene • The free radical substitution reaction between chlorine and propane in the presence of UV light For each reaction, outline the mechanism and explain why neither reaction will produce a high yield of the desired product. You should refer to how the reaction mechanisms give rise to alternative products.`,
     markScheme: [
-      "Electrophilic addition mechanism: The reaction proceeds via a carbocation intermediate.",
-      "There are two possible carbocations that can form, primary or secondary.",
-      "The secondary carbocation is more stable, so the reaction will be more likely to proceed by this route and the major product will be 2-chloropropane.",
-      "Free radical substitution mechanism: Initiation: Propagation: Termination: It is random which hydrogen is replaced in the propagation steps, so C3H7Cl could be 1-chloropropane or 2-chloropropane.",
-      "If there is an excess of alkane then an alternative termination is more likely: 2 C3H7• → C6H14 If there is an excess of chlorine then multiple substitutions can occur to produce dichloroalkanes, trichloroalkanes etc.",
-      "Cl2 → 2Cl• Cl• + C3H8 → HCl + C3H7• C3H7• + Cl2 → C3H7Cl + Cl• Cl• + C3H7•→ C3H7Cl"
+      "Electrophilic addition: HCl adds across the C=C bond of propene via a carbocation intermediate; two carbocations can form: primary (CH3-CH•-CH2Cl) or secondary (CH3-CH+Cl-CH3 region); the secondary carbocation is more stable",
+      "Because the secondary carbocation is more stable, 2-chloropropane is the major product, not 1-chloropropane; the desired 1-chloropropane is only the minor product",
+      "Free radical substitution (initiation): UV light causes homolytic fission of Cl2: Cl2 → 2Cl•",
+      "Free radical substitution (propagation): Cl• + C3H8 → HCl + C3H7•; then C3H7• + Cl2 → C3H7Cl + Cl• (chain reaction)",
+      "The radical mechanism does not distinguish between different C-H bonds, so the Cl can attach to C1 or C2, giving a mixture of 1-chloropropane and 2-chloropropane; yield of 1-chloropropane is not high",
+      "Termination steps (any two radicals combining) can also give unwanted by-products such as C6H14 (from 2 C3H7• combining) or polychlorinated products if excess Cl2 is present; these further reduce yield"
     ],
     examTip: "OCR A: use 'because' or 'so' to link your points together into a logical chain of reasoning."
   },
@@ -2531,14 +2530,14 @@ Octane         | 8                 | -5471
     marks: 6,
     question: `Describe how you could carry out an experiment to calculate enthalpy of neutralisation in kJmol-1. You are provided with solutions of hydrochloric acid and sodium hydroxide of equal concentrations along with standard laboratory equipment. In your answer you should clearly state the measurements you would take. You should also explain how results from the experiment would be used to calculate the enthalpy of neutralisation, and what assumptions you made in this calculation.`,
     markScheme: [
-      "Measure out 25cm3 hydrochloric acid using a volumetric pipette and add to a polystyrene",
-      "Place the polystyrene cup in a beaker and use a thermometer to take its temperature – repeat every 30 seconds for two minutes to ensure temperature is not changing",
-      "Add 25cm3 sodium hydroxide solution using a volumetric pipette.",
-      "Stir with the thermometer and record the highest temperature reached.",
-      "Calculate the change in temperature Calculations:",
-      "Moles of acid (or alkali) = concentration x volume in dm3",
-      "Heat energy transferred (in J) = mass of solution x 4.18 x change in temperature",
-      "Convert energy in J to kJ (/1000) and divide by moles to get enthalpy change"
+      "Measure out equal volumes (e.g. 25 cm3) of hydrochloric acid and sodium hydroxide using a volumetric pipette; place the acid in a polystyrene cup inside a beaker",
+      "Record the initial temperature of both solutions using a thermometer (taking readings every 30 seconds before mixing to confirm a stable baseline temperature)",
+      "Add the sodium hydroxide to the acid, stir with the thermometer, and record the maximum temperature reached",
+      "Calculate the temperature change: ΔT = Tmax - Tinitial",
+      "Moles of acid (or alkali) used = concentration x volume in dm3; the moles of water formed = moles of acid used",
+      "Heat energy transferred (q, in J) = mass of solution x 4.18 x ΔT; assume density of solution = 1 g cm3 so mass = total volume in cm3",
+      "Enthalpy of neutralisation (kJ mol-1) = -(q / 1000) / moles of water formed",
+      "Key assumptions: the specific heat capacity of the solution is 4.18 J g-1 K-1 (same as water); no heat is lost to the surroundings (hence use of polystyrene cup)"
     ],
     examTip: "OCR A extended response: you must both describe AND explain. Don't just state observations - link them to underlying chemistry."
   },
