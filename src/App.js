@@ -2381,9 +2381,9 @@ Octane         | 8                 | -5471
       "Butan-1-ol (primary alcohol) and butan-2-ol (secondary alcohol) will both turn the mixture from orange to green. 2- methylpropan-2-ol (tertiary alcohol) will not change.",
       "Identification of butan-1-ol and butan-2-ol: Take fresh samples of each of the remaining alcohols.",
       "Heat with acidified potassium dichromate and separate the product immediately with distillation.",
-      "Test the product with Tollen’s reagent.",
+      "Test the product with Tollen's reagent.",
       "Butan-1-ol will produce an aldehyde as the distillate, which will produce a silver mirror.",
-      "Butan-2-ol will produce a ketone, which will not react with Tollen’s."
+      "Butan-2-ol will produce a ketone, which will not react with Tollen's."
     ],
     examTip: "OCR A: structured answers score best. Cover each stage in order with reagents, conditions and equations."
   },
@@ -2444,7 +2444,7 @@ Octane         | 8                 | -5471
     board: "ocr",
     category: "Equilibrium",
     marks: 8,
-    question: `Hydrogen is produced in industry from the reaction between methane and steam. The first stage in this process is shown below. CH4 (g) + H2O (g) ⇌ CO (g) + 3H2 (g) ΔH = +206 kJ mol-1 Use ideas about rates of reaction, collision theory and Le Chatelier’s principle to explain why conditions of high temperature and high pressure are used in this process.`,
+    question: `Hydrogen is produced in industry from the reaction between methane and steam. The first stage in this process is shown below. CH4 (g) + H2O (g) ⇌ CO (g) + 3H2 (g) ΔH = +206 kJ mol-1 Use ideas about rates of reaction, collision theory and Le Chatelier's principle to explain why conditions of high temperature and high pressure are used in this process.`,
     markScheme: [
       "The forward reaction is endothermic, so increasing temperature will shift the position of equilibrium to the right hand side, producing more hydrogen.",
       "Particles therefore collide more often, and a greater proportion of collisions are successful as more particles have at least the activation energy.",
@@ -2552,14 +2552,14 @@ Describe how you would prepare 250 cm3 of a solution of hydrated sodium carbonat
 
 Mr(Na2CO3) = 106; Mr(H2O) = 18`,
     markScheme: [
-      “Calculation: moles of solute required = 0.0100 mol dm-3 × 0.250 dm3 = 2.50 × 10-3 mol; Mr(Na2CO3.10H2O) = 106 + (10 × 18) = 286; mass required = 2.50 × 10-3 × 286 = 0.715 g”,
-      “Weigh an empty weighing boat on a balance; record the mass; add approximately 0.715 g of the solid; record the new mass; calculate the actual mass used by difference”,
-      “Dissolve the solid in a small volume (approximately 100 cm3) of distilled water in a clean beaker, stirring to ensure complete dissolution”,
-      “Transfer the solution to a 250 cm3 volumetric flask using a funnel; rinse the beaker at least three times with distilled water and add all rinsings to the flask”,
-      “Add distilled water carefully to the flask until the bottom of the meniscus just reaches the 250 cm3 graduation mark (stopper and invert several times to mix thoroughly)”,
-      “The concentration is accurately known because: (1) the mass of solid is measured accurately by weighing by difference; (2) the volume is accurately defined by the volumetric flask graduation mark”
+      "Calculation: moles of solute required = 0.0100 mol dm-3 × 0.250 dm3 = 2.50 × 10-3 mol; Mr(Na2CO3.10H2O) = 106 + (10 × 18) = 286; mass required = 2.50 × 10-3 × 286 = 0.715 g",
+      "Weigh an empty weighing boat on a balance; record the mass; add approximately 0.715 g of the solid; record the new mass; calculate the actual mass used by difference",
+      "Dissolve the solid in a small volume (approximately 100 cm3) of distilled water in a clean beaker, stirring to ensure complete dissolution",
+      "Transfer the solution to a 250 cm3 volumetric flask using a funnel; rinse the beaker at least three times with distilled water and add all rinsings to the flask",
+      "Add distilled water carefully to the flask until the bottom of the meniscus just reaches the 250 cm3 graduation mark (stopper and invert several times to mix thoroughly)",
+      "The concentration is accurately known because: (1) the mass of solid is measured accurately by weighing by difference; (2) the volume is accurately defined by the volumetric flask graduation mark"
     ],
-    examTip: “OCR A: be specific and systematic. Key points the examiner looks for: (1) weighing by difference (not just ‘weigh the solid’), (2) rinsing the beaker into the flask to ensure all solid is transferred, (3) adding water to the graduation mark (not ‘fill to 250 cm3’), (4) inverting to mix. State WHY you rinse (to ensure complete transfer) and why you use a volumetric flask (accurately known volume).”
+    examTip: "OCR A: be specific and systematic. Key points the examiner looks for: (1) weighing by difference (not just 'weigh the solid'), (2) rinsing the beaker into the flask to ensure all solid is transferred, (3) adding water to the graduation mark (not 'fill to 250 cm3'), (4) inverting to mix. State WHY you rinse (to ensure complete transfer) and why you use a volumetric flask (accurately known volume)."
   }
 ];
 
