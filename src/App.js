@@ -1670,875 +1670,529 @@ const CALC_SETS = [
 
 const EXTENDED_QUESTIONS = [
   {
-    id: "doc01",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 6,
-    question: `This question is about the shapes of molecules.Discuss the difference between the shapes of CF4 and XeF4 In your answer you should:• name the shape of each molecule• explain the shape of each molecule• explain the bond angle(s) in each molecule.`,
-    markScheme: [
-      "four bonding pairs (and zero lone pairs)",
-      "electron pairs repel each other to be as far apart as possible / electronpairs repel each other equally",
-      "four bonding pairs",
-      "two lone pairs",
-      "lone pairs repel more than bonding pairs"
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc02",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 10,
-    question: `1.1-Methylcyclohexene and limonene are cyclic alkenes with a citrus smell.1-Methylcyclohexene is manufactured and used in the chemical industry.Limonene is found naturally in orange peel.2.(a) 1-Methylcyclohexene reacts with HBr to form two structural isomers.The major product is 1-bromo-1-methylcyclohexane.Name and outline the mechanism for the formation of this major product.Name of mechanism Outline of mechanism (5)(b) Draw the skeletal formula of the minor product formed in the reaction in part (a).Explain why the products are formed in different amounts.Skeletal formula Explanation (4)(`,
-    markScheme: [
-      "electrophilic additionM2 must show an arrow from the double bond towards the Hatom of the HBr moleculeM3 must show the breaking of the H-Br bondM4 is for the structure of the correct carbocation (the added H does not need to beshown)",
-      "-5) for wrong organic reactant or wrongcarbocation (ignore structure of product)",
-      "if there is a bond drawn to the positive chargeFor",
-      ", credit attack on a partially positively charged carbocationstructure, but penalise",
-      "for the structure of the carbocation.52.Aston Manor Academy",
-      "Penalise inclusion of  - H bonds(allow carbonium ion in place of carbocation)",
-      "idea that 1-bromo-1-methylcyclohexane is formed from/via orhas more stable carbocationM2 and",
-      "must refer to stability of carbocations (ignore referenceto stability of products)"
-    ],
-    examTip: "This question is worth 10 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc03",
+    id: "aqa01",
     board: "aqa",
     category: "Kinetics",
     marks: 6,
-    question: `Draw the Maxwell–Boltzmann distribution curves for a fixed mass of a gas at two differenttemperatures.This gas decomposes when heated.By reference to these distribution curves, explain why the rate of decomposition of this gasincreases at higher temperatures.`,
+    question: `Draw the Maxwell-Boltzmann distribution curves for a fixed mass of a gas at two different temperatures T1 and T2, where T2 is greater than T1.
+
+This gas decomposes when heated. By reference to these distribution curves, explain why the rate of decomposition of this gas increases at a higher temperature.`,
     markScheme: [
-      "suitable axis labels:vertical: number/proportion/fraction of molecules/particles;horizontal: (kinetic) energy",
-      "peak moves to the right and down",
-      "area under the curve (roughly) the same",
-      "lines cross once only",
-      "molecules have more energy",
-      "more molecules have the activation energy",
-      "higher proportion of collisions are successful / increases frequency ofsuccessful collisions"
+      "Both curves have correct axis labels: y-axis = number/fraction/proportion of molecules; x-axis = kinetic energy (or speed)",
+      "The T2 curve has its peak shifted to the right of the T1 peak (more molecules at higher energies at T2)",
+      "The T2 curve has a lower, broader peak than the T1 curve",
+      "The area under both curves is approximately equal (same total number of molecules)",
+      "At the higher temperature T2, more molecules have kinetic energy greater than or equal to the activation energy (Ea)",
+      "A greater proportion of collisions result in reaction / there is a higher frequency of successful collisions at T2"
     ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
+    examTip: "Draw the curves first before writing your explanation. The most common error is forgetting the area under both curves must be equal. Use the phrase 'greater proportion of molecules have energy greater than or equal to Ea' rather than just 'more energy'. Both curves must start at the origin and not cross the x-axis."
   },
   {
-    id: "doc04",
+    id: "aqa02",
     board: "aqa",
-    category: "Bonding & Structure",
-    marks: 16,
-    question: `lBorn–Haber cycleCalcium chloride22232237Potassium chloride690701Silver chloride770905Discuss the values in Table 3.In your answer you should• compare the three values based on a perfect ionic model• compare the values based on a perfect ionic model to the values from a Born–Habercycle for each compound.`,
+    category: "Equilibrium",
+    marks: 6,
+    question: `The Haber process produces ammonia by the reversible reaction:
+
+N2(g) + 3H2(g) ⇌ 2NH3(g)   ΔH = -92 kJ mol-1
+
+The industrial conditions used are approximately 450 °C, 200 atm pressure and an iron catalyst. Explain, in terms of equilibrium yield, rate of reaction and cost, why these particular conditions are chosen.`,
     markScheme: [
-      "KCl has similar values (between the perfect ionic model and Born-Haber cycle)",
-      "AgCl has larger difference in values (between the perfect ionic model and Born-Habercycle)",
-      "AgCl contains (some) covalent character",
-      "Ag+ more polarising/distorts electron cloud more"
+      "The reaction is exothermic, so higher temperature shifts equilibrium to the left, reducing yield; a lower temperature would give a higher equilibrium yield",
+      "However, lower temperatures give too slow a rate of reaction; 450 °C is a compromise giving an acceptable yield at an acceptable rate",
+      "There are more moles of gas on the left (4 mol) than the right (2 mol), so higher pressure shifts equilibrium to the right, increasing yield",
+      "High pressure is used to increase yield, though very high pressures are costly and technically challenging to maintain",
+      "The catalyst has no effect on the equilibrium position or yield, but it increases the rate of reaction",
+      "The catalyst allows a lower operating temperature to be used, reducing energy costs while maintaining an acceptable rate"
     ],
-    examTip: "This question is worth 16 marks. Make sure you address all parts systematically."
+    examTip: "Structure your answer in three clear sections: temperature, pressure, catalyst. For each, address both yield AND rate/cost. The most common error is forgetting to state WHY 450 °C is chosen as a compromise rather than a higher or lower temperature. Always mention that a catalyst does NOT change Kp or equilibrium yield."
   },
   {
-    id: "doc05",
+    id: "aqa03",
     board: "aqa",
-    category: "Organic Chemistry",
-    marks: 15,
-    question: `n for reaction 3.Reagent and conditions Equation(2)(e) An incomplete equation for the formation of nylon 4,6 from five molecules of butane-1,4-diamine and five molecules of hexanedioic acid is shown.Deduce the values of x and y in this equation. x  y (2)(f) The figure below shows a section of the nylon 4,6 polymer molecule.Draw, on the figure above, another section of nylon 4,6 polymer showing two hydrogenbonds between the two sections.Draw, on the figure above, another section of nylon 4,6 polymer showing two hydrogenbonds between the two sections.`,
+    category: "Transition Metals",
+    marks: 6,
+    question: `Transition metals and their compounds can act as heterogeneous and homogeneous catalysts.
+
+Explain what is meant by heterogeneous and homogeneous catalysis, giving one example of each from transition metal chemistry. For each example, explain why the transition metal is able to act as a catalyst.
+
+Your answer should make reference to relevant properties of transition metals.`,
     markScheme: [
-      "Exists as two Optical isomers / enantiomers",
-      "Intermediate structure primary carbocation OR",
-      "Alternative Intermediate structure secondary carbocation OR",
-      "Optical because (secondary) C+ planar"
+      "Heterogeneous catalysis: the catalyst is in a different phase (state) from the reactants",
+      "Named example of heterogeneous catalysis: e.g. Fe in the Haber process; V2O5 in the Contact process; Pt/Pd/Rh in catalytic converters",
+      "In heterogeneous catalysis, reactants adsorb onto the catalyst surface; bonds in reactants are weakened; products desorb from the surface; this provides a lower activation energy pathway",
+      "Homogeneous catalysis: the catalyst is in the same phase as the reactants",
+      "Named example of homogeneous catalysis: e.g. Fe2+/Fe3+ catalysing the reaction between I- and S2O82- in aqueous solution; Mn2+ in KMnO4 decomposition; V4+/V5+ in the Contact process (liquid phase)",
+      "In homogeneous catalysis, the transition metal uses variable oxidation states to accept then donate electrons, forming an intermediate and then being regenerated; this provides a lower activation energy pathway"
     ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
+    examTip: "This is a levels-of-response question. You MUST cover both types of catalysis with an example each. For high marks: state the definition, give a specific named example, and explain the mechanism in terms of transition metal properties (adsorption for heterogeneous; variable oxidation states for homogeneous). Do not describe one type and leave out the other."
   },
   {
-    id: "doc06",
+    id: "aqa04",
+    board: "aqa",
+    category: "Acids & Buffers",
+    marks: 6,
+    question: `A buffer solution is prepared by mixing propanoic acid (CH3CH2COOH) with sodium propanoate (CH3CH2COONa) in water.
+
+Explain what is meant by a buffer solution. Explain, with ionic equations, how this buffer resists a change in pH when:
+(i) a small amount of hydrochloric acid is added
+(ii) a small amount of sodium hydroxide is added`,
+    markScheme: [
+      "A buffer solution resists changes in pH when small amounts of acid or alkali are added to it",
+      "The buffer works because it contains both a weak acid (propanoic acid, CH3CH2COOH) and its conjugate base (propanoate ion, CH3CH2COO-) in significant concentrations",
+      "When HCl (H+ ions) is added: the added H+ reacts with propanoate ions: CH3CH2COO-(aq) + H+(aq) → CH3CH2COOH(aq); the equilibrium shifts to remove the added H+ so pH changes only slightly",
+      "When NaOH (OH- ions) is added: the added OH- reacts with propanoic acid: CH3CH2COOH(aq) + OH-(aq) → CH3CH2COO-(aq) + H2O(l); the equilibrium shifts to remove the added OH- so pH changes only slightly",
+      "In both cases the concentrations of weak acid and conjugate base change only slightly because both are present in large amounts",
+      "Simply stating 'the equilibrium shifts' without specifying which ion reacts (H+ with A- or OH- with HA) does not gain the mark for the mechanism"
+    ],
+    examTip: "The most common mark-losing error is writing 'the equilibrium shifts left/right' without stating what reacts with what. Examiners require: 'H+ reacts with A-' and 'OH- reacts with HA'. Always write ionic equations showing the conjugate base and weak acid. This error is flagged in the examiner report every single year."
+  },
+  {
+    id: "aqa05",
     board: "aqa",
     category: "Bonding & Structure",
     marks: 6,
-    question: `cipitate forms.Add silver nitrate solution tothe second portion.A white precipitate forms.No change is seen.Identify L and M using the results in the table.In your answer:• identify all precipitates• explain why effervescence is seen in the reaction of sodiumcarbonate with L but not with M• give ionic equations for all reactions.`,
+    question: `Discuss the difference between the shapes of CF4 and XeF4.
+
+In your answer you should:
+• name the shape of each molecule
+• explain the shape of each molecule using electron pair repulsion theory
+• explain the bond angle(s) in each molecule`,
     markScheme: [
-      "white ppt with L = AgCl AND white ppt with M = BaSO4",
-      "L = FeCl3AND M = FeSO4",
-      "Ag+ + Cl- → AgCl AND Ba2+ + SO42- → BaSO4"
+      "CF4 has a tetrahedral shape with bond angles of 109.5°",
+      "CF4: carbon has four bonding pairs and zero lone pairs; all electron pairs repel equally to positions as far apart as possible; tetrahedral arrangement minimises repulsion",
+      "XeF4 has a square planar shape with bond angles of 90°",
+      "XeF4: xenon has four bonding pairs and two lone pairs (6 electron pairs total); the 6 pairs adopt an octahedral geometry to minimise repulsion",
+      "The two lone pairs in XeF4 occupy positions directly opposite each other (axial positions), minimising lone pair to lone pair repulsion",
+      "Lone pairs repel more strongly than bonding pairs, which forces the four F atoms into a square planar arrangement with bond angles of 90°"
     ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
+    examTip: "You must name the shape AND give the bond angle for each molecule. For CF4: tetrahedral, 109.5°. For XeF4: square planar, 90°. The key to XeF4 is explaining WHY the two lone pairs go to opposite (axial) positions: this minimises lp-lp repulsion. Draw diagrams if it helps."
   },
   {
-    id: "doc07",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 6,
-    question: `6.Hydrogen can be prepared on an industrial scale using the reversible reaction between methaneand steam.CH4(g) + H2O(g) ⇌ CO(g) + 3 H2(g) ΔH = +206 kJ mol−1The reaction is done at a temperature of 800 °C and a low pressure of 300 kPa in the presenceof a nickel catalyst.Explain, in terms of equilibrium yield and cost, why these conditions are used.`,
-    markScheme: [
-      "The reaction is endothermic (so equilibrium shifts to RHS to reduce the temperature)1b",
-      "So, higher temperature increases the yield 1c",
-      "High temperatures are costly (so compromisetemperature used)Stage 2: Pressure2a",
-      "More moles of gas on the right hand side, (so equilibrium shifts to RHS to increase the yield)2b",
-      "So, lower pressure increases the yield2c",
-      "A low pressure means a low costStage 3: Catalyst3a",
-      "Catalyst has no effect on yield3b",
-      "Adding a catalyst allows a lower temperature to be used3c"
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc08",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 25,
-    question: `its colour.Identity Colour (2)(f) Give the formula of B and state its colour.Give an ionic equation for the reaction of [Fe(H2O)6]3+ with aqueous Na2CO3 to form B.Formula Colour Ionic equation(3)(g) Explain why an aqueous solution containing [Fe(H2O)6]3+ ions has a lower pH than anaqueous solution containing [Fe(H2O)6]2+ ions.`,
-    markScheme: [
-      "Heterogeneous means in a different phase/state from reactants",
-      "Catalyst speeds up reaction and is left unchanged OR lowers the activationenergy for the reaction",
-      "Hydrogen and nitrogen/reactants adsorb onto the surface/ active sites of theiron",
-      "Bonds weaken/reaction takes place",
-      "Products desorb/leave from the surface (of the iron)",
-      "Large surface area (of iron) by using powder or small pellets or supportmedium/mesh",
-      "Catalyst poisoned / sulfur poisons or binds to the catalyst"
-    ],
-    examTip: "This question is worth 25 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc09",
-    board: "aqa",
-    category: "Inorganic Chemistry",
-    marks: 19,
-    question: `peared on a website.“The fact that bioethanol is a carbon-neutral fuel outweighs the environmentaldisadvantages of producing bioethanol.”Evaluate this statement.In your answer you should include:• an outline of how bioethanol is produced• relevant equations• analysis of the environmental impacts.`,
-    markScheme: [
-      "Deforestation / Sacrifice land that could be used for food",
-      "Loss of biodiversity / habitat"
-    ],
-    examTip: "This question is worth 19 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc10",
-    board: "aqa",
-    category: "Energetics",
-    marks: 20,
-    question: `cording the initial burette reading.1 2 (2)(h) When Na2C2O4(aq) is added to a solution containing [Fe(H2O)6]3+ ions, a reaction occurs inwhich all six water ligands are replaced by ethanedioate ions.Explain why the replacement of the water ligands by ethanedioate ions is favourable. Inyour answer refer to:• the enthalpy and entropy changes for the reaction• how the enthalpy and entropy changes influence the free-energy change for thereaction.`,
-    markScheme: [
-      "∆H negligible",
-      "make & break same number of bonds",
-      "make & break same type of bonds / bondshave similar enthalpies",
-      "increase in entropy",
-      "∆G = ∆H –T∆S",
-      "∆G negative (for forward reaction)"
-    ],
-    examTip: "This question is worth 20 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc11",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 6,
-    question: `The melting point of XeF4 is higher than the melting point of PF3Explain why the melting points of these two compounds are different.In your answer you should give the shape of each molecule, explain why each molecule has thatshape and how the shape influences the forces that affect the melting point.`,
-    markScheme: [
-      "Electron pairs repel as far as possible or Lone pair repels more than bonding pairs",
-      "Stronger/more intermolecular forces in XeF",
-      "Due to larger Mr or more electrons or larger molecules or packs more closely together"
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc12",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 12,
-    question: `11.This question is about NMR spectroscopy.(a) A compound is usually mixed with Si(CH3)4 and either CCl4 or CDCl3 before recording thecompound’s 1H NMR spectrum.State why Si(CH3)4, CCl4 and CDCl3 are used in 1H NMR spectroscopy.Explain how their properties make them suitable for use in 1H NMR spectroscopy.(6)12.(b) Deduce the splitting pattern for each of the peaks given by the H atoms labelled x, y and zin the 1H NMR spectrum of the compound shown.x y z (3)(c) Suggest why it is difficult to use Table B in the Data Booklet to predict the chemical shift (δvalue) for the peak given by the H at`,
-    markScheme: [
-      "Signal in an area away from other typical H signals / peak upfield from othersOR(Low electronegativity of Si shifts) signal right",
-      "x – doublet1M2 y – quartet1M3 z – doublet"
-    ],
-    examTip: "This question is worth 12 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc13",
-    board: "aqa",
-    category: "Electrochemistry",
-    marks: 13,
-    question: `able shows some electrode potential data. Electrode reactionEө / V2 H+(aq) + 2 e− → H2(g)0.00Cu2+(aq) + 2 e− → Cu(s)+0.34NO3−(aq) + 4 H+(aq) + 3 e− → NO(g) + 2 H2O(l)+0.96Use the data in the table to explain why copper does not react with most acids but doesreact with nitric acid.Give an equation for the reaction between copper and nitric acid.Explanation Equation`,
-    markScheme: [
-      "Weigh 7.995 / 8.00 g TiOSO4",
-      "transfer to volumetric flask and make up to the mark",
-      "record voltage/potential difference/emf of the cell",
-      "Ecell = ERHS – ELHSEcell = Ecopper – Etitanium"
-    ],
-    examTip: "This question is worth 13 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc14",
+    id: "aqa06",
     board: "aqa",
     category: "Atomic Structure & Periodicity",
     marks: 6,
-    question: `The first ionisation energies of the elements in Period 2 change as the atomic number increases.Explain the pattern in the first ionisation energies of the elements from lithium to neon.`,
+    question: `The first ionisation energies of the elements in Period 2 show a general increase from lithium to neon, but with two notable deviations.
+
+Explain the general trend in first ionisation energy from Li to Ne. Account for the deviation at boron (lower than beryllium) and the deviation at oxygen (lower than nitrogen).`,
     markScheme: [
-      "Errors in the use of technical terms.1-2 marksInsufficient correct chemistry to gain a mark.0 marks14",
-      "Indicative Chemistry ContentStage 1: General Trend (Li → Ne)1a. 1st IE increases1b",
-      "More protons/increased nuclear charge1c",
-      "No extra/similar shielding1e",
-      "Stronger attraction between nucleus and outer e OR outer e closer to nucleus (ignoreradius decreases)Stage 2: Deviation Be → B2a",
-      "Outer electron in (2)p2c. higher in energy than (2)sIf Al vs Mg then do not award 2a or 2bStage 3: Deviation N → O3a",
-      "O lower than N3b. 2 electrons in (2)p need to pair3c. pairing causes repulsion (do not award if it is clear reference to repulsion is in s orbital)If S vs P then do not award 3a or 3b"
+      "General trend: first ionisation energy increases from Li to Ne because nuclear charge increases across the period",
+      "Shielding from inner electrons (1s2) remains approximately constant across the period, so the effective nuclear charge experienced by outer electrons increases",
+      "Outer electrons are held more strongly by the nucleus, requiring more energy to remove",
+      "Deviation at B (lower than Be): the outer electron in B is in the 2p subshell, which is at higher energy and further from the nucleus than the 2s subshell of Be; it is therefore easier to remove",
+      "Deviation at O (lower than N): in nitrogen, the three 2p electrons each occupy separate 2p orbitals (no pairing); in oxygen, one 2p orbital contains a pair of electrons",
+      "Electron-electron repulsion between the paired electrons in oxygen makes this electron easier to remove than any of the unpaired 2p electrons in nitrogen"
     ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
+    examTip: "Structure your answer in three parts: general trend, deviation at B, deviation at O. For the B deviation: it is about the subshell (2p higher energy than 2s), NOT about shielding. For the O deviation: it is about pairing repulsion, NOT about the 2p subshell. Do not confuse the two deviations."
   },
   {
-    id: "doc15",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 10,
-    question: `14.Methanol (CH3OH) is an important alcohol with many uses.(a) Draw a diagram to show how two methanol molecules interact with each other throughhydrogen bonding in the liquid phase.Include all partial charges and all lone pairs of electrons in your diagram. (3)15.(b) The bond angle around the oxygen atom in methanol is slightly smaller than the regulartetrahedral angle of 109.5°Explain why this bond angle is smaller than 109.5°(1)(c) Methanol is made by the reaction of carbon monoxide with hydrogen.CO + 2 H2 ⇌ CH3OH ∆H = –91 kJ mol–1The reaction uses a copper-based catalyst, a pressure of 1`,
-    markScheme: [
-      "use of a catalyst has no impact on equilibrium yield",
-      "use of a catalyst gives faster rate",
-      "use of catalyst lowers costs",
-      "higher pressure gives a higher equilibrium yield",
-      "higher pressure gives a faster rate",
-      "the higher the pressure, the greater the cost",
-      "lower temperature gives a higher equilibrium yield",
-      "higher temperature gives a faster rate",
-      "the higher the temperature, the greater the costNote that converse statements are fine (e.g"
-    ],
-    examTip: "This question is worth 10 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc16",
-    board: "aqa",
-    category: "Organic Chemistry",
-    marks: 7,
-    question: `Isomers X and Y have the molecular formula C5H8O (a) Give the IUPAC name for isomer X.(1)16.(b) Explain how and why isomers X and Y can be distinguished by comparing each of their• boiling points• 13C NMR spectra• infrared spectra.Use data from Tables A and C in the Data Booklet in your answer.`,
-    markScheme: [
-      "Use the mark scheme to award up to 7 marks based on the key chemistry points covered."
-    ],
-    examTip: "This question is worth 7 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc17",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 17,
-    question: `This question is about sodium and some of its compounds.(a) Use your knowledge of structure and bonding to explain why sodium bromide has a meltingpoint that is higher than that of sodium, and higher than that of sodium iodide.(6)17.(b) When 250 mg of sodium were added to 500 cm3 of water at 25 °C a gas was produced.Give an equation for the reaction that occurs.Calculate the volume, in cm3, of the gas formed at 101 kPaThe gas constant, R = 8.31 J K–1 mol–1Equation Volume  cm3(6)(c) Calculate the concentration, in mol dm–3, of sodium ions in the solution produced in thereaction in part (b).Con`,
-    markScheme: [
-      "Na + H2O → NaOH + ½ H2",
-      "andM5AE: If not divided by 1000 and final answer is 1.33 × 105 cm3 4/51M3 moles H2 = 5.43 × 10–3 to 5.45 × 10–3M3 =",
-      "/2CE: If incorrect ratio used max 3/5 calculation marks –",
-      "andM51M4 T = 298 (K) and P = 101000 (Pa)1M5 V = nRT/P or (5.435 × 10–3 × 8.31 × 298)/101000 or 1.33 × 10–4 (m3)1M6 V = 133 – 134 cm3",
-      "from question (b)1Aston Manor Academy",
-      "allow lone pairs repel more than bonding pairsMark independently1"
-    ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc18",
-    board: "aqa",
-    category: "Organic Chemistry",
-    marks: 6,
-    question: `Four compounds, all colourless liquids, are• butan-2-ol• butanal• butanone• 2-methylpropan-2-olTwo of these compounds can be identified using different test-tube reactions.Describe these two test-tube reactions by giving reagents and observations in each case.Suggest how the results of a spectroscopic technique could be used to distinguish between theother two compounds.`,
-    markScheme: [
-      "observation withcorrect deduction",
-      "suitable technique"
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc19",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 7,
-    question: `18.A student added 627 mg of hydrated sodium carbonate (Na2CO3.xH2O) to 200 cm3 of 0.250 moldm–3 hydrochloric acid in a beaker and stirred the mixture.After the reaction was complete, the resulting solution was transferred to a volumetric flask,made up to 250 cm3 with deionised water and mixed thoroughly.Several 25.0 cm3 portions of the resulting solution were titrated with 0.150 mol dm–3 aqueoussodium hydroxide. The mean titre was 26.60 cm3 of aqueous sodium hydroxide.Calculate the value of x in Na2CO3.xH2OShow your working.Give your answer as an integer.Value of x`,
-    markScheme: [
-      "HCl added = 0.050 mol andNaOH used in titration = 3.99 × 10–3 mol119",
-      "xH2O = 0.627/5.05 × 10–3 -106.0 = 18 (.16)Alternative: mass Na2CO3 that reacted with the HCl 5.05 × 10–3x106.0 = 0.5353 g and mass H2O = 0.627- 0.5353 = 0.0917 g1M7 so x = 1Alternative: 0.0917 /18.0 = 5.094 × 10–3 so ratioNa2CO3 to H2O = 1:1.009 ie 1"
-    ],
-    examTip: "This question is worth 7 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc20",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 9,
-    question: `19.Data about the hydrogenation of cyclohexene and of benzene are given.20.(a) Explain the bonding in and the shape of a benzene molecule.Compare the stability of benzene with that of the hypothetical cyclohexa-1,3,5-trienemolecule.Use the data in your answer.(6)(b) The enthalpy of hydrogenation of cyclohexa-1,3-diene is not exactly double that ofcyclohexene.Suggest a value for the enthalpy of hydrogenation of cyclohexa-1,3-diene and justify yourvalue.`,
-    markScheme: [
-      "Indicative chemistry contentStage"
-    ],
-    examTip: "This question is worth 9 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc21",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 13,
-    question: `nd the data book value.(1)(c) Suggest how the students’ method, and the analysis of the results, could be improved inorder to determine a more accurate value for the enthalpy of reaction.Justify your suggestions.Do not refer to the precision of the measuring equipment. Do not change the amounts orthe concentration of the chemicals.`,
-    markScheme: [
-      "Insulate the beaker or use a polystyrene cup or a lid",
-      "To reduce heat loss",
-      "Record the temperature for a suitable time before adding the metal",
-      "To establish an accurate initial temperatureOR",
-      "Record temperature values at regular time intervals",
-      "To plot the temperature results against time on a graph",
-      "Extrapolate the cooling back to the point of addition"
-    ],
-    examTip: "This question is worth 13 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc22",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 6,
-    question: `Compounds A, B and C all have the molecular formula C5H10A and B decolourise bromine water but C does not.B exists as two stereoisomers but A does not show stereoisomerism.Use this information to deduce a possible structure for each of compounds A, B and C andexplain your deductions.State the meaning of the term stereoisomers and explain how they arise in compound B.`,
-    markScheme: [
-      "states that A & B are unsaturated / do contain C=C / alkenes (this can be obtained from thestructures)",
-      "as they decolourise bromine water",
-      "states that C is saturated / does not contain C=C / is (cyclo)alkane (this can be obtainedfrom the structures)",
-      "as it does not decolourise bromine water",
-      "suggests a suitable name / structure of C (cyclopentane, methylcyclobutane, anydimethylcyclopropane)",
-      "explains what stereoisomerism is in terms of molecules with the same structural formulabut a different arrangement of atoms / bonds / groups in space",
-      "explains how it arises by discussing that C=C cannot rotate"
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc23",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 14,
-    question: `oric acid as a catalyst. The structure of concentrated phosphoric acid is shown. Identify the factors that influence the boiling points of each of the compounds in thisreaction mixture. State how and explain why cyclohexene can be separated from thereaction mixture.`,
-    markScheme: [
-      "for secondary and",
-      "curly arrow from lone pair on O to H+1M2 correct structure of intermediate with + on O1M3 curly arrow from C‑O bond to O1M4 curly arrow from correct C‑H bond towards correct C‑C bond1",
-      "/3/4 as relevant (but allow attack by ananion of phosphoric acid on the H that is lost in",
-      "in addition to thearrow specified)for",
-      ", the O of the +OH2 group must be bonded to the ring23.(b)Any correct structural representation1Aston Manor Academy",
-      "more stable (carbocation formed)For",
-      "penalise more stable product1M2 changes from secondary to tertiary (carbocation)For",
-      "allow explanation via inductive effect with more alkyl / Cgroups attached or inductive effect from methyl group asalternatives",
-      "/2/3 penalise reference to breaking covalent bondsM2 &",
-      "ignore reference to van der Waals and/or (permanent)dipole-dipole forcesM2 allow use of term H bonds (on this occasion)"
-    ],
-    examTip: "This question is worth 14 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc24",
-    board: "aqa",
-    category: "Equilibrium",
-    marks: 6,
-    question: `Titanium(IV) chloride can be made from titanium(IV) oxide as shown in the equation.TiO2(s) + 2C(s) + 2Cl2 (g) → 2CO(g) + TiCl4(l) ΔHo = −60.0 kJ mol−1Some entropy data are shown in the table. SubstanceTiO2(s)C(s)Cl2(g)CO(g)TiCl4(l)So / J K−1 mol−150.25.70223198253Use the equation and the data in the table to calculate the Gibbs free-energy change forthis reaction at 989 °CGive your answer to the appropriate number of significant figures.Use your answer to explain whether this reaction is feasible.Gibbs free-energy change  kJ mol−1Explanation`,
-    markScheme: [
-      "from incorrect M21ΔG = ΔH - TΔS1ΔG = -60 - (1262 × 141(.4) × 10−3)This expression also scores",
-      ", allow ΔG = -60 - (1262 × their",
-      "× 10−3)1= –238 (kJ mol−1 ) to 3 sig figsIf calculated in joulesM4",
-      "from their ΔG1"
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc25",
-    board: "aqa",
-    category: "Equilibrium",
-    marks: 14,
-    question: `de and hydrogen was allowed to reach equilibrium at600 KAt equilibrium, the mixture contained 2.76 mol of carbon monoxide, 4.51 mol of hydrogenand 0.360 mol of methanol. The total pressure was 630 kPaCalculate a value for the equilibrium constant, Kp, for this reaction at 600 K and state itsunits.Value of Kp  Units`,
-    markScheme: [
-      "Yield increases as temperature increases (or converse)",
-      "After a certain temperature yield no longer increases",
-      "Yield decreases as pressure increases (or converse)",
-      "High temperature results in high energy costs/expensive",
-      "(After a certain temperature) yield no longer increases therefore there is no gain in usinga higher temperature",
-      "Low pressure may be too slow",
-      "So compromise pressure required"
-    ],
-    examTip: "This question is worth 14 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc26",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 14,
-    question: `the iron complex.Bond angle Type of isomerism (3)(d) Ethanedioate ions are poisonous because they react with iron ions in the body.Ethanedioate ions are present in foods such as broccoli and spinach.Suggest one reason why people who eat these foods do not suffer from poisoning.`,
-    markScheme: [
-      "(do not allow if negative and do not allow =",
-      ")If no subtraction, max = 5 (",
-      ")If incorrect subtraction, max = 6 (",
-      "can be scored by multiplying",
-      "by 10 beforesubtraction (giving 1.325 × 10−2 – 5.225 × 10−3 = 8.025 × 10−3 )",
-      "× 134M8 = (",
-      "/1.90) × 100"
-    ],
-    examTip: "This question is worth 14 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc27",
-    board: "aqa",
-    category: "Organic Chemistry",
-    marks: 6,
-    question: `Test-tube reactions can be used to identify the functional groups in organic molecules.You are provided with samples of each of the four compounds. Describe how you could distinguish between all four compounds using the minimum number oftests on each compound.You should describe what would be observed in each test.`,
-    markScheme: [
-      "Use the mark scheme to award up to 6 marks based on the key chemistry points covered."
-    ],
-    examTip: "This is a 6-mark levels of response question. Structure your answer clearly covering all key stages."
-  },
-  {
-    id: "doc28",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 21,
-    question: `3)(e) Although the 1H spectra of R and S both show the same number of peaks, the spectra canbe used to distinguish between the isomers.Justify this statement using the splitting patterns of the peaks.Give the number of peaks for each isomer.JustificationNumber of peaks (3)(f) The action of heat on 5-hydroxyhexanoic acid can lead to two different products.On gentle heating, 5-hydroxyhexanoic acid loses water to form a cyclic compound, T(C6H10O2).Under different conditions, 5-hydroxyhexanoic acid forms a polyester.Draw the structure of T.Draw the repeating unit of the polyester and name the typ`,
-    markScheme: [
-      "– max 3If incorrect volume from AE then penalise",
-      "and mark on(Final answer is 0.806 × their volume)M2Mol carbon dioxide = pV/RT = = 7.632 × 10−3If unit error in p, V or T lose",
-      "and M5If incorrect rearrangement lose",
-      "and M5If both errors seen then no further marksM3Mol P, C6H10O2 used = 7.632 × 10−3 / 6 = 1.272 × 10−3M3 divided by 6 If wrong no further marksM4Mass P used = 1.272 × 10−3 × 114(.0) g = 145 mgMark for answer (allow ans to 2 sf)Check chemical equation",
-      "can be awarded on the spectra",
-      "for resulting peak in spectraM2ORS has a -C(H2)-C(H3) R does notM1S has one peak in range δ = 5-40 R does not/ lowest peak for S is lower than lowest for RM2(Both have) three peaksM3Aston Manor Academy"
-    ],
-    examTip: "This question is worth 21 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc29",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 11,
-    question: `This question is about the three amines, E, F and G. (a) Amines E, F and G are weak bases.Explain the difference in base strength of the three amines and give the order of increasingbase strength.(6)29.(b) Amine F can be prepared in a three-step synthesis starting from methylbenzene.Suggest the structures of the two intermediate compounds.For each step, give reagents and conditions only. Equations and mechanisms are notrequired.`,
-    markScheme: [
-      "Use the mark scheme to award up to 11 marks based on the key chemistry points covered."
-    ],
-    examTip: "This question is worth 11 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc30",
+    id: "aqa07",
     board: "aqa",
     category: "Energetics",
-    marks: 14,
-    question: `mol−1298−592.5288−594.2273−596.7260−598.8240−602.2Use these data to plot a graph of free-energy change against temperature on the gridbelow.Calculate the gradient of the line on your graph and hence calculate the entropy change,ΔS, in J K−1 mol−1, for the formation of anhydrous magnesium chloride from its elements.Show your working.ΔS  J K−1 mol−1`,
+    marks: 6,
+    question: `When sodium oxalate solution (Na2C2O4) is added to [Fe(H2O)6]3+ ions, all six water ligands are replaced by oxalate (ethanedioate, C2O4 2-) ions to form [Fe(C2O4)3]3-.
+
+[Fe(H2O)6]3+(aq) + 3C2O4 2-(aq) → [Fe(C2O4)3]3-(aq) + 6H2O(l)
+
+Explain why the replacement of water ligands by oxalate ions is thermodynamically favourable. In your answer refer to the enthalpy change, the entropy change and how these influence the Gibbs free-energy change for the reaction.`,
     markScheme: [
-      "Measures water with named appropriate apparatus",
-      "Suitable volume/mass / volume/mass in range 10 – 200 cm3/g",
-      "Record T at regular timed intervals for 5+ mins / until trend seen",
-      "Tfinal – Tinitial = ΔT / idea of finding ΔT from graph at point of addition"
+      "The enthalpy change (ΔH) for the reaction is approximately zero / negligible",
+      "The number and type of bonds broken and formed are similar: the same number of metal-oxygen bonds are broken and reformed (M-O in water replaced by M-O in oxalate)",
+      "The entropy change (ΔS) is large and positive: entropy increases significantly",
+      "Because 4 particles on the left (1 complex + 3 ligands) produce 7 particles on the right (1 complex + 6 water molecules); the number of particles/moles of gas+aqueous species increases",
+      "Using ΔG = ΔH - TΔS: since ΔH ≈ 0 and ΔS is positive, ΔG is negative",
+      "A negative ΔG means the reaction is thermodynamically feasible/spontaneous; the chelate effect arises because replacing one ligand with one bidentate ligand releases more particles"
     ],
-    examTip: "This question is worth 14 marks. Make sure you address all parts systematically."
+    examTip: "This is the chelate effect question. The key insight is: ΔH ≈ 0 (same bond types), but ΔS is large and positive (4 particles → 7 particles). Use ΔG = ΔH - TΔS to show that ΔG is negative. Common error: forgetting to count the number of particles on each side. Always state both ΔH and ΔS before linking to ΔG."
   },
   {
-    id: "doc31",
+    id: "aqa08",
     board: "aqa",
-    category: "Equilibrium",
-    marks: 18,
-    question: `lar experiment, another student used 0.040 mol of ethyl benzoate and obtained5.12 g of benzoic acid.Calculate the percentage yield of benzoic acid.Suggest why the yield is not 100%.Percentage yield  %Suggestion`,
+    category: "Transition Metals",
+    marks: 6,
+    question: `Explain why an aqueous solution of copper(II) sulfate is blue, while an aqueous solution of zinc sulfate is colourless.
+
+In your answer you should explain: how d-d transitions produce colour; why the two aquo-complexes have different colours; and why zinc cannot show d-d transitions.`,
     markScheme: [
-      "max = 41of minimum volume",
-      "/0.04or calculation that 0.04 mol of benzoic = 4.88 g (",
-      ") so% yield = (5.12/4.88) × 100 = 105%1Product not dried / impurities present in productOnly allow"
+      "In [Cu(H2O)6]2+, the six water ligands cause the 3d orbitals to split into two energy levels (d-orbital splitting)",
+      "Visible light is absorbed to promote an electron from the lower energy d orbitals to the higher energy d orbitals: this is called a d-d transition",
+      "The complementary colour to the absorbed wavelength is transmitted/observed; copper(II) absorbs red/orange light and transmits blue",
+      "The colour observed depends on the size of the energy gap between the split d orbitals, which is influenced by the ligand and the metal ion",
+      "Zn2+ has the electron configuration [Ar] 3d10: the 3d subshell is completely full",
+      "In Zn2+, there are no vacant d orbitals so no d-d transitions are possible; no visible light is absorbed; the zinc solution appears colourless"
     ],
-    examTip: "This question is worth 18 marks. Make sure you address all parts systematically."
+    examTip: "Always state that visible light is absorbed (not 'light is reflected'). The key for zinc: state the electron configuration [Ar] 3d10, state 'completely full 3d subshell', state 'no vacant d orbitals', state 'no d-d transitions possible'. All four points are needed for full marks. Do not say 'd10 is stable' as this does not explain the colour."
   },
   {
-    id: "doc32",
-    board: "aqa",
-    category: "Inorganic Chemistry",
-    marks: 9,
-    question: `hydroxide.(If you were unable to calculate a value for the concentration of HX in part (c) you shoulduse a value of 0.600 mol dm−3 in this calculation. This is not the correct value.)pH of HX (2)(e) Calculate the pH of the solution when half of the acid has reacted.pH of solution (1)(f) Plot your answers to part (d) and part (e) on the grid in the figure above.Use these points to sketch the missing part of the curve between 0 and 20 cm3 of NaOHsolution added.`,
-    markScheme: [
-      "dependent on a calculation of [H+]1(e) (pH at half-neutralisation = pKa)= –log 2.62 × 10−5 = 4.58 (must be 2 or more dp)"
-    ],
-    examTip: "This question is worth 9 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc33",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 17,
-    question: `splitting patterns of these peaks.Signal at δ= 3.5 Signal at δ= 2.2 (4)(f) Deduce the structure of compound X, C6H12O2Use your answer from part (e) to help you.You are not required to explain how you deduced the structure.`,
-    markScheme: [
-      "Use the mark scheme to award up to 17 marks based on the key chemistry points covered."
-    ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc34",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 19,
-    question: `to comment on thestatement that “the student has demonstrated expert practical skills”.(4)(e) Suggest why the student should not use this sample of paracetamol for the purposes ofpain relief.(1)(f) Suggest two reasons why, in an industrial situation, ethanoic anhydride would be preferredto ethanoyl chloride in the production of paracetamol.1. 2.`,
-    markScheme: [
-      "= Arrow from lone pair on N to carbon in C=O.1M3 = Arrow from the bond in CO to the O.1M3 = Correct intermediate with + on N and − on O.1M4 = Three arrows and lone pair.1Aston Manor Academy"
-    ],
-    examTip: "This question is worth 19 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc35",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 5,
-    question: `The table shows some data about the elements bromine and magnesium. ElementMelting point / KBoiling point / KBromine266332Magnesium923138335.In terms of structure and bonding explain why the boiling point of bromine is different from that ofmagnesium. Suggest why magnesium is a liquid over a much greater temperature rangecompared to bromine.`,
-    markScheme: [
-      "and M41StrengthM3 Br2 has weak (van der Waals) forces between the molecules / weak IMFsIf eg Mg molecules or Mg ionic bonds lose",
-      "The comparison could be direct or implied.1Liquid rangeM5 Mg has a much greater liquid range because forces of attraction inliquid / molten metal are strong(er) OR converse argument for Br2Must refer to liquid range to score M51"
-    ],
-    examTip: "This question is worth 5 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc36",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 10,
-    question: `The compounds in the table all have a relative molecular mass of 58.0 (a) Explain why determining the precise relative molecular mass of propanal andprop-2-en-1-ol by mass spectrometry could not be used to distinguish betweensamples of these two compounds.(2)36.(b) The infrared spectrum of one of these three compounds is shown below. Use the spectrum to identify the compound.State the bond that you used to identify the compound and give its wavenumber range.You should only consider absorptions with wavenumbers greater than 1500 cm−1.Compound Bond used to identify compound Wavenumber range of b`,
-    markScheme: [
-      "have the same molecular formulaor are C3H6Oor both have the same number/amount of each type of atom or same amount of eachelementor are isomers",
-      "prop-2-en-1-olMust refer to this compound clearly by name or structure (not toalcohol alone); ignore minor slips in name/structure1M2 O(-)H (alcohol) and 3230–3550 (cm−1), orC=C and 1620–1680 (cm−1)Marked independently from M1Could score from bond la"
-    ],
-    examTip: "This question is worth 10 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc37",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 8,
-    question: `The alkene 3-methylpent-2-ene (CH3CH=C(CH3)CH2CH3) reacts with hydrogen bromide to forma mixture of 3-bromo-3-methylpentane and 2-bromo-3-methylpentane.(a) The alkene 3-methylpent-2-ene (CH3CH=C(CH3)CH2CH3) exists as E and Zstereoisomers.Draw the structure of Z-3-methylpent-2-ene. (1)37.(b) Name and outline the mechanism for the formation of 3-bromo-3-methylpentane from thisreaction of 3-methylpent-2-ene with hydrogen bromide.Explain why more 3-bromo-3-methylpentane is formed in this reaction than 2-bromo-3-methylpentane.`,
-    markScheme: [
-      "Penalise one mark from their total if half-headed arrows areusedM2",
-      "if there is a bond drawn to the positive chargePenalise only once in any part of the mechanism for a line and twodots to show a bondMax 3 of any 4 marks (",
-      "-5) for wrong organic reactant or wrongorganic product (if shown) or secondary carbocationMax 2 of any 4 marks in the mechanism for use of bromineDo not penalise the “correct” use of “sticks”Aston Manor Academy",
-      "must describe the movement of a pair of electrons from the Br−ion to the positive C atom of the carbocation / curly arrow from thelone pair of electrons on the negatively charged bromide iontowards the positively charged C atom (of either a secondary"
-    ],
-    examTip: "This question is worth 8 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc38",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 13,
-    question: `Alcohols can be prepared from alkenes in various ways.(a) On a laboratory scale, a mixture of propan-1-ol and propan-2-ol can be prepared frompropene in two steps.In step 1, propene reacts with cold, concentrated sulfuric acid to form intermediatecompounds.In step 2, the intermediate compounds react with water to form the mixture of alcohols.Name and outline the mechanism for the reaction between propene and concentratedsulfuric acid to form the intermediate compound which gives propan-2-ol in step 2.Explain why propan-2-ol is the major product of this preparation.(7)38.(b) On an industrial s`,
-    markScheme: [
-      "= curly arrow from C=C towards H of H−O on ‘their’ sulfuric acidM3 = curly arrow to break H−OPenalise incorrect dipole/full chargesM4 = intermediateM5 = correct anion, lone pair on correct O and curly arrow from thatlone pair to C+ on their carbocati"
-    ],
-    examTip: "This question is worth 13 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc39",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 17,
-    question: `e investigated by adding aqueous silvernitrate to the chloroalkanes. During the hydrolysis reactions, chloride ions are liberatedslowly. Precipitates of silver chloride are formed.Outline a method to compare the rate of hydrolysis of 1-chlorobutane with that of2-chlorobutane. State how the method would ensure a fair test.`,
-    markScheme: [
-      "if any mention of acidified/H+ in reagents or conditions1Reaction 1 = ethanolic/alcoholic ANDreaction 2 = aqueous",
-      "only even if arrows inmechanism correctIf C chain length or halogen wrong in reactant or product max 2/311139.Aston Manor Academy"
-    ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc40",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 17,
-    question: `ve isomers are repeated to help you answer this question. State which isomer produces the spectrum in Figure 1 and which isomer produces thespectrum in Figure 2.Explain your answer.You do not need to identify every peak in each spectrum.Use Table C on the Data Sheet to answer the question.(5)(f) U and V are other isomers of P, Q, R, S and T.The 1H n.m.r. spectrum of U consists of two singlets.V is a cyclic alcohol that exists as optical isomers.Draw the structure of U and the structure of V. U V`,
-    markScheme: [
-      "or M5M3150-90 (ppm) or value in range is C - O or alcohol or etherM41two peaks (so not S which would have only one)",
-      "(f) 1Aston Manor Academy"
-    ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc41",
-    board: "aqa",
-    category: "Bonding & Structure",
-    marks: 9,
-    question: `The N-substituted amide C6H13NO can be formed from but−2−ene in a three-step synthesis.H3CCHCHCH3 C4H9Br C4H11N C6H13NOFor each reaction• state a reagent• give the structure of the product• name the mechanism of the reaction.Detailed mechanisms are not required.`,
-    markScheme: [
-      "but canscore",
-      "& M9M11M21electrophilic additionIf 1-bromobutane structure given for",
-      "then 1-aminobutanestructure for",
-      "consequentiallyM3141. Aston Manor Academy",
-      "then 2-aminobutanestructure for",
-      "and M8M51nucleophilic substitutionIf 2-bromobutane structure given for",
-      "then 1-aminobutanestructure, penalise",
-      "and M8M61Step 3CH3COCl or (CH3CO)2O"
-    ],
-    examTip: "This question is worth 9 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc42",
-    board: "aqa",
-    category: "Inorganic Chemistry",
-    marks: 12,
-    question: `ydrogenphosphate can be represented by the formula Ca(H2PO4)x where x isan integer.A 9.76 g sample of calcium dihydrogenphosphate contains 0.17 g of hydrogen, 2.59 g ofphosphorus and 5.33 g of oxygen.Calculate the empirical formula and hence the value of x.Show your working.`,
-    markScheme: [
-      "- Mr calcium phosphate = 310(.3)If Mr wrong, lose",
-      ".142.Aston Manor Academy",
-      "- Moles calcium phosphate = (= 0.0234) 0.0234 moles can score",
-      ".If Mr incorrect, can score",
-      "to 2 significant figures here but will lose",
-      "ifanswer not 1.23.1M3 - Moles phosphoric acid = 2 × 0.0234 = 0.0468",
-      "× 2. If not multiplied by 2 then lose",
-      ".1M4 - Vol phosphoric acid = 0.038(0) dm3If not 0.038(0) dm3 then lose",
-      ".1Conc phosphoric acid =",
-      "= 1.23 (mol dm−3)This answer only – unless arithmetic or transcription error that hasbeen penalised by 1 mark"
-    ],
-    examTip: "This question is worth 12 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc43",
-    board: "aqa",
-    category: "Inorganic Chemistry",
-    marks: 20,
-    question: `al reaction involves one of the chloride ligandsbeing replaced by water.Write an equation for this reaction.(1)(iii) Suggest how the risk associated with the use of this drug can be minimised.(1)(d) Explain, with the aid of equations, how and why vanadium(V) oxide is used in the ContactProcess.`,
-    markScheme: [
-      "but can score",
-      "particles form 7 particles / increase in number of particles",
-      "if numbers match candidates incorrect equationprovided number of particles increases1disorder / entropy increases / ΔS positiveCannot score",
-      "if number of particles stated or in equation is thesame or decreases1ΔH is approx. zero / no net change in bond enthalpies",
-      "independently1(c) (i) Correct displayed structureMust show all three N–H bonds on each N",
-      "Bond angle 90°",
-      "must state that overall charge = 0"
-    ],
-    examTip: "This question is worth 20 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc44",
-    board: "aqa",
-    category: "Electrochemistry",
-    marks: 7,
-    question: `A student carried out an experiment to find the mass of FeSO4.7H2O in an impure sample, X.The student recorded the mass of X. This sample was dissolved in water and made up to250 cm3 of solution.The student found that, after an excess of acid had been added, 25.0 cm3 of this solution reactedwith 21.3 cm3 of a 0.0150 mol dm–3 solution of K2Cr2O7(a) Use this information to calculate a value for the mass of FeSO4.7H2O in the sample of X.(5)44.(b) The student found that the calculated mass of FeSO4.7H2O was greater than the actualmass of the sample that had been weighed out. The student realised t`,
-    markScheme: [
-      "or M31moles of Fe2+ = 6 × 3.195 × 10–4 = 1.917 × 10–3Process mark for",
-      "× 6 (also score",
-      ")1original moles in 250 cm3 = 1.917 × 10–3 × 10 = 1.917 × 10–2Process mark for",
-      "× 101Aston Manor Academy",
-      "× 277.9(allow 5.30 to 5.40)Answer must be to at least 3 sig figsNote that an answer of 0.888 scores",
-      "(ratio 1:1used)1(b) (Impurity is a) reducing agent / reacts with dichromate / impurity is a version of FeSO4with fewer than 7 waters (not fully hydrated)"
-    ],
-    examTip: "This question is worth 7 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc45",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 17,
-    question: `An excess of a given reagent is added to each of the following pairs of aqueous metal ions.For each metal ion, state the initial colour of the solution and the final observation that you wouldmake.In each case, write an overall equation for the formation of the final product from the initialaqueous metal ion.(a) An excess of aqueous sodium carbonate is added to separate aqueous solutionscontaining [Fe(H2O)6]2+ and [Fe(H2O)6]3+.(5)45.(b) An excess of concentrated hydrochloric acid is added to separate aqueous solutionscontaining [Cu(H2O)6]2+ and [Co(H2O)6]2+.(4)(c) An excess of dilute aqueous `,
-    markScheme: [
-      "(a) Iron(II): green (solution) gives a green precipitateApply list principle throughout if extra colours and / or extraobservations given"
-    ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc46",
-    board: "aqa",
-    category: "Inorganic Chemistry",
-    marks: 15,
-    question: `ve the formula of the complex cobalt compound Z that you would expect to be formed inthe preparation described above.Suggest one reason why the mole ratio of chloride ions to cobalt ions that you havecalculated is different from the expected value.`,
-    markScheme: [
-      "even if equation incorrect or missingprovided number of particles increases1So the entropy change is positive / disorder increases / entropy increases1(ii) Minimum for",
-      "is 3 bidentate ligands bonded to Co",
-      "but penalise charges on anyligand in M21Ligands need not have any atoms shown but diagram must show 6 bonds fromligands to Co, 2 from each ligandMinimum for",
-      "is one ligand identified as H2N-----NH2",
-      "is one bidentate ligand showing two arrows from separatenitrogens to cobalt1(c) Moles of cobalt = (50 × 0.203) / 1000 = 0.01015 mol",
-      "Aston Manor Academy",
-      "[Co(NH3)6]Cl3 (square brackets not essential)1Difference due to incomplete oxidation in the preparation"
-    ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc47",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 5,
-    question: `Concentrated sulfuric acid reacts with solid potassium iodide as shown in the equation.8KI + 9H2SO4 4l2 + 8KHSO4 + H2S + 4H2OGive two observations that you would make when this reaction occurs.In terms of electrons, state what happens to the iodide ions in this reaction.State the change in oxidation state of sulfur that occurs during this formation of H2S and deducethe half-equation for the conversion of H2SO4 into H2S`,
-    markScheme: [
-      "(either order)Any two from• purple vapour / gas• (white solid goes to) black or black / grey or black / purplesolid• bad egg smell or words to this effect"
-    ],
-    examTip: "This question is worth 5 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc48",
-    board: "aqa",
-    category: "Kinetics",
-    marks: 18,
-    question: `-determining step in the mechanism in part (b) (ii) involves attack by thenucleophile.Suggest how the rate of reaction of propanone with HCN would compare with therate of reaction of propanal with HCNExplain your answer.`,
-    markScheme: [
-      "arrow from circle or within it to C or to + on Chorseshoe must not extend beyond C2 to C6 but can be smaller+ not too close to C1M2 penalise C6H5–CH3CH2CO (even if already penalized in (a)(i))",
-      "arrow into hexagon unless Kekuleallow",
-      "arrow independent of",
-      "structureignore base removing H in",
-      "(b) (i) CH3CH2CHO + HCN → CH3CH2CH(OH)CN OR C2H5CH(OH)CNaldehyde must be –CHO brackets optional12-hydroxybutanenitrile OR 2-hydroxybutanonitrileno others1Aston Manor Academy",
-      "includes lp and arrow to Carbonyl C and minus charge (oneither C or N)",
-      ", but allow",
-      "to C+ after non-scoringcarbonyl arrow"
-    ],
-    examTip: "This question is worth 18 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc49",
-    board: "aqa",
-    category: "Electrochemistry",
-    marks: 17,
-    question: `0.0187 mol dm–3 potassiummanganate(VII) solution.Write an equation for the reaction between acidified potassium manganate(VII) solutionand hydrogen peroxide.Use this equation and the results given to calculate a value for the concentration, inmol dm–3, of the original hydrogen peroxide solution.(If you have been unable to write an equation for this reaction you may assume that 3 molof KMnO4 react with 7mol of H2O2. This is not the correct reacting ratio.)`,
-    markScheme: [
-      "& M51Moles MnO4– = (24.35/1000) × 0.0187 = 4.55 × 10–4Note value must be quoted to at least 3 sig. figs",
-      "is for 4.55 × 10–41Moles H2O2 = (4.55 × 10–4) × 5/2 = 1.138 × 10–3M3 is for × 5/2 (or 7/3)Mark consequential on molar ratio from candidate's equation1Aston Manor Academy",
-      "is for consequentially correct answer from (answer to mark 4) ×(1000/5)Note an answer of between 2.25 and 2.30 is worth 4 marks)If candidate uses given ratio 3/7 max 4 marks",
-      ": Moles of MnO4– = 4.55 × 10–4M2: Moles H2O2 = (4.55 × 10–4) × 7/3 = 1.0617 × 10–3M3: Moles H2O2 in 5 cm3 original= (1.0617 × 10–3) × 10 = 0.01062M4: Original [H2O2] = 0.01062 × (1000/5) = 2.12 mol dm–3(allow 2.10 to 2.15)1"
-    ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
-  },
-  {
-    id: "doc50",
+    id: "aqa09",
     board: "aqa",
     category: "Energetics",
-    marks: 15,
-    question: `cess 3. The student showed that the temperature of 200 g of water increased by 8.0 °Cwhen 0.46 g of pure ethanol was burned in air and the heat produced was used to warmthe water.Use these results to calculate the value, in kJ mol–1, obtained by the student for thisenthalpy change. (The specific heat capacity of water is 4.18 J K–1 g–1)Give one reason, other than heat loss, why the value obtained from the student’s results isless exothermic than a data book value.`,
+    marks: 6,
+    question: `The table below shows theoretical (perfect ionic model) and experimental (Born-Haber cycle) lattice enthalpies for three chlorides.
+
+Compound | Theoretical / kJ mol-1 | Experimental / kJ mol-1
+NaCl     | -770                   | -788
+KCl      | -711                   | -719
+AgCl     | -770                   | -905
+
+Discuss the values in the table. In your answer compare the theoretical values and explain the differences between theoretical and experimental values for each compound, with reference to the bonding present.`,
     markScheme: [
-      "to M3M1 yeast or zymaseM2 30 °C ≥ T ≤ 42 °CM3 anaerobic/no oxygen/no air OR neutral pHM4 C6H12O6 2C2H5OH + 2CO2OR2C6H12O6 4C2H5OH + 4CO2Mark independentlyPenalise “bacteria” and “phosphoric acid” using the list principle",
-      "Carbon-neutral",
-      "for equations alone withoutcommentary or annotation or calculation1(c)",
-      "(could be scored by a correct mathematical expression)(Sum of) bonds broken – (Sum of) bonds made/formed = ΔHOR(Σ) Breactants – (Σ) Bproducts = ΔH (where B = bond enthalpy/bond energy)For",
-      "there must be a correct mathematical expression using ΔHor “enthalpy change”",
-      "Reactants = (+) 4719ORProducts = (–) 5750M3 Overall + 4719 – 5750 = –1031 (kJ mol–1) (This is worth 3 marks)Award full marks for correct answer",
-      "is for either value underlinedM3 is",
-      "Mean bond enthalpies are not specific for this reactionOR they are average values from many differentcompounds/moleculesDo not forget to award this mark1Aston Manor Academy",
-      "q = m c ΔT (this mark for correct mathematical formula)",
-      "= 6688 (J) OR 6.688 (kJ) OR 6.69 (kJ) OR 6.7 (kJ)"
+      "NaCl and AgCl have similar theoretical lattice enthalpies (-770 kJ mol-1) because they have similar ionic radii and charges",
+      "KCl has a less negative theoretical lattice enthalpy because K+ has a larger ionic radius than Na+ or Ag+, giving weaker electrostatic attraction",
+      "All three compounds have experimental values more negative than theoretical values, suggesting the bonding is not purely ionic (some covalent character is present)",
+      "NaCl and KCl have only small differences between experimental and theoretical values: the bonding is close to purely ionic",
+      "AgCl has a much larger difference (905 vs 770 = 135 kJ mol-1 difference) than NaCl: AgCl has significantly more covalent character",
+      "Ag+ is more polarising than Na+ because it has a greater charge density / more electrons in outer shells that incompletely shield the nuclear charge; Ag+ distorts (polarises) the Cl- electron cloud more, giving more covalent character to AgCl"
     ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
+    examTip: "Compare all three compounds systematically. The key AQA mark is explaining WHY AgCl has more covalent character than NaCl: Ag+ is more polarising (not because of charge - both are 1+, but because of the d-block electrons providing incomplete shielding). Always use the phrase 'covalent character' and link it to the difference between experimental and theoretical values."
   },
   {
-    id: "doc51",
+    id: "aqa10",
+    board: "aqa",
+    category: "Period 3",
+    marks: 6,
+    question: `This question is about the oxides of period 3 elements.
+
+Explain, in terms of structure and bonding, why silicon dioxide (SiO2) has a much higher melting point than sulfur trioxide (SO3).
+
+Explain also what is meant by the term 'amphoteric' and describe the reactions of aluminium oxide (Al2O3) with dilute sulfuric acid and with excess sodium hydroxide solution, giving balanced equations for each reaction.`,
+    markScheme: [
+      "SiO2 has a giant covalent structure: strong covalent bonds extend throughout the entire lattice in three dimensions; a large amount of energy is required to break these covalent bonds, so SiO2 has a very high melting point",
+      "SO3 is a simple molecular substance: there are only weak van der Waals (London dispersion) and dipole-dipole intermolecular forces between SO3 molecules; little energy is required to overcome these, so SO3 has a low melting point",
+      "Amphoteric: a substance that can react with both acids and bases (alkalis)",
+      "Al2O3 with dilute H2SO4 (acts as a base): Al2O3(s) + 3H2SO4(aq) → Al2(SO4)3(aq) + 3H2O(l)",
+      "Al2O3 with excess NaOH (acts as an acid): Al2O3(s) + 2NaOH(aq) + 3H2O(l) → 2NaAl(OH)4(aq)",
+      "Both equations must be balanced correctly for atoms and charges to score the marks"
+    ],
+    examTip: "For SiO2 vs SO3: the key contrast is 'giant covalent (covalent bonds throughout)' versus 'simple molecular (only IMF between molecules, covalent bonds NOT broken)'. For the Al2O3 equations: both must be balanced. The most common errors are: writing Al(OH)3 instead of Al2O3 in the reaction, and unbalanced equations."
+  },
+  {
+    id: "aqa11",
+    board: "aqa",
+    category: "Halogens",
+    marks: 6,
+    question: `Chlorine reacts with cold, dilute sodium hydroxide solution to form sodium chloride and sodium chlorate(I).
+
+(a) Write a balanced equation for this reaction.
+(b) Explain what is meant by disproportionation and show that this reaction is a disproportionation reaction.
+(c) Write a balanced ionic equation for the reaction of chlorine with water.
+(d) State the role of the chloride ion in the reaction of halogenoalkanes with water.`,
+    markScheme: [
+      "Balanced equation: Cl2(aq) + 2NaOH(aq) → NaCl(aq) + NaClO(aq) + H2O(l)",
+      "Disproportionation: a reaction in which the same element is simultaneously oxidised and reduced",
+      "In Cl2 the oxidation state of Cl is 0; in NaCl it is -1 (reduced); in NaClO (chlorate(I)) it is +1 (oxidised); since the same element is both oxidised and reduced, this is disproportionation",
+      "Ionic equation for Cl2 + H2O: Cl2(aq) + H2O(l) ⇌ H+(aq) + Cl-(aq) + HClO(aq)",
+      "The chloride ion acts as a nucleophile in the reaction of halogenoalkanes with water (nucleophilic substitution)",
+      "The Cl- ion donates a lone pair of electrons to the electron-deficient carbon atom of the C-X bond"
+    ],
+    examTip: "For disproportionation: always state the oxidation states of Cl in all species (0 in Cl2, -1 in NaCl, +1 in NaClO). Always state 'the same element is simultaneously oxidised AND reduced'. The ionic equation for Cl2 + H2O produces HClO (not ClO-). Note that ClO- is only produced in alkaline conditions."
+  },
+  {
+    id: "aqa12",
     board: "aqa",
     category: "Equilibrium",
-    marks: 17,
-    question: `ΔS you may assume that they are–61 kJ mol–1 and –205 J K–1 mol–1 respectively. These are not the correct values.)(6)(d) Write an equation for the complete combustion of methanol. Use your equation to explainwhy the combustion reaction in the gas phase is feasible at all temperatures.(4)(e) Give one reason why methanol, synthesised from carbon dioxide and hydrogen, may notbe a carbon-neutral fuel.`,
+    marks: 6,
+    question: `In the Contact process, sulfur dioxide is oxidised to sulfur trioxide:
+
+2SO2(g) + O2(g) ⇌ 2SO3(g)   ΔH = -196 kJ mol-1
+
+The industrial conditions used are typically 450 °C and 1-2 atm pressure in the presence of a vanadium(V) oxide (V2O5) catalyst. Explain, in terms of equilibrium yield and rate of reaction, why these conditions are used.`,
     markScheme: [
-      "(ΔS is negative so) at high temp –TΔS (is positive and)greater than ΔH/largeDo not award",
-      "if positive ΔS value used1So ΔG > 0Independent mark unless positive ΔS value used1(Limiting condition ΔG = 0 so) T = ΔH/ΔS1= 272 K",
-      "if T –ve or if",
-      "should give T –ve1Reaction is too slow at this temperature/to speed up the reaction1Aston Manor Academy"
+      "The reaction is exothermic, so decreasing temperature increases the equilibrium yield (Kp increases as temperature decreases); lower temperature favours the forward reaction",
+      "However, too low a temperature gives an unacceptably slow rate of reaction; 450 °C is a compromise between an acceptable yield and an acceptable rate",
+      "There are fewer moles of gas on the right-hand side (2 mol SO3) than the left (2+1 = 3 mol); higher pressure shifts equilibrium to the right, increasing yield",
+      "Relatively low pressure (1-2 atm) is used because at these conditions the yield is already very high (>97%); very high pressure would add greatly to capital and operating costs",
+      "The V2O5 catalyst has no effect on the equilibrium yield or Kp, but it increases the rate of reaction by providing an alternative pathway with a lower activation energy",
+      "The catalyst allows the process to run at a lower temperature (450 °C rather than higher) while still achieving an acceptable rate; this reduces energy costs and increases yield"
     ],
-    examTip: "This question is worth 17 marks. Make sure you address all parts systematically."
+    examTip: "Notice how this question is similar to the Haber process question but with different answers for pressure. In the Haber process, high pressure is used because it is economical; in the Contact process, only 1-2 atm is used because the yield is already very high even at low pressure. Always explain WHY a compromise temperature is used, not just that it is used."
   },
   {
-    id: "doc52",
+    id: "aqa13",
+    board: "aqa",
+    category: "Transition Metals",
+    marks: 6,
+    question: `Describe and explain the following observations for copper(II) chemistry:
+
+(a) When excess aqueous ammonia is added to [Cu(H2O)6]2+(aq), a deep blue solution forms.
+(b) When concentrated hydrochloric acid is added to [Cu(H2O)6]2+(aq), a yellow-green solution forms.
+(c) [Cu(H2O)6]2+(aq) reacts with aqueous sodium hydroxide to form a pale blue precipitate. Write an ionic equation for this reaction.`,
+    markScheme: [
+      "With excess NH3: [Cu(H2O)6]2+ + 4NH3 → [Cu(NH3)4(H2O)2]2+ + 4H2O; the four water ligands are replaced by four ammonia ligands (ligand substitution)",
+      "[Cu(NH3)4(H2O)2]2+ is deep blue because NH3 causes a larger d-orbital splitting energy than H2O, so a different wavelength of visible light is absorbed",
+      "With concentrated HCl: [Cu(H2O)6]2+ + 4Cl- → [CuCl4]2- + 6H2O; the six water ligands are replaced by four chloride ligands",
+      "[CuCl4]2- is tetrahedral (not octahedral) because Cl- is a larger ligand than H2O; the geometry changes from octahedral to tetrahedral",
+      "With NaOH: [Cu(H2O)6]2+(aq) + 2OH-(aq) → Cu(OH)2(H2O)4(s) + 2H2O(l); a pale blue precipitate of copper(II) hydroxide forms",
+      "The OH- ions act as a base and deprotonate the water ligands / remove H+ from the aquo complex (acid-base reaction, not ligand substitution)"
+    ],
+    examTip: "The formula for the copper-ammonia complex is [Cu(NH3)4(H2O)2]2+ (NOT [Cu(NH3)6]2+). This error is flagged in every AQA examiner report. The tetrachlorocuprate(II) complex [CuCl4]2- is tetrahedral, not octahedral. For the NaOH reaction: this is a deprotonation (not ligand substitution) - OH- removes H+ from the coordinated water."
+  },
+  {
+    id: "aqa14",
     board: "aqa",
     category: "Electrochemistry",
-    marks: 14,
-    question: `s. A 25.0 cm3sample of the partially oxidised solution required 23.70 cm3 of 0.0100 mol dm–3 potassiumdichromate(VI) solution for complete reaction in the presence of an excess of dilute sulfuricacid.Calculate the percentage of iron(II) ions that had been oxidised by the air.`,
+    marks: 6,
+    question: `The following standard electrode potentials are given:
+
+Cr3+(aq) + 3e- → Cr(s)         E° = -0.74 V
+Cr3+(aq) + e-  → Cr2+(aq)      E° = -0.41 V
+Fe3+(aq) + e-  → Fe2+(aq)      E° = +0.77 V
+Fe2+(aq) + 2e- → Fe(s)         E° = -0.44 V
+
+(a) Calculate the standard cell potential for a cell in which Cr(s) is oxidised by Fe3+(aq). Identify the cathode and anode.
+(b) Write the standard cell notation for a cell with the Cr3+/Cr2+ half-cell as the anode and the Fe3+/Fe2+ half-cell as the cathode.
+(c) Explain the role of the salt bridge in an electrochemical cell.`,
     markScheme: [
-      "/101Original moles Fe2+ = 10.00/277.9 = 0.0360Independent mark1Moles Fe2+ oxidised = 0.0360 – 0.0142 = 0.0218M4 –",
-      "% oxidised = (0.0218 × 100)/0.0360 = 60.5%(",
-      "wrongeg 1:5 gives 67.1%1:1 gives 93.4%Note also, 39.5% (39-40) scores"
+      "The cathode (reduction) is Fe3+/Fe2+ (more positive E° = +0.77 V); the anode (oxidation) is Cr/Cr3+ (more negative E° = -0.74 V)",
+      "E°cell = E°cathode - E°anode = +0.77 - (-0.74) = +1.51 V",
+      "Cell notation: Pt(s) | Cr2+(aq) | Cr3+(aq) || Fe3+(aq), Fe2+(aq) | Pt(s)",
+      "Pt electrodes are required on BOTH sides because neither half-cell contains a solid metal (both species in the Cr3+/Cr2+ and Fe3+/Fe2+ half-cells are in the same aqueous phase)",
+      "The salt bridge allows ion flow between the two half-cells (NOT electron flow)",
+      "The salt bridge maintains electrical neutrality in each half-cell: as ions are consumed or produced, the salt bridge provides counter-ions to prevent charge build-up"
     ],
-    examTip: "This question is worth 14 marks. Make sure you address all parts systematically."
+    examTip: "The most common errors: (1) forgetting Pt electrodes when both half-cell species are in solution - this is flagged in 6 out of 8 AQA examiner reports. (2) Writing 'electrons flow through the salt bridge' - electrons flow in the external wire ONLY; the salt bridge carries ions. (3) Getting anode/cathode wrong: anode = oxidation = more negative E°; cathode = reduction = more positive E°."
   },
   {
-    id: "doc53",
+    id: "aqa15",
     board: "aqa",
-    category: "Atomic Structure & Periodicity",
-    marks: 13,
-    question: `nergiesacross Period 3. Explain your answer.How sulfur deviates from the trend Explanation (3)(e) A general trend exists in the first ionisation energies of the Period 2 elements lithium tofluorine. Identify one element which deviates from this general trend.`,
+    category: "Energetics",
+    marks: 6,
+    question: `For the reaction: TiO2(s) + 2C(s) + 2Cl2(g) → 2CO(g) + TiCl4(l)   ΔH° = -60.0 kJ mol-1
+
+Some entropy data are given below:
+TiO2(s): S° = 50.2 J K-1 mol-1
+C(s): S° = 5.7 J K-1 mol-1
+Cl2(g): S° = 223 J K-1 mol-1
+CO(g): S° = 198 J K-1 mol-1
+TiCl4(l): S° = 253 J K-1 mol-1
+
+(a) Calculate the standard entropy change ΔS° for the reaction.
+(b) Calculate the Gibbs free-energy change ΔG° at 989 °C. Give your answer to 3 significant figures.
+(c) Use your answer to explain whether this reaction is feasible at 989 °C.`,
     markScheme: [
-      "dependent upon a reasonable attempt at",
-      "(e) Boron/B or oxygen/O/O21"
+      "ΔS°(reaction) = ΣS°(products) - ΣS°(reactants) = [2(198) + 253] - [50.2 + 2(5.7) + 2(223)] = 649 - 507.6 = +141 J K-1 mol-1",
+      "Temperature must be converted to Kelvin: T = 989 + 273 = 1262 K",
+      "ΔS must be converted from J to kJ: ΔS° = +141/1000 = +0.141 kJ K-1 mol-1",
+      "ΔG = ΔH - TΔS = -60.0 - (1262 × 0.141) = -60.0 - 177.9 = -238 kJ mol-1",
+      "ΔG is negative (-238 kJ mol-1), so the reaction is feasible/spontaneous at 989 °C",
+      "The reaction is feasible because even though ΔH is only slightly negative, the large positive ΔS and high temperature make the -TΔS term large enough to give a significantly negative ΔG"
     ],
-    examTip: "This question is worth 13 marks. Make sure you address all parts systematically."
+    examTip: "Two critical unit conversions that lose marks every year: (1) Temperature MUST be in Kelvin (T = °C + 273). (2) ΔS MUST be converted from J K-1 mol-1 to kJ K-1 mol-1 (divide by 1000) before using in ΔG = ΔH - TΔS. If you forget either conversion, ΔG will be completely wrong. Answer to 3 sig figs as specified."
   },
   {
-    id: "doc54",
+    id: "aqa16",
     board: "aqa",
-    category: "Bonding & Structure",
-    marks: 5,
-    question: `A molecule of ClF3 reacts with a molecule of AsF5 as shown in the following equation.ClF3 + AsF5 → ClF2+ + AsF6–Use your understanding of electron pair repulsion to draw the shape of the AsF5 molecule andthe shape of the ClF2+ ion. Include any lone pairs of electrons.Name the shape made by the atoms in the AsF5 molecule and in the ClF2+ ion.Predict the bond angle in the ClF2+ ion.`,
+    category: "Period 3",
+    marks: 6,
+    question: `The reactions of period 3 elements with water vary across the period.
+
+(a) Write balanced equations for the reactions of sodium (Na) and magnesium (Mg) with water.
+(b) Explain the difference in reactivity between sodium and magnesium with water. Refer to the relevant ionisation energies.
+(c) Write an equation for the reaction of sodium oxide (Na2O) with water, and state whether the resulting solution is acidic, alkaline or neutral.
+(d) Write an equation for the reaction of phosphorus(V) oxide (P4O10) with water, and state whether the resulting solution is acidic, alkaline or neutral.`,
     markScheme: [
-      "independentlyM1 for 5 bond pairs around AsDo not penalise A for As or Fl for F1trigonal/triangular bipyramid(al)"
+      "Na + H2O → NaOH + 1/2 H2 (or 2Na + 2H2O → 2NaOH + H2); Mg + 2H2O → Mg(OH)2 + H2 (Mg reacts only slowly with cold water; reacts vigorously with steam)",
+      "Sodium is more reactive than magnesium: sodium has a lower first ionisation energy (and lower sum of first + second IE), so it loses electrons more easily to form Na+ ions",
+      "The outer electron in Na is in the 3s subshell with less nuclear attraction (larger atom); Mg has a greater nuclear charge and two electrons to lose, requiring more energy",
+      "Na2O + H2O → 2NaOH; the resulting solution is alkaline (NaOH is a strong base, fully dissociates to give OH-)",
+      "P4O10 + 6H2O → 4H3PO4; the resulting solution is acidic (phosphoric acid is a weak acid)",
+      "Sodium oxide is a basic oxide (metal oxide); phosphorus(V) oxide is an acidic oxide (non-metal oxide): this illustrates the trend from basic to acidic oxides across period 3"
     ],
-    examTip: "This question is worth 5 marks. Make sure you address all parts systematically."
+    examTip: "Remember P4O10, NOT P2O5. P2O5 is penalised as incorrect in AQA mark schemes. This error appears in the examiner report for NOV20, NOV21 and JUN22. The formula P4O10 reflects the actual molecule structure. Also: Na reacts vigorously with cold water; Mg only reacts slowly with cold water but vigorously with steam."
   },
   {
-    id: "doc55",
+    id: "aqa17",
+    board: "aqa",
+    category: "Energetics",
+    marks: 6,
+    question: `Magnesium chloride (MgCl2) has a theoretical (perfect ionic model) lattice enthalpy of formation of -2523 kJ mol-1.
+
+The following enthalpy data are available:
+Enthalpy of formation of MgCl2(s): -641 kJ mol-1
+Enthalpy of atomisation of Mg(s): +148 kJ mol-1
+First ionisation energy of Mg: +738 kJ mol-1
+Second ionisation energy of Mg: +1451 kJ mol-1
+Enthalpy of atomisation of Cl2(g): +122 kJ mol-1
+First electron affinity of Cl(g): -349 kJ mol-1
+
+(a) Calculate the experimental lattice enthalpy of formation of MgCl2 from the Born-Haber cycle.
+(b) Compare the theoretical and experimental values and explain what this comparison indicates about the bonding in MgCl2.`,
+    markScheme: [
+      "Applying Hess's law: ΔHlatt = ΔHf - ΔHat(Mg) - IE1(Mg) - IE2(Mg) - 2×ΔHat(Cl) - 2×EA(Cl)",
+      "ΔHlatt = -641 - 148 - 738 - 1451 - 2(122) - 2(-349) = -641 - 148 - 738 - 1451 - 244 + 698",
+      "ΔHlatt = -2524 kJ mol-1 (accept -2523 to -2526 kJ mol-1)",
+      "The key step requiring care: 2 moles of Cl are needed for MgCl2, so both ΔHat(Cl) and EA(Cl) must be multiplied by 2 (factors of 2)",
+      "The experimental value (-2524 kJ mol-1) is slightly more negative than the theoretical value (-2523 kJ mol-1); the difference is small",
+      "This small difference suggests that MgCl2 is close to a perfect ionic compound with very little covalent character; Mg2+ is a small, highly charged cation with high charge density, but the difference from ideal is small"
+    ],
+    examTip: "The factors of 2 for Cl are the most commonly lost marks in Born-Haber calculations. For MgCl2 you need 2 Cl atoms, so: ×2 for atomisation of Cl and ×2 for electron affinity of Cl. Check your answer against the theoretical value: if the experimental value is more negative than theoretical, there is covalent character. If values are very close, bonding is close to purely ionic."
+  },
+  {
+    id: "aqa18",
+    board: "aqa",
+    category: "Transition Metals",
+    marks: 6,
+    question: `The complex ion [Co(en)3]3+, where en represents the bidentate ligand ethane-1,2-diamine (H2NCH2CH2NH2), exists as two optical isomers.
+
+(a) State the coordination number of cobalt in this complex. Explain why [Co(en)3]3+ displays optical isomerism.
+(b) The complex ion [Pt(NH3)2Cl2] exists as two geometric (cis-trans) isomers. Explain what is meant by geometric isomerism and describe the two isomers of [Pt(NH3)2Cl2].
+(c) Explain how the shape of [Pt(NH3)2Cl2] makes it possible for geometric isomers to form.`,
+    markScheme: [
+      "Coordination number of Co = 6 (3 bidentate en ligands, each occupying 2 coordination sites, giving 3×2 = 6)",
+      "[Co(en)3]3+ displays optical isomerism because it has no plane of symmetry / is non-superimposable on its mirror image; the three bidentate ligands wrap around the octahedral centre in a propeller-like arrangement giving a chiral complex",
+      "The two optical isomers (enantiomers) are non-superimposable mirror images of each other; they rotate plane-polarised light in opposite directions",
+      "Geometric isomerism: molecules with the same structural formula but different spatial arrangements due to restricted rotation (in complexes, due to the fixed positions of ligands)",
+      "In cis-[Pt(NH3)2Cl2] (cisplatin): the two NH3 ligands are adjacent (90° apart); the two Cl ligands are adjacent (90° apart)",
+      "[Pt(NH3)2Cl2] is square planar (Pt has a coordination number of 4); restricted rotation around the Pt-ligand bonds means different arrangements of ligands give different, non-interconvertible isomers"
+    ],
+    examTip: "Cisplatin ([Pt(NH3)2Cl2]) is the most frequently examined geometric isomer. The shape is square planar, NOT tetrahedral. In cis-platin: both Cl are adjacent (used as anticancer drug because both Cl can bind to DNA); in trans-platin: both Cl are opposite. For optical isomers, you must say 'non-superimposable mirror images' and mention at least two bidentate ligands."
+  },
+  {
+    id: "aqa19",
+    board: "aqa",
+    category: "Acids & Buffers",
+    marks: 6,
+    question: `Propanoic acid (CH3CH2COOH) has a Ka value of 1.34 × 10-5 mol dm-3.
+
+(a) A solution of propanoic acid has a concentration of 0.0800 mol dm-3. Calculate the pH of this solution.
+(b) A buffer solution contains 0.0400 mol of propanoic acid and 0.0400 mol of sodium propanoate in 500 cm3 of solution. Calculate the pH of this buffer.
+(c) 5.00 cm3 of 1.00 mol dm-3 HCl is added to the buffer in (b). Calculate the new pH of the buffer solution.`,
+    markScheme: [
+      "(a) [H+] = sqrt(Ka × [HA]) = sqrt(1.34 × 10-5 × 0.0800) = sqrt(1.072 × 10-6) = 1.035 × 10-3 mol dm-3; pH = -log(1.035 × 10-3) = 2.99",
+      "pH must be given to 2 decimal places: pH = 2.99 (not 3.0 or 2.9)",
+      "(b) n(HCl) = 1.00 × 0.00500 = 5.00 × 10-3 mol added; n(H+) reacts with propanoate: new n(HA) = 0.0400 + 0.00500 = 0.0450 mol; new n(A-) = 0.0400 - 0.00500 = 0.0350 mol",
+      "(b) Using Henderson-Hasselbalch or Ka expression with equal moles of acid and base: when n(HA) = n(A-), [H+] = Ka = 1.34 × 10-5; pH = -log(1.34 × 10-5) = 4.87",
+      "(c) [H+] = Ka × n(HA)/n(A-) = 1.34 × 10-5 × (0.0450/0.0350) = 1.72 × 10-5; pH = -log(1.72 × 10-5) = 4.76",
+      "The buffer resists the pH change: adding HCl only changed pH from 4.87 to 4.76 (change of 0.11 units), much less than if the acid had been added to water"
+    ],
+    examTip: "pH MUST always be given to 2 decimal places. This is the single most common error flagged in every AQA examiner report since 2017. For the buffer: when H+ is added, it reacts with A- (propanoate), INCREASING n(HA) and DECREASING n(A-). Students often subtract in the wrong direction - H+ reacts with A- not with HA."
+  },
+  {
+    id: "aqa20",
     board: "aqa",
     category: "Electrochemistry",
-    marks: 15,
-    question: `-1-ol, carbondioxide and water only.State one condition necessary to ensure the complete combustion of a fuel in air.Write an equation for the complete combustion of butan-1-ol and state why it can bedescribed as a biofuel.(4)(d) Butan-1-ol reacts with acidified potassium dichromate(VI) solution to produce two organiccompounds.State the class of alcohols to which butan-1-ol belongs.Draw the displayed formula for both of the organic products.State the type of reaction that occurs and the change in colour of the potassiumdichromate(VI) solution.`,
+    marks: 6,
+    question: `A hydrogen fuel cell uses hydrogen and oxygen as fuels. In an alkaline hydrogen fuel cell, the electrolyte is a concentrated aqueous solution of potassium hydroxide.
+
+(a) Write the half-equation for the reaction at the anode in an alkaline hydrogen fuel cell.
+(b) Write the half-equation for the reaction at the cathode in an alkaline hydrogen fuel cell.
+(c) Write the overall equation for the alkaline hydrogen fuel cell.
+(d) State one advantage and one disadvantage of hydrogen fuel cells compared to internal combustion engines, with reference to environmental impact.`,
     markScheme: [
-      "displayed formula must have all bonds drawn out, including theO―H but ignore anglesPenalise “sticks”",
-      "Alcohol X is",
-      "structure must be clearly identifiable as2-methylpropan-2-ol and may be drawn in a variety of ways",
-      "Alcohol Y is named (2)-methylpropan-1-ol ONLYM3 must be correct name, but ignore structures355.(b)",
-      "The infrared spectrum shows an absorption/peak in the range3230 to 3550 (cm–1)(which supports the idea that an alcohol is present)In",
-      ", allow the words “dip”, “spike”, “low transmittance” and“trough” as alternatives for absorption",
-      "Reference to the ‘fingerprint region’ or below 1500 (cm–1)",
-      "Match with or same as known sample/database spectraCheck the spectrum to see if alcohol OH is labelled and credit.ORM2 Run infrared spectra (of the alcohols)",
-      "Find which one matches or is the same as this spectrum.3Aston Manor Academy",
-      "balanced equationC6H12O6 → CH3CH2CH2CH2OH + 2CO2 + H2O or C4H9OHOr multiples for"
+      "Anode (oxidation): H2(g) + 2OH-(aq) → 2H2O(l) + 2e-",
+      "Cathode (reduction): O2(g) + 2H2O(l) + 4e- → 4OH-(aq)",
+      "Overall: 2H2(g) + O2(g) → 2H2O(l)",
+      "Advantage: the only product during operation is water (H2O); no CO2 or NOx emissions during operation, unlike combustion engines which produce greenhouse gases and pollutants",
+      "Disadvantage: hydrogen is usually produced by steam reforming of natural gas (releasing CO2) or by electrolysis (requiring electricity, which may come from fossil fuels); the overall carbon footprint may not be zero",
+      "Fuel cells have higher energy efficiency than combustion engines (no thermodynamic losses from heat engine cycle)"
     ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
+    examTip: "In acidic fuel cells, anode is: H2 → 2H+ + 2e-; cathode: O2 + 4H+ + 4e- → 2H2O. In alkaline fuel cells (the version more commonly examined at AQA), the electrolyte is KOH, so OH- is present. Do not confuse acid and alkaline versions. The overall equation is always 2H2 + O2 → 2H2O regardless of acidic or alkaline conditions."
   },
   {
-    id: "doc56",
+    id: "aqa21",
     board: "aqa",
-    category: "Organic Chemistry",
-    marks: 15,
-    question: `e the white precipitate and state what you would observe when an excess of aqueousammonia is added to it.(3)(d) The reaction of chlorine with ethene is similar to that of bromine with ethene.Name and outline a mechanism for the reaction of chlorine with ethene to form1,2-dichloroethane, as shown by the following equation.H2CCH2 + Cl2 → ClCH2CH2Cl`,
+    category: "Transition Metals",
+    marks: 6,
+    question: `This question is about vanadium chemistry.
+
+(a) State the electron configuration of a vanadium atom (atomic number 23).
+(b) Vanadium forms ions with oxidation states +2, +3, +4 and +5. State the colour and formula of the aqueous ion at each oxidation state.
+(c) Describe how vanadium(V) oxide acts as a catalyst in the Contact process. Write equations for the two steps and explain why vanadium is able to act as a catalyst.`,
     markScheme: [
-      "Cl2 (provides the pale green colour)",
-      "requires the formulaM2 NaOH reacts with the acid(s)/the HCl/the HClO/H+",
-      "requires a correct answer in M2Equilibrium shifts (from left ) to rightOR wtte356.(b)",
-      "A reducing agent is an electron donor OR (readily) loses/gives away electronsPenalise",
-      "if “electron pair donor”",
-      "Cl2 + 2e– → 2Cl–For",
-      ", iodide ions are stronger reducing agents thanchloride ions, because",
-      "insist on “iodide ions”",
-      "Strength of attraction for electron(s) being lostElectron(s) lost from an iodide ion is less strongly held by the nucleuscompared with that lost from a chloride ionM3 and",
-      "must be comparative and should refer to electrons.(assume argument refers to iodide ions but accept converse argumentfor chloride ions)4(c)"
+      "Electron configuration of V: [Ar] 3d3 4s2 (or 1s2 2s2 2p6 3s2 3p6 3d3 4s2)",
+      "V2+: violet; V3+: green; VO2+: blue (oxovanadium(IV), also called vanadyl); VO2+: yellow (dioxovanadium(V))",
+      "In the Contact process, V2O5 acts as a homogeneous/heterogeneous catalyst (it is a solid reacting with gaseous SO2): Step 1: V2O5 oxidises SO2 to SO3; V2O5 + SO2 → V2O4 + SO3 (V is reduced from +5 to +4)",
+      "Step 2: V2O4 is re-oxidised back to V2O5 by oxygen: V2O4 + 1/2 O2 → V2O5 (V is oxidised from +4 to +5)",
+      "Overall: SO2 + 1/2 O2 → SO3 (V2O5 is regenerated and acts as a catalyst)",
+      "Vanadium can act as a catalyst because it can use variable oxidation states (+4 and +5 in this reaction) to accept then donate electrons, providing an alternative lower activation energy pathway"
     ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
+    examTip: "The vanadium oxidation states and their colours: +2 violet, +3 green, +4 blue (VO2+), +5 yellow (VO2+). The most common errors: getting the formulae wrong (VO2+ for V4+, VO2+ for V5+) and reversing the steps in the Contact process mechanism. The V2O5 is reduced in step 1 (SO2 is oxidised to SO3) then re-oxidised in step 2."
   },
   {
-    id: "doc57",
+    id: "aqa22",
     board: "aqa",
-    category: "Inorganic Chemistry",
-    marks: 18,
-    question: `olution is 1.74 × 10–5 mol dm–3(i) Write an expression for the acid dissociation constant, Ka, for ethanoic acid.(1)(ii) Calculate the pH of 0.410 mol dm–3 ethanoic acid at this temperature.(3)(iii) Calculate the pH of the buffer solution formed when 10.00 cm3 of 0.100 mol dm–3potassium hydroxide are added to 25.00 cm3 of 0.410 mol dm–3 ethanoic acid.`,
+    category: "Mass Spectrometry",
+    marks: 6,
+    question: `In a time-of-flight (TOF) mass spectrometer, ions are accelerated through a potential difference of 9000 V. All ions enter the flight tube with the same kinetic energy.
+
+(a) Give the equation that relates kinetic energy to mass and velocity: KE = 1/2 mv2. Explain why, given the same KE, a heavier ion travels more slowly.
+(b) A 24Mg+ ion has a kinetic energy of 1.44 × 10-15 J after acceleration. Calculate the time, in seconds, for this ion to travel the length of the flight tube (length = 0.800 m). Give your answer to 3 significant figures. (NA = 6.02 × 1023 mol-1)
+(c) Define the term relative atomic mass.`,
     markScheme: [
-      "mol OH– = (10.0 × 10–3) × 0.10 = 1.0 × 10–3If no subtraction or other wrong chemistry the max score is 3 forM1",
-      "and M41M2 orig mol HA = (25.0 × 10–3) × 0.41 = 0.010251or 1.025 × 10–2 or 1.03 × 10–2Aston Manor Academy",
-      "mol HA in buffer = orig mol HA – mol OH–1 = 0.00925 or 0.0093If A– is wrong, max 3 for",
-      "or use ofpH = pKa – log [HA]/[A–]",
-      "mol A– in buffer = mol OH– = 1.0 × 10–3Mark is for insertion of correct numbers in correct expression for[H+]11(= 1.61 × 10–4 or 1.62 × 10–4)",
-      "pH = 3.79 can give six ticks for 3.79if [HA]/[A–] upside down lose",
-      "& M6If wrong method e.g. [H+]2/[HA] max 3 for",
-      "and M3Some may calculate concentrations[HA] = 0.264 and [A–] = 0.0286 and rounding this to 0.029 gives pH= 3.80 (which is OK)NB Unlike (c)(ii), this pH mark is"
+      "(a) From KE = 1/2 mv2: v = sqrt(2KE/m); for the same KE, a larger m gives a smaller v (heavier ion travels more slowly); the heavier ion therefore takes longer to reach the detector",
+      "(b) Mass of one 24Mg atom: m = (24 × 10-3) / (6.02 × 1023) = 3.987 × 10-26 kg",
+      "(b) v = sqrt(2 × 1.44 × 10-15 / 3.987 × 10-26) = sqrt(7.225 × 1010) = 2.688 × 105 m s-1",
+      "(b) t = L/v = 0.800 / (2.688 × 105) = 2.98 × 10-6 s (accept 2.97 to 2.99 × 10-6 s)",
+      "(c) The weighted mean mass of an atom of an element relative to one-twelfth of the mass of one atom of carbon-12",
+      "All three components required for full marks: (1) weighted mean/average, (2) atom (not molecule), (3) one-twelfth of carbon-12 (not just 'carbon' or 'carbon-12')"
     ],
-    examTip: "This question is worth 18 marks. Make sure you address all parts systematically."
+    examTip: "The most commonly lost mark in TOF calculations is forgetting to convert mass to kg per single atom. You must divide the molar mass by 1000 (g to kg) and then by NA (mol-1 to per-atom). If you use mass in grams or in g mol-1 the answer is completely wrong. For the relative atomic mass definition: all three parts required (weighted mean, atom, carbon-12 standard)."
   },
   {
-    id: "doc58",
+    id: "aqa23",
     board: "aqa",
-    category: "Bonding & Structure",
-    marks: 15,
-    question: `(a) State and explain the trend in electronegativities across Period 3 from sodium to sulfur.(4)58.(b) Explain why the oxides of the Period 3 elements sodium and phosphorus have differentmelting points. In your answer you should discuss the structure of and bonding in theseoxides, and the link between electronegativity and the type of bonding.(6)(c) A chemical company has a waste tank of volume 25 000 dm3. The tank is full of phosphoricacid (H3PO4) solution formed by adding some unwanted phosphorus(V) oxide to water inthe tank.A 25.0 cm3 sample of this solution required 21.2 cm3 of 0.500 mol`,
+    category: "Equilibrium",
+    marks: 6,
+    question: `Carbon monoxide and hydrogen react reversibly to form methanol:
+
+CO(g) + 2H2(g) ⇌ CH3OH(g)   ΔH = -91 kJ mol-1
+
+At equilibrium at a certain temperature, the mixture contains: 2.76 mol CO, 4.51 mol H2 and 0.360 mol CH3OH. The total pressure is 630 kPa.
+
+(a) Write an expression for Kp for this reaction.
+(b) Calculate the mole fraction and partial pressure of each species at equilibrium.
+(c) Calculate Kp and state its units.`,
     markScheme: [
-      "is for 1/31Moles of P in 25000 l = 0.00353 × 106 = 3.53 × 103M3 is for factor of 1,000,0001Moles of P4O10 = 3.53 × 103/4M4 is for factor of 1/4 (or 1/2 if P2O5)1Mass of P4O10 = 3.53 × 103/4 × 284 = 0.251 × 106 g = 251 kg(Or if P2O5 3.53 × 103/2 × 142",
-      "is for multiplying moles by Mr with correct unitsallow conseq on incorrect",
-      "(allow 250-252)1"
+      "(a) Kp = p(CH3OH) / [p(CO) × p(H2)2]; must use p notation (not square brackets)",
+      "Total moles = 2.76 + 4.51 + 0.360 = 7.63 mol; mole fractions: x(CO) = 2.76/7.63 = 0.3617; x(H2) = 4.51/7.63 = 0.5910; x(CH3OH) = 0.360/7.63 = 0.04719",
+      "Partial pressures: p(CO) = 0.3617 × 630 = 228 kPa; p(H2) = 0.5910 × 630 = 372 kPa; p(CH3OH) = 0.04719 × 630 = 29.7 kPa",
+      "Kp = p(CH3OH) / [p(CO) × p(H2)2] = 29.7 / (228 × 3722)",
+      "Kp = 29.7 / (228 × 138384) = 29.7 / (3.155 × 107) = 9.41 × 10-7",
+      "Units: kPa / (kPa × kPa2) = kPa-2 (Kp = 9.41 × 10-7 kPa-2)"
     ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
+    examTip: "Five-step method for Kp: (1) equilibrium moles, (2) total moles, (3) mole fractions, (4) partial pressures = mole fraction × total pressure, (5) substitute into Kp expression. Units are derived from the expression: check powers. Here: kPa / (kPa × kPa2) = kPa-2. Always use p notation (p(NH3), not [NH3]). Never forget to raise partial pressures to the stoichiometric power."
   },
   {
-    id: "doc59",
+    id: "aqa24",
     board: "aqa",
-    category: "Bonding & Structure",
-    marks: 15,
-    question: `ment.(2)(ii) Sketch a curve to show how you would expect the concentration of manganate(VII)ions to change with time until the colour has faded because the concentration hasreached a very low value. Explain the shape of the curve.`,
+    category: "Period 3",
+    marks: 6,
+    question: `This question is about Period 3 structure and bonding.
+
+Use your knowledge of structure and bonding to explain why the melting point of sodium (Na) is much lower than that of magnesium (Mg), and why silicon (Si) has a much higher melting point than phosphorus (P4).
+
+Your answer should discuss the type of bonding and/or forces that must be overcome in each case.`,
     markScheme: [
-      "Use the mark scheme to award up to 15 marks based on the key chemistry points covered."
+      "Sodium has metallic bonding: a lattice of positive Na+ ions held together by a sea of delocalised electrons; electrostatic attraction between the ions and electrons must be overcome on melting",
+      "Magnesium has metallic bonding but Mg2+ ions and two delocalised electrons per atom; the charge on Mg2+ is greater and the ion is smaller, so there is a stronger electrostatic attraction (higher charge density), requiring more energy to overcome; hence Mg has a higher melting point",
+      "Silicon has a giant covalent (macromolecular) structure: strong covalent bonds are present throughout the lattice in all three dimensions",
+      "A large amount of energy is required to break these strong covalent bonds, so silicon has a very high melting point (1414 °C)",
+      "White phosphorus exists as simple molecular P4 molecules; there are only weak London dispersion (van der Waals) forces between P4 molecules",
+      "Very little energy is required to overcome these weak intermolecular forces; covalent bonds within the P4 molecule are NOT broken on melting; hence phosphorus has a much lower melting point than silicon"
     ],
-    examTip: "This question is worth 15 marks. Make sure you address all parts systematically."
+    examTip: "For Na vs Mg comparison: both are metallic, but Mg2+ has double the charge and is smaller, giving stronger metallic bonding. For Si vs P4: the key contrast is 'giant covalent (covalent bonds broken on melting)' vs 'simple molecular (only van der Waals overcome, covalent bonds NOT broken)'. A very common error is stating 'covalent bonds are broken when P4 melts' - this is WRONG."
   },
   {
-    id: "doc60",
+    id: "aqa25",
     board: "aqa",
-    category: "Bonding & Structure",
-    marks: 20,
-    question: `(a) Describe the bonding in, and the structure of, sodium chloride and ice. In each case draw adiagram showing how each structure can be represented. Explain, by reference to thetypes of bonding present, why the melting point of these two compounds is very different.(12)60.(b) Explain how the concept of bonding and non-bonding electron pairs can be used to predictthe shape of, and bond angles in, a molecule of sulfur tetrafluoride, SF4.Illustrate your answer with a diagram of the structure.`,
+    category: "Acids & Buffers",
+    marks: 6,
+    question: `At 37 °C (body temperature), Kw = 2.09 × 10-14 mol2 dm-6.
+
+(a) Calculate the pH of pure water at 37 °C. State whether pure water at 37 °C is acidic, alkaline or neutral, and explain your answer.
+(b) A weak acid HX has Ka = 2.62 × 10-5 mol dm-3. A solution of HX is prepared with concentration 0.200 mol dm-3. Calculate the pH of this solution.
+(c) Explain what happens to the pH of pure water when the temperature is raised from 25 °C to 37 °C. Is this change consistent with Le Chatelier's principle?`,
     markScheme: [
-      "(b)MarkRangeThe marking scheme for this part of the question includes an overallassessment for the Quality of Written Communication (QWC)"
+      "(a) [H+] = [OH-] = sqrt(Kw) = sqrt(2.09 × 10-14) = 1.446 × 10-7 mol dm-3; pH = -log(1.446 × 10-7) = 6.84",
+      "(a) Pure water at 37 °C is NEUTRAL, not acidic. Even though pH = 6.84 (below 7), [H+] = [OH-] still, so the solution is neutral. A neutral solution has [H+] = [OH-]; 'neutral' does not mean pH = 7.",
+      "(b) [H+] = sqrt(Ka × [HA]) = sqrt(2.62 × 10-5 × 0.200) = sqrt(5.24 × 10-6) = 2.289 × 10-3 mol dm-3",
+      "(b) pH = -log(2.289 × 10-3) = 2.64 (must be to 2 decimal places)",
+      "(c) When temperature increases, Kw increases (more water molecules dissociate); [H+] and [OH-] both increase, so pH decreases (becomes less than 7)",
+      "(c) This is consistent with Le Chatelier's principle: the dissociation of water (H2O ⇌ H+ + OH-) is endothermic; increasing temperature shifts equilibrium to the right, increasing [H+] and [OH-], so Kw increases"
     ],
-    examTip: "This question is worth 20 marks. Make sure you address all parts systematically."
-  }
-,
+    examTip: "Key misconception: pure water is ALWAYS neutral, regardless of temperature. Neutral means [H+] = [OH-]. At 37°C, pH of neutral water is 6.84, NOT 7.00. A pH below 7 does NOT mean acidic if [H+] = [OH-]. This distinction appears in AQA mark schemes. Always give pH to 2 decimal places."
+  },
   {
     id: "ocr01",
     board: "ocr",
@@ -2564,7 +2218,7 @@ const EXTENDED_QUESTIONS = [
     board: "ocr",
     category: "Bonding & Structure",
     marks: 6,
-    question: `Aluminium forms compounds with group 7 elements with the empirical formula AlX3. Aluminium chloride and aluminium fluoride are both solids which sublime (they turn from a solid to a gas when heated). The sublimation temperature of aluminium fluoride is over 1000°C higher than that of aluminium fluoride. Explain why the two halides have such different sublimation temperatures. You should refer to the structure and bonding present in the two compounds and also refer to the electronegativity values given below: Element Electronegativity value Aluminium 1.5 Chlorine 3.0 Fluorine 4.0`,
+    question: `Aluminium forms compounds with group 7 elements with the empirical formula AlX3. Aluminium chloride and aluminium fluoride are both solids which sublime (they turn from a solid to a gas when heated). The sublimation temperature of aluminium fluoride is over 1000°C higher than that of aluminium chloride. Explain why the two halides have such different sublimation temperatures. You should refer to the structure and bonding present in the two compounds and also refer to the electronegativity values given below: Element Electronegativity value Aluminium 1.5 Chlorine 3.0 Fluorine 4.0`,
     markScheme: [
       "Fluorine is more electronegative than chlorine.",
       "When aluminium bonds with fluorine, the electronegativity difference is large and aluminium fluoride is an ionic compound.",
@@ -2859,15 +2513,20 @@ const EXTENDED_QUESTIONS = [
     board: "ocr",
     category: "Practical Chemistry",
     marks: 6,
-    question: `Hydrated sodium carbonate (Na2CO3.10H2O) is a solid at room temperature and is soluble in water. Describe how you would prepare 250cm3 of a solution of hydrated sodium carbonate (Na2CO3.10H2O) with an accurately known concentration of approximately 0.0100 moldm-3. You should include a calculation with your answer.  Mark scheme and notes If you’re a student, make sure you try the question under exam conditions before you look at the mark scheme to get the most out of the practice. You can allow a little more than one minute per mark, as these questions usually take a bit longer (other questions will take less than one minute usually). Each question comes with a “model answer” – this does not `,
+    question: `Hydrated sodium carbonate (Na2CO3.10H2O) is a solid at room temperature and is soluble in water.
+
+Describe how you would prepare 250 cm3 of a solution of hydrated sodium carbonate with an accurately known concentration of approximately 0.0100 mol dm-3. Show a calculation to determine the mass of solid required.
+
+Mr(Na2CO3) = 106; Mr(H2O) = 18`,
     markScheme: [
-      "Weighing the solid/calculations: Moles of solid = 0.01 x 0.25 = 0.0025 Mr = 106 + (10 x 18) = 286 Mass of solid required = 0.0025 x 286 = 0.715g • Zero the balance and add an empty weighing boat.",
-      "Note the mass and add approximately 0.715g solid.",
-      "Write down the mass of solid and weighing boat. • Add the solid to a clean dry beaker, then reweigh the weighing boat.",
-      "Subtract the mass of the empty boat to obtain the accurate mass of solid used.",
-      "Making the solution: • Add around 100 cm3 distilled water to the beaker and stir to dissolve the solid • Pour the solution into a 250cm3 volumetric flask using a funnel • Rinse the beaker with more distilled water and add to the flask • Add distilled water to the flask until just"
+      “Calculation: moles of solute required = 0.0100 mol dm-3 × 0.250 dm3 = 2.50 × 10-3 mol; Mr(Na2CO3.10H2O) = 106 + (10 × 18) = 286; mass required = 2.50 × 10-3 × 286 = 0.715 g”,
+      “Weigh an empty weighing boat on a balance; record the mass; add approximately 0.715 g of the solid; record the new mass; calculate the actual mass used by difference”,
+      “Dissolve the solid in a small volume (approximately 100 cm3) of distilled water in a clean beaker, stirring to ensure complete dissolution”,
+      “Transfer the solution to a 250 cm3 volumetric flask using a funnel; rinse the beaker at least three times with distilled water and add all rinsings to the flask”,
+      “Add distilled water carefully to the flask until the bottom of the meniscus just reaches the 250 cm3 graduation mark (stopper and invert several times to mix thoroughly)”,
+      “The concentration is accurately known because: (1) the mass of solid is measured accurately by weighing by difference; (2) the volume is accurately defined by the volumetric flask graduation mark”
     ],
-    examTip: "OCR A: be specific and systematic. List reagents, observations and conclusions clearly."
+    examTip: “OCR A: be specific and systematic. Key points the examiner looks for: (1) weighing by difference (not just ‘weigh the solid’), (2) rinsing the beaker into the flask to ensure all solid is transferred, (3) adding water to the graduation mark (not ‘fill to 250 cm3’), (4) inverting to mix. State WHY you rinse (to ensure complete transfer) and why you use a volumetric flask (accurately known volume).”
   }
 ];
 
