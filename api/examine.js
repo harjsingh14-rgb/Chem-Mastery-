@@ -5,40 +5,36 @@
 const Anthropic = require("@anthropic-ai/sdk");
 
 module.exports = async function handler(req, res) {
-  // Only allow POST
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  const { question, markScheme, studentAnswer, maxMarks } = req.body || {};
-
-  if (!studentAnswer || !markScheme || !question) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
-  const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
-
-  if (!apiKey) {
-    return res.status(500).json({ error: "API key not configured" });
-  }
-
-  if (!apiKey.startsWith("sk-ant-")) {
-    return res.status(500).json({ error: "API key format invalid — check Vercel environment variables" });
-  }
-
-  let client;
+  // Outer catch-all — nothing should escape unhandled
   try {
-    client = new Anthropic({ apiKey });
-  } catch (err) {
-    console.error("Anthropic client init error:", err);
-    return res.status(500).json({ error: "Failed to initialise AI client", detail: err.message });
-  }
+    // Only allow POST
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Method not allowed" });
+    }
 
-  const schemeLines = markScheme
-    .map((point, i) => `${i + 1}. ${point}`)
-    .join("\n");
+    const { question, markScheme, studentAnswer, maxMarks } = req.body || {};
 
-  const prompt = `You are an experienced A-Level Chemistry examiner marking a student's extended response.
+    if (!studentAnswer || !markScheme || !question) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
+
+    if (!apiKey) {
+      return res.status(500).json({ error: "API key not configured" });
+    }
+
+    if (!apiKey.startsWith("sk-ant-")) {
+      return res.status(500).json({ error: "API key format invalid — re-paste from Anthropic console in Vercel env vars" });
+    }
+
+    const client = new Anthropic({ apiKey });
+
+    const schemeLines = Array.isArray(markScheme)
+      ? markScheme.map((point, i) => `${i + 1}. ${point}`).join("\n")
+      : String(markScheme);
+
+    const prompt = `You are an experienced A-Level Chemistry examiner marking a student's extended response.
 
 QUESTION (${maxMarks} marks):
 ${question}
@@ -65,7 +61,6 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
   "modelAnswer": "<concise model student answer covering all mark scheme points in full connected sentences>"
 }`;
 
-  try {
     const message = await client.messages.create({
       model: "claude-3-5-haiku-20241022",
       max_tokens: 1024,
@@ -93,8 +88,14 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
     }
 
     return res.status(200).json(result);
+
   } catch (err) {
-    console.error("Anthropic API error:", err);
-    return res.status(502).json({ error: "AI Examiner unavailable", detail: err.message });
+    // Catch-all — return the real error so we can diagnose it
+    console.error("examine.js unhandled error:", err);
+    return res.status(500).json({
+      error: `Examiner error: ${err.message}`,
+      errorName: err.name,
+      errorType: err.constructor?.name,
+    });
   }
 };
