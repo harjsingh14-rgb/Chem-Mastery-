@@ -1509,94 +1509,161 @@ const CALC_SETS = [
   {
     id: "calc_moles", title: "Moles & Amount of Substance", color: "#29ABE2", board: "both",
     questions: [
-      { q: "Calculate the number of moles in 5.6 g of iron (Fe).", hint: "Use n = m/M. Mr of Fe = 56 g mol⁻¹.", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Mr of Fe = 56 g mol⁻¹", "n = m ÷ M = 5.6 ÷ 56", "n = 0.10 mol"] },
-      { q: "How many moles are in 2.20 g of carbon dioxide (CO₂)?", hint: "Calculate Mr of CO₂ first: C=12, O=16.", answer: 0.05, unit: "mol", tolerance: 0.003, steps: ["Mr of CO₂ = 12 + (2×16) = 44 g mol⁻¹", "n = m ÷ M = 2.20 ÷ 44", "n = 0.050 mol"] },
-      { q: "What mass of sodium hydroxide (NaOH) contains 0.25 mol? (Mr NaOH = 40)", hint: "Rearrange n = m/M to give m = n × M.", answer: 10, unit: "g", tolerance: 0.1, steps: ["m = n × M", "m = 0.25 × 40", "m = 10 g"] },
-      { q: "Calculate the concentration (mol dm⁻³) of a solution containing 0.050 mol of HCl in 250 cm³ of solution.", hint: "Convert cm³ to dm³ first: divide by 1000.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["V = 250 cm³ = 0.250 dm³", "c = n ÷ V = 0.050 ÷ 0.250", "c = 0.20 mol dm⁻³"] },
-      { q: "How many moles of gas occupy 6.0 dm³ at RTP? (Molar volume at RTP = 24.0 dm³ mol⁻¹)", hint: "n = V ÷ molar volume", answer: 0.25, unit: "mol", tolerance: 0.01, steps: ["n = V ÷ Vm = 6.0 ÷ 24.0", "n = 0.25 mol"] },
-      { q: "Calculate the volume (dm³) occupied by 0.40 mol of gas at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "V = n × molar volume", answer: 9.6, unit: "dm³", tolerance: 0.05, steps: ["V = n × Vm = 0.40 × 24.0", "V = 9.6 dm³"] },
-      { q: "Using PV = nRT, calculate the pressure (Pa) exerted by 0.10 mol of gas in a 2.0 dm³ container at 300 K. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Rearrange PV=nRT for P. Convert V to m³ (÷1000).", answer: 124710, unit: "Pa", tolerance: 500, steps: ["V = 2.0 dm³ = 0.0020 m³", "P = nRT ÷ V", "P = (0.10 × 8.314 × 300) ÷ 0.0020", "P = 249.42 ÷ 0.0020 = 124 710 Pa"] },
-      { q: "Calculate the % atom economy for making ethanol (Mr = 46) by hydration of ethene: C₂H₄ + H₂O → C₂H₅OH. (Mr C₂H₄ = 28, Mr H₂O = 18)", hint: "Atom economy = (Mr desired product ÷ sum of Mr all reactants) × 100", answer: 100, unit: "%", tolerance: 1, steps: ["Sum of Mr of reactants = 28 + 18 = 46", "Desired product Mr = 46", "Atom economy = (46 ÷ 46) × 100 = 100%", "This is a 100% atom economy reaction - all atoms end up in the product."] },
-      { q: "A reaction produces 4.2 g of product. The theoretical yield was 6.0 g. Calculate the % yield.", hint: "% yield = (actual ÷ theoretical) × 100", answer: 70, unit: "%", tolerance: 0.5, steps: ["% yield = (actual yield ÷ theoretical yield) × 100", "% yield = (4.2 ÷ 6.0) × 100", "% yield = 70%"] },
+      // EASY
+      { difficulty: "easy", q: "Calculate the number of moles in 5.6 g of iron (Fe). (Ar of Fe = 56)", hint: "n = m ÷ M", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["n = m ÷ M = 5.6 ÷ 56", "n = 0.10 mol"] },
+      { difficulty: "easy", q: "What mass of sodium hydroxide (NaOH) contains 0.25 mol? (Mr NaOH = 40)", hint: "m = n × M", answer: 10, unit: "g", tolerance: 0.1, steps: ["m = n × M = 0.25 × 40", "m = 10 g"] },
+      { difficulty: "easy", q: "How many moles of gas occupy 4.8 dm³ at RTP? (Molar volume = 24.0 dm³ mol⁻¹)", hint: "n = V ÷ Vm", answer: 0.2, unit: "mol", tolerance: 0.005, steps: ["n = V ÷ Vm = 4.8 ÷ 24.0", "n = 0.20 mol"] },
+      // MEDIUM
+      { difficulty: "medium", q: "How many moles are in 2.20 g of carbon dioxide (CO₂)? (Mr CO₂ = 44)", hint: "n = m ÷ M. Calculate Mr of CO₂ first: C=12, O=16.", answer: 0.05, unit: "mol", tolerance: 0.003, steps: ["Mr of CO₂ = 12 + (2×16) = 44 g mol⁻¹", "n = m ÷ M = 2.20 ÷ 44 = 0.050 mol"] },
+      { difficulty: "medium", q: "Calculate the concentration (mol dm⁻³) of a solution containing 0.050 mol of HCl in 250 cm³ of solution.", hint: "Convert cm³ to dm³ first (divide by 1000), then c = n ÷ V.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["V = 250 ÷ 1000 = 0.250 dm³", "c = n ÷ V = 0.050 ÷ 0.250 = 0.20 mol dm⁻³"] },
+      { difficulty: "medium", q: "Calculate the volume (dm³) occupied by 0.40 mol of gas at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "V = n × Vm", answer: 9.6, unit: "dm³", tolerance: 0.05, steps: ["V = n × Vm = 0.40 × 24.0 = 9.6 dm³"] },
+      { difficulty: "medium", q: "A reaction produces 4.2 g of product. The theoretical yield was 6.0 g. Calculate the % yield.", hint: "% yield = (actual ÷ theoretical) × 100", answer: 70, unit: "%", tolerance: 0.5, steps: ["% yield = (actual ÷ theoretical) × 100", "% yield = (4.2 ÷ 6.0) × 100 = 70%"] },
+      // HARD
+      { difficulty: "hard", q: "Using PV = nRT, calculate the pressure (Pa) exerted by 0.10 mol of gas in a 2.0 dm³ container at 300 K. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Rearrange for P. Convert V to m³ by dividing by 1000.", answer: 124710, unit: "Pa", tolerance: 500, steps: ["V = 2.0 dm³ = 0.0020 m³", "P = nRT ÷ V = (0.10 × 8.314 × 300) ÷ 0.0020", "P = 249.42 ÷ 0.0020 = 124 710 Pa"] },
+      { difficulty: "hard", q: "2Mg(s) + O₂(g) → 2MgO(s). 4.80 g of Mg reacts with excess O₂. The actual yield of MgO is 5.60 g. Calculate the % yield. (Mr: Mg=24, MgO=40)", hint: "Find moles of Mg, use 1:1 mole ratio for MgO, then calculate theoretical mass.", answer: 70.0, unit: "%", tolerance: 0.5, steps: ["n(Mg) = 4.80 ÷ 24 = 0.200 mol", "n(MgO) = 0.200 mol (1:1 mole ratio)", "Theoretical mass MgO = 0.200 × 40 = 8.00 g", "% yield = (5.60 ÷ 8.00) × 100 = 70.0%"] },
+      { difficulty: "hard", q: "Calculate the % atom economy for making ethanol by fermentation:\nC₆H₁₂O₆ → 2C₂H₅OH + 2CO₂\n(Mr: C₆H₁₂O₆=180, C₂H₅OH=46)", hint: "Atom economy = (total Mr of desired product(s) ÷ total Mr of reactants) × 100. Both moles of ethanol are desired.", answer: 51.1, unit: "%", tolerance: 0.5, steps: ["Total Mr of desired products = 2 × 46 = 92", "Total Mr of reactants = 180", "Atom economy = (92 ÷ 180) × 100 = 51.1%"] },
+      // EXAM
+      { difficulty: "exam", q: "0.580 g of butane (C₄H₁₀, Mr=58) is burned completely:\nC₄H₁₀ + 13/2 O₂ → 4CO₂ + 5H₂O\nCalculate the volume (dm³) of CO₂ produced at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "Find moles of butane, use the 4:1 mole ratio for CO₂, then calculate volume.", answer: 0.960, unit: "dm³", tolerance: 0.01, steps: ["n(C₄H₁₀) = 0.580 ÷ 58 = 0.01000 mol", "n(CO₂) = 4 × 0.01000 = 0.04000 mol", "V(CO₂) = 0.04000 × 24.0 = 0.960 dm³"] },
+      { difficulty: "exam", q: "200 cm³ of gas is collected at 300 K and constant pressure. The temperature is raised to 375 K. Using Charles's Law (V₁/T₁ = V₂/T₂), calculate the new volume (cm³).", hint: "Rearrange Charles's Law for V₂ = V₁ × (T₂ ÷ T₁).", answer: 250, unit: "cm³", tolerance: 2, steps: ["V₂ = V₁ × T₂ ÷ T₁", "V₂ = 200 × 375 ÷ 300", "V₂ = 250 cm³"] },
     ]
   },
   {
     id: "calc_formula", title: "Empirical & Molecular Formula", color: "#0090cc", board: "both",
     questions: [
-      { q: "A compound contains 40.0% C, 6.7% H and 53.3% O by mass. Find its empirical formula. (Give the formula as e.g. CH2O)", hint: "Divide each % by its Ar to get mole ratios, then simplify.", answer: "CH2O", unit: "", tolerance: 0, isText: true, steps: ["C: 40.0÷12 = 3.33 mol", "H: 6.7÷1 = 6.7 mol", "O: 53.3÷16 = 3.33 mol", "Ratio C:H:O = 3.33:6.7:3.33 → divide by 3.33 → 1:2:1", "Empirical formula = CH₂O"] },
-      { q: "The empirical formula of a compound is CH₂ and its Mr is 56. What is the molecular formula? (Type as e.g. C4H8)", hint: "Find the empirical formula mass, then divide Mr by it to get n.", answer: "C4H8", unit: "", tolerance: 0, isText: true, steps: ["Empirical formula mass of CH₂ = 12 + 2 = 14", "n = Mr ÷ empirical formula mass = 56 ÷ 14 = 4", "Molecular formula = C₄H₈"] },
-      { q: "0.92 g of an alcohol burns completely to give 1.76 g CO₂ and 1.08 g H₂O. Find the empirical formula. (Type as e.g. C2H6O)", hint: "Find moles of C from CO₂ (Mr=44), H from H₂O (Mr=18), then O by subtraction.", answer: "C2H6O", unit: "", tolerance: 0, isText: true, steps: ["mol CO₂ = 1.76÷44 = 0.040 → mol C = 0.040", "mol H₂O = 1.08÷18 = 0.060 → mol H = 0.120", "Mass of C = 0.040×12 = 0.48 g; mass of H = 0.12×1 = 0.12 g", "Mass of O = 0.92 − 0.48 − 0.12 = 0.32 g → mol O = 0.32÷16 = 0.020", "C:H:O = 0.040:0.120:0.020 → divide by 0.020 → 2:6:1", "Empirical formula = C₂H₆O"] },
-      { q: "A compound is 85.7% C and 14.3% H. Its Mr = 42. Find the molecular formula. (Type as e.g. C3H6)", hint: "Find empirical formula first, then use Mr.", answer: "C3H6", unit: "", tolerance: 0, isText: true, steps: ["C: 85.7÷12 = 7.14; H: 14.3÷1 = 14.3", "Ratio = 7.14:14.3 → 1:2 → empirical formula CH₂", "Empirical mass = 14; n = 42÷14 = 3", "Molecular formula = C₃H₆"] },
-      { q: "Calculate the Mr of a gas if 0.25 mol occupies 6.0 dm³ at RTP and has a mass of 7.0 g.", hint: "Find moles from volume, then use M = m/n.", answer: 28, unit: "g mol⁻¹", tolerance: 0.5, steps: ["n = V ÷ 24.0 = 6.0 ÷ 24.0 = 0.25 mol", "Mr = m ÷ n = 7.0 ÷ 0.25 = 28 g mol⁻¹", "This corresponds to nitrogen (N₂) or carbon monoxide (CO)."] },
+      // EASY
+      { difficulty: "easy", q: "The empirical formula of a compound is CH₂ and its Mr is 56. Find the molecular formula. (Type as e.g. C4H8)", hint: "Find the empirical formula mass, divide Mr by it to get n, then multiply subscripts.", answer: "C4H8", unit: "", tolerance: 0, isText: true, steps: ["Empirical formula mass of CH₂ = 12 + 2 = 14", "n = Mr ÷ empirical formula mass = 56 ÷ 14 = 4", "Molecular formula = C₄H₈"] },
+      { difficulty: "easy", q: "A hydrocarbon is 75.0% C and 25.0% H by mass. Its Mr = 16. Find the molecular formula. (Type as e.g. CH4)", hint: "Divide % by Ar for each element to get mole ratios, simplify, then use Mr.", answer: "CH4", unit: "", tolerance: 0, isText: true, steps: ["C: 75.0÷12 = 6.25; H: 25.0÷1 = 25.0", "Divide by 6.25 → C:H = 1:4 → empirical CH₄", "Empirical mass = 16; n = 16÷16 = 1 → Molecular formula = CH₄"] },
+      // MEDIUM
+      { difficulty: "medium", q: "A compound contains 40.0% C, 6.7% H and 53.3% O by mass. Find its empirical formula. (Type as e.g. CH2O)", hint: "Divide each % by its Ar, then divide all by the smallest value.", answer: "CH2O", unit: "", tolerance: 0, isText: true, steps: ["C: 40.0÷12 = 3.33; H: 6.7÷1 = 6.7; O: 53.3÷16 = 3.33", "Divide by 3.33 → C:H:O = 1:2:1", "Empirical formula = CH₂O"] },
+      { difficulty: "medium", q: "A compound is 85.7% C and 14.3% H. Its Mr = 42. Find the molecular formula. (Type as e.g. C3H6)", hint: "Find empirical formula first, then compare empirical mass with Mr.", answer: "C3H6", unit: "", tolerance: 0, isText: true, steps: ["C: 85.7÷12 = 7.14; H: 14.3÷1 = 14.3", "Divide by 7.14 → 1:2 → empirical formula CH₂", "Empirical mass = 14; n = 42÷14 = 3 → Molecular formula = C₃H₆"] },
+      { difficulty: "medium", q: "Calculate the Mr of a gas if 0.25 mol occupies 6.0 dm³ at RTP and has a mass of 7.0 g. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "Find moles from volume using n = V ÷ 24.0, then Mr = m ÷ n.", answer: 28, unit: "g mol⁻¹", tolerance: 0.5, steps: ["n = V ÷ 24.0 = 6.0 ÷ 24.0 = 0.25 mol", "Mr = m ÷ n = 7.0 ÷ 0.25 = 28 g mol⁻¹"] },
+      // HARD
+      { difficulty: "hard", q: "0.92 g of an alcohol burns completely to give 1.76 g CO₂ and 1.08 g H₂O. Find the empirical formula. (Type as e.g. C2H6O)", hint: "Find mol C from CO₂ (Mr=44), mol H from H₂O (Mr=18, gives 2H per molecule), then mass O by subtraction.", answer: "C2H6O", unit: "", tolerance: 0, isText: true, steps: ["n(CO₂) = 1.76÷44 = 0.040 mol → n(C) = 0.040", "n(H₂O) = 1.08÷18 = 0.060 mol → n(H) = 0.120", "Mass C = 0.48g; Mass H = 0.12g; Mass O = 0.92−0.48−0.12 = 0.32g → n(O) = 0.020", "C:H:O = 0.040:0.120:0.020 → ÷0.020 → 2:6:1 → C₂H₆O"] },
+      { difficulty: "hard", q: "1.00 g of hydrated copper sulfate CuSO₄·nH₂O is heated to constant mass, leaving 0.640 g of anhydrous CuSO₄ (Mr = 160). Find the value of n.", hint: "Find moles of CuSO₄ and moles of H₂O lost, then calculate the ratio.", answer: 5, unit: "", tolerance: 0, steps: ["n(CuSO₄) = 0.640 ÷ 160 = 0.004000 mol", "Mass H₂O lost = 1.00 − 0.640 = 0.360 g", "n(H₂O) = 0.360 ÷ 18 = 0.02000 mol", "n = n(H₂O) ÷ n(CuSO₄) = 0.02000 ÷ 0.004000 = 5"] },
+      { difficulty: "hard", q: "A compound contains 52.2% C, 13.0% H and 34.8% O by mass. Its Mr is 46. Find the molecular formula. (Type as e.g. C2H6O)", hint: "Find empirical formula from % composition, then compare empirical mass with Mr.", answer: "C2H6O", unit: "", tolerance: 0, isText: true, steps: ["C: 52.2÷12=4.35; H: 13.0÷1=13.0; O: 34.8÷16=2.175", "Divide by 2.175 → C:H:O ≈ 2:6:1 → empirical C₂H₆O", "Empirical mass = 46; n = 46÷46 = 1 → Molecular formula = C₂H₆O (ethanol)"] },
+      // EXAM
+      { difficulty: "exam", q: "0.430 g of a liquid hydrocarbon CₓHᵧ (Mr = 86) is burned completely, producing 1.320 g CO₂. Find the molecular formula. (Type as e.g. C6H14)", hint: "Find mol C from CO₂, find mass H by subtraction, find mol H, then ratio C:H. Use Mr to confirm.", answer: "C6H14", unit: "", tolerance: 0, isText: true, steps: ["n(CO₂) = 1.320÷44 = 0.03000 mol → n(C) = 0.03000 → mass C = 0.360g", "Mass H = 0.430−0.360 = 0.070g → n(H) = 0.070", "C:H = 0.030:0.070 → ÷0.010 → 3:7 → empirical C₃H₇ (mass=43)", "n = 86÷43 = 2 → Molecular formula = C₆H₁₄"] },
+      { difficulty: "exam", q: "0.867 g of gas X occupies 480 cm³ at 20°C and 100 kPa. Calculate the Mr of X using the ideal gas equation. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Find n from PV=nRT (T in K, V in m³, P in Pa), then Mr = m ÷ n.", answer: 44.0, unit: "g mol⁻¹", tolerance: 0.5, steps: ["T = 293 K; V = 4.80×10⁻⁴ m³; P = 100 000 Pa", "n = PV ÷ RT = (100000 × 4.80×10⁻⁴) ÷ (8.314 × 293) = 48.0 ÷ 2436 = 0.01970 mol", "Mr = 0.867 ÷ 0.01970 = 44.0 g mol⁻¹"] },
     ]
   },
   {
     id: "calc_titration", title: "Titrations & Volumetric Analysis", color: "#16a97d", board: "both",
     questions: [
-      { q: "25.0 cm³ of NaOH is neutralised by 20.0 cm³ of 0.100 mol dm⁻³ HCl. Calculate the concentration of NaOH.", hint: "Find mol HCl first (n=cV), use 1:1 ratio, then c = n/V for NaOH.", answer: 0.08, unit: "mol dm⁻³", tolerance: 0.004, steps: ["mol HCl = c × V = 0.100 × (20.0÷1000) = 0.00200 mol", "NaOH + HCl → NaCl + H₂O (1:1 ratio)", "mol NaOH = 0.00200 mol", "c(NaOH) = n÷V = 0.00200 ÷ (25.0÷1000) = 0.0800 mol dm⁻³"] },
-      { q: "What volume (cm³) of 0.200 mol dm⁻³ H₂SO₄ is needed to neutralise 30.0 cm³ of 0.150 mol dm⁻³ NaOH?\n(H₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O)", hint: "Find mol NaOH, use stoichiometry (2:1 NaOH:H₂SO₄), then V = n/c.", answer: 11.25, unit: "cm³", tolerance: 0.2, steps: ["mol NaOH = 0.150 × 0.0300 = 0.00450 mol", "From equation: mol H₂SO₄ = 0.00450 ÷ 2 = 0.00225 mol", "V(H₂SO₄) = n÷c = 0.00225 ÷ 0.200 = 0.01125 dm³ = 11.25 cm³"] },
-      { q: "A 0.400 g impure sample of Na₂CO₃ is dissolved and titrated with 0.200 mol dm⁻³ HCl. The titre is 34.0 cm³. Calculate the % purity of Na₂CO₃. (Mr Na₂CO₃ = 106; Na₂CO₃ + 2HCl → 2NaCl + H₂O + CO₂)", hint: "Find mol HCl, use stoichiometry to get mol Na₂CO₃, convert to mass, then % purity.", answer: 90.1, unit: "%", tolerance: 0.5, steps: ["mol HCl = 0.200 × (34.0÷1000) = 0.00680 mol", "mol Na₂CO₃ = 0.00680 ÷ 2 = 0.00340 mol", "mass Na₂CO₃ = 0.00340 × 106 = 0.3604 g", "% purity = (0.3604 ÷ 0.400) × 100 = 90.1%"] },
-      { q: "In a back titration, 1.20 g of CaCO₃ (Mr=100) is dissolved in 50.0 cm³ of 0.500 mol dm⁻³ HCl. The excess HCl requires 12.5 cm³ of 0.200 mol dm⁻³ NaOH to neutralise. Calculate the % purity of the CaCO₃ sample. (CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂)", hint: "Find total mol HCl, subtract mol HCl reacted with NaOH to get mol HCl that reacted with CaCO₃.", answer: 93.8, unit: "%", tolerance: 0.5, steps: ["Total mol HCl = 0.500 × 0.0500 = 0.0250 mol", "mol NaOH used = 0.200 × 0.0125 = 0.00250 mol", "mol excess HCl = 0.00250 mol (1:1 ratio)", "mol HCl reacted with CaCO₃ = 0.0250 − 0.00250 = 0.0225 mol", "mol CaCO₃ = 0.0225 ÷ 2 = 0.01125 mol", "mass CaCO₃ = 0.01125 × 100 = 1.125 g", "% purity = (1.125 ÷ 1.20) × 100 = 93.8%"] },
-      { q: "A solution of ethanedioic acid (H₂C₂O₄, Mr=90) is prepared by dissolving 1.575 g in 250 cm³. What is its concentration in mol dm⁻³?", hint: "n = m/M, then c = n/V.", answer: 0.07, unit: "mol dm⁻³", tolerance: 0.003, steps: ["n = m ÷ M = 1.575 ÷ 90 = 0.01750 mol", "c = n ÷ V = 0.01750 ÷ 0.250 = 0.0700 mol dm⁻³"] },
+      // EASY
+      { difficulty: "easy", q: "25.0 cm³ of NaOH is neutralised by 20.0 cm³ of 0.100 mol dm⁻³ HCl. Calculate the concentration of NaOH.", hint: "n(HCl) = c × V; 1:1 mole ratio; c(NaOH) = n ÷ V.", answer: 0.08, unit: "mol dm⁻³", tolerance: 0.004, steps: ["n(HCl) = 0.100 × 0.0200 = 0.00200 mol", "NaOH:HCl = 1:1 → n(NaOH) = 0.00200 mol", "c(NaOH) = 0.00200 ÷ 0.0250 = 0.0800 mol dm⁻³"] },
+      { difficulty: "easy", q: "25.0 cm³ of HCl is neutralised by 20.0 cm³ of 0.150 mol dm⁻³ NaOH. Calculate the concentration of HCl.", hint: "Find n(NaOH) first, then use 1:1 ratio to get n(HCl), then c = n ÷ V.", answer: 0.12, unit: "mol dm⁻³", tolerance: 0.005, steps: ["n(NaOH) = 0.150 × 0.0200 = 0.00300 mol", "1:1 ratio → n(HCl) = 0.00300 mol", "c(HCl) = 0.00300 ÷ 0.0250 = 0.120 mol dm⁻³"] },
+      { difficulty: "easy", q: "A solution of ethanedioic acid (H₂C₂O₄, Mr=90) is made by dissolving 1.575 g in 250 cm³ of solution. Calculate its concentration (mol dm⁻³).", hint: "n = m ÷ M, then c = n ÷ V (convert cm³ to dm³).", answer: 0.07, unit: "mol dm⁻³", tolerance: 0.003, steps: ["n = 1.575 ÷ 90 = 0.01750 mol", "c = 0.01750 ÷ 0.250 = 0.0700 mol dm⁻³"] },
+      // MEDIUM
+      { difficulty: "medium", q: "What volume (cm³) of 0.200 mol dm⁻³ H₂SO₄ is needed to neutralise 30.0 cm³ of 0.150 mol dm⁻³ NaOH?\n(H₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O)", hint: "Find n(NaOH), divide by 2 for n(H₂SO₄) (stoichiometry), then V = n ÷ c.", answer: 11.25, unit: "cm³", tolerance: 0.2, steps: ["n(NaOH) = 0.150 × 0.0300 = 0.00450 mol", "n(H₂SO₄) = 0.00450 ÷ 2 = 0.00225 mol", "V = 0.00225 ÷ 0.200 = 0.01125 dm³ = 11.25 cm³"] },
+      { difficulty: "medium", q: "A 0.500 g aspirin tablet (Mr of aspirin = 180) is dissolved and titrated against 0.100 mol dm⁻³ NaOH. The titre is 27.7 cm³. Calculate the % purity of the tablet. (1:1 mole ratio)", hint: "n(NaOH) = c×V; n(aspirin) = n(NaOH); mass aspirin = n×M; % = (mass ÷ 0.500) × 100.", answer: 99.8, unit: "%", tolerance: 0.5, steps: ["n(NaOH) = 0.100 × 0.0277 = 0.00277 mol", "n(aspirin) = 0.00277 mol (1:1)", "mass aspirin = 0.00277 × 180 = 0.499 g", "% purity = (0.499 ÷ 0.500) × 100 = 99.8%"] },
+      // HARD
+      { difficulty: "hard", q: "A 0.400 g impure sample of Na₂CO₃ is titrated with 0.200 mol dm⁻³ HCl. Titre = 34.0 cm³. Calculate the % purity of Na₂CO₃. (Mr = 106; Na₂CO₃ + 2HCl → 2NaCl + H₂O + CO₂)", hint: "Find n(HCl), divide by 2 for n(Na₂CO₃), convert to mass, then calculate % purity.", answer: 90.1, unit: "%", tolerance: 0.5, steps: ["n(HCl) = 0.200 × 0.0340 = 0.00680 mol", "n(Na₂CO₃) = 0.00680 ÷ 2 = 0.00340 mol", "mass Na₂CO₃ = 0.00340 × 106 = 0.3604 g", "% purity = (0.3604 ÷ 0.400) × 100 = 90.1%"] },
+      { difficulty: "hard", q: "In a back titration, 1.20 g of CaCO₃ sample is dissolved in 50.0 cm³ of 0.500 mol dm⁻³ HCl. The excess HCl requires 12.5 cm³ of 0.200 mol dm⁻³ NaOH. Calculate the % purity of the CaCO₃.\n(Mr CaCO₃=100; CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂)", hint: "Total HCl minus excess HCl (from NaOH titre) = HCl that reacted with CaCO₃.", answer: 93.8, unit: "%", tolerance: 0.5, steps: ["Total n(HCl) = 0.500 × 0.0500 = 0.0250 mol", "n(NaOH) = 0.200 × 0.0125 = 0.00250 mol = n(excess HCl)", "n(HCl) reacted = 0.0250 − 0.00250 = 0.0225 mol", "n(CaCO₃) = 0.0225 ÷ 2 = 0.01125 mol", "mass CaCO₃ = 0.01125 × 100 = 1.125 g", "% purity = (1.125 ÷ 1.20) × 100 = 93.8%"] },
+      // EXAM
+      { difficulty: "exam", q: "5.00 g of vinegar is titrated with 0.100 mol dm⁻³ NaOH. Titre = 31.3 cm³. Calculate the % by mass of ethanoic acid (Mr=60) in the vinegar.\n(CH₃COOH + NaOH → CH₃COONa + H₂O)", hint: "n(NaOH) = c×V; 1:1 ratio; mass ethanoic acid = n×M; % = (mass ÷ 5.00) × 100.", answer: 3.76, unit: "%", tolerance: 0.1, steps: ["n(NaOH) = 0.100 × 0.0313 = 0.00313 mol", "n(CH₃COOH) = 0.00313 mol (1:1)", "mass = 0.00313 × 60 = 0.1878 g", "% by mass = (0.1878 ÷ 5.00) × 100 = 3.76%"] },
+      { difficulty: "exam", q: "25.0 cm³ of fruit juice is titrated against 0.0200 mol dm⁻³ KMnO₄ (acidified). Titre = 18.6 cm³. Reaction:\n2KMnO₄ + 5H₂C₂O₄ → products (2:5 mole ratio)\nCalculate the concentration of oxalic acid (H₂C₂O₄) in mol dm⁻³.", hint: "n(KMnO₄) = c×V; multiply by 5/2 for n(H₂C₂O₄); then c = n ÷ V(juice).", answer: 0.0372, unit: "mol dm⁻³", tolerance: 0.001, steps: ["n(KMnO₄) = 0.0200 × 0.0186 = 3.72×10⁻⁴ mol", "n(H₂C₂O₄) = 3.72×10⁻⁴ × (5÷2) = 9.30×10⁻⁴ mol", "c = 9.30×10⁻⁴ ÷ 0.0250 = 0.0372 mol dm⁻³"] },
     ]
   },
   {
     id: "calc_enthalpy", title: "Enthalpy Changes", color: "#7c3aed", board: "both",
     questions: [
-      { q: "50.0 cm³ of 1.00 mol dm⁻³ HCl is mixed with 50.0 cm³ of 1.00 mol dm⁻³ NaOH. The temperature rises by 6.8 °C. Calculate the enthalpy of neutralisation in kJ mol⁻¹. (c = 4.18 J g⁻¹ K⁻¹, density = 1.00 g cm⁻³)", hint: "q = mcΔT for total mass; mol = c×V for HCl or NaOH; ΔH = −q/mol in kJ.", answer: -56.8, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["Total mass = 50.0 + 50.0 = 100 g", "q = mcΔT = 100 × 4.18 × 6.8 = 2842 J = 2.842 kJ", "mol HCl = 1.00 × 0.0500 = 0.0500 mol", "ΔH = −q ÷ mol = −2.842 ÷ 0.0500 = −56.8 kJ mol⁻¹"] },
-      { q: "Using the following data, calculate ΔHr for: C(s) + 2H₂(g) → CH₄(g)\nΔHc°[C(s)] = −394 kJ mol⁻¹\nΔHc°[H₂(g)] = −286 kJ mol⁻¹\nΔHc°[CH₄(g)] = −890 kJ mol⁻¹", hint: "Use Hess's law: ΔHr = ΣΔHc°(reactants) − ΔHc°(product). Note the stoichiometry!", answer: -76, unit: "kJ mol⁻¹", tolerance: 2, steps: ["ΔHr = [ΔHc(C) + 2×ΔHc(H₂)] − ΔHc(CH₄)", "ΔHr = [−394 + 2×(−286)] − (−890)", "ΔHr = [−394 − 572] + 890", "ΔHr = −966 + 890 = −76 kJ mol⁻¹"] },
-      { q: "Using mean bond enthalpies, calculate ΔHr for: H₂(g) + Cl₂(g) → 2HCl(g)\nE(H–H) = +436 kJ mol⁻¹; E(Cl–Cl) = +242 kJ mol⁻¹; E(H–Cl) = +431 kJ mol⁻¹", hint: "ΔHr = bonds broken − bonds formed. Breaking H-H and Cl-Cl; forming 2×H-Cl.", answer: -184, unit: "kJ mol⁻¹", tolerance: 2, steps: ["Bonds broken: H–H (+436) + Cl–Cl (+242) = +678 kJ", "Bonds formed: 2 × H–Cl = 2 × (−431) = −862 kJ", "ΔHr = +678 + (−862) = −184 kJ mol⁻¹"] },
-      { q: "0.50 g of ethanol (Mr=46) is burned and heats 200 g of water from 20.0°C to 33.4°C. Calculate the enthalpy of combustion in kJ mol⁻¹. (c = 4.18 J g⁻¹ K⁻¹)", hint: "q = mcΔT (use mass of water); mol = m/M; ΔHc = −q/mol × 1000 to convert to kJ mol⁻¹.", answer: -1031, unit: "kJ mol⁻¹", tolerance: 20, steps: ["ΔT = 33.4 − 20.0 = 13.4°C", "q = 200 × 4.18 × 13.4 = 11202 J = 11.20 kJ", "mol ethanol = 0.50 ÷ 46 = 0.01087 mol", "ΔHc = −11.20 ÷ 0.01087 = −1031 kJ mol⁻¹"] },
-      { q: "Calculate ΔHf° for ethane C₂H₆(g) using:\nΔHc°[C(graphite)] = −394 kJ mol⁻¹\nΔHc°[H₂(g)] = −286 kJ mol⁻¹\nΔHc°[C₂H₆(g)] = −1560 kJ mol⁻¹\n(Formation reaction: 2C + 3H₂ → C₂H₆)", hint: "ΔHf = [2×ΔHc(C) + 3×ΔHc(H₂)] − ΔHc(C₂H₆)", answer: -86, unit: "kJ mol⁻¹", tolerance: 3, steps: ["ΔHf = [2×(−394) + 3×(−286)] − (−1560)", "ΔHf = [−788 − 858] + 1560", "ΔHf = −1646 + 1560 = −86 kJ mol⁻¹"] },
+      // EASY
+      { difficulty: "easy", q: "100 g of water is heated from 20.0°C to 35.0°C using a spirit lamp. Calculate the heat energy transferred (J). (c = 4.18 J g⁻¹ K⁻¹)", hint: "q = m × c × ΔT. ΔT = final − initial temperature.", answer: 6270, unit: "J", tolerance: 30, steps: ["ΔT = 35.0 − 20.0 = 15.0°C", "q = m × c × ΔT = 100 × 4.18 × 15.0", "q = 6270 J"] },
+      { difficulty: "easy", q: "500 g of water absorbs 20 920 J of heat energy. Calculate the temperature rise (ΔT) in °C. (c = 4.18 J g⁻¹ K⁻¹)", hint: "Rearrange q = mcΔT for ΔT.", answer: 10.0, unit: "°C", tolerance: 0.1, steps: ["ΔT = q ÷ (m × c)", "ΔT = 20920 ÷ (500 × 4.18)", "ΔT = 20920 ÷ 2090 = 10.0°C"] },
+      // MEDIUM
+      { difficulty: "medium", q: "50.0 cm³ of 1.00 mol dm⁻³ HCl is mixed with 50.0 cm³ of 1.00 mol dm⁻³ NaOH. Temperature rises by 6.8°C. Calculate the enthalpy of neutralisation (kJ mol⁻¹). (c = 4.18 J g⁻¹ K⁻¹, density = 1.00 g cm⁻³)", hint: "q = mcΔT using total mass; mol = c × V; ΔH = −q ÷ mol (kJ).", answer: -56.8, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["Total mass = 100 g", "q = 100 × 4.18 × 6.8 = 2842 J = 2.842 kJ", "n(HCl) = 1.00 × 0.0500 = 0.0500 mol", "ΔH = −2.842 ÷ 0.0500 = −56.8 kJ mol⁻¹"] },
+      { difficulty: "medium", q: "Calculate ΔHr for: C(s) + 2H₂(g) → CH₄(g)\nΔHc°[C(s)] = −394 kJ mol⁻¹\nΔHc°[H₂(g)] = −286 kJ mol⁻¹\nΔHc°[CH₄(g)] = −890 kJ mol⁻¹", hint: "Hess's Law: ΔHr = ΣΔHc°(reactants) − ΔHc°(product). Note 2 mol H₂.", answer: -76, unit: "kJ mol⁻¹", tolerance: 2, steps: ["ΔHr = [ΔHc(C) + 2×ΔHc(H₂)] − ΔHc(CH₄)", "ΔHr = [−394 + 2×(−286)] − (−890)", "ΔHr = −966 + 890 = −76 kJ mol⁻¹"] },
+      { difficulty: "medium", q: "Using mean bond enthalpies, calculate ΔHr for:\nH₂(g) + Cl₂(g) → 2HCl(g)\nE(H–H) = +436 kJ mol⁻¹; E(Cl–Cl) = +242 kJ mol⁻¹; E(H–Cl) = +431 kJ mol⁻¹", hint: "ΔHr = bonds broken − bonds formed. Break one H-H and one Cl-Cl; form two H-Cl.", answer: -184, unit: "kJ mol⁻¹", tolerance: 2, steps: ["Bonds broken: H–H (+436) + Cl–Cl (+242) = +678 kJ", "Bonds formed: 2 × H–Cl = −862 kJ", "ΔHr = +678 − 862 = −184 kJ mol⁻¹"] },
+      // HARD
+      { difficulty: "hard", q: "0.50 g of ethanol (Mr=46) is burned and heats 200 g of water from 20.0°C to 33.4°C. Calculate the enthalpy of combustion (kJ mol⁻¹). (c = 4.18 J g⁻¹ K⁻¹)", hint: "q = mcΔT using mass of water; mol = m÷M; ΔHc = −q ÷ mol, then convert J to kJ.", answer: -1031, unit: "kJ mol⁻¹", tolerance: 20, steps: ["ΔT = 33.4 − 20.0 = 13.4°C", "q = 200 × 4.18 × 13.4 = 11202 J = 11.20 kJ", "n(ethanol) = 0.50 ÷ 46 = 0.01087 mol", "ΔHc = −11.20 ÷ 0.01087 = −1031 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "2.00 g of ammonium nitrate (Mr=80) is dissolved in 50.0 cm³ of water. Temperature drops from 20.0°C to 16.8°C. Calculate the enthalpy of solution (kJ mol⁻¹). (c = 4.18 J g⁻¹ K⁻¹, density of water = 1.00 g cm⁻³)", hint: "ΔT is negative (temperature dropped). q = mcΔT; because temperature fell, the process is endothermic (+ΔH).", answer: 26.8, unit: "kJ mol⁻¹", tolerance: 0.5, steps: ["ΔT = 16.8 − 20.0 = −3.2°C", "q = 50.0 × 4.18 × 3.2 = 669 J = 0.669 kJ (heat absorbed by system)", "n(NH₄NO₃) = 2.00 ÷ 80 = 0.0250 mol", "ΔHsol = +0.669 ÷ 0.0250 = +26.8 kJ mol⁻¹ (endothermic)"] },
+      { difficulty: "hard", q: "Calculate ΔHf° for ethane C₂H₆(g) using:\nΔHc°[C(graphite)] = −394 kJ mol⁻¹\nΔHc°[H₂(g)] = −286 kJ mol⁻¹\nΔHc°[C₂H₆(g)] = −1560 kJ mol⁻¹\n(Formation: 2C + 3H₂ → C₂H₆)", hint: "ΔHf = [2×ΔHc(C) + 3×ΔHc(H₂)] − ΔHc(C₂H₆)", answer: -86, unit: "kJ mol⁻¹", tolerance: 3, steps: ["ΔHf = [2×(−394) + 3×(−286)] − (−1560)", "ΔHf = [−788 − 858] + 1560", "ΔHf = −1646 + 1560 = −86 kJ mol⁻¹"] },
+      // EXAM
+      { difficulty: "exam", q: "Calculate ΔHcombustion for ethanol using standard enthalpies of formation:\nC₂H₅OH(l) + 3O₂(g) → 2CO₂(g) + 3H₂O(l)\nΔHf°[C₂H₅OH(l)] = −278 kJ mol⁻¹\nΔHf°[CO₂(g)] = −394 kJ mol⁻¹\nΔHf°[H₂O(l)] = −286 kJ mol⁻¹", hint: "ΔHr = ΣΔHf°(products) − ΣΔHf°(reactants). O₂ elements have ΔHf° = 0.", answer: -1368, unit: "kJ mol⁻¹", tolerance: 5, steps: ["ΔHr = [2×ΔHf(CO₂) + 3×ΔHf(H₂O)] − [ΔHf(C₂H₅OH) + 3×ΔHf(O₂)]", "ΔHr = [2×(−394) + 3×(−286)] − [(−278) + 0]", "ΔHr = [−788 − 858] − (−278)", "ΔHr = −1646 + 278 = −1368 kJ mol⁻¹"] },
     ]
   },
   {
-    id: "calc_equilibrium", title: "Equilibrium - Kc and Kp", color: "#d97706", board: "both",
+    id: "calc_equilibrium", title: "Equilibrium — Kc and Kp", color: "#d97706", board: "both",
     questions: [
-      { q: "At equilibrium, [H₂] = 0.30 mol dm⁻³, [I₂] = 0.10 mol dm⁻³, [HI] = 0.60 mol dm⁻³.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kc.", hint: "Kc = [products]^stoich / [reactants]^stoich. Products are raised to the power of their coefficients.", answer: 12, unit: "", tolerance: 0.2, steps: ["Kc = [HI]² ÷ ([H₂][I₂])", "Kc = (0.60)² ÷ (0.30 × 0.10)", "Kc = 0.36 ÷ 0.030 = 12", "Kc has no units here (equal moles of gas each side)."] },
-      { q: "For N₂(g) + 3H₂(g) ⇌ 2NH₃(g), at equilibrium: [N₂] = 0.10, [H₂] = 0.30, [NH₃] = 0.20 mol dm⁻³. Calculate Kc (include units).", hint: "Kc = [NH₃]² ÷ ([N₂][H₂]³). Work out the units separately.", answer: 14.8, unit: "mol⁻² dm⁶", tolerance: 0.5, steps: ["Kc = [NH₃]² ÷ ([N₂] × [H₂]³)", "Kc = (0.20)² ÷ (0.10 × (0.30)³)", "Kc = 0.040 ÷ (0.10 × 0.027) = 0.040 ÷ 0.0027 = 14.8", "Units: mol²dm⁻⁶ ÷ (mol dm⁻³ × mol³dm⁻⁹) = mol⁻²dm⁶"] },
-      { q: "In the equilibrium A(g) + B(g) ⇌ C(g), the mole fractions at equilibrium are: χ(A)=0.25, χ(B)=0.25, χ(C)=0.50. Total pressure = 200 kPa. Calculate Kp in kPa⁻¹.", hint: "Find partial pressures (p = χ × P_total), then write Kp expression.", answer: 0.04, unit: "kPa⁻¹", tolerance: 0.003, steps: ["p(A) = 0.25 × 200 = 50 kPa", "p(B) = 0.25 × 200 = 50 kPa", "p(C) = 0.50 × 200 = 100 kPa", "Kp = p(C) ÷ [p(A) × p(B)] = 100 ÷ (50 × 50) = 100 ÷ 2500 = 0.040 kPa⁻¹"] },
-      { q: "For 2SO₂(g) + O₂(g) ⇌ 2SO₃(g) at equilibrium: p(SO₂) = 10 kPa, p(O₂) = 5 kPa, p(SO₃) = 40 kPa. Calculate Kp.", hint: "Kp = p(SO₃)² ÷ [p(SO₂)² × p(O₂)]", answer: 3.2, unit: "kPa⁻¹", tolerance: 0.1, steps: ["Kp = p(SO₃)² ÷ [p(SO₂)² × p(O₂)]", "Kp = (40)² ÷ [(10)² × 5]", "Kp = 1600 ÷ 500 = 3.2 kPa⁻¹"] },
-      { q: "1.0 mol of N₂O₄(g) partially dissociates: N₂O₄(g) ⇌ 2NO₂(g). At equilibrium, the fraction dissociated is 0.40. Total moles at equilibrium = 1.40. If total pressure = 100 kPa, calculate Kp.", hint: "Find moles of each at equilibrium, then mole fractions, then partial pressures.", answer: 76.2, unit: "kPa", tolerance: 1.5, steps: ["Moles N₂O₄ at equil. = 1.0 − 0.40 = 0.60; moles NO₂ = 2×0.40 = 0.80", "Total = 1.40 mol", "χ(N₂O₄) = 0.60÷1.40 = 0.4286; χ(NO₂) = 0.80÷1.40 = 0.5714", "p(N₂O₄) = 0.4286 × 100 = 42.86 kPa; p(NO₂) = 0.5714 × 100 = 57.14 kPa", "Kp = p(NO₂)² ÷ p(N₂O₄) = (57.14)² ÷ 42.86 = 3265 ÷ 42.86 = 76.2 kPa"] },
+      // EASY
+      { difficulty: "easy", q: "At equilibrium: [A] = 0.50 mol dm⁻³, [B] = 0.50 mol dm⁻³, [AB] = 1.0 mol dm⁻³.\nA(g) + B(g) ⇌ AB(g)\nCalculate Kc.", hint: "Kc = [AB] ÷ ([A][B])", answer: 4.0, unit: "", tolerance: 0.1, steps: ["Kc = [AB] ÷ ([A][B])", "Kc = 1.0 ÷ (0.50 × 0.50)", "Kc = 1.0 ÷ 0.25 = 4.0"] },
+      // MEDIUM
+      { difficulty: "medium", q: "At equilibrium, [H₂] = 0.30 mol dm⁻³, [I₂] = 0.10 mol dm⁻³, [HI] = 0.60 mol dm⁻³.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kc.", hint: "Kc = [HI]² ÷ ([H₂][I₂]). Raise concentrations to the power of their stoichiometric coefficients.", answer: 12, unit: "", tolerance: 0.2, steps: ["Kc = [HI]² ÷ ([H₂][I₂])", "Kc = (0.60)² ÷ (0.30 × 0.10) = 0.36 ÷ 0.030 = 12", "No units (equal mol gas on each side)."] },
+      { difficulty: "medium", q: "PCl₅(g) ⇌ PCl₃(g) + Cl₂(g). At equilibrium: [PCl₅] = 0.10, [PCl₃] = 0.040, [Cl₂] = 0.040 mol dm⁻³. Calculate Kc (include units).", hint: "Kc = [PCl₃][Cl₂] ÷ [PCl₅]", answer: 0.016, unit: "mol dm⁻³", tolerance: 0.001, steps: ["Kc = [PCl₃][Cl₂] ÷ [PCl₅]", "Kc = (0.040 × 0.040) ÷ 0.10", "Kc = 0.0016 ÷ 0.10 = 0.016 mol dm⁻³"] },
+      { difficulty: "medium", q: "For N₂(g) + 3H₂(g) ⇌ 2NH₃(g), at equilibrium: [N₂] = 0.10, [H₂] = 0.30, [NH₃] = 0.20 mol dm⁻³. Calculate Kc (give numerical value only).", hint: "Kc = [NH₃]² ÷ ([N₂][H₂]³)", answer: 14.8, unit: "mol⁻² dm⁶", tolerance: 0.5, steps: ["Kc = [NH₃]² ÷ ([N₂] × [H₂]³)", "Kc = (0.20)² ÷ (0.10 × (0.30)³)", "Kc = 0.040 ÷ (0.10 × 0.027) = 0.040 ÷ 0.0027 = 14.8"] },
+      // HARD
+      { difficulty: "hard", q: "A(g) + B(g) ⇌ C(g). Mole fractions at equilibrium: χ(A)=0.25, χ(B)=0.25, χ(C)=0.50. Total pressure = 200 kPa. Calculate Kp (kPa⁻¹).", hint: "Partial pressure = mole fraction × total pressure. Write Kp expression.", answer: 0.04, unit: "kPa⁻¹", tolerance: 0.003, steps: ["p(A) = 0.25 × 200 = 50 kPa; p(B) = 50 kPa; p(C) = 100 kPa", "Kp = p(C) ÷ [p(A) × p(B)] = 100 ÷ (50×50) = 0.040 kPa⁻¹"] },
+      { difficulty: "hard", q: "2.0 mol SO₂ and 1.0 mol O₂ are placed in a 5.0 dm³ vessel and reach equilibrium:\n2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nAt equilibrium, 1.40 mol SO₃ is present. Calculate Kc (mol⁻¹ dm³).", hint: "Use an ICE table: work out equilibrium moles of each species, divide by volume for concentrations.", answer: 90.7, unit: "mol⁻¹ dm³", tolerance: 2.0, steps: ["Equilibrium: SO₂ = 2.0−1.40 = 0.60 mol; O₂ = 1.0−0.70 = 0.30 mol; SO₃ = 1.40 mol", "[SO₂] = 0.12; [O₂] = 0.060; [SO₃] = 0.280 mol dm⁻³", "Kc = [SO₃]² ÷ ([SO₂]² × [O₂]) = (0.280)² ÷ ((0.12)² × 0.060)", "Kc = 0.07840 ÷ 0.000864 = 90.7 mol⁻¹ dm³"] },
+      // EXAM
+      { difficulty: "exam", q: "For 2SO₂(g) + O₂(g) ⇌ 2SO₃(g) at equilibrium: p(SO₂)=10 kPa, p(O₂)=5 kPa, p(SO₃)=40 kPa. Calculate Kp.", hint: "Kp = p(SO₃)² ÷ [p(SO₂)² × p(O₂)]. Keep track of units.", answer: 3.2, unit: "kPa⁻¹", tolerance: 0.1, steps: ["Kp = p(SO₃)² ÷ [p(SO₂)² × p(O₂)]", "Kp = (40)² ÷ [(10)² × 5] = 1600 ÷ 500 = 3.2 kPa⁻¹"] },
+      { difficulty: "exam", q: "1.0 mol of N₂O₄(g) partially dissociates: N₂O₄(g) ⇌ 2NO₂(g). Fraction dissociated = 0.40. Total moles at equilibrium = 1.40. Total pressure = 100 kPa. Calculate Kp (kPa).", hint: "Find moles of each species, then mole fractions, then partial pressures.", answer: 76.2, unit: "kPa", tolerance: 1.5, steps: ["n(N₂O₄) = 0.60; n(NO₂) = 0.80; total = 1.40", "χ(N₂O₄) = 0.60÷1.40 = 0.4286; χ(NO₂) = 0.5714", "p(N₂O₄) = 42.86 kPa; p(NO₂) = 57.14 kPa", "Kp = p(NO₂)² ÷ p(N₂O₄) = (57.14)² ÷ 42.86 = 76.2 kPa"] },
     ]
   },
   {
     id: "calc_ph", title: "pH and Acids & Bases", color: "#0d8c68", board: "both",
     questions: [
-      { q: "Calculate the pH of 0.050 mol dm⁻³ HCl (a strong acid).", hint: "Strong acid fully dissociates: [H⁺] = concentration of acid. pH = −log[H⁺].", answer: 1.30, unit: "", tolerance: 0.02, steps: ["HCl fully dissociates: [H⁺] = 0.050 mol dm⁻³", "pH = −log(0.050)", "pH = −log(5.0 × 10⁻²) = −(log 5.0 + log 10⁻²) = −(0.699 − 2) = 1.30"] },
-      { q: "Calculate the pH of 0.020 mol dm⁻³ NaOH.", hint: "Strong base fully dissociates: [OH⁻] = concentration. Use Kw = [H⁺][OH⁻] = 1×10⁻¹⁴.", answer: 12.30, unit: "", tolerance: 0.02, steps: ["[OH⁻] = 0.020 mol dm⁻³", "[H⁺] = Kw ÷ [OH⁻] = 1×10⁻¹⁴ ÷ 0.020 = 5.0×10⁻¹³ mol dm⁻³", "pH = −log(5.0×10⁻¹³) = 12.30"] },
-      { q: "Calculate the pH of 0.10 mol dm⁻³ ethanoic acid. Ka = 1.8 × 10⁻⁵ mol dm⁻³.", hint: "For weak acid: [H⁺] = √(Ka × c). Then pH = −log[H⁺].", answer: 2.87, unit: "", tolerance: 0.05, steps: ["[H⁺] = √(Ka × c) = √(1.8×10⁻⁵ × 0.10)", "[H⁺] = √(1.8×10⁻⁶) = 1.342×10⁻³ mol dm⁻³", "pH = −log(1.342×10⁻³) = 2.87"] },
-      { q: "A buffer solution contains 0.20 mol dm⁻³ ethanoic acid and 0.10 mol dm⁻³ sodium ethanoate. Ka = 1.8×10⁻⁵ mol dm⁻³. Calculate the pH.", hint: "Use Henderson-Hasselbalch: pH = pKa + log([A⁻]/[HA])", answer: 4.44, unit: "", tolerance: 0.05, steps: ["pKa = −log(1.8×10⁻⁵) = 4.745", "pH = pKa + log([A⁻]/[HA]) = 4.745 + log(0.10/0.20)", "pH = 4.745 + log(0.5) = 4.745 − 0.301 = 4.44"] },
-      { q: "Calculate the pH of water at 50°C where Kw = 5.5 × 10⁻¹⁴.", hint: "At neutral pH, [H⁺] = [OH⁻] = √Kw. Then pH = −log[H⁺].", answer: 6.63, unit: "", tolerance: 0.03, steps: ["[H⁺] = [OH⁻] = √Kw = √(5.5×10⁻¹⁴) = 2.345×10⁻⁷ mol dm⁻³", "pH = −log(2.345×10⁻⁷) = 6.63", "Note: water is still neutral here (equal [H⁺] and [OH⁻]) even though pH < 7."] },
-      { q: "What is the pH after adding 10.0 cm³ of 0.100 mol dm⁻³ NaOH to 20.0 cm³ of 0.100 mol dm⁻³ HCl?", hint: "Find moles of each, subtract to find excess, calculate [H⁺] or [OH⁻] in total volume.", answer: 1.48, unit: "", tolerance: 0.03, steps: ["mol HCl = 0.100 × 0.0200 = 0.00200 mol", "mol NaOH = 0.100 × 0.0100 = 0.00100 mol", "Excess HCl = 0.00200 − 0.00100 = 0.00100 mol", "Total volume = 30.0 cm³ = 0.0300 dm³", "[H⁺] = 0.00100 ÷ 0.0300 = 0.03333 mol dm⁻³", "pH = −log(0.03333) = 1.48"] },
+      // EASY
+      { difficulty: "easy", q: "Calculate the pH of 0.100 mol dm⁻³ HCl.", hint: "HCl is a strong acid and fully dissociates. [H⁺] = 0.100 mol dm⁻³. pH = −log[H⁺].", answer: 1.00, unit: "", tolerance: 0.02, steps: ["HCl fully dissociates → [H⁺] = 0.100 mol dm⁻³", "pH = −log(0.100) = 1.00"] },
+      { difficulty: "easy", q: "Calculate the pH of 0.050 mol dm⁻³ HCl.", hint: "Strong acid: [H⁺] = concentration. pH = −log[H⁺].", answer: 1.30, unit: "", tolerance: 0.02, steps: ["[H⁺] = 0.050 mol dm⁻³", "pH = −log(0.050) = 1.30"] },
+      { difficulty: "easy", q: "A solution has pH = 2.00. Calculate [H⁺] in mol dm⁻³.", hint: "[H⁺] = 10^(−pH)", answer: 0.01, unit: "mol dm⁻³", tolerance: 0.0005, steps: ["[H⁺] = 10^(−pH) = 10^(−2.00)", "[H⁺] = 0.0100 mol dm⁻³"] },
+      // MEDIUM
+      { difficulty: "medium", q: "Calculate the pH of 0.020 mol dm⁻³ NaOH.", hint: "Strong base: [OH⁻] = concentration. Use Kw = [H⁺][OH⁻] = 1×10⁻¹⁴ to find [H⁺].", answer: 12.30, unit: "", tolerance: 0.02, steps: ["[OH⁻] = 0.020 mol dm⁻³", "[H⁺] = 1×10⁻¹⁴ ÷ 0.020 = 5.0×10⁻¹³", "pH = −log(5.0×10⁻¹³) = 12.30"] },
+      { difficulty: "medium", q: "Calculate the pH of 0.10 mol dm⁻³ ethanoic acid. Ka = 1.8×10⁻⁵ mol dm⁻³.", hint: "Weak acid: [H⁺] = √(Ka × c). Then pH = −log[H⁺].", answer: 2.87, unit: "", tolerance: 0.05, steps: ["[H⁺] = √(Ka × c) = √(1.8×10⁻⁵ × 0.10)", "[H⁺] = √(1.8×10⁻⁶) = 1.342×10⁻³ mol dm⁻³", "pH = −log(1.342×10⁻³) = 2.87"] },
+      { difficulty: "medium", q: "Calculate the pH of water at 50°C where Kw = 5.5×10⁻¹⁴.", hint: "In pure water [H⁺] = [OH⁻] = √Kw. Then pH = −log[H⁺].", answer: 6.63, unit: "", tolerance: 0.03, steps: ["[H⁺] = √(5.5×10⁻¹⁴) = 2.345×10⁻⁷ mol dm⁻³", "pH = −log(2.345×10⁻⁷) = 6.63", "Note: still neutral (equal [H⁺] and [OH⁻]) even though pH < 7."] },
+      // HARD
+      { difficulty: "hard", q: "A buffer contains 0.20 mol dm⁻³ ethanoic acid and 0.10 mol dm⁻³ sodium ethanoate. Ka = 1.8×10⁻⁵ mol dm⁻³. Calculate the pH.", hint: "pH = pKa + log([A⁻]/[HA]). First find pKa = −log(Ka).", answer: 4.44, unit: "", tolerance: 0.05, steps: ["pKa = −log(1.8×10⁻⁵) = 4.745", "pH = 4.745 + log(0.10÷0.20) = 4.745 + log(0.5)", "pH = 4.745 − 0.301 = 4.44"] },
+      { difficulty: "hard", q: "Calculate the pH of 0.050 mol dm⁻³ propanoic acid. Ka = 1.35×10⁻⁵ mol dm⁻³.", hint: "[H⁺] = √(Ka × c), assuming weak acid approximation.", answer: 3.09, unit: "", tolerance: 0.05, steps: ["[H⁺] = √(1.35×10⁻⁵ × 0.050) = √(6.75×10⁻⁷)", "[H⁺] = 8.22×10⁻⁴ mol dm⁻³", "pH = −log(8.22×10⁻⁴) = 3.09"] },
+      { difficulty: "hard", q: "Calculate the pH after adding 10.0 cm³ of 0.100 mol dm⁻³ NaOH to 20.0 cm³ of 0.100 mol dm⁻³ HCl.", hint: "Find moles of each, subtract to find excess acid, then [H⁺] = excess mol ÷ total volume.", answer: 1.48, unit: "", tolerance: 0.03, steps: ["n(HCl) = 0.00200 mol; n(NaOH) = 0.00100 mol", "Excess HCl = 0.00100 mol", "Total volume = 30.0 cm³ = 0.0300 dm³", "[H⁺] = 0.00100 ÷ 0.0300 = 0.0333 mol dm⁻³", "pH = −log(0.0333) = 1.48"] },
+      // EXAM
+      { difficulty: "exam", q: "Calculate the pH of 0.500 mol dm⁻³ NaOH. (Kw = 1.0×10⁻¹⁴)", hint: "[OH⁻] = 0.500; [H⁺] = Kw ÷ [OH⁻]; pH = −log[H⁺].", answer: 13.70, unit: "", tolerance: 0.03, steps: ["[OH⁻] = 0.500 mol dm⁻³", "[H⁺] = 1.0×10⁻¹⁴ ÷ 0.500 = 2.0×10⁻¹⁴ mol dm⁻³", "pH = −log(2.0×10⁻¹⁴) = 13.70"] },
     ]
   },
   {
     id: "calc_rates", title: "Rate Equations", color: "#6d28d9", board: "both",
     questions: [
-      { q: "The rate equation for a reaction is: rate = k[A][B]². If [A] = 0.20 mol dm⁻³, [B] = 0.30 mol dm⁻³, and k = 5.0 mol⁻² dm⁶ s⁻¹, calculate the rate.", hint: "Substitute directly into rate = k[A][B]².", answer: 0.09, unit: "mol dm⁻³ s⁻¹", tolerance: 0.003, steps: ["rate = k[A][B]²", "rate = 5.0 × 0.20 × (0.30)²", "rate = 5.0 × 0.20 × 0.090 = 0.090 mol dm⁻³ s⁻¹"] },
-      { q: "In two experiments: Exp 1: [A]=0.10, rate=2.0×10⁻³. Exp 2: [A]=0.20, rate=4.0×10⁻³ mol dm⁻³ s⁻¹. What is the order with respect to A? (Enter 0, 1, or 2)", hint: "When [A] doubles, how does the rate change? Rate doubles → 1st order.", answer: 1, unit: "", tolerance: 0, steps: ["[A] doubles from 0.10 to 0.20", "Rate doubles from 2.0×10⁻³ to 4.0×10⁻³", "Rate ∝ [A]¹ → first order with respect to A"] },
-      { q: "Exp 1: [B]=0.10, rate=1.5×10⁻⁴. Exp 2: [B]=0.30, rate=1.35×10⁻³ mol dm⁻³ s⁻¹. What is the order with respect to B? (Enter 0, 1, or 2)", hint: "[B] triples. Calculate rate ratio: 1.35×10⁻³ ÷ 1.5×10⁻⁴ = 9 = 3². What order gives factor of 9?", answer: 2, unit: "", tolerance: 0, steps: ["[B] increases by factor 3 (0.10→0.30)", "Rate increases by factor 9 (1.5×10⁻⁴ → 1.35×10⁻³)", "3^n = 9 → n = 2", "Second order with respect to B."] },
-      { q: "A first-order reaction has a half-life of 120 s. Calculate the rate constant k. (Give answer to 3 s.f.)", hint: "For a first-order reaction: t½ = ln2 ÷ k. Rearrange for k.", answer: 0.00578, unit: "s⁻¹", tolerance: 0.0001, steps: ["t½ = ln2 ÷ k", "k = ln2 ÷ t½ = 0.6931 ÷ 120", "k = 5.78 × 10⁻³ s⁻¹"] },
-      { q: "From Arrhenius equation data: ln k = 12.5 at 1/T = 0.0025 K⁻¹, and ln k = 10.0 at 1/T = 0.0030 K⁻¹. Calculate the activation energy in kJ mol⁻¹. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Gradient = −Ea/R. gradient = Δ(ln k) ÷ Δ(1/T). Then Ea = −gradient × R.", answer: 41.6, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["Gradient = (12.5 − 10.0) ÷ (0.0025 − 0.0030) = 2.5 ÷ (−0.0005) = −5000 K", "Ea = −gradient × R = 5000 × 8.314 = 41 570 J mol⁻¹ = 41.6 kJ mol⁻¹"] },
+      // EASY
+      { difficulty: "easy", q: "For rate = k[A][B], k = 2.0 mol⁻¹ dm³ s⁻¹, [A] = 0.50 mol dm⁻³, [B] = 0.50 mol dm⁻³. Calculate the rate.", hint: "Substitute directly: rate = k × [A] × [B].", answer: 0.50, unit: "mol dm⁻³ s⁻¹", tolerance: 0.02, steps: ["rate = k[A][B] = 2.0 × 0.50 × 0.50", "rate = 0.50 mol dm⁻³ s⁻¹"] },
+      // MEDIUM
+      { difficulty: "medium", q: "For rate = k[A][B]². If [A] = 0.20 mol dm⁻³, [B] = 0.30 mol dm⁻³, k = 5.0 mol⁻² dm⁶ s⁻¹, calculate the rate.", hint: "rate = k × [A] × [B]². Square [B] first.", answer: 0.09, unit: "mol dm⁻³ s⁻¹", tolerance: 0.003, steps: ["rate = 5.0 × 0.20 × (0.30)²", "rate = 5.0 × 0.20 × 0.090 = 0.090 mol dm⁻³ s⁻¹"] },
+      { difficulty: "medium", q: "Exp 1: [A]=0.10, rate=2.0×10⁻³. Exp 2: [A]=0.20, rate=4.0×10⁻³ mol dm⁻³ s⁻¹ ([B] constant). What is the order with respect to A? (Enter 0, 1, or 2)", hint: "When [A] doubles, how does rate change? rate doubles → 1st order.", answer: 1, unit: "", tolerance: 0, steps: ["[A] doubles (×2); rate doubles (×2)", "Rate factor = 2 = 2^n → n = 1", "First order with respect to A."] },
+      { difficulty: "medium", q: "Exp 1: [B]=0.10, rate=1.5×10⁻⁴. Exp 2: [B]=0.30, rate=1.35×10⁻³ mol dm⁻³ s⁻¹ ([A] constant). What is the order with respect to B? (Enter 0, 1, or 2)", hint: "[B] triples. Rate ratio = 1.35×10⁻³ ÷ 1.5×10⁻⁴ = 9. What power of 3 gives 9?", answer: 2, unit: "", tolerance: 0, steps: ["[B] increases ×3; rate increases ×9", "9 = 3^n → n = 2", "Second order with respect to B."] },
+      { difficulty: "medium", q: "Experiments show doubling [A] has no effect on rate, and doubling [B] quadruples the rate. What is the overall order of reaction? (Enter as a number)", hint: "0th order means rate is independent of [A]. 2nd order means rate ∝ [B]². Add the orders.", answer: 2, unit: "", tolerance: 0, steps: ["[A] doubled → no rate change → 0th order in A", "[B] doubled → rate ×4 = 2^2 → 2nd order in B", "Overall order = 0 + 2 = 2"] },
+      // HARD
+      { difficulty: "hard", q: "A first-order reaction has a half-life of 120 s. Calculate the rate constant k (s⁻¹). Give your answer to 3 significant figures.", hint: "t½ = ln2 ÷ k. Rearrange for k.", answer: 0.00578, unit: "s⁻¹", tolerance: 0.0001, steps: ["t½ = ln2 ÷ k → k = ln2 ÷ t½", "k = 0.6931 ÷ 120 = 5.78×10⁻³ s⁻¹"] },
+      { difficulty: "hard", q: "For rate = k[A][B]², rate = 4.80×10⁻³ mol dm⁻³ s⁻¹ when [A]=0.300, [B]=0.200 mol dm⁻³. Calculate k.", hint: "Rearrange rate = k[A][B]² for k.", answer: 0.400, unit: "mol⁻² dm⁶ s⁻¹", tolerance: 0.01, steps: ["k = rate ÷ ([A][B]²)", "k = 4.80×10⁻³ ÷ (0.300 × (0.200)²)", "k = 4.80×10⁻³ ÷ (0.300 × 0.0400) = 4.80×10⁻³ ÷ 0.0120", "k = 0.400 mol⁻² dm⁶ s⁻¹"] },
+      // EXAM
+      { difficulty: "exam", q: "From an Arrhenius plot: ln k = 12.5 at 1/T = 0.0025 K⁻¹, and ln k = 10.0 at 1/T = 0.0030 K⁻¹. Calculate the activation energy (kJ mol⁻¹). (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Gradient = −Ea/R. Gradient = Δ(ln k) ÷ Δ(1/T). Then Ea = −gradient × R ÷ 1000.", answer: 41.6, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["Gradient = (12.5−10.0) ÷ (0.0025−0.0030) = 2.5 ÷ (−0.0005) = −5000 K", "Ea = −gradient × R = 5000 × 8.314 = 41570 J mol⁻¹ = 41.6 kJ mol⁻¹"] },
     ]
   },
   {
-    id: "calc_thermo", title: "Thermodynamics - ΔG & Born-Haber", color: "#b45309", board: "both",
+    id: "calc_thermo", title: "Thermodynamics — ΔG & Born-Haber", color: "#b45309", board: "both",
     questions: [
-      { q: "Calculate ΔG at 298 K for a reaction where ΔH = −92 kJ mol⁻¹ and ΔS = −199 J K⁻¹ mol⁻¹.", hint: "ΔG = ΔH − TΔS. Make sure units are consistent (convert ΔS to kJ).", answer: -32.7, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["ΔG = ΔH − TΔS", "ΔS in kJ = −199 ÷ 1000 = −0.199 kJ K⁻¹ mol⁻¹", "ΔG = −92 − (298 × −0.199)", "ΔG = −92 + 59.3 = −32.7 kJ mol⁻¹", "ΔG < 0 → reaction is feasible at 298 K."] },
-      { q: "At what temperature (K) does a reaction with ΔH = +60 kJ mol⁻¹ and ΔS = +150 J K⁻¹ mol⁻¹ become feasible?", hint: "Feasible when ΔG = 0: T = ΔH ÷ ΔS. Convert ΔH to J.", answer: 400, unit: "K", tolerance: 5, steps: ["ΔG = 0 when ΔH = TΔS", "T = ΔH ÷ ΔS = 60 000 ÷ 150 = 400 K", "Above 400 K, ΔG < 0 and the reaction is feasible."] },
-      { q: "Use the Born-Haber cycle for NaCl to find the lattice enthalpy (ΔHlatt) given:\nΔHf°(NaCl) = −411 kJ mol⁻¹\nΔHat°(Na) = +108 kJ mol⁻¹\nΔHat°(½Cl₂) = +121 kJ mol⁻¹\nIE₁(Na) = +496 kJ mol⁻¹\nEA₁(Cl) = −349 kJ mol⁻¹\n(ΔHlatt = lattice dissociation enthalpy)", hint: "ΔHf = ΔHat(Na) + ΔHat(½Cl₂) + IE₁(Na) + EA₁(Cl) + ΔHlatt. Rearrange for ΔHlatt.", answer: -787, unit: "kJ mol⁻¹", tolerance: 3, steps: ["ΔHf = ΔHat(Na) + ΔHat(½Cl₂) + IE₁(Na) + EA₁(Cl) + ΔHlatt", "−411 = +108 + 121 + 496 + (−349) + ΔHlatt", "−411 = +376 + ΔHlatt", "ΔHlatt = −411 − 376 = −787 kJ mol⁻¹"] },
-      { q: "Calculate ΔSsurroundings for a reaction with ΔH = −240 kJ mol⁻¹ at 300 K.", hint: "ΔSsurr = −ΔH ÷ T. Convert ΔH to J.", answer: 800, unit: "J K⁻¹ mol⁻¹", tolerance: 5, steps: ["ΔSsurr = −ΔH ÷ T", "ΔSsurr = −(−240 000) ÷ 300", "ΔSsurr = +240 000 ÷ 300 = +800 J K⁻¹ mol⁻¹"] },
-      { q: "For a reaction: ΔH = +50 kJ mol⁻¹, ΔSsystem = +200 J K⁻¹ mol⁻¹. Calculate ΔStotal at 400 K. Is the reaction spontaneous?", hint: "ΔSsurr = −ΔH/T; ΔStotal = ΔSsystem + ΔSsurr.", answer: 75, unit: "J K⁻¹ mol⁻¹", tolerance: 3, steps: ["ΔSsurr = −(+50 000) ÷ 400 = −125 J K⁻¹ mol⁻¹", "ΔStotal = ΔSsystem + ΔSsurr = +200 + (−125) = +75 J K⁻¹ mol⁻¹", "ΔStotal > 0 → reaction is spontaneous at 400 K."] },
+      // EASY
+      { difficulty: "easy", q: "Calculate ΔG (kJ mol⁻¹) for a reaction where ΔH = −200 kJ mol⁻¹ and ΔS = +100 J K⁻¹ mol⁻¹ at 400 K.", hint: "ΔG = ΔH − TΔS. Convert ΔS to kJ K⁻¹ mol⁻¹ first (divide by 1000).", answer: -240, unit: "kJ mol⁻¹", tolerance: 2, steps: ["ΔS = +100 J K⁻¹ mol⁻¹ = +0.100 kJ K⁻¹ mol⁻¹", "ΔG = ΔH − TΔS = −200 − (400 × 0.100)", "ΔG = −200 − 40 = −240 kJ mol⁻¹"] },
+      { difficulty: "easy", q: "Calculate ΔSsurroundings for a reaction with ΔH = −120 kJ mol⁻¹ at 300 K.", hint: "ΔSsurr = −ΔH ÷ T. Convert ΔH to J.", answer: 400, unit: "J K⁻¹ mol⁻¹", tolerance: 5, steps: ["ΔSsurr = −ΔH ÷ T = −(−120 000) ÷ 300", "ΔSsurr = +120 000 ÷ 300 = +400 J K⁻¹ mol⁻¹"] },
+      // MEDIUM
+      { difficulty: "medium", q: "Calculate ΔG at 298 K for a reaction where ΔH = −92 kJ mol⁻¹ and ΔS = −199 J K⁻¹ mol⁻¹.", hint: "ΔG = ΔH − TΔS. Convert ΔS to kJ first.", answer: -32.7, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["ΔS in kJ = −0.199 kJ K⁻¹ mol⁻¹", "ΔG = −92 − (298 × −0.199) = −92 + 59.3", "ΔG = −32.7 kJ mol⁻¹"] },
+      { difficulty: "medium", q: "Calculate ΔSsurroundings for a reaction with ΔH = −240 kJ mol⁻¹ at 300 K.", hint: "ΔSsurr = −ΔH ÷ T. Convert ΔH to J.", answer: 800, unit: "J K⁻¹ mol⁻¹", tolerance: 5, steps: ["ΔSsurr = −(−240 000) ÷ 300 = +800 J K⁻¹ mol⁻¹"] },
+      // HARD
+      { difficulty: "hard", q: "At what temperature (K) does a reaction with ΔH = +60 kJ mol⁻¹ and ΔS = +150 J K⁻¹ mol⁻¹ become feasible?", hint: "Feasible when ΔG = 0 → T = ΔH ÷ ΔS. Convert ΔH to J.", answer: 400, unit: "K", tolerance: 5, steps: ["Feasible when ΔG = 0: ΔH = TΔS", "T = ΔH ÷ ΔS = 60 000 ÷ 150 = 400 K", "Above 400 K, ΔG < 0 and the reaction is feasible."] },
+      { difficulty: "hard", q: "For a reaction: ΔH = +50 kJ mol⁻¹, ΔSsystem = +200 J K⁻¹ mol⁻¹. Calculate ΔStotal at 400 K. Is the reaction spontaneous? (Give numerical value of ΔStotal)", hint: "ΔSsurr = −ΔH ÷ T; ΔStotal = ΔSsystem + ΔSsurr.", answer: 75, unit: "J K⁻¹ mol⁻¹", tolerance: 3, steps: ["ΔSsurr = −(+50 000) ÷ 400 = −125 J K⁻¹ mol⁻¹", "ΔStotal = +200 + (−125) = +75 J K⁻¹ mol⁻¹", "ΔStotal > 0 → reaction is spontaneous at 400 K."] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for KCl to find the lattice enthalpy given:\nΔHf°(KCl) = −437 kJ mol⁻¹\nΔHat°(K) = +89 kJ mol⁻¹\nΔHat°(½Cl₂) = +122 kJ mol⁻¹\nIE₁(K) = +419 kJ mol⁻¹\nEA₁(Cl) = −349 kJ mol⁻¹", hint: "ΔHf = ΔHat(K) + ΔHat(½Cl₂) + IE₁(K) + EA₁(Cl) + ΔHlatt. Rearrange for ΔHlatt.", answer: -718, unit: "kJ mol⁻¹", tolerance: 3, steps: ["ΔHf = ΔHat(K) + ΔHat(½Cl₂) + IE₁(K) + EA₁(Cl) + ΔHlatt", "−437 = 89 + 122 + 419 + (−349) + ΔHlatt", "−437 = +281 + ΔHlatt", "ΔHlatt = −437 − 281 = −718 kJ mol⁻¹"] },
+      // EXAM
+      { difficulty: "exam", q: "Use the Born-Haber cycle for NaCl to find the lattice enthalpy given:\nΔHf°(NaCl) = −411 kJ mol⁻¹\nΔHat°(Na) = +108 kJ mol⁻¹\nΔHat°(½Cl₂) = +121 kJ mol⁻¹\nIE₁(Na) = +496 kJ mol⁻¹\nEA₁(Cl) = −349 kJ mol⁻¹", hint: "ΔHf = ΔHat(Na) + ΔHat(½Cl₂) + IE₁(Na) + EA₁(Cl) + ΔHlatt. Rearrange for ΔHlatt.", answer: -787, unit: "kJ mol⁻¹", tolerance: 3, steps: ["−411 = 108 + 121 + 496 + (−349) + ΔHlatt", "−411 = +376 + ΔHlatt", "ΔHlatt = −787 kJ mol⁻¹"] },
     ]
   },
   {
     id: "calc_electrode", title: "Electrode Potentials", color: "#1a6b9a", board: "both",
     questions: [
-      { q: "Calculate the standard cell EMF for a cell made from Zn²⁺/Zn (E° = −0.76 V) and Cu²⁺/Cu (E° = +0.34 V).", hint: "E°cell = E°cathode − E°anode. Cathode is the more positive electrode.", answer: 1.10, unit: "V", tolerance: 0.01, steps: ["E°cell = E°(more positive) − E°(more negative)", "E°cell = E°(Cu²⁺/Cu) − E°(Zn²⁺/Zn)", "E°cell = +0.34 − (−0.76) = +0.34 + 0.76 = +1.10 V"] },
-      { q: "Are these two half-reactions spontaneous in the forward direction together?\nMnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O  E° = +1.51 V\nFe³⁺ + e⁻ → Fe²⁺  E° = +0.77 V\n(Enter 1 for yes, 0 for no)", hint: "The stronger oxidising agent (higher E°) oxidises the reducing form of the weaker one. E°cell > 0 means spontaneous.", answer: 1, unit: "", tolerance: 0, steps: ["MnO₄⁻/Mn²⁺ has E° = +1.51 V (stronger oxidising agent)", "Fe³⁺/Fe²⁺ has E° = +0.77 V", "MnO₄⁻ oxidises Fe²⁺ to Fe³⁺ (reverse of Fe half-equation)", "E°cell = +1.51 − 0.77 = +0.74 V > 0 → spontaneous ✓"] },
-      { q: "A cell consists of Fe³⁺/Fe²⁺ (E° = +0.77 V) and Cl₂/Cl⁻ (E° = +1.36 V). What is E°cell if Fe²⁺ is oxidised to Fe³⁺ at the anode?", hint: "If Fe²⁺ is oxidised (anode), then Fe³⁺/Fe²⁺ is the anode. Cl₂/Cl⁻ is cathode. E°cell = E°cathode − E°anode.", answer: 0.59, unit: "V", tolerance: 0.01, steps: ["Anode (oxidation): Fe²⁺ → Fe³⁺ + e⁻ (reverse of Fe³⁺/Fe²⁺)", "Cathode (reduction): Cl₂ + 2e⁻ → 2Cl⁻", "E°cell = E°cathode − E°anode = +1.36 − 0.77 = +0.59 V"] },
+      // EASY
+      { difficulty: "easy", q: "Calculate the standard cell EMF for a cell made from Zn²⁺/Zn (E° = −0.76 V) and Cu²⁺/Cu (E° = +0.34 V).", hint: "E°cell = E°cathode − E°anode. The cathode (reduction) is the more positive half-cell.", answer: 1.10, unit: "V", tolerance: 0.01, steps: ["E°cell = E°(Cu²⁺/Cu) − E°(Zn²⁺/Zn)", "E°cell = +0.34 − (−0.76) = +1.10 V"] },
+      { difficulty: "easy", q: "Calculate the standard cell EMF for a cell made from Ag⁺/Ag (E° = +0.80 V) and Cu²⁺/Cu (E° = +0.34 V).", hint: "More positive electrode is the cathode. E°cell = E°cathode − E°anode.", answer: 0.46, unit: "V", tolerance: 0.01, steps: ["Ag⁺/Ag is more positive → cathode (reduction)", "Cu²⁺/Cu is less positive → anode (oxidation)", "E°cell = +0.80 − 0.34 = +0.46 V"] },
+      { difficulty: "easy", q: "A cell is made from Fe³⁺/Fe²⁺ (E° = +0.77 V) and Sn⁴⁺/Sn²⁺ (E° = +0.15 V). Fe³⁺ is reduced at the cathode. Calculate E°cell.", hint: "E°cell = E°cathode − E°anode.", answer: 0.62, unit: "V", tolerance: 0.01, steps: ["Cathode: Fe³⁺/Fe²⁺ (E° = +0.77 V)", "Anode: Sn⁴⁺/Sn²⁺ (E° = +0.15 V)", "E°cell = 0.77 − 0.15 = +0.62 V"] },
+      // MEDIUM
+      { difficulty: "medium", q: "Are these two half-reactions spontaneous in the forward direction together?\nMnO₄⁻ + 8H⁺ + 5e⁻ → Mn²⁺ + 4H₂O  E° = +1.51 V\nFe³⁺ + e⁻ → Fe²⁺  E° = +0.77 V\n(Enter 1 for yes, 0 for no)", hint: "For a spontaneous reaction, E°cell > 0. The stronger oxidiser (higher E°) reacts with the reducing form of the weaker.", answer: 1, unit: "", tolerance: 0, steps: ["MnO₄⁻/Mn²⁺ has higher E° → is the oxidising agent (cathode)", "Fe²⁺ is oxidised to Fe³⁺ (anode = reverse of Fe³⁺/Fe²⁺)", "E°cell = +1.51 − 0.77 = +0.74 V > 0 → spontaneous ✓"] },
+      { difficulty: "medium", q: "A cell consists of Fe³⁺/Fe²⁺ (E° = +0.77 V) and Cl₂/Cl⁻ (E° = +1.36 V). Fe²⁺ is oxidised at the anode. Calculate E°cell.", hint: "E°cell = E°cathode − E°anode. Identify which is cathode and which is anode.", answer: 0.59, unit: "V", tolerance: 0.01, steps: ["Anode (oxidation): Fe²⁺ → Fe³⁺ + e⁻", "Cathode (reduction): Cl₂ + 2e⁻ → 2Cl⁻", "E°cell = +1.36 − 0.77 = +0.59 V"] },
+      // HARD
+      { difficulty: "hard", q: "Calculate ΔG° (kJ mol⁻¹) for the Zn/Cu cell (E°cell = +1.10 V). The reaction involves 2 electrons. (F = 96 500 C mol⁻¹)", hint: "ΔG° = −nFE°cell. n = number of moles of electrons transferred.", answer: -212.3, unit: "kJ mol⁻¹", tolerance: 2.0, steps: ["ΔG° = −nFE°cell", "ΔG° = −2 × 96500 × 1.10 = −212 300 J mol⁻¹", "ΔG° = −212.3 kJ mol⁻¹"] },
     ]
   },
 ];
@@ -3956,6 +4023,7 @@ export default function App() {
   const [extShowModel, setExtShowModel] = useState(false); // model answer toggle
   const [extAiError, setExtAiError] = useState(null);      // error message if API fails
   const [calcTopic, setCalcTopic] = useState(null);
+  const [calcDifficulty, setCalcDifficulty] = useState(null); // null | "all" | "easy" | "medium" | "hard" | "exam"
   const [calcIndex, setCalcIndex] = useState(0);
   const [calcInput, setCalcInput] = useState("");
   const [calcChecked, setCalcChecked] = useState(false);
@@ -5793,16 +5861,17 @@ export default function App() {
       })()}
       {topicsTab === "calc" && (
         <div style={{ padding: "16px", flex: 1, overflowY: "auto" }}>
+          {/* ── Topic selection ── */}
           {!calcTopic && (
             <div>
               <p style={{ color: "#4a6080", fontSize: "14px", marginBottom: "16px", lineHeight: 1.5 }}>
-                Practise exam-style calculation questions with full worked solutions.
+                Worked calc questions across all topics. Pick a topic then choose your difficulty.
               </p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                 {CALC_SETS.map(set => {
                   const score = calcScore[set.id] || { correct: 0, attempted: 0 };
                   return (
-                    <button key={set.id} onClick={() => { setCalcTopic(set.id); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{
+                    <button key={set.id} onClick={() => { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{
                       background: "#ffffff", border: `2px solid ${set.color}30`,
                       borderRadius: "14px", padding: "14px 12px", textAlign: "left",
                       cursor: "pointer", fontFamily: "inherit",
@@ -5820,11 +5889,54 @@ export default function App() {
               </div>
             </div>
           )}
-          {calcTopic && (() => {
+          {/* ── Difficulty selection ── */}
+          {calcTopic && !calcDifficulty && (() => {
             const set = CALC_SETS.find(s => s.id === calcTopic);
             if (!set) return null;
-            const q = set.questions[calcIndex];
-            const isLast = calcIndex === set.questions.length - 1;
+            const tiers = [
+              { key: "all",    label: "All Questions",  icon: "∞", color: "#1a2d45",  desc: `${set.questions.length} questions across all levels` },
+              { key: "easy",   label: "Easy",           icon: "1", color: "#16a34a",  desc: `${set.questions.filter(q=>q.difficulty==="easy").length} questions — single or two-step` },
+              { key: "medium", label: "Medium",         icon: "2", color: "#d97706",  desc: `${set.questions.filter(q=>q.difficulty==="medium").length} questions — multi-step, unit conversions` },
+              { key: "hard",   label: "Hard",           icon: "3", color: "#dc2626",  desc: `${set.questions.filter(q=>q.difficulty==="hard").length} questions — longer chains, stoichiometry` },
+              { key: "exam",   label: "Exam Style",     icon: "★", color: "#7c3aed",  desc: `${set.questions.filter(q=>q.difficulty==="exam").length} questions — past paper difficulty` },
+            ];
+            return (
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
+                  <button onClick={() => setCalcTopic(null)} style={{ background: "none", border: "none", color: "#29ABE2", fontWeight: 700, cursor: "pointer", fontSize: "14px", fontFamily: "inherit", padding: 0 }}>← Topics</button>
+                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45" }}>{set.title}</div>
+                </div>
+                <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Choose difficulty</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {tiers.map(t => (
+                    <button key={t.key} onClick={() => { setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{
+                      background: "#ffffff", border: `2px solid ${t.color}20`, borderRadius: "14px",
+                      padding: "14px 16px", textAlign: "left", cursor: "pointer", fontFamily: "inherit",
+                      display: "flex", alignItems: "center", gap: "14px",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    }}>
+                      <div style={{ width: "34px", height: "34px", borderRadius: "10px", background: `${t.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 800, color: t.color, flexShrink: 0 }}>{t.icon}</div>
+                      <div>
+                        <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a2d45" }}>{t.label}</div>
+                        <div style={{ fontSize: "12px", color: "#7a95b0", marginTop: "2px" }}>{t.desc}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+          {/* ── Question view ── */}
+          {calcTopic && calcDifficulty && (() => {
+            const set = CALC_SETS.find(s => s.id === calcTopic);
+            if (!set) return null;
+            const filteredQs = calcDifficulty === "all" ? set.questions : set.questions.filter(q => q.difficulty === calcDifficulty);
+            if (filteredQs.length === 0) return <div style={{ color: "#7a95b0", fontSize: "14px" }}>No questions at this difficulty yet.</div>;
+            const q = filteredQs[calcIndex] || filteredQs[0];
+            const currentIdx = Math.min(calcIndex, filteredQs.length - 1);
+            const isLast = currentIdx === filteredQs.length - 1;
+            const diffColors = { easy: "#16a34a", medium: "#d97706", hard: "#dc2626", exam: "#7c3aed" };
+            const diffLabels = { easy: "Easy", medium: "Medium", hard: "Hard", exam: "Exam Style" };
             const checkAnswer = () => {
               if (!calcChecked) {
                 const correct = q.isText
@@ -5845,13 +5957,20 @@ export default function App() {
               <div>
                 {/* Header */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-                  <button onClick={() => setCalcTopic(null)} style={{ background: "none", border: "none", color: "#29ABE2", fontWeight: 700, cursor: "pointer", fontSize: "14px", fontFamily: "inherit" }}>← Topics</button>
-                  <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{set.title} · {calcIndex + 1} / {set.questions.length}</div>
+                  <button onClick={() => { setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ background: "none", border: "none", color: "#29ABE2", fontWeight: 700, cursor: "pointer", fontSize: "14px", fontFamily: "inherit", padding: 0 }}>← Difficulty</button>
+                  <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{currentIdx + 1} / {filteredQs.length}</div>
                 </div>
                 {/* Progress bar */}
-                <div style={{ height: "4px", background: "#e0e8f0", borderRadius: "2px", marginBottom: "16px", overflow: "hidden" }}>
-                  <div style={{ height: "100%", width: `${((calcIndex + 1) / set.questions.length) * 100}%`, background: set.color, borderRadius: "2px", transition: "width 0.3s" }} />
+                <div style={{ height: "4px", background: "#e0e8f0", borderRadius: "2px", marginBottom: "14px", overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${((currentIdx + 1) / filteredQs.length) * 100}%`, background: set.color, borderRadius: "2px", transition: "width 0.3s" }} />
                 </div>
+                {/* Difficulty badge */}
+                {q.difficulty && (
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", background: `${diffColors[q.difficulty]}15`, borderRadius: "6px", padding: "3px 9px", marginBottom: "10px" }}>
+                    <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: diffColors[q.difficulty] }} />
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: diffColors[q.difficulty], textTransform: "uppercase", letterSpacing: "0.5px" }}>{diffLabels[q.difficulty]}</span>
+                  </div>
+                )}
                 {/* Question card */}
                 <div style={{ background: "#ffffff", borderRadius: "14px", padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,0.07)", marginBottom: "12px", border: "1px solid #e8eef4" }}>
                   <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, fontWeight: 500, whiteSpace: "pre-line" }}>{q.q}</div>
@@ -5902,12 +6021,12 @@ export default function App() {
                     {/* Navigation */}
                     <div style={{ display: "flex", gap: "8px" }}>
                       {!isLast ? (
-                        <button onClick={() => { setCalcIndex(i => i + 1); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ flex: 1, padding: "13px", background: "#29ABE2", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                        <button onClick={() => { setCalcIndex(currentIdx + 1); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ flex: 1, padding: "13px", background: "#29ABE2", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
                           Next Question →
                         </button>
                       ) : (
-                        <button onClick={() => { setCalcTopic(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                          Finish - Back to Topics
+                        <button onClick={() => { setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                          Finish — Back to Difficulty
                         </button>
                       )}
                       <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
