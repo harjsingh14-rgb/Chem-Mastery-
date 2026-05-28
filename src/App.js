@@ -3706,6 +3706,7 @@ export default function App() {
   const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms"
   const [extCategory, setExtCategory] = useState(null);
   const [extIndex, setExtIndex] = useState(0);
+  const [extQPicker, setExtQPicker] = useState(false); // true = show question list, false = show question
   const [extRevealed, setExtRevealed] = useState(false);
   const [extMarked, setExtMarked] = useState(new Set());
   const [extDraft, setExtDraft] = useState("");
@@ -5314,7 +5315,7 @@ export default function App() {
                 const totalMarks = qs.length * 6;
                 const earnedMarks = scores.reduce((a, b) => a + b, 0);
                 return (
-                  <button key={cat} onClick={() => { setExtCategory(cat); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); }}
+                  <button key={cat} onClick={() => { setExtCategory(cat); setExtQPicker(true); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); }}
                     style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
                     <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: purple, marginBottom: "8px" }} />
                     <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{cat}</div>
@@ -5327,8 +5328,49 @@ export default function App() {
           </div>
         );
 
-        // Question view
+        // Question picker
         const catQs = filteredQs.filter(q => q.category === extCategory);
+        if (extQPicker) return (
+          <div style={{ padding: "16px", flex: 1, overflowY: "auto" }}>
+            <button onClick={() => { setExtCategory(null); setExtQPicker(false); }}
+              style={{ background: "none", border: "none", color: purple, fontWeight: 700, fontSize: "13px", cursor: "pointer", padding: "0 0 14px 0", fontFamily: "inherit", display: "flex", alignItems: "center", gap: "4px" }}>
+              &#8592; Back to topics
+            </button>
+            <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", marginBottom: "4px" }}>{extCategory}</p>
+            <p style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>Choose a question to attempt</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {catQs.map((question, i) => {
+                const savedScore = extScore[question.id];
+                const attempted = savedScore !== undefined;
+                return (
+                  <button key={question.id}
+                    onClick={() => { setExtIndex(i); setExtQPicker(false); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiError(null); setExtAiLoading(false); setExtShowModel(false); }}
+                    style={{ background: "#fff", border: `2px solid ${attempted ? purple : purpleLight}`, borderRadius: "14px", padding: "14px 14px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px" }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: "11px", fontWeight: 700, color: purple, marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                          Q{i + 1} &middot; {question.marks} marks
+                        </div>
+                        <div style={{ fontSize: "12px", color: "#1a2d45", lineHeight: 1.5, fontWeight: 500 }}>
+                          {question.question.length > 120 ? question.question.slice(0, 120).trim() + "..." : question.question}
+                        </div>
+                      </div>
+                      {attempted && (
+                        <div style={{ flexShrink: 0, background: savedScore >= question.marks * 0.7 ? "#d1fae5" : savedScore >= question.marks * 0.4 ? "#fef9c3" : "#fee2e2",
+                          color: savedScore >= question.marks * 0.7 ? "#065f46" : savedScore >= question.marks * 0.4 ? "#92400e" : "#991b1b",
+                          borderRadius: "8px", padding: "4px 8px", fontSize: "12px", fontWeight: 700 }}>
+                          {savedScore}/{question.marks}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+
+        // Question view
         const q = catQs[extIndex];
         if (!q) return null;
         const isLast = extIndex === catQs.length - 1;
@@ -5383,8 +5425,8 @@ export default function App() {
           <div style={{ padding: "16px", flex: 1, overflowY: "auto" }}>
             {/* Header */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-              <button onClick={() => setExtCategory(null)} style={{ background: "none", border: "none", color: purple, fontWeight: 700, cursor: "pointer", fontSize: "14px", fontFamily: "inherit" }}>← Topics</button>
-              <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{extCategory} · {extIndex + 1} / {catQs.length}</div>
+              <button onClick={() => { setExtQPicker(true); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); }} style={{ background: "none", border: "none", color: purple, fontWeight: 700, cursor: "pointer", fontSize: "14px", fontFamily: "inherit" }}>&#8592; Questions</button>
+              <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600 }}>{extCategory} · Q{extIndex + 1} / {catQs.length}</div>
             </div>
             {/* Progress bar */}
             <div style={{ height: "4px", background: "#e0e8f0", borderRadius: "2px", marginBottom: "16px", overflow: "hidden" }}>
