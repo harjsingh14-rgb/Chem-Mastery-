@@ -5434,8 +5434,8 @@ export default function App() {
                 <div style={{ fontSize: "13px", fontWeight: 700, color: "#be123c", marginBottom: "6px" }}>⚠️ AI Examiner unavailable</div>
                 <div style={{ fontSize: "12px", color: "#9f1239", lineHeight: 1.6, marginBottom: "12px" }}>
                   {extAiError === 'API key not configured'
-                    ? 'The API key hasn\'t been added to Vercel yet. Add ANTHROPIC_API_KEY in Vercel → Settings → Environment Variables, then redeploy.'
-                    : `Something went wrong: ${extAiError}. Check your internet connection and try again.`}
+                    ? 'The API key has not been added to Vercel. Add ANTHROPIC_API_KEY in Vercel > Settings > Environment Variables, then redeploy.'
+                    : `Error: ${extAiError}`}
                 </div>
                 <button onClick={handleSubmit} style={{ width: "100%", padding: "11px", borderRadius: "10px", border: "none", background: "#be123c", color: "#fff", fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
                   Try Again

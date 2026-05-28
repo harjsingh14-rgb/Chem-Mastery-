@@ -1,6 +1,5 @@
 // Vercel serverless function — AI Examiner
-// Called by the React app at POST /api/examine
-// Uses raw fetch to Anthropic API — no SDK dependency, no validation issues
+// Uses raw fetch to Anthropic API — no SDK dependency
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -50,8 +49,9 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
   "modelAnswer": "<concise model student answer covering all mark scheme points in full connected sentences>"
 }`;
 
+  let anthropicRes;
   try {
-    const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
+    anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,41 +64,42 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
         messages: [{ role: "user", content: prompt }],
       }),
     });
-
-    if (!anthropicRes.ok) {
-      const errBody = await anthropicRes.text();
-      console.error("Anthropic API error response:", anthropicRes.status, errBody);
-      return res.status(502).json({
-        error: `Anthropic API error ${anthropicRes.status}`,
-        detail: errBody,
-      });
-    }
-
-    const anthropicData = await anthropicRes.json();
-    const raw = anthropicData.content?.[0]?.text?.trim() || "";
-
-    // Strip markdown code fences if the model wraps in ```json...```
-    const cleaned = raw.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "");
-
-    let result;
-    try {
-      result = JSON.parse(cleaned);
-    } catch {
-      return res.status(502).json({ error: "Could not parse AI response", raw });
-    }
-
-    // Clamp score to valid range
-    result.score = Math.max(0, Math.min(maxMarks, result.score || 0));
-
-    // Ensure coveredPoints array matches mark scheme length
-    if (!Array.isArray(result.coveredPoints) || result.coveredPoints.length !== markScheme.length) {
-      result.coveredPoints = markScheme.map(() => false);
-    }
-
-    return res.status(200).json(result);
-
-  } catch (err) {
-    console.error("examine.js error:", err);
-    return res.status(500).json({ error: `Server error: ${err.message}` });
+  } catch (fetchErr) {
+    return res.status(502).json({
+      error: `Network error calling Anthropic: ${fetchErr.message}`,
+    });
   }
+
+  if (!anthropicRes.ok) {
+    const errBody = await anthropicRes.text();
+    console.error("Anthropic API error:", anthropicRes.status, errBody);
+    return res.status(502).json({
+      error: `Anthropic API error ${anthropicRes.status}: ${errBody.slice(0, 200)}`,
+    });
+  }
+
+  let anthropicData;
+  try {
+    anthropicData = await anthropicRes.json();
+  } catch (jsonErr) {
+    return res.status(502).json({ error: `Failed to parse Anthropic response: ${jsonErr.message}` });
+  }
+
+  const raw = anthropicData.content?.[0]?.text?.trim() || "";
+  const cleaned = raw.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "");
+
+  let result;
+  try {
+    result = JSON.parse(cleaned);
+  } catch {
+    return res.status(502).json({ error: "Could not parse AI response", raw });
+  }
+
+  result.score = Math.max(0, Math.min(maxMarks, result.score || 0));
+
+  if (!Array.isArray(result.coveredPoints) || result.coveredPoints.length !== markScheme.length) {
+    result.coveredPoints = markScheme.map(() => false);
+  }
+
+  return res.status(200).json(result);
 };
