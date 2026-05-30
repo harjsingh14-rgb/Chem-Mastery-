@@ -3566,18 +3566,16 @@ function Bond({ x1,y1,x2,y2,dbl,dash,color="#1a202c",width=2.5 }) {
     strokeDasharray={dash?"6,4":undefined} strokeLinecap="round"/>;
 }
 
-// Lone pair helper (two short parallel lines - Save My Exams / textbook style)
+// Lone pair helper (two dots close to atom - Lewis structure style)
 function LP({ x, y, angle=0, color="#1a202c" }) {
   const rad=(angle*Math.PI)/180;
-  // Direction away from atom (the "outward" direction)
   const ox=Math.cos(rad), oy=Math.sin(rad);
-  // Perpendicular direction (for spacing the two lines)
   const px=-oy, py=ox;
-  const gap=3, len=7;
-  // Two parallel lines extending outward from (x,y), spaced apart perpendicular
+  const dist=9, gap=2.8;
+  const cx=x+ox*dist, cy=y+oy*dist;
   return <g>
-    <line x1={x+px*gap} y1={y+py*gap} x2={x+px*gap+ox*len} y2={y+py*gap+oy*len} stroke={color} strokeWidth={1.8} strokeLinecap="round"/>
-    <line x1={x-px*gap} y1={y-py*gap} x2={x-px*gap+ox*len} y2={y-py*gap+oy*len} stroke={color} strokeWidth={1.8} strokeLinecap="round"/>
+    <circle cx={cx+px*gap} cy={cy+py*gap} r={1.8} fill={color}/>
+    <circle cx={cx-px*gap} cy={cy-py*gap} r={1.8} fill={color}/>
   </g>;
 }
 
@@ -3663,7 +3661,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           {/* Br⁻ */}
           <A x={470} y={140} el="Br" size={20}/>
           <Charge x={494} y={124} val="-" color="#9a3412"/>
-          <LP x={454} y={126} angle={150} color="#9a3412"/>
           <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>bromide ion</text>
           {renderArrows()}
         </MechSVGBase>
@@ -3687,7 +3684,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={306} y1={140} x2={430} y2={140}/>
         <A x={448} y={140} el="Br" size={18}/>
         <Delta x={464} y={118} sign="-"/>
-        <LP x={466} y={126} angle={70} color="#9a3412"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
         <text x={290} y={210} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
@@ -3710,7 +3706,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={145} y={140} el="C" size={18}/>
           <Bond x1={155} y1={130} x2={172} y2={112}/>
           <A x={180} y={104} el="Br" size={17}/>
-          <LP x={196} y={92} angle={40} color="#9a3412"/>
           <Bond x1={160} y1={140} x2={240} y2={140}/>
           <A x={255} y={140} el="C" size={18}/>
           <Charge x={276} y={122} val="+" color="#b91c1c"/>
@@ -3741,11 +3736,9 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         {/* Br₂ */}
         <A x={390} y={140} el="Br" size={18}/>
         <Delta x={378} y={118} sign="+"/>
-        <LP x={374} y={128} angle={170} color="#9a3412"/>
         <Bond x1={408} y1={140} x2={455} y2={140}/>
         <A x={470} y={140} el="Br" size={18}/>
         <Delta x={488} y={118} sign="-"/>
-        <LP x={488} y={128} angle={70} color="#9a3412"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3794,7 +3787,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={394} y1={140} x2={438} y2={140}/>
         <A x={456} y={140} el="Br" size={18}/>
         <Delta x={474} y={118} sign="-"/>
-        <LP x={474} y={128} angle={70} color="#9a3412"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3860,7 +3852,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={352} y1={132} x2={388} y2={112} dbl/>
         <A x={400} y={106} el="O" size={18}/>
         <Delta x={418} y={90} sign="-"/>
-        <LP x={416} y={102} angle={40} color="#b91c1c"/>
         <Bond x1={335} y1={150} x2={326} y2={172}/>
         <A x={322} y={182} el="H" size={16} color="#64748b"/>
         {renderArrows()}
@@ -3888,7 +3879,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           {/* Cl down-right */}
           <Bond x1={200} y1={148} x2={245} y2={176}/>
           <A x={258} y={184} el="Cl" size={18}/>
-          <LP x={276} y={196} angle={50} color="#166534"/>
           {/* H */}
           <Bond x1={182} y1={150} x2={162} y2={174}/>
           <A x={156} y={184} el="H" size={16} color="#64748b"/>
@@ -3929,10 +3919,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={316} y1={132} x2={354} y2={112} dbl/>
         <A x={368} y={104} el="O" size={18}/>
         <Delta x={386} y={88} sign="-"/>
-        <LP x={384} y={100} angle={40} color="#b91c1c"/>
         <Bond x1={316} y1={148} x2={354} y2={168}/>
         <A x={368} y={176} el="Cl" size={18}/>
-        <LP x={386} y={188} angle={70} color="#166534"/>
         <text x={305} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic acyl carbon</text>
         {renderArrows()}
       </MechSVGBase>
@@ -3952,7 +3940,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={262} y={104} el="O" size={18}/>
           <Bond x1={216} y1={148} x2={248} y2={168}/>
           <A x={262} y={176} el="Cl" size={18}/>
-          <LP x={278} y={188} angle={60} color="#166534"/>
           <A x={440} y={140} el="AlCl₃" size={16} color="#64748b"/>
           <Bond x1={286} y1={176} x2={410} y2={146} dash color="#94a3b8" width={1.5}/>
           <text x={205} y={220} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#7c3aed",fontWeight:700}}>acyl chloride</text>
@@ -4083,7 +4070,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         {/* C-Br bond */}
         <Bond x1={326} y1={140} x2={435} y2={140}/>
         <A x={455} y={140} el="Br" size={18}/>
-        <LP x={472} y={126} angle={70} color="#9a3412"/>
 
         {renderArrows()}
       </MechSVGBase>
@@ -4099,10 +4085,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <text x={310} y={55} textAnchor="middle" style={{fontSize:"16px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>UV light (hv)</text>
           <text x={310} y={78} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>|</text>
           <A x={180} y={140} el="Cl" size={20}/>
-          <LP x={160} y={126} angle={150} color="#166534"/>
           <Bond x1={204} y1={140} x2={395} y2={140}/>
           <A x={418} y={140} el="Cl" size={20}/>
-          <LP x={438} y={126} angle={30} color="#166534"/>
           <text x={300} y={178} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>homolytic fission</text>
           {renderArrows()}
         </MechSVGBase>
@@ -4113,7 +4097,6 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <MechSVGBase animKey={animKey}>
           <A x={80} y={140} el="Cl" size={20}/>
           <text x={100} y={122} style={{fontSize:"18px",fill:"#166534",fontWeight:700}}>.</text>
-          <LP x={60} y={126} angle={150} color="#166534"/>
 
           <A x={290} y={140} el="C" size={18}/>
           <A x={290} y={104} el="H" size={16} color="#64748b"/><Bond x1={290} y1={132} x2={290} y2={112}/>
@@ -4134,10 +4117,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={125} y={168} el="H" size={16} color="#64748b"/><Bond x1={102} y1={148} x2={119} y2={164}/>
 
           <A x={310} y={140} el="Cl" size={20}/>
-          <LP x={292} y={126} angle={150} color="#166534"/>
           <Bond x1={334} y1={140} x2={405} y2={140}/>
           <A x={425} y={140} el="Cl" size={20}/>
-          <LP x={444} y={126} angle={30} color="#166534"/>
           {renderArrows()}
         </MechSVGBase>
       );
