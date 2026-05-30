@@ -3909,7 +3909,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         <A x={70} y={140} el="NH₃" size={17} color="#1d4ed8"/>
-        <LP x={70} y={140} angle={0} color="#1d4ed8"/>
+        <LP x={92} y={140} angle={0} color="#1d4ed8"/>
         <text x={70} y={188} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
 
         <A x={230} y={140} el="CH₃" size={16}/>
@@ -4045,7 +4045,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         {/* OH⁻ base */}
         <A x={60} y={140} el="HO" size={18} color="#b91c1c"/>
         <Charge x={86} y={122} val="-" color="#b91c1c"/>
-        <LP x={60} y={140} angle={0} color="#b91c1c"/>
+        <LP x={80} y={140} angle={0} color="#b91c1c"/>
         <text x={60} y={192} textAnchor="middle" style={{fontSize:"12px",fill:"#9333ea",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:700}}>base</text>
 
         {/* β-carbon */}
