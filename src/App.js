@@ -3301,7 +3301,7 @@ const MECHS = [
     ],
     arrowPaths: {
       a1: { d:"M 110,118 C 165,72 225,72 268,120", label:"O lone pair attacks δ+C, forming new O-C bond", type:"full" },
-      a2: { d:"M 310,130 C 350,100 400,100 438,128", label:"C-Br bond breaks heterolytically, Br leaves as Br⁻", type:"full" },
+      a2: { d:"M 310,130 C 330,105 350,105 364,128", label:"C-Br bond breaks heterolytically, Br leaves as Br⁻", type:"full" },
     },
   },
   {
@@ -3480,7 +3480,7 @@ const MECHS = [
     arrowPaths: {
       a1: { d:"M 72,118 C 110,78 160,76 196,108", label:"OH⁻ abstracts the β-hydrogen", type:"full" },
       a2: { d:"M 218,128 C 240,102 278,102 302,128", label:"C-H electrons form the new C=C π bond", type:"full" },
-      a3: { d:"M 326,128 C 360,102 410,104 445,128", label:"C-Br bond breaks, Br⁻ leaves", type:"full" },
+      a3: { d:"M 326,128 C 348,104 370,104 385,128", label:"C-Br bond breaks, Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -3681,13 +3681,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={290} y={106} el="H" size={16} color="#64748b"/><Bond x1={290} y1={132} x2={290} y2={114}/>
         <A x={262} y={166} el="H" size={16} color="#64748b"/><Bond x1={283} y1={148} x2={268} y2={162}/>
         <A x={318} y={166} el="H" size={16} color="#64748b"/><Bond x1={297} y1={148} x2={312} y2={162}/>
-        <Bond x1={306} y1={140} x2={430} y2={140}/>
-        <A x={448} y={140} el="Br" size={18}/>
-        <Delta x={464} y={118} sign="-"/>
+        <Bond x1={306} y1={140} x2={358} y2={140}/>
+        <A x={374} y={140} el="Br" size={18}/>
+        <Delta x={390} y={118} sign="-"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
         <text x={290} y={210} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-        <text x={448} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+        <text x={374} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -4068,8 +4068,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={314} y1={150} x2={326} y2={168}/>
 
         {/* C-Br bond */}
-        <Bond x1={326} y1={140} x2={435} y2={140}/>
-        <A x={455} y={140} el="Br" size={18}/>
+        <Bond x1={326} y1={140} x2={378} y2={140}/>
+        <A x={395} y={140} el="Br" size={18}/>
 
         {renderArrows()}
       </MechSVGBase>
