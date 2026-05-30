@@ -1774,28 +1774,32 @@ const renderReactionSvg = (fromKey, toKey) => {
   const fMol = MOLECULE_SVG[fromKey];
   const tMol = MOLECULE_SVG[toKey];
   if (!fMol || !tMol) return null;
-  const gap = 50; // space for arrow
-  const totalW = fMol.w + gap + tMol.w + 20;
-  const maxH = Math.max(fMol.h, tMol.h) + 20;
-  const fX = 10, fY = (maxH - fMol.h) / 2;
-  const tX = fMol.w + gap + 10, tY = (maxH - tMol.h) / 2;
-  const arrowX1 = fMol.w + 15, arrowX2 = fMol.w + gap + 5;
+  const pad = 16;
+  const arrowLen = 44;
+  const arrowGap = 10; // gap between molecule edge and arrow
+  const totalW = pad + fMol.w + arrowGap + arrowLen + arrowGap + tMol.w + pad;
+  const maxH = Math.max(fMol.h, tMol.h) + pad * 2;
+  const fX = pad;
+  const fY = (maxH - fMol.h) / 2;
+  const tX = pad + fMol.w + arrowGap + arrowLen + arrowGap;
+  const tY = (maxH - tMol.h) / 2;
+  const arrowX1 = pad + fMol.w + arrowGap;
+  const arrowX2 = arrowX1 + arrowLen;
   const arrowY = maxH / 2;
 
   return React.createElement("svg", {
     viewBox: `0 0 ${totalW} ${maxH}`,
-    width: Math.min(totalW * 1.4, 340),
-    height: Math.min(maxH * 1.4, 100),
+    width: Math.min(totalW * 1.6, 380),
+    height: Math.min(maxH * 1.6, 120),
     style: { display:"block", margin:"0 auto" }
   },
-    React.createElement("g", { transform:`translate(${fX},${fY})` }, ...fMol.render()),
-    // Arrow
-    React.createElement("line", { x1:arrowX1, y1:arrowY, x2:arrowX2-4, y2:arrowY, stroke:"#1a2d45", strokeWidth:1.8, markerEnd:"url(#rxnArrow)" }),
     React.createElement("defs", null,
-      React.createElement("marker", { id:"rxnArrow", markerWidth:8, markerHeight:8, refX:7, refY:4, orient:"auto" },
-        React.createElement("path", { d:"M0,1 L7,4 L0,7z", fill:"#1a2d45" })
+      React.createElement("marker", { id:"rxnArrow", markerWidth:10, markerHeight:10, refX:9, refY:5, orient:"auto" },
+        React.createElement("path", { d:"M0,1 L9,5 L0,9z", fill:"#1a2d45" })
       )
     ),
+    React.createElement("g", { transform:`translate(${fX},${fY})` }, ...fMol.render()),
+    React.createElement("line", { x1:arrowX1, y1:arrowY, x2:arrowX2-6, y2:arrowY, stroke:"#1a2d45", strokeWidth:2.2, markerEnd:"url(#rxnArrow)" }),
     React.createElement("g", { transform:`translate(${tX},${tY})` }, ...tMol.render())
   );
 };
