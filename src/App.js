@@ -1908,6 +1908,378 @@ Use your answer to explain whether this reaction is feasible.`,
     examTip: "Two critical unit conversions: (1) Temperature MUST be in Kelvin (989 + 273 = 1262 K). (2) ΔS MUST be converted from J K⁻¹ mol⁻¹ to kJ K⁻¹ mol⁻¹ (divide by 1000) before using in ΔG = ΔH - TΔS. Answer to 3 significant figures as specified."
   },
 
+
+  {
+    id: "aqa10",
+    board: "aqa",
+    category: "Intermolecular Forces",
+    marks: 6,
+    question: `The boiling points of the hydrogen halides are shown below:
+
+Compound | HF | HCl | HBr | HI
+Boiling point / K | 293 | 188 | 206 | 237
+
+Explain the pattern in boiling points in relation to the bonding, structure and intermolecular forces present in the four compounds.`,
+    markScheme: [
+      "All four compounds are covalent molecular",
+      "HF has hydrogen bonding, which is the strongest intermolecular force and takes the most energy to overcome, giving HF the highest boiling point",
+      "HCl, HBr and HI all have permanent dipole attractions and van der Waals forces, which are weaker than hydrogen bonding",
+      "As you go down the group, the halide molecule becomes larger and contains more electrons",
+      "The strength of the van der Waals forces increases down the group, so boiling points increase as it takes more energy to overcome these forces"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Identifies molecular structure, gives types of force present and links to trends in boiling point for all halides" },
+      { level: 2, marks: "3-4", descriptor: "Links boiling point of HF to strength of hydrogen bonding and increasing boiling point of other halides to increasing van der Waals forces" },
+      { level: 1, marks: "1-2", descriptor: "Correctly identifies some of the intermolecular forces and links to boiling points" },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa11",
+    board: "aqa",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `Outline a two-stage procedure to produce the ester, ethyl ethanoate, using ethanol as the only organic reagent. For each step in the procedure you should include: reagents and conditions, chemical equations and the type of reaction taking place. Details of reaction mechanisms or purification steps are not required.`,
+    markScheme: [
+      "Stage 1: Reflux ethanol with excess acidified potassium dichromate to produce ethanoic acid",
+      "Equation: CH₃CH₂OH + 2[O] → CH₃COOH + H₂O",
+      "Type of reaction: oxidation",
+      "Stage 2: Reflux ethanoic acid and ethanol in the presence of concentrated sulfuric acid (catalyst)",
+      "Equation: CH₃CH₂OH + CH₃COOH → CH₃COOCH₂CH₃ + H₂O",
+      "Type of reaction: condensation (esterification)"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Correct reagents and conditions, equations and reaction types for both stages. For full marks, must give full names or formulae of reagents." },
+      { level: 2, marks: "3-4", descriptor: "Identifies oxidation to produce acid and reaction with alcohol to produce ester; at least 3 out of 6 correct for reagents and conditions, equations and reaction types." },
+      { level: 1, marks: "1-2", descriptor: "Identifies oxidation to produce acid and reaction with alcohol to produce ester; some correct reagents/conditions/type of reaction." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa12",
+    board: "aqa",
+    category: "Inorganic Chemistry",
+    marks: 6,
+    question: `Using calcium as an example, describe the reactions of group 2 metals with cold water. You should include a balanced equation, observations you would make and an explanation of why this is a redox reaction.
+
+Describe and explain the trend in reactivity of group 2 metals as you go down the group.`,
+    markScheme: [
+      "Balanced equation: Ca + 2H₂O → Ca(OH)₂ + H₂",
+      "Observations: bubbling/fizzing, the metal disappears, slight white precipitate (Ca(OH)₂ is only slightly soluble)",
+      "Calcium goes from oxidation state 0 to +2: it loses electrons and is oxidised",
+      "Hydrogen (in water) goes from oxidation state +1 to 0: it gains electrons and is reduced",
+      "Metals get more reactive down the group as there are more electron shells, more shielding and outer electrons are further from the nucleus",
+      "The attraction between outer electrons and nucleus is weaker down the group so it takes less energy to remove the electrons"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Correct balanced equation and observations plus both explanations correct. Minor errors or omissions can score 5." },
+      { level: 2, marks: "3-4", descriptor: "Correct balanced equation and at least one observation plus either one fully correct explanation (redox or reactivity) or partly correct explanation for both." },
+      { level: 1, marks: "1-2", descriptor: "Either mostly correct observations/explanation of redox or mostly correct explanation of reactivity." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa13",
+    board: "aqa",
+    category: "Inorganic Chemistry",
+    marks: 8,
+    question: `You are given aqueous solutions of chlorine, bromine and iodine along with solid samples of potassium chloride, potassium bromide and potassium iodide.
+
+Describe how you could use these chemicals to demonstrate the trend in oxidising ability as you go down the group. You should include observations you would make along with examples of full balanced and ionic equations for reactions that take place. You do not need to include details of practical equipment.`,
+    markScheme: [
+      "Add the aqueous halogens to small samples of the solid halides and observe colour changes",
+      "A stronger oxidising agent (more reactive halogen) will displace a weaker one from its compound",
+      "Chlorine + potassium bromide turns from colourless to orange (bromine formed) showing chlorine is a stronger oxidising agent",
+      "Chlorine + potassium iodide turns from colourless to brown (iodine produced)",
+      "Bromine + potassium iodide turns from orange to brown (iodine produced) showing bromine is a stronger oxidising agent than iodine",
+      "Iodine produces no colour change with potassium chloride or potassium bromide as iodine is the weakest oxidising agent",
+      "Full equation example: Cl₂ + 2KBr → 2KCl + Br₂",
+      "Ionic equation example: Cl₂ + 2Br⁻ → 2Cl⁻ + Br₂"
+    ],
+    levels: [
+      { level: 3, marks: "6-8", descriptor: "All equations and observations correct and linked to oxidising ability trend." },
+      { level: 2, marks: "3-5", descriptor: "At least one correct equation, order of oxidising ability correct and linked to experimental observations with at least two correct colour changes." },
+      { level: 1, marks: "1-2", descriptor: "Identifies use of displacement reactions and gives some correct observations linked to oxidising power." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa14",
+    board: "aqa",
+    category: "Energetics",
+    marks: 6,
+    question: `The standard enthalpy of combustion of successive straight-chain alkanes shows a linear relationship with chain length.
+
+Give the definition for standard enthalpy of combustion, and write a balanced equation (including state symbols) for this reaction using butane as an example.
+
+Explain, in terms of bond making and breaking, why the reactions are exothermic and why the relationship is linear.`,
+    markScheme: [
+      "Standard enthalpy of combustion is the enthalpy change when one mole of a substance burns completely in excess oxygen under standard conditions",
+      "Balanced equation: C₄H₁₀(g) + 6.5O₂(g) → 4CO₂(g) + 5H₂O(l)",
+      "Reactions are exothermic because the energy required to break bonds in reactants is less than the energy released when new bonds are made in products",
+      "As the number of carbons increases, the number of C-C, C-H and O=O bonds broken increases by the same amount each time",
+      "The number of C=O and O-H bonds made also increases by the same amount each time",
+      "Therefore the difference in enthalpy of combustion values is the same each time the carbon chain length increases, giving a linear relationship"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Fully correct definition and equation and clear explanation linking to same number and type of bonds broken and made." },
+      { level: 2, marks: "3-4", descriptor: "Fully correct definition and equation and some explanation in terms of bond making/breaking." },
+      { level: 1, marks: "1-2", descriptor: "Mostly correct definition, correct equation and some explanation." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa15",
+    board: "aqa",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `You are provided with unlabelled samples of three isomeric alcohols:
+- Butan-1-ol
+- Butan-2-ol
+- 2-methylpropan-2-ol
+
+You also have access to common laboratory equipment and chemicals.
+
+Outline a practical procedure which would identify each of the three alcohols using chemical reactions and observations alone. You do not need to include descriptions or diagrams of practical apparatus, nor refer to safety procedures.`,
+    markScheme: [
+      "Heat/warm each sample with acidified potassium dichromate",
+      "Butan-1-ol (primary) and butan-2-ol (secondary) both turn the mixture from orange to green; 2-methylpropan-2-ol (tertiary) will not change",
+      "Take fresh samples of the two remaining alcohols and heat with acidified potassium dichromate, separating the product immediately with distillation",
+      "Test the product with Tollens reagent (or Fehlings solution)",
+      "Butan-1-ol produces an aldehyde as the distillate, which gives a silver mirror with Tollens (or red precipitate with Fehlings)",
+      "Butan-2-ol produces a ketone, which does not react with Tollens"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Correct use of oxidising agent plus distillation and testing of products, linked to identifying original alcohol based on classification." },
+      { level: 2, marks: "3-4", descriptor: "Identifies use of oxidising agent and links the tests to the classification of each alcohol and products formed." },
+      { level: 1, marks: "1-2", descriptor: "Identifies oxidising agent as a test to eliminate tertiary alcohol." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa16",
+    board: "aqa",
+    category: "Inorganic Chemistry",
+    marks: 6,
+    question: `You are given three unlabelled solids that are known to be: sodium carbonate, sodium chloride and sodium bromide.
+
+Outline a procedure that could be used to identify each sample using simple laboratory tests and write ionic equations for the reactions that take place.`,
+    markScheme: [
+      "Dissolve the solids in distilled/deionised water",
+      "Identifying the carbonate: add hydrochloric acid (or sulfuric/nitric acid) and the sample that produces bubbles/effervesces contains sodium carbonate",
+      "Ionic equation: 2H⁺ + CO₃²⁻ → CO₂ + H₂O",
+      "Identifying halides: add nitric acid and silver nitrate solution",
+      "Sodium chloride gives a white precipitate; sodium bromide gives a cream precipitate",
+      "Equations: Ag⁺(aq) + Cl⁻(aq) → AgCl(s) and Ag⁺(aq) + Br⁻(aq) → AgBr(s)"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Correctly identifies both carbonate and halide tests with results and correct ionic equations with state symbols. Also identifies need to dissolve solids in distilled water." },
+      { level: 2, marks: "3-4", descriptor: "Correctly identifies both carbonate and halide tests with results and mostly correct ionic equations." },
+      { level: 1, marks: "1-2", descriptor: "Correctly identifies either carbonate or halide ion test with one correct equation." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa17",
+    board: "aqa",
+    category: "Organic Chemistry",
+    marks: 8,
+    question: `Three different organic compounds are isomers with the molecular formula C₅H₁₀O. None of the compounds exist as stereoisomers.
+
+More information about each isomer is presented in the table below:
+
+Isomer | X | Y | Z
+IR spectrum | Broad peak around 3500 cm⁻¹ and peak at 1650 cm⁻¹ | Broad peak around 3500 cm⁻¹ | Broad peak around 3500 cm⁻¹ and peak at 1650 cm⁻¹
+Chemical tests | Reacts with bromine water but does not react with acidified potassium dichromate | Does not react with bromine water but does react with acidified potassium dichromate | Reacts with bromine water and with acidified potassium dichromate
+Mass spectrum peaks | m/z: 15, 27, 59 | m/z: 17, 69 | m/z: 27, 31, 59
+
+Deduce possible structures for each of the compounds, using all the information in the table to justify your answers.`,
+    markScheme: [
+      "Compound X: IR shows C=C (1650) and O-H (3500). Reacts with bromine water so contains an alkene. Does not react with dichromate so must be a tertiary alcohol",
+      "Mass spec peaks: 15 = CH₃⁺, 27 = C₂H₃⁺, 59 = C₃H₆OH⁺",
+      "Compound Y: IR shows O-H (3500). No reaction with bromine water and no C=C on IR, but C:H ratio is 1:2. Must be a cyclic alcohol. Reacts with dichromate so could be primary or secondary",
+      "Mass spec peaks: 17 = OH⁺, 69 = C₅H₉⁺",
+      "Compound Z: IR shows O-H (3500) and C=C (1650). Reacts with bromine so contains an alkene. Reacts with dichromate so could be primary or secondary alcohol",
+      "Mass spec peaks: 27 = C₂H₃⁺, 31 = CH₂OH⁺, 59 = CH₂CH₂CH₂OH⁺"
+    ],
+    levels: [
+      { level: 3, marks: "7-8", descriptor: "Correctly identifies all 3 structures with links to all information." },
+      { level: 2, marks: "4-6", descriptor: "Correctly identifies three structures that match IR spectra and chemical tests. At least one reference to stereoisomerism." },
+      { level: 1, marks: "1-3", descriptor: "Correctly identifies at least two structures with links to information from the table." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa18",
+    board: "aqa",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `The structures of three organic compounds are benzene, ethylamine (CH₃CH₂NH₂) and phenylamine (C₆H₅NH₂).
+
+- Explain whether you would expect phenylamine to be a stronger or weaker base than ethylamine.
+- Explain whether you would expect phenylamine to be more or less reactive than benzene in electrophilic substitution reactions.
+
+In your answer you should include relevant definitions and examples, but do not need to include equations or mechanisms.`,
+    markScheme: [
+      "Phenylamine is a weaker base than ethylamine",
+      "A base is a proton acceptor; both contain an amine functional group which acts as a base when the lone pair on the nitrogen bonds with H⁺",
+      "In phenylamine, the lone pair on the nitrogen delocalises into the benzene ring, making it less available to donate to H⁺",
+      "Phenylamine would be more reactive than benzene in electrophilic substitution reactions",
+      "Electrophiles are attracted to the electron density of the benzene ring and accept a pair of electrons from the system",
+      "In phenylamine, the lone pair of the nitrogen delocalises into the benzene ring, increasing the electron density and making it react more readily with electrophiles"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Both comparisons correct with full descriptions of how delocalisation of nitrogen electrons impacts reactivity." },
+      { level: 2, marks: "3-4", descriptor: "Both comparisons correct with a correct definition/explanation of base and electrophile behaviour." },
+      { level: 1, marks: "1-2", descriptor: "At least one correct comparison with a definition or explanation." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa19",
+    board: "aqa",
+    category: "Physical Chemistry",
+    marks: 6,
+    question: `Ethanoic acid is a weak acid that can be used to prepare a buffer solution.
+
+Describe how you would use a solution of ethanoic acid and a solution of sodium hydroxide, both of equal concentrations, to prepare a buffer solution. Explain how your solution could act as a buffer when small amounts of hydrochloric acid are added.
+
+You may illustrate your answer with equations, but do not need to include calculations.`,
+    markScheme: [
+      "Mix the acid and sodium hydroxide using approximately half the volume of sodium hydroxide compared to ethanoic acid",
+      "The NaOH reacts with ethanoic acid to form sodium ethanoate (its salt/conjugate base): CH₃COOH + NaOH → CH₃COONa + H₂O",
+      "A buffer solution contains a mixture of a weak acid and its conjugate base",
+      "The buffer contains both the weak acid and its conjugate base in equilibrium: CH₃COOH ⇌ CH₃COO⁻ + H⁺",
+      "When acid is added, H⁺ ions react with CH₃COO⁻ ions to form CH₃COOH",
+      "Because the buffer contains relatively large amounts of both acid and conjugate base, the ratio does not change significantly and neither does the pH"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Identifies that fewer moles of NaOH are needed so some acid remains, and clearly identifies the significance of both acid and salt being present in large quantities so pH change is minimised." },
+      { level: 2, marks: "3-4", descriptor: "Correctly identifies that fewer moles of NaOH are added so some acid remains. Explains effect of buffer in terms of equilibrium position." },
+      { level: 1, marks: "1-2", descriptor: "Adds NaOH to the acid and explains that a salt will form and that a buffer is a mixture of weak acid and salt." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa20",
+    board: "aqa",
+    category: "Inorganic Chemistry",
+    marks: 6,
+    question: `Transition metal ions can form complex ions with different coordination numbers and shapes, depending on the transition metal and ligand involved. Some of these complexes can exist as stereoisomers.
+
+Describe the types of stereoisomerism that can exist in transition metal complexes. You should refer to specific examples where possible, and illustrate your answer with relevant diagrams.`,
+    markScheme: [
+      "Cis/trans isomers can form in square planar complexes (coordination number 4) when there are two different ligands, e.g. cisplatin and transplatin",
+      "In cis isomers, both same-type ligands are on the same side; in trans isomers they are on opposite sides",
+      "Cis/trans isomerism also occurs in octahedral complexes (coordination number 6) with two different ligands",
+      "Optical isomers can form in octahedral complexes with at least two bidentate ligands",
+      "Optical isomers are non-superimposable mirror images"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Correctly identifies cis/trans in square planar and octahedral, as well as optical isomerism, with diagrams, definition of optical isomers and reference to coordination number and complex shape." },
+      { level: 2, marks: "3-4", descriptor: "Correctly identifies that both cis/trans and optical isomerism can occur, with examples and reference to the coordination number or shape of the complex." },
+      { level: 1, marks: "1-2", descriptor: "Correctly identifies at least one form of isomerism with an appropriate diagram and example." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa21",
+    board: "aqa",
+    category: "Organic Chemistry",
+    marks: 6,
+    question: `Hydroxide ions can behave as nucleophiles or bases when they react with haloalkanes. Explain the difference between these two terms and, for each case:
+
+- Give an example equation for a reaction in which the behaviour occurs, using 1-bromobutane as the haloalkane, and name the organic product
+- Give the reaction conditions necessary and name the type of reaction`,
+    markScheme: [
+      "Nucleophile: donates a lone pair of electrons to a positively polarised carbon atom",
+      "Occurs in nucleophilic substitution reactions, in aqueous solvent",
+      "Equation: CH₃CH₂CH₂CH₂Br + OH⁻ → CH₃CH₂CH₂CH₂OH + Br⁻. Product: butan-1-ol",
+      "Base: proton acceptor / lone pair bonds with H⁺",
+      "Occurs in elimination reactions, in ethanol solvent",
+      "Equation: CH₃CH₂CH₂CH₂Br + OH⁻ → CH₃CH₂CH=CH₂ + H₂O + Br⁻. Product: but-1-ene"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "All details correct: definitions, equations, product names, conditions and reaction types for both cases." },
+      { level: 2, marks: "3-4", descriptor: "Correct definitions and balanced equations for both and some product names/conditions correct." },
+      { level: 1, marks: "1-2", descriptor: "Correct definition and balanced equation for one example, or two correct definitions, or two correct balanced equations." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa22",
+    board: "aqa",
+    category: "Organic Chemistry",
+    marks: 8,
+    question: `1-chloropropane can be prepared in two different reactions:
+
+- The electrophilic addition reaction between HCl and propene
+- The free radical substitution reaction between chlorine and propane in the presence of UV light
+
+For each reaction, outline the mechanism and explain why neither reaction will produce a high yield of the desired product. You should refer to how the reaction mechanisms give rise to alternative products.`,
+    markScheme: [
+      "Electrophilic addition: reaction proceeds via a carbocation intermediate. Two possible carbocations can form (primary or secondary)",
+      "The secondary carbocation is more stable, so the major product will be 2-chloropropane rather than 1-chloropropane",
+      "Free radical substitution: initiation: Cl₂ → 2Cl•",
+      "Propagation: Cl• + C₃H₈ → HCl + C₃H₇• then C₃H₇• + Cl₂ → C₃H₇Cl + Cl•",
+      "It is random which hydrogen is replaced, so the product could be 1-chloropropane or 2-chloropropane",
+      "With excess chlorine, multiple substitutions can occur (dichloropropane, trichloropropane etc.)",
+      "Termination steps can produce longer-chain products e.g. 2C₃H₇• → C₆H₁₄"
+    ],
+    levels: [
+      { level: 3, marks: "7-8", descriptor: "Both mechanisms correctly outlined and clear links between both mechanisms and alternative products." },
+      { level: 2, marks: "4-6", descriptor: "Both mechanisms correctly outlined and at least one linked to alternative products." },
+      { level: 1, marks: "1-3", descriptor: "At least one mechanism correctly outlined and some reference to alternative products." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa23",
+    board: "aqa",
+    category: "Practical Chemistry",
+    marks: 6,
+    question: `Describe how you could carry out an experiment to calculate the enthalpy of neutralisation in kJ mol⁻¹. You are provided with solutions of hydrochloric acid and sodium hydroxide of equal concentrations along with standard laboratory equipment.
+
+In your answer you should clearly state the measurements you would take. You should also explain how results from the experiment would be used to calculate the enthalpy of neutralisation, and what assumptions you made in this calculation.`,
+    markScheme: [
+      "Measure out 25 cm³ hydrochloric acid using a volumetric pipette and add to a polystyrene cup",
+      "Place the cup in a beaker and use a thermometer to take its temperature; record every 30 seconds for two minutes to ensure temperature is stable",
+      "Add 25 cm³ sodium hydroxide solution using a volumetric pipette. Stir and record the highest temperature reached",
+      "Calculate moles of acid (or alkali) = concentration x volume in dm³",
+      "Heat energy transferred (J) = mass of solution x 4.18 x change in temperature. Convert J to kJ and divide by moles to get enthalpy change",
+      "Assumptions: density of solutions is the same as water (1 g cm⁻³) and specific heat capacity of solutions is the same as water (4.18 J g⁻¹ K⁻¹)"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Fully correct procedure and description of calculations plus assumptions made." },
+      { level: 2, marks: "3-4", descriptor: "Procedure that includes volume measurement, temperature measurements, stirring and mostly correct calculation description." },
+      { level: 1, marks: "1-2", descriptor: "Procedure that includes measurement of start and final temperature and calculation using specific heat capacity." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+  {
+    id: "aqa24",
+    board: "aqa",
+    category: "Practical Chemistry",
+    marks: 6,
+    question: `Hydrated sodium carbonate (Na₂CO₃·10H₂O) is a solid at room temperature and is soluble in water.
+
+Describe how you would prepare 250 cm³ of a solution of hydrated sodium carbonate (Na₂CO₃·10H₂O) with an accurately known concentration of approximately 0.0100 mol dm⁻³. You should include a calculation with your answer.`,
+    markScheme: [
+      "Moles = 0.01 x 0.25 = 0.0025 mol. Mr = 106 + (10 x 18) = 286. Mass = 0.0025 x 286 = 0.715 g",
+      "Zero the balance with an empty weighing boat. Add approximately 0.715 g solid. Record mass of solid and weighing boat",
+      "Add solid to a clean dry beaker, reweigh the weighing boat. Subtract to obtain accurate mass (weighing by difference)",
+      "Add around 100 cm³ distilled water to the beaker and stir to dissolve",
+      "Pour the solution into a 250 cm³ volumetric flask using a funnel. Rinse the beaker with more distilled water and add to the flask",
+      "Add distilled water to just below the line, then make up to the line with a pipette. Ensure the bottom of the meniscus touches the line. Stopper and invert several times to mix"
+    ],
+    levels: [
+      { level: 3, marks: "5-6", descriptor: "Fully correct procedure including description of accurate weighing technique and volume measurement." },
+      { level: 2, marks: "3-4", descriptor: "Correct calculation of mass, use of volumetric flask and key details such as stirring, rinsing the beaker and inverting the flask." },
+      { level: 1, marks: "1-2", descriptor: "Procedure that includes a calculation, weighing and dissolving the solid and use of a volumetric flask." },
+      { level: 0, marks: "0", descriptor: "Insufficient correct chemistry to gain a mark." }
+    ],
+  },
+
   // ═══════════════════════════════════════════════════════════
   //  OCR A 6-mark extended-response questions (from source PDF)
   // ═══════════════════════════════════════════════════════════
