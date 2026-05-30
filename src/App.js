@@ -5222,6 +5222,59 @@ export default function App() {
         const isLast = extIndex === catQs.length - 1;
         const marksThisQ = extMarked.size;
 
+        // Render question text with proper tables for pipe-separated data
+        const renderQuestionText = (text) => {
+          const lines = text.split("\n");
+          const result = [];
+          let i = 0;
+          while (i < lines.length) {
+            // Detect table: lines with | separators (at least 2 pipes)
+            if (lines[i].includes(" | ") && (lines[i].match(/\|/g) || []).length >= 2) {
+              const tableLines = [];
+              while (i < lines.length && lines[i].includes(" | ") && (lines[i].match(/\|/g) || []).length >= 2) {
+                tableLines.push(lines[i].split(" | ").map(c => c.trim()));
+                i++;
+              }
+              if (tableLines.length > 0) {
+                const headerRow = tableLines[0];
+                const dataRows = tableLines.slice(1);
+                result.push(
+                  <div key={`tbl-${result.length}`} style={{ overflowX: "auto", margin: "12px 0" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13.5px", fontFamily: "'DM Sans', sans-serif" }}>
+                      <thead>
+                        <tr>
+                          {headerRow.map((h, ci) => (
+                            <th key={ci} style={{ background: "#f0f4f8", padding: "8px 10px", textAlign: "left", fontWeight: 700, color: "#1a2d45", borderBottom: "2px solid #d0dce8", fontSize: "12px" }}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dataRows.map((row, ri) => (
+                          <tr key={ri} style={{ background: ri % 2 === 0 ? "#fff" : "#f8fafc" }}>
+                            {row.map((cell, ci) => (
+                              <td key={ci} style={{ padding: "7px 10px", borderBottom: "1px solid #e8eef4", color: "#1a2d45", fontSize: "13px" }}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              }
+            } else {
+              // Regular text line
+              const line = lines[i];
+              if (line.trim() === "") {
+                result.push(<div key={`sp-${result.length}`} style={{ height: "8px" }} />);
+              } else {
+                result.push(<div key={`ln-${result.length}`}>{line}</div>);
+              }
+              i++;
+            }
+          }
+          return result;
+        };
+
         const canSubmit = extDraft.trim().length >= 20;
         const handleSubmit = async () => {
           setExtAiLoading(true);
@@ -5284,7 +5337,7 @@ export default function App() {
                 <div style={{ fontSize: "11px", fontWeight: 700, color: purple, textTransform: "uppercase", letterSpacing: "1px", background: purpleLight, padding: "3px 8px", borderRadius: "6px" }}>{q.category}</div>
                 <div style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", background: "#f0f4f8", padding: "3px 8px", borderRadius: "6px" }}>{q.marks} marks</div>
               </div>
-              <div style={{ fontSize: "15.5px", color: "#1a2d45", lineHeight: 1.75, fontWeight: 500, whiteSpace: "pre-line", fontFamily: "'Georgia', 'Times New Roman', serif", letterSpacing: "0.01em" }}>{q.question}</div>
+              <div style={{ fontSize: "15.5px", color: "#1a2d45", lineHeight: 1.75, fontWeight: 500, fontFamily: "'Georgia', 'Times New Roman', serif", letterSpacing: "0.01em" }}>{renderQuestionText(q.question)}</div>
             </div>
             {/* Answer box - required */}
             {!extRevealed && !extAiLoading && (

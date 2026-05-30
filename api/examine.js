@@ -97,7 +97,7 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-3-7-sonnet-20250219",
           max_tokens: 1024,
           messages: [{ role: "user", content: prompt }],
         }),
