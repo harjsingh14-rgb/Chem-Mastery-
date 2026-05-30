@@ -2894,85 +2894,85 @@ const OCR_TOPIC_ORDER = OCR_SECTIONS.flatMap(s => s.topics);
 
 // === ORGANIC SYNTHESIS MAP DATA ===
 const SYNTH_ALI_NODES = [
-  ["alkylAmm",    "Alkyl\nAmm. Salts",              72,  36, "#4f46e5", 66, 22],
-  ["quatAmm",     "Quat.\nAmm. Salts",             238,  36, "#6d28d9", 84, 22],
-  ["tertAmines",  "Tertiary\nAmines",              400,  36, "#7c3aed", 56, 22],
-  ["alkanes",     "Alkanes",                        55, 112, "#475569", 48, 14],
-  ["haloalkanes", "Haloalkanes",                   195, 112, "#c2410c", 66, 14],
-  ["primAmines",  "Primary\nAmines",               345, 112, "#be185d", 60, 20],
-  ["secAmines",   "Secondary\nAmines",             435, 164, "#9d174d", 50, 20],
-  ["alkenes",     "Alkenes",                       182, 200, "#15803d", 52, 14],
-  ["nitriles",    "Nitriles",                      390, 200, "#4338ca", 50, 14],
-  ["dihalides",   "Di-\nhaloalkanes",               65, 288, "#9a3412", 58, 20],
-  ["alcohols",    "Alcohols",                      258, 274, "#1d4ed8", 54, 14],
-  ["diols",       "Diols",                          65, 372, "#0369a1", 46, 14],
-  ["ketones",     "Ketones",                       165, 372, "#7e22ce", 52, 14],
-  ["aldehydes",   "Aldehydes",                     280, 372, "#a21caf", 54, 14],
-  ["esters",      "Esters",                        415, 350, "#0e7490", 48, 14],
-  ["carbAcids",   "Carboxylic\nAcids",             280, 456, "#b91c1c", 68, 20],
-  ["carboxylate", "Carboxylate\nSalts",            108, 540, "#be123c", 68, 20],
-  ["amides",      "Amides",                        272, 540, "#5b21b6", 50, 14],
-  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  416, 540, "#0369a1", 58, 24],
+  ["alkylAmm",    "Alkyl\nAmm. Salts",              95,  55, "#4f46e5", 78, 26],
+  ["quatAmm",     "Quat.\nAmm. Salts",             305,  55, "#6d28d9", 90, 26],
+  ["tertAmines",  "Tertiary\nAmines",              520,  55, "#7c3aed", 72, 26],
+  ["alkanes",     "Alkanes",                        70, 160, "#475569", 62, 20],
+  ["haloalkanes", "Haloalkanes",                   255, 160, "#c2410c", 82, 20],
+  ["primAmines",  "Primary\nAmines",               455, 160, "#be185d", 78, 26],
+  ["secAmines",   "Secondary\nAmines",             575, 225, "#9d174d", 66, 26],
+  ["alkenes",     "Alkenes",                       235, 285, "#15803d", 66, 20],
+  ["nitriles",    "Nitriles",                      510, 285, "#4338ca", 66, 20],
+  ["dihalides",   "Di-\nhaloalkanes",               80, 400, "#9a3412", 72, 26],
+  ["alcohols",    "Alcohols",                      340, 385, "#1d4ed8", 70, 20],
+  ["diols",       "Diols",                          80, 520, "#0369a1", 58, 20],
+  ["ketones",     "Ketones",                       210, 515, "#7e22ce", 66, 20],
+  ["aldehydes",   "Aldehydes",                     365, 515, "#a21caf", 70, 20],
+  ["esters",      "Esters",                        545, 490, "#0e7490", 62, 20],
+  ["carbAcids",   "Carboxylic\nAcids",             365, 630, "#b91c1c", 86, 26],
+  ["carboxylate", "Carboxylate\nSalts",            140, 740, "#be123c", 86, 26],
+  ["amides",      "Amides",                        355, 740, "#5b21b6", 66, 20],
+  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  545, 740, "#0369a1", 78, 30],
 ];
 const SYNTH_ALI_RXNS = [
-  [1,  "alkanes",    "haloalkanes", 124, 112, "Alkanes",             "Haloalkanes",              "Halogen",                "UV light",               "Free radical",  "Substitution"],
-  [2,  "haloalkanes","primAmines",  272, 107, "Haloalkanes",         "Primary Amines",           "Conc. NH3",              "Heat, under pressure",   "Nucleophilic",  "Substitution"],
-  [3,  "primAmines", "alkylAmm",   200,  68, "Primary Amines",      "Alkyl Ammonium Salts",     "Dilute HCl",             "Room temperature",       "--",            "Acid-base"],
-  [4,  "tertAmines", "quatAmm",    320,  33, "Tertiary Amines",     "Quaternary Ammonium Salts","Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [5,  "secAmines",  "tertAmines", 420,  96, "Secondary Amines",    "Tertiary Amines",          "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [6,  "primAmines", "secAmines",  393, 134, "Primary Amines",      "Secondary Amines",         "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [7,  "haloalkanes","alkenes",    166, 153, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
-  [8,  "alkenes",   "haloalkanes", 214, 152, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
-  [9,  "haloalkanes","alcohols",   220, 192, "Haloalkanes",         "Alcohols",                 "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [10, "haloalkanes","nitriles",   290, 152, "Haloalkanes",         "Nitriles",                 "KCN in ethanol",         "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [11, "nitriles",  "primAmines",  368, 152, "Nitriles",            "Primary Amines",           "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
-  [12, "alkenes",   "dihalides",   118, 246, "Alkenes",             "Dihaloalkanes",            "Halogen",                "Room temperature",        "Electrophilic", "Addition"],
-  [13, "alkenes",   "alcohols",    218, 238, "Alkenes",             "Alcohols",                 "Steam + H2SO4",          "Heat",                   "--",            "Hydration"],
-  [14, "alcohols",  "alkenes",     242, 222, "Alcohols",            "Alkenes",                  "Al2O3 or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
-  [15, "dihalides", "diols",        65, 330, "Dihaloalkanes",       "Diols",                    "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [16, "alcohols",  "ketones",     208, 320, "Alcohols (secondary)","Ketones",                  "K2Cr2O7 / H2SO4",       "Heat",                   "--",            "Oxidation"],
-  [17, "ketones",   "alcohols",    228, 332, "Ketones",             "Alcohols (secondary)",     "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
-  [18, "alcohols",  "aldehydes",   268, 322, "Alcohols (primary)",  "Aldehydes",                "K2Cr2O7 / H2SO4",       "Heat, limited oxidant",  "--",            "Oxidation"],
-  [19, "aldehydes", "alcohols",    286, 312, "Aldehydes",           "Alcohols (primary)",       "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
-  [20, "nitriles",  "carbAcids",   340, 328, "Nitriles",            "Carboxylic Acids",         "Dilute HCl(aq)",         "Heat under reflux",      "--",            "Hydrolysis"],
-  [21, "aldehydes", "carbAcids",   280, 412, "Aldehydes",           "Carboxylic Acids",         "K2Cr2O7 / H2SO4",       "Heat under reflux",      "--",            "Oxidation"],
-  [22, "carbAcids", "alcohols",    300, 366, "Carboxylic Acids",    "Primary Alcohols",         "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
-  [23, "carbAcids", "esters",      352, 404, "Carboxylic Acids",    "Esters",                   "Alcohol + conc. H2SO4", "Heat",                   "--",            "Esterification"],
-  [24, "acylCl",    "esters",      416, 448, "Acyl Chlorides",      "Esters",                   "Alcohol",                "Room temperature",        "Nucleophilic",  "Acylation"],
-  [25, "carbAcids", "carboxylate", 192, 500, "Carboxylic Acids",    "Carboxylate Salts",        "NaOH(aq)",               "Room temperature",        "--",            "Acid-base"],
-  [26, "acylCl",    "carbAcids",   352, 498, "Acyl Chlorides",      "Carboxylic Acids",         "H2O",                    "Room temperature",        "--",            "Hydrolysis"],
-  [27, "acylCl",    "amides",      344, 540, "Acyl Chlorides",      "Amides",                   "Amines",                 "Room temperature",        "Nucleophilic",  "Acylation"],
+  [1,  "alkanes",    "haloalkanes", 160, 155, "Alkanes",             "Haloalkanes",              "Halogen",                "UV light",               "Free radical",  "Substitution"],
+  [2,  "haloalkanes","primAmines",  355, 150, "Haloalkanes",         "Primary Amines",           "Conc. NH3",              "Heat, under pressure",   "Nucleophilic",  "Substitution"],
+  [3,  "primAmines", "alkylAmm",   260, 100, "Primary Amines",      "Alkyl Ammonium Salts",     "Dilute HCl",             "Room temperature",       "--",            "Acid-base"],
+  [4,  "tertAmines", "quatAmm",    415,  48, "Tertiary Amines",     "Quaternary Ammonium Salts","Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [5,  "secAmines",  "tertAmines", 550, 135, "Secondary Amines",    "Tertiary Amines",          "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [6,  "primAmines", "secAmines",  520, 188, "Primary Amines",      "Secondary Amines",         "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [7,  "haloalkanes","alkenes",    210, 218, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
+  [8,  "alkenes",   "haloalkanes", 270, 210, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
+  [9,  "haloalkanes","alcohols",   285, 270, "Haloalkanes",         "Alcohols",                 "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [10, "haloalkanes","nitriles",   380, 218, "Haloalkanes",         "Nitriles",                 "KCN in ethanol",         "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [11, "nitriles",  "primAmines",  485, 218, "Nitriles",            "Primary Amines",           "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
+  [12, "alkenes",   "dihalides",   150, 340, "Alkenes",             "Dihaloalkanes",            "Halogen",                "Room temperature",        "Electrophilic", "Addition"],
+  [13, "alkenes",   "alcohols",    280, 332, "Alkenes",             "Alcohols",                 "Steam + H2SO4",          "Heat",                   "--",            "Hydration"],
+  [14, "alcohols",  "alkenes",     310, 318, "Alcohols",            "Alkenes",                  "Al2O3 or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
+  [15, "dihalides", "diols",        80, 458, "Dihaloalkanes",       "Diols",                    "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [16, "alcohols",  "ketones",     270, 448, "Alcohols (secondary)","Ketones",                  "K2Cr2O7 / H2SO4",       "Heat",                   "--",            "Oxidation"],
+  [17, "ketones",   "alcohols",    295, 458, "Ketones",             "Alcohols (secondary)",     "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
+  [18, "alcohols",  "aldehydes",   350, 448, "Alcohols (primary)",  "Aldehydes",                "K2Cr2O7 / H2SO4",       "Heat, limited oxidant",  "--",            "Oxidation"],
+  [19, "aldehydes", "alcohols",    375, 438, "Aldehydes",           "Alcohols (primary)",       "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
+  [20, "nitriles",  "carbAcids",   445, 458, "Nitriles",            "Carboxylic Acids",         "Dilute HCl(aq)",         "Heat under reflux",      "--",            "Hydrolysis"],
+  [21, "aldehydes", "carbAcids",   365, 572, "Aldehydes",           "Carboxylic Acids",         "K2Cr2O7 / H2SO4",       "Heat under reflux",      "--",            "Oxidation"],
+  [22, "carbAcids", "alcohols",    390, 510, "Carboxylic Acids",    "Primary Alcohols",         "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
+  [23, "carbAcids", "esters",      460, 560, "Carboxylic Acids",    "Esters",                   "Alcohol + conc. H2SO4", "Heat",                   "--",            "Esterification"],
+  [24, "acylCl",    "esters",      545, 615, "Acyl Chlorides",      "Esters",                   "Alcohol",                "Room temperature",        "Nucleophilic",  "Acylation"],
+  [25, "carbAcids", "carboxylate", 245, 690, "Carboxylic Acids",    "Carboxylate Salts",        "NaOH(aq)",               "Room temperature",        "--",            "Acid-base"],
+  [26, "acylCl",    "carbAcids",   460, 685, "Acyl Chlorides",      "Carboxylic Acids",         "H2O",                    "Room temperature",        "--",            "Hydrolysis"],
+  [27, "acylCl",    "amides",      450, 740, "Acyl Chlorides",      "Amides",                   "Amines",                 "Room temperature",        "Nucleophilic",  "Acylation"],
 ];
 const SYNTH_ARO_NODES = [
-  ["benzene",      "Benzene",                       250, 196, "#1d4ed8", 52, 14],
-  ["methylbenz",   "Methylbenzene\n(Toluene)",      140, 196, "#15803d", 72, 22],
-  ["acetophenone", "Acetophenone\n(COCH3)",         380, 112, "#0e7490", 72, 22],
-  ["ethylbenzene", "Ethylbenzene",                  415, 196, "#0369a1", 64, 14],
-  ["chloromethyl", "Chloromethyl-\nbenzene",         55, 284, "#9a3412", 72, 22],
-  ["nitrobenzene", "Nitrobenzene",                  375, 284, "#b45309", 66, 14],
-  ["dinitrotol",   "Di-nitro-\ntoluene",             55, 368, "#92400e", 60, 22],
-  ["aniline",      "Aniline\n(Aminobenzene)",       342, 368, "#15803d", 78, 22],
-  ["diazonium",    "Benzenediazonium\nChloride",    255, 456, "#dc2626", 94, 22],
-  ["azoDye",       "Azo Dye",                       125, 456, "#9333ea", 52, 14],
+  ["benzene",      "Benzene",                       320, 260, "#1d4ed8", 68, 20],
+  ["methylbenz",   "Methylbenzene\n(Toluene)",      175, 260, "#15803d", 90, 28],
+  ["acetophenone", "Acetophenone\n(COCH3)",         500, 150, "#0e7490", 90, 28],
+  ["ethylbenzene", "Ethylbenzene",                  545, 260, "#0369a1", 80, 20],
+  ["chloromethyl", "Chloromethyl-\nbenzene",         70, 385, "#9a3412", 88, 28],
+  ["nitrobenzene", "Nitrobenzene",                  490, 385, "#b45309", 82, 20],
+  ["dinitrotol",   "Di-nitro-\ntoluene",             70, 510, "#92400e", 76, 28],
+  ["aniline",      "Aniline\n(Aminobenzene)",       445, 510, "#15803d", 96, 28],
+  ["diazonium",    "Benzenediazonium\nChloride",    330, 630, "#dc2626", 110, 28],
+  ["azoDye",       "Azo Dye",                       160, 630, "#9333ea", 68, 20],
 ];
 const SYNTH_ARO_RXNS = [
-  [1, "benzene",     "acetophenone", 316, 150, "Benzene",                    "Acetophenone",
+  [1, "benzene",     "acetophenone", 415, 198, "Benzene",                    "Acetophenone",
       "Ethanoyl chloride + AlCl3",  "Heat",              "Electrophilic", "Friedel-Crafts Acylation"],
-  [2, "benzene",     "ethylbenzene", 332, 196, "Benzene",                    "Ethylbenzene",
+  [2, "benzene",     "ethylbenzene", 435, 256, "Benzene",                    "Ethylbenzene",
       "Chloroethane + AlCl3",       "Heat",              "Electrophilic", "Friedel-Crafts Alkylation"],
-  [3, "methylbenz",  "chloromethyl",  97, 240, "Methylbenzene",              "Chloromethylbenzene",
+  [3, "methylbenz",  "chloromethyl", 118, 322, "Methylbenzene",              "Chloromethylbenzene",
       "Chlorine",                    "UV light",          "Free radical",  "Substitution"],
-  [4, "benzene",     "methylbenz",   194, 196, "Benzene",                    "Methylbenzene",
+  [4, "benzene",     "methylbenz",   248, 256, "Benzene",                    "Methylbenzene",
       "Chloromethane + AlCl3",      "Heat",              "Electrophilic", "Friedel-Crafts Alkylation"],
-  [5, "benzene",     "nitrobenzene", 312, 240, "Benzene",                    "Nitrobenzene",
+  [5, "benzene",     "nitrobenzene", 410, 322, "Benzene",                    "Nitrobenzene",
       "Conc. HNO3 + H2SO4",        "25-60 degrees C",   "Electrophilic", "Nitration"],
-  [6, "methylbenz",  "dinitrotol",    97, 328, "Methylbenzene",              "Di-nitrotoluene",
+  [6, "methylbenz",  "dinitrotol",   118, 448, "Methylbenzene",              "Di-nitrotoluene",
       "Conc. HNO3 + H2SO4",        "25-60 degrees C",   "Electrophilic", "Nitration"],
-  [7, "nitrobenzene","aniline",      360, 326, "Nitrobenzene",               "Aniline",
+  [7, "nitrobenzene","aniline",      470, 448, "Nitrobenzene",               "Aniline",
       "Sn + conc. HCl",             "Heat",              "--",             "Reduction"],
-  [8, "aniline",     "diazonium",    298, 414, "Aniline",                    "Benzenediazonium Chloride",
+  [8, "aniline",     "diazonium",    388, 572, "Aniline",                    "Benzenediazonium Chloride",
       "NaNO2 / HCl",                "Below 10 degrees C","--",             "Diazotisation"],
-  [9, "diazonium",   "azoDye",       190, 456, "Benzenediazonium Chloride",  "Azo Dye",
+  [9, "diazonium",   "azoDye",       245, 630, "Benzenediazonium Chloride",  "Azo Dye",
       "Phenol",                      "Alkaline conditions","--",            "Azo Coupling"],
 ];
 
@@ -5273,8 +5273,8 @@ export default function App() {
       {topicsTab === "pathways" && (() => {
         const sNodes = synthTab === "ali" ? SYNTH_ALI_NODES : SYNTH_ARO_NODES;
         const sRxns  = synthTab === "ali" ? SYNTH_ALI_RXNS  : SYNTH_ARO_RXNS;
-        const vbW = 480, vbH = synthTab === "ali" ? 590 : 490;
-        const SW = 0.76; // scale nodes down so they don't dominate the map
+        const vbW = 640, vbH = synthTab === "ali" ? 800 : 700;
+        const SW = 1.0; // full-size nodes for readability
         const nodeMap = Object.fromEntries(sNodes.map(n => [n[0], n]));
         const edgePt = (fcx, fcy, fhw, fhh, tcx, tcy) => {
           const dx = tcx - fcx, dy = tcy - fcy;
@@ -5304,66 +5304,73 @@ export default function App() {
         return (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
             {/* Sub-tabs + quiz */}
-            <div style={{ display: "flex", alignItems: "center", borderBottom: "2px solid #e0e8f0", padding: "0 12px", background: "#fff", flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", borderBottom: "2px solid #e0e8f0", padding: "0 14px", background: "#fff", flexShrink: 0 }}>
               {[["ali","Aliphatic","27"],["aro","Aromatic","9"]].map(([id,lbl,cnt]) => (
                 <button key={id} onClick={() => { setSynthTab(id); setSelectedFrom(null); setSelectedRxn(null); }} style={{
-                  padding:"11px 13px", border:"none", background:"none", fontFamily:"inherit",
-                  fontSize:"13px", fontWeight:700, cursor:"pointer",
+                  padding:"12px 16px", border:"none", background:"none", fontFamily:"inherit",
+                  fontSize:"14px", fontWeight:700, cursor:"pointer",
                   color: synthTab===id ? "#059669" : "#7a95b0",
                   borderBottom: synthTab===id ? "3px solid #059669" : "3px solid transparent",
-                  marginBottom:"-2px", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:"6px"
+                  marginBottom:"-2px", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:"7px"
                 }}>
                   {lbl}
-                  <span style={{ fontSize:"10px", fontWeight:700, background:synthTab===id?"#dcfce7":"#f0f4f8", color:synthTab===id?"#059669":"#94a3b8", padding:"1px 6px", borderRadius:"10px" }}>{cnt}</span>
+                  <span style={{ fontSize:"11px", fontWeight:700, background:synthTab===id?"#dcfce7":"#f0f4f8", color:synthTab===id?"#059669":"#94a3b8", padding:"2px 8px", borderRadius:"12px" }}>{cnt}</span>
                 </button>
               ))}
               <div style={{ flex:1 }} />
               <button onClick={() => setSynthQuiz(q => !q)} style={{
-                padding:"5px 12px", borderRadius:"20px", border:"none",
-                background:synthQuiz?"#f97316":"#f0f4f8", color:synthQuiz?"#fff":"#7a95b0",
-                fontSize:"11px", fontWeight:700, cursor:"pointer", fontFamily:"inherit"
+                padding:"6px 14px", borderRadius:"20px", border:"none",
+                background:synthQuiz?"linear-gradient(135deg,#f97316,#ea580c)":"#f0f4f8", color:synthQuiz?"#fff":"#7a95b0",
+                fontSize:"12px", fontWeight:700, cursor:"pointer", fontFamily:"inherit",
+                boxShadow: synthQuiz ? "0 2px 8px rgba(249,115,22,0.3)" : "none"
               }}>Quiz {synthQuiz?"ON":"OFF"}</button>
             </div>
             {/* Hint bar */}
-            <div style={{ fontSize:"11px", color:"#94a3b8", padding:"4px 0 3px", textAlign:"center", flexShrink:0, background:"#fff", borderBottom:"1px solid #f0f4f8" }}>
-              {selId ? `${selNodeData ? selNodeData[1].replace(/\n/g," ") : ""} - tap another node or clear` : "Scroll to explore · tap a compound to highlight its routes"}
+            <div style={{ fontSize:"12px", color: selId ? "#059669" : "#94a3b8", fontWeight: selId ? 600 : 400, padding:"6px 14px 5px", textAlign:"center", flexShrink:0, background: selId ? "#f0fdf4" : "#fff", borderBottom:"1px solid #f0f4f8", transition:"all 0.2s" }}>
+              {selId ? `${selNodeData ? selNodeData[1].replace(/\n/g," ") : ""} selected - tap another compound or background to clear` : "Tap a compound to highlight its reaction routes"}
             </div>
             {/* SVG map - scrollable */}
-            <div style={{ flex:1, overflow:"auto", WebkitOverflowScrolling:"touch", background:"#f0f4f8" }}>
+            <div style={{ flex:1, overflow:"auto", WebkitOverflowScrolling:"touch", background:"linear-gradient(180deg, #f0f4f8 0%, #e8eef6 100%)" }}>
               <svg
                 viewBox={`0 0 ${vbW} ${vbH}`}
-                width={vbW + 16} height={vbH + 16}
-                style={{ display:"block", margin:"8px" }}
+                width={vbW * 1.05} height={vbH * 1.05}
+                style={{ display:"block", margin:"12px auto" }}
                 onClick={() => { setSelectedFrom(null); setSelectedRxn(null); }}
               >
                 <defs>
-                  <marker id="mn" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
-                    <path d="M0,0 L5,2.5 L0,5z" fill="#b0bec5" />
+                  <marker id="mn" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <path d="M0,0.5 L6,3.5 L0,6.5z" fill="#94a3b8" />
                   </marker>
-                  <marker id="mo" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
-                    <path d="M0,0 L5,2.5 L0,5z" fill="#059669" />
+                  <marker id="mo" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                    <path d="M0,0.5 L7,4 L0,7.5z" fill="#059669" />
                   </marker>
-                  <marker id="mi" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
-                    <path d="M0,0 L5,2.5 L0,5z" fill="#2563eb" />
+                  <marker id="mi" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                    <path d="M0,0.5 L7,4 L0,7.5z" fill="#2563eb" />
                   </marker>
+                  <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.15" />
+                  </filter>
+                  <filter id="glowGreen" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#059669" floodOpacity="0.4" />
+                  </filter>
                 </defs>
-                <rect x={0} y={0} width={vbW} height={vbH} fill="#f0f4f8" />
+                <rect x={0} y={0} width={vbW} height={vbH} fill="transparent" />
                 {/* Group zone backgrounds - aliphatic only */}
                 {synthTab === "ali" && (<>
                   {/* Ammonium Salts row */}
-                  <rect x={8} y={14} rx={7} width={175} height={48} fill="rgba(79,70,229,0.07)" stroke="rgba(79,70,229,0.18)" strokeWidth={1} strokeDasharray="3 2" />
-                  <text x={16} y={25} fontSize="7" fontWeight="700" fill="rgba(79,70,229,0.45)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">AMMONIUM SALTS</text>
+                  <rect x={8} y={20} rx={12} width={225} height={68} fill="rgba(79,70,229,0.06)" stroke="rgba(79,70,229,0.15)" strokeWidth={1.5} strokeDasharray="6 3" />
+                  <text x={20} y={34} fontSize="8.5" fontWeight="800" fill="rgba(79,70,229,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">AMMONIUM SALTS</text>
                   {/* Amine family (right column) */}
-                  <rect x={305} y={14} rx={7} width={168} height={204} fill="rgba(124,58,237,0.06)" stroke="rgba(124,58,237,0.16)" strokeWidth={1} strokeDasharray="3 2" />
-                  <text x={313} y={25} fontSize="7" fontWeight="700" fill="rgba(124,58,237,0.45)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">AMINE FAMILY</text>
+                  <rect x={390} y={20} rx={12} width={230} height={260} fill="rgba(124,58,237,0.05)" stroke="rgba(124,58,237,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
+                  <text x={405} y={36} fontSize="8.5" fontWeight="800" fill="rgba(124,58,237,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">AMINE FAMILY</text>
                   {/* Carbonyl compounds cluster */}
-                  <rect x={128} y={346} rx={7} width={180} height={132} fill="rgba(162,28,175,0.05)" stroke="rgba(162,28,175,0.14)" strokeWidth={1} strokeDasharray="3 2" />
-                  <text x={136} y={357} fontSize="7" fontWeight="700" fill="rgba(162,28,175,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">CARBONYL COMPOUNDS</text>
+                  <rect x={155} y={480} rx={12} width={290} height={80} fill="rgba(162,28,175,0.04)" stroke="rgba(162,28,175,0.12)" strokeWidth={1.5} strokeDasharray="6 3" />
+                  <text x={170} y={494} fontSize="8.5" fontWeight="800" fill="rgba(162,28,175,0.35)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">CARBONYL COMPOUNDS</text>
                   {/* Acid derivatives row */}
-                  <rect x={10} y={512} rx={7} width={455} height={66} fill="rgba(3,105,144,0.06)" stroke="rgba(3,105,144,0.16)" strokeWidth={1} strokeDasharray="3 2" />
-                  <text x={18} y={523} fontSize="7" fontWeight="700" fill="rgba(3,105,144,0.45)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.4">ACID DERIVATIVES</text>
+                  <rect x={15} y={705} rx={12} width={610} height={72} fill="rgba(3,105,144,0.05)" stroke="rgba(3,105,144,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
+                  <text x={30} y={720} fontSize="8.5" fontWeight="800" fill="rgba(3,105,144,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">ACID DERIVATIVES</text>
                 </>)}
-                {/* Edges */}
+                {/* Edges - curved arrows */}
                 {sRxns.map(r => {
                   const [n, fromId, toId] = r;
                   const fN = nodeMap[fromId], tN = nodeMap[toId];
@@ -5374,55 +5381,76 @@ export default function App() {
                   const isOut = selId && fromId === selId;
                   const isIn  = selId && toId   === selId;
                   const isDim = connRxnIds && !connRxnIds.has(n);
+                  // Slight curve offset for visual clarity
+                  const mx = (x1+x2)/2, my = (y1+y2)/2;
+                  const dx = x2-x1, dy = y2-y1;
+                  const len = Math.sqrt(dx*dx+dy*dy) || 1;
+                  const curveOff = Math.min(len * 0.12, 18);
+                  const cx1 = mx + (dy/len)*curveOff, cy1 = my - (dx/len)*curveOff;
                   return (
-                    <line key={"e"+n} x1={x1} y1={y1} x2={x2} y2={y2}
-                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#c5ced8" : "#b8c5d0"}
-                      strokeWidth={isOut||isIn ? 2.2 : selId ? 1 : 0.9}
-                      opacity={isDim ? 0.12 : 1}
+                    <path key={"e"+n}
+                      d={`M${x1},${y1} Q${cx1},${cy1} ${x2},${y2}`}
+                      fill="none"
+                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#d0d8e0" : "#94a3b8"}
+                      strokeWidth={isOut||isIn ? 2.5 : selId ? 0.8 : 1.2}
+                      opacity={isDim ? 0.1 : 1}
                       markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
+                      strokeLinecap="round"
                     />
                   );
                 })}
-                {/* Nodes - tappable */}
+                {/* Nodes - tappable cards with shadows */}
                 {sNodes.map(([id, label, cx, cy, fill, hw, hh]) => {
                   const rw = hw*SW, rh = hh*SW;
                   const lines = label.split("\n");
-                  const lh = 9.5, th = lines.length * lh;
+                  const lh = 12, th = lines.length * lh;
                   const isSel = id === selId;
+                  const isConn = connNodeIds && connNodeIds.has(id);
                   const isDim = connNodeIds && !connNodeIds.has(id);
                   return (
                     <g key={id} onClick={e => { e.stopPropagation(); setSelectedFrom(id === selId ? null : id); setSelectedRxn(null); }} style={{ cursor:"pointer" }}>
-                      {isSel && <rect x={cx-rw-4} y={cy-rh-4} width={(rw+4)*2} height={(rh+4)*2} rx={10} fill="rgba(5,150,105,0.18)" stroke="#059669" strokeWidth={2.5} />}
+                      {/* Selection glow ring */}
+                      {isSel && <rect x={cx-rw-6} y={cy-rh-6} width={(rw+6)*2} height={(rh+6)*2} rx={14} fill="rgba(5,150,105,0.12)" stroke="#059669" strokeWidth={2.5} filter="url(#glowGreen)" />}
+                      {/* Node body with shadow */}
                       <rect x={cx-rw} y={cy-rh} width={rw*2} height={rh*2}
-                        rx={6} fill={fill} opacity={isDim ? 0.18 : 1}
-                        stroke={isSel ? "#fff" : "rgba(255,255,255,0.22)"} strokeWidth={isSel ? 1.5 : 1}
+                        rx={10} fill={fill} opacity={isDim ? 0.15 : 1}
+                        stroke={isSel ? "#fff" : isConn ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)"}
+                        strokeWidth={isSel ? 2 : 1}
+                        filter={isDim ? "none" : "url(#nodeShadow)"}
                       />
+                      {/* Subtle inner highlight */}
+                      {!isDim && <rect x={cx-rw+1} y={cy-rh+1} width={rw*2-2} height={rh-1} rx={9} fill="rgba(255,255,255,0.15)" style={{ pointerEvents:"none" }} />}
                       {lines.map((ln,li) => (
-                        <text key={li} x={cx} y={cy - th/2 + li*lh + lh*0.88}
-                          textAnchor="middle" fontSize="8" fontWeight="700"
-                          fill={isDim ? "rgba(255,255,255,0.25)" : "#fff"}
-                          style={{ userSelect:"none", pointerEvents:"none" }}>{ln}</text>
+                        <text key={li} x={cx} y={cy - th/2 + li*lh + lh*0.85}
+                          textAnchor="middle" fontSize="10.5" fontWeight="700"
+                          fill={isDim ? "rgba(255,255,255,0.2)" : "#fff"}
+                          style={{ userSelect:"none", pointerEvents:"none", textShadow: isDim ? "none" : "0 1px 2px rgba(0,0,0,0.3)" }}>{ln}</text>
                       ))}
                     </g>
                   );
                 })}
-                {/* Reaction number circles */}
+                {/* Reaction number badges */}
                 {sRxns.map(r => {
-                  const [n,,,bx,by] = r;
+                  const [n, fromId, toId, bx, by] = r;
                   const isAct = selectedRxn === n;
+                  const isOut = selId && fromId === selId;
+                  const isIn  = selId && toId === selId;
                   const isDim = connRxnIds && !connRxnIds.has(n);
+                  const badgeColor = isAct ? "#1a2d45" : isOut ? "#059669" : isIn ? "#2563eb" : "#fff";
+                  const textColor = isAct || isOut || isIn ? "#fff" : isDim ? "#bbb" : "#475569";
                   return (
                     <g key={"b"+n} onClick={e => { e.stopPropagation(); setSelectedRxn(isAct ? null : n); }} style={{ cursor:"pointer" }}>
-                      <circle cx={bx} cy={by} r={10} fill="transparent" />
-                      <circle cx={bx} cy={by} r={7}
-                        fill={isAct ? "#1a2d45" : "#fff"}
-                        stroke={isDim ? "#d4dae0" : isAct ? "#1a2d45" : "#94a3b8"}
-                        strokeWidth={1.5} opacity={isDim ? 0.25 : 1}
+                      <circle cx={bx} cy={by} r={13} fill="transparent" />
+                      <circle cx={bx} cy={by} r={9.5}
+                        fill={badgeColor}
+                        stroke={isDim ? "#dde3ea" : isOut ? "#059669" : isIn ? "#2563eb" : "#94a3b8"}
+                        strokeWidth={1.5} opacity={isDim ? 0.2 : 1}
+                        filter={isAct || isOut || isIn ? "url(#nodeShadow)" : "none"}
                       />
                       <text x={bx} y={by+0.5} textAnchor="middle" dominantBaseline="middle"
-                        fontSize="7" fontWeight="800"
-                        fill={isAct ? "#fff" : isDim ? "#aaa" : "#374151"}
-                        opacity={isDim ? 0.25 : 1}
+                        fontSize="8.5" fontWeight="800"
+                        fill={textColor}
+                        opacity={isDim ? 0.2 : 1}
                         style={{ userSelect:"none", pointerEvents:"none" }}>{n}</text>
                     </g>
                   );
