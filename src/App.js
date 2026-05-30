@@ -2897,51 +2897,51 @@ const SYNTH_ALI_NODES = [
   ["alkylAmm",    "Alkyl\nAmm. Salts",              95,  55, "#4f46e5", 78, 26],
   ["quatAmm",     "Quat.\nAmm. Salts",             305,  55, "#6d28d9", 90, 26],
   ["tertAmines",  "Tertiary\nAmines",              520,  55, "#7c3aed", 72, 26],
-  ["alkanes",     "Alkanes",                        70, 160, "#475569", 62, 20],
-  ["haloalkanes", "Haloalkanes",                   255, 160, "#c2410c", 82, 20],
-  ["primAmines",  "Primary\nAmines",               455, 160, "#be185d", 78, 26],
-  ["secAmines",   "Secondary\nAmines",             575, 225, "#9d174d", 66, 26],
-  ["alkenes",     "Alkenes",                       235, 285, "#15803d", 66, 20],
-  ["nitriles",    "Nitriles",                      510, 285, "#4338ca", 66, 20],
-  ["dihalides",   "Di-\nhaloalkanes",               80, 400, "#9a3412", 72, 26],
-  ["alcohols",    "Alcohols",                      340, 385, "#1d4ed8", 70, 20],
-  ["diols",       "Diols",                          80, 520, "#0369a1", 58, 20],
-  ["ketones",     "Ketones",                       210, 515, "#7e22ce", 66, 20],
-  ["aldehydes",   "Aldehydes",                     365, 515, "#a21caf", 70, 20],
-  ["esters",      "Esters",                        545, 490, "#0e7490", 62, 20],
-  ["carbAcids",   "Carboxylic\nAcids",             365, 630, "#b91c1c", 86, 26],
-  ["carboxylate", "Carboxylate\nSalts",            140, 740, "#be123c", 86, 26],
-  ["amides",      "Amides",                        355, 740, "#5b21b6", 66, 20],
-  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  545, 740, "#0369a1", 78, 30],
+  ["alkanes",     "Alkanes",                        70, 165, "#475569", 62, 20],
+  ["haloalkanes", "Haloalkanes",                   255, 165, "#c2410c", 82, 20],
+  ["primAmines",  "Primary\nAmines",               455, 165, "#be185d", 78, 26],
+  ["secAmines",   "Secondary\nAmines",             575, 230, "#9d174d", 66, 26],
+  ["alkenes",     "Alkenes",                       175, 310, "#15803d", 66, 20],
+  ["nitriles",    "Nitriles",                      510, 310, "#4338ca", 66, 20],
+  ["dihalides",   "Di-\nhaloalkanes",               70, 440, "#9a3412", 72, 26],
+  ["alcohols",    "Alcohols",                      370, 410, "#1d4ed8", 70, 20],
+  ["diols",       "Diols",                          70, 570, "#0369a1", 58, 20],
+  ["ketones",     "Ketones",                       175, 560, "#7e22ce", 66, 20],
+  ["aldehydes",   "Aldehydes",                     420, 560, "#a21caf", 70, 20],
+  ["esters",      "Esters",                        575, 510, "#0e7490", 62, 20],
+  ["carbAcids",   "Carboxylic\nAcids",             420, 690, "#b91c1c", 86, 26],
+  ["carboxylate", "Carboxylate\nSalts",            140, 790, "#be123c", 86, 26],
+  ["amides",      "Amides",                        370, 790, "#5b21b6", 66, 20],
+  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  560, 790, "#0369a1", 78, 30],
 ];
 const SYNTH_ALI_RXNS = [
-  [1,  "alkanes",    "haloalkanes", 160, 155, "Alkanes",             "Haloalkanes",              "Halogen",                "UV light",               "Free radical",  "Substitution"],
-  [2,  "haloalkanes","primAmines",  355, 150, "Haloalkanes",         "Primary Amines",           "Conc. NH3",              "Heat, under pressure",   "Nucleophilic",  "Substitution"],
-  [3,  "primAmines", "alkylAmm",   260, 100, "Primary Amines",      "Alkyl Ammonium Salts",     "Dilute HCl",             "Room temperature",       "--",            "Acid-base"],
-  [4,  "tertAmines", "quatAmm",    415,  48, "Tertiary Amines",     "Quaternary Ammonium Salts","Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [5,  "secAmines",  "tertAmines", 550, 135, "Secondary Amines",    "Tertiary Amines",          "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [6,  "primAmines", "secAmines",  520, 188, "Primary Amines",      "Secondary Amines",         "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [7,  "haloalkanes","alkenes",    210, 218, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
-  [8,  "alkenes",   "haloalkanes", 270, 210, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
-  [9,  "haloalkanes","alcohols",   285, 270, "Haloalkanes",         "Alcohols",                 "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [10, "haloalkanes","nitriles",   380, 218, "Haloalkanes",         "Nitriles",                 "KCN in ethanol",         "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [11, "nitriles",  "primAmines",  485, 218, "Nitriles",            "Primary Amines",           "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
-  [12, "alkenes",   "dihalides",   150, 340, "Alkenes",             "Dihaloalkanes",            "Halogen",                "Room temperature",        "Electrophilic", "Addition"],
-  [13, "alkenes",   "alcohols",    280, 332, "Alkenes",             "Alcohols",                 "Steam + H2SO4",          "Heat",                   "--",            "Hydration"],
-  [14, "alcohols",  "alkenes",     310, 318, "Alcohols",            "Alkenes",                  "Al2O3 or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
-  [15, "dihalides", "diols",        80, 458, "Dihaloalkanes",       "Diols",                    "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [16, "alcohols",  "ketones",     270, 448, "Alcohols (secondary)","Ketones",                  "K2Cr2O7 / H2SO4",       "Heat",                   "--",            "Oxidation"],
-  [17, "ketones",   "alcohols",    295, 458, "Ketones",             "Alcohols (secondary)",     "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
-  [18, "alcohols",  "aldehydes",   350, 448, "Alcohols (primary)",  "Aldehydes",                "K2Cr2O7 / H2SO4",       "Heat, limited oxidant",  "--",            "Oxidation"],
-  [19, "aldehydes", "alcohols",    375, 438, "Aldehydes",           "Alcohols (primary)",       "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
-  [20, "nitriles",  "carbAcids",   445, 458, "Nitriles",            "Carboxylic Acids",         "Dilute HCl(aq)",         "Heat under reflux",      "--",            "Hydrolysis"],
-  [21, "aldehydes", "carbAcids",   365, 572, "Aldehydes",           "Carboxylic Acids",         "K2Cr2O7 / H2SO4",       "Heat under reflux",      "--",            "Oxidation"],
-  [22, "carbAcids", "alcohols",    390, 510, "Carboxylic Acids",    "Primary Alcohols",         "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
-  [23, "carbAcids", "esters",      460, 560, "Carboxylic Acids",    "Esters",                   "Alcohol + conc. H2SO4", "Heat",                   "--",            "Esterification"],
-  [24, "acylCl",    "esters",      545, 615, "Acyl Chlorides",      "Esters",                   "Alcohol",                "Room temperature",        "Nucleophilic",  "Acylation"],
-  [25, "carbAcids", "carboxylate", 245, 690, "Carboxylic Acids",    "Carboxylate Salts",        "NaOH(aq)",               "Room temperature",        "--",            "Acid-base"],
-  [26, "acylCl",    "carbAcids",   460, 685, "Acyl Chlorides",      "Carboxylic Acids",         "H2O",                    "Room temperature",        "--",            "Hydrolysis"],
-  [27, "acylCl",    "amides",      450, 740, "Acyl Chlorides",      "Amides",                   "Amines",                 "Room temperature",        "Nucleophilic",  "Acylation"],
+  [1,  "alkanes",    "haloalkanes", 162, 148, "Alkanes",             "Haloalkanes",              "Halogen",                "UV light",               "Free radical",  "Substitution"],
+  [2,  "haloalkanes","primAmines",  355, 148, "Haloalkanes",         "Primary Amines",           "Conc. NH3",              "Heat, under pressure",   "Nucleophilic",  "Substitution"],
+  [3,  "primAmines", "alkylAmm",   265,  95, "Primary Amines",      "Alkyl Ammonium Salts",     "Dilute HCl",             "Room temperature",       "--",            "Acid-base"],
+  [4,  "tertAmines", "quatAmm",    415,  38, "Tertiary Amines",     "Quaternary Ammonium Salts","Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [5,  "secAmines",  "tertAmines", 558, 132, "Secondary Amines",    "Tertiary Amines",          "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [6,  "primAmines", "secAmines",  525, 190, "Primary Amines",      "Secondary Amines",         "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
+  [7,  "haloalkanes","alkenes",    195, 228, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
+  [8,  "alkenes",   "haloalkanes", 235, 248, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
+  [9,  "haloalkanes","alcohols",   300, 275, "Haloalkanes",         "Alcohols",                 "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [10, "haloalkanes","nitriles",   385, 222, "Haloalkanes",         "Nitriles",                 "KCN in ethanol",         "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [11, "nitriles",  "primAmines",  490, 228, "Nitriles",            "Primary Amines",           "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
+  [12, "alkenes",   "dihalides",   112, 370, "Alkenes",             "Dihaloalkanes",            "Halogen",                "Room temperature",        "Electrophilic", "Addition"],
+  [13, "alkenes",   "alcohols",    255, 345, "Alkenes",             "Alcohols",                 "Steam + H2SO4",          "Heat",                   "--",            "Hydration"],
+  [14, "alcohols",  "alkenes",     285, 372, "Alcohols",            "Alkenes",                  "Al2O3 or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
+  [15, "dihalides", "diols",        52, 505, "Dihaloalkanes",       "Diols",                    "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
+  [16, "alcohols",  "ketones",     258, 475, "Alcohols (secondary)","Ketones",                  "K2Cr2O7 / H2SO4",       "Heat",                   "--",            "Oxidation"],
+  [17, "ketones",   "alcohols",    290, 498, "Ketones",             "Alcohols (secondary)",     "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
+  [18, "alcohols",  "aldehydes",   408, 475, "Alcohols (primary)",  "Aldehydes",                "K2Cr2O7 / H2SO4",       "Heat, limited oxidant",  "--",            "Oxidation"],
+  [19, "aldehydes", "alcohols",    382, 498, "Aldehydes",           "Alcohols (primary)",       "NaBH4(aq)",              "Room temperature",        "--",            "Reduction"],
+  [20, "nitriles",  "carbAcids",   478, 490, "Nitriles",            "Carboxylic Acids",         "Dilute HCl(aq)",         "Heat under reflux",      "--",            "Hydrolysis"],
+  [21, "aldehydes", "carbAcids",   408, 625, "Aldehydes",           "Carboxylic Acids",         "K2Cr2O7 / H2SO4",       "Heat under reflux",      "--",            "Oxidation"],
+  [22, "carbAcids", "alcohols",    382, 548, "Carboxylic Acids",    "Primary Alcohols",         "LiAlH4 in dry ether",   "Heat",                   "--",            "Reduction"],
+  [23, "carbAcids", "esters",      505, 598, "Carboxylic Acids",    "Esters",                   "Alcohol + conc. H2SO4", "Heat",                   "--",            "Esterification"],
+  [24, "acylCl",    "esters",      582, 648, "Acyl Chlorides",      "Esters",                   "Alcohol",                "Room temperature",        "Nucleophilic",  "Acylation"],
+  [25, "carbAcids", "carboxylate", 270, 738, "Carboxylic Acids",    "Carboxylate Salts",        "NaOH(aq)",               "Room temperature",        "--",            "Acid-base"],
+  [26, "acylCl",    "carbAcids",   500, 728, "Acyl Chlorides",      "Carboxylic Acids",         "H2O",                    "Room temperature",        "--",            "Hydrolysis"],
+  [27, "acylCl",    "amides",      468, 775, "Acyl Chlorides",      "Amides",                   "Amines",                 "Room temperature",        "Nucleophilic",  "Acylation"],
 ];
 const SYNTH_ARO_NODES = [
   ["benzene",      "Benzene",                       320, 260, "#1d4ed8", 68, 20],
@@ -5273,7 +5273,7 @@ export default function App() {
       {topicsTab === "pathways" && (() => {
         const sNodes = synthTab === "ali" ? SYNTH_ALI_NODES : SYNTH_ARO_NODES;
         const sRxns  = synthTab === "ali" ? SYNTH_ALI_RXNS  : SYNTH_ARO_RXNS;
-        const vbW = 640, vbH = synthTab === "ali" ? 800 : 700;
+        const vbW = 640, vbH = synthTab === "ali" ? 860 : 700;
         const SW = 1.0; // full-size nodes for readability
         const nodeMap = Object.fromEntries(sNodes.map(n => [n[0], n]));
         const edgePt = (fcx, fcy, fhw, fhh, tcx, tcy) => {
@@ -5339,7 +5339,7 @@ export default function App() {
               >
                 <defs>
                   <marker id="mn" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                    <path d="M0,0.5 L6,3.5 L0,6.5z" fill="#94a3b8" />
+                    <path d="M0,0.5 L6,3.5 L0,6.5z" fill="#1a2d45" />
                   </marker>
                   <marker id="mo" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                     <path d="M0,0.5 L7,4 L0,7.5z" fill="#059669" />
@@ -5364,11 +5364,11 @@ export default function App() {
                   <rect x={390} y={20} rx={12} width={230} height={260} fill="rgba(124,58,237,0.05)" stroke="rgba(124,58,237,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
                   <text x={405} y={36} fontSize="8.5" fontWeight="800" fill="rgba(124,58,237,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">AMINE FAMILY</text>
                   {/* Carbonyl compounds cluster */}
-                  <rect x={155} y={480} rx={12} width={290} height={80} fill="rgba(162,28,175,0.04)" stroke="rgba(162,28,175,0.12)" strokeWidth={1.5} strokeDasharray="6 3" />
-                  <text x={170} y={494} fontSize="8.5" fontWeight="800" fill="rgba(162,28,175,0.35)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">CARBONYL COMPOUNDS</text>
+                  <rect x={100} y={530} rx={12} width={400} height={62} fill="rgba(162,28,175,0.04)" stroke="rgba(162,28,175,0.12)" strokeWidth={1.5} strokeDasharray="6 3" />
+                  <text x={115} y={544} fontSize="8.5" fontWeight="800" fill="rgba(162,28,175,0.35)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">CARBONYL COMPOUNDS</text>
                   {/* Acid derivatives row */}
-                  <rect x={15} y={705} rx={12} width={610} height={72} fill="rgba(3,105,144,0.05)" stroke="rgba(3,105,144,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
-                  <text x={30} y={720} fontSize="8.5" fontWeight="800" fill="rgba(3,105,144,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">ACID DERIVATIVES</text>
+                  <rect x={50} y={755} rx={12} width={580} height={78} fill="rgba(3,105,144,0.05)" stroke="rgba(3,105,144,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
+                  <text x={65} y={770} fontSize="8.5" fontWeight="800" fill="rgba(3,105,144,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">ACID DERIVATIVES</text>
                 </>)}
                 {/* Edges - curved arrows */}
                 {sRxns.map(r => {
@@ -5391,7 +5391,7 @@ export default function App() {
                     <path key={"e"+n}
                       d={`M${x1},${y1} Q${cx1},${cy1} ${x2},${y2}`}
                       fill="none"
-                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#d0d8e0" : "#94a3b8"}
+                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#d0d8e0" : "#1a2d45"}
                       strokeWidth={isOut||isIn ? 2.5 : selId ? 0.8 : 1.2}
                       opacity={isDim ? 0.1 : 1}
                       markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
@@ -5443,7 +5443,7 @@ export default function App() {
                       <circle cx={bx} cy={by} r={13} fill="transparent" />
                       <circle cx={bx} cy={by} r={9.5}
                         fill={badgeColor}
-                        stroke={isDim ? "#dde3ea" : isOut ? "#059669" : isIn ? "#2563eb" : "#94a3b8"}
+                        stroke={isDim ? "#dde3ea" : isOut ? "#059669" : isIn ? "#2563eb" : "#1a2d45"}
                         strokeWidth={1.5} opacity={isDim ? 0.2 : 1}
                         filter={isAct || isOut || isIn ? "url(#nodeShadow)" : "none"}
                       />
