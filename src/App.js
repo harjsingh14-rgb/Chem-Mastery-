@@ -3289,15 +3289,15 @@ const MECHS = [
         explanation: "The C–Br bond is polarised because bromine is more electronegative than carbon. This gives Cδ+ and Brδ−. The hydroxide ion (OH⁻) has a lone pair of electrons and is the nucleophile. The δ+ carbon is the electrophile. Bromine is the leaving group - it can accommodate the negative charge as a stable halide ion Br⁻.",
         arrows: [] },
       { title: "Nucleophile attacks; leaving group departs",
-        explanation: "Arrow ①: the lone pair on O⁻ attacks the δ+ carbon, starting to form a new O–C bond. Arrow ②: at the same time, the C–Br bonding electrons shift towards Br, breaking the C–Br bond. Br leaves as Br⁻ (a stable bromide ion). Both arrows are drawn together - the nucleophile donates electrons in and the leaving group takes electrons out simultaneously.",
+        explanation: "Arrow 1: the lone pair on O⁻ attacks the δ+ carbon, starting to form a new O–C bond. Arrow 2: at the same time, the C–Br bonding electrons shift towards Br, breaking the C–Br bond. Br leaves as Br⁻ (a stable bromide ion). Both arrows are drawn together - the nucleophile donates electrons in and the leaving group takes electrons out simultaneously.",
         arrows: ["a1","a2"] },
       { title: "Products: CH₃OH + Br⁻",
         explanation: "The product CH₃OH (methanol) has formed as the nucleophile bonded to the carbon. Br⁻ is released as a free bromide ion. The overall reaction is a substitution - the –Br group has been replaced by –OH. This mechanism applies whenever a nucleophile reacts with a primary or secondary halogenoalkane.",
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 100,93 C 155,60 215,65 248,104", label:"① O lone pair → δ+C (forms O–C bond)", type:"full" },
-      a2: { d:"M 289,112 C 328,88 362,88 394,106", label:"② C–Br bond electrons → Br (forms Br⁻)", type:"full" },
+      a1: { d:"M 110,118 C 165,72 225,72 268,120", label:"O lone pair attacks δ+C, forming new O-C bond", type:"full" },
+      a2: { d:"M 310,130 C 350,100 400,100 438,128", label:"C-Br bond breaks heterolytically, Br leaves as Br⁻", type:"full" },
     },
   },
   {
@@ -3313,16 +3313,16 @@ const MECHS = [
         explanation: "The π electrons of the C=C double bond create a region of high electron density. As Br₂ approaches, the near bromine atom becomes δ+ (electron density is repelled away from it) and the far bromine becomes δ−. This is temporary induced polarisation - without the approaching alkene, Br₂ is non-polar.",
         arrows: [] },
       { title: "π electrons attack δ+ Br; Br–Br breaks",
-        explanation: "Arrow ①: the π bonding electrons attack the δ+ bromine atom, forming a C–Br bond (a carbocation intermediate or cyclic bromonium ion forms). Arrow ②: simultaneously, the Br–Br bonding electrons shift to the distant Br, forming Br⁻ (the leaving group). The π bond is completely used up in this step.",
+        explanation: "Arrow 1: the π bonding electrons attack the δ+ bromine atom, forming a C–Br bond (a carbocation intermediate or cyclic bromonium ion forms). Arrow 2: simultaneously, the Br–Br bonding electrons shift to the distant Br, forming Br⁻ (the leaving group). The π bond is completely used up in this step.",
         arrows: ["a1","a2"] },
       { title: "Br⁻ attacks the carbocation",
-        explanation: "Arrow ③: the Br⁻ ion attacks the empty orbital on the positive carbon from the back face. This anti (trans) addition means the two Br atoms end up on opposite faces of the molecule, giving 1,2-dibromoethane. The orange colour of Br₂ disappears as the product is colourless - this is the standard alkene test.",
+        explanation: "Arrow 3: the Br⁻ ion attacks the empty orbital on the positive carbon from the back face. This anti (trans) addition means the two Br atoms end up on opposite faces of the molecule, giving 1,2-dibromoethane. The orange colour of Br₂ disappears as the product is colourless - this is the standard alkene test.",
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 237,95 C 262,62 308,58 335,86", label:"① π electrons → δ+Br", type:"full" },
-      a2: { d:"M 349,94 C 372,68 402,68 422,88", label:"② Br–Br bond → Br⁻", type:"full" },
-      a3: { d:"M 408,104 C 385,75 320,72 256,108", label:"③ Br⁻ lone pair → C⁺", type:"full" },
+      a1: { d:"M 240,115 C 275,78 330,76 370,118", label:"π bond electrons attack δ+Br", type:"full" },
+      a2: { d:"M 400,120 C 425,88 448,88 460,118", label:"Br-Br bond breaks, forming Br⁻", type:"full" },
+      a3: { d:"M 462,118 C 430,80 330,76 270,122", label:"Br⁻ lone pair attacks C⁺", type:"full" },
     },
   },
   {
@@ -3338,16 +3338,16 @@ const MECHS = [
         explanation: "The H–Br bond is polarised: Hδ+ and Brδ−. The electron-rich π bond of propene is attracted to the δ+ hydrogen. The π electrons will attack the Hδ+, and H is the electrophile in this reaction.",
         arrows: [] },
       { title: "π electrons attack H; H–Br breaks → carbocation",
-        explanation: "Arrow ①: the π electrons attack the δ+ H atom of HBr, forming a new C–H bond on C-1 (the CH₂ end). Arrow ②: the H–Br bond electrons shift to Br, forming Br⁻. A carbocation forms. Crucially, H adds to C-1 (the carbon with MORE hydrogens) because this gives the more stable SECONDARY carbocation at C-2, not the less stable primary carbocation at C-1. This is Markovnikov's rule.",
+        explanation: "Arrow 1: the π electrons attack the δ+ H atom of HBr, forming a new C–H bond on C-1 (the CH₂ end). Arrow 2: the H–Br bond electrons shift to Br, forming Br⁻. A carbocation forms. Crucially, H adds to C-1 (the carbon with MORE hydrogens) because this gives the more stable SECONDARY carbocation at C-2, not the less stable primary carbocation at C-1. This is Markovnikov's rule.",
         arrows: ["a1","a2"] },
       { title: "Br⁻ attacks secondary carbocation",
-        explanation: "Arrow ③: Br⁻ (a nucleophile) attacks the secondary carbocation at C-2 using a lone pair. The product is 2-bromopropane (the Markovnikov product). If H had added to C-2, a less stable primary carbocation at C-1 would form and the minor product 1-bromopropane would result.",
+        explanation: "Arrow 3: Br⁻ (a nucleophile) attacks the secondary carbocation at C-2 using a lone pair. The product is 2-bromopropane (the Markovnikov product). If H had added to C-2, a less stable primary carbocation at C-1 would form and the minor product 1-bromopropane would result.",
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 228,102 C 252,68 298,60 328,82", label:"① π electrons → Hδ+", type:"full" },
-      a2: { d:"M 344,82 C 366,58 400,60 420,80", label:"② H–Br bond → Br⁻", type:"full" },
-      a3: { d:"M 406,104 C 378,72 300,72 192,108", label:"③ Br⁻ lone pair → C⁺", type:"full" },
+      a1: { d:"M 224,115 C 255,78 320,76 365,118", label:"π electrons attack Hδ+", type:"full" },
+      a2: { d:"M 390,118 C 410,88 436,88 450,118", label:"H-Br bond breaks, Br⁻ forms", type:"full" },
+      a3: { d:"M 458,118 C 420,80 300,74 178,122", label:"Br⁻ attacks secondary C⁺", type:"full" },
     },
   },
   {
@@ -3363,19 +3363,19 @@ const MECHS = [
         explanation: "Oxygen is more electronegative than carbon, so the C=O bond is polarised: Cδ+ and Oδ−. The CN⁻ ion (from NaCN/KCN) is the nucleophile with its lone pair on carbon. Pure HCN is avoided (toxic volatile liquid) - NaCN + dilute acid generates CN⁻ safely.",
         arrows: [] },
       { title: "CN⁻ attacks δ+C; C=O π bond breaks → O⁻",
-        explanation: "Arrow ①: the lone pair on carbon of CN⁻ attacks the δ+ carbonyl carbon, forming a new C–CN bond. Arrow ②: simultaneously, the C=O π bond electrons shift entirely to oxygen, forming an alkoxide O⁻. Both arrows happen in the same step - nucleophilic addition is a single concerted event.",
+        explanation: "Arrow 1: the lone pair on carbon of CN⁻ attacks the δ+ carbonyl carbon, forming a new C–CN bond. Arrow 2: simultaneously, the C=O π bond electrons shift entirely to oxygen, forming an alkoxide O⁻. Both arrows happen in the same step - nucleophilic addition is a single concerted event.",
         arrows: ["a1","a2"] },
       { title: "Alkoxide intermediate formed",
         explanation: "The tetrahedral alkoxide intermediate has formed. The carbon that was sp² (flat, trigonal planar) is now sp³ (tetrahedral). The O⁻ is negatively charged and will be protonated by H⁺ from the HCN in solution. A molecule of HCN is shown on the right, ready to donate its proton.",
         arrows: [], past: [], showIntermediate: true },
       { title: "H⁺ from HCN protonates O⁻ → hydroxynitrile",
-        explanation: "Arrow ③: the H on HCN protonates the O⁻, forming the –OH group. The H–CN bond electrons shift towards C of CN, so CN⁻ is regenerated (it acts as a chain carrier). The final product is 2-hydroxypropanenitrile. The new carbon centre is chiral - equal attack from both faces gives a racemic mixture.",
+        explanation: "Arrow 3: the H on HCN protonates the O⁻, forming the –OH group. The H–CN bond electrons shift towards C of CN, so CN⁻ is regenerated (it acts as a chain carrier). The final product is 2-hydroxypropanenitrile. The new carbon centre is chiral - equal attack from both faces gives a racemic mixture.",
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 60,115 C 118,68 208,68 284,112", label:"① CN⁻ lone pair → δ+C (new C–CN bond)", type:"full" },
-      a2: { d:"M 300,106 C 312,80 332,68 345,84", label:"② C=O π bond electrons → O⁻", type:"full" },
-      a3: { d:"M 388,112 C 352,76 280,65 175,70", label:"③ H⁺ from HCN → O⁻ (forms –OH)", type:"full" },
+      a1: { d:"M 60,140 C 130,80 240,80 318,120", label:"CN⁻ lone pair attacks δ+C, forming C-CN bond", type:"full" },
+      a2: { d:"M 348,128 C 362,100 385,90 394,100", label:"C=O π bond electrons shift to O, forming O⁻", type:"full" },
+      a3: { d:"M 428,118 C 380,70 280,60 170,76", label:"H from HCN protonates O⁻, forming -OH", type:"full" },
     },
   },
   {
@@ -3391,20 +3391,20 @@ const MECHS = [
         explanation: "The acyl carbon (C=O carbon bonded to Cl) is highly electrophilic: both O and Cl withdraw electron density, making the carbon strongly δ+. NH₃ has a lone pair on nitrogen - it is the nucleophile. Acyl chloride reactions are much faster and irreversible compared to esterification with a carboxylic acid.",
         arrows: [] },
       { title: "NH₃ attacks acyl carbon; C=O π breaks",
-        explanation: "Arrow ①: the lone pair on N of NH₃ attacks the δ+ acyl carbon, forming a new N–C bond. Arrow ②: simultaneously, the C=O π bond electrons shift to O, forming O⁻. A tetrahedral intermediate forms with N, Cl, O⁻, and CH₃ all attached to the same carbon.",
+        explanation: "Arrow 1: the lone pair on N of NH₃ attacks the δ+ acyl carbon, forming a new N–C bond. Arrow 2: simultaneously, the C=O π bond electrons shift to O, forming O⁻. A tetrahedral intermediate forms with N, Cl, O⁻, and CH₃ all attached to the same carbon.",
         arrows: ["a1","a2"] },
       { title: "Cl⁻ expelled; C=O reforms",
-        explanation: "Arrow ③: the lone pair on O⁻ reforms the C=O π bond (O pushes electrons back to the C=O). Arrow ④: simultaneously, the C–Cl bonding electrons shift to Cl, expelling Cl⁻. The carbonyl group is restored and the amide product CH₃CONH₂ forms. The overall result is substitution of Cl by NH₂.",
+        explanation: "Arrow 3: the lone pair on O⁻ reforms the C=O π bond (O pushes electrons back to the C=O). Arrow 4: simultaneously, the C–Cl bonding electrons shift to Cl, expelling Cl⁻. The carbonyl group is restored and the amide product CH₃CONH₂ forms. The overall result is substitution of Cl by NH₂.",
         arrows: ["a3","a4"], past: [] },
       { title: "HCl neutralised by second NH₃",
         explanation: "The HCl produced (from NH₄⁺ Cl⁻ in solution) is mopped up by a second equivalent of NH₃: NH₃ + HCl → NH₄Cl. This is why 2 mol of NH₃ are shown in the overall equation. Using an excess of ammonia ensures the acidic HCl is neutralised and the product is the free amide.",
         arrows: [], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 104,110 C 155,70 210,70 248,104", label:"① N lone pair → acyl C", type:"full" },
-      a2: { d:"M 268,100 C 280,72 308,64 330,80", label:"② C=O π bond → O⁻", type:"full" },
-      a3: { d:"M 236,78 C 214,58 188,72 170,108", label:"③ O⁻ lone pair → C=O reforms", type:"full" },
-      a4: { d:"M 174,122 C 192,134 207,144 218,150", label:"④ C–Cl bond electrons → Cl⁻", type:"full" },
+      a1: { d:"M 98,126 C 155,78 240,78 283,120", label:"N lone pair attacks acyl C, forming N-C bond", type:"full" },
+      a2: { d:"M 316,126 C 330,96 350,88 362,98", label:"C=O π bond electrons shift to O, forming O⁻", type:"full" },
+      a3: { d:"M 270,90 C 245,64 210,76 198,120", label:"O⁻ lone pair reforms C=O bond", type:"full" },
+      a4: { d:"M 204,150 C 225,168 248,178 256,178", label:"C-Cl bond breaks, Cl⁻ expelled", type:"full" },
     },
   },
   {
@@ -3417,20 +3417,20 @@ const MECHS = [
     description: "AlCl₃ (Lewis acid catalyst) generates the acylium ion (RCO⁺) from the acyl chloride. The acylium ion is the electrophile that attacks benzene's π system. The mechanism follows the general EAS pathway: π attack → arenium ion → H⁺ lost to restore aromaticity. AlCl₃ is regenerated at the end.",
     steps: [
       { title: "Generate the acylium ion (electrophile)",
-        explanation: "AlCl₃ is a Lewis acid - it has an empty orbital and accepts electron pairs. Arrow ①: the lone pair on the Cl of CH₃COCl donates to AlCl₃, forming a coordinate bond. Arrow ②: the C–Cl bond electrons shift to Cl, forming the acylium ion CH₃CO⁺ and [AlCl₄]⁻. The acylium ion CH₃CO⁺ is stabilised by the positive charge on carbon being delocalised onto oxygen.",
+        explanation: "AlCl₃ is a Lewis acid - it has an empty orbital and accepts electron pairs. Arrow 1: the lone pair on the Cl of CH₃COCl donates to AlCl₃, forming a coordinate bond. Arrow 2: the C–Cl bond electrons shift to Cl, forming the acylium ion CH₃CO⁺ and [AlCl₄]⁻. The acylium ion CH₃CO⁺ is stabilised by the positive charge on carbon being delocalised onto oxygen.",
         arrows: ["a1","a2"] },
       { title: "Acylium ion attacks benzene π system",
-        explanation: "Arrow ③: the delocalised π electrons of benzene attack the electrophilic carbon of the acylium ion CH₃CO⁺, forming a new C–C bond. Aromaticity is temporarily lost. A positively charged arenium ion (Wheland intermediate) forms - one carbon in the ring is now sp³ and the positive charge is delocalised around the ring.",
+        explanation: "Arrow 3: the delocalised π electrons of benzene attack the electrophilic carbon of the acylium ion CH₃CO⁺, forming a new C–C bond. Aromaticity is temporarily lost. A positively charged arenium ion (Wheland intermediate) forms - one carbon in the ring is now sp³ and the positive charge is delocalised around the ring.",
         arrows: ["a3"], past: [] },
       { title: "H⁺ lost; aromaticity restored",
-        explanation: "Arrow ④: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored - this is what drives the reaction forward. The H⁺ is accepted by [AlCl₄]⁻, regenerating AlCl₃ and HCl. Overall: one H replaced by –COCH₃ (an acyl group). Product: methyl phenyl ketone (acetophenone).",
+        explanation: "Arrow 4: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored - this is what drives the reaction forward. The H⁺ is accepted by [AlCl₄]⁻, regenerating AlCl₃ and HCl. Overall: one H replaced by –COCH₃ (an acyl group). Product: methyl phenyl ketone (acetophenone).",
         arrows: ["a4"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 400,143 C 412,126 418,112 414,100", label:"① Cl lone pair → Al (Lewis acid)", type:"full" },
-      a2: { d:"M 378,108 C 363,90 344,88 330,100", label:"② C–Cl bond → Cl (acylium forms)", type:"full" },
-      a3: { d:"M 238,93 C 260,58 296,54 318,76", label:"③ π electrons → acylium C", type:"full" },
-      a4: { d:"M 248,104 C 240,130 253,148 270,154", label:"④ C–H bond → H⁺ expelled", type:"full" },
+      a1: { d:"M 460,176 C 472,156 472,146 462,136", label:"Cl lone pair donates to Al (Lewis acid)", type:"full" },
+      a2: { d:"M 424,132 C 404,110 384,108 370,120", label:"C-Cl bond breaks, acylium ion CH₃CO⁺ forms", type:"full" },
+      a3: { d:"M 248,118 C 290,72 360,68 382,96", label:"π electrons attack acylium C⁺", type:"full" },
+      a4: { d:"M 262,130 C 252,160 268,180 288,186", label:"C-H bond breaks, H⁺ expelled, aromaticity restored", type:"full" },
     },
   },
   {
@@ -3446,15 +3446,15 @@ const MECHS = [
         explanation: "Conc. H₂SO₄ donates a proton to HNO₃: HNO₃ + H₂SO₄ → NO₂⁺ + H₂O + HSO₄⁻. The nitronium ion (NO₂⁺) is the electrophile. The temperature is kept below 55°C - at higher temperatures, further nitration to give di- and tri-nitro products occurs.",
         arrows: [] },
       { title: "π electrons attack NO₂⁺",
-        explanation: "Arrow ①: the delocalised π electrons of benzene attack the nitrogen of NO₂⁺, forming a new C–N bond. Aromaticity is temporarily lost - this is the slow, rate-determining step. A positively charged arenium ion (Wheland intermediate / sigma complex) is formed. One ring carbon is now sp³.",
+        explanation: "Arrow 1: the delocalised π electrons of benzene attack the nitrogen of NO₂⁺, forming a new C–N bond. Aromaticity is temporarily lost - this is the slow, rate-determining step. A positively charged arenium ion (Wheland intermediate / sigma complex) is formed. One ring carbon is now sp³.",
         arrows: ["a1"] },
       { title: "H⁺ lost; aromaticity restored",
-        explanation: "Arrow ②: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored. H⁺ is released into the acid mixture. This second step is fast. The overall result is substitution of one H by NO₂ - aromaticity is preserved because the energy gained by restoring delocalisation drives the reaction.",
+        explanation: "Arrow 2: the C–H bonding electrons on the sp³ carbon move into the ring, expelling H⁺. The aromatic π system (6 delocalised electrons) is fully restored. H⁺ is released into the acid mixture. This second step is fast. The overall result is substitution of one H by NO₂ - aromaticity is preserved because the energy gained by restoring delocalisation drives the reaction.",
         arrows: ["a2"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 248,98 C 274,58 314,50 344,76", label:"① π electrons → NO₂⁺", type:"full" },
-      a2: { d:"M 258,107 C 248,133 262,148 280,152", label:"② C–H bond → H⁺ expelled", type:"full" },
+      a1: { d:"M 250,118 C 290,72 360,68 400,118", label:"π electrons attack NO₂⁺", type:"full" },
+      a2: { d:"M 262,130 C 252,162 268,184 290,190", label:"C-H bond breaks, H⁺ expelled, aromaticity restored", type:"full" },
     },
   },
   {
@@ -3470,13 +3470,13 @@ const MECHS = [
         explanation: "The β-carbon is the carbon adjacent to the carbon bearing the Br. OH⁻ is a strong base (not just a nucleophile) - it abstracts the β-hydrogen rather than attacking the carbon (which would give SN2). Hot ethanolic conditions favour the more hindered approach (elimination) over back-face attack (substitution).",
         arrows: [] },
       { title: "Concerted: base removes H, π forms, Br⁻ leaves",
-        explanation: "Arrow ①: the OH⁻ base uses its lone pair to abstract the β-H (H on the carbon adjacent to C–Br). Arrow ②: the C–H bonding electrons shift to form the C=C π bond between the two carbons. Arrow ③: simultaneously, the C–Br bonding electrons shift entirely to Br, forming Br⁻. All three bonds break/form at the same time (E2). The reaction produces ethene + H₂O + Br⁻.",
+        explanation: "Arrow 1: the OH⁻ base uses its lone pair to abstract the β-H (H on the carbon adjacent to C–Br). Arrow 2: the C–H bonding electrons shift to form the C=C π bond between the two carbons. Arrow 3: simultaneously, the C–Br bonding electrons shift entirely to Br, forming Br⁻. All three bonds break/form at the same time (E2). The reaction produces ethene + H₂O + Br⁻.",
         arrows: ["a1","a2","a3"] },
     ],
     arrowPaths: {
-      a1: { d:"M 105,99 C 138,68 182,66 205,90", label:"① O lone pair → β-H", type:"full" },
-      a2: { d:"M 218,108 C 234,86 262,86 278,106", label:"② C–H electrons → π bond forms", type:"full" },
-      a3: { d:"M 294,108 C 328,88 364,90 396,107", label:"③ C–Br electrons → Br⁻", type:"full" },
+      a1: { d:"M 72,118 C 110,78 160,76 196,108", label:"OH⁻ abstracts the β-hydrogen", type:"full" },
+      a2: { d:"M 218,128 C 240,102 278,102 302,128", label:"C-H electrons form the new C=C π bond", type:"full" },
+      a3: { d:"M 326,128 C 360,102 410,104 445,128", label:"C-Br bond breaks, Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -3492,29 +3492,29 @@ const MECHS = [
         explanation: "UV light provides energy for homolytic fission of the Cl–Cl bond - one electron from the bond goes to each chlorine atom. Fish-hook arrows (half-headed, ↷) each represent ONE electron moving. Two Cl• radicals are formed. Each has an unpaired electron shown as a dot (•). This step starts the chain.",
         arrows: ["a1","a2"] },
       { title: "Propagation Step 1: Cl• + CH₄",
-        explanation: "Arrow ③: one electron from the C–H bond moves to pair with the unpaired electron on Cl•, forming H–Cl. Arrow ④: the remaining electron on carbon creates a methyl radical •CH₃. The Cl• radical is consumed but a new radical (•CH₃) is produced - this is why it's a chain reaction. Propagation continues while reactants are available.",
+        explanation: "Arrow 3: one electron from the C–H bond moves to pair with the unpaired electron on Cl•, forming H–Cl. Arrow 4: the remaining electron on carbon creates a methyl radical •CH₃. The Cl• radical is consumed but a new radical (•CH₃) is produced - this is why it's a chain reaction. Propagation continues while reactants are available.",
         arrows: ["a3","a4"], past: [] },
       { title: "Propagation Step 2: •CH₃ + Cl₂",
-        explanation: "Arrow ⑤: one electron from the Cl–Cl bond pairs with the unpaired electron on •CH₃, forming CH₃–Cl (the product). Arrow ⑥: the other Cl atom becomes a new Cl• radical, which goes on to repeat propagation Step 1. Each propagation cycle produces one molecule of CH₃Cl and one molecule of HCl.",
+        explanation: "Arrow 5: one electron from the Cl–Cl bond pairs with the unpaired electron on •CH₃, forming CH₃–Cl (the product). Arrow 6: the other Cl atom becomes a new Cl• radical, which goes on to repeat propagation Step 1. Each propagation cycle produces one molecule of CH₃Cl and one molecule of HCl.",
         arrows: ["a5","a6"], past: [] },
       { title: "Termination: two radicals combine",
         explanation: "Termination occurs when any two radicals collide and combine, using up their unpaired electrons: Cl• + Cl• → Cl₂, or •CH₃ + Cl• → CH₃Cl, or •CH₃ + •CH₃ → C₂H₆. No radicals are produced in termination - the chain is ended. C₂H₆ forming is why trace amounts of ethane are always found as a by-product.",
         arrows: [], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 255,107 C 228,76 200,74 182,94", label:"① one e⁻ → left Cl", type:"fish" },
-      a2: { d:"M 265,107 C 292,76 320,74 338,94", label:"② one e⁻ → right Cl", type:"fish" },
-      a3: { d:"M 235,107 C 248,76 268,72 286,94", label:"③ one e⁻ from C–H → Cl•", type:"fish" },
-      a4: { d:"M 285,110 C 268,130 248,132 232,118", label:"④ remaining e⁻ on C → •CH₃", type:"fish" },
-      a5: { d:"M 240,107 C 265,76 290,74 308,94", label:"⑤ one e⁻ from Cl–Cl → •CH₃", type:"fish" },
-      a6: { d:"M 318,98 C 345,76 368,76 382,94", label:"⑥ other e⁻ → new Cl•", type:"fish" },
+      a1: { d:"M 284,120 C 254,86 218,84 196,108", label:"one electron moves to left Cl", type:"fish" },
+      a2: { d:"M 298,120 C 330,86 370,84 404,108", label:"one electron moves to right Cl", type:"fish" },
+      a3: { d:"M 252,120 C 270,88 288,86 282,112", label:"one electron from C-H pairs with Cl radical", type:"fish" },
+      a4: { d:"M 298,128 C 282,152 262,154 246,140", label:"remaining electron stays on C, forming methyl radical", type:"fish" },
+      a5: { d:"M 270,120 C 296,88 312,86 302,112", label:"one electron from Cl-Cl pairs with methyl radical", type:"fish" },
+      a6: { d:"M 346,120 C 374,88 402,88 418,112", label:"other electron goes to new Cl radical", type:"fish" },
     },
   },
 ];
 
 function MechSVGBase({ children, animKey }) {
   return (
-    <svg viewBox="0 0 560 220" style={{ width:"100%", height:"auto", display:"block", maxHeight:"220px" }}>
+    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block", maxHeight:"280px" }}>
       <defs>
         <marker id={`arr-blue-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -3539,7 +3539,7 @@ function MechSVGBase({ children, animKey }) {
 }
 
 // Atom label helper
-function A({ x, y, el, charge, partial, size=16, color }) {
+function A({ x, y, el, charge, partial, size=18, color }) {
   const c = color || (el==="O"||el==="OH"||el==="OH⁻"?"#b91c1c":el==="N"||el==="NH₃"||el==="NH₂"?"#1d4ed8":el==="Br"?"#9a3412":el==="Cl"?"#166534":el==="H"?"#64748b":"#1a202c");
   return (
     <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
@@ -3635,56 +3635,56 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "nuc_sub") {
     const showProducts = step.showProducts;
     if (showProducts) {
-      // Step 2: Products - CH₃OH on left, Br⁻ on right
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH3-O-H */}
-          <A x={110} y={115} el="CH₃" size={15}/>
-          <Bond x1={131} y1={115} x2={158} y2={115}/>
-          <A x={172} y={115} el="O" size={17}/>
-          <LP x={172} y={98} angle={0} color="#b91c1c"/>
-          <Bond x1={182} y1={115} x2={205} y2={115}/>
-          <A x={214} y={115} el="H" size={15} color="#64748b"/>
-          <text x={162} y={165} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>CH₃OH</text>
+          {/* CH3-O-H product */}
+          <A x={130} y={140} el="H" size={16} color="#64748b"/>
+          <Bond x1={141} y1={140} x2={163} y2={140}/>
+          <A x={175} y={140} el="C" size={18}/>
+          <A x={175} y={108} el="H" size={16} color="#64748b"/><Bond x1={175} y1={132} x2={175} y2={116}/>
+          <A x={149} y={164} el="H" size={16} color="#64748b"/><Bond x1={168} y1={147} x2={154} y2={160}/>
+          <Bond x1={189} y1={140} x2={220} y2={140}/>
+          <A x={234} y={140} el="O" size={18}/>
+          <LP x={234} y={118} angle={0} color="#b91c1c"/>
+          <Bond x1={248} y1={140} x2={272} y2={140}/>
+          <A x={282} y={140} el="H" size={16} color="#64748b"/>
+          <text x={205} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>methanol</text>
           {/* Br⁻ */}
-          <A x={410} y={115} el="Br" size={19}/>
-          <Charge x={432} y={101} val="−" color="#9a3412"/>
-          <LP x={395} y={104} angle={150} color="#9a3412"/>
-          <LP x={393} y={126} angle={120} color="#9a3412"/>
-          <text x={410} y={165} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>Br⁻</text>
-          {/* Past arrows (shown grey) */}
+          <A x={470} y={140} el="Br" size={20}/>
+          <Charge x={494} y={124} val="-" color="#9a3412"/>
+          <LP x={454} y={126} angle={150} color="#9a3412"/>
+          <LP x={452} y={154} angle={120} color="#9a3412"/>
+          <LP x={488} y={126} angle={30} color="#9a3412"/>
+          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>bromide ion</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Steps 0 & 1: HO⁻ on left, CH₃Br on right
     return (
       <MechSVGBase animKey={animKey}>
-        {/* HO⁻ on left */}
-        <A x={68} y={115} el="H" size={15} color="#64748b"/>
-        <Bond x1={79} y1={115} x2={90} y2={115}/>
-        <A x={100} y={115} el="O" size={17}/>
-        <Charge x={118} y={103} val="−" color="#b91c1c"/>
-        <LP x={100} y={93} angle={0} color="#b91c1c"/>
+        {/* HO⁻ nucleophile */}
+        <A x={55} y={140} el="H" size={16} color="#64748b"/>
+        <Bond x1={66} y1={140} x2={88} y2={140}/>
+        <A x={100} y={140} el="O" size={18}/>
+        <Charge x={118} y={124} val="-" color="#b91c1c"/>
+        <LP x={100} y={118} angle={0} color="#b91c1c"/>
+        <LP x={86} y={152} angle={120} color="#b91c1c"/>
 
-        {/* CH3Br */}
-        <A x={270} y={115} el="C" size={17}/>
-        <Delta x={260} y={97} sign="+"/>
-        <A x={270} y={85} el="H" size={14} color="#64748b"/>
-        <Bond x1={270} y1={107} x2={270} y2={92}/>
-        <A x={244} y={136} el="H" size={14} color="#64748b"/>
-        <Bond x1={262} y1={121} x2={248} y2={133}/>
-        <A x={296} y={136} el="H" size={14} color="#64748b"/>
-        <Bond x1={278} y1={121} x2={292} y2={133}/>
-        <Bond x1={284} y1={115} x2={388} y2={115}/>
-        <A x={402} y={115} el="Br" size={17}/>
-        <Delta x={416} y={97} sign="−"/>
-        <LP x={418} y={102} angle={80} color="#9a3412"/>
-        <LP x={430} y={115} angle={170} color="#9a3412"/>
+        {/* CH₃Br displayed formula */}
+        <A x={290} y={140} el="C" size={18}/>
+        <Delta x={278} y={118} sign="+"/>
+        <A x={290} y={106} el="H" size={16} color="#64748b"/><Bond x1={290} y1={132} x2={290} y2={114}/>
+        <A x={262} y={166} el="H" size={16} color="#64748b"/><Bond x1={283} y1={148} x2={268} y2={162}/>
+        <A x={318} y={166} el="H" size={16} color="#64748b"/><Bond x1={297} y1={148} x2={312} y2={162}/>
+        <Bond x1={306} y1={140} x2={430} y2={140}/>
+        <A x={448} y={140} el="Br" size={18}/>
+        <Delta x={464} y={118} sign="-"/>
+        <LP x={466} y={126} angle={70} color="#9a3412"/>
+        <LP x={470} y={140} angle={0} color="#9a3412"/>
 
-        <text x={90} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
-        <text x={270} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophile</text>
-        <text x={402} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+        <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
+        <text x={290} y={210} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
+        <text x={448} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -3695,53 +3695,52 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "ea_br2") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (stepN === 2) {
-      // Step 2: carbocation intermediate CH₂Br–CH₂⁺ with Br⁻ approaching
+      // Step 2: carbocation intermediate with Br⁻ approaching
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH2Br–CH2+ carbocation intermediate */}
-          <A x={130} y={115} el="C" size={17}/>
-          <A x={112} y={88} el="H" size={14} color="#64748b"/><Bond x1={127} y1={107} x2={115} y2={93}/>
-          <A x={112} y={142} el="H" size={14} color="#64748b"/><Bond x1={127} y1={123} x2={115} y2={137}/>
-          <Bond x1={138} y1={108} x2={152} y2={94}/>
-          <A x={158} y={88} el="Br" size={15}/>
-          <LP x={170} y={76} angle={40} color="#9a3412"/>
-          <Bond x1={144} y1={115} x2={218} y2={115}/>
-          <A x={232} y={115} el="C" size={17}/>
-          <Charge x={252} y={101} val="+" color="#b91c1c"/>
-          <A x={232} y={85} el="H" size={14} color="#64748b"/><Bond x1={232} y1={107} x2={232} y2={92}/>
-          <A x={232} y={145} el="H" size={14} color="#64748b"/><Bond x1={232} y1={123} x2={232} y2={138}/>
-          {/* Br⁻ approaching from right */}
-          <A x={420} y={115} el="Br" size={19}/>
-          <Charge x={442} y={101} val="−" color="#9a3412"/>
-          <LP x={408} y={104} angle={160} color="#9a3412"/>
-          <LP x={406} y={126} angle={140} color="#9a3412"/>
-          <Bond x1={258} y1={115} x2={392} y2={115} dash color="#94a3b8" width={1.5}/>
+          <A x={110} y={140} el="H" size={16} color="#64748b"/><Bond x1={121} y1={133} x2={135} y2={118}/>
+          <A x={110} y={170} el="H" size={16} color="#64748b"/><Bond x1={121} y1={167} x2={135} y2={152}/>
+          <A x={145} y={140} el="C" size={18}/>
+          <Bond x1={155} y1={130} x2={172} y2={112}/>
+          <A x={180} y={104} el="Br" size={17}/>
+          <LP x={196} y={92} angle={40} color="#9a3412"/>
+          <Bond x1={160} y1={140} x2={240} y2={140}/>
+          <A x={255} y={140} el="C" size={18}/>
+          <Charge x={276} y={122} val="+" color="#b91c1c"/>
+          <A x={255} y={106} el="H" size={16} color="#64748b"/><Bond x1={255} y1={132} x2={255} y2={114}/>
+          <A x={255} y={174} el="H" size={16} color="#64748b"/><Bond x1={255} y1={148} x2={255} y2={166}/>
+          {/* Br⁻ approaching */}
+          <A x={475} y={140} el="Br" size={20}/>
+          <Charge x={500} y={124} val="-" color="#9a3412"/>
+          <LP x={460} y={126} angle={160} color="#9a3412"/>
+          <LP x={458} y={154} angle={140} color="#9a3412"/>
+          <Bond x1={280} y1={140} x2={448} y2={140} dash color="#94a3b8" width={1.5}/>
+          <text x={200} y={220} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>carbocation intermediate</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Steps 0 & 1: CH₂=CH₂ on left, Br–Br on right
+    // Steps 0 & 1: ethene + Br₂
     return (
       <MechSVGBase animKey={animKey}>
-        {/* Ethene: C=C */}
-        <A x={185} y={115} el="C" size={17}/>
-        <Bond x1={199} y1={115} x2={261} y2={115} dbl/>
-        <A x={275} y={115} el="C" size={17}/>
-        <A x={165} y={88} el="H" size={14} color="#64748b"/><Bond x1={182} y1={108} x2={168} y2={93}/>
-        <A x={165} y={142} el="H" size={14} color="#64748b"/><Bond x1={182} y1={122} x2={168} y2={137}/>
-        <A x={295} y={88} el="H" size={14} color="#64748b"/><Bond x1={278} y1={108} x2={292} y2={93}/>
-        <A x={295} y={142} el="H" size={14} color="#64748b"/><Bond x1={278} y1={122} x2={292} y2={137}/>
-        {/* π cloud label */}
-        <text x={228} y={60} textAnchor="middle" style={{fontSize:"11px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>π cloud</text>
-        {/* Br2 */}
-        <A x={355} y={115} el="Br" size={17}/>
-        <Delta x={344} y={97} sign="+"/>
-        <LP x={342} y={103} angle={170} color="#9a3412"/>
-        <Bond x1={369} y1={115} x2={405} y2={115}/>
-        <A x={420} y={115} el="Br" size={17}/>
-        <Delta x={436} y={97} sign="−"/>
-        <LP x={436} y={103} angle={70} color="#9a3412"/>
-        <LP x={438} y={126} angle={50} color="#9a3412"/>
+        {/* Ethene H₂C=CH₂ */}
+        <A x={140} y={108} el="H" size={16} color="#64748b"/><Bond x1={158} y1={120} x2={148} y2={112}/>
+        <A x={140} y={168} el="H" size={16} color="#64748b"/><Bond x1={158} y1={155} x2={148} y2={163}/>
+        <A x={170} y={140} el="C" size={18}/>
+        <Bond x1={186} y1={140} x2={260} y2={140} dbl/>
+        <A x={275} y={140} el="C" size={18}/>
+        <A x={304} y={108} el="H" size={16} color="#64748b"/><Bond x1={282} y1={126} x2={296} y2={114}/>
+        <A x={304} y={168} el="H" size={16} color="#64748b"/><Bond x1={282} y1={153} x2={296} y2={163}/>
+        <text x={222} y={80} textAnchor="middle" style={{fontSize:"13px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>electron-rich π bond</text>
+        {/* Br₂ */}
+        <A x={390} y={140} el="Br" size={18}/>
+        <Delta x={378} y={118} sign="+"/>
+        <LP x={374} y={128} angle={170} color="#9a3412"/>
+        <Bond x1={408} y1={140} x2={455} y2={140}/>
+        <A x={470} y={140} el="Br" size={18}/>
+        <Delta x={488} y={118} sign="-"/>
+        <LP x={488} y={128} angle={70} color="#9a3412"/>
+        <LP x={490} y={154} angle={50} color="#9a3412"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3751,47 +3750,47 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "ea_hbr") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (stepN === 2) {
-      // Step 2: secondary carbocation CH₃–C⁺H–CH₃ with Br⁻ approaching
+      // Step 2: secondary carbocation with Br⁻ approaching
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH3–C+H–CH3 */}
-          <A x={90} y={115} el="CH₃" size={15}/>
-          <Bond x1={112} y1={115} x2={155} y2={115}/>
-          <A x={168} y={115} el="C" size={17}/>
-          <Charge x={188} y={101} val="+" color="#b91c1c"/>
-          <A x={168} y={85} el="H" size={14} color="#64748b"/><Bond x1={168} y1={107} x2={168} y2={92}/>
-          <Bond x1={182} y1={115} x2={225} y2={115}/>
-          <A x={248} y={115} el="CH₃" size={15}/>
-          <text x={168} y={165} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>secondary carbocation</text>
+          <A x={75} y={140} el="CH₃" size={16}/>
+          <Bond x1={100} y1={140} x2={145} y2={140}/>
+          <A x={160} y={140} el="C" size={18}/>
+          <Charge x={180} y={120} val="+" color="#b91c1c"/>
+          <A x={160} y={106} el="H" size={16} color="#64748b"/><Bond x1={160} y1={132} x2={160} y2={114}/>
+          <Bond x1={175} y1={140} x2={225} y2={140}/>
+          <A x={250} y={140} el="CH₃" size={16}/>
+          <text x={160} y={200} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>secondary carbocation (more stable)</text>
           {/* Br⁻ approaching */}
-          <A x={420} y={115} el="Br" size={19}/>
-          <Charge x={442} y={101} val="−" color="#9a3412"/>
-          <LP x={406} y={104} angle={160} color="#9a3412"/>
-          <LP x={404} y={126} angle={140} color="#9a3412"/>
-          <Bond x1={272} y1={115} x2={392} y2={115} dash color="#94a3b8" width={1.5}/>
+          <A x={470} y={140} el="Br" size={20}/>
+          <Charge x={496} y={124} val="-" color="#9a3412"/>
+          <LP x={454} y={126} angle={160} color="#9a3412"/>
+          <LP x={452} y={154} angle={140} color="#9a3412"/>
+          <Bond x1={276} y1={140} x2={442} y2={140} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Steps 0 & 1: CH₃CH=CH₂ on left, HBr on right
+    // Steps 0 & 1: propene + HBr
     return (
       <MechSVGBase animKey={animKey}>
-        {/* Propene: CH3-CH=CH2 */}
-        <A x={100} y={115} el="CH₃" size={15}/>
-        <Bond x1={122} y1={115} x2={150} y2={115}/>
-        <A x={163} y={115} el="C" size={17}/>
-        <Bond x1={177} y1={115} x2={239} y2={115} dbl/>
-        <A x={253} y={115} el="C" size={17}/>
-        <Bond x1={257} y1={108} x2={272} y2={93}/><A x={276} y={87} el="H" size={14} color="#64748b"/>
-        <Bond x1={257} y1={122} x2={272} y2={137}/><A x={276} y={143} el="H" size={14} color="#64748b"/>
-        <Bond x1={156} y1={108} x2={150} y2={93}/><A x={148} y={87} el="H" size={14} color="#64748b"/>
+        {/* Propene: CH₃-CH=CH₂ */}
+        <A x={72} y={140} el="CH₃" size={16}/>
+        <Bond x1={97} y1={140} x2={140} y2={140}/>
+        <A x={155} y={140} el="C" size={18}/>
+        <Bond x1={169} y1={140} x2={238} y2={140} dbl/>
+        <A x={252} y={140} el="C" size={18}/>
+        <A x={280} y={112} el="H" size={16} color="#64748b"/><Bond x1={259} y1={128} x2={274} y2={118}/>
+        <A x={280} y={168} el="H" size={16} color="#64748b"/><Bond x1={259} y1={152} x2={274} y2={162}/>
+        <A x={148} y={112} el="H" size={16} color="#64748b"/><Bond x1={151} y1={132} x2={150} y2={118}/>
+        <text x={204} y={86} textAnchor="middle" style={{fontSize:"13px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>π bond</text>
         {/* HBr */}
-        <A x={350} y={115} el="H" size={16} color="#64748b"/>
-        <Delta x={342} y={97} sign="+"/>
-        <Bond x1={362} y1={115} x2={398} y2={115}/>
-        <A x={412} y={115} el="Br" size={17}/>
-        <Delta x={426} y={97} sign="−"/>
-        <LP x={430} y={103} angle={70} color="#9a3412"/>
+        <A x={380} y={140} el="H" size={18} color="#64748b"/>
+        <Delta x={370} y={118} sign="+"/>
+        <Bond x1={394} y1={140} x2={438} y2={140}/>
+        <A x={456} y={140} el="Br" size={18}/>
+        <Delta x={474} y={118} sign="-"/>
+        <LP x={474} y={128} angle={70} color="#9a3412"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3800,69 +3799,66 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   // ── nuc_add ──────────────────────────────────────────────────────────
   if (mech.id === "nuc_add") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
-    // Steps 2 and 3: alkoxide intermediate on left + HCN on right; step 3 shows protonation arrow
     if (stepN === 2 || stepN === 3) {
       return (
         <MechSVGBase animKey={animKey}>
-          {/* Alkoxide intermediate: CH₃–C(O⁻)(CN)–H */}
-          <A x={68} y={115} el="CH₃" size={15}/>
-          <Bond x1={88} y1={115} x2={128} y2={115}/>
-          <A x={144} y={115} el="C" size={17}/>
+          {/* Alkoxide intermediate */}
+          <A x={68} y={140} el="CH₃" size={16}/>
+          <Bond x1={93} y1={140} x2={140} y2={140}/>
+          <A x={155} y={140} el="C" size={18}/>
           {/* O⁻ upward */}
-          <Bond x1={144} y1={107} x2={144} y2={78}/>
-          <A x={144} y={68} el="O" size={17}/>
-          <Charge x={162} y={54} val="−" color="#b91c1c"/>
-          <LP x={130} y={62} angle={145} color="#b91c1c"/>
+          <Bond x1={155} y1={130} x2={155} y2={96}/>
+          <A x={155} y={84} el="O" size={18}/>
+          <Charge x={174} y={68} val="-" color="#b91c1c"/>
+          <LP x={140} y={78} angle={145} color="#b91c1c"/>
           {/* CN down-right */}
-          <Bond x1={152} y1={122} x2={178} y2={148}/>
-          <A x={188} y={158} el="C" size={15} color="#1d4ed8"/>
-          <line x1={198} y1={155} x2={222} y2={149} stroke="#1d4ed8" strokeWidth={2.2}/>
-          <line x1={199} y1={159} x2={223} y2={153} stroke="#1d4ed8" strokeWidth={2.2}/>
-          <line x1={200} y1={163} x2={224} y2={157} stroke="#1d4ed8" strokeWidth={2.2}/>
-          <A x={234} y={152} el="N" size={15} color="#1d4ed8"/>
+          <Bond x1={164} y1={150} x2={194} y2={178}/>
+          <A x={205} y={188} el="C" size={16} color="#1d4ed8"/>
+          <line x1={216} y1={184} x2={242} y2={178} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <line x1={217} y1={188} x2={243} y2={182} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <line x1={218} y1={192} x2={244} y2={186} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <A x={256} y={182} el="N" size={16} color="#1d4ed8"/>
           {/* H on C */}
-          <Bond x1={136} y1={121} x2={122} y2={140}/>
-          <A x={117} y={150} el="H" size={14} color="#64748b"/>
-          {stepN === 2 && <text x={144} y={195} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>alkoxide intermediate</text>}
-
-          {/* HCN proton source on right */}
-          <A x={390} y={110} el="H" size={16} color="#64748b"/>
-          <Bond x1={400} y1={110} x2={416} y2={110}/>
-          <A x={425} y={110} el="C" size={15} color="#1d4ed8"/>
-          <line x1={434} y1={107} x2={452} y2={103} stroke="#1d4ed8" strokeWidth={2.2}/>
-          <line x1={434} y1={111} x2={452} y2={107} stroke="#1d4ed8" strokeWidth={2.2}/>
-          <line x1={434} y1={115} x2={452} y2={111} stroke="#1d4ed8" strokeWidth={2.2}/>
-          <A x={462} y={107} el="N" size={15} color="#1d4ed8"/>
-          <text x={430} y={145} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>HCN (H⁺ source)</text>
+          <Bond x1={146} y1={150} x2={128} y2={170}/>
+          <A x={122} y={180} el="H" size={16} color="#64748b"/>
+          {stepN === 2 && <text x={155} y={240} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>alkoxide intermediate</text>}
+          {/* HCN proton source */}
+          <A x={430} y={130} el="H" size={18} color="#64748b"/>
+          <Bond x1={442} y1={130} x2={462} y2={130}/>
+          <A x={475} y={130} el="C" size={16} color="#1d4ed8"/>
+          <line x1={486} y1={126} x2={508} y2={122} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <line x1={486} y1={130} x2={508} y2={126} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <line x1={486} y1={134} x2={508} y2={130} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <A x={520} y={126} el="N" size={16} color="#1d4ed8"/>
+          <text x={475} y={170} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>HCN (proton source)</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Steps 0 & 1: CN⁻ on left, CH₃CHO on right
+    // Steps 0 & 1: CN⁻ + ethanal
     return (
       <MechSVGBase animKey={animKey}>
         {/* CN⁻ */}
-        <A x={72} y={115} el="N" size={17} color="#1d4ed8"/>
-        <line x1={84} y1={111} x2={108} y2={111} stroke="#1d4ed8" strokeWidth={2.2}/>
-        <line x1={84} y1={115} x2={108} y2={115} stroke="#1d4ed8" strokeWidth={2.2}/>
-        <line x1={84} y1={119} x2={108} y2={119} stroke="#1d4ed8" strokeWidth={2.2}/>
-        <A x={118} y={115} el="C" size={17} color="#1d4ed8"/>
-        <Charge x={136} y={102} val="−" color="#1d4ed8"/>
-        <LP x={55} y={115} angle={90} color="#1d4ed8"/>
+        <A x={52} y={140} el="N" size={18} color="#1d4ed8"/>
+        <line x1={66} y1={136} x2={94} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
+        <line x1={66} y1={140} x2={94} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
+        <line x1={66} y1={144} x2={94} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
+        <A x={108} y={140} el="C" size={18} color="#1d4ed8"/>
+        <Charge x={128} y={122} val="-" color="#1d4ed8"/>
+        <LP x={34} y={140} angle={90} color="#1d4ed8"/>
+        <text x={80} y={192} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
 
-        {/* Ethanal CH3-CHO */}
-        <A x={240} y={115} el="CH₃" size={15}/>
-        <Bond x1={262} y1={115} x2={283} y2={115}/>
-        <A x={297} y={115} el="C" size={17}/>
-        <Delta x={287} y={97} sign="+"/>
-        {/* C=O double bond */}
-        <Bond x1={307} y1={110} x2={335} y2={97} dbl/>
-        <A x={348} y={90} el="O" size={17}/>
-        <Delta x={362} y={78} sign="−"/>
-        <LP x={360} y={88} angle={40} color="#b91c1c"/>
-        {/* H on CHO carbon */}
-        <Bond x1={292} y1={123} x2={286} y2={140}/>
-        <A x={283} y={150} el="H" size={14} color="#64748b"/>
+        {/* Ethanal CH₃CHO */}
+        <A x={270} y={140} el="CH₃" size={16}/>
+        <Bond x1={296} y1={140} x2={325} y2={140}/>
+        <A x={340} y={140} el="C" size={18}/>
+        <Delta x={328} y={118} sign="+"/>
+        <Bond x1={352} y1={132} x2={388} y2={112} dbl/>
+        <A x={400} y={106} el="O" size={18}/>
+        <Delta x={418} y={90} sign="-"/>
+        <LP x={416} y={102} angle={40} color="#b91c1c"/>
+        <Bond x1={335} y1={150} x2={326} y2={172}/>
+        <A x={322} y={182} el="H" size={16} color="#64748b"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3872,78 +3868,68 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "nuc_add_elim") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (stepN === 2) {
-      // Step 2: tetrahedral intermediate CH₃–C(NH₂)(O⁻)(Cl)
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃ */}
-          <A x={80} y={115} el="CH₃" size={15}/>
-          <Bond x1={101} y1={115} x2={148} y2={115}/>
-          {/* Central C */}
-          <A x={162} y={115} el="C" size={17}/>
+          <A x={100} y={140} el="CH₃" size={16}/>
+          <Bond x1={126} y1={140} x2={175} y2={140}/>
+          <A x={190} y={140} el="C" size={18}/>
           {/* NH₂ up */}
-          <Bond x1={162} y1={107} x2={162} y2={78}/>
-          <A x={162} y={68} el="NH₂" size={14} color="#1d4ed8"/>
-          {/* O⁻ right */}
-          <Bond x1={170} y1={110} x2={210} y2={88}/>
-          <A x={222} y={82} el="O" size={17}/>
-          <Charge x={240} y={68} val="−" color="#b91c1c"/>
-          <LP x={236} y={78} angle={30} color="#b91c1c"/>
+          <Bond x1={190} y1={130} x2={190} y2={96}/>
+          <A x={190} y={82} el="NH₂" size={16} color="#1d4ed8"/>
+          {/* O⁻ right-up */}
+          <Bond x1={200} y1={132} x2={245} y2={104}/>
+          <A x={258} y={96} el="O" size={18}/>
+          <Charge x={278} y={80} val="-" color="#b91c1c"/>
+          <LP x={274} y={92} angle={30} color="#b91c1c"/>
           {/* Cl down-right */}
-          <Bond x1={170} y1={121} x2={210} y2={143}/>
-          <A x={222} y={152} el="Cl" size={17}/>
-          <LP x={238} y={162} angle={50} color="#166534"/>
+          <Bond x1={200} y1={148} x2={245} y2={176}/>
+          <A x={258} y={184} el="Cl" size={18}/>
+          <LP x={276} y={196} angle={50} color="#166534"/>
           {/* H */}
-          <Bond x1={155} y1={122} x2={140} y2={142}/>
-          <A x={135} y={152} el="H" size={14} color="#64748b"/>
-          <text x={162} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>tetrahedral intermediate</text>
+          <Bond x1={182} y1={150} x2={162} y2={174}/>
+          <A x={156} y={184} el="H" size={16} color="#64748b"/>
+          <text x={190} y={245} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>tetrahedral intermediate</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
     if (stepN === 3) {
-      // Step 3: amide product + second NH₃ mopping up HCl
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃CONH₂ */}
-          <A x={80} y={115} el="CH₃" size={15}/>
-          <Bond x1={101} y1={115} x2={130} y2={115}/>
-          <A x={144} y={115} el="C" size={17}/>
-          <Bond x1={154} y1={109} x2={182} y2={96} dbl/>
-          <A x={195} y={89} el="O" size={17}/>
-          <Bond x1={154} y1={121} x2={185} y2={135}/>
-          <A x={200} y={142} el="NH₂" size={14} color="#1d4ed8"/>
-          <text x={144} y={175} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>CH₃CONH₂</text>
-          {/* + sign */}
-          <text x={280} y={120} textAnchor="middle" style={{fontSize:"20px",fill:"#64748b",fontWeight:300}}>+</text>
-          {/* NH₄Cl */}
-          <A x={370} y={115} el="NH₄Cl" size={14} color="#64748b"/>
-          <text x={370} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>(2nd NH₃ + HCl)</text>
+          <A x={100} y={140} el="CH₃" size={16}/>
+          <Bond x1={126} y1={140} x2={160} y2={140}/>
+          <A x={175} y={140} el="C" size={18}/>
+          <Bond x1={186} y1={132} x2={220} y2={112} dbl/>
+          <A x={234} y={104} el="O" size={18}/>
+          <Bond x1={186} y1={148} x2={222} y2={168}/>
+          <A x={240} y={176} el="NH₂" size={16} color="#1d4ed8"/>
+          <text x={175} y={218} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>ethanamide (CH₃CONH₂)</text>
+          <text x={340} y={145} textAnchor="middle" style={{fontSize:"22px",fill:"#64748b",fontWeight:300}}>+</text>
+          <A x={440} y={140} el="NH₄Cl" size={16} color="#64748b"/>
+          <text x={440} y={185} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>(2nd NH₃ mops up HCl)</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Steps 0 & 1: NH₃ on left, CH₃COCl on right
+    // Steps 0 & 1: NH₃ + CH₃COCl
     return (
       <MechSVGBase animKey={animKey}>
-        {/* NH3 nucleophile */}
-        <A x={80} y={115} el="NH₃" size={15} color="#1d4ed8"/>
-        <LP x={104} y={108} angle={0} color="#1d4ed8"/>
-        {/* CH3COCl */}
-        <A x={200} y={115} el="CH₃" size={15}/>
-        <Bond x1={222} y1={115} x2={245} y2={115}/>
-        <A x={260} y={115} el="C" size={17}/>
-        <Delta x={250} y={97} sign="+"/>
-        {/* C=O */}
-        <Bond x1={270} y1={108} x2={302} y2={95} dbl/>
-        <A x={315} y={88} el="O" size={17}/>
-        <Delta x={330} y={76} sign="−"/>
-        <LP x={330} y={86} angle={40} color="#b91c1c"/>
-        {/* C-Cl */}
-        <Bond x1={270} y1={122} x2={302} y2={135}/>
-        <A x={315} y={143} el="Cl" size={17}/>
-        <LP x={330} y={152} angle={70} color="#166534"/>
-        <text x={80} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
-        <text x={260} y={175} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic acyl C</text>
+        <A x={70} y={140} el="NH₃" size={17} color="#1d4ed8"/>
+        <LP x={98} y={130} angle={0} color="#1d4ed8"/>
+        <text x={70} y={188} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
+
+        <A x={230} y={140} el="CH₃" size={16}/>
+        <Bond x1={256} y1={140} x2={288} y2={140}/>
+        <A x={305} y={140} el="C" size={18}/>
+        <Delta x={292} y={118} sign="+"/>
+        <Bond x1={316} y1={132} x2={354} y2={112} dbl/>
+        <A x={368} y={104} el="O" size={18}/>
+        <Delta x={386} y={88} sign="-"/>
+        <LP x={384} y={100} angle={40} color="#b91c1c"/>
+        <Bond x1={316} y1={148} x2={354} y2={168}/>
+        <A x={368} y={176} el="Cl" size={18}/>
+        <LP x={386} y={188} angle={70} color="#166534"/>
+        <text x={305} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic acyl carbon</text>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3953,71 +3939,61 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "fc_acyl") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (stepN === 0) {
-      // Step 0: CH₃COCl + AlCl₃ generating acylium
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃COCl */}
-          <A x={130} y={115} el="CH₃" size={15}/>
-          <Bond x1={152} y1={115} x2={176} y2={115}/>
-          <A x={192} y={115} el="C" size={17}/>
-          <Bond x1={202} y1={108} x2={230} y2={94} dbl/>
-          <A x={244} y={87} el="O" size={17}/>
-          <Bond x1={202} y1={122} x2={230} y2={136}/>
-          <A x={244} y={143} el="Cl" size={17}/>
-          <LP x={258} y={152} angle={60} color="#166534"/>
-          {/* AlCl₃ */}
-          <A x={380} y={115} el="AlCl₃" size={14} color="#64748b"/>
-          {/* dashed line showing interaction */}
-          <Bond x1={268} y1={143} x2={355} y2={120} dash color="#94a3b8" width={1.5}/>
-          <text x={192} y={175} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#7c3aed",fontWeight:700}}>acyl chloride</text>
-          <text x={380} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b",fontWeight:700}}>Lewis acid</text>
+          <A x={130} y={140} el="CH₃" size={16}/>
+          <Bond x1={156} y1={140} x2={188} y2={140}/>
+          <A x={205} y={140} el="C" size={18}/>
+          <Bond x1={216} y1={132} x2={248} y2={112} dbl/>
+          <A x={262} y={104} el="O" size={18}/>
+          <Bond x1={216} y1={148} x2={248} y2={168}/>
+          <A x={262} y={176} el="Cl" size={18}/>
+          <LP x={278} y={188} angle={60} color="#166534"/>
+          <A x={440} y={140} el="AlCl₃" size={16} color="#64748b"/>
+          <Bond x1={286} y1={176} x2={410} y2={146} dash color="#94a3b8" width={1.5}/>
+          <text x={205} y={220} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#7c3aed",fontWeight:700}}>acyl chloride</text>
+          <text x={440} y={188} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b",fontWeight:700}}>Lewis acid catalyst</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
     if (stepN === 1) {
-      // Step 1: benzene + acylium CH₃CO⁺
-      const cx=195, cy=118, r=50;
+      const cx=195, cy=145, r=55;
       const pts = Array.from({length:6},(_,i)=>{ const a=(i*60-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
       return (
         <MechSVGBase animKey={animKey}>
           {pts.map(([x,y],i)=>{ const [nx,ny]=pts[(i+1)%6]; return <line key={i} x1={x} y1={y} x2={nx} y2={ny} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; })}
-          {[0,2,4].map(i=>{ const [x,y]=pts[i],[nx,ny]=pts[(i+1)%6]; const ddx=ny-y,ddy=x-nx,len=Math.sqrt(ddx*ddx+ddy*ddy)||1; const ox=ddx/len*5,oy=ddy/len*5; return <line key={`d${i}`} x1={x+ox} y1={y+oy} x2={nx+ox} y2={ny+oy} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; })}
-          <A x={195} y={58} el="H" size={14} color="#64748b"/>
-          <Bond x1={195} y1={67} x2={195} y2={68}/>
-          {/* CH₃CO⁺ acylium */}
-          <A x={370} y={115} el="CH₃" size={14}/>
-          <Bond x1={386} y1={115} x2={408} y2={115}/>
-          <A x={418} y={115} el="C" size={17}/>
-          <Bond x1={428} y1={110} x2={450} y2={97} dbl/>
-          <A x={458} y={92} el="O" size={16}/>
-          <Charge x={434} y={100} val="+" color="#b91c1c"/>
-          <text x={418} y={155} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>acylium ion</text>
-          <Bond x1={248} y1={115} x2={348} y2={115} dash color="#94a3b8" width={1.5}/>
+          <circle cx={cx} cy={cy} r={28} fill="none" stroke="#1a202c" strokeWidth={1.5} strokeDasharray="4,3"/>
+          <A x={195} y={76} el="H" size={16} color="#64748b"/>
+          <Bond x1={195} y1={84} x2={195} y2={90}/>
+          <A x={410} y={140} el="CH₃" size={16}/>
+          <Bond x1={434} y1={140} x2={462} y2={140}/>
+          <A x={478} y={140} el="C" size={18}/>
+          <Bond x1={490} y1={132} x2={514} y2={116} dbl/>
+          <A x={524} y={108} el="O" size={18}/>
+          <Charge x={494} y={120} val="+" color="#b91c1c"/>
+          <text x={478} y={185} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>acylium ion</text>
+          <Bond x1={254} y1={140} x2={388} y2={140} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Step 2: arenium ion with –COCH₃ attached, sp3 carbon shown, arrow expels H⁺
-    const cx=195, cy=118, r=50;
+    // Step 2: arenium ion
+    const cx=195, cy=145, r=55;
     const pts = Array.from({length:6},(_,i)=>{ const a=(i*60-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
     return (
       <MechSVGBase animKey={animKey}>
         {pts.map(([x,y],i)=>{ const [nx,ny]=pts[(i+1)%6]; return <line key={i} x1={x} y1={y} x2={nx} y2={ny} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; })}
-        {[0,2,4].map(i=>{ const [x,y]=pts[i],[nx,ny]=pts[(i+1)%6]; const ddx=ny-y,ddy=x-nx,len=Math.sqrt(ddx*ddx+ddy*ddy)||1; const ox=ddx/len*5,oy=ddy/len*5; return <line key={`d${i}`} x1={x+ox} y1={y+oy} x2={nx+ox} y2={ny+oy} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; })}
-        {/* sp3 carbon at top with H */}
-        <A x={195} y={55} el="H" size={14} color="#64748b"/>
-        <Bond x1={195} y1={64} x2={195} y2={68}/>
-        {/* acyl group attached at top */}
-        <Bond x1={195} y1={68} x2={280} y2={80}/>
-        <A x={296} y={78} el="C" size={15}/>
-        <Bond x1={306} y1={72} x2={328} y2={60} dbl/>
-        <A x={338} y={55} el="O" size={15}/>
-        <Bond x1={306} y1={83} x2={332} y2={92}/>
-        <A x={346} y={97} el="CH₃" size={13}/>
-        {/* + charge on ring */}
-        <Charge x={155} y={155} val="+" color="#b91c1c"/>
-        <text x={195} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion (sp³ C)</text>
+        <A x={195} y={76} el="H" size={16} color="#64748b"/>
+        <Bond x1={195} y1={84} x2={195} y2={90}/>
+        <Bond x1={195} y1={90} x2={310} y2={100}/>
+        <A x={326} y={98} el="C" size={16}/>
+        <Bond x1={338} y1={92} x2={365} y2={76} dbl/>
+        <A x={378} y={68} el="O" size={16}/>
+        <Bond x1={338} y1={104} x2={370} y2={116}/>
+        <A x={385} y={122} el="CH₃" size={14}/>
+        <Charge x={160} y={190} val="+" color="#b91c1c"/>
+        <text x={195} y={245} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion</text>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -4026,49 +4002,46 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   // ── eas ──────────────────────────────────────────────────────────────
   if (mech.id === "eas") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
-    const cx=195, cy=118, r=52;
+    const cx=195, cy=145, r=55;
     const pts = Array.from({length:6},(_,i)=>{ const a=(i*60-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
     const ringLines = pts.map(([x,y],i)=>{ const [nx,ny]=pts[(i+1)%6]; return <line key={i} x1={x} y1={y} x2={nx} y2={ny} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; });
-    const dblLines = [0,2,4].map(i=>{ const [x,y]=pts[i],[nx,ny]=pts[(i+1)%6]; const ddx=ny-y,ddy=x-nx,len=Math.sqrt(ddx*ddx+ddy*ddy)||1; const ox=ddx/len*5,oy=ddy/len*5; return <line key={`d${i}`} x1={x+ox} y1={y+oy} x2={nx+ox} y2={ny+oy} stroke="#1a202c" strokeWidth={2.5} strokeLinecap="round"/>; });
 
     if (stepN === 0) {
-      // Step 0: HNO3 + H2SO4 generating NO2+
       return (
         <MechSVGBase animKey={animKey}>
-          <text x={280} y={50} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>Generating NO₂⁺</text>
-          <text x={280} y={78} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c"}}>HNO₃ + H₂SO₄</text>
-          <text x={280} y={100} textAnchor="middle" style={{fontSize:"16px",fill:"#64748b"}}>→</text>
-          <text x={280} y={125} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>NO₂⁺</text>
-          <text x={280} y={147} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>+ H₂O + HSO₄⁻</text>
-          <text x={280} y={175} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>Temperature kept below 55°C</text>
+          <text x={310} y={65} textAnchor="middle" style={{fontSize:"16px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>Generating the electrophile: NO₂⁺</text>
+          <text x={310} y={100} textAnchor="middle" style={{fontSize:"15px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c"}}>HNO₃ + H₂SO₄</text>
+          <text x={310} y={128} textAnchor="middle" style={{fontSize:"18px",fill:"#64748b"}}>→</text>
+          <text x={310} y={158} textAnchor="middle" style={{fontSize:"16px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>NO₂⁺ + H₂O + HSO₄⁻</text>
+          <text x={310} y={195} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>Temperature kept below 55 degrees C</text>
         </MechSVGBase>
       );
     }
     if (stepN === 1) {
-      // Step 1: benzene + NO₂⁺
       return (
         <MechSVGBase animKey={animKey}>
-          {ringLines}{dblLines}
-          <A x={195} y={56} el="H" size={14} color="#64748b"/>
-          <Bond x1={195} y1={65} x2={195} y2={66}/>
-          <A x={380} y={118} el="NO₂" size={16} color="#0284c7"/>
-          <Charge x={412} y={104} val="+" color="#0284c7"/>
-          <Bond x1={250} y1={118} x2={356} y2={118} dash color="#94a3b8" width={1.5}/>
+          {ringLines}
+          <circle cx={cx} cy={cy} r={28} fill="none" stroke="#1a202c" strokeWidth={1.5} strokeDasharray="4,3"/>
+          <A x={195} y={76} el="H" size={16} color="#64748b"/>
+          <Bond x1={195} y1={84} x2={195} y2={90}/>
+          <A x={420} y={145} el="NO₂" size={18} color="#0284c7"/>
+          <Charge x={452} y={128} val="+" color="#0284c7"/>
+          <Bond x1={254} y1={145} x2={394} y2={145} dash color="#94a3b8" width={1.5}/>
+          <text x={420} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophile</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Step 2: arenium intermediate with NO₂, arrow expels H⁺
+    // Step 2: arenium ion
     return (
       <MechSVGBase animKey={animKey}>
-        {ringLines}{dblLines}
-        <A x={195} y={56} el="H" size={14} color="#64748b"/>
-        <Bond x1={195} y1={65} x2={195} y2={66}/>
-        {/* NO2 attached */}
-        <Bond x1={195} y1={66} x2={280} y2={80}/>
-        <A x={296} y={78} el="NO₂" size={14} color="#0284c7"/>
-        <Charge x={155} y={155} val="+" color="#0284c7"/>
-        <text x={195} y={200} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion</text>
+        {ringLines}
+        <A x={195} y={76} el="H" size={16} color="#64748b"/>
+        <Bond x1={195} y1={84} x2={195} y2={90}/>
+        <Bond x1={195} y1={90} x2={310} y2={100}/>
+        <A x={330} y={98} el="NO₂" size={16} color="#0284c7"/>
+        <Charge x={160} y={190} val="+" color="#0284c7"/>
+        <text x={195} y={248} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion</text>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -4078,35 +4051,37 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "elimination") {
     return (
       <MechSVGBase animKey={animKey}>
-        {/* OH⁻ base on far left */}
-        <A x={78} y={115} el="HO" size={16} color="#b91c1c"/>
-        <Charge x={102} y={103} val="−" color="#b91c1c"/>
-        <LP x={78} y={99} angle={0} color="#b91c1c"/>
+        {/* OH⁻ base */}
+        <A x={60} y={140} el="HO" size={18} color="#b91c1c"/>
+        <Charge x={86} y={122} val="-" color="#b91c1c"/>
+        <LP x={60} y={118} angle={0} color="#b91c1c"/>
+        <LP x={44} y={152} angle={120} color="#b91c1c"/>
+        <text x={60} y={192} textAnchor="middle" style={{fontSize:"12px",fill:"#9333ea",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:700}}>base</text>
 
         {/* β-carbon */}
-        <A x={198} y={115} el="C" size={17}/>
-        <text x={198} y={165} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif"}}>β-C</text>
-        {/* β-H (the one being abstracted) */}
-        <A x={185} y={86} el="H" size={15} color="#64748b"/>
-        <Bond x1={193} y1={107} x2={188} y2={92}/>
-        <A x={172} y={138} el="H" size={14} color="#64748b"/>
-        <Bond x1={191} y1={121} x2={176} y2={135}/>
+        <A x={210} y={140} el="C" size={18}/>
+        <text x={210} y={204} textAnchor="middle" style={{fontSize:"12px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:600}}>β-C</text>
+        <A x={192} y={106} el="H" size={16} color="#64748b"/>
+        <Bond x1={205} y1={130} x2={196} y2={114}/>
+        <A x={182} y={168} el="H" size={16} color="#64748b"/>
+        <Bond x1={203} y1={148} x2={188} y2={164}/>
 
-        {/* C–C bond */}
-        <Bond x1={210} y1={115} x2={268} y2={115}/>
+        {/* C-C bond */}
+        <Bond x1={224} y1={140} x2={295} y2={140}/>
 
         {/* α-carbon */}
-        <A x={282} y={115} el="C" size={17}/>
-        <text x={282} y={165} textAnchor="middle" style={{fontSize:"10px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif"}}>α-C</text>
-        <A x={300} y={87} el="H" size={14} color="#64748b"/>
-        <Bond x1={284} y1={107} x2={298} y2={93}/>
-        <A x={300} y={143} el="H" size={14} color="#64748b"/>
-        <Bond x1={284} y1={123} x2={297} y2={138}/>
+        <A x={310} y={140} el="C" size={18}/>
+        <text x={310} y={204} textAnchor="middle" style={{fontSize:"12px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:600}}>α-C</text>
+        <A x={330} y={106} el="H" size={16} color="#64748b"/>
+        <Bond x1={314} y1={130} x2={326} y2={114}/>
+        <A x={330} y={174} el="H" size={16} color="#64748b"/>
+        <Bond x1={314} y1={150} x2={326} y2={168}/>
 
-        {/* C–Br bond */}
-        <Bond x1={296} y1={115} x2={385} y2={115}/>
-        <A x={400} y={115} el="Br" size={17}/>
-        <LP x={415} y={103} angle={70} color="#9a3412"/>
+        {/* C-Br bond */}
+        <Bond x1={326} y1={140} x2={435} y2={140}/>
+        <A x={455} y={140} el="Br" size={18}/>
+        <LP x={472} y={126} angle={70} color="#9a3412"/>
+        <LP x={474} y={154} angle={50} color="#9a3412"/>
 
         {renderArrows()}
       </MechSVGBase>
@@ -4117,73 +4092,70 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "frs") {
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (stepN === 0) {
-      // Initiation: Cl–Cl with UV
       return (
         <MechSVGBase animKey={animKey}>
-          <text x={280} y={38} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>UV light (hν)</text>
-          <text x={280} y={56} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>↓</text>
-          <A x={165} y={115} el="Cl" size={18}/>
-          <LP x={148} y={103} angle={150} color="#166534"/>
-          <LP x={150} y={127} angle={120} color="#166534"/>
-          <Bond x1={186} y1={115} x2={345} y2={115}/>
-          <A x={365} y={115} el="Cl" size={18}/>
-          <LP x={382} y={103} angle={30} color="#166534"/>
-          <LP x={384} y={127} angle={60} color="#166534"/>
-          <text x={265} y={145} textAnchor="middle" style={{fontSize:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>homolytic fission</text>
+          <text x={310} y={55} textAnchor="middle" style={{fontSize:"16px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>UV light (hv)</text>
+          <text x={310} y={78} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>|</text>
+          <A x={180} y={140} el="Cl" size={20}/>
+          <LP x={160} y={126} angle={150} color="#166534"/>
+          <LP x={162} y={154} angle={120} color="#166534"/>
+          <Bond x1={204} y1={140} x2={395} y2={140}/>
+          <A x={418} y={140} el="Cl" size={20}/>
+          <LP x={438} y={126} angle={30} color="#166534"/>
+          <LP x={440} y={154} angle={60} color="#166534"/>
+          <text x={300} y={178} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#d97706",fontWeight:700}}>homolytic fission</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
     if (stepN === 1) {
-      // Propagation 1: Cl• + CH4
       return (
         <MechSVGBase animKey={animKey}>
-          <A x={88} y={115} el="Cl" size={18}/>
-          <text x={106} y={99} style={{fontSize:"15px",fill:"#166534",fontWeight:700}}>•</text>
-          <LP x={72} y={103} angle={150} color="#166534"/>
+          <A x={80} y={140} el="Cl" size={20}/>
+          <text x={100} y={122} style={{fontSize:"18px",fill:"#166534",fontWeight:700}}>.</text>
+          <LP x={60} y={126} angle={150} color="#166534"/>
 
-          <A x={275} y={115} el="C" size={17}/>
-          <A x={275} y={82} el="H" size={15} color="#64748b"/><Bond x1={275} y1={107} x2={275} y2={89}/>
-          <A x={245} y={138} el="H" size={15} color="#64748b"/><Bond x1={267} y1={121} x2={250} y2={135}/>
-          <A x={305} y={138} el="H" size={15} color="#64748b"/><Bond x1={283} y1={121} x2={302} y2={135}/>
-          <A x={310} y={89} el="H" size={15} color="#64748b"/><Bond x1={282} y1={108} x2={305} y2={93}/>
+          <A x={290} y={140} el="C" size={18}/>
+          <A x={290} y={104} el="H" size={16} color="#64748b"/><Bond x1={290} y1={132} x2={290} y2={112}/>
+          <A x={258} y={168} el="H" size={16} color="#64748b"/><Bond x1={283} y1={148} x2={264} y2={164}/>
+          <A x={322} y={168} el="H" size={16} color="#64748b"/><Bond x1={297} y1={148} x2={316} y2={164}/>
+          <A x={330} y={110} el="H" size={16} color="#64748b"/><Bond x1={298} y1={132} x2={322} y2={116}/>
           {renderArrows()}
         </MechSVGBase>
       );
     }
     if (stepN === 2) {
-      // Propagation 2: •CH3 + Cl2
       return (
         <MechSVGBase animKey={animKey}>
-          <A x={95} y={115} el="C" size={17}/>
-          <text x={113} y={99} style={{fontSize:"15px",fill:"#1a202c",fontWeight:700}}>•</text>
-          <A x={95} y={82} el="H" size={14} color="#64748b"/><Bond x1={95} y1={107} x2={95} y2={89}/>
-          <A x={68} y={138} el="H" size={14} color="#64748b"/><Bond x1={88} y1={121} x2={72} y2={135}/>
-          <A x={122} y={138} el="H" size={14} color="#64748b"/><Bond x1={102} y1={121} x2={118} y2={135}/>
+          <A x={95} y={140} el="C" size={18}/>
+          <text x={115} y={122} style={{fontSize:"18px",fill:"#1a202c",fontWeight:700}}>.</text>
+          <A x={95} y={104} el="H" size={16} color="#64748b"/><Bond x1={95} y1={132} x2={95} y2={112}/>
+          <A x={65} y={168} el="H" size={16} color="#64748b"/><Bond x1={88} y1={148} x2={71} y2={164}/>
+          <A x={125} y={168} el="H" size={16} color="#64748b"/><Bond x1={102} y1={148} x2={119} y2={164}/>
 
-          <A x={278} y={115} el="Cl" size={18}/>
-          <LP x={262} y={103} angle={150} color="#166534"/>
-          <Bond x1={298} y1={115} x2={360} y2={115}/>
-          <A x={378} y={115} el="Cl" size={18}/>
-          <LP x={394} y={103} angle={30} color="#166534"/>
-          <LP x={396} y={127} angle={60} color="#166534"/>
+          <A x={310} y={140} el="Cl" size={20}/>
+          <LP x={292} y={126} angle={150} color="#166534"/>
+          <Bond x1={334} y1={140} x2={405} y2={140}/>
+          <A x={425} y={140} el="Cl" size={20}/>
+          <LP x={444} y={126} angle={30} color="#166534"/>
+          <LP x={446} y={154} angle={60} color="#166534"/>
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Termination (step 3)
+    // Termination
     return (
       <MechSVGBase animKey={animKey}>
-        <text x={280} y={58} textAnchor="middle" style={{fontSize:"14px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:600}}>Termination: any two radicals combine</text>
-        <text x={280} y={88} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl• + Cl• → Cl₂</text>
-        <text x={280} y={113} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl• + •CH₃ → CH₃Cl</text>
-        <text x={280} y={138} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>•CH₃ + •CH₃ → C₂H₆</text>
-        <text x={280} y={168} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>No curly arrows - radicals combine directly</text>
+        <text x={310} y={70} textAnchor="middle" style={{fontSize:"16px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:600}}>Termination: any two radicals combine</text>
+        <text x={310} y={110} textAnchor="middle" style={{fontSize:"15px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl. + Cl. ---> Cl₂</text>
+        <text x={310} y={145} textAnchor="middle" style={{fontSize:"15px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>Cl. + .CH₃ ---> CH₃Cl</text>
+        <text x={310} y={180} textAnchor="middle" style={{fontSize:"15px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>.CH₃ + .CH₃ ---> C₂H₆</text>
+        <text x={310} y={218} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#94a3b8"}}>No new radicals produced - chain ends</text>
       </MechSVGBase>
     );
   }
 
-  return <MechSVGBase animKey={animKey}><text x={280} y={110} textAnchor="middle" fill="#94a3b8">Diagram coming soon</text></MechSVGBase>;
+  return <MechSVGBase animKey={animKey}><text x={310} y={140} textAnchor="middle" fill="#94a3b8">Diagram coming soon</text></MechSVGBase>;
 }
 
 // Still / exam version: shows the KEY step (first step with arrows) with all its arrows in red, no animation.
@@ -6551,32 +6523,32 @@ export default function App() {
               </div>
 
               {/* Step title */}
-              <div style={{ padding:"2px 16px 8px" }}>
-                <div style={{ fontSize:"15px", fontWeight:700, color:"#1a2d45" }}>{currentStepData.title}</div>
+              <div style={{ padding:"4px 16px 8px" }}>
+                <div style={{ fontSize:"17px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>{currentStepData.title}</div>
               </div>
 
               {/* SVG diagram */}
               <div style={{ margin:"0 16px", background:"#f8fafc", border:"1.5px solid #e2e8f0",
-                borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
+                borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
                 <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
               </div>
 
               {/* Latest arrow label */}
               {latestArrowLabel && (
-                <div style={{ margin:"8px 16px 0", display:"flex", alignItems:"center", gap:"8px" }}>
-                  <div style={{ width:"24px", height:"2px", background:"#29ABE2", borderRadius:"1px", flexShrink:0 }}/>
-                  <span style={{ fontSize:"12px", color:"#1a2d45", fontWeight:600 }}>{latestArrowLabel}</span>
+                <div style={{ margin:"10px 16px 0", display:"flex", alignItems:"center", gap:"10px" }}>
+                  <div style={{ width:"28px", height:"2.5px", background:"#29ABE2", borderRadius:"1px", flexShrink:0 }}/>
+                  <span style={{ fontSize:"14px", color:"#1a2d45", fontWeight:600, lineHeight:1.4 }}>{latestArrowLabel}</span>
                 </div>
               )}
 
               {/* Explanation */}
-              <div style={{ margin:"8px 16px", padding:"14px", background:"#ffffff",
+              <div style={{ margin:"10px 16px", padding:"16px", background:"#ffffff",
                 border:"1.5px solid #e2e8f0", borderRadius:"14px" }}>
-                <div style={{ fontSize:"11px", fontWeight:700, color:"#29ABE2", textTransform:"uppercase",
-                  letterSpacing:"0.8px", marginBottom:"6px" }}>
+                <div style={{ fontSize:"12px", fontWeight:700, color:"#29ABE2", textTransform:"uppercase",
+                  letterSpacing:"0.8px", marginBottom:"8px" }}>
                   {mechArrowIdx === 0 ? "Overview" : "Why this arrow?"}
                 </div>
-                <p style={{ margin:0, fontSize:"13px", lineHeight:1.75, color:"#1a2d45" }}>
+                <p style={{ margin:0, fontSize:"14.5px", lineHeight:1.75, color:"#1a2d45" }}>
                   {currentStepData.explanation}
                 </p>
               </div>
