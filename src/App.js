@@ -3673,7 +3673,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={66} y1={140} x2={88} y2={140}/>
         <A x={100} y={140} el="O" size={18}/>
         <Charge x={118} y={124} val="-" color="#b91c1c"/>
-        <LP x={100} y={118} angle={0} color="#b91c1c"/>
+        <LP x={100} y={140} angle={0} color="#b91c1c"/>
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
@@ -3714,7 +3714,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           {/* Br⁻ approaching */}
           <A x={475} y={140} el="Br" size={20}/>
           <Charge x={500} y={124} val="-" color="#9a3412"/>
-          <LP x={460} y={126} angle={160} color="#9a3412"/>
+          <LP x={475} y={140} angle={180} color="#9a3412"/>
           <Bond x1={280} y1={140} x2={448} y2={140} dash color="#94a3b8" width={1.5}/>
           <text x={200} y={220} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>carbocation intermediate</text>
           {renderArrows()}
@@ -3762,7 +3762,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           {/* Br⁻ approaching */}
           <A x={470} y={140} el="Br" size={20}/>
           <Charge x={496} y={124} val="-" color="#9a3412"/>
-          <LP x={454} y={126} angle={160} color="#9a3412"/>
+          <LP x={470} y={140} angle={180} color="#9a3412"/>
           <Bond x1={276} y1={140} x2={442} y2={140} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
@@ -3806,7 +3806,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <Bond x1={155} y1={130} x2={155} y2={96}/>
           <A x={155} y={84} el="O" size={18}/>
           <Charge x={174} y={68} val="-" color="#b91c1c"/>
-          <LP x={140} y={78} angle={145} color="#b91c1c"/>
+          <LP x={155} y={84} angle={180} color="#b91c1c"/>
           {/* CN down-right */}
           <Bond x1={164} y1={150} x2={194} y2={178}/>
           <A x={205} y={188} el="C" size={16} color="#1d4ed8"/>
@@ -3841,7 +3841,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <line x1={66} y1={144} x2={94} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
         <A x={108} y={140} el="C" size={18} color="#1d4ed8"/>
         <Charge x={128} y={122} val="-" color="#1d4ed8"/>
-        <LP x={34} y={140} angle={90} color="#1d4ed8"/>
+        <LP x={108} y={140} angle={0} color="#1d4ed8"/>
         <text x={80} y={192} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
 
         {/* Ethanal CH₃CHO */}
@@ -3875,7 +3875,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <Bond x1={200} y1={132} x2={245} y2={104}/>
           <A x={258} y={96} el="O" size={18}/>
           <Charge x={278} y={80} val="-" color="#b91c1c"/>
-          <LP x={274} y={92} angle={30} color="#b91c1c"/>
+          <LP x={258} y={96} angle={0} color="#b91c1c"/>
           {/* Cl down-right */}
           <Bond x1={200} y1={148} x2={245} y2={176}/>
           <A x={258} y={184} el="Cl" size={18}/>
@@ -3909,7 +3909,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         <A x={70} y={140} el="NH₃" size={17} color="#1d4ed8"/>
-        <LP x={98} y={130} angle={0} color="#1d4ed8"/>
+        <LP x={70} y={140} angle={0} color="#1d4ed8"/>
         <text x={70} y={188} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
 
         <A x={230} y={140} el="CH₃" size={16}/>
@@ -4045,7 +4045,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         {/* OH⁻ base */}
         <A x={60} y={140} el="HO" size={18} color="#b91c1c"/>
         <Charge x={86} y={122} val="-" color="#b91c1c"/>
-        <LP x={60} y={118} angle={0} color="#b91c1c"/>
+        <LP x={60} y={140} angle={0} color="#b91c1c"/>
         <text x={60} y={192} textAnchor="middle" style={{fontSize:"12px",fill:"#9333ea",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:700}}>base</text>
 
         {/* β-carbon */}
