@@ -3198,7 +3198,7 @@ const SYNTH_ALI_NODES = [
   ["secAmines",   "Secondary\nAmines",             575, 230, "#9d174d", 66, 26],
   ["alkenes",     "Alkenes",                       175, 310, "#15803d", 66, 20],
   ["nitriles",    "Nitriles",                      510, 310, "#4338ca", 66, 20],
-  ["dihalides",   "Di-\nhaloalkanes",               70, 440, "#9a3412", 72, 26],
+  ["dihalides",   "Dihaloalkanes",                   70, 440, "#9a3412", 82, 20],
   ["alcohols",    "Alcohols",                      370, 410, "#1d4ed8", 70, 20],
   ["diols",       "Diols",                          70, 570, "#0369a1", 58, 20],
   ["ketones",     "Ketones",                       175, 560, "#7e22ce", 66, 20],
@@ -3216,19 +3216,19 @@ const SYNTH_ALI_RXNS = [
   [4,  "tertAmines", "quatAmm",    415,  38, "Tertiary Amines",     "Quaternary Ammonium Salts","Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
   [5,  "secAmines",  "tertAmines", 558, 132, "Secondary Amines",    "Tertiary Amines",          "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
   [6,  "primAmines", "secAmines",  525, 190, "Primary Amines",      "Secondary Amines",         "Halogenoalkane",         "Heat",                   "Nucleophilic",  "Substitution"],
-  [7,  "haloalkanes","alkenes",    195, 228, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
-  [8,  "alkenes",   "haloalkanes", 235, 248, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
+  [7,  "haloalkanes","alkenes",    182, 220, "Haloalkanes",         "Alkenes",                  "NaOH in ethanol",        "Heat",                   "Elimination",   "Elimination"],
+  [8,  "alkenes",   "haloalkanes", 248, 260, "Alkenes",             "Haloalkanes",              "Hydrogen halide",        "Room temperature",        "Electrophilic", "Addition"],
   [9,  "haloalkanes","alcohols",   300, 275, "Haloalkanes",         "Alcohols",                 "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
   [10, "haloalkanes","nitriles",   385, 222, "Haloalkanes",         "Nitriles",                 "KCN in ethanol",         "Heat under reflux",      "Nucleophilic",  "Substitution"],
   [11, "nitriles",  "primAmines",  490, 228, "Nitriles",            "Primary Amines",           "LiAlH₄ in dry ether",   "Heat",                   "--",            "Reduction"],
   [12, "alkenes",   "dihalides",   112, 370, "Alkenes",             "Dihaloalkanes",            "Halogen",                "Room temperature",        "Electrophilic", "Addition"],
-  [13, "alkenes",   "alcohols",    255, 345, "Alkenes",             "Alcohols",                 "Steam + H₂SO₄",          "Heat",                   "--",            "Hydration"],
-  [14, "alcohols",  "alkenes",     285, 372, "Alcohols",            "Alkenes",                  "Al₂O₃ or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
+  [13, "alkenes",   "alcohols",    240, 338, "Alkenes",             "Alcohols",                 "Steam + H₂SO₄",          "Heat",                   "--",            "Hydration"],
+  [14, "alcohols",  "alkenes",     298, 385, "Alcohols",            "Alkenes",                  "Al₂O₃ or conc. acid",   "Heat",                   "Elimination",   "Dehydration"],
   [15, "dihalides", "diols",        52, 505, "Dihaloalkanes",       "Diols",                    "NaOH(aq)",               "Heat under reflux",      "Nucleophilic",  "Substitution"],
-  [16, "alcohols",  "ketones",     258, 475, "Alcohols (secondary)","Ketones",                  "K₂Cr₂O₇ / H₂SO₄",       "Heat",                   "--",            "Oxidation"],
-  [17, "ketones",   "alcohols",    290, 498, "Ketones",             "Alcohols (secondary)",     "NaBH₄(aq)",              "Room temperature",        "--",            "Reduction"],
-  [18, "alcohols",  "aldehydes",   408, 475, "Alcohols (primary)",  "Aldehydes",                "K₂Cr₂O₇ / H₂SO₄",       "Heat, limited oxidant",  "--",            "Oxidation"],
-  [19, "aldehydes", "alcohols",    382, 498, "Aldehydes",           "Alcohols (primary)",       "NaBH₄(aq)",              "Room temperature",        "--",            "Reduction"],
+  [16, "alcohols",  "ketones",     242, 468, "Alcohols (secondary)","Ketones",                  "K₂Cr₂O₇ / H₂SO₄",       "Heat",                   "--",            "Oxidation"],
+  [17, "ketones",   "alcohols",    305, 505, "Ketones",             "Alcohols (secondary)",     "NaBH₄(aq)",              "Room temperature",        "--",            "Reduction"],
+  [18, "alcohols",  "aldehydes",   418, 468, "Alcohols (primary)",  "Aldehydes",                "K₂Cr₂O₇ / H₂SO₄",       "Heat, limited oxidant",  "--",            "Oxidation"],
+  [19, "aldehydes", "alcohols",    372, 505, "Aldehydes",           "Alcohols (primary)",       "NaBH₄(aq)",              "Room temperature",        "--",            "Reduction"],
   [20, "nitriles",  "carbAcids",   478, 490, "Nitriles",            "Carboxylic Acids",         "Dilute HCl(aq)",         "Heat under reflux",      "--",            "Hydrolysis"],
   [21, "aldehydes", "carbAcids",   408, 625, "Aldehydes",           "Carboxylic Acids",         "K₂Cr₂O₇ / H₂SO₄",       "Heat under reflux",      "--",            "Oxidation"],
   [22, "carbAcids", "alcohols",    382, 548, "Carboxylic Acids",    "Primary Alcohols",         "LiAlH₄ in dry ether",   "Heat",                   "--",            "Reduction"],
@@ -5650,50 +5650,50 @@ export default function App() {
                   </filter>
                 </defs>
                 <rect x={0} y={0} width={vbW} height={vbH} fill="transparent" />
-                {/* Group zone backgrounds - aliphatic only */}
-                {synthTab === "ali" && (<>
-                  {/* Ammonium Salts row */}
-                  <rect x={8} y={20} rx={12} width={225} height={68} fill="rgba(79,70,229,0.06)" stroke="rgba(79,70,229,0.15)" strokeWidth={1.5} strokeDasharray="6 3" />
-                  <text x={20} y={34} fontSize="8.5" fontWeight="800" fill="rgba(79,70,229,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">AMMONIUM SALTS</text>
-                  {/* Amine family (right column) */}
-                  <rect x={390} y={20} rx={12} width={230} height={260} fill="rgba(124,58,237,0.05)" stroke="rgba(124,58,237,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
-                  <text x={405} y={36} fontSize="8.5" fontWeight="800" fill="rgba(124,58,237,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">AMINE FAMILY</text>
-                  {/* Carbonyl compounds cluster */}
-                  <rect x={100} y={530} rx={12} width={400} height={62} fill="rgba(162,28,175,0.04)" stroke="rgba(162,28,175,0.12)" strokeWidth={1.5} strokeDasharray="6 3" />
-                  <text x={115} y={544} fontSize="8.5" fontWeight="800" fill="rgba(162,28,175,0.35)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">CARBONYL COMPOUNDS</text>
-                  {/* Acid derivatives row */}
-                  <rect x={50} y={755} rx={12} width={580} height={78} fill="rgba(3,105,144,0.05)" stroke="rgba(3,105,144,0.13)" strokeWidth={1.5} strokeDasharray="6 3" />
-                  <text x={65} y={770} fontSize="8.5" fontWeight="800" fill="rgba(3,105,144,0.4)" style={{ userSelect:"none", pointerEvents:"none" }} letterSpacing="0.8">ACID DERIVATIVES</text>
-                </>)}
-                {/* Edges - curved arrows */}
-                {sRxns.map(r => {
-                  const [n, fromId, toId] = r;
-                  const fN = nodeMap[fromId], tN = nodeMap[toId];
-                  if (!fN || !tN) return null;
-                  const frw = fN[5]*SW, frh = fN[6]*SW, trw = tN[5]*SW, trh = tN[6]*SW;
-                  const [x1,y1] = edgePt(fN[2],fN[3],frw,frh,tN[2],tN[3]);
-                  const [x2,y2] = edgePt(tN[2],tN[3],trw,trh,fN[2],fN[3]);
-                  const isOut = selId && fromId === selId;
-                  const isIn  = selId && toId   === selId;
-                  const isDim = connRxnIds && !connRxnIds.has(n);
-                  // Slight curve offset for visual clarity
-                  const mx = (x1+x2)/2, my = (y1+y2)/2;
-                  const dx = x2-x1, dy = y2-y1;
-                  const len = Math.sqrt(dx*dx+dy*dy) || 1;
-                  const curveOff = Math.min(len * 0.12, 18);
-                  const cx1 = mx + (dy/len)*curveOff, cy1 = my - (dx/len)*curveOff;
-                  return (
-                    <path key={"e"+n}
-                      d={`M${x1},${y1} Q${cx1},${cy1} ${x2},${y2}`}
-                      fill="none"
-                      stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#d0d8e0" : "#1a2d45"}
-                      strokeWidth={isOut||isIn ? 2.5 : selId ? 0.8 : 1.2}
-                      opacity={isDim ? 0.1 : 1}
-                      markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
-                      strokeLinecap="round"
-                    />
-                  );
-                })}
+                {/* Zone backgrounds removed for cleaner look */}
+                {/* Edges - curved arrows (reverse pairs get bigger curve separation) */}
+                {(() => {
+                  // Build reverse-pair lookup: for reactions A->B and B->A, curve them in opposite directions
+                  const pairKey = (a,b) => a < b ? a+"|"+b : b+"|"+a;
+                  const pairDir = {};
+                  sRxns.forEach(r => {
+                    const k = pairKey(r[1],r[2]);
+                    if (pairDir[k] === undefined) pairDir[k] = r[0];
+                    // else it's the reverse - second one found
+                  });
+                  return sRxns.map(r => {
+                    const [n, fromId, toId] = r;
+                    const fN = nodeMap[fromId], tN = nodeMap[toId];
+                    if (!fN || !tN) return null;
+                    const frw = fN[5]*SW, frh = fN[6]*SW, trw = tN[5]*SW, trh = tN[6]*SW;
+                    const [x1,y1] = edgePt(fN[2],fN[3],frw,frh,tN[2],tN[3]);
+                    const [x2,y2] = edgePt(tN[2],tN[3],trw,trh,fN[2],fN[3]);
+                    const isOut = selId && fromId === selId;
+                    const isIn  = selId && toId   === selId;
+                    const isDim = connRxnIds && !connRxnIds.has(n);
+                    const mx = (x1+x2)/2, my = (y1+y2)/2;
+                    const dx = x2-x1, dy = y2-y1;
+                    const len = Math.sqrt(dx*dx+dy*dy) || 1;
+                    // Detect reverse pair and choose direction
+                    const pk = pairKey(fromId, toId);
+                    const isFirst = pairDir[pk] === n;
+                    const hasReverse = sRxns.some(o => o[0] !== n && ((o[1]===fromId && o[2]===toId) || (o[1]===toId && o[2]===fromId)));
+                    const curveOff = hasReverse ? Math.min(len * 0.22, 35) : Math.min(len * 0.1, 16);
+                    const sign = hasReverse ? (isFirst ? 1 : -1) : 1;
+                    const cx1 = mx + (dy/len)*curveOff*sign, cy1 = my - (dx/len)*curveOff*sign;
+                    return (
+                      <path key={"e"+n}
+                        d={`M${x1},${y1} Q${cx1},${cy1} ${x2},${y2}`}
+                        fill="none"
+                        stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#d0d8e0" : "#1a2d45"}
+                        strokeWidth={isOut||isIn ? 2.5 : selId ? 0.8 : 1.2}
+                        opacity={isDim ? 0.1 : 1}
+                        markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
+                        strokeLinecap="round"
+                      />
+                    );
+                  });
+                })()}
                 {/* Nodes - tappable cards with shadows */}
                 {sNodes.map(([id, label, cx, cy, fill, hw, hh]) => {
                   const rw = hw*SW, rh = hh*SW;
