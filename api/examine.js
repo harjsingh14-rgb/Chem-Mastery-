@@ -1,15 +1,14 @@
-// Vercel serverless function — AI Examiner v2
+// Vercel serverless function — AI Examiner v3
+// Levels-of-response marking using Claude Sonnet
 // Uses raw fetch only — NO @anthropic-ai/sdk dependency
-// v2: force cache-bust; full outer try-catch; Node version diagnostics
 
 module.exports = async function handler(req, res) {
-  // Outer safety net — catches any unexpected throw including module-level issues
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { question, markScheme, studentAnswer, maxMarks } = req.body || {};
+    const { question, markScheme, studentAnswer, maxMarks, levels } = req.body || {};
 
     if (!studentAnswer || !markScheme || !question) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -19,14 +18,13 @@ module.exports = async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "API key not configured — add ANTHROPIC_API_KEY in Vercel > Settings > Environment Variables then redeploy",
+        error: "API key not configured - add ANTHROPIC_API_KEY in Vercel > Settings > Environment Variables then redeploy",
       });
     }
 
-    // Verify fetch is available (Node 18+ required)
     if (typeof fetch === "undefined") {
       return res.status(500).json({
-        error: "fetch is not available — this function requires Node.js 18+. Check Vercel function runtime settings.",
+        error: "fetch is not available - this function requires Node.js 18+.",
       });
     }
 
@@ -34,12 +32,36 @@ module.exports = async function handler(req, res) {
       ? markScheme.map((point, i) => `${i + 1}. ${point}`).join("\n")
       : String(markScheme);
 
-    const prompt = `You are an experienced A-Level Chemistry examiner marking a student's extended response.
+    // Build levels descriptor text
+    let levelsText = "";
+    if (levels && Array.isArray(levels) && levels.length > 0) {
+      levelsText = levels.map(l =>
+        `Level ${l.level} (${l.marks} marks): ${l.descriptor}`
+      ).join("\n");
+    } else {
+      // Default generic AQA levels-of-response descriptors
+      if (maxMarks <= 6) {
+        levelsText = `Level 3 (5-6 marks): All stages are covered and each stage is generally correct and virtually complete. Answer is well structured with accurate terminology.
+Level 2 (3-4 marks): All stages are covered but may be incomplete or contain inaccuracies OR two stages are covered and are generally correct and virtually complete.
+Level 1 (1-2 marks): Two stages are covered but may be incomplete OR only one stage is covered but is generally correct and virtually complete.
+Level 0 (0 marks): Insufficient correct chemistry to gain a mark.`;
+      } else {
+        levelsText = `Level 3 (7-8 marks): All stages are covered and each stage is generally correct and virtually complete. Answer is well structured with accurate terminology.
+Level 2 (4-6 marks): All stages are covered but may be incomplete or contain inaccuracies OR two stages are covered and are generally correct and virtually complete.
+Level 1 (1-3 marks): Two stages are covered but may be incomplete OR only one stage is covered but is generally correct and virtually complete.
+Level 0 (0 marks): Insufficient correct chemistry to gain a mark.`;
+      }
+    }
+
+    const prompt = `You are an experienced A-Level Chemistry examiner. You are marking a student's extended response using LEVELS OF RESPONSE marking (not point-by-point).
 
 QUESTION (${maxMarks} marks):
 ${question}
 
-MARK SCHEME (award 1 mark per point — ignore any examiner-only penalty/credit notes, focus only on the chemistry content):
+LEVELS OF RESPONSE DESCRIPTORS:
+${levelsText}
+
+INDICATIVE CHEMISTRY CONTENT (use these points to help assign a level - students do NOT need to cover every point, and may gain credit for valid chemistry not listed here):
 ${schemeLines}
 
 STUDENT ANSWER:
@@ -47,18 +69,22 @@ STUDENT ANSWER:
 ${studentAnswer}
 ---
 
-INSTRUCTIONS:
-- Assess each mark scheme point independently — did the student's answer cover the chemistry content of that point, even if worded differently?
-- Be fair but strict: partial mentions do not earn the mark.
-- Write the model answer as a concise, exam-ready student response (not bullet points — full connected sentences, 4–8 sentences).
-- Keep the feedback brief and constructive: 2–3 sentences max.
+MARKING INSTRUCTIONS:
+1. Read the student's answer holistically.
+2. Identify which indicative content points are addressed (even if worded differently).
+3. Assess the overall quality: how many stages/aspects are covered, accuracy, use of technical terms, coherence and logical structure.
+4. Assign the answer to a level first, then decide the mark within that level.
+5. A well-structured answer with minor errors gets the higher mark in a level. A disorganised answer with some correct points gets the lower mark.
+6. Write a model answer as a concise, exam-ready student response (full connected sentences, 4-8 sentences).
+7. Keep feedback constructive: 2-3 sentences max.
 
 Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 {
+  "level": <integer 0 to 3>,
   "score": <integer 0 to ${maxMarks}>,
-  "coveredPoints": [<boolean for each mark scheme point, in order>],
-  "feedback": "<2-3 sentences: acknowledge what they got right, identify the single most important thing they missed>",
-  "modelAnswer": "<concise model student answer covering all mark scheme points in full connected sentences>"
+  "coveredPoints": [<boolean for each indicative content point listed above, in order>],
+  "feedback": "<2-3 sentences: acknowledge what they got right, state the level assigned and why, identify the most important thing they missed or could improve>",
+  "modelAnswer": "<concise model student answer covering all key indicative content in full connected sentences>"
 }`;
 
     let anthropicRes;
@@ -71,7 +97,7 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: "claude-haiku-4-5-20250414",
+          model: "claude-sonnet-4-20250514",
           max_tokens: 1024,
           messages: [{ role: "user", content: prompt }],
         }),
@@ -114,6 +140,7 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
     }
 
     result.score = Math.max(0, Math.min(maxMarks, result.score || 0));
+    result.level = Math.max(0, Math.min(3, result.level || 0));
 
     if (!Array.isArray(result.coveredPoints) || result.coveredPoints.length !== markScheme.length) {
       result.coveredPoints = markScheme.map(() => false);
@@ -121,7 +148,6 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 
     return res.status(200).json(result);
   } catch (outerErr) {
-    // Catch-all: return the actual error so we can diagnose it
     return res.status(500).json({
       error: `Unexpected function error: ${outerErr.message || String(outerErr)}`,
       stack: outerErr.stack ? outerErr.stack.split("\n").slice(0, 5).join(" | ") : undefined,
