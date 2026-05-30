@@ -5227,7 +5227,7 @@ export default function App() {
           setExtAiLoading(true);
           setExtAiError(null);
           try {
-            const res = await fetch('/api/examine', {
+            const res = await fetch('/api/examine.js', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ question: q.question, markScheme: q.markScheme, studentAnswer: extDraft, maxMarks: q.marks, levels: q.levels }),
