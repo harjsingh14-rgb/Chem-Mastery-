@@ -4236,12 +4236,10 @@ function LoginScreen({ onLogin }) {
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <div style={{ width: "100%", maxWidth: "420px" }}>
         {/* Logo / Brand */}
-        <div style={{ textAlign: "center", marginBottom: "36px" }}>
-          <div style={{ display: "inline-block", background: "#ffffff", borderRadius: "20px", padding: "10px 18px", marginBottom: "18px", boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}>
-            <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "80px", objectFit: "contain", display: "block" }} />
-          </div>
-          <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", color: "#ffffff", letterSpacing: "1px", textTransform: "uppercase", lineHeight: 1.1 }}>HSJ TUITION</div>
-          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "13px", color: "#29ABE2", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginTop: "6px" }}>A-Level Chemistry. Mastered.</div>
+        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+          <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "120px", objectFit: "contain", display: "block", margin: "0 auto 20px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "32px", color: "#ffffff", letterSpacing: "2px", textTransform: "uppercase", lineHeight: 1.1 }}>HSJ TUITION</div>
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "14px", color: "#29ABE2", fontWeight: 600, letterSpacing: "2.5px", textTransform: "uppercase", marginTop: "8px" }}>A-Level Chemistry. Mastered.</div>
         </div>
 
         {/* Card */}
@@ -4312,8 +4310,10 @@ function LoginScreen({ onLogin }) {
           </div>
         </div>
 
-        <div style={{ textAlign: "center", marginTop: "20px", fontSize: "12px", color: "#4a6080" }}>
-          HSJ Tuition
+        <div style={{ textAlign: "center", marginTop: "24px", fontSize: "11px", color: "#4a6080", lineHeight: 1.6, maxWidth: "360px", margin: "24px auto 0" }}>
+          <div style={{ marginBottom: "6px" }}>By signing in you agree to our terms of use and privacy policy.</div>
+          <div>This platform is an independent revision tool and is not affiliated with, endorsed by, or connected to AQA, OCR, or any exam board. All exam board names and specifications are used for reference only.</div>
+          <div style={{ marginTop: "10px", color: "#3a5068" }}>&#169; {new Date().getFullYear()} HSJ Tuition. All rights reserved.</div>
         </div>
       </div>
     </div>
