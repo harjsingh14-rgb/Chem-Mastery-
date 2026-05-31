@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { signInGoogle, signInEmail, signUpEmail, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
 
 const SETS = {
   "3.1.1": { title: "Atomic Structure", cards: [
@@ -1816,11 +1817,8 @@ const CALC_SETS = [
       { difficulty: "medium", q: "How many moles are in 2.20 g of carbon dioxide (CO₂)? (Mr CO₂ = 44)", hint: "n = m ÷ M. Calculate Mr of CO₂ first: C=12, O=16.", answer: 0.05, unit: "mol", tolerance: 0.003, steps: ["Mr of CO₂ = 12 + (2×16) = 44 g mol⁻¹", "n = m ÷ M = 2.20 ÷ 44 = 0.050 mol"] },
       { difficulty: "medium", q: "Calculate the concentration (mol dm⁻³) of a solution containing 0.050 mol of HCl in 250 cm³ of solution.", hint: "Convert cm³ to dm³ first (divide by 1000), then c = n ÷ V.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["V = 250 ÷ 1000 = 0.250 dm³", "c = n ÷ V = 0.050 ÷ 0.250 = 0.20 mol dm⁻³"] },
       { difficulty: "medium", q: "Calculate the volume (dm³) occupied by 0.40 mol of gas at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "V = n × Vm", answer: 9.6, unit: "dm³", tolerance: 0.05, steps: ["V = n × Vm = 0.40 × 24.0 = 9.6 dm³"] },
-      { difficulty: "medium", q: "A reaction produces 4.2 g of product. The theoretical yield was 6.0 g. Calculate the % yield.", hint: "% yield = (actual ÷ theoretical) × 100", answer: 70, unit: "%", tolerance: 0.5, steps: ["% yield = (actual ÷ theoretical) × 100", "% yield = (4.2 ÷ 6.0) × 100 = 70%"] },
       // HARD
       { difficulty: "hard", q: "Using PV = nRT, calculate the pressure (Pa) exerted by 0.10 mol of gas in a 2.0 dm³ container at 300 K. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Rearrange for P. Convert V to m³ by dividing by 1000.", answer: 124710, unit: "Pa", tolerance: 500, steps: ["V = 2.0 dm³ = 0.0020 m³", "P = nRT ÷ V = (0.10 × 8.314 × 300) ÷ 0.0020", "P = 249.42 ÷ 0.0020 = 124 710 Pa"] },
-      { difficulty: "hard", q: "2Mg(s) + O₂(g) → 2MgO(s). 4.80 g of Mg reacts with excess O₂. The actual yield of MgO is 5.60 g. Calculate the % yield. (Mr: Mg=24, MgO=40)", hint: "Find moles of Mg, use 1:1 mole ratio for MgO, then calculate theoretical mass.", answer: 70.0, unit: "%", tolerance: 0.5, steps: ["n(Mg) = 4.80 ÷ 24 = 0.200 mol", "n(MgO) = 0.200 mol (1:1 mole ratio)", "Theoretical mass MgO = 0.200 × 40 = 8.00 g", "% yield = (5.60 ÷ 8.00) × 100 = 70.0%"] },
-      { difficulty: "hard", q: "Calculate the % atom economy for making ethanol by fermentation:\nC₆H₁₂O₆ → 2C₂H₅OH + 2CO₂\n(Mr: C₆H₁₂O₆=180, C₂H₅OH=46)", hint: "Atom economy = (total Mr of desired product(s) ÷ total Mr of reactants) × 100. Both moles of ethanol are desired.", answer: 51.1, unit: "%", tolerance: 0.5, steps: ["Total Mr of desired products = 2 × 46 = 92", "Total Mr of reactants = 180", "Atom economy = (92 ÷ 180) × 100 = 51.1%"] },
       // EXAM
       { difficulty: "exam", q: "0.580 g of butane (C₄H₁₀, Mr=58) is burned completely:\nC₄H₁₀ + 13/2 O₂ → 4CO₂ + 5H₂O\nCalculate the volume (dm³) of CO₂ produced at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "Find moles of butane, use the 4:1 mole ratio for CO₂, then calculate volume.", answer: 0.960, unit: "dm³", tolerance: 0.01, steps: ["n(C₄H₁₀) = 0.580 ÷ 58 = 0.01000 mol", "n(CO₂) = 4 × 0.01000 = 0.04000 mol", "V(CO₂) = 0.04000 × 24.0 = 0.960 dm³"] },
       { difficulty: "exam", q: "200 cm³ of gas is collected at 300 K and constant pressure. The temperature is raised to 375 K. Using Charles's Law (V₁/T₁ = V₂/T₂), calculate the new volume (cm³).", hint: "Rearrange Charles's Law for V₂ = V₁ × (T₂ ÷ T₁).", answer: 250, unit: "cm³", tolerance: 2, steps: ["V₂ = V₁ × T₂ ÷ T₁", "V₂ = 200 × 375 ÷ 300", "V₂ = 250 cm³"] },
@@ -1860,7 +1858,9 @@ const CALC_SETS = [
       { difficulty: "hard", q: "In a back titration, 1.20 g of CaCO₃ sample is dissolved in 50.0 cm³ of 0.500 mol dm⁻³ HCl. The excess HCl requires 12.5 cm³ of 0.200 mol dm⁻³ NaOH. Calculate the % purity of the CaCO₃.\n(Mr CaCO₃=100; CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂)", hint: "Total HCl minus excess HCl (from NaOH titre) = HCl that reacted with CaCO₃.", answer: 93.8, unit: "%", tolerance: 0.5, steps: ["Total n(HCl) = 0.500 × 0.0500 = 0.0250 mol", "n(NaOH) = 0.200 × 0.0125 = 0.00250 mol = n(excess HCl)", "n(HCl) reacted = 0.0250 − 0.00250 = 0.0225 mol", "n(CaCO₃) = 0.0225 ÷ 2 = 0.01125 mol", "mass CaCO₃ = 0.01125 × 100 = 1.125 g", "% purity = (1.125 ÷ 1.20) × 100 = 93.8%"] },
       // EXAM
       { difficulty: "exam", q: "5.00 g of vinegar is titrated with 0.100 mol dm⁻³ NaOH. Titre = 31.3 cm³. Calculate the % by mass of ethanoic acid (Mr=60) in the vinegar.\n(CH₃COOH + NaOH → CH₃COONa + H₂O)", hint: "n(NaOH) = c×V; 1:1 ratio; mass ethanoic acid = n×M; % = (mass ÷ 5.00) × 100.", answer: 3.76, unit: "%", tolerance: 0.1, steps: ["n(NaOH) = 0.100 × 0.0313 = 0.00313 mol", "n(CH₃COOH) = 0.00313 mol (1:1)", "mass = 0.00313 × 60 = 0.1878 g", "% by mass = (0.1878 ÷ 5.00) × 100 = 3.76%"] },
-      { difficulty: "exam", q: "25.0 cm³ of fruit juice is titrated against 0.0200 mol dm⁻³ KMnO₄ (acidified). Titre = 18.6 cm³. Reaction:\n2KMnO₄ + 5H₂C₂O₄ → products (2:5 mole ratio)\nCalculate the concentration of oxalic acid (H₂C₂O₄) in mol dm⁻³.", hint: "n(KMnO₄) = c×V; multiply by 5/2 for n(H₂C₂O₄); then c = n ÷ V(juice).", answer: 0.0372, unit: "mol dm⁻³", tolerance: 0.001, steps: ["n(KMnO₄) = 0.0200 × 0.0186 = 3.72×10⁻⁴ mol", "n(H₂C₂O₄) = 3.72×10⁻⁴ × (5÷2) = 9.30×10⁻⁴ mol", "c = 9.30×10⁻⁴ ÷ 0.0250 = 0.0372 mol dm⁻³"] },
+      { difficulty: "exam", q: "25.0 cm³ of fruit juice is titrated against 0.0200 mol dm⁻³ KMnO₄ (acidified). Titre = 18.6 cm³. Reaction:\n2KMnO₄ + 5H₂C₂O₄ -> products (2:5 mole ratio)\nCalculate the concentration of oxalic acid (H₂C₂O₄) in mol dm⁻³.", hint: "n(KMnO₄) = c x V; multiply by 5/2 for n(H₂C₂O₄); then c = n / V(juice).", answer: 0.0372, unit: "mol dm⁻³", tolerance: 0.001, steps: ["n(KMnO₄) = 0.0200 x 0.0186 = 3.72 x 10⁻⁴ mol", "n(H₂C₂O₄) = 3.72 x 10⁻⁴ x (5/2) = 9.30 x 10⁻⁴ mol", "c = 9.30 x 10⁻⁴ / 0.0250 = 0.0372 mol dm⁻³"] },
+      { difficulty: "exam", q: "0.2640 g of sodium oxalate (Na₂C₂O₄, Mr=134) is titrated with KMnO₄ solution. Titre = 30.74 cm³.\n5Na₂C₂O₄ + 2KMnO₄ + 8H₂SO₄ -> products\nCalculate the concentration of KMnO₄ in mol dm⁻³.", hint: "Find n(Na₂C₂O₄), use 5:2 ratio to get n(KMnO₄), then c = n/V.", answer: 0.02564, unit: "mol dm⁻³", tolerance: 0.001, steps: ["n(Na₂C₂O₄) = 0.2640 / 134 = 1.970 x 10⁻³ mol", "n(KMnO₄) = 1.970 x 10⁻³ x (2/5) = 7.881 x 10⁻⁴ mol", "c = 7.881 x 10⁻⁴ / 0.03074 = 0.02564 mol dm⁻³"] },
+      { difficulty: "exam", q: "A 1.62 g impure Na₂CO₃ sample is dissolved and made up to 250 cm³. 25.0 cm³ aliquots are titrated with 0.105 mol dm⁻³ HCl. Mean titre = 24.80 cm³.\nNa₂CO₃ + 2HCl -> 2NaCl + H₂O + CO₂\nCalculate the % purity of Na₂CO₃ (Mr=106).", hint: "n(HCl) from titre, use 1:2 ratio for Na₂CO₃, scale up x10 for full 250 cm³, find mass.", answer: 85.3, unit: "%", tolerance: 0.5, steps: ["n(HCl) in titre = 0.105 x 0.02480 = 2.604 x 10⁻³ mol", "n(Na₂CO₃) in 25 cm³ = 2.604 x 10⁻³ / 2 = 1.302 x 10⁻³ mol", "n(Na₂CO₃) in 250 cm³ = 1.302 x 10⁻³ x 10 = 0.01302 mol", "mass Na₂CO₃ = 0.01302 x 106 = 1.380 g", "% purity = (1.380 / 1.62) x 100 = 85.2%"] },
     ]
   },
   {
@@ -1882,7 +1882,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_equilibrium", title: "Equilibrium — Kc and Kp", color: "#d97706", board: "both",
+    id: "calc_equilibrium", title: "Equilibrium - Kc and Kp", color: "#d97706", board: "both",
     questions: [
       // EASY
       { difficulty: "easy", q: "At equilibrium: [A] = 0.50 mol dm⁻³, [B] = 0.50 mol dm⁻³, [AB] = 1.0 mol dm⁻³.\nA(g) + B(g) ⇌ AB(g)\nCalculate Kc.", hint: "Kc = [AB] ÷ ([A][B])", answer: 4.0, unit: "", tolerance: 0.1, steps: ["Kc = [AB] ÷ ([A][B])", "Kc = 1.0 ÷ (0.50 × 0.50)", "Kc = 1.0 ÷ 0.25 = 4.0"] },
@@ -1914,7 +1914,11 @@ const CALC_SETS = [
       { difficulty: "hard", q: "Calculate the pH of 0.050 mol dm⁻³ propanoic acid. Ka = 1.35×10⁻⁵ mol dm⁻³.", hint: "[H⁺] = √(Ka × c), assuming weak acid approximation.", answer: 3.09, unit: "", tolerance: 0.05, steps: ["[H⁺] = √(1.35×10⁻⁵ × 0.050) = √(6.75×10⁻⁷)", "[H⁺] = 8.22×10⁻⁴ mol dm⁻³", "pH = −log(8.22×10⁻⁴) = 3.09"] },
       { difficulty: "hard", q: "Calculate the pH after adding 10.0 cm³ of 0.100 mol dm⁻³ NaOH to 20.0 cm³ of 0.100 mol dm⁻³ HCl.", hint: "Find moles of each, subtract to find excess acid, then [H⁺] = excess mol ÷ total volume.", answer: 1.48, unit: "", tolerance: 0.03, steps: ["n(HCl) = 0.00200 mol; n(NaOH) = 0.00100 mol", "Excess HCl = 0.00100 mol", "Total volume = 30.0 cm³ = 0.0300 dm³", "[H⁺] = 0.00100 ÷ 0.0300 = 0.0333 mol dm⁻³", "pH = −log(0.0333) = 1.48"] },
       // EXAM
-      { difficulty: "exam", q: "Calculate the pH of 0.500 mol dm⁻³ NaOH. (Kw = 1.0×10⁻¹⁴)", hint: "[OH⁻] = 0.500; [H⁺] = Kw ÷ [OH⁻]; pH = −log[H⁺].", answer: 13.70, unit: "", tolerance: 0.03, steps: ["[OH⁻] = 0.500 mol dm⁻³", "[H⁺] = 1.0×10⁻¹⁴ ÷ 0.500 = 2.0×10⁻¹⁴ mol dm⁻³", "pH = −log(2.0×10⁻¹⁴) = 13.70"] },
+      { difficulty: "exam", q: "Calculate the pH of 0.500 mol dm⁻³ NaOH. (Kw = 1.0 x 10⁻¹⁴)", hint: "[OH⁻] = 0.500; [H⁺] = Kw / [OH⁻]; pH = -log[H⁺].", answer: 13.70, unit: "", tolerance: 0.03, steps: ["[OH⁻] = 0.500 mol dm⁻³", "[H⁺] = 1.0 x 10⁻¹⁴ / 0.500 = 2.0 x 10⁻¹⁴ mol dm⁻³", "pH = -log(2.0 x 10⁻¹⁴) = 13.70"] },
+      { difficulty: "exam", q: "Calculate the pH of 0.10 mol dm⁻³ benzoic acid (C₆H₅COOH). Ka = 6.3 x 10⁻⁵ mol dm⁻³.", hint: "Weak acid: [H⁺] = sqrt(Ka x c). Then pH = -log[H⁺].", answer: 2.60, unit: "", tolerance: 0.05, steps: ["[H⁺] = sqrt(6.3 x 10⁻⁵ x 0.10) = sqrt(6.3 x 10⁻⁶)", "[H⁺] = 2.51 x 10⁻³ mol dm⁻³", "pH = -log(2.51 x 10⁻³) = 2.60"] },
+      { difficulty: "exam", q: "Calculate the pH of a buffer containing 0.10 mol dm⁻³ propanoic acid and 0.050 mol dm⁻³ sodium propanoate. Ka = 1.26 x 10⁻⁵ mol dm⁻³.", hint: "Henderson-Hasselbalch: pH = pKa + log([A⁻]/[HA]).", answer: 4.60, unit: "", tolerance: 0.05, steps: ["pKa = -log(1.26 x 10⁻⁵) = 4.90", "pH = 4.90 + log(0.050/0.10) = 4.90 + log(0.5)", "pH = 4.90 - 0.301 = 4.60"] },
+      { difficulty: "exam", q: "A 0.10 mol dm⁻³ weak monoprotic acid HA has pH 2.85. Calculate the Ka of the acid.", hint: "[H⁺] = 10^(-pH). Then Ka = [H⁺]² / c (weak acid approximation).", answer: 2.0e-5, unit: "mol dm⁻³", tolerance: 2e-6, steps: ["[H⁺] = 10^(-2.85) = 1.413 x 10⁻³ mol dm⁻³", "Ka = [H⁺]² / c = (1.413 x 10⁻³)² / 0.10", "Ka = 2.00 x 10⁻⁶ / 0.10 = 2.0 x 10⁻⁵ mol dm⁻³"] },
+      { difficulty: "exam", q: "Calculate the pH of 0.20 mol dm⁻³ Ba(OH)₂. (Kw = 1.0 x 10⁻¹⁴)", hint: "Ba(OH)₂ gives 2 mol OH⁻ per mol. [OH⁻] = 2 x 0.20 = 0.40 mol dm⁻³.", answer: 13.60, unit: "", tolerance: 0.03, steps: ["[OH⁻] = 2 x 0.20 = 0.40 mol dm⁻³", "[H⁺] = 1.0 x 10⁻¹⁴ / 0.40 = 2.5 x 10⁻¹⁴", "pH = -log(2.5 x 10⁻¹⁴) = 13.60"] },
     ]
   },
   {
@@ -1931,11 +1935,12 @@ const CALC_SETS = [
       { difficulty: "hard", q: "A first-order reaction has a half-life of 120 s. Calculate the rate constant k (s⁻¹). Give your answer to 3 significant figures.", hint: "t½ = ln2 ÷ k. Rearrange for k.", answer: 0.00578, unit: "s⁻¹", tolerance: 0.0001, steps: ["t½ = ln2 ÷ k → k = ln2 ÷ t½", "k = 0.6931 ÷ 120 = 5.78×10⁻³ s⁻¹"] },
       { difficulty: "hard", q: "For rate = k[A][B]², rate = 4.80×10⁻³ mol dm⁻³ s⁻¹ when [A]=0.300, [B]=0.200 mol dm⁻³. Calculate k.", hint: "Rearrange rate = k[A][B]² for k.", answer: 0.400, unit: "mol⁻² dm⁶ s⁻¹", tolerance: 0.01, steps: ["k = rate ÷ ([A][B]²)", "k = 4.80×10⁻³ ÷ (0.300 × (0.200)²)", "k = 4.80×10⁻³ ÷ (0.300 × 0.0400) = 4.80×10⁻³ ÷ 0.0120", "k = 0.400 mol⁻² dm⁶ s⁻¹"] },
       // EXAM
-      { difficulty: "exam", q: "From an Arrhenius plot: ln k = 12.5 at 1/T = 0.0025 K⁻¹, and ln k = 10.0 at 1/T = 0.0030 K⁻¹. Calculate the activation energy (kJ mol⁻¹). (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Gradient = −Ea/R. Gradient = Δ(ln k) ÷ Δ(1/T). Then Ea = −gradient × R ÷ 1000.", answer: 41.6, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["Gradient = (12.5−10.0) ÷ (0.0025−0.0030) = 2.5 ÷ (−0.0005) = −5000 K", "Ea = −gradient × R = 5000 × 8.314 = 41570 J mol⁻¹ = 41.6 kJ mol⁻¹"] },
+      { difficulty: "exam", q: "From an Arrhenius plot: ln k = 12.5 at 1/T = 0.0025 K⁻¹, and ln k = 10.0 at 1/T = 0.0030 K⁻¹. Calculate the activation energy (kJ mol⁻¹). (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Gradient = -Ea/R. Gradient = delta(ln k) / delta(1/T). Then Ea = -gradient x R / 1000.", answer: 41.6, unit: "kJ mol⁻¹", tolerance: 1.0, steps: ["Gradient = (12.5-10.0) / (0.0025-0.0030) = 2.5 / (-0.0005) = -5000 K", "Ea = -gradient x R = 5000 x 8.314 = 41570 J mol⁻¹ = 41.6 kJ mol⁻¹"] },
+      { difficulty: "exam", q: "Rate constants for a reaction: k = 3.01 x 10⁻³ s⁻¹ at 293 K, k = 0.567 s⁻¹ at 353 K. Use the Arrhenius equation to calculate Ea (kJ mol⁻¹).\nln(k₂/k₁) = (Ea/R)(1/T₁ - 1/T₂). R = 8.314 J mol⁻¹ K⁻¹", hint: "Substitute values into the two-temperature Arrhenius equation.", answer: 87.5, unit: "kJ mol⁻¹", tolerance: 2.0, steps: ["ln(0.567/3.01 x 10⁻³) = ln(188.4) = 5.239", "1/T₁ - 1/T₂ = 1/293 - 1/353 = 0.003413 - 0.002833 = 5.80 x 10⁻⁴", "Ea/R = 5.239 / (5.80 x 10⁻⁴) = 9033 K", "Ea = 9033 x 8.314 = 75090 J = 75.1 kJ mol⁻¹"] },
     ]
   },
   {
-    id: "calc_thermo", title: "Thermodynamics — ΔG & Born-Haber", color: "#b45309", board: "both",
+    id: "calc_thermo", title: "Thermodynamics - Delta G & Born-Haber", color: "#b45309", board: "both",
     questions: [
       // EASY
       { difficulty: "easy", q: "Calculate ΔG (kJ mol⁻¹) for a reaction where ΔH = −200 kJ mol⁻¹ and ΔS = +100 J K⁻¹ mol⁻¹ at 400 K.", hint: "ΔG = ΔH − TΔS. Convert ΔS to kJ K⁻¹ mol⁻¹ first (divide by 1000).", answer: -240, unit: "kJ mol⁻¹", tolerance: 2, steps: ["ΔS = +100 J K⁻¹ mol⁻¹ = +0.100 kJ K⁻¹ mol⁻¹", "ΔG = ΔH − TΔS = −200 − (400 × 0.100)", "ΔG = −200 − 40 = −240 kJ mol⁻¹"] },
@@ -1963,6 +1968,45 @@ const CALC_SETS = [
       { difficulty: "medium", q: "A cell consists of Fe³⁺/Fe²⁺ (E° = +0.77 V) and Cl₂/Cl⁻ (E° = +1.36 V). Fe²⁺ is oxidised at the anode. Calculate E°cell.", hint: "E°cell = E°cathode − E°anode. Identify which is cathode and which is anode.", answer: 0.59, unit: "V", tolerance: 0.01, steps: ["Anode (oxidation): Fe²⁺ → Fe³⁺ + e⁻", "Cathode (reduction): Cl₂ + 2e⁻ → 2Cl⁻", "E°cell = +1.36 − 0.77 = +0.59 V"] },
       // HARD
       { difficulty: "hard", q: "A hydrogen fuel cell uses H₂ and O₂. The two half-equations are:\nO₂ + 4H⁺ + 4e⁻ → 2H₂O  E° = +1.23 V\n2H⁺ + 2e⁻ → H₂  E° = 0.00 V\nIdentify the cathode and calculate E°cell (V).", hint: "The cathode is where reduction occurs (more positive E°). E°cell = E°cathode − E°anode.", answer: 1.23, unit: "V", tolerance: 0.01, steps: ["O₂/H₂O has higher E° → reduction occurs here → cathode", "H⁺/H₂ is reversed at the anode: H₂ → 2H⁺ + 2e⁻", "E°cell = E°cathode − E°anode = +1.23 − 0.00 = +1.23 V"] },
+    ]
+  },
+  {
+    id: "calc_ram", title: "Relative Atomic Mass & Mass Spec", color: "#e11d48", board: "both",
+    questions: [
+      // EASY
+      { difficulty: "easy", q: "A sample of lithium contains two isotopes: Li-7 (92.5%) and Li-6 (7.5%). Calculate the relative atomic mass to 1 decimal place.", hint: "Ar = (mass1 x %1 + mass2 x %2) / 100", answer: 6.9, unit: "", tolerance: 0.05, steps: ["Ar = (7 x 92.5 + 6 x 7.5) / 100", "Ar = (647.5 + 45.0) / 100 = 692.5 / 100", "Ar = 6.9"] },
+      { difficulty: "easy", q: "Chlorine has two isotopes: Cl-35 (75%) and Cl-37 (25%). Calculate the relative atomic mass.", hint: "Ar = (mass1 x %1 + mass2 x %2) / 100", answer: 35.5, unit: "", tolerance: 0.05, steps: ["Ar = (35 x 75 + 37 x 25) / 100", "Ar = (2625 + 925) / 100 = 3550 / 100", "Ar = 35.5"] },
+      { difficulty: "easy", q: "Calculate the relative formula mass (Mr) of Ca(OH)₂. (Ar: Ca=40, O=16, H=1)", hint: "Mr = sum of all Ar values. Ca(OH)₂ has 1 Ca, 2 O, 2 H.", answer: 74, unit: "", tolerance: 0.1, steps: ["Mr = 40 + 2(16 + 1)", "Mr = 40 + 2(17) = 40 + 34", "Mr = 74"] },
+      // MEDIUM
+      { difficulty: "medium", q: "A sample of iron from a meteorite contains: Fe-54 (6.20%), Fe-56 (91.8%), Fe-57 (1.76%), Fe-58 (0.24%). Calculate the Ar to 3 significant figures.", hint: "Ar = sum of (isotope mass x % abundance) / 100", answer: 55.9, unit: "", tolerance: 0.05, steps: ["Ar = (54x6.20 + 56x91.8 + 57x1.76 + 58x0.24) / 100", "Ar = (334.8 + 5140.8 + 100.32 + 13.92) / 100", "Ar = 5589.84 / 100 = 55.9"] },
+      { difficulty: "medium", q: "The Mr of hydrated magnesium sulfate MgSO₄.xH₂O is 246.4. Calculate the value of x. (Ar: Mg=24.3, S=32.1, O=16, H=1)", hint: "Mr(MgSO₄) = 24.3 + 32.1 + 4(16) = 120.4. Then 246.4 - 120.4 = mass of xH₂O.", answer: 7, unit: "", tolerance: 0, steps: ["Mr(MgSO₄) = 24.3 + 32.1 + 64.0 = 120.4", "Mass of water = 246.4 - 120.4 = 126.0", "Mr(H₂O) = 18; x = 126.0 / 18 = 7"] },
+      { difficulty: "medium", q: "The Mr of a Group 2 nitrate M(NO₃)₂ is 212. Find the Ar of the metal M. (Ar: N=14, O=16)", hint: "Mr(NO₃)₂ = 2(14 + 48) = 124. Then Ar(M) = 212 - 124.", answer: 88, unit: "", tolerance: 0.5, steps: ["Mr of 2 NO₃ groups = 2 x (14 + 3x16) = 2 x 62 = 124", "Ar(M) = 212 - 124 = 88", "The metal is strontium (Sr)"] },
+      // HARD
+      { difficulty: "hard", q: "The Ar of rubidium is 85.47. Rubidium has two isotopes: Rb-85 and Rb-87. Calculate the percentage abundance of Rb-87.", hint: "Let x = % of Rb-87. Then (85(100-x) + 87x) / 100 = 85.47.", answer: 23.5, unit: "%", tolerance: 0.5, steps: ["Let x = % Rb-87, so % Rb-85 = (100 - x)", "85(100-x) + 87x = 85.47 x 100 = 8547", "8500 - 85x + 87x = 8547", "2x = 47, x = 23.5%"] },
+      { difficulty: "hard", q: "A sample of boron has two isotopes: B-10 and B-11. The Ar is 10.88. Calculate the percentage abundance of B-11.", hint: "Let x = % of B-11. Set up: 10(100-x) + 11x = 10.88 x 100", answer: 88, unit: "%", tolerance: 0.5, steps: ["Let x = % B-11", "10(100-x) + 11x = 1088", "1000 - 10x + 11x = 1088", "x = 88%"] },
+      { difficulty: "hard", q: "Calculate the mass (in kg) of a single P-31 ion (31P+). (L = 6.02 x 10²³ mol⁻¹)", hint: "Mass of 1 mol of P-31 atoms = 31 g = 0.031 kg. Divide by Avogadro's number.", answer: 5.15e-26, unit: "kg", tolerance: 1e-27, steps: ["Mass of 1 atom = molar mass / L", "Mass = 0.031 / (6.02 x 10²³)", "Mass = 5.15 x 10⁻²⁶ kg"] },
+      // EXAM
+      { difficulty: "exam", q: "A singly charged ion has a mass of 1.66 x 10⁻²³ kg and is accelerated through a TOF mass spectrometer with KE = 2.00 x 10⁻¹⁶ J. The drift region is 1.50 m. Calculate the time (s) for the ion to reach the detector.", hint: "KE = 1/2 mv². Rearrange for v, then t = d/v.", answer: 3.05e-4, unit: "s", tolerance: 5e-6, steps: ["KE = 1/2 mv², so v² = 2KE/m", "v² = 2(2.00 x 10⁻¹⁶) / (1.66 x 10⁻²³) = 2.41 x 10⁷", "v = 4910 m s⁻¹", "t = d/v = 1.50 / 4910 = 3.05 x 10⁻⁴ s"] },
+    ]
+  },
+  {
+    id: "calc_yield", title: "% Yield & Atom Economy", color: "#059669", board: "both",
+    questions: [
+      // EASY
+      { difficulty: "easy", q: "A reaction produces 4.2 g of product. The theoretical yield was 6.0 g. Calculate the % yield.", hint: "% yield = (actual / theoretical) x 100", answer: 70, unit: "%", tolerance: 0.5, steps: ["% yield = (actual / theoretical) x 100", "% yield = (4.2 / 6.0) x 100 = 70%"] },
+      { difficulty: "easy", q: "0.32 g of magnesium reacts with excess HCl:\nMg + 2HCl -> MgCl₂ + H₂\n1.04 g of MgCl₂ is obtained. Calculate the % yield. (Ar: Mg=24, Cl=35.5)", hint: "Find theoretical mass of MgCl₂ from moles of Mg, then % yield.", answer: 81.9, unit: "%", tolerance: 0.5, steps: ["n(Mg) = 0.32 / 24 = 0.01333 mol", "n(MgCl₂) = 0.01333 mol (1:1 ratio)", "Theoretical mass = 0.01333 x 95 = 1.267 g", "% yield = (1.04 / 1.267) x 100 = 82.1%"] },
+      // MEDIUM
+      { difficulty: "medium", q: "2Mg(s) + O₂(g) -> 2MgO(s). 4.80 g of Mg reacts with excess O₂. The actual yield of MgO is 5.60 g. Calculate the % yield. (Mr: Mg=24, MgO=40)", hint: "Find moles of Mg, use 1:1 mole ratio for MgO, then calculate theoretical mass.", answer: 70.0, unit: "%", tolerance: 0.5, steps: ["n(Mg) = 4.80 / 24 = 0.200 mol", "n(MgO) = 0.200 mol (1:1 mole ratio)", "Theoretical mass MgO = 0.200 x 40 = 8.00 g", "% yield = (5.60 / 8.00) x 100 = 70.0%"] },
+      { difficulty: "medium", q: "Calculate the atom economy for making NaIO₃ from:\n3I₂ + 6NaOH -> 5NaI + NaIO₃ + 3H₂O\n(Mr: I₂=254, NaOH=40, NaIO₃=198)", hint: "Atom economy = (Mr of desired product / total Mr of all products) x 100. Or use: (Mr desired / total Mr reactants) x 100.", answer: 15.4, unit: "%", tolerance: 0.5, steps: ["Total Mr of reactants = 3(254) + 6(40) = 762 + 240 = 1002", "Or: total Mr products = 5(150) + 198 + 3(18) = 750 + 198 + 54 = 1002", "Mr of desired product (NaIO₃) = 198", "Atom economy = (198 / 1002) x 100 = 19.8%", "Note: some mark schemes define AE as Mr(desired) / Mr(reactants) x 100"] },
+      { difficulty: "medium", q: "Calculate the % atom economy for making ethanol by fermentation:\nC₆H₁₂O₆ -> 2C₂H₅OH + 2CO₂\n(Mr: C₆H₁₂O₆=180, C₂H₅OH=46)", hint: "Atom economy = (total Mr of desired product(s) / total Mr of reactants) x 100.", answer: 51.1, unit: "%", tolerance: 0.5, steps: ["Total Mr of desired products = 2 x 46 = 92", "Total Mr of reactants = 180", "Atom economy = (92 / 180) x 100 = 51.1%"] },
+      { difficulty: "medium", q: "What is the atom economy for making MgSO₄ from:\nMgCO₃ + H₂SO₄ -> MgSO₄ + CO₂ + H₂O\n(Mr: MgCO₃=84, H₂SO₄=98, MgSO₄=120)", hint: "Atom economy = Mr(desired) / Mr(all reactants) x 100", answer: 65.9, unit: "%", tolerance: 0.5, steps: ["Total Mr of reactants = 84 + 98 = 182", "Mr of desired product (MgSO₄) = 120", "Atom economy = (120 / 182) x 100 = 65.9%"] },
+      // HARD
+      { difficulty: "hard", q: "What mass of barium sulfate (Mr=233) is produced from 10 g of barium hydroxide (Mr=171) in:\nBa(OH)₂ + H₂SO₄ -> BaSO₄ + 2H₂O", hint: "Find moles of Ba(OH)₂, use 1:1 ratio for BaSO₄, convert to mass.", answer: 13.6, unit: "g", tolerance: 0.2, steps: ["n(Ba(OH)₂) = 10 / 171 = 0.05848 mol", "n(BaSO₄) = 0.05848 mol (1:1 ratio)", "mass BaSO₄ = 0.05848 x 233 = 13.6 g"] },
+      { difficulty: "hard", q: "Aspirin (C₉H₈O₄) is made from:\nC₇H₆O₃ + C₄H₆O₃ -> C₉H₈O₄ + C₂H₄O₂\n(Mr: C₇H₆O₃=138, C₄H₆O₃=102, C₉H₈O₄=180)\na) Calculate the atom economy.", hint: "AE = Mr(aspirin) / Mr(all reactants) x 100", answer: 75.0, unit: "%", tolerance: 0.5, steps: ["Total Mr reactants = 138 + 102 = 240", "AE = (180 / 240) x 100 = 75.0%"] },
+      { difficulty: "hard", q: "Mg + 2HNO₃ -> Mg(NO₃)₂ + H₂\n7.8 g of magnesium reacts with 0.60 mol of nitric acid. Which reagent is in excess? Enter the mass (g) of excess reagent remaining. (Ar: Mg=24, Mr HNO₃=63)", hint: "Find moles of each, compare using stoichiometry. Mg needs 2 mol HNO₃ per mol Mg.", answer: 0.6, unit: "g", tolerance: 0.1, steps: ["n(Mg) = 7.8 / 24 = 0.325 mol", "Mg needs 2 x 0.325 = 0.65 mol HNO₃", "Only 0.60 mol HNO₃ available, so HNO₃ is limiting", "HNO₃ reacts with 0.30 mol Mg", "Excess Mg = 0.325 - 0.30 = 0.025 mol = 0.60 g"] },
+      // EXAM
+      { difficulty: "exam", q: "Aspirin synthesis: 65 g of C₇H₆O₃ (Mr=138) reacts with 65 g of C₄H₆O₃ (Mr=102).\nC₇H₆O₃ + C₄H₆O₃ -> C₉H₈O₄ + C₂H₄O₂\nThe yield is 86%. Calculate the mass of aspirin (Mr=180) obtained.", hint: "Find the limiting reagent first. Then theoretical mass, then apply % yield.", answer: 72.9, unit: "g", tolerance: 0.5, steps: ["n(C₇H₆O₃) = 65/138 = 0.4710 mol", "n(C₄H₆O₃) = 65/102 = 0.6373 mol", "1:1 ratio, so C₇H₆O₃ is limiting", "Theoretical mass aspirin = 0.4710 x 180 = 84.78 g", "Actual mass = 84.78 x 0.86 = 72.9 g"] },
+      { difficulty: "exam", q: "Fe(NO₃)₃ + 3NaOH -> Fe(OH)₃ + 3NaNO₃\n15 g of Fe(NO₃)₃ (Mr=242) reacts with 6 g of NaOH (Mr=40). Calculate the maximum mass of Fe(OH)₃ (Mr=107) produced.", hint: "Find moles of each reactant, identify limiting reagent using stoichiometry.", answer: 5.35, unit: "g", tolerance: 0.1, steps: ["n(Fe(NO₃)₃) = 15/242 = 0.06198 mol", "n(NaOH) = 6/40 = 0.150 mol", "Fe(NO₃)₃ needs 3 x 0.06198 = 0.186 mol NaOH", "Only 0.150 mol NaOH available, so NaOH is limiting", "n(Fe(OH)₃) = 0.150/3 = 0.0500 mol", "mass = 0.0500 x 107 = 5.35 g"] },
     ]
   },
 ];
@@ -4146,7 +4190,188 @@ function MechSVGStill({ mech }) {
   return <MechSVG mech={mech} stepIdx={stepIdx} animKey={999} stillMode="step"/>;
 }
 
+// --- Google Analytics helper ---
+function track(event, params = {}) {
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", event, params);
+  }
+}
+
+// --- Login Screen Component ---
+function LoginScreen({ onLogin }) {
+  const [mode, setMode] = useState("login"); // "login" | "signup"
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleGoogle = async () => {
+    setLoading(true); setError("");
+    try { await signInGoogle(); }
+    catch (e) { setError(e.message); setLoading(false); }
+  };
+
+  const handleEmail = async (e) => {
+    e.preventDefault();
+    setError(""); setLoading(true);
+    if (mode === "signup" && password !== confirmPassword) { setError("Passwords do not match"); setLoading(false); return; }
+    if (password.length < 6) { setError("Password must be at least 6 characters"); setLoading(false); return; }
+    try {
+      if (mode === "signup") await signUpEmail(email, password);
+      else await signInEmail(email, password);
+    } catch (e) {
+      const msg = e.code === "auth/user-not-found" ? "No account found with this email"
+        : e.code === "auth/wrong-password" ? "Incorrect password"
+        : e.code === "auth/invalid-credential" ? "Incorrect email or password"
+        : e.code === "auth/email-already-in-use" ? "An account with this email already exists"
+        : e.code === "auth/invalid-email" ? "Please enter a valid email"
+        : e.message;
+      setError(msg); setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'DM Sans', sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <div style={{ width: "100%", maxWidth: "420px" }}>
+        {/* Logo / Brand */}
+        <div style={{ textAlign: "center", marginBottom: "36px" }}>
+          <div style={{ display: "inline-block", background: "#ffffff", borderRadius: "20px", padding: "10px 18px", marginBottom: "18px", boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}>
+            <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "80px", objectFit: "contain", display: "block" }} />
+          </div>
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", color: "#ffffff", letterSpacing: "1px", textTransform: "uppercase", lineHeight: 1.1 }}>HSJ TUITION</div>
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "13px", color: "#29ABE2", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", marginTop: "6px" }}>A-Level Chemistry. Mastered.</div>
+        </div>
+
+        {/* Card */}
+        <div style={{ background: "#ffffff", borderRadius: "20px", padding: "32px", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
+          <h2 style={{ fontSize: "22px", fontWeight: 700, color: "#1a2d45", margin: "0 0 24px", textAlign: "center" }}>
+            {mode === "login" ? "Welcome back" : "Create your account"}
+          </h2>
+
+          {/* Google button */}
+          <button onClick={handleGoogle} disabled={loading} style={{
+            width: "100%", padding: "13px", borderRadius: "12px", border: "1.5px solid #e0e8f0",
+            background: "#ffffff", cursor: "pointer", fontFamily: "inherit", fontSize: "15px",
+            fontWeight: 600, color: "#1a2d45", display: "flex", alignItems: "center",
+            justifyContent: "center", gap: "10px", transition: "all 0.15s",
+            opacity: loading ? 0.6 : 1
+          }}
+          onMouseEnter={e => { if (!loading) e.currentTarget.style.background = "#f8fafc"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "#ffffff"; }}
+          >
+            <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Continue with Google
+          </button>
+
+          {/* Divider */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "20px 0" }}>
+            <div style={{ flex: 1, height: "1px", background: "#e0e8f0" }} />
+            <span style={{ fontSize: "13px", color: "#7a95b0", fontWeight: 500 }}>or</span>
+            <div style={{ flex: 1, height: "1px", background: "#e0e8f0" }} />
+          </div>
+
+          {/* Email form */}
+          <form onSubmit={handleEmail}>
+            <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required
+              style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "12px", boxSizing: "border-box", transition: "border 0.15s" }}
+              onFocus={e => e.target.style.borderColor = "#29ABE2"}
+              onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+            />
+            <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
+              style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: mode === "signup" ? "12px" : "16px", boxSizing: "border-box", transition: "border 0.15s" }}
+              onFocus={e => e.target.style.borderColor = "#29ABE2"}
+              onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+            />
+            {mode === "signup" && (
+              <input type="password" placeholder="Confirm password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required
+                style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box", transition: "border 0.15s" }}
+                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+              />
+            )}
+            {error && <div style={{ color: "#dc2626", fontSize: "13px", fontWeight: 600, marginBottom: "12px", padding: "8px 12px", background: "#fef2f2", borderRadius: "8px" }}>{error}</div>}
+            <button type="submit" disabled={loading} style={{
+              width: "100%", padding: "14px", borderRadius: "12px", border: "none",
+              background: "#29ABE2", color: "#ffffff", fontSize: "15px", fontWeight: 700,
+              cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s",
+              opacity: loading ? 0.6 : 1
+            }}>
+              {loading ? "Please wait..." : mode === "login" ? "Log in" : "Sign up"}
+            </button>
+          </form>
+
+          {/* Toggle mode */}
+          <div style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "#7a95b0" }}>
+            {mode === "login" ? "Don't have an account? " : "Already have an account? "}
+            <button onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); }}
+              style={{ background: "none", border: "none", color: "#29ABE2", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", fontSize: "14px", padding: 0 }}>
+              {mode === "login" ? "Sign up" : "Log in"}
+            </button>
+          </div>
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: "20px", fontSize: "12px", color: "#4a6080" }}>
+          HSJ Tuition
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
+  // --- Auth state ---
+  const [authUser, setAuthUser] = useState(undefined); // undefined=loading, null=not logged in, object=logged in
+  const [userProfile, setUserProfile] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [accessKeyInput, setAccessKeyInput] = useState("");
+  const [accessKeyMsg, setAccessKeyMsg] = useState(null);
+  const [accessKeyLoading, setAccessKeyLoading] = useState(false);
+
+  useEffect(() => {
+    const unsub = onAuthChange(async (user) => {
+      if (user) {
+        setAuthUser(user);
+        try {
+          const profile = await getOrCreateUserProfile(user);
+          setUserProfile(profile);
+          track("user_login", { method: user.providerData?.[0]?.providerId || "unknown", uid: user.uid });
+        } catch (e) {
+          console.error("Profile error:", e);
+          setUserProfile({ role: "free" });
+        }
+      } else {
+        setAuthUser(null);
+        setUserProfile(null);
+      }
+      setAuthLoading(false);
+    });
+    return unsub;
+  }, []);
+
+  const handleRedeemKey = async () => {
+    if (!accessKeyInput.trim() || !authUser) return;
+    setAccessKeyLoading(true); setAccessKeyMsg(null);
+    try {
+      const result = await redeemAccessKey(authUser.uid, accessKeyInput.trim().toUpperCase());
+      if (result.success) {
+        setAccessKeyMsg({ type: "success", text: "Access key activated! You now have full access." });
+        setUserProfile(prev => ({ ...prev, role: "access_key", accessKey: accessKeyInput.trim().toUpperCase(), accessKeyExpiry: result.expiresAt }));
+        setAccessKeyInput("");
+        track("redeem_access_key", { success: true });
+      } else {
+        setAccessKeyMsg({ type: "error", text: result.error });
+        track("redeem_access_key", { success: false, error: result.error });
+      }
+    } catch (e) {
+      setAccessKeyMsg({ type: "error", text: "Something went wrong. Please try again." });
+    }
+    setAccessKeyLoading(false);
+  };
+
+  const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin");
+
   const [screen, setScreen] = useState("board");
   const [board, setBoard] = useState(null);
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
@@ -4220,12 +4445,13 @@ export default function App() {
   const knownSet = known[knownKey] || new Set();
   const knownCount = knownSet.size;
 
-  const selectBoard = (b) => { setBoard(b); setScreen("topics"); setTopicsTab("home"); };
+  const selectBoard = (b) => { setBoard(b); setScreen("topics"); setTopicsTab("home"); track("select_board", { board: b }); };
   const selectTopic = (t) => {
     setTopic(t);
     setOrder(SETS[t].cards.map((_, i) => i));
     setIndex(0); setFlipped(false); setShuffled(false); setShowMenu(false);
     setScreen("cards");
+    track("select_flashcard_topic", { topic: t, title: SETS[t]?.title, board });
   };
   // Save progress to localStorage whenever it changes
   useEffect(() => {
@@ -4349,10 +4575,12 @@ export default function App() {
   const toggleKnown = useCallback(() => {
     setKnown(prev => {
       const s = new Set(prev[knownKey] || []);
-      s.has(currentCardIndex) ? s.delete(currentCardIndex) : s.add(currentCardIndex);
+      const wasKnown = s.has(currentCardIndex);
+      wasKnown ? s.delete(currentCardIndex) : s.add(currentCardIndex);
+      track("toggle_known", { topic, card_index: currentCardIndex, marked: !wasKnown });
       return { ...prev, [knownKey]: s };
     });
-  }, [knownKey, currentCardIndex]);
+  }, [knownKey, currentCardIndex, topic]);
 
   const shuffle = useCallback(() => {
     const arr = cards.map((_, i) => i);
@@ -4427,15 +4655,60 @@ export default function App() {
     </svg>
   );
 
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const Header = ({ sub, back }) => (
-    <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", position: "relative", zIndex: 2, flexShrink: 0 }}>
+    <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", position: "relative", zIndex: 10, flexShrink: 0 }}>
       {back && <button onClick={back} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
       <div style={{ background: "#fff", borderRadius: "10px", padding: "4px 8px", display: "flex", alignItems: "center", flexShrink: 0 }}>
         <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "52px", objectFit: "contain", display: "block" }} />
       </div>
-      <div>
+      <div style={{ flex: 1 }}>
         <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "18px", color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.1 }}>HSJ TUITION</div>
         <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "11px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>A-Level Chemistry. Mastered.</div>
+      </div>
+      {/* User avatar */}
+      <div style={{ position: "relative" }}>
+        <button onClick={() => setShowUserMenu(v => !v)} style={{
+          width: "38px", height: "38px", borderRadius: "50%", border: "2px solid #29ABE2",
+          background: authUser?.photoURL ? `url(${authUser.photoURL}) center/cover` : "#29ABE2",
+          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+          color: "#fff", fontSize: "15px", fontWeight: 700, fontFamily: "inherit", padding: 0
+        }}>
+          {!authUser?.photoURL && (authUser?.displayName?.[0] || authUser?.email?.[0] || "?").toUpperCase()}
+        </button>
+        {showUserMenu && (
+          <>
+            <div onClick={() => setShowUserMenu(false)} style={{ position: "fixed", inset: 0, zIndex: 99 }} />
+            <div style={{ position: "absolute", right: 0, top: "48px", background: "#ffffff", borderRadius: "14px", boxShadow: "0 8px 32px rgba(0,0,0,0.18)", padding: "16px", minWidth: "240px", zIndex: 100 }}>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", marginBottom: "2px" }}>{authUser?.displayName || "Student"}</div>
+              <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px" }}>{authUser?.email}</div>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: hasFullAccess ? "#059669" : "#d97706", background: hasFullAccess ? "#ecfdf5" : "#fffbeb", borderRadius: "6px", padding: "4px 10px", display: "inline-block", marginBottom: "14px" }}>
+                {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "access_key" ? "Full Access (Key)" : userProfile?.role === "paid" ? "Full Access (Paid)" : "Free Plan"}
+              </div>
+              {!hasFullAccess && (
+                <div style={{ marginBottom: "14px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Have an access key?</div>
+                  <div style={{ display: "flex", gap: "6px" }}>
+                    <input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="e.g. HSJ-2026-ABCD"
+                      style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1.5px solid #e0e8f0", fontSize: "13px", fontFamily: "inherit", outline: "none" }}
+                      onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                      onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+                    />
+                    <button onClick={handleRedeemKey} disabled={accessKeyLoading} style={{ padding: "8px 12px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: accessKeyLoading ? 0.6 : 1 }}>
+                      {accessKeyLoading ? "..." : "Redeem"}
+                    </button>
+                  </div>
+                  {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
+                </div>
+              )}
+              <button onClick={() => { logOut(); setShowUserMenu(false); }} style={{
+                width: "100%", padding: "10px", borderRadius: "10px", border: "1.5px solid #e0e8f0",
+                background: "#ffffff", color: "#dc2626", fontSize: "13px", fontWeight: 600,
+                cursor: "pointer", fontFamily: "inherit"
+              }}>Log out</button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -4446,8 +4719,8 @@ export default function App() {
     const W = "100%", H = "100%";
     if (id === "aqa") return (
       <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
-        {/* AQA — dense organic chemistry art filling the whole card */}
-        {/* Naphthalene (two fused benzene rings) — top-right */}
+        {/* AQA -dense organic chemistry art filling the whole card */}
+        {/* Naphthalene (two fused benzene rings) -top-right */}
         <polygon points="238,10 260,22 260,46 238,58 216,46 216,22" stroke="white" strokeWidth="2.2" fill="none"/>
         <polygon points="282,10 304,22 304,46 282,58 260,46 260,22" stroke="white" strokeWidth="2.2" fill="none"/>
         {/* Naphthalene double bonds */}
@@ -4455,7 +4728,7 @@ export default function App() {
         <line x1="238" y1="58" x2="260" y2="46" stroke="white" strokeWidth="1.4"/>
         <line x1="260" y1="22" x2="282" y2="10" stroke="white" strokeWidth="1.4"/>
         <line x1="282" y1="58" x2="304" y2="46" stroke="white" strokeWidth="1.4"/>
-        {/* Flask — far right filling top gap */}
+        {/* Flask -far right filling top gap */}
         <path d="M348,8 L348,40 L328,78 Q323,88 333,92 L379,92 Q389,88 384,78 L364,40 L364,8 Z" stroke="white" strokeWidth="2" fill="none"/>
         <line x1="344" y1="22" x2="368" y2="22" stroke="white" strokeWidth="1.5"/>
         <ellipse cx="356" cy="76" rx="10" ry="5" stroke="white" strokeWidth="1.5"/>
@@ -4482,10 +4755,10 @@ export default function App() {
         {/* Cyclohexane chair bond angles */}
         <line x1="44" y1="120" x2="28" y2="130" stroke="white" strokeWidth="1.5"/>
         <line x1="88" y1="120" x2="104" y2="130" stroke="white" strokeWidth="1.5"/>
-        {/* Benzene — centre-bottom */}
+        {/* Benzene -centre-bottom */}
         <polygon points="160,108 180,97 200,108 200,130 180,141 160,130" stroke="white" strokeWidth="2.2" fill="none"/>
         <circle cx="180" cy="119" r="13" stroke="white" strokeWidth="1.3" fill="none"/>
-        {/* COOH attached to benzene — at top-right vertex (200,108) */}
+        {/* COOH attached to benzene -at top-right vertex (200,108) */}
         <line x1="200" y1="108" x2="222" y2="100" stroke="white" strokeWidth="1.8"/>
         <text x="224" y="104" fill="white" fontSize="10" fontFamily="'Space Mono',monospace">COOH</text>
         {/* Ester linkage bottom-right */}
@@ -4495,7 +4768,7 @@ export default function App() {
     );
     if (id === "ocr") return (
       <svg style={s} width={W} height={H} viewBox="0 0 400 170" fill="none" preserveAspectRatio="xMidYMid slice">
-        {/* OCR A — physical/inorganic chemistry, fills whole card */}
+        {/* OCR A -physical/inorganic chemistry, fills whole card */}
         {/* Atomic orbitals top-right */}
         <circle cx="330" cy="48" r="42" stroke="white" strokeWidth="1.5" strokeDasharray="6 4"/>
         <circle cx="330" cy="48" r="26" stroke="white" strokeWidth="1.5" strokeDasharray="4 5"/>
@@ -4518,7 +4791,7 @@ export default function App() {
         <line x1="74" y1="132" x2="74" y2="58" stroke="white" strokeWidth="1.5"/>
         <polygon points="70,62 74,50 78,62" fill="white"/>
         <text x="78" y="98" fill="white" fontSize="11" fontFamily="'Space Mono',monospace">ΔH</text>
-        {/* Activation energy curve — upper-middle fills gap */}
+        {/* Activation energy curve -upper-middle fills gap */}
         <path d="M 96,90 C 116,90 126,18 156,14 C 186,10 196,90 216,90" stroke="white" strokeWidth="2" fill="none"/>
         <line x1="96" y1="90" x2="96" y2="110" stroke="white" strokeWidth="1.5" strokeDasharray="3 3"/>
         <line x1="216" y1="90" x2="216" y2="110" stroke="white" strokeWidth="1.5" strokeDasharray="3 3"/>
@@ -4700,6 +4973,19 @@ export default function App() {
     return null;
   };
 
+  // AUTH LOADING
+  if (authLoading) return (
+    <div style={{ minHeight: "100vh", background: "#0d1b2a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: "32px", fontWeight: 800, color: "#ffffff", marginBottom: "12px" }}><span style={{ color: "#29ABE2" }}>Chem</span>Mastery</div>
+        <div style={{ color: "#7a95b0", fontSize: "14px" }}>Loading...</div>
+      </div>
+    </div>
+  );
+
+  // LOGIN SCREEN
+  if (!authUser) return <LoginScreen />;
+
   // BOARD SELECT
   if (screen === "board") return (
     <div style={base}>
@@ -4724,7 +5010,7 @@ export default function App() {
             >
               {/* Fancy thumbnail */}
               <div style={{ height: "170px", background: b.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "22px 24px", position: "relative", overflow: "hidden" }}>
-                {/* Chemistry art — unique per board */}
+                {/* Chemistry art -unique per board */}
                 <ChemArt id={b.id} />
                 {/* Label */}
                 <div>
@@ -4950,7 +5236,7 @@ export default function App() {
   if (screen === "topics") return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-      {/* Header — always visible */}
+      {/* Header -always visible */}
       <div style={{ padding: "0 20px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0f1d35", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {topicsTab !== "home"
@@ -4965,7 +5251,7 @@ export default function App() {
             <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "10px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>{board === "ocr" ? "OCR A" : "AQA"} · A-Level Chemistry</div>
           </div>
         </div>
-        <button onClick={() => setScreen("dashboard")} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
+        <button onClick={() => { setScreen("dashboard"); track("view_dashboard", { board }); }} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
       </div>
 
       {/* HOME card grid */}
@@ -4975,7 +5261,7 @@ export default function App() {
           <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", margin: "0 0 28px", letterSpacing: "-0.5px", alignSelf: "flex-start" }}>What would you like to practise?</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => (
-              <button key={card.id} onClick={() => { setTopicsTab(card.id); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
+              <button key={card.id} onClick={() => { setTopicsTab(card.id); track("open_section", { section: card.id, board }); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
                 style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
@@ -5553,7 +5839,7 @@ export default function App() {
             {/* Sub-tabs + quiz */}
             <div style={{ display: "flex", alignItems: "center", borderBottom: "2px solid #e0e8f0", padding: "0 14px", background: "#fff", flexShrink: 0 }}>
               {[["ali","Aliphatic","27"],["aro","Aromatic","9"]].map(([id,lbl,cnt]) => (
-                <button key={id} onClick={() => { setSynthTab(id); setSelectedFrom(null); setSelectedRxn(null); }} style={{
+                <button key={id} onClick={() => { setSynthTab(id); setSelectedFrom(null); setSelectedRxn(null); track("view_synthesis", { map: id }); }} style={{
                   padding:"12px 18px", border:"none", background:"none", fontFamily:"inherit",
                   fontSize:"15px", fontWeight:800, cursor:"pointer",
                   color: synthTab===id ? "#0f1d35" : "#7a95b0",
@@ -5856,7 +6142,7 @@ export default function App() {
                 const totalMarks = qs.length * 6;
                 const earnedMarks = scores.reduce((a, b) => a + b, 0);
                 return (
-                  <button key={cat} onClick={() => { setExtCategory(cat); setExtQPicker(true); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); }}
+                  <button key={cat} onClick={() => { setExtCategory(cat); setExtQPicker(true); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); track("select_ext_category", { category: cat, board }); }}
                     style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
                     <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: purple, marginBottom: "8px" }} />
                     <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{cat}</div>
@@ -5885,7 +6171,7 @@ export default function App() {
                 const attempted = savedScore !== undefined;
                 return (
                   <button key={question.id}
-                    onClick={() => { setExtIndex(i); setExtQPicker(false); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiError(null); setExtAiLoading(false); setExtShowModel(false); }}
+                    onClick={() => { setExtIndex(i); setExtQPicker(false); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiError(null); setExtAiLoading(false); setExtShowModel(false); track("attempt_extended", { question_id: catQs[i].id, category: extCategory, board }); }}
                     style={{ background: "#fff", border: `2px solid ${attempted ? purple : purpleLight}`, borderRadius: "14px", padding: "14px 14px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px" }}>
                       <div style={{ flex: 1 }}>
@@ -5974,6 +6260,7 @@ export default function App() {
         const handleSubmit = async () => {
           setExtAiLoading(true);
           setExtAiError(null);
+          track("submit_ai_examine", { question_id: thisQ.id, category: extCategory, board });
           try {
             const res = await fetch('/api/examine.js', {
               method: 'POST',
@@ -6206,7 +6493,7 @@ export default function App() {
                 {CALC_SETS.map(set => {
                   const score = calcScore[set.id] || { correct: 0, attempted: 0 };
                   return (
-                    <button key={set.id} onClick={() => { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{
+                    <button key={set.id} onClick={() => { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); track("select_calc_topic", { topic: set.id, title: set.title }); }} style={{
                       background: "#ffffff", border: `2px solid ${set.color}30`,
                       borderRadius: "14px", padding: "14px 12px", textAlign: "left",
                       cursor: "pointer", fontFamily: "inherit",
@@ -6230,10 +6517,10 @@ export default function App() {
             if (!set) return null;
             const tiers = [
               { key: "all",    label: "All Questions",  icon: "∞", color: "#1a2d45",  desc: `${set.questions.length} questions across all levels` },
-              { key: "easy",   label: "Easy",           icon: "1", color: "#16a34a",  desc: `${set.questions.filter(q=>q.difficulty==="easy").length} questions — single or two-step` },
-              { key: "medium", label: "Medium",         icon: "2", color: "#d97706",  desc: `${set.questions.filter(q=>q.difficulty==="medium").length} questions — multi-step, unit conversions` },
-              { key: "hard",   label: "Hard",           icon: "3", color: "#dc2626",  desc: `${set.questions.filter(q=>q.difficulty==="hard").length} questions — longer chains, stoichiometry` },
-              { key: "exam",   label: "Exam Style",     icon: "★", color: "#7c3aed",  desc: `${set.questions.filter(q=>q.difficulty==="exam").length} questions — past paper difficulty` },
+              { key: "easy",   label: "Easy",           icon: "1", color: "#16a34a",  desc: `${set.questions.filter(q=>q.difficulty==="easy").length} questions - single or two-step` },
+              { key: "medium", label: "Medium",         icon: "2", color: "#d97706",  desc: `${set.questions.filter(q=>q.difficulty==="medium").length} questions - multi-step, unit conversions` },
+              { key: "hard",   label: "Hard",           icon: "3", color: "#dc2626",  desc: `${set.questions.filter(q=>q.difficulty==="hard").length} questions - longer chains, stoichiometry` },
+              { key: "exam",   label: "Exam Style",     icon: "★", color: "#7c3aed",  desc: `${set.questions.filter(q=>q.difficulty==="exam").length} questions - past paper difficulty` },
             ];
             return (
               <div>
@@ -6244,7 +6531,7 @@ export default function App() {
                 <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Choose difficulty</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {tiers.map(t => (
-                    <button key={t.key} onClick={() => { setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{
+                    <button key={t.key} onClick={() => { setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); track("select_difficulty", { topic: calcTopic, difficulty: t.key }); }} style={{
                       background: "#ffffff", border: `2px solid ${t.color}20`, borderRadius: "14px",
                       padding: "14px 16px", textAlign: "left", cursor: "pointer", fontFamily: "inherit",
                       display: "flex", alignItems: "center", gap: "14px",
@@ -6281,6 +6568,7 @@ export default function App() {
                   const s = prev[calcTopic] || { correct: 0, attempted: 0 };
                   return { ...prev, [calcTopic]: { correct: s.correct + (correct ? 1 : 0), attempted: s.attempted + 1 } };
                 });
+                track("attempt_question", { topic: calcTopic, difficulty: q.difficulty, correct, question_index: currentIdx });
               }
               setCalcChecked(true);
               setCalcShowSteps(true);
@@ -6361,7 +6649,7 @@ export default function App() {
                         </button>
                       ) : (
                         <button onClick={() => { setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                          Finish — Back to Difficulty
+                          Finish - Back to Difficulty
                         </button>
                       )}
                       <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
@@ -6394,7 +6682,7 @@ export default function App() {
                 <div style={{ fontSize:"13px", fontWeight:800, color:"#0f1d35", textTransform:"uppercase", letterSpacing:"1.2px", marginBottom:"10px", borderBottom:"2px solid #e2e8f0", paddingBottom:"6px" }}>{cat}</div>
                 <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
                   {list.map(m => (
-                    <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); }}
+                    <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); track("view_mechanism", { mechanism: m.id, title: m.title }); }}
                       style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
                         padding:"16px 18px", textAlign:"left", cursor:"pointer", fontFamily:"inherit",
                         boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s" }}>
