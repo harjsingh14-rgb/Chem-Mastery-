@@ -1809,19 +1809,79 @@ const CALC_SETS = [
   {
     id: "calc_moles", title: "Moles & Amount of Substance", color: "#29ABE2", board: "both",
     questions: [
-      // EASY
-      { difficulty: "easy", q: "Calculate the number of moles in 5.6 g of iron (Fe). (Ar of Fe = 56)", hint: "n = m ÷ M", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["n = m ÷ M = 5.6 ÷ 56", "n = 0.10 mol"] },
-      { difficulty: "easy", q: "What mass of sodium hydroxide (NaOH) contains 0.25 mol? (Mr NaOH = 40)", hint: "m = n × M", answer: 10, unit: "g", tolerance: 0.1, steps: ["m = n × M = 0.25 × 40", "m = 10 g"] },
-      { difficulty: "easy", q: "How many moles of gas occupy 4.8 dm³ at RTP? (Molar volume = 24.0 dm³ mol⁻¹)", hint: "n = V ÷ Vm", answer: 0.2, unit: "mol", tolerance: 0.005, steps: ["n = V ÷ Vm = 4.8 ÷ 24.0", "n = 0.20 mol"] },
-      // MEDIUM
-      { difficulty: "medium", q: "How many moles are in 2.20 g of carbon dioxide (CO₂)? (Mr CO₂ = 44)", hint: "n = m ÷ M. Calculate Mr of CO₂ first: C=12, O=16.", answer: 0.05, unit: "mol", tolerance: 0.003, steps: ["Mr of CO₂ = 12 + (2×16) = 44 g mol⁻¹", "n = m ÷ M = 2.20 ÷ 44 = 0.050 mol"] },
-      { difficulty: "medium", q: "Calculate the concentration (mol dm⁻³) of a solution containing 0.050 mol of HCl in 250 cm³ of solution.", hint: "Convert cm³ to dm³ first (divide by 1000), then c = n ÷ V.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["V = 250 ÷ 1000 = 0.250 dm³", "c = n ÷ V = 0.050 ÷ 0.250 = 0.20 mol dm⁻³"] },
-      { difficulty: "medium", q: "Calculate the volume (dm³) occupied by 0.40 mol of gas at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "V = n × Vm", answer: 9.6, unit: "dm³", tolerance: 0.05, steps: ["V = n × Vm = 0.40 × 24.0 = 9.6 dm³"] },
-      // HARD
-      { difficulty: "hard", q: "Using PV = nRT, calculate the pressure (Pa) exerted by 0.10 mol of gas in a 2.0 dm³ container at 300 K. (R = 8.314 J mol⁻¹ K⁻¹)", hint: "Rearrange for P. Convert V to m³ by dividing by 1000.", answer: 124710, unit: "Pa", tolerance: 500, steps: ["V = 2.0 dm³ = 0.0020 m³", "P = nRT ÷ V = (0.10 × 8.314 × 300) ÷ 0.0020", "P = 249.42 ÷ 0.0020 = 124 710 Pa"] },
-      // EXAM
-      { difficulty: "exam", q: "0.580 g of butane (C₄H₁₀, Mr=58) is burned completely:\nC₄H₁₀ + 13/2 O₂ → 4CO₂ + 5H₂O\nCalculate the volume (dm³) of CO₂ produced at RTP. (Molar volume = 24.0 dm³ mol⁻¹)", hint: "Find moles of butane, use the 4:1 mole ratio for CO₂, then calculate volume.", answer: 0.960, unit: "dm³", tolerance: 0.01, steps: ["n(C₄H₁₀) = 0.580 ÷ 58 = 0.01000 mol", "n(CO₂) = 4 × 0.01000 = 0.04000 mol", "V(CO₂) = 0.04000 × 24.0 = 0.960 dm³"] },
-      { difficulty: "exam", q: "200 cm³ of gas is collected at 300 K and constant pressure. The temperature is raised to 375 K. Using Charles's Law (V₁/T₁ = V₂/T₂), calculate the new volume (cm³).", hint: "Rearrange Charles's Law for V₂ = V₁ × (T₂ ÷ T₁).", answer: 250, unit: "cm³", tolerance: 2, steps: ["V₂ = V₁ × T₂ ÷ T₁", "V₂ = 200 × 375 ÷ 300", "V₂ = 250 cm³"] },
+      // ═══ EASY ═══ (15 questions - basic n=m/M, m=nM, molar volume)
+      // n = m/M variations
+      { difficulty: "easy", q: "Calculate the number of moles in 5.6 g of iron (Fe).", hint: "n = m / M. Look up Ar of Fe on the periodic table.", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Ar of Fe = 55.8 (from periodic table)", "n = m / M = 5.6 / 55.8", "n = 0.100 mol"] },
+      { difficulty: "easy", q: "Calculate the number of moles in 4.0 g of calcium (Ca).", hint: "n = m / M", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Ar of Ca = 40.1", "n = m / M = 4.0 / 40.1", "n = 0.100 mol"] },
+      { difficulty: "easy", q: "Calculate the number of moles in 3.2 g of sulfur (S).", hint: "n = m / M", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Ar of S = 32.1", "n = m / M = 3.2 / 32.1", "n = 0.0997 mol (accept 0.10)"] },
+      { difficulty: "easy", q: "How many moles are in 12.0 g of magnesium (Mg)?", hint: "n = m / M", answer: 0.494, unit: "mol", tolerance: 0.01, steps: ["Ar of Mg = 24.3", "n = m / M = 12.0 / 24.3", "n = 0.494 mol"] },
+      { difficulty: "easy", q: "How many moles are in 32.0 g of oxygen gas (O₂)?", hint: "Mr of O₂ = 2 x Ar of O", answer: 1.0, unit: "mol", tolerance: 0.05, steps: ["Mr of O₂ = 2 x 16.0 = 32.0", "n = m / M = 32.0 / 32.0", "n = 1.00 mol"] },
+      // m = nM variations
+      { difficulty: "easy", q: "What mass of sodium hydroxide (NaOH) contains 0.25 mol?", hint: "m = n x M. Calculate Mr of NaOH first.", answer: 10, unit: "g", tolerance: 0.1, steps: ["Mr of NaOH = 23 + 16 + 1 = 40", "m = n x M = 0.25 x 40", "m = 10.0 g"] },
+      { difficulty: "easy", q: "What mass of water (H₂O) is 2.0 mol?", hint: "m = n x M", answer: 36, unit: "g", tolerance: 0.5, steps: ["Mr of H₂O = (2 x 1) + 16 = 18", "m = n x M = 2.0 x 18", "m = 36.0 g"] },
+      { difficulty: "easy", q: "Calculate the mass of 0.50 mol of copper (Cu).", hint: "m = n x M", answer: 31.8, unit: "g", tolerance: 0.3, steps: ["Ar of Cu = 63.5", "m = n x M = 0.50 x 63.5", "m = 31.8 g"] },
+      { difficulty: "easy", q: "Calculate the mass of 0.10 mol of calcium carbonate (CaCO₃).", hint: "m = n x M. Work out Mr first.", answer: 10.0, unit: "g", tolerance: 0.2, steps: ["Mr of CaCO₃ = 40 + 12 + (3 x 16) = 100", "m = n x M = 0.10 x 100", "m = 10.0 g"] },
+      { difficulty: "easy", q: "What mass of sulfuric acid (H₂SO₄) contains 0.20 mol?", hint: "m = n x M", answer: 19.6, unit: "g", tolerance: 0.2, steps: ["Mr of H₂SO₄ = (2 x 1) + 32 + (4 x 16) = 98", "m = n x M = 0.20 x 98", "m = 19.6 g"] },
+      // Molar volume
+      { difficulty: "easy", q: "How many moles of gas occupy 4.8 dm³ at RTP? (Molar volume = 24.0 dm³ mol⁻¹)", hint: "n = V / Vm", answer: 0.2, unit: "mol", tolerance: 0.005, steps: ["n = V / Vm = 4.8 / 24.0", "n = 0.200 mol"] },
+      { difficulty: "easy", q: "What volume (dm³) does 0.50 mol of gas occupy at RTP?", hint: "V = n x Vm (Vm = 24.0 dm³ mol⁻¹)", answer: 12.0, unit: "dm³", tolerance: 0.1, steps: ["V = n x Vm = 0.50 x 24.0", "V = 12.0 dm³"] },
+      { difficulty: "easy", q: "How many moles of gas occupy 120 cm³ at RTP?", hint: "Convert cm³ to dm³ first, then n = V / Vm", answer: 0.005, unit: "mol", tolerance: 0.0005, steps: ["V = 120 / 1000 = 0.120 dm³", "n = V / Vm = 0.120 / 24.0", "n = 0.00500 mol"] },
+      { difficulty: "easy", q: "Calculate the number of moles in 6.4 g of methane (CH₄).", hint: "n = m / M", answer: 0.4, unit: "mol", tolerance: 0.01, steps: ["Mr of CH₄ = 12 + (4 x 1) = 16", "n = m / M = 6.4 / 16", "n = 0.400 mol"] },
+      { difficulty: "easy", q: "Calculate the mass of 3.0 mol of nitrogen gas (N₂).", hint: "m = n x M", answer: 84, unit: "g", tolerance: 0.5, steps: ["Mr of N₂ = 2 x 14 = 28", "m = n x M = 3.0 x 28", "m = 84.0 g"] },
+
+      // ═══ MEDIUM ═══ (20 questions - Mr calculations, concentrations, conversions)
+      // Calculate Mr then find moles
+      { difficulty: "medium", q: "How many moles are in 2.20 g of carbon dioxide (CO₂)?", hint: "Calculate Mr of CO₂ first, then use n = m / M.", answer: 0.05, unit: "mol", tolerance: 0.003, steps: ["Mr of CO₂ = 12 + (2 x 16) = 44", "n = m / M = 2.20 / 44", "n = 0.0500 mol"] },
+      { difficulty: "medium", q: "Calculate the number of moles in 7.1 g of chlorine gas (Cl₂).", hint: "Mr of Cl₂ = 2 x Ar(Cl)", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Mr of Cl₂ = 2 x 35.5 = 71.0", "n = m / M = 7.1 / 71.0", "n = 0.100 mol"] },
+      { difficulty: "medium", q: "How many moles are in 9.8 g of sulfuric acid (H₂SO₄)?", hint: "Calculate Mr first", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Mr of H₂SO₄ = 2 + 32 + 64 = 98", "n = m / M = 9.8 / 98", "n = 0.100 mol"] },
+      { difficulty: "medium", q: "Calculate the number of moles in 17.0 g of ammonia (NH₃).", hint: "Calculate Mr of NH₃ first", answer: 1.0, unit: "mol", tolerance: 0.05, steps: ["Mr of NH₃ = 14 + (3 x 1) = 17", "n = m / M = 17.0 / 17", "n = 1.00 mol"] },
+      { difficulty: "medium", q: "How many moles are in 5.85 g of sodium chloride (NaCl)?", hint: "Calculate Mr of NaCl", answer: 0.1, unit: "mol", tolerance: 0.005, steps: ["Mr of NaCl = 23 + 35.5 = 58.5", "n = m / M = 5.85 / 58.5", "n = 0.100 mol"] },
+      { difficulty: "medium", q: "Calculate the mass of 0.30 mol of ethanol (C₂H₅OH).", hint: "Work out Mr of C₂H₅OH first, then m = n x M", answer: 13.8, unit: "g", tolerance: 0.2, steps: ["Mr of C₂H₅OH = (2 x 12) + (6 x 1) + 16 = 46", "m = n x M = 0.30 x 46", "m = 13.8 g"] },
+      { difficulty: "medium", q: "What mass of potassium permanganate (KMnO₄) contains 0.025 mol?", hint: "Calculate Mr of KMnO₄", answer: 3.95, unit: "g", tolerance: 0.05, steps: ["Mr of KMnO₄ = 39 + 55 + (4 x 16) = 158", "m = n x M = 0.025 x 158", "m = 3.95 g"] },
+      // Concentration calculations
+      { difficulty: "medium", q: "Calculate the concentration (mol dm⁻³) of a solution containing 0.050 mol of HCl in 250 cm³ of solution.", hint: "Convert cm³ to dm³ first, then c = n / V.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["V = 250 / 1000 = 0.250 dm³", "c = n / V = 0.050 / 0.250", "c = 0.200 mol dm⁻³"] },
+      { difficulty: "medium", q: "What is the concentration (mol dm⁻³) of a solution containing 0.10 mol of NaOH in 500 cm³?", hint: "c = n / V. Convert cm³ to dm³.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["V = 500 / 1000 = 0.500 dm³", "c = n / V = 0.10 / 0.500", "c = 0.200 mol dm⁻³"] },
+      { difficulty: "medium", q: "How many moles of solute are in 100 cm³ of 0.50 mol dm⁻³ HNO₃?", hint: "n = c x V. Convert cm³ to dm³.", answer: 0.05, unit: "mol", tolerance: 0.003, steps: ["V = 100 / 1000 = 0.100 dm³", "n = c x V = 0.50 x 0.100", "n = 0.0500 mol"] },
+      { difficulty: "medium", q: "Calculate the concentration (mol dm⁻³) of 4.0 g of NaOH dissolved in 500 cm³ of solution.", hint: "Find moles of NaOH first, then c = n / V.", answer: 0.2, unit: "mol dm⁻³", tolerance: 0.01, steps: ["Mr of NaOH = 23 + 16 + 1 = 40", "n = 4.0 / 40 = 0.10 mol", "V = 500 / 1000 = 0.500 dm³", "c = 0.10 / 0.500 = 0.200 mol dm⁻³"] },
+      { difficulty: "medium", q: "What mass of HCl is dissolved in 250 cm³ of 0.10 mol dm⁻³ solution?", hint: "Find moles first (n = cV), then m = nM.", answer: 0.913, unit: "g", tolerance: 0.02, steps: ["V = 250 / 1000 = 0.250 dm³", "n = c x V = 0.10 x 0.250 = 0.025 mol", "Mr of HCl = 1 + 35.5 = 36.5", "m = 0.025 x 36.5 = 0.913 g"] },
+      // Gas volume
+      { difficulty: "medium", q: "Calculate the volume (dm³) occupied by 0.40 mol of gas at RTP.", hint: "V = n x Vm (Vm = 24.0 dm³ mol⁻¹)", answer: 9.6, unit: "dm³", tolerance: 0.05, steps: ["V = n x Vm = 0.40 x 24.0", "V = 9.60 dm³"] },
+      { difficulty: "medium", q: "What volume (cm³) does 0.020 mol of CO₂ occupy at RTP?", hint: "V = n x Vm, then convert to cm³", answer: 480, unit: "cm³", tolerance: 5, steps: ["V = n x Vm = 0.020 x 24.0 = 0.480 dm³", "V = 0.480 x 1000 = 480 cm³"] },
+      { difficulty: "medium", q: "3.2 g of oxygen gas (O₂) is collected at RTP. Calculate the volume in dm³.", hint: "Find moles first (n = m/M), then V = n x Vm", answer: 2.4, unit: "dm³", tolerance: 0.05, steps: ["Mr of O₂ = 2 x 16 = 32", "n = m / M = 3.2 / 32 = 0.10 mol", "V = n x Vm = 0.10 x 24.0 = 2.40 dm³"] },
+      { difficulty: "medium", q: "480 cm³ of hydrogen gas (H₂) at RTP has what mass?", hint: "Convert to dm³, find moles, then m = nM", answer: 0.04, unit: "g", tolerance: 0.002, steps: ["V = 480 / 1000 = 0.480 dm³", "n = V / Vm = 0.480 / 24.0 = 0.0200 mol", "Mr of H₂ = 2 x 1 = 2", "m = n x M = 0.0200 x 2 = 0.0400 g"] },
+      // Concentration in g dm⁻³
+      { difficulty: "medium", q: "Convert 0.50 mol dm⁻³ NaCl solution to g dm⁻³.", hint: "g dm⁻³ = c x Mr", answer: 29.25, unit: "g dm⁻³", tolerance: 0.3, steps: ["Mr of NaCl = 23 + 35.5 = 58.5", "conc (g dm⁻³) = c x Mr = 0.50 x 58.5", "= 29.3 g dm⁻³"] },
+      { difficulty: "medium", q: "A solution has a concentration of 4.0 g dm⁻³ of NaOH. What is its concentration in mol dm⁻³?", hint: "mol dm⁻³ = (g dm⁻³) / Mr", answer: 0.1, unit: "mol dm⁻³", tolerance: 0.005, steps: ["Mr of NaOH = 23 + 16 + 1 = 40", "c = 4.0 / 40 = 0.10 mol dm⁻³"] },
+      { difficulty: "medium", q: "Calculate the number of moles in 24.5 g of potassium hydroxide (KOH).", hint: "Calculate Mr of KOH, then n = m / M", answer: 0.437, unit: "mol", tolerance: 0.005, steps: ["Mr of KOH = 39 + 16 + 1 = 56", "n = m / M = 24.5 / 56", "n = 0.438 mol"] },
+
+      // ═══ HARD ═══ (15 questions - ideal gas, multi-step, stoichiometry)
+      { difficulty: "hard", q: "Using PV = nRT, calculate the pressure (Pa) exerted by 0.10 mol of gas in a 2.0 dm³ container at 300 K.\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "Rearrange for P. Convert V to m³.", answer: 124710, unit: "Pa", tolerance: 500, steps: ["V = 2.0 dm³ = 0.0020 m³", "P = nRT / V = (0.10 x 8.314 x 300) / 0.0020", "P = 249.42 / 0.0020 = 124 710 Pa"] },
+      { difficulty: "hard", q: "Using PV = nRT, calculate the number of moles in a gas at 100 kPa, 500 cm³, and 298 K.\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "Convert P to Pa, V to m³. n = PV / RT", answer: 0.0202, unit: "mol", tolerance: 0.001, steps: ["P = 100 kPa = 100 000 Pa", "V = 500 cm³ = 0.000500 m³", "n = PV / RT = (100000 x 0.000500) / (8.314 x 298)", "n = 50.0 / 2477.6 = 0.0202 mol"] },
+      { difficulty: "hard", q: "What volume (m³) does 0.25 mol of gas occupy at 350 K and 150 kPa?\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "V = nRT / P. Convert P to Pa.", answer: 0.00485, unit: "m³", tolerance: 0.0001, steps: ["P = 150 kPa = 150 000 Pa", "V = nRT / P = (0.25 x 8.314 x 350) / 150000", "V = 727.5 / 150000 = 0.00485 m³"] },
+      { difficulty: "hard", q: "2.40 dm³ of chlorine gas (Cl₂) at RTP is dissolved in NaOH solution:\nCl₂ + 2NaOH -> NaCl + NaClO + H₂O\nCalculate the mass of NaOH that reacts.", hint: "Find mol Cl₂ from volume, use mole ratio 1:2, then m = nM", answer: 8.0, unit: "g", tolerance: 0.1, steps: ["n(Cl₂) = V / Vm = 2.40 / 24.0 = 0.100 mol", "n(NaOH) = 2 x 0.100 = 0.200 mol (1:2 ratio)", "Mr of NaOH = 40", "m = 0.200 x 40 = 8.00 g"] },
+      { difficulty: "hard", q: "25.0 cm³ of 0.200 mol dm⁻³ NaOH reacts with excess HCl. Calculate the mass of NaCl formed.\nNaOH + HCl -> NaCl + H₂O", hint: "Find moles of NaOH, 1:1 ratio gives moles NaCl, then m = nM", answer: 0.293, unit: "g", tolerance: 0.005, steps: ["n(NaOH) = c x V = 0.200 x 0.0250 = 0.00500 mol", "n(NaCl) = 0.00500 mol (1:1 ratio)", "Mr of NaCl = 23 + 35.5 = 58.5", "m = 0.00500 x 58.5 = 0.293 g"] },
+      { difficulty: "hard", q: "What volume of 0.100 mol dm⁻³ H₂SO₄ is needed to react with 20.0 cm³ of 0.250 mol dm⁻³ NaOH?\n2NaOH + H₂SO₄ -> Na₂SO₄ + 2H₂O", hint: "Find moles NaOH, use 2:1 ratio, then V = n / c", answer: 25.0, unit: "cm³", tolerance: 0.5, steps: ["n(NaOH) = 0.250 x 0.0200 = 0.00500 mol", "n(H₂SO₄) = 0.00500 / 2 = 0.00250 mol (2:1 ratio)", "V = n / c = 0.00250 / 0.100 = 0.0250 dm³", "V = 25.0 cm³"] },
+      { difficulty: "hard", q: "1.06 g of Na₂CO₃ is dissolved in 250 cm³ of solution. Calculate the concentration in mol dm⁻³.", hint: "Find Mr of Na₂CO₃, then n = m/M, then c = n/V", answer: 0.04, unit: "mol dm⁻³", tolerance: 0.002, steps: ["Mr of Na₂CO₃ = (2 x 23) + 12 + (3 x 16) = 106", "n = 1.06 / 106 = 0.0100 mol", "V = 250 / 1000 = 0.250 dm³", "c = 0.0100 / 0.250 = 0.0400 mol dm⁻³"] },
+      { difficulty: "hard", q: "A gas has a density of 1.78 g dm⁻³ at RTP. Calculate its molar mass.", hint: "At RTP, 1 mol of gas = 24.0 dm³. Mass of 24 dm³ = molar mass.", answer: 42.7, unit: "g mol⁻¹", tolerance: 0.5, steps: ["At RTP, 1 mol of gas occupies 24.0 dm³", "Mass of 24.0 dm³ = 1.78 x 24.0", "Mr = 42.7 g mol⁻¹"] },
+      { difficulty: "hard", q: "0.120 g of a gas occupies 48.0 cm³ at RTP. Calculate the molar mass of the gas.", hint: "Find moles from volume, then M = m / n", answer: 60, unit: "g mol⁻¹", tolerance: 1, steps: ["V = 48.0 / 1000 = 0.0480 dm³", "n = V / Vm = 0.0480 / 24.0 = 0.00200 mol", "Mr = m / n = 0.120 / 0.00200 = 60.0 g mol⁻¹"] },
+      { difficulty: "hard", q: "200 cm³ of 0.500 mol dm⁻³ CuSO₄ solution contains what mass of CuSO₄?", hint: "n = cV, then m = nM", answer: 15.97, unit: "g", tolerance: 0.2, steps: ["n = c x V = 0.500 x 0.200 = 0.100 mol", "Mr of CuSO₄ = 63.5 + 32 + (4 x 16) = 159.5 (accept 160)", "m = 0.100 x 159.5 = 16.0 g"] },
+      { difficulty: "hard", q: "What concentration of Na₂CO₃ solution (g dm⁻³) is equivalent to 0.100 mol dm⁻³?", hint: "g dm⁻³ = c (mol dm⁻³) x Mr", answer: 10.6, unit: "g dm⁻³", tolerance: 0.2, steps: ["Mr of Na₂CO₃ = (2 x 23) + 12 + (3 x 16) = 106", "g dm⁻³ = 0.100 x 106 = 10.6 g dm⁻³"] },
+      { difficulty: "hard", q: "At RTP, 1.20 dm³ of CO₂ is produced when CaCO₃ reacts with excess HCl.\nCaCO₃ + 2HCl -> CaCl₂ + H₂O + CO₂\nCalculate the mass of CaCO₃ that reacted.", hint: "Find mol CO₂ from volume, 1:1 ratio, then m = nM", answer: 5.0, unit: "g", tolerance: 0.1, steps: ["n(CO₂) = 1.20 / 24.0 = 0.0500 mol", "n(CaCO₃) = 0.0500 mol (1:1 ratio)", "Mr of CaCO₃ = 40 + 12 + 48 = 100", "m = 0.0500 x 100 = 5.00 g"] },
+      { difficulty: "hard", q: "Calculate the temperature (K) at which 0.050 mol of gas at 200 kPa occupies 800 cm³.\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "T = PV / nR. Convert P to Pa and V to m³.", answer: 385, unit: "K", tolerance: 5, steps: ["P = 200 000 Pa, V = 0.000800 m³", "T = PV / nR = (200000 x 0.000800) / (0.050 x 8.314)", "T = 160 / 0.4157 = 385 K"] },
+      { difficulty: "hard", q: "A student dilutes 25.0 cm³ of 2.00 mol dm⁻³ HCl to make 500 cm³ of solution. What is the new concentration?", hint: "c₁V₁ = c₂V₂", answer: 0.1, unit: "mol dm⁻³", tolerance: 0.005, steps: ["c₁V₁ = c₂V₂", "2.00 x 25.0 = c₂ x 500", "c₂ = 50.0 / 500 = 0.100 mol dm⁻³"] },
+      { difficulty: "hard", q: "How many molecules are in 0.25 mol of water?\nGive your answer in standard form as e.g. 1.51e23", hint: "Number = n x Nₐ (6.022 x 10²³)", answer: 1.506e23, unit: "", tolerance: 1e21, steps: ["N = n x Nₐ = 0.25 x 6.022 x 10²³", "N = 1.51 x 10²³ molecules"] },
+
+      // ═══ EXAM ═══ (10 questions - multi-step stoichiometry, limiting reagent)
+      { difficulty: "exam", q: "0.580 g of butane (C₄H₁₀) is burned completely:\nC₄H₁₀ + 13/2 O₂ -> 4CO₂ + 5H₂O\nCalculate the volume (dm³) of CO₂ produced at RTP.", hint: "Find moles of butane, use mole ratio, then V = n x Vm", answer: 0.960, unit: "dm³", tolerance: 0.01, steps: ["Mr of C₄H₁₀ = (4 x 12) + (10 x 1) = 58", "n(C₄H₁₀) = 0.580 / 58 = 0.0100 mol", "n(CO₂) = 4 x 0.0100 = 0.0400 mol", "V = 0.0400 x 24.0 = 0.960 dm³"] },
+      { difficulty: "exam", q: "200 cm³ of gas at 300 K and constant pressure is heated to 375 K. Calculate the new volume (cm³).\n(Charles's Law: V₁/T₁ = V₂/T₂)", hint: "V₂ = V₁ x T₂ / T₁", answer: 250, unit: "cm³", tolerance: 2, steps: ["V₂ = V₁ x T₂ / T₁", "V₂ = 200 x 375 / 300", "V₂ = 250 cm³"] },
+      { difficulty: "exam", q: "2.65 g of Na₂CO₃ reacts with excess HCl:\nNa₂CO₃ + 2HCl -> 2NaCl + H₂O + CO₂\nThe CO₂ is collected at 298 K and 101 kPa.\nUsing PV = nRT, calculate the volume of CO₂ in cm³.", hint: "Find mol Na₂CO₃, 1:1 ratio for CO₂, then V = nRT/P", answer: 612, unit: "cm³", tolerance: 10, steps: ["Mr of Na₂CO₃ = 46 + 12 + 48 = 106", "n(Na₂CO₃) = 2.65 / 106 = 0.0250 mol", "n(CO₂) = 0.0250 mol (1:1)", "V = nRT/P = (0.0250 x 8.314 x 298) / 101000", "V = 61.94 / 101000 = 0.000613 m³ = 613 cm³"] },
+      { difficulty: "exam", q: "50.0 cm³ of 0.200 mol dm⁻³ Na₂CO₃ is added to 50.0 cm³ of 0.300 mol dm⁻³ HCl.\nNa₂CO₃ + 2HCl -> 2NaCl + H₂O + CO₂\nWhich reagent is in excess and by how many moles?", hint: "Find moles of each. Na₂CO₃ needs 2x HCl. Compare.", answer: "Na2CO3", unit: "", tolerance: 0, isText: true, steps: ["n(Na₂CO₃) = 0.200 x 0.0500 = 0.0100 mol", "n(HCl) = 0.300 x 0.0500 = 0.0150 mol", "Na₂CO₃ needs 2 x 0.0100 = 0.0200 mol HCl", "Only 0.0150 mol HCl available - HCl is limiting", "Na₂CO₃ excess = 0.0100 - 0.0075 = 0.0025 mol", "Na₂CO₃ is in excess"] },
+      { difficulty: "exam", q: "A student makes a standard solution by dissolving 2.65 g of anhydrous Na₂CO₃ in a 250 cm³ volumetric flask.\nCalculate the concentration in mol dm⁻³.", hint: "Mr of Na₂CO₃ = 106. n = m/M, c = n/V", answer: 0.1, unit: "mol dm⁻³", tolerance: 0.005, steps: ["Mr of Na₂CO₃ = (2 x 23) + 12 + (3 x 16) = 106", "n = 2.65 / 106 = 0.0250 mol", "V = 250 / 1000 = 0.250 dm³", "c = 0.0250 / 0.250 = 0.100 mol dm⁻³"] },
+      { difficulty: "exam", q: "3.0 g of Mg reacts with 100 cm³ of 1.0 mol dm⁻³ HCl:\nMg + 2HCl -> MgCl₂ + H₂\nCalculate the maximum volume of H₂ (dm³) at RTP.", hint: "Find moles of both. Identify limiting reagent. Calculate H₂ volume.", answer: 1.2, unit: "dm³", tolerance: 0.05, steps: ["n(Mg) = 3.0 / 24.3 = 0.123 mol", "n(HCl) = 1.0 x 0.100 = 0.100 mol", "Mg needs 2 x 0.123 = 0.247 mol HCl - HCl is limiting", "n(H₂) = 0.100 / 2 = 0.0500 mol", "V = 0.0500 x 24.0 = 1.20 dm³"] },
+      { difficulty: "exam", q: "An unknown metal M reacts with HCl:\nM + 2HCl -> MCl₂ + H₂\n0.480 g of M produces 192 cm³ of H₂ at RTP.\nCalculate the Ar of M and identify it.", hint: "Find mol H₂, use 1:1 ratio for mol M, then Ar = m/n", answer: 60, unit: "g mol⁻¹", tolerance: 2, steps: ["V(H₂) = 192 / 1000 = 0.192 dm³", "n(H₂) = 0.192 / 24.0 = 0.00800 mol", "n(M) = 0.00800 mol (1:1 ratio)", "Ar = m / n = 0.480 / 0.00800 = 60.0", "This is cobalt (Co, Ar = 58.9) - accept 60"] },
+      { difficulty: "exam", q: "25.0 cm³ of 0.100 mol dm⁻³ NaOH neutralises 20.0 cm³ of sulfuric acid.\n2NaOH + H₂SO₄ -> Na₂SO₄ + 2H₂O\nCalculate the concentration of the sulfuric acid in g dm⁻³.", hint: "Find mol NaOH, use 2:1 ratio, find c of H₂SO₄, convert to g dm⁻³", answer: 6.13, unit: "g dm⁻³", tolerance: 0.1, steps: ["n(NaOH) = 0.100 x 0.0250 = 0.00250 mol", "n(H₂SO₄) = 0.00250 / 2 = 0.00125 mol", "c(H₂SO₄) = 0.00125 / 0.0200 = 0.0625 mol dm⁻³", "Mr of H₂SO₄ = 98", "g dm⁻³ = 0.0625 x 98 = 6.13 g dm⁻³"] },
+      { difficulty: "exam", q: "A 1.00 g sample of impure CaCO₃ reacts with excess HCl and produces 200 cm³ of CO₂ at RTP.\nCalculate the percentage purity of the CaCO₃.\nCaCO₃ + 2HCl -> CaCl₂ + H₂O + CO₂", hint: "Find mol CO₂, 1:1 ratio for CaCO₃, find mass of pure CaCO₃, then % purity", answer: 83.3, unit: "%", tolerance: 1, steps: ["n(CO₂) = 0.200 / 24.0 = 0.00833 mol", "n(CaCO₃) = 0.00833 mol (1:1)", "m(CaCO₃) = 0.00833 x 100 = 0.833 g", "% purity = (0.833 / 1.00) x 100 = 83.3%"] },
+      { difficulty: "exam", q: "A gas syringe contains 80.0 cm³ of gas at 20.0 C and 100 kPa. The gas is heated to 100.0 C at constant pressure.\nCalculate the new volume in cm³.\n(Combined gas law: use absolute temperature)", hint: "Convert to Kelvin (add 273). V₂ = V₁ x T₂ / T₁", answer: 102, unit: "cm³", tolerance: 1, steps: ["T₁ = 20.0 + 273 = 293 K", "T₂ = 100.0 + 273 = 373 K", "V₂ = V₁ x T₂ / T₁ = 80.0 x 373 / 293", "V₂ = 101.8 cm³ (accept 102)"] },
     ]
   },
   {
@@ -7007,8 +7067,24 @@ export default function App() {
           {calcTopic && calcDifficulty && (() => {
             const set = CALC_SETS.find(s => s.id === calcTopic);
             if (!set) return null;
-            const filteredQs = calcDifficulty === "all" ? set.questions : set.questions.filter(q => q.difficulty === calcDifficulty);
-            if (filteredQs.length === 0) return <div style={{ color: "#7a95b0", fontSize: "14px" }}>No questions at this difficulty yet.</div>;
+            const baseQs = calcDifficulty === "all" ? set.questions : set.questions.filter(q => q.difficulty === calcDifficulty);
+            if (baseQs.length === 0) return <div style={{ color: "#7a95b0", fontSize: "14px" }}>No questions at this difficulty yet.</div>;
+
+            // Spaced repetition: sort by performance (wrong answers first, unseen next, correct last)
+            const calcHistory = JSON.parse(localStorage.getItem("hsj-calc-sr") || "{}");
+            const topicHistory = calcHistory[calcTopic] || {};
+            const filteredQs = [...baseQs].sort((a, b) => {
+              const aKey = JSON.stringify(a.q).slice(0, 40);
+              const bKey = JSON.stringify(b.q).slice(0, 40);
+              const aH = topicHistory[aKey] || { correct: 0, wrong: 0, last: 0 };
+              const bH = topicHistory[bKey] || { correct: 0, wrong: 0, last: 0 };
+              // Priority: wrong > unseen > correct. Within same, oldest first.
+              const aScore = aH.wrong > 0 ? 0 : (aH.correct === 0 ? 1 : 2 + Math.min(aH.correct, 5));
+              const bScore = bH.wrong > 0 ? 0 : (bH.correct === 0 ? 1 : 2 + Math.min(bH.correct, 5));
+              if (aScore !== bScore) return aScore - bScore;
+              return (aH.last || 0) - (bH.last || 0);
+            });
+
             const q = filteredQs[calcIndex] || filteredQs[0];
             const currentIdx = Math.min(calcIndex, filteredQs.length - 1);
             const isLast = currentIdx === filteredQs.length - 1;
@@ -7026,6 +7102,16 @@ export default function App() {
                 track("attempt_question", { topic: calcTopic, difficulty: q.difficulty, correct, question_index: currentIdx });
                 logActivity("calc");
                 logScore("calc", calcTopic, correct ? 1 : 0, 1);
+                // Update spaced repetition data
+                try {
+                  const srData = JSON.parse(localStorage.getItem("hsj-calc-sr") || "{}");
+                  const topicSR = srData[calcTopic] || {};
+                  const qKey = JSON.stringify(q.q).slice(0, 40);
+                  const prev = topicSR[qKey] || { correct: 0, wrong: 0, last: 0 };
+                  topicSR[qKey] = { correct: correct ? prev.correct + 1 : Math.max(0, prev.correct - 1), wrong: correct ? Math.max(0, prev.wrong - 1) : prev.wrong + 1, last: Date.now() };
+                  srData[calcTopic] = topicSR;
+                  localStorage.setItem("hsj-calc-sr", JSON.stringify(srData));
+                } catch {}
               }
               setCalcChecked(true);
               setCalcShowSteps(true);
@@ -7051,6 +7137,11 @@ export default function App() {
                     <span style={{ fontSize: "11px", fontWeight: 700, color: diffColors[q.difficulty], textTransform: "uppercase", letterSpacing: "0.5px" }}>{diffLabels[q.difficulty]}</span>
                   </div>
                 )}
+                {/* Data sheet link */}
+                <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+                  <a href="https://filestore.aqa.org.uk/resources/chemistry/AQA-7405-PERIODIC-TABLE.PDF" target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", fontWeight: 600, color: "#29ABE2", textDecoration: "none", background: "#eaf6fd", padding: "4px 10px", borderRadius: "6px" }}>📊 Periodic Table (AQA)</a>
+                  <a href="https://www.ocr.org.uk/Images/Periodic_Table.pdf" target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", fontWeight: 600, color: "#7c3aed", textDecoration: "none", background: "#f3f0ff", padding: "4px 10px", borderRadius: "6px" }}>📊 Periodic Table (OCR)</a>
+                </div>
                 {/* Question card */}
                 <div style={{ background: "#ffffff", borderRadius: "14px", padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,0.07)", marginBottom: "12px", border: "1px solid #e8eef4" }}>
                   <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, fontWeight: 500, whiteSpace: "pre-line" }}>{q.q}</div>
