@@ -8,8 +8,8 @@
     "react-scripts": "5.0.1",
     "smiles-drawer": "^2.3.0",
     "firebase": "^11.7.1",
-    "stripe": "^17.5.0",
-    "firebase-admin": "^13.0.0"
+    "stripe": "^22.2.0",
+    "firebase-admin": "^13.10.0"
   },
   "scripts": {
     "start": "react-scripts start",
