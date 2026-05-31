@@ -4372,6 +4372,130 @@ export default function App() {
 
   const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin");
 
+  // --- Free tier: first item in each section is free ---
+  const FREE_FLASHCARD_SECTIONS = board === "ocr" ? ["ocr_mod2"] : ["physical_as"];
+  const FREE_CALC_IDS = ["calc_moles"];
+  const FREE_MECH_COUNT = 1; // first mechanism in each category
+
+  const LockedBadge = () => (
+    <div style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", borderRadius: "6px", padding: "3px 8px", display: "flex", alignItems: "center", gap: "4px", zIndex: 2 }}>
+      <span style={{ fontSize: "11px" }}>🔒</span>
+      <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>PRO</span>
+    </div>
+  );
+
+  const LockedOverlay = ({ style }) => (
+    <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.6)", backdropFilter: "blur(1px)", borderRadius: "inherit", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, ...style }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: "22px", marginBottom: "4px" }}>🔒</div>
+        <div style={{ fontSize: "11px", fontWeight: 700, color: "#1a2d45" }}>Unlock with access key</div>
+      </div>
+    </div>
+  );
+
+  // --- Stripe checkout ---
+  const [checkoutLoading, setCheckoutLoading] = useState(null); // "monthly" | "yearly" | null
+  const [showPricing, setShowPricing] = useState(false);
+
+  const handleCheckout = async (plan) => {
+    if (!authUser) return;
+    setCheckoutLoading(plan);
+    try {
+      const resp = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan, uid: authUser.uid, email: authUser.email }),
+      });
+      const data = await resp.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Could not start checkout");
+      }
+    } catch (err) {
+      alert("Network error - please try again");
+    }
+    setCheckoutLoading(null);
+  };
+
+  const handleManageSubscription = async () => {
+    if (!userProfile?.stripeCustomerId) return;
+    try {
+      const resp = await fetch("/api/customer-portal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customerId: userProfile.stripeCustomerId }),
+      });
+      const data = await resp.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      alert("Could not open subscription manager");
+    }
+  };
+
+  // Check for payment success/cancel URL params
+  const [paymentBanner, setPaymentBanner] = useState(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get("payment");
+    if (payment === "success") {
+      setPaymentBanner("success");
+      window.history.replaceState({}, "", window.location.pathname);
+      setTimeout(() => setPaymentBanner(null), 8000);
+    } else if (payment === "cancel") {
+      setPaymentBanner("cancel");
+      window.history.replaceState({}, "", window.location.pathname);
+      setTimeout(() => setPaymentBanner(null), 5000);
+    }
+  }, []);
+
+  const PricingCards = () => (
+    <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", marginTop: "16px" }}>
+      {/* Monthly */}
+      <div style={{ background: "#fff", border: "2px solid #e0e8f0", borderRadius: "16px", padding: "20px", width: "180px", textAlign: "center" }}>
+        <div style={{ fontSize: "12px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Monthly</div>
+        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£4.99</div>
+        <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per month</div>
+        <button onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}
+          style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: checkoutLoading ? "wait" : "pointer", fontFamily: "inherit", opacity: checkoutLoading === "yearly" ? 0.5 : 1 }}>
+          {checkoutLoading === "monthly" ? "Loading..." : "Subscribe"}
+        </button>
+        <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "8px" }}>Cancel anytime</div>
+      </div>
+      {/* Yearly */}
+      <div style={{ background: "#fff", border: "2px solid #29ABE2", borderRadius: "16px", padding: "20px", width: "180px", textAlign: "center", position: "relative" }}>
+        <div style={{ position: "absolute", top: "-10px", left: "50%", transform: "translateX(-50%)", background: "#29ABE2", color: "#fff", fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "6px", letterSpacing: "0.5px" }}>SAVE 27%</div>
+        <div style={{ fontSize: "12px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Yearly</div>
+        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£43.99</div>
+        <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per year (£3.67/mo)</div>
+        <button onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}
+          style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: checkoutLoading ? "wait" : "pointer", fontFamily: "inherit", opacity: checkoutLoading === "monthly" ? 0.5 : 1 }}>
+          {checkoutLoading === "yearly" ? "Loading..." : "Subscribe"}
+        </button>
+        <div style={{ fontSize: "11px", color: "#29ABE2", marginTop: "8px", fontWeight: 600 }}>Best value</div>
+      </div>
+    </div>
+  );
+
+  const UpgradeCard = ({ section }) => (
+    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
+      <div style={{ textAlign: "center", maxWidth: "420px" }}>
+        <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔒</div>
+        <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>{section} is locked</h3>
+        <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 8px" }}>
+          Upgrade to ChemMastery Pro to unlock all content.
+        </p>
+        <PricingCards />
+        <div style={{ marginTop: "20px", padding: "12px 16px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e0e8f0" }}>
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>HSJ Tuition student?</div>
+          <button onClick={() => setShowUserMenu(true)} style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>
+            Enter your free access key instead
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   const [screen, setScreen] = useState("board");
   const [board, setBoard] = useState(null);
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
@@ -4685,6 +4809,13 @@ export default function App() {
               <div style={{ fontSize: "11px", fontWeight: 600, color: hasFullAccess ? "#059669" : "#d97706", background: hasFullAccess ? "#ecfdf5" : "#fffbeb", borderRadius: "6px", padding: "4px 10px", display: "inline-block", marginBottom: "14px" }}>
                 {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "access_key" ? "Full Access (Key)" : userProfile?.role === "paid" ? "Full Access (Paid)" : "Free Plan"}
               </div>
+              {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
+                <button onClick={handleManageSubscription} style={{
+                  width: "100%", padding: "10px", borderRadius: "10px", border: "1.5px solid #e0e8f0",
+                  background: "#ffffff", color: "#4a6080", fontSize: "13px", fontWeight: 600,
+                  cursor: "pointer", fontFamily: "inherit", marginBottom: "8px"
+                }}>Manage Subscription</button>
+              )}
               {!hasFullAccess && (
                 <div style={{ marginBottom: "14px" }}>
                   <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Have an access key?</div>
@@ -4699,6 +4830,17 @@ export default function App() {
                     </button>
                   </div>
                   {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
+                  <div style={{ borderTop: "1px solid #e0e8f0", marginTop: "12px", paddingTop: "12px" }}>
+                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "8px" }}>Or upgrade to Pro</div>
+                    <div style={{ display: "flex", gap: "6px" }}>
+                      <button onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                        {checkoutLoading === "monthly" ? "..." : "£4.99/mo"}
+                      </button>
+                      <button onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                        {checkoutLoading === "yearly" ? "..." : "£43.99/yr"}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
               <button onClick={() => { logOut(); setShowUserMenu(false); }} style={{
@@ -5254,13 +5396,62 @@ export default function App() {
         <button onClick={() => { setScreen("dashboard"); track("view_dashboard", { board }); }} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
       </div>
 
+      {/* Payment success/cancel banner */}
+      {paymentBanner === "success" && (
+        <div style={{ margin: "12px 16px 0", padding: "14px 16px", background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "20px" }}>🎉</span>
+          <div>
+            <div style={{ fontSize: "14px", fontWeight: 700, color: "#059669" }}>Payment successful!</div>
+            <div style={{ fontSize: "12px", color: "#047857", marginTop: "2px" }}>Welcome to ChemMastery Pro - all content is now unlocked. It may take a moment to activate.</div>
+          </div>
+          <button onClick={() => setPaymentBanner(null)} style={{ background: "none", border: "none", color: "#059669", fontSize: "18px", cursor: "pointer", marginLeft: "auto" }}>x</button>
+        </div>
+      )}
+      {paymentBanner === "cancel" && (
+        <div style={{ margin: "12px 16px 0", padding: "14px 16px", background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "20px" }}>💡</span>
+          <div>
+            <div style={{ fontSize: "14px", fontWeight: 700, color: "#92400e" }}>Payment cancelled</div>
+            <div style={{ fontSize: "12px", color: "#a16207", marginTop: "2px" }}>No worries - you can upgrade anytime from the home screen.</div>
+          </div>
+          <button onClick={() => setPaymentBanner(null)} style={{ background: "none", border: "none", color: "#92400e", fontSize: "18px", cursor: "pointer", marginLeft: "auto" }}>x</button>
+        </div>
+      )}
+
       {/* HOME card grid */}
       {topicsTab === "home" && (
         <div style={{ flex: 1, overflowY: "auto", padding: "32px 24px 56px", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <p style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 6px", alignSelf: "flex-start" }}>ChemMastery</p>
-          <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", margin: "0 0 28px", letterSpacing: "-0.5px", alignSelf: "flex-start" }}>What would you like to practise?</h2>
+          <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", margin: "0 0 12px", letterSpacing: "-0.5px", alignSelf: "flex-start" }}>What would you like to practise?</h2>
+          {!hasFullAccess && (
+            <div style={{ alignSelf: "stretch", background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "1.5px solid #fbbf2440", borderRadius: "12px", padding: "14px 16px", marginBottom: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: showPricing ? "12px" : "0" }}>
+                <span style={{ fontSize: "18px" }}>🔑</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#92400e" }}>Free plan - limited content</div>
+                  <div style={{ fontSize: "11px", color: "#a16207", marginTop: "2px" }}>Upgrade to unlock all flashcards, calcs, synthesis and more</div>
+                </div>
+                <button onClick={() => setShowPricing(!showPricing)} style={{ background: "#29ABE2", border: "none", borderRadius: "8px", padding: "8px 14px", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                  {showPricing ? "Hide" : "Upgrade"}
+                </button>
+              </div>
+              {showPricing && (
+                <div>
+                  <PricingCards />
+                  <div style={{ textAlign: "center", marginTop: "12px" }}>
+                    <button onClick={() => setShowUserMenu(true)} style={{ background: "none", border: "none", color: "#92400e", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>
+                      Have an access key? Enter it here
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
-            {ACTIVITY_CARDS.map(card => (
+            {ACTIVITY_CARDS.map(card => {
+              const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
+              const partiallyLocked = !hasFullAccess && !fullyLocked;
+              return (
               <button key={card.id} onClick={() => { setTopicsTab(card.id); track("open_section", { section: card.id, board }); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
                 style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
@@ -5274,6 +5465,13 @@ export default function App() {
                   <div style={{ position: "absolute", top: "14px", left: "16px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "4px 10px" }}>
                     <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
                   </div>
+                  {/* Lock badge for free users */}
+                  {(fullyLocked || partiallyLocked) && (
+                    <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(0,0,0,0.5)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <span style={{ fontSize: "10px" }}>🔒</span>
+                      <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>{fullyLocked ? "PRO" : "PREVIEW"}</span>
+                    </div>
+                  )}
                   {/* Single bold title */}
                   <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "34px", color: "#ffffff", lineHeight: 1, letterSpacing: "-1px" }}>{card.label}</div>
                 </div>
@@ -5283,7 +5481,8 @@ export default function App() {
                   <div style={{ fontSize: "13px", color: "#7a95b0", lineHeight: 1.55 }}>{card.desc}</div>
                 </div>
               </button>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -5571,18 +5770,19 @@ export default function App() {
       {topicsTab === "flashcards" && !quizScreen && (
         <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
           {/* Random Quiz launch card */}
-          <button onClick={() => setQuizScreen("setup")} style={{
+          <button onClick={() => { if (hasFullAccess) setQuizScreen("setup"); }} style={{
             width: "100%", padding: "14px 16px", borderRadius: "16px", border: "none",
-            background: "linear-gradient(135deg,#29ABE2 0%,#0090cc 100%)", color: "#ffffff",
-            cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+            background: hasFullAccess ? "linear-gradient(135deg,#29ABE2 0%,#0090cc 100%)" : "linear-gradient(135deg,#94a3b8 0%,#64748b 100%)", color: "#ffffff",
+            cursor: hasFullAccess ? "pointer" : "default", textAlign: "left", fontFamily: "inherit",
             display: "flex", alignItems: "center", justifyContent: "space-between",
-            boxShadow: "0 4px 16px rgba(41,171,226,0.35)", marginBottom: "12px", marginTop: "4px",
+            boxShadow: hasFullAccess ? "0 4px 16px rgba(41,171,226,0.35)" : "none", marginBottom: "12px", marginTop: "4px",
+            position: "relative", overflow: "hidden",
           }}>
             <div>
-              <div style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.3px" }}>🎯 Random Quiz</div>
-              <div style={{ fontSize: "11px", opacity: 0.85, marginTop: "2px" }}>Spaced repetition · 25 cards · adapts to your gaps</div>
+              <div style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.3px" }}>{hasFullAccess ? "🎯" : "🔒"} Random Quiz</div>
+              <div style={{ fontSize: "11px", opacity: 0.85, marginTop: "2px" }}>{hasFullAccess ? "Spaced repetition · 25 cards · adapts to your gaps" : "Unlock with access key for full quiz access"}</div>
             </div>
-            <div style={{ fontSize: "20px", opacity: 0.8 }}>→</div>
+            <div style={{ fontSize: "20px", opacity: 0.8 }}>{hasFullAccess ? "→" : ""}</div>
           </button>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
             {CURRENT_SECTIONS.map(section => {
@@ -5590,15 +5790,17 @@ export default function App() {
               const totalCards = section.topics.reduce((sum, id) => sum + SETS[id].cards.length, 0);
               const totalKnown = section.topics.reduce((sum, id) => sum + (known[id] || new Set()).size, 0);
               const pct = totalCards > 0 ? Math.round((totalKnown / totalCards) * 100) : 0;
+              const sectionLocked = !hasFullAccess && !FREE_FLASHCARD_SECTIONS.includes(section.id);
               return (
-                <button key={section.id} onClick={() => setActiveSection(section.id)} style={{
+                <button key={section.id} onClick={() => { if (!sectionLocked) setActiveSection(section.id); }} style={{
                   padding: "16px 14px 14px", borderRadius: "16px",
                   background: fc.bg, border: `2px solid ${fc.border}40`,
-                  cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                  cursor: sectionLocked ? "default" : "pointer", textAlign: "left", fontFamily: "inherit",
                   position: "relative", overflow: "hidden", minHeight: "110px",
                   display: "flex", flexDirection: "column", justifyContent: "space-between",
                   boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
                 }}>
+                  {sectionLocked && <LockedOverlay />}
                   <div style={{ borderLeft: `4px solid ${fc.accent}`, paddingLeft: "10px" }}>
                     <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>{section.label}</div>
                     <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
@@ -5618,7 +5820,10 @@ export default function App() {
           </div>
         </div>
       )}
-      {topicsTab === "synth" && (() => {
+      {topicsTab === "synth" && !hasFullAccess && (
+        <UpgradeCard section="Synthesis" />
+      )}
+      {topicsTab === "synth" && hasFullAccess && (() => {
         const mechColors = {
           "Free Radical Substitution": { bg: "#fff7ed", text: "#c2410c", border: "#fed7aa" },
           "Electrophilic Addition": { bg: "#eff6ff", text: "#1d4ed8", border: "#bfdbfe" },
@@ -5803,7 +6008,10 @@ export default function App() {
           </div>
         );
       })()}
-      {topicsTab === "pathways" && (() => {
+      {topicsTab === "pathways" && !hasFullAccess && (
+        <UpgradeCard section="Pathways" />
+      )}
+      {topicsTab === "pathways" && hasFullAccess && (() => {
         const sNodes = synthTab === "ali" ? SYNTH_ALI_NODES : SYNTH_ARO_NODES;
         const sRxns  = synthTab === "ali" ? SYNTH_ALI_RXNS  : SYNTH_ARO_RXNS;
         const vbW = 660, vbH = synthTab === "ali" ? 870 : 720;
@@ -6136,14 +6344,16 @@ export default function App() {
               Read the question, think through your answer, then reveal the mark scheme. Tick each point you covered to track your score.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-              {categories.map(cat => {
+              {categories.map((cat, catIdx) => {
                 const qs = filteredQs.filter(q => q.category === cat);
                 const scores = qs.map(q => extScore[q.id]).filter(Boolean);
                 const totalMarks = qs.length * 6;
                 const earnedMarks = scores.reduce((a, b) => a + b, 0);
+                const extLocked = !hasFullAccess && catIdx > 0;
                 return (
-                  <button key={cat} onClick={() => { setExtCategory(cat); setExtQPicker(true); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); track("select_ext_category", { category: cat, board }); }}
-                    style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s" }}>
+                  <button key={cat} onClick={() => { if (!extLocked) { setExtCategory(cat); setExtQPicker(true); setExtIndex(0); setExtRevealed(false); setExtMarked(new Set()); setExtDraft(""); setExtAiResult(null); setExtAiLoading(false); setExtShowModel(false); setExtAiError(null); track("select_ext_category", { category: cat, board }); } }}
+                    style={{ background: "#fff", border: `2px solid ${purpleLight}`, borderRadius: "14px", padding: "14px 12px", textAlign: "left", cursor: extLocked ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.15s", position: "relative", overflow: "hidden" }}>
+                    {extLocked && <LockedOverlay />}
                     <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: purple, marginBottom: "8px" }} />
                     <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{cat}</div>
                     <div style={{ fontSize: "11px", color: purple, fontWeight: 600 }}>{qs.length} question{qs.length > 1 ? "s" : ""} · {qs[0]?.marks || 6} marks each</div>
@@ -6492,13 +6702,16 @@ export default function App() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                 {CALC_SETS.map(set => {
                   const score = calcScore[set.id] || { correct: 0, attempted: 0 };
+                  const calcLocked = !hasFullAccess && !FREE_CALC_IDS.includes(set.id);
                   return (
-                    <button key={set.id} onClick={() => { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); track("select_calc_topic", { topic: set.id, title: set.title }); }} style={{
+                    <button key={set.id} onClick={() => { if (!calcLocked) { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); track("select_calc_topic", { topic: set.id, title: set.title }); } }} style={{
                       background: "#ffffff", border: `2px solid ${set.color}30`,
                       borderRadius: "14px", padding: "14px 12px", textAlign: "left",
-                      cursor: "pointer", fontFamily: "inherit",
+                      cursor: calcLocked ? "default" : "pointer", fontFamily: "inherit",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                      position: "relative", overflow: "hidden",
                     }}>
+                      {calcLocked && <LockedOverlay />}
                       <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: set.color, marginBottom: "8px" }} />
                       <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{set.title}</div>
                       <div style={{ fontSize: "11px", color: set.color, fontWeight: 600 }}>{set.questions.length} questions</div>
@@ -6681,11 +6894,14 @@ export default function App() {
               <div key={cat} style={{ marginBottom:"22px" }}>
                 <div style={{ fontSize:"13px", fontWeight:800, color:"#0f1d35", textTransform:"uppercase", letterSpacing:"1.2px", marginBottom:"10px", borderBottom:"2px solid #e2e8f0", paddingBottom:"6px" }}>{cat}</div>
                 <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
-                  {list.map(m => (
-                    <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); track("view_mechanism", { mechanism: m.id, title: m.title }); }}
+                  {list.map((m, mIdx) => {
+                    const mechLocked = !hasFullAccess && mIdx >= FREE_MECH_COUNT;
+                    return (
+                    <button key={m.id} onClick={()=>{ if (!mechLocked) { setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); track("view_mechanism", { mechanism: m.id, title: m.title }); } }}
                       style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
-                        padding:"16px 18px", textAlign:"left", cursor:"pointer", fontFamily:"inherit",
-                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s" }}>
+                        padding:"16px 18px", textAlign:"left", cursor: mechLocked ? "default" : "pointer", fontFamily:"inherit",
+                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
+                      {mechLocked && <LockedOverlay />}
                       <div style={{ display:"flex", alignItems:"center", gap:"12px" }}>
                         <div style={{ width:"12px", height:"12px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
                         <div style={{ flex:1 }}>
@@ -6697,7 +6913,8 @@ export default function App() {
                         </div>
                       </div>
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
