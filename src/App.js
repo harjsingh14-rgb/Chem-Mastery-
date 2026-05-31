@@ -4372,11 +4372,6 @@ export default function App() {
 
   const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin");
 
-  // --- Free tier: first item in each section is free ---
-  const FREE_FLASHCARD_SECTIONS = board === "ocr" ? ["ocr_mod2"] : ["physical_as"];
-  const FREE_CALC_IDS = ["calc_moles"];
-  const FREE_MECH_COUNT = 1; // first mechanism in each category
-
   const LockedBadge = () => (
     <div style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", borderRadius: "6px", padding: "3px 8px", display: "flex", alignItems: "center", gap: "4px", zIndex: 2 }}>
       <span style={{ fontSize: "11px" }}>🔒</span>
@@ -4500,6 +4495,11 @@ export default function App() {
   const [board, setBoard] = useState(null);
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
   const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : TOPIC_ORDER;
+
+  // --- Free tier: first item in each section is free ---
+  const FREE_FLASHCARD_SECTIONS = board === "ocr" ? ["ocr_mod2"] : ["physical_as"];
+  const FREE_CALC_IDS = ["calc_moles"];
+  const FREE_MECH_COUNT = 1; // first mechanism in each category
   const [topic, setTopic] = useState(null);
   const [activeSection, setActiveSection] = useState(null);
   const [index, setIndex] = useState(0);
