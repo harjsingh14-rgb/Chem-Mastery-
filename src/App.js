@@ -1666,20 +1666,20 @@ const MOLECULE_SVG = {
   ]},
   // === AROMATIC MOLECULES ===
   benzene: { w:50, h:50, render: () => [benzeneRing(25,25,20,"bz")] },
-  methylbenzene: { w:70, h:55, render: () => [
-    benzeneRing(25,30,20,"bz"),
-    chemBond(25,10,25,0,1,"b0"),
-    chemAtom(25,-4,"CH₃","#1a2d45","a0")
+  methylbenzene: { w:70, h:60, render: () => [
+    benzeneRing(25,33,20,"bz"),
+    chemBond(25,13,25,4,1,"b0"),
+    chemAtom(25,-3,"CH₃","#1a2d45","a0")
   ]},
-  nitrobenzene: { w:65, h:65, render: () => [
+  nitrobenzene: { w:65, h:70, render: () => [
     benzeneRing(28,25,20,"bz"),
-    chemBond(28,45,28,55,1,"b0"),
-    chemAtom(28,62,"NO₂","#b45309","a0")
+    chemBond(28,45,28,54,1,"b0"),
+    chemAtom(28,65,"NO₂","#b45309","a0")
   ]},
-  aniline: { w:65, h:65, render: () => [
+  aniline: { w:65, h:70, render: () => [
     benzeneRing(28,25,20,"bz"),
-    chemBond(28,45,28,55,1,"b0"),
-    chemAtom(28,62,"NH₂","#2563eb","a0")
+    chemBond(28,45,28,54,1,"b0"),
+    chemAtom(28,65,"NH₂","#2563eb","a0")
   ]},
   acetophenone: { w:80, h:60, render: () => [
     benzeneRing(25,30,20,"bz"),
@@ -1688,14 +1688,14 @@ const MOLECULE_SVG = {
     chemAtom(40,-15,"O","#dc2626","a0"),
     chemAtom(55,5,"CH₃","#1a2d45","a1")
   ]},
-  ethylbenzene: { w:70, h:65, render: () => [
+  ethylbenzene: { w:70, h:70, render: () => [
     benzeneRing(28,25,20,"bz"),
-    chemBond(28,45,28,55,1,"b0"), chemBond(28,55,45,65,1,"b1")
+    chemBond(28,45,28,56,1,"b0"), chemBond(28,56,45,68,1,"b1")
   ]},
-  chloromethylbenzene: { w:80, h:70, render: () => [
+  chloromethylbenzene: { w:80, h:75, render: () => [
     benzeneRing(28,25,20,"bz"),
-    chemBond(28,45,28,58,1,"b0"),
-    chemAtom(42,64,"Cl","#16a34a","a0","start")
+    chemBond(28,45,28,55,1,"b0"),
+    chemAtom(42,66,"Cl","#16a34a","a0","start")
   ]},
   dinitrotoluene: { w:80, h:70, render: () => [
     benzeneRing(28,25,20,"bz"),
@@ -3193,25 +3193,25 @@ const OCR_TOPIC_ORDER = OCR_SECTIONS.flatMap(s => s.topics);
 
 // === ORGANIC SYNTHESIS MAP DATA ===
 const SYNTH_ALI_NODES = [
-  ["alkylAmm",    "Alkyl\nAmm. Salts",              95,  55, "#4f46e5", 78, 26],
-  ["quatAmm",     "Quat.\nAmm. Salts",             305,  55, "#6d28d9", 90, 26],
-  ["tertAmines",  "Tertiary\nAmines",              520,  55, "#7c3aed", 72, 26],
-  ["alkanes",     "Alkanes",                        70, 165, "#475569", 62, 20],
-  ["haloalkanes", "Haloalkanes",                   255, 165, "#c2410c", 82, 20],
-  ["primAmines",  "Primary\nAmines",               455, 165, "#be185d", 78, 26],
-  ["secAmines",   "Secondary\nAmines",             575, 230, "#9d174d", 66, 26],
-  ["alkenes",     "Alkenes",                       175, 310, "#15803d", 66, 20],
-  ["nitriles",    "Nitriles",                      510, 310, "#4338ca", 66, 20],
-  ["dihalides",   "Dihaloalkanes",                   70, 440, "#9a3412", 82, 20],
-  ["alcohols",    "Alcohols",                      370, 410, "#1d4ed8", 70, 20],
-  ["diols",       "Diols",                          70, 600, "#0369a1", 58, 20],
-  ["ketones",     "Ketones",                       225, 560, "#7e22ce", 66, 20],
-  ["aldehydes",   "Aldehydes",                     420, 560, "#a21caf", 70, 20],
-  ["esters",      "Esters",                        575, 510, "#0e7490", 62, 20],
-  ["carbAcids",   "Carboxylic\nAcids",             420, 690, "#b91c1c", 86, 26],
-  ["carboxylate", "Carboxylate\nSalts",            140, 790, "#be123c", 86, 26],
-  ["amides",      "Amides",                        370, 790, "#5b21b6", 66, 20],
-  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  560, 790, "#0369a1", 78, 30],
+  ["alkylAmm",    "Alkyl\nAmm. Salts",              95,  55, "#6366f1", 82, 28],
+  ["quatAmm",     "Quat.\nAmm. Salts",             305,  55, "#7c3aed", 94, 28],
+  ["tertAmines",  "Tertiary\nAmines",              520,  55, "#8b5cf6", 76, 28],
+  ["alkanes",     "Alkanes",                        70, 165, "#475569", 66, 22],
+  ["haloalkanes", "Haloalkanes",                   255, 165, "#c2410c", 86, 22],
+  ["primAmines",  "Primary\nAmines",               455, 165, "#db2777", 82, 28],
+  ["secAmines",   "Secondary\nAmines",             580, 230, "#be185d", 72, 28],
+  ["alkenes",     "Alkenes",                       175, 310, "#16a34a", 70, 22],
+  ["nitriles",    "Nitriles",                      510, 310, "#4f46e5", 70, 22],
+  ["dihalides",   "Dihaloalkanes",                   70, 440, "#c2410c", 86, 22],
+  ["alcohols",    "Alcohols",                      370, 410, "#2563eb", 74, 22],
+  ["diols",       "Diols",                          70, 600, "#0284c7", 62, 22],
+  ["ketones",     "Ketones",                       225, 560, "#7c3aed", 70, 22],
+  ["aldehydes",   "Aldehydes",                     420, 560, "#a855f7", 74, 22],
+  ["esters",      "Esters",                        575, 510, "#0891b2", 66, 22],
+  ["carbAcids",   "Carboxylic\nAcids",             420, 690, "#dc2626", 90, 28],
+  ["carboxylate", "Carboxylate\nSalts",            140, 790, "#e11d48", 90, 28],
+  ["amides",      "Amides",                        370, 790, "#7c3aed", 70, 22],
+  ["acylCl",      "Acyl Chlorides /\nAnhydrides",  560, 790, "#0284c7", 82, 32],
 ];
 const SYNTH_ALI_RXNS = [
   [1,  "alkanes",    "haloalkanes", 162, 148, "Alkanes",             "Haloalkanes",              "Halogen",                "UV light",               "Free radical",  "Substitution"],
@@ -3243,35 +3243,35 @@ const SYNTH_ALI_RXNS = [
   [27, "acylCl",    "amides",      468, 775, "Acyl Chlorides",      "Amides",                   "Amines",                 "Room temperature",        "Nucleophilic",  "Acylation"],
 ];
 const SYNTH_ARO_NODES = [
-  ["benzene",      "Benzene",                       320, 260, "#1d4ed8", 68, 20],
-  ["methylbenz",   "Methylbenzene\n(Toluene)",      175, 260, "#15803d", 90, 28],
-  ["acetophenone", "Acetophenone\n(COCH₃)",         500, 150, "#0e7490", 90, 28],
-  ["ethylbenzene", "Ethylbenzene",                  545, 260, "#0369a1", 80, 20],
-  ["chloromethyl", "Chloromethyl-\nbenzene",         70, 385, "#9a3412", 88, 28],
-  ["nitrobenzene", "Nitrobenzene",                  490, 385, "#b45309", 82, 20],
-  ["dinitrotol",   "Di-nitro-\ntoluene",             70, 510, "#92400e", 76, 28],
-  ["aniline",      "Aniline\n(Aminobenzene)",       445, 510, "#15803d", 96, 28],
-  ["diazonium",    "Benzenediazonium\nChloride",    330, 630, "#dc2626", 110, 28],
-  ["azoDye",       "Azo Dye",                       160, 630, "#9333ea", 68, 20],
+  ["benzene",      "Benzene",                       320, 260, "#2563eb", 72, 22],
+  ["methylbenz",   "Methylbenzene\n(Toluene)",      160, 260, "#16a34a", 94, 30],
+  ["acetophenone", "Acetophenone\n(COCH₃)",         520, 140, "#0891b2", 94, 30],
+  ["ethylbenzene", "Ethylbenzene",                  560, 260, "#0284c7", 84, 22],
+  ["chloromethyl", "Chloromethyl-\nbenzene",         80, 395, "#c2410c", 92, 30],
+  ["nitrobenzene", "Nitrobenzene",                  510, 395, "#ea580c", 86, 22],
+  ["dinitrotol",   "Di-nitro-\ntoluene",             80, 520, "#b45309", 80, 30],
+  ["aniline",      "Aniline\n(Aminobenzene)",       470, 520, "#16a34a", 100, 30],
+  ["diazonium",    "Benzenediazonium\nChloride",    350, 650, "#dc2626", 114, 30],
+  ["azoDye",       "Azo Dye",                       150, 650, "#7c3aed", 72, 22],
 ];
 const SYNTH_ARO_RXNS = [
-  [1, "benzene",     "acetophenone", 415, 198, "Benzene",                    "Acetophenone",
+  [1, "benzene",     "acetophenone", 425, 192, "Benzene",                    "Acetophenone",
       "Ethanoyl chloride + AlCl₃",  "Heat",              "Electrophilic", "Friedel-Crafts Acylation"],
-  [2, "benzene",     "ethylbenzene", 435, 256, "Benzene",                    "Ethylbenzene",
+  [2, "benzene",     "ethylbenzene", 445, 256, "Benzene",                    "Ethylbenzene",
       "Chloroethane + AlCl₃",       "Heat",              "Electrophilic", "Friedel-Crafts Alkylation"],
-  [3, "methylbenz",  "chloromethyl", 118, 322, "Methylbenzene",              "Chloromethylbenzene",
+  [3, "methylbenz",  "chloromethyl", 115, 328, "Methylbenzene",              "Chloromethylbenzene",
       "Chlorine",                    "UV light",          "Free radical",  "Substitution"],
-  [4, "benzene",     "methylbenz",   248, 256, "Benzene",                    "Methylbenzene",
+  [4, "benzene",     "methylbenz",   240, 256, "Benzene",                    "Methylbenzene",
       "Chloromethane + AlCl₃",      "Heat",              "Electrophilic", "Friedel-Crafts Alkylation"],
-  [5, "benzene",     "nitrobenzene", 410, 322, "Benzene",                    "Nitrobenzene",
+  [5, "benzene",     "nitrobenzene", 420, 328, "Benzene",                    "Nitrobenzene",
       "Conc. HNO₃ + H₂SO₄",        "25-60 degrees C",   "Electrophilic", "Nitration"],
-  [6, "methylbenz",  "dinitrotol",   118, 448, "Methylbenzene",              "Di-nitrotoluene",
+  [6, "methylbenz",  "dinitrotol",   115, 458, "Methylbenzene",              "Di-nitrotoluene",
       "Conc. HNO₃ + H₂SO₄",        "25-60 degrees C",   "Electrophilic", "Nitration"],
-  [7, "nitrobenzene","aniline",      470, 448, "Nitrobenzene",               "Aniline",
+  [7, "nitrobenzene","aniline",      492, 458, "Nitrobenzene",               "Aniline",
       "Sn + conc. HCl",             "Heat",              "--",             "Reduction"],
-  [8, "aniline",     "diazonium",    388, 572, "Aniline",                    "Benzenediazonium Chloride",
+  [8, "aniline",     "diazonium",    412, 588, "Aniline",                    "Benzenediazonium Chloride",
       "NaNO₂ / HCl",                "Below 10 degrees C","--",             "Diazotisation"],
-  [9, "diazonium",   "azoDye",       245, 630, "Benzenediazonium Chloride",  "Azo Dye",
+  [9, "diazonium",   "azoDye",       250, 650, "Benzenediazonium Chloride",  "Azo Dye",
       "Phenol",                      "Alkaline conditions","--",            "Azo Coupling"],
 ];
 
@@ -5520,7 +5520,7 @@ export default function App() {
       {topicsTab === "pathways" && (() => {
         const sNodes = synthTab === "ali" ? SYNTH_ALI_NODES : SYNTH_ARO_NODES;
         const sRxns  = synthTab === "ali" ? SYNTH_ALI_RXNS  : SYNTH_ARO_RXNS;
-        const vbW = 640, vbH = synthTab === "ali" ? 860 : 700;
+        const vbW = 660, vbH = synthTab === "ali" ? 870 : 720;
         const SW = 1.0; // full-size nodes for readability
         const nodeMap = Object.fromEntries(sNodes.map(n => [n[0], n]));
         const edgePt = (fcx, fcy, fhw, fhh, tcx, tcy) => {
@@ -5554,14 +5554,15 @@ export default function App() {
             <div style={{ display: "flex", alignItems: "center", borderBottom: "2px solid #e0e8f0", padding: "0 14px", background: "#fff", flexShrink: 0 }}>
               {[["ali","Aliphatic","27"],["aro","Aromatic","9"]].map(([id,lbl,cnt]) => (
                 <button key={id} onClick={() => { setSynthTab(id); setSelectedFrom(null); setSelectedRxn(null); }} style={{
-                  padding:"12px 16px", border:"none", background:"none", fontFamily:"inherit",
-                  fontSize:"14px", fontWeight:700, cursor:"pointer",
-                  color: synthTab===id ? "#059669" : "#7a95b0",
-                  borderBottom: synthTab===id ? "3px solid #059669" : "3px solid transparent",
-                  marginBottom:"-2px", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:"7px"
+                  padding:"12px 18px", border:"none", background:"none", fontFamily:"inherit",
+                  fontSize:"15px", fontWeight:800, cursor:"pointer",
+                  color: synthTab===id ? "#0f1d35" : "#7a95b0",
+                  borderBottom: synthTab===id ? "3px solid #29ABE2" : "3px solid transparent",
+                  marginBottom:"-2px", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:"8px",
+                  letterSpacing:"0.3px"
                 }}>
                   {lbl}
-                  <span style={{ fontSize:"11px", fontWeight:700, background:synthTab===id?"#dcfce7":"#f0f4f8", color:synthTab===id?"#059669":"#94a3b8", padding:"2px 8px", borderRadius:"12px" }}>{cnt}</span>
+                  <span style={{ fontSize:"11px", fontWeight:700, background:synthTab===id?"#e0f4fd":"#f0f4f8", color:synthTab===id?"#29ABE2":"#94a3b8", padding:"3px 10px", borderRadius:"12px" }}>{cnt}</span>
                 </button>
               ))}
               <div style={{ flex:1 }} />
@@ -5638,7 +5639,7 @@ export default function App() {
                         d={`M${x1},${y1} Q${cx1},${cy1} ${x2},${y2}`}
                         fill="none"
                         stroke={isOut ? "#059669" : isIn ? "#2563eb" : selId ? "#d0d8e0" : "#1a2d45"}
-                        strokeWidth={isOut||isIn ? 2.5 : selId ? 0.8 : 1.2}
+                        strokeWidth={isOut||isIn ? 2.5 : selId ? 0.8 : 1.5}
                         opacity={isDim ? 0.1 : 1}
                         markerEnd={isOut ? "url(#mo)" : isIn ? "url(#mi)" : "url(#mn)"}
                         strokeLinecap="round"
@@ -5650,7 +5651,7 @@ export default function App() {
                 {sNodes.map(([id, label, cx, cy, fill, hw, hh]) => {
                   const rw = hw*SW, rh = hh*SW;
                   const lines = label.split("\n");
-                  const lh = 12, th = lines.length * lh;
+                  const lh = 14, th = lines.length * lh;
                   const isSel = id === selId;
                   const isConn = connNodeIds && connNodeIds.has(id);
                   const isDim = connNodeIds && !connNodeIds.has(id);
@@ -5658,20 +5659,25 @@ export default function App() {
                     <g key={id} onClick={e => { e.stopPropagation(); setSelectedFrom(id === selId ? null : id); setSelectedRxn(null); }} style={{ cursor:"pointer" }}>
                       {/* Selection glow ring */}
                       {isSel && <rect x={cx-rw-6} y={cy-rh-6} width={(rw+6)*2} height={(rh+6)*2} rx={14} fill="rgba(5,150,105,0.12)" stroke="#059669" strokeWidth={2.5} filter="url(#glowGreen)" />}
-                      {/* Node body with shadow */}
+                      {/* Node body - pastel fill with coloured border */}
                       <rect x={cx-rw} y={cy-rh} width={rw*2} height={rh*2}
-                        rx={10} fill={fill} opacity={isDim ? 0.15 : 1}
-                        stroke={isSel ? "#fff" : isConn ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)"}
-                        strokeWidth={isSel ? 2 : 1}
+                        rx={12} fill={isDim ? "#f0f4f8" : "#fff"} opacity={isDim ? 0.4 : 1}
+                        stroke={isSel ? "#059669" : fill}
+                        strokeWidth={isSel ? 2.5 : 2}
                         filter={isDim ? "none" : "url(#nodeShadow)"}
                       />
-                      {/* Subtle inner highlight */}
-                      {!isDim && <rect x={cx-rw+1} y={cy-rh+1} width={rw*2-2} height={rh-1} rx={9} fill="rgba(255,255,255,0.15)" style={{ pointerEvents:"none" }} />}
+                      {/* Pastel colour wash */}
+                      {!isDim && <rect x={cx-rw} y={cy-rh} width={rw*2} height={rh*2}
+                        rx={12} fill={fill} fillOpacity={0.12}
+                        style={{ pointerEvents:"none" }} />}
+                      {/* Left accent bar */}
+                      {!isDim && <rect x={cx-rw} y={cy-rh+4} width={3.5} height={rh*2-8}
+                        rx={2} fill={fill} style={{ pointerEvents:"none" }} />}
                       {lines.map((ln,li) => (
                         <text key={li} x={cx} y={cy - th/2 + li*lh + lh*0.85}
-                          textAnchor="middle" fontSize="10.5" fontWeight="700"
-                          fill={isDim ? "rgba(255,255,255,0.2)" : "#fff"}
-                          style={{ userSelect:"none", pointerEvents:"none", textShadow: isDim ? "none" : "0 1px 2px rgba(0,0,0,0.3)" }}>{ln}</text>
+                          textAnchor="middle" fontSize="12.5" fontWeight="800"
+                          fill={isDim ? "#c0cdd8" : fill}
+                          style={{ userSelect:"none", pointerEvents:"none" }}>{ln}</text>
                       ))}
                     </g>
                   );
@@ -5684,18 +5690,18 @@ export default function App() {
                   const isIn  = selId && toId === selId;
                   const isDim = connRxnIds && !connRxnIds.has(n);
                   const badgeColor = isAct ? "#1a2d45" : isOut ? "#059669" : isIn ? "#2563eb" : "#fff";
-                  const textColor = isAct || isOut || isIn ? "#fff" : isDim ? "#bbb" : "#475569";
+                  const textColor = isAct || isOut || isIn ? "#fff" : isDim ? "#bbb" : "#1a2d45";
                   return (
                     <g key={"b"+n} onClick={e => { e.stopPropagation(); setSelectedRxn(isAct ? null : n); }} style={{ cursor:"pointer" }}>
-                      <circle cx={bx} cy={by} r={13} fill="transparent" />
-                      <circle cx={bx} cy={by} r={9.5}
+                      <circle cx={bx} cy={by} r={16} fill="transparent" />
+                      <circle cx={bx} cy={by} r={12}
                         fill={badgeColor}
                         stroke={isDim ? "#dde3ea" : isOut ? "#059669" : isIn ? "#2563eb" : "#1a2d45"}
-                        strokeWidth={1.5} opacity={isDim ? 0.2 : 1}
+                        strokeWidth={1.8} opacity={isDim ? 0.2 : 1}
                         filter={isAct || isOut || isIn ? "url(#nodeShadow)" : "none"}
                       />
                       <text x={bx} y={by+0.5} textAnchor="middle" dominantBaseline="middle"
-                        fontSize="8.5" fontWeight="800"
+                        fontSize="10" fontWeight="800"
                         fill={textColor}
                         opacity={isDim ? 0.2 : 1}
                         style={{ userSelect:"none", pointerEvents:"none" }}>{n}</text>
