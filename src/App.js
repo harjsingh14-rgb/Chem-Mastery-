@@ -3300,8 +3300,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 110,118 C 165,72 225,72 268,120", label:"O lone pair attacks δ+C, forming new O-C bond", type:"full" },
-      a2: { d:"M 310,130 C 330,105 350,105 364,128", label:"C-Br bond breaks heterolytically, Br leaves as Br⁻", type:"full" },
+      a1: { d:"M 116,140 C 160,86 220,86 268,120", label:"O⁻ lone pair → C (new bond forms)", type:"full" },
+      a2: { d:"M 310,132 C 322,112 334,112 344,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -3324,9 +3324,9 @@ const MECHS = [
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 240,115 C 275,78 330,76 370,118", label:"π bond electrons attack δ+Br", type:"full" },
-      a2: { d:"M 400,120 C 425,88 448,88 460,118", label:"Br-Br bond breaks, forming Br⁻", type:"full" },
-      a3: { d:"M 462,118 C 430,80 330,76 270,122", label:"Br⁻ lone pair attacks C⁺", type:"full" },
+      a1: { d:"M 230,115 C 265,80 320,78 350,118", label:"π electrons → δ+Br (new C-Br bond)", type:"full" },
+      a2: { d:"M 380,120 C 400,92 420,92 432,118", label:"Br-Br breaks → Br⁻ forms", type:"full" },
+      a3: { d:"M 426,118 C 390,76 310,74 250,118", label:"Br⁻ attacks C⁺ (anti addition)", type:"full" },
     },
   },
   {
@@ -3349,9 +3349,9 @@ const MECHS = [
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 224,115 C 255,78 320,76 365,118", label:"π electrons attack Hδ+", type:"full" },
-      a2: { d:"M 390,118 C 410,88 436,88 450,118", label:"H-Br bond breaks, Br⁻ forms", type:"full" },
-      a3: { d:"M 458,118 C 420,80 300,74 178,122", label:"Br⁻ attacks secondary C⁺", type:"full" },
+      a1: { d:"M 224,115 C 255,78 320,76 365,118", label:"π electrons → Hδ+ (new C-H bond)", type:"full" },
+      a2: { d:"M 390,118 C 410,88 436,88 450,118", label:"H-Br breaks → Br⁻ forms", type:"full" },
+      a3: { d:"M 458,118 C 420,80 300,74 178,122", label:"Br⁻ → secondary C⁺ (Markovnikov)", type:"full" },
     },
   },
   {
@@ -3377,9 +3377,9 @@ const MECHS = [
         arrows: ["a3"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 60,140 C 130,80 240,80 318,120", label:"CN⁻ lone pair attacks δ+C, forming C-CN bond", type:"full" },
-      a2: { d:"M 348,128 C 362,100 385,90 394,100", label:"C=O π bond electrons shift to O, forming O⁻", type:"full" },
-      a3: { d:"M 428,118 C 380,70 280,60 170,76", label:"H from HCN protonates O⁻, forming -OH", type:"full" },
+      a1: { d:"M 60,140 C 130,80 240,80 318,120", label:"CN⁻ lone pair → δ+C (new C-CN bond)", type:"full" },
+      a2: { d:"M 348,128 C 362,100 385,90 394,100", label:"C=O π breaks → O⁻ forms", type:"full" },
+      a3: { d:"M 428,118 C 380,70 280,60 170,76", label:"H from HCN → O⁻ (forms -OH)", type:"full" },
     },
   },
   {
@@ -3405,10 +3405,10 @@ const MECHS = [
         arrows: [], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 98,126 C 155,78 240,78 283,120", label:"N lone pair attacks acyl C, forming N-C bond", type:"full" },
-      a2: { d:"M 316,126 C 330,96 350,88 362,98", label:"C=O π bond electrons shift to O, forming O⁻", type:"full" },
-      a3: { d:"M 270,90 C 245,64 210,76 198,120", label:"O⁻ lone pair reforms C=O bond", type:"full" },
-      a4: { d:"M 204,150 C 225,168 248,178 256,178", label:"C-Cl bond breaks, Cl⁻ expelled", type:"full" },
+      a1: { d:"M 98,126 C 155,78 240,78 283,120", label:"N lone pair → acyl C (new N-C bond)", type:"full" },
+      a2: { d:"M 316,126 C 330,96 350,88 362,98", label:"C=O π breaks → O⁻ forms", type:"full" },
+      a3: { d:"M 270,90 C 245,64 210,76 198,120", label:"O⁻ reforms C=O bond", type:"full" },
+      a4: { d:"M 204,150 C 225,168 248,178 256,178", label:"C-Cl breaks → Cl⁻ expelled", type:"full" },
     },
   },
   {
@@ -3431,10 +3431,10 @@ const MECHS = [
         arrows: ["a4"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 460,176 C 472,156 472,146 462,136", label:"Cl lone pair donates to Al (Lewis acid)", type:"full" },
-      a2: { d:"M 424,132 C 404,110 384,108 370,120", label:"C-Cl bond breaks, acylium ion CH₃CO⁺ forms", type:"full" },
-      a3: { d:"M 248,118 C 290,72 360,68 382,96", label:"π electrons attack acylium C⁺", type:"full" },
-      a4: { d:"M 262,130 C 252,160 268,180 288,186", label:"C-H bond breaks, H⁺ expelled, aromaticity restored", type:"full" },
+      a1: { d:"M 460,176 C 472,156 472,146 462,136", label:"Cl lone pair → Al (coordinate bond)", type:"full" },
+      a2: { d:"M 424,132 C 404,110 384,108 370,120", label:"C-Cl breaks → acylium CH₃CO⁺ forms", type:"full" },
+      a3: { d:"M 248,118 C 290,72 360,68 382,96", label:"π electrons → acylium C⁺ (new C-C bond)", type:"full" },
+      a4: { d:"M 262,130 C 252,160 268,180 288,186", label:"C-H breaks → H⁺ lost, aromaticity restored", type:"full" },
     },
   },
   {
@@ -3457,8 +3457,8 @@ const MECHS = [
         arrows: ["a2"], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 250,118 C 290,72 360,68 400,118", label:"π electrons attack NO₂⁺", type:"full" },
-      a2: { d:"M 262,130 C 252,162 268,184 290,190", label:"C-H bond breaks, H⁺ expelled, aromaticity restored", type:"full" },
+      a1: { d:"M 250,118 C 290,72 360,68 400,118", label:"π electrons → NO₂⁺ (new C-N bond)", type:"full" },
+      a2: { d:"M 262,130 C 252,162 268,184 290,190", label:"C-H breaks → H⁺ lost, aromaticity restored", type:"full" },
     },
   },
   {
@@ -3478,9 +3478,9 @@ const MECHS = [
         arrows: ["a1","a2","a3"] },
     ],
     arrowPaths: {
-      a1: { d:"M 72,118 C 110,78 160,76 196,108", label:"OH⁻ abstracts the β-hydrogen", type:"full" },
-      a2: { d:"M 218,128 C 240,102 278,102 302,128", label:"C-H electrons form the new C=C π bond", type:"full" },
-      a3: { d:"M 326,128 C 348,104 370,104 385,128", label:"C-Br bond breaks, Br⁻ leaves", type:"full" },
+      a1: { d:"M 72,118 C 110,78 160,76 196,108", label:"OH⁻ base abstracts β-H", type:"full" },
+      a2: { d:"M 218,128 C 240,102 278,102 302,128", label:"C-H electrons → new C=C π bond", type:"full" },
+      a3: { d:"M 326,128 C 348,104 370,104 385,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -3506,12 +3506,12 @@ const MECHS = [
         arrows: [], past: [] },
     ],
     arrowPaths: {
-      a1: { d:"M 284,120 C 254,86 218,84 196,108", label:"one electron moves to left Cl", type:"fish" },
-      a2: { d:"M 298,120 C 330,86 370,84 404,108", label:"one electron moves to right Cl", type:"fish" },
-      a3: { d:"M 252,120 C 270,88 288,86 282,112", label:"one electron from C-H pairs with Cl radical", type:"fish" },
-      a4: { d:"M 298,128 C 282,152 262,154 246,140", label:"remaining electron stays on C, forming methyl radical", type:"fish" },
-      a5: { d:"M 270,120 C 296,88 312,86 302,112", label:"one electron from Cl-Cl pairs with methyl radical", type:"fish" },
-      a6: { d:"M 346,120 C 374,88 402,88 418,112", label:"other electron goes to new Cl radical", type:"fish" },
+      a1: { d:"M 284,120 C 254,86 218,84 196,108", label:"1e⁻ → left Cl (homolytic fission)", type:"fish" },
+      a2: { d:"M 298,120 C 330,86 370,84 404,108", label:"1e⁻ → right Cl (forms Cl radical)", type:"fish" },
+      a3: { d:"M 252,120 C 270,88 288,86 282,112", label:"1e⁻ from C-H → Cl radical (forms HCl)", type:"fish" },
+      a4: { d:"M 298,128 C 282,152 262,154 246,140", label:"1e⁻ stays on C (forms CH₃ radical)", type:"fish" },
+      a5: { d:"M 270,120 C 296,88 312,86 302,112", label:"1e⁻ from Cl-Cl → CH₃ radical (forms CH₃Cl)", type:"fish" },
+      a6: { d:"M 346,120 C 374,88 402,88 418,112", label:"1e⁻ → new Cl radical (chain continues)", type:"fish" },
     },
   },
 ];
@@ -3659,9 +3659,9 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={282} y={140} el="H" size={16} color="#64748b"/>
           <text x={205} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>methanol</text>
           {/* Br⁻ */}
-          <A x={470} y={140} el="Br" size={20}/>
-          <Charge x={494} y={124} val="-" color="#9a3412"/>
-          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>bromide ion</text>
+          <A x={470} y={140} el="Br" size={20} color="#c2410c"/>
+          <Charge x={494} y={124} val="-" color="#c2410c"/>
+          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#c2410c",fontWeight:700}}>bromide ion</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3681,13 +3681,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={290} y={106} el="H" size={16} color="#64748b"/><Bond x1={290} y1={132} x2={290} y2={114}/>
         <A x={262} y={166} el="H" size={16} color="#64748b"/><Bond x1={283} y1={148} x2={268} y2={162}/>
         <A x={318} y={166} el="H" size={16} color="#64748b"/><Bond x1={297} y1={148} x2={312} y2={162}/>
-        <Bond x1={306} y1={140} x2={358} y2={140}/>
-        <A x={374} y={140} el="Br" size={18}/>
-        <Delta x={390} y={118} sign="-"/>
+        <Bond x1={306} y1={140} x2={336} y2={140}/>
+        <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
+        <Delta x={366} y={118} sign="-"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
         <text x={290} y={210} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-        <text x={374} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+        <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -3701,22 +3701,22 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
       // Step 2: carbocation intermediate with Br⁻ approaching
       return (
         <MechSVGBase animKey={animKey}>
-          <A x={110} y={140} el="H" size={16} color="#64748b"/><Bond x1={121} y1={133} x2={135} y2={118}/>
-          <A x={110} y={170} el="H" size={16} color="#64748b"/><Bond x1={121} y1={167} x2={135} y2={152}/>
-          <A x={145} y={140} el="C" size={18}/>
-          <Bond x1={155} y1={130} x2={172} y2={112}/>
-          <A x={180} y={104} el="Br" size={17}/>
-          <Bond x1={160} y1={140} x2={240} y2={140}/>
-          <A x={255} y={140} el="C" size={18}/>
-          <Charge x={276} y={122} val="+" color="#b91c1c"/>
-          <A x={255} y={106} el="H" size={16} color="#64748b"/><Bond x1={255} y1={132} x2={255} y2={114}/>
-          <A x={255} y={174} el="H" size={16} color="#64748b"/><Bond x1={255} y1={148} x2={255} y2={166}/>
+          <A x={90} y={108} el="H" size={16} color="#64748b"/><Bond x1={110} y1={126} x2={100} y2={114}/>
+          <A x={90} y={176} el="H" size={16} color="#64748b"/><Bond x1={110} y1={155} x2={100} y2={168}/>
+          <A x={125} y={140} el="C" size={18}/>
+          <Bond x1={137} y1={128} x2={158} y2={108}/>
+          <A x={168} y={100} el="Br" size={17} color="#c2410c"/>
+          <Bond x1={142} y1={140} x2={218} y2={140}/>
+          <A x={235} y={140} el="C" size={18}/>
+          <Charge x={250} y={122} val="+" color="#b91c1c"/>
+          <A x={235} y={100} el="H" size={16} color="#64748b"/><Bond x1={235} y1={130} x2={235} y2={108}/>
+          <A x={235} y={182} el="H" size={16} color="#64748b"/><Bond x1={235} y1={152} x2={235} y2={174}/>
           {/* Br⁻ approaching */}
-          <A x={475} y={140} el="Br" size={20}/>
-          <Charge x={500} y={124} val="-" color="#9a3412"/>
-          <LP x={475} y={140} angle={180} color="#9a3412"/>
-          <Bond x1={280} y1={140} x2={448} y2={140} dash color="#94a3b8" width={1.5}/>
-          <text x={200} y={220} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>carbocation intermediate</text>
+          <A x={440} y={140} el="Br" size={20} color="#c2410c"/>
+          <Charge x={466} y={124} val="-" color="#c2410c"/>
+          <LP x={440} y={140} angle={180} color="#c2410c"/>
+          <Bond x1={258} y1={140} x2={412} y2={140} dash color="#94a3b8" width={1.5}/>
+          <text x={180} y={224} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>carbocation intermediate</text>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -3725,20 +3725,20 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         {/* Ethene H₂C=CH₂ */}
-        <A x={140} y={108} el="H" size={16} color="#64748b"/><Bond x1={158} y1={120} x2={148} y2={112}/>
-        <A x={140} y={168} el="H" size={16} color="#64748b"/><Bond x1={158} y1={155} x2={148} y2={163}/>
-        <A x={170} y={140} el="C" size={18}/>
-        <Bond x1={186} y1={140} x2={260} y2={140} dbl/>
-        <A x={275} y={140} el="C" size={18}/>
-        <A x={304} y={108} el="H" size={16} color="#64748b"/><Bond x1={282} y1={126} x2={296} y2={114}/>
-        <A x={304} y={168} el="H" size={16} color="#64748b"/><Bond x1={282} y1={153} x2={296} y2={163}/>
-        <text x={222} y={80} textAnchor="middle" style={{fontSize:"13px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>electron-rich π bond</text>
+        <A x={155} y={108} el="H" size={16} color="#64748b"/><Bond x1={170} y1={120} x2={162} y2={112}/>
+        <A x={155} y={168} el="H" size={16} color="#64748b"/><Bond x1={170} y1={155} x2={162} y2={163}/>
+        <A x={185} y={140} el="C" size={18}/>
+        <Bond x1={200} y1={140} x2={240} y2={140} dbl/>
+        <A x={255} y={140} el="C" size={18}/>
+        <A x={284} y={108} el="H" size={16} color="#64748b"/><Bond x1={262} y1={126} x2={276} y2={114}/>
+        <A x={284} y={168} el="H" size={16} color="#64748b"/><Bond x1={262} y1={153} x2={276} y2={163}/>
+        <text x={220} y={84} textAnchor="middle" style={{fontSize:"12px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>π bond</text>
         {/* Br₂ */}
-        <A x={390} y={140} el="Br" size={18}/>
-        <Delta x={378} y={118} sign="+"/>
-        <Bond x1={408} y1={140} x2={455} y2={140}/>
-        <A x={470} y={140} el="Br" size={18}/>
-        <Delta x={488} y={118} sign="-"/>
+        <A x={370} y={140} el="Br" size={18} color="#c2410c"/>
+        <Delta x={358} y={118} sign="+"/>
+        <Bond x1={388} y1={140} x2={425} y2={140}/>
+        <A x={440} y={140} el="Br" size={18} color="#c2410c"/>
+        <Delta x={458} y={118} sign="-"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -3760,9 +3760,9 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={250} y={140} el="CH₃" size={16}/>
           <text x={160} y={200} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>secondary carbocation (more stable)</text>
           {/* Br⁻ approaching */}
-          <A x={470} y={140} el="Br" size={20}/>
-          <Charge x={496} y={124} val="-" color="#9a3412"/>
-          <LP x={470} y={140} angle={180} color="#9a3412"/>
+          <A x={470} y={140} el="Br" size={20} color="#c2410c"/>
+          <Charge x={496} y={124} val="-" color="#c2410c"/>
+          <LP x={470} y={140} angle={180} color="#c2410c"/>
           <Bond x1={276} y1={140} x2={442} y2={140} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
@@ -3785,7 +3785,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={380} y={140} el="H" size={18} color="#64748b"/>
         <Delta x={370} y={118} sign="+"/>
         <Bond x1={394} y1={140} x2={438} y2={140}/>
-        <A x={456} y={140} el="Br" size={18}/>
+        <A x={456} y={140} el="Br" size={18} color="#c2410c"/>
         <Delta x={474} y={118} sign="-"/>
         {renderArrows()}
       </MechSVGBase>
@@ -4069,7 +4069,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* C-Br bond */}
         <Bond x1={326} y1={140} x2={378} y2={140}/>
-        <A x={395} y={140} el="Br" size={18}/>
+        <A x={395} y={140} el="Br" size={18} color="#c2410c"/>
 
         {renderArrows()}
       </MechSVGBase>
@@ -6515,9 +6515,10 @@ export default function App() {
 
               {/* Latest arrow label */}
               {latestArrowLabel && (
-                <div style={{ margin:"10px 16px 0", display:"flex", alignItems:"center", gap:"10px" }}>
-                  <div style={{ width:"28px", height:"2.5px", background:"#29ABE2", borderRadius:"1px", flexShrink:0 }}/>
-                  <span style={{ fontSize:"14px", color:"#1a2d45", fontWeight:600, lineHeight:1.4 }}>{latestArrowLabel}</span>
+                <div style={{ margin:"10px 16px 0", display:"flex", alignItems:"center", gap:"8px",
+                  background:"#29ABE212", padding:"8px 14px", borderRadius:"10px", border:"1px solid #29ABE230" }}>
+                  <span style={{ color:"#29ABE2", fontSize:"16px", fontWeight:700 }}>&#8635;</span>
+                  <span style={{ fontSize:"13px", color:"#1a2d45", fontWeight:600, lineHeight:1.3 }}>{latestArrowLabel}</span>
                 </div>
               )}
 
@@ -6526,7 +6527,7 @@ export default function App() {
                 border:"1.5px solid #e2e8f0", borderRadius:"14px" }}>
                 <div style={{ fontSize:"12px", fontWeight:700, color:"#29ABE2", textTransform:"uppercase",
                   letterSpacing:"0.8px", marginBottom:"8px" }}>
-                  {mechArrowIdx === 0 ? "Overview" : "Why this arrow?"}
+                  {mechArrowIdx === 0 ? "Overview" : "What happens here"}
                 </div>
                 <p style={{ margin:0, fontSize:"14.5px", lineHeight:1.75, color:"#1a2d45" }}>
                   {currentStepData.explanation}
