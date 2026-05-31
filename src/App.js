@@ -1859,8 +1859,15 @@ const CALC_SETS = [
       { difficulty: "hard", q: "Using PV = nRT, calculate the number of moles in a gas at 100 kPa, 500 cm³, and 298 K.\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "Convert P to Pa, V to m³. n = PV / RT", answer: 0.0202, unit: "mol", tolerance: 0.001, steps: ["P = 100 kPa = 100 000 Pa", "V = 500 cm³ = 0.000500 m³", "n = PV / RT = (100000 x 0.000500) / (8.314 x 298)", "n = 50.0 / 2477.6 = 0.0202 mol"] },
       { difficulty: "hard", q: "What volume (m³) does 0.25 mol of gas occupy at 350 K and 150 kPa?\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "V = nRT / P. Convert P to Pa.", answer: 0.00485, unit: "m³", tolerance: 0.0001, steps: ["P = 150 kPa = 150 000 Pa", "V = nRT / P = (0.25 x 8.314 x 350) / 150000", "V = 727.5 / 150000 = 0.00485 m³"] },
       { difficulty: "hard", q: "2.40 dm³ of chlorine gas (Cl₂) at RTP is dissolved in NaOH solution:\nCl₂ + 2NaOH -> NaCl + NaClO + H₂O\nCalculate the mass of NaOH that reacts.", hint: "Find mol Cl₂ from volume, use mole ratio 1:2, then m = nM", answer: 8.0, unit: "g", tolerance: 0.1, steps: ["n(Cl₂) = V / Vm = 2.40 / 24.0 = 0.100 mol", "n(NaOH) = 2 x 0.100 = 0.200 mol (1:2 ratio)", "Mr of NaOH = 40", "m = 0.200 x 40 = 8.00 g"] },
-      { difficulty: "hard", q: "25.0 cm³ of 0.200 mol dm⁻³ NaOH reacts with excess HCl. Calculate the mass of NaCl formed.\nNaOH + HCl -> NaCl + H₂O", hint: "Find moles of NaOH, 1:1 ratio gives moles NaCl, then m = nM", answer: 0.293, unit: "g", tolerance: 0.005, steps: ["n(NaOH) = c x V = 0.200 x 0.0250 = 0.00500 mol", "n(NaCl) = 0.00500 mol (1:1 ratio)", "Mr of NaCl = 23 + 35.5 = 58.5", "m = 0.00500 x 58.5 = 0.293 g"] },
-      { difficulty: "hard", q: "What volume of 0.100 mol dm⁻³ H₂SO₄ is needed to react with 20.0 cm³ of 0.250 mol dm⁻³ NaOH?\n2NaOH + H₂SO₄ -> Na₂SO₄ + 2H₂O", hint: "Find moles NaOH, use 2:1 ratio, then V = n / c", answer: 25.0, unit: "cm³", tolerance: 0.5, steps: ["n(NaOH) = 0.250 x 0.0200 = 0.00500 mol", "n(H₂SO₄) = 0.00500 / 2 = 0.00250 mol (2:1 ratio)", "V = n / c = 0.00250 / 0.100 = 0.0250 dm³", "V = 25.0 cm³"] },
+      // Dilution
+      { difficulty: "hard", q: "50.0 cm³ of 0.400 mol dm⁻³ KOH is diluted to 200 cm³. Calculate the new concentration.", hint: "c₁V₁ = c₂V₂", answer: 0.1, unit: "mol dm⁻³", tolerance: 0.005, steps: ["c₁V₁ = c₂V₂", "0.400 x 50.0 = c₂ x 200", "c₂ = 20.0 / 200 = 0.100 mol dm⁻³"] },
+      { difficulty: "hard", q: "A student needs 500 cm³ of 0.0500 mol dm⁻³ HCl. They have 1.00 mol dm⁻³ HCl. What volume (cm³) should they dilute?", hint: "c₁V₁ = c₂V₂. Rearrange for V₁.", answer: 25.0, unit: "cm³", tolerance: 0.5, steps: ["c₁V₁ = c₂V₂", "1.00 x V₁ = 0.0500 x 500", "V₁ = 25.0 / 1.00 = 25.0 cm³"] },
+      // Number of particles
+      { difficulty: "hard", q: "How many atoms are in 0.50 mol of neon gas (Ne)?\nGive as e.g. 3.01e23", hint: "N = n x Na (6.022 x 10²³)", answer: 3.011e23, unit: "", tolerance: 1e21, steps: ["N = n x Na = 0.50 x 6.022 x 10²³", "N = 3.01 x 10²³ atoms"] },
+      { difficulty: "hard", q: "How many individual atoms are in 1.0 mol of H₂O?\nGive as e.g. 1.81e24", hint: "1 molecule of H₂O has 3 atoms. N = n x Na x 3", answer: 1.807e24, unit: "", tolerance: 5e22, steps: ["1 molecule H₂O = 3 atoms (2H + 1O)", "Molecules = 1.0 x 6.022 x 10²³ = 6.022 x 10²³", "Total atoms = 3 x 6.022 x 10²³ = 1.81 x 10²⁴"] },
+      // Mass of one atom/ion
+      { difficulty: "hard", q: "Calculate the mass (g) of a single atom of carbon-12.\nGive as e.g. 1.99e-23", hint: "mass = Ar / Na", answer: 1.993e-23, unit: "g", tolerance: 1e-25, steps: ["mass of 1 atom = Ar / Na", "= 12.0 / (6.022 x 10²³)", "= 1.99 x 10⁻²³ g"] },
+      { difficulty: "hard", q: "Calculate the mass (g) of a single molecule of water (H₂O).\nGive as e.g. 2.99e-23", hint: "mass = Mr / Na", answer: 2.99e-23, unit: "g", tolerance: 1e-25, steps: ["Mr of H₂O = 18", "mass of 1 molecule = Mr / Na", "= 18 / (6.022 x 10²³)", "= 2.99 x 10⁻²³ g"] },
       { difficulty: "hard", q: "1.06 g of Na₂CO₃ is dissolved in 250 cm³ of solution. Calculate the concentration in mol dm⁻³.", hint: "Find Mr of Na₂CO₃, then n = m/M, then c = n/V", answer: 0.04, unit: "mol dm⁻³", tolerance: 0.002, steps: ["Mr of Na₂CO₃ = (2 x 23) + 12 + (3 x 16) = 106", "n = 1.06 / 106 = 0.0100 mol", "V = 250 / 1000 = 0.250 dm³", "c = 0.0100 / 0.250 = 0.0400 mol dm⁻³"] },
       { difficulty: "hard", q: "A gas has a density of 1.78 g dm⁻³ at RTP. Calculate its molar mass.", hint: "At RTP, 1 mol of gas = 24.0 dm³. Mass of 24 dm³ = molar mass.", answer: 42.7, unit: "g mol⁻¹", tolerance: 0.5, steps: ["At RTP, 1 mol of gas occupies 24.0 dm³", "Mass of 24.0 dm³ = 1.78 x 24.0", "Mr = 42.7 g mol⁻¹"] },
       { difficulty: "hard", q: "0.120 g of a gas occupies 48.0 cm³ at RTP. Calculate the molar mass of the gas.", hint: "Find moles from volume, then M = m / n", answer: 60, unit: "g mol⁻¹", tolerance: 1, steps: ["V = 48.0 / 1000 = 0.0480 dm³", "n = V / Vm = 0.0480 / 24.0 = 0.00200 mol", "Mr = m / n = 0.120 / 0.00200 = 60.0 g mol⁻¹"] },
@@ -1879,9 +1886,29 @@ const CALC_SETS = [
       { difficulty: "exam", q: "A student makes a standard solution by dissolving 2.65 g of anhydrous Na₂CO₃ in a 250 cm³ volumetric flask.\nCalculate the concentration in mol dm⁻³.", hint: "Mr of Na₂CO₃ = 106. n = m/M, c = n/V", answer: 0.1, unit: "mol dm⁻³", tolerance: 0.005, steps: ["Mr of Na₂CO₃ = (2 x 23) + 12 + (3 x 16) = 106", "n = 2.65 / 106 = 0.0250 mol", "V = 250 / 1000 = 0.250 dm³", "c = 0.0250 / 0.250 = 0.100 mol dm⁻³"] },
       { difficulty: "exam", q: "3.0 g of Mg reacts with 100 cm³ of 1.0 mol dm⁻³ HCl:\nMg + 2HCl -> MgCl₂ + H₂\nCalculate the maximum volume of H₂ (dm³) at RTP.", hint: "Find moles of both. Identify limiting reagent. Calculate H₂ volume.", answer: 1.2, unit: "dm³", tolerance: 0.05, steps: ["n(Mg) = 3.0 / 24.3 = 0.123 mol", "n(HCl) = 1.0 x 0.100 = 0.100 mol", "Mg needs 2 x 0.123 = 0.247 mol HCl - HCl is limiting", "n(H₂) = 0.100 / 2 = 0.0500 mol", "V = 0.0500 x 24.0 = 1.20 dm³"] },
       { difficulty: "exam", q: "An unknown metal M reacts with HCl:\nM + 2HCl -> MCl₂ + H₂\n0.480 g of M produces 192 cm³ of H₂ at RTP.\nCalculate the Ar of M and identify it.", hint: "Find mol H₂, use 1:1 ratio for mol M, then Ar = m/n", answer: 60, unit: "g mol⁻¹", tolerance: 2, steps: ["V(H₂) = 192 / 1000 = 0.192 dm³", "n(H₂) = 0.192 / 24.0 = 0.00800 mol", "n(M) = 0.00800 mol (1:1 ratio)", "Ar = m / n = 0.480 / 0.00800 = 60.0", "This is cobalt (Co, Ar = 58.9) - accept 60"] },
-      { difficulty: "exam", q: "25.0 cm³ of 0.100 mol dm⁻³ NaOH neutralises 20.0 cm³ of sulfuric acid.\n2NaOH + H₂SO₄ -> Na₂SO₄ + 2H₂O\nCalculate the concentration of the sulfuric acid in g dm⁻³.", hint: "Find mol NaOH, use 2:1 ratio, find c of H₂SO₄, convert to g dm⁻³", answer: 6.13, unit: "g dm⁻³", tolerance: 0.1, steps: ["n(NaOH) = 0.100 x 0.0250 = 0.00250 mol", "n(H₂SO₄) = 0.00250 / 2 = 0.00125 mol", "c(H₂SO₄) = 0.00125 / 0.0200 = 0.0625 mol dm⁻³", "Mr of H₂SO₄ = 98", "g dm⁻³ = 0.0625 x 98 = 6.13 g dm⁻³"] },
+      // More limiting reagent
+      { difficulty: "exam", q: "2.43 g of Mg is added to 100 cm³ of 0.500 mol dm⁻³ HCl.\nMg + 2HCl -> MgCl₂ + H₂\nWhich is the limiting reagent? Calculate the volume of H₂ produced at RTP (dm³).", hint: "Find moles of both. Mg needs 2x its moles of HCl.", answer: 0.6, unit: "dm³", tolerance: 0.02, steps: ["n(Mg) = 2.43 / 24.3 = 0.100 mol", "n(HCl) = 0.500 x 0.100 = 0.0500 mol", "Mg needs 2 x 0.100 = 0.200 mol HCl, only 0.0500 available", "HCl is limiting", "n(H₂) = 0.0500 / 2 = 0.0250 mol", "V = 0.0250 x 24.0 = 0.600 dm³"] },
+      { difficulty: "exam", q: "1.40 g of Fe reacts with 50.0 cm³ of 1.00 mol dm⁻³ CuSO₄.\nFe + CuSO₄ -> FeSO₄ + Cu\nCalculate the mass of Cu deposited.", hint: "Find moles of both. 1:1 ratio. Identify limiting reagent.", answer: 1.59, unit: "g", tolerance: 0.02, steps: ["n(Fe) = 1.40 / 55.8 = 0.0251 mol", "n(CuSO₄) = 1.00 x 0.0500 = 0.0500 mol", "1:1 ratio - Fe is limiting (0.0251 mol)", "n(Cu) = 0.0251 mol", "m(Cu) = 0.0251 x 63.5 = 1.59 g"] },
+      { difficulty: "exam", q: "4.00 g of NaOH is added to 200 cm³ of 0.300 mol dm⁻³ HCl.\nNaOH + HCl -> NaCl + H₂O\nCalculate the mass of NaCl formed.", hint: "Find moles of both. 1:1 ratio. Limiting reagent determines product.", answer: 3.51, unit: "g", tolerance: 0.05, steps: ["n(NaOH) = 4.00 / 40 = 0.100 mol", "n(HCl) = 0.300 x 0.200 = 0.0600 mol", "1:1 ratio - HCl is limiting (0.0600 mol)", "n(NaCl) = 0.0600 mol", "Mr NaCl = 58.5", "m = 0.0600 x 58.5 = 3.51 g"] },
+      { difficulty: "exam", q: "3.25 g of Zn is added to 50.0 cm³ of 0.500 mol dm⁻³ H₂SO₄.\nZn + H₂SO₄ -> ZnSO₄ + H₂\nDetermine the limiting reagent and the volume of H₂ at RTP.", hint: "Find moles of both. 1:1 ratio.", answer: 0.6, unit: "dm³", tolerance: 0.02, steps: ["n(Zn) = 3.25 / 65.4 = 0.0497 mol", "n(H₂SO₄) = 0.500 x 0.0500 = 0.0250 mol", "1:1 ratio - H₂SO₄ is limiting", "n(H₂) = 0.0250 mol", "V = 0.0250 x 24.0 = 0.600 dm³"] },
       { difficulty: "exam", q: "A 1.00 g sample of impure CaCO₃ reacts with excess HCl and produces 200 cm³ of CO₂ at RTP.\nCalculate the percentage purity of the CaCO₃.\nCaCO₃ + 2HCl -> CaCl₂ + H₂O + CO₂", hint: "Find mol CO₂, 1:1 ratio for CaCO₃, find mass of pure CaCO₃, then % purity", answer: 83.3, unit: "%", tolerance: 1, steps: ["n(CO₂) = 0.200 / 24.0 = 0.00833 mol", "n(CaCO₃) = 0.00833 mol (1:1)", "m(CaCO₃) = 0.00833 x 100 = 0.833 g", "% purity = (0.833 / 1.00) x 100 = 83.3%"] },
       { difficulty: "exam", q: "Using PV = nRT, calculate the volume (cm³) occupied by 0.0150 mol of gas at 80.0 C and 110 kPa.\n(R = 8.314 J mol⁻¹ K⁻¹)", hint: "Convert T to K and P to Pa. V = nRT/P. Convert m³ to cm³.", answer: 400, unit: "cm³", tolerance: 5, steps: ["T = 80.0 + 273 = 353 K", "P = 110 kPa = 110 000 Pa", "V = nRT/P = (0.0150 x 8.314 x 353) / 110000", "V = 44.02 / 110000 = 0.000400 m³", "V = 400 cm³"] },
+
+      // ═══ PERCENTAGE PURITY (4 more) ═══
+      { difficulty: "hard", q: "A 2.50 g sample of impure MgCO₃ reacts with excess HCl and produces 480 cm³ of CO₂ at RTP.\nMgCO₃ + 2HCl -> MgCl₂ + H₂O + CO₂\nCalculate the percentage purity.", hint: "Find mol CO₂ from volume, 1:1 ratio, find mass of pure MgCO₃, then %", answer: 67.2, unit: "%", tolerance: 1, steps: ["n(CO₂) = 0.480 / 24.0 = 0.0200 mol", "n(MgCO₃) = 0.0200 mol (1:1)", "Mr MgCO₃ = 24.3 + 12 + 48 = 84.3", "m(MgCO₃) = 0.0200 x 84.3 = 1.686 g", "% purity = (1.686 / 2.50) x 100 = 67.4%"] },
+      { difficulty: "hard", q: "0.800 g of impure zinc reacts with excess H₂SO₄ and produces 240 cm³ of H₂ at RTP.\nZn + H₂SO₄ -> ZnSO₄ + H₂\nCalculate the percentage purity of the zinc.", hint: "Find mol H₂, 1:1 ratio for Zn, find mass of pure Zn, then %", answer: 81.8, unit: "%", tolerance: 1, steps: ["n(H₂) = 0.240 / 24.0 = 0.0100 mol", "n(Zn) = 0.0100 mol (1:1)", "m(Zn) = 0.0100 x 65.4 = 0.654 g", "% purity = (0.654 / 0.800) x 100 = 81.8%"] },
+      { difficulty: "exam", q: "5.00 g of impure Na₂CO₃ is dissolved and reacted with excess HCl. The CO₂ produced occupies 960 cm³ at RTP.\nNa₂CO₃ + 2HCl -> 2NaCl + H₂O + CO₂\nCalculate the percentage purity.", hint: "Find mol CO₂, 1:1 with Na₂CO₃, find mass, then %", answer: 84.8, unit: "%", tolerance: 1, steps: ["n(CO₂) = 0.960 / 24.0 = 0.0400 mol", "n(Na₂CO₃) = 0.0400 mol (1:1)", "Mr Na₂CO₃ = 106", "m = 0.0400 x 106 = 4.24 g", "% purity = (4.24 / 5.00) x 100 = 84.8%"] },
+      { difficulty: "exam", q: "A 3.00 g sample of impure iron reacts with excess CuSO₄ solution. 2.54 g of Cu is deposited.\nFe + CuSO₄ -> FeSO₄ + Cu\nCalculate the % purity of the iron sample.", hint: "Find mol Cu, 1:1 ratio for Fe, find mass of pure Fe, then %", answer: 74.3, unit: "%", tolerance: 1, steps: ["n(Cu) = 2.54 / 63.5 = 0.0400 mol", "n(Fe) = 0.0400 mol (1:1)", "m(Fe) = 0.0400 x 55.8 = 2.23 g", "% purity = (2.23 / 3.00) x 100 = 74.3%"] },
+
+      // ═══ WATER OF CRYSTALLISATION (8 questions) ═══
+      { difficulty: "medium", q: "4.96 g of hydrated CuSO₄ (CuSO₄.xH₂O) is heated to constant mass. The anhydrous residue weighs 3.18 g.\nCalculate the value of x (moles of water of crystallisation).", hint: "Find mass of water lost. Find moles of CuSO₄ and moles of H₂O. Divide to get ratio.", answer: 5, unit: "", tolerance: 0.1, steps: ["Mass of water = 4.96 - 3.18 = 1.78 g", "n(CuSO₄) = 3.18 / 159.5 = 0.01994 mol", "n(H₂O) = 1.78 / 18 = 0.0989 mol", "x = 0.0989 / 0.01994 = 4.96", "x = 5, so formula is CuSO₄.5H₂O"] },
+      { difficulty: "medium", q: "5.72 g of hydrated Na₂CO₃ (Na₂CO₃.xH₂O) is heated to constant mass, leaving 2.12 g of anhydrous Na₂CO₃.\nCalculate x.", hint: "Mass of water = total - anhydrous. Find mol of each, divide.", answer: 10, unit: "", tolerance: 0.1, steps: ["Mass of water = 5.72 - 2.12 = 3.60 g", "n(Na₂CO₃) = 2.12 / 106 = 0.0200 mol", "n(H₂O) = 3.60 / 18 = 0.200 mol", "x = 0.200 / 0.0200 = 10.0", "Formula is Na₂CO₃.10H₂O"] },
+      { difficulty: "medium", q: "2.46 g of hydrated MgSO₄ (MgSO₄.xH₂O) is heated. The anhydrous residue weighs 1.20 g.\nCalculate x.", hint: "Find mass of water, then moles of MgSO₄ and H₂O, divide for ratio.", answer: 7, unit: "", tolerance: 0.1, steps: ["Mass of water = 2.46 - 1.20 = 1.26 g", "n(MgSO₄) = 1.20 / 120.4 = 0.00997 mol", "n(H₂O) = 1.26 / 18 = 0.0700 mol", "x = 0.0700 / 0.00997 = 7.02", "x = 7, formula is MgSO₄.7H₂O"] },
+      { difficulty: "hard", q: "Calculate the Mr of hydrated iron(II) sulfate, FeSO₄.7H₂O.", hint: "Mr = Mr(FeSO₄) + 7 x Mr(H₂O)", answer: 278, unit: "g mol⁻¹", tolerance: 1, steps: ["Mr(FeSO₄) = 55.8 + 32 + (4 x 16) = 151.8", "Mr(7H₂O) = 7 x 18 = 126", "Mr(FeSO₄.7H₂O) = 151.8 + 126 = 277.8 (accept 278)"] },
+      { difficulty: "hard", q: "What mass of CuSO₄.5H₂O must be dissolved to make 250 cm³ of 0.100 mol dm⁻³ CuSO₄ solution?", hint: "Find moles needed, then use Mr of hydrated salt", answer: 6.24, unit: "g", tolerance: 0.1, steps: ["n = c x V = 0.100 x 0.250 = 0.0250 mol", "Mr(CuSO₄.5H₂O) = 159.5 + (5 x 18) = 249.5", "m = 0.0250 x 249.5 = 6.24 g"] },
+      { difficulty: "hard", q: "3.50 g of hydrated BaCl₂ (BaCl₂.xH₂O) is heated to give 2.98 g of anhydrous BaCl₂.\nCalculate x.", hint: "Find mass of water, then moles of each, divide.", answer: 2, unit: "", tolerance: 0.1, steps: ["Mass of water = 3.50 - 2.98 = 0.52 g", "Mr(BaCl₂) = 137.3 + (2 x 35.5) = 208.3", "n(BaCl₂) = 2.98 / 208.3 = 0.01431 mol", "n(H₂O) = 0.52 / 18 = 0.0289 mol", "x = 0.0289 / 0.01431 = 2.02", "x = 2, formula is BaCl₂.2H₂O"] },
+      { difficulty: "exam", q: "A student dissolves 7.15 g of Na₂CO₃.xH₂O in water and makes 250 cm³ of solution.\nThe concentration is 0.100 mol dm⁻³. Calculate x.", hint: "Find moles from concentration, then Mr = m/n, subtract Mr of Na₂CO₃ to find mass of water.", answer: 10, unit: "", tolerance: 0.1, steps: ["n = c x V = 0.100 x 0.250 = 0.0250 mol", "Mr of hydrate = m / n = 7.15 / 0.0250 = 286", "Mr(Na₂CO₃) = 106", "Mass from water = 286 - 106 = 180", "x = 180 / 18 = 10", "Formula is Na₂CO₃.10H₂O"] },
+      { difficulty: "exam", q: "11.10 g of FeSO₄.xH₂O is dissolved in water to make 200 cm³ of solution.\nThe solution is found to be 0.200 mol dm⁻³. Calculate x.", hint: "Find moles, then Mr = m/n, subtract Mr(FeSO₄) and divide by 18.", answer: 7, unit: "", tolerance: 0.1, steps: ["n = c x V = 0.200 x 0.200 = 0.0400 mol", "Mr of hydrate = 11.10 / 0.0400 = 277.5", "Mr(FeSO₄) = 55.8 + 32 + 64 = 151.8", "Water mass = 277.5 - 151.8 = 125.7", "x = 125.7 / 18 = 6.98", "x = 7, formula is FeSO₄.7H₂O"] },
     ]
   },
   {
@@ -4592,6 +4619,7 @@ export default function App() {
   const [extShowModel, setExtShowModel] = useState(false); // model answer toggle
   const [extAiError, setExtAiError] = useState(null);      // error message if API fails
   const [calcTopic, setCalcTopic] = useState(null);
+  const [showPT, setShowPT] = useState(null); // null | "aqa" | "ocr"
   const [calcDifficulty, setCalcDifficulty] = useState(null); // null | "all" | "easy" | "medium" | "hard" | "exam"
   const [calcIndex, setCalcIndex] = useState(0);
   const [calcInput, setCalcInput] = useState("");
@@ -5321,7 +5349,7 @@ export default function App() {
   // BOARD SELECT
   if (screen === "board") return (
     <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <Header />
       <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#29ABE2", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>ChemMastery</p>
@@ -5678,7 +5706,7 @@ export default function App() {
 
   if (screen === "topics") return (
     <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
       {/* Header -always visible */}
       <div style={{ padding: "0 20px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0f1d35", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -7137,11 +7165,29 @@ export default function App() {
                     <span style={{ fontSize: "11px", fontWeight: 700, color: diffColors[q.difficulty], textTransform: "uppercase", letterSpacing: "0.5px" }}>{diffLabels[q.difficulty]}</span>
                   </div>
                 )}
-                {/* Data sheet link */}
+                {/* Periodic table popup buttons */}
                 <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
-                  <a href="https://filestore.aqa.org.uk/resources/chemistry/AQA-7405-PERIODIC-TABLE.PDF" target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", fontWeight: 600, color: "#29ABE2", textDecoration: "none", background: "#eaf6fd", padding: "4px 10px", borderRadius: "6px" }}>📊 Periodic Table (AQA)</a>
-                  <a href="https://www.ocr.org.uk/Images/Periodic_Table.pdf" target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", fontWeight: 600, color: "#7c3aed", textDecoration: "none", background: "#f3f0ff", padding: "4px 10px", borderRadius: "6px" }}>📊 Periodic Table (OCR)</a>
+                  <button onClick={() => setShowPT("aqa")} style={{ fontSize: "11px", fontWeight: 600, color: "#29ABE2", background: "#eaf6fd", padding: "5px 10px", borderRadius: "6px", border: "none", cursor: "pointer", fontFamily: "inherit" }}>📊 Periodic Table (AQA)</button>
+                  <button onClick={() => setShowPT("ocr")} style={{ fontSize: "11px", fontWeight: 600, color: "#7c3aed", background: "#f3f0ff", padding: "5px 10px", borderRadius: "6px", border: "none", cursor: "pointer", fontFamily: "inherit" }}>📊 Periodic Table (OCR)</button>
                 </div>
+                {/* Periodic table popup modal */}
+                {showPT && (
+                  <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }} onClick={() => setShowPT(null)}>
+                    <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: "16px", width: "95vw", maxWidth: "900px", maxHeight: "80vh", overflow: "auto", position: "relative", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
+                      <div style={{ position: "sticky", top: 0, background: "#fff", padding: "12px 16px", borderBottom: "1px solid #e0e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", borderRadius: "16px 16px 0 0", zIndex: 2 }}>
+                        <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45" }}>{showPT === "aqa" ? "AQA" : "OCR A"} Periodic Table</div>
+                        <button onClick={() => setShowPT(null)} style={{ background: "#f0f4f8", border: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "13px", fontWeight: 600, cursor: "pointer", color: "#4a6080", fontFamily: "inherit" }}>Close</button>
+                      </div>
+                      <div style={{ padding: "12px", textAlign: "center" }}>
+                        <img
+                          src={showPT === "aqa" ? "/pt-aqa.png" : "/pt-ocr.png"}
+                          alt={`${showPT === "aqa" ? "AQA" : "OCR A"} Periodic Table`}
+                          style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
                 {/* Question card */}
                 <div style={{ background: "#ffffff", borderRadius: "14px", padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,0.07)", marginBottom: "12px", border: "1px solid #e8eef4" }}>
                   <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, fontWeight: 500, whiteSpace: "pre-line" }}>{q.q}</div>
@@ -7183,9 +7229,9 @@ export default function App() {
                     <div style={{ background: "#ffffff", borderRadius: "12px", padding: "14px 16px", border: "1px solid #e8eef4", boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
                       <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Worked Solution</div>
                       {q.steps.map((step, si) => (
-                        <div key={si} style={{ display: "flex", gap: "10px", marginBottom: "6px" }}>
-                          <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", background: "#eaf6fd", borderRadius: "50%", width: "20px", height: "20px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>{si + 1}</div>
-                          <div style={{ fontSize: "13px", color: "#1a2d45", lineHeight: 1.5, fontFamily: step.includes("=") || step.includes("÷") || step.includes("×") ? "'Space Mono', monospace" : "inherit" }}>{step}</div>
+                        <div key={si} style={{ display: "flex", gap: "10px", marginBottom: "8px" }}>
+                          <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", background: "#eaf6fd", borderRadius: "50%", width: "22px", height: "22px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>{si + 1}</div>
+                          <div style={{ fontSize: "17px", color: "#1a2d45", lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{step}</div>
                         </div>
                       ))}
                     </div>
