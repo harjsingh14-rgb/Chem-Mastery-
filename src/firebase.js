@@ -57,11 +57,19 @@ export async function redeemAccessKey(uid, key) {
   const keySnap = await getDoc(keyRef);
   if (!keySnap.exists()) return { success: false, error: "Invalid access key" };
   const keyData = keySnap.data();
-  if (keyData.used) return { success: false, error: "This key has already been used" };
-  if (keyData.expiresAt && keyData.expiresAt.toDate() < new Date()) return { success: false, error: "This key has expired" };
 
-  // Mark key as used
-  await setDoc(keyRef, { used: true, usedBy: uid, usedAt: serverTimestamp() }, { merge: true });
+  // Check if key is disabled
+  if (keyData.disabled) return { success: false, error: "This access key has been disabled" };
+
+  // Check expiry
+  if (keyData.expiresAt && keyData.expiresAt.toDate() < new Date()) return { success: false, error: "This access key has expired" };
+
+  // For single-use keys, check if already used
+  if (keyData.type === "single" && keyData.used) return { success: false, error: "This key has already been used" };
+
+  // Track usage (for shared keys, keep a count)
+  const usageCount = (keyData.usageCount || 0) + 1;
+  await setDoc(keyRef, { usageCount, lastUsedAt: serverTimestamp() }, { merge: true });
 
   // Update user profile
   const userRef = doc(db, "users", uid);
