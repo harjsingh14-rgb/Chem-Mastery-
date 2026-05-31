@@ -4538,6 +4538,58 @@ export default function App() {
   const [calcChecked, setCalcChecked] = useState(false);
   const [calcShowSteps, setCalcShowSteps] = useState(false);
   const [calcScore, setCalcScore] = useState({}); // { topicId: { correct, attempted } }
+
+  // --- Study streak & activity tracking ---
+  const [studyLog, setStudyLog] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("hsj-study-log") || "{}"); } catch { return {}; }
+  });
+  const todayKey = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  const logActivity = useCallback((type) => {
+    setStudyLog(prev => {
+      const day = prev[todayKey] || { sessions: 0, cards: 0, calcs: 0, extended: 0, mechanisms: 0, firstOpen: Date.now() };
+      if (type === "session") day.sessions = (day.sessions || 0) + 1;
+      if (type === "card") day.cards = (day.cards || 0) + 1;
+      if (type === "calc") day.calcs = (day.calcs || 0) + 1;
+      if (type === "extended") day.extended = (day.extended || 0) + 1;
+      if (type === "mechanism") day.mechanisms = (day.mechanisms || 0) + 1;
+      day.lastActive = Date.now();
+      const next = { ...prev, [todayKey]: day };
+      try { localStorage.setItem("hsj-study-log", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, [todayKey]);
+  // Log a session on first load each day
+  useEffect(() => {
+    if (!studyLog[todayKey]?.sessions) logActivity("session");
+  }, [todayKey]); // eslint-disable-line
+
+  // Calculate streak
+  const getStreak = () => {
+    let streak = 0;
+    const d = new Date();
+    // Check if active today, if not start from yesterday
+    if (!studyLog[todayKey]) d.setDate(d.getDate() - 1);
+    while (true) {
+      const key = d.toISOString().slice(0, 10);
+      if (studyLog[key]) { streak++; d.setDate(d.getDate() - 1); }
+      else break;
+    }
+    return streak;
+  };
+  const currentStreak = getStreak();
+
+  // Score history for trends (stored in localStorage)
+  const [scoreHistory, setScoreHistory] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("hsj-score-history") || "[]"); } catch { return []; }
+  });
+  const logScore = useCallback((type, topic, score, total) => {
+    setScoreHistory(prev => {
+      const entry = { date: todayKey, time: Date.now(), type, topic, score, total };
+      const next = [...prev, entry].slice(-200); // keep last 200 entries
+      try { localStorage.setItem("hsj-score-history", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, [todayKey]);
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
   const [mechId, setMechId] = useState(null);
@@ -4704,6 +4756,7 @@ export default function App() {
       const wasKnown = s.has(currentCardIndex);
       wasKnown ? s.delete(currentCardIndex) : s.add(currentCardIndex);
       track("toggle_known", { topic, card_index: currentCardIndex, marked: !wasKnown });
+      if (!wasKnown) logActivity("card");
       return { ...prev, [knownKey]: s };
     });
   }, [knownKey, currentCardIndex, topic]);
@@ -5306,15 +5359,126 @@ export default function App() {
         <Header sub="Progress Dashboard" back={goBack} />
         <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "16px" }}>
 
-          {/* Hero stats */}
-          <div style={{ background: "linear-gradient(135deg, #29ABE2, #1a8fc4)", borderRadius: "20px", padding: "20px", color: "#fff", boxShadow: "0 8px 24px rgba(41,171,226,0.3)" }}>
-            <div style={{ fontSize: "13px", fontWeight: 600, opacity: 0.85, marginBottom: "4px" }}>Overall Progress</div>
-            <div style={{ fontSize: "48px", fontWeight: 800, lineHeight: 1 }}>{overallPct}%</div>
-            <div style={{ fontSize: "14px", opacity: 0.85, marginTop: "4px" }}>{totalMastered} of {totalCards} cards mastered</div>
-            <div style={{ marginTop: "12px", height: "6px", background: "rgba(255,255,255,0.25)", borderRadius: "3px", overflow: "hidden" }}>
-              <div style={{ height: "100%", width: `${overallPct}%`, background: "#ffffff", borderRadius: "3px", transition: "width 0.5s" }} />
+          {/* Streak & Activity Hero */}
+          <div style={{ display: "flex", gap: "10px" }}>
+            {/* Streak card */}
+            <div style={{ flex: 1, background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: "20px", padding: "20px", color: "#fff", boxShadow: "0 8px 24px rgba(245,158,11,0.3)", textAlign: "center" }}>
+              <div style={{ fontSize: "42px", marginBottom: "4px" }}>🔥</div>
+              <div style={{ fontSize: "36px", fontWeight: 800, lineHeight: 1 }}>{currentStreak}</div>
+              <div style={{ fontSize: "13px", fontWeight: 600, opacity: 0.9, marginTop: "4px" }}>{currentStreak === 1 ? "day streak" : "day streak"}</div>
+              {currentStreak >= 7 && <div style={{ fontSize: "11px", opacity: 0.8, marginTop: "4px" }}>Keep it going!</div>}
+            </div>
+            {/* Overall progress card */}
+            <div style={{ flex: 2, background: "linear-gradient(135deg, #29ABE2, #1a8fc4)", borderRadius: "20px", padding: "20px", color: "#fff", boxShadow: "0 8px 24px rgba(41,171,226,0.3)" }}>
+              <div style={{ fontSize: "13px", fontWeight: 600, opacity: 0.85, marginBottom: "4px" }}>Overall Progress</div>
+              <div style={{ fontSize: "42px", fontWeight: 800, lineHeight: 1 }}>{overallPct}%</div>
+              <div style={{ fontSize: "13px", opacity: 0.85, marginTop: "4px" }}>{totalMastered} of {totalCards} cards mastered</div>
+              <div style={{ marginTop: "10px", height: "6px", background: "rgba(255,255,255,0.25)", borderRadius: "3px", overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${overallPct}%`, background: "#ffffff", borderRadius: "3px", transition: "width 0.5s" }} />
+              </div>
             </div>
           </div>
+
+          {/* Activity Heatmap - last 28 days */}
+          <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
+            <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "10px" }}>Activity - Last 28 Days</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
+              {["M","T","W","T","F","S","S"].map((d, i) => (
+                <div key={i} style={{ fontSize: "10px", color: "#7a95b0", textAlign: "center", fontWeight: 600, marginBottom: "2px" }}>{d}</div>
+              ))}
+              {(() => {
+                const cells = [];
+                const today = new Date();
+                // Find the Monday 4 weeks ago
+                const start = new Date(today);
+                start.setDate(start.getDate() - 27 - ((start.getDay() + 6) % 7));
+                for (let i = 0; i < 28; i++) {
+                  const d = new Date(start);
+                  d.setDate(d.getDate() + i);
+                  const key = d.toISOString().slice(0, 10);
+                  const dayData = studyLog[key];
+                  const total = dayData ? (dayData.cards || 0) + (dayData.calcs || 0) + (dayData.extended || 0) + (dayData.mechanisms || 0) : 0;
+                  const isToday = key === todayKey;
+                  const intensity = total === 0 ? 0 : total < 5 ? 1 : total < 15 ? 2 : total < 30 ? 3 : 4;
+                  const colors = ["#edf2f7", "#bae6fd", "#38bdf8", "#0284c7", "#0c4a6e"];
+                  cells.push(
+                    <div key={key} title={`${key}: ${total} actions`} style={{
+                      aspectRatio: "1", borderRadius: "4px",
+                      background: colors[intensity],
+                      border: isToday ? "2px solid #f59e0b" : "none",
+                    }} />
+                  );
+                }
+                return cells;
+              })()}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "8px", justifyContent: "flex-end" }}>
+              <span style={{ fontSize: "10px", color: "#7a95b0" }}>Less</span>
+              {["#edf2f7", "#bae6fd", "#38bdf8", "#0284c7", "#0c4a6e"].map(c => (
+                <div key={c} style={{ width: "10px", height: "10px", borderRadius: "2px", background: c }} />
+              ))}
+              <span style={{ fontSize: "10px", color: "#7a95b0" }}>More</span>
+            </div>
+          </div>
+
+          {/* Today's activity */}
+          {(() => {
+            const today = studyLog[todayKey] || {};
+            const todayTotal = (today.cards || 0) + (today.calcs || 0) + (today.extended || 0) + (today.mechanisms || 0);
+            return (
+              <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
+                <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "10px" }}>Today</div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
+                  <div style={{ textAlign: "center", padding: "8px", background: "#f0f9ff", borderRadius: "10px" }}>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#29ABE2" }}>{today.cards || 0}</div>
+                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Cards</div>
+                  </div>
+                  <div style={{ textAlign: "center", padding: "8px", background: "#f0f9ff", borderRadius: "10px" }}>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#0284c7" }}>{today.calcs || 0}</div>
+                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Calcs</div>
+                  </div>
+                  <div style={{ textAlign: "center", padding: "8px", background: "#f5f3ff", borderRadius: "10px" }}>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#7c3aed" }}>{today.extended || 0}</div>
+                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Extended</div>
+                  </div>
+                  <div style={{ textAlign: "center", padding: "8px", background: "#fff7ed", borderRadius: "10px" }}>
+                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#d97706" }}>{today.mechanisms || 0}</div>
+                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Mechs</div>
+                  </div>
+                </div>
+                {todayTotal === 0 && <div style={{ textAlign: "center", fontSize: "12px", color: "#7a95b0", marginTop: "8px" }}>Start studying to fill this up!</div>}
+              </div>
+            );
+          })()}
+
+          {/* Score Trends */}
+          {scoreHistory.length > 0 && (
+            <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "10px" }}>Recent Calc Scores</div>
+              <div style={{ display: "flex", alignItems: "flex-end", gap: "3px", height: "60px" }}>
+                {scoreHistory.filter(s => s.type === "calc").slice(-20).map((s, i) => (
+                  <div key={i} title={`${s.topic}: ${s.score}/${s.total}`} style={{
+                    flex: 1, maxWidth: "20px",
+                    height: `${s.score ? 100 : 20}%`, minHeight: "4px",
+                    background: s.score ? "linear-gradient(180deg, #29ABE2, #0284c7)" : "#fecaca",
+                    borderRadius: "3px 3px 0 0",
+                    transition: "height 0.3s",
+                  }} />
+                ))}
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
+                <span style={{ fontSize: "10px", color: "#7a95b0" }}>Oldest</span>
+                <span style={{ fontSize: "10px", color: "#7a95b0" }}>
+                  {(() => {
+                    const calcScores = scoreHistory.filter(s => s.type === "calc");
+                    const correct = calcScores.filter(s => s.score > 0).length;
+                    return calcScores.length > 0 ? `${Math.round((correct / calcScores.length) * 100)}% correct overall` : "";
+                  })()}
+                </span>
+                <span style={{ fontSize: "10px", color: "#7a95b0" }}>Latest</span>
+              </div>
+            </div>
+          )}
 
           {/* Quick stats row */}
           <div style={{ display: "flex", gap: "10px" }}>
@@ -6548,6 +6712,7 @@ export default function App() {
           setExtAiLoading(true);
           setExtAiError(null);
           track("submit_ai_examine", { question_id: thisQ.id, category: extCategory, board });
+          logActivity("extended");
           try {
             const res = await fetch('/api/examine.js', {
               method: 'POST',
@@ -6859,6 +7024,8 @@ export default function App() {
                   return { ...prev, [calcTopic]: { correct: s.correct + (correct ? 1 : 0), attempted: s.attempted + 1 } };
                 });
                 track("attempt_question", { topic: calcTopic, difficulty: q.difficulty, correct, question_index: currentIdx });
+                logActivity("calc");
+                logScore("calc", calcTopic, correct ? 1 : 0, 1);
               }
               setCalcChecked(true);
               setCalcShowSteps(true);
@@ -6974,7 +7141,7 @@ export default function App() {
                   {list.map((m, mIdx) => {
                     const mechLocked = !hasFullAccess && mIdx >= FREE_MECH_COUNT;
                     return (
-                    <button key={m.id} onClick={()=>{ if (!mechLocked) { setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); track("view_mechanism", { mechanism: m.id, title: m.title }); } }}
+                    <button key={m.id} onClick={()=>{ if (!mechLocked) { setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); track("view_mechanism", { mechanism: m.id, title: m.title }); logActivity("mechanism"); } }}
                       style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
                         padding:"16px 18px", textAlign:"left", cursor: mechLocked ? "default" : "pointer", fontFamily:"inherit",
                         boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
