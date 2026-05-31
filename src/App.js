@@ -4391,6 +4391,8 @@ export default function App() {
   // --- Stripe checkout ---
   const [checkoutLoading, setCheckoutLoading] = useState(null); // "monthly" | "yearly" | null
   const [showPricing, setShowPricing] = useState(false);
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
+  const [cancelStep, setCancelStep] = useState(0); // 0=settings, 1=win-back, 2=confirm
 
   const handleCheckout = async (plan) => {
     if (!authUser) return;
@@ -4810,11 +4812,10 @@ export default function App() {
                 {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "access_key" ? "Full Access (Key)" : userProfile?.role === "paid" ? "Full Access (Paid)" : "Free Plan"}
               </div>
               {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
-                <button onClick={handleManageSubscription} style={{
-                  width: "100%", padding: "10px", borderRadius: "10px", border: "1.5px solid #e0e8f0",
-                  background: "#ffffff", color: "#4a6080", fontSize: "13px", fontWeight: 600,
-                  cursor: "pointer", fontFamily: "inherit", marginBottom: "8px"
-                }}>Manage Subscription</button>
+                <button onClick={() => { setShowUserMenu(false); setShowAccountSettings(true); }} style={{
+                  background: "none", border: "none", color: "#7a95b0", fontSize: "11px",
+                  cursor: "pointer", fontFamily: "inherit", marginBottom: "8px", textDecoration: "underline"
+                }}>Account settings</button>
               )}
               {!hasFullAccess && (
                 <div style={{ marginBottom: "14px" }}>
@@ -5127,6 +5128,82 @@ export default function App() {
 
   // LOGIN SCREEN
   if (!authUser) return <LoginScreen />;
+
+  // ACCOUNT SETTINGS MODAL (buried - only for paid users managing subscription)
+  if (showAccountSettings) return (
+    <div style={base}>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+      <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", flexShrink: 0 }}>
+        <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
+        <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "17px", color: "#ffffff" }}>Account Settings</div>
+      </div>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
+        <div style={{ maxWidth: "400px", width: "100%" }}>
+          {cancelStep === 0 && (
+            <div>
+              <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: "14px", padding: "20px", marginBottom: "24px", textAlign: "center" }}>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#059669", marginBottom: "4px" }}>ChemMastery Pro - Active</div>
+                <div style={{ fontSize: "12px", color: "#047857" }}>You have full access to all content</div>
+              </div>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", marginBottom: "16px" }}>Account</div>
+              <div style={{ fontSize: "13px", color: "#7a95b0", marginBottom: "6px" }}>{authUser?.email}</div>
+              <div style={{ fontSize: "13px", color: "#7a95b0", marginBottom: "24px" }}>{authUser?.displayName || "Student"}</div>
+              <div style={{ borderTop: "1px solid #e0e8f0", paddingTop: "20px" }}>
+                <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px" }}>Subscription</div>
+                <button onClick={() => setCancelStep(1)} style={{
+                  background: "none", border: "none", color: "#94a3b8", fontSize: "12px",
+                  cursor: "pointer", fontFamily: "inherit", textDecoration: "underline"
+                }}>Cancel subscription</button>
+              </div>
+            </div>
+          )}
+          {cancelStep === 1 && (
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "40px", marginBottom: "16px" }}>😢</div>
+              <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>We would hate to see you go!</h3>
+              <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 24px" }}>
+                You will lose access to all premium content including flashcards, calculations, synthesis routes and AI marking.
+              </p>
+              <div style={{ background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "2px solid #f59e0b", borderRadius: "14px", padding: "20px", marginBottom: "20px" }}>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: "#92400e", marginBottom: "4px" }}>Stay for 50% off!</div>
+                <div style={{ fontSize: "13px", color: "#a16207", marginBottom: "12px" }}>Get your next month for just £2.50 instead of £4.99</div>
+                <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{
+                  padding: "10px 24px", borderRadius: "10px", border: "none",
+                  background: "#f59e0b", color: "#fff", fontSize: "14px", fontWeight: 700,
+                  cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 16px rgba(245,158,11,0.35)"
+                }}>Keep my subscription</button>
+              </div>
+              <button onClick={() => setCancelStep(2)} style={{
+                background: "none", border: "none", color: "#94a3b8", fontSize: "12px",
+                cursor: "pointer", fontFamily: "inherit", textDecoration: "underline"
+              }}>I still want to cancel</button>
+            </div>
+          )}
+          {cancelStep === 2 && (
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "40px", marginBottom: "16px" }}>⚠️</div>
+              <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>Are you sure?</h3>
+              <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 24px" }}>
+                Your access will continue until the end of your current billing period. After that, your account will be downgraded to the free plan.
+              </p>
+              <button onClick={handleManageSubscription} style={{
+                padding: "10px 24px", borderRadius: "10px", border: "1.5px solid #dc2626",
+                background: "#fff", color: "#dc2626", fontSize: "13px", fontWeight: 600,
+                cursor: "pointer", fontFamily: "inherit", marginBottom: "12px", width: "100%"
+              }}>Proceed to cancellation</button>
+              <br />
+              <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{
+                padding: "10px 24px", borderRadius: "10px", border: "none",
+                background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 700,
+                cursor: "pointer", fontFamily: "inherit", width: "100%",
+                boxShadow: "0 4px 16px rgba(41,171,226,0.35)"
+              }}>Never mind, keep my subscription</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   // BOARD SELECT
   if (screen === "board") return (
