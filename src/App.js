@@ -6378,28 +6378,28 @@ export default function App() {
         if (!activeMech) return (
           <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
             <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}`}</style>
-            <p style={{ color:"#4a6080", fontSize:"14px", marginBottom:"16px", lineHeight:1.5 }}>
+            <p style={{ color:"#475569", fontSize:"15px", marginBottom:"20px", lineHeight:1.6 }}>
               Step-by-step animated curly-arrow mechanisms. Each arrow is explained. Tap a mechanism to start.
             </p>
             {Object.entries(
               MECHS.reduce((acc,m)=>{ (acc[m.category]=acc[m.category]||[]).push(m); return acc; }, {})
             ).map(([cat, list]) => (
-              <div key={cat} style={{ marginBottom:"18px" }}>
-                <div style={{ fontSize:"11px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"8px" }}>{cat}</div>
-                <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+              <div key={cat} style={{ marginBottom:"22px" }}>
+                <div style={{ fontSize:"13px", fontWeight:800, color:"#0f1d35", textTransform:"uppercase", letterSpacing:"1.2px", marginBottom:"10px", borderBottom:"2px solid #e2e8f0", paddingBottom:"6px" }}>{cat}</div>
+                <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
                   {list.map(m => (
                     <button key={m.id} onClick={()=>{ setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); }}
                       style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
-                        padding:"14px 16px", textAlign:"left", cursor:"pointer", fontFamily:"inherit",
-                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                        <div style={{ width:"10px", height:"10px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
-                        <div>
-                          <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45", marginBottom:"2px" }}>{m.title}</div>
-                          <div style={{ fontSize:"12px", color:"#64748b", fontFamily:"'DM Sans',system-ui,sans-serif" }}>{m.subtitle}</div>
+                        padding:"16px 18px", textAlign:"left", cursor:"pointer", fontFamily:"inherit",
+                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:"12px" }}>
+                        <div style={{ width:"12px", height:"12px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
+                        <div style={{ flex:1 }}>
+                          <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", marginBottom:"4px", lineHeight:1.3 }}>{m.title}</div>
+                          <div style={{ fontSize:"14px", color:"#475569", fontFamily:"'DM Sans',system-ui,sans-serif", letterSpacing:"0.3px" }}>{m.subtitle}</div>
                         </div>
-                        <div style={{ marginLeft:"auto", display:"flex", gap:"4px" }}>
-                          {m.specs.map(s=><span key={s} style={{ fontSize:"10px", fontWeight:700, background:`${m.color}20`, color:m.color, padding:"2px 6px", borderRadius:"6px" }}>{s.replace("_"," ")}</span>)}
+                        <div style={{ display:"flex", gap:"5px", flexShrink:0 }}>
+                          {m.specs.map(s=><span key={s} style={{ fontSize:"11px", fontWeight:700, background:`${m.color}15`, color:m.color, padding:"3px 8px", borderRadius:"8px" }}>{s.replace("_"," ")}</span>)}
                         </div>
                       </div>
                     </button>
