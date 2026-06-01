@@ -1850,7 +1850,7 @@ const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dhL, dhR,
 
 // Born-Haber cycle diagram (exam-style: left up, EA top-right, lattice far-right)
 const BornHaberCycle = ({ compound, steps, find }) => {
-  const W = 540, padT = 30, padB = 30, lineW = 150;
+  const W = 580, padT = 30, padB = 30, lineW = 140;
   // Cumulative energies
   let cumE = [0]; let run = 0;
   steps.forEach(s => { run += (s.value || 0); cumE.push(run); });
@@ -1947,7 +1947,7 @@ const BornHaberCycle = ({ compound, steps, find }) => {
               <rect x={ax - 5} y={Math.min(py, cy) + 5} width="10" height={Math.abs(cy - py) - 12} fill={col} rx="2" strokeDasharray={isMiss ? "8,5" : "0"} stroke={isMiss ? col : "none"} fillOpacity={isMiss ? 0 : 1}/>
               {isMiss && <line x1={ax} y1={py + 5} x2={ax} y2={cy - 8} stroke={col} strokeWidth="6" strokeDasharray="8,5"/>}
               <polygon points={`${ax - 8} ${cy - 8}, ${ax} ${cy + 2}, ${ax + 8} ${cy - 8}`} fill={col}/>
-              <text x={ax + 14} y={(py + cy) / 2 + 4} fontSize="13" fontWeight="800" fill={col}>{lv.arrow}</text>
+              <text x={ax - 12} y={(py + cy) / 2 + 4} fontSize="13" fontWeight="800" fill={col} textAnchor="end">{lv.arrow}</text>
             </g>
           );
         }
