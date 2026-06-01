@@ -7682,7 +7682,7 @@ export default function App() {
                       </tbody>
                     </table>
                   )}
-                  {q.diagram && <div style={{ margin: "16px 0 16px", display: "flex", justifyContent: "center" }}><div style={{ width: "100%", maxWidth: "420px" }}>{q.diagram}</div></div>}
+                  {q.diagram && <div style={{ margin: "16px 0 16px", display: "flex", justifyContent: "center" }}><div style={{ width: "100%", maxWidth: "550px" }}>{q.diagram}</div></div>}
                   {/* Input inside the card */}
                   {!calcChecked && (
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "12px" }}>
