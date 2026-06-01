@@ -1848,106 +1848,144 @@ const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dhL, dhR,
   </svg>
 );
 
-// Born-Haber cycle diagram (exam-style: left up, EA top-right, lattice far-right)
+// Born-Haber cycle diagram (exam-style rectangle: ΔHf left, steps up, lattice right)
 const BornHaberCycle = ({ compound, steps, find }) => {
-  const W = 580, padT = 30, padB = 30, lineW = 140;
-  // Cumulative energies
+  const W = 600, padT = 35, padB = 35, lineW = 130;
+  // Calculate cumulative energies from compound (energy = 0)
   let cumE = [0]; let run = 0;
   steps.forEach(s => { run += (s.value || 0); cumE.push(run); });
-  const maxE = Math.max(...cumE), minE = Math.min(...cumE);
-  const range = maxE - minE || 1;
-  const H = Math.max(range * 0.28 + padT + padB + 80, 380);
-  const sc = (H - padT - padB - 60) / range;
-  const toY = e => padT + 40 + (maxE - e) * sc;
+  // ΔHf = final cumulative (should equal ΔHf of compound, negative for stable compounds)
+  const dhf = cumE[cumE.length - 1]; // e.g. -437 for KCl
+  // Elements level is at energy = sum of all steps except lattice (i.e. ΔHf reversed)
+  // Actually elements are the starting point: compound is BELOW elements by |ΔHf|
+  // In our system compound=0, so elements = -dhf (positive number for exothermic ΔHf)
+  const elementsE = -dhf; // e.g. +437 for KCl
 
-  // Classify steps: endothermic left-side going up, EA = right-top, lattice = right-down
-  // Find which steps are EA (negative value before lattice) and lattice (last step or find)
-  const latticeIdx = steps.length - 1;
-  let eaStart = -1;
+  // Find EA start (first negative step before lattice)
+  let eaStart = steps.length - 1;
   for (let i = steps.length - 2; i >= 0; i--) {
-    if (steps[i].value < 0) { eaStart = i; } else break;
+    if (steps[i].value < 0 || steps[i].value > 0 && i > 0 && steps[i-1].value < 0) break;
+    if (steps[i].value < 0) { eaStart = i; }
   }
-  if (eaStart === -1) eaStart = latticeIdx; // no EA steps
+  // Simpler: EA starts at first negative-value step (excluding lattice)
+  eaStart = -1;
+  for (let i = 0; i < steps.length - 1; i++) {
+    if (steps[i].value < 0) { eaStart = i; break; }
+  }
+  if (eaStart === -1) eaStart = steps.length - 1;
 
-  // Build all levels
+  // Build levels: compound, then each step
   let energy = 0;
-  const levels = [{ e: 0, label: compound, col: "left" }];
+  const allLevels = [{ e: 0, label: compound, col: "left", type: "compound" }];
   steps.forEach((s, i) => {
     energy += (s.value || 0);
-    const col = i >= eaStart ? "right" : "left";
-    levels.push({ e: energy, label: s.species, arrow: s.label, miss: s.label === find, val: s.value, col, idx: i });
+    const isLast = i === steps.length - 1;
+    const col = (i >= eaStart || isLast) ? "right" : "left";
+    allLevels.push({ e: energy, label: s.species, arrow: s.label, miss: s.label === find, val: s.value, col, type: isLast ? "compound" : "step" });
   });
 
-  const LX = 55, RX = 340; // left and right column x positions
-  const arrowX_L = LX + lineW + 20; // left arrows just right of left levels
-  const arrowX_R = RX - 20; // right arrows just left of right levels
+  const maxE = Math.max(...allLevels.map(l => l.e));
+  const minE = Math.min(...allLevels.map(l => l.e));
+  const range = maxE - minE || 1;
+  const H = Math.max(range * 0.25 + padT + padB + 80, 400);
+  const sc = (H - padT - padB - 50) / range;
+  const toY = e => padT + 30 + (maxE - e) * sc;
+
+  const LX = 70, RX = 370;
+  const dhfX = LX - 25; // ΔHf arrow on far left
+  const leftArrowX = LX + lineW + 18;
+  const eaArrowX = RX - 18;
+  const lattArrowX = RX + lineW + 22;
 
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ fontFamily: "'Outfit','DM Sans',sans-serif", display: "block", margin: "0 auto" }}>
       {/* Energy axis */}
-      <text x="16" y={H / 2} textAnchor="middle" fontSize="14" fontWeight="800" fill="#0f1d35" transform={`rotate(-90, 16, ${H/2})`}>Energy</text>
-      <line x1="32" y1={H - padB + 10} x2="32" y2={padT - 5} stroke="#0f1d35" strokeWidth="3"/>
-      <polygon points={`26 ${padT}, 32 ${padT - 12}, 38 ${padT}`} fill="#0f1d35"/>
+      <text x="14" y={H / 2} textAnchor="middle" fontSize="13" fontWeight="800" fill="#0f1d35" transform={`rotate(-90, 14, ${H/2})`}>Energy</text>
+      <line x1="30" y1={H - padB + 5} x2="30" y2={padT} stroke="#0f1d35" strokeWidth="2.5"/>
+      <polygon points={`25 ${padT + 3}, 30 ${padT - 7}, 35 ${padT + 3}`} fill="#0f1d35"/>
 
-      {/* Draw levels */}
-      {levels.map((lv, i) => {
+      {/* ΔHf arrow on far left (elements down to compound) */}
+      {(() => {
+        const compY = toY(0);
+        const elemY = toY(elementsE);
+        return (
+          <g>
+            <line x1={dhfX} y1={elemY + 3} x2={dhfX} y2={compY - 5} stroke="#059669" strokeWidth="3"/>
+            <polygon points={`${dhfX - 5} ${compY - 8}, ${dhfX} ${compY}, ${dhfX + 5} ${compY - 8}`} fill="#059669"/>
+            <text x={dhfX - 6} y={(elemY + compY) / 2 + 4} fontSize="11" fontWeight="700" fill="#059669" textAnchor="end">ΔHf</text>
+          </g>
+        );
+      })()}
+
+      {/* Draw all levels */}
+      {allLevels.map((lv, i) => {
         const y = toY(lv.e);
         const x = lv.col === "left" ? LX : RX;
         return (
           <g key={`lv${i}`}>
-            <line x1={x} y1={y} x2={x + lineW} y2={y} stroke="#334155" strokeWidth="2.5"/>
-            <text x={x + lineW / 2} y={y - 8} textAnchor="middle" fontSize="11" fontWeight="700" fill="#1e293b">{lv.label}</text>
+            <line x1={x} y1={y} x2={x + lineW} y2={y} stroke="#1e293b" strokeWidth="2"/>
+            <text x={x + lineW / 2} y={y - 7} textAnchor="middle" fontSize="10" fontWeight="700" fill="#1e293b">{lv.label}</text>
           </g>
         );
       })}
 
-      {/* Draw arrows */}
-      {levels.map((lv, i) => {
+      {/* Draw step arrows */}
+      {allLevels.map((lv, i) => {
         if (i === 0) return null;
-        const prev = levels[i - 1];
+        const prev = allLevels[i - 1];
         const py = toY(prev.e), cy = toY(lv.e);
         const isMiss = lv.miss;
         const col = isMiss ? "#dc2626" : "#29ABE2";
-        const goUp = lv.val > 0;
 
-        // CASE 1: Both on left (endothermic steps going up)
+        // Left-to-left: endothermic steps going UP
         if (prev.col === "left" && lv.col === "left") {
-          const ax = arrowX_L;
           return (
             <g key={`ar${i}`}>
-              <rect x={ax - 4} y={Math.min(py, cy) + 4} width="8" height={Math.abs(cy - py) - 8} fill={col} rx="2"/>
-              {goUp
-                ? <polygon points={`${ax - 7} ${cy + 6}, ${ax} ${cy - 4}, ${ax + 7} ${cy + 6}`} fill={col}/>
-                : <polygon points={`${ax - 7} ${cy - 6}, ${ax} ${cy + 4}, ${ax + 7} ${cy - 6}`} fill={col}/>
-              }
-              <text x={ax + 14} y={(py + cy) / 2 + 4} fontSize="12" fontWeight="800" fill={col}>{lv.arrow}</text>
+              <rect x={leftArrowX - 4} y={Math.min(py, cy) + 4} width="8" height={Math.abs(cy - py) - 8} fill={col} rx="2"/>
+              <polygon points={`${leftArrowX - 6} ${cy + 5}, ${leftArrowX} ${cy - 4}, ${leftArrowX + 6} ${cy + 5}`} fill={col}/>
+              <text x={leftArrowX + 12} y={(py + cy) / 2 + 4} fontSize="11" fontWeight="700" fill={col}>{lv.arrow}</text>
             </g>
           );
         }
 
-        // CASE 2: Left to right transition (EA step - goes across and slightly down)
+        // Left-to-right: EA transition
         if (prev.col === "left" && lv.col === "right") {
           return (
             <g key={`ar${i}`}>
-              {/* Horizontal connector from left level to right level */}
-              <line x1={prev.col === "left" ? LX + lineW : RX} y1={py} x2={RX + lineW} y2={py} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
-              {/* Downward arrow on right side */}
-              <rect x={arrowX_R - 3} y={Math.min(py, cy) + 3} width="6" height={Math.abs(cy - py) - 6} fill={col} rx="2"/>
-              <polygon points={`${arrowX_R - 6} ${cy - 5}, ${arrowX_R} ${cy + 3}, ${arrowX_R + 6} ${cy - 5}`} fill={col}/>
-              <text x={arrowX_R + 12} y={(py + cy) / 2 + 4} fontSize="11" fontWeight="700" fill={col}>{lv.arrow}</text>
+              <line x1={LX + lineW} y1={py} x2={RX + lineW} y2={py} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
+              <rect x={eaArrowX - 3} y={Math.min(py, cy) + 3} width="6" height={Math.abs(cy - py) - 6} fill={col} rx="2"/>
+              <polygon points={`${eaArrowX - 5} ${cy - 4}, ${eaArrowX} ${cy + 4}, ${eaArrowX + 5} ${cy - 4}`} fill={col}/>
+              <text x={eaArrowX + 10} y={(py + cy) / 2 + 4} fontSize="10" fontWeight="700" fill={col}>{lv.arrow}</text>
             </g>
           );
         }
 
-        // CASE 3: Right to right (lattice enthalpy - big arrow)
+        // Right-to-right: lattice enthalpy (or second EA)
         if (prev.col === "right" && lv.col === "right") {
-          const ax = RX + lineW + 25;
+          const isLattice = lv.type === "compound";
+          const ax = isLattice ? lattArrowX : eaArrowX;
+          if (isLattice) {
+            // Big lattice arrow
+            return (
+              <g key={`ar${i}`}>
+                {isMiss
+                  ? <line x1={ax} y1={py + 5} x2={ax} y2={cy - 8} stroke={col} strokeWidth="7" strokeDasharray="8,5"/>
+                  : <rect x={ax - 5} y={py + 5} width="10" height={cy - py - 12} fill={col} rx="2"/>
+                }
+                <polygon points={`${ax - 8} ${cy - 8}, ${ax} ${cy + 2}, ${ax + 8} ${cy - 8}`} fill={col}/>
+                <text x={ax - 14} y={(py + cy) / 2 + 4} fontSize="12" fontWeight="800" fill={col} textAnchor="end">{lv.arrow}</text>
+              </g>
+            );
+          }
+          // EA2 or additional right-side step
           return (
             <g key={`ar${i}`}>
-              <rect x={ax - 5} y={Math.min(py, cy) + 5} width="10" height={Math.abs(cy - py) - 12} fill={col} rx="2" strokeDasharray={isMiss ? "8,5" : "0"} stroke={isMiss ? col : "none"} fillOpacity={isMiss ? 0 : 1}/>
-              {isMiss && <line x1={ax} y1={py + 5} x2={ax} y2={cy - 8} stroke={col} strokeWidth="6" strokeDasharray="8,5"/>}
-              <polygon points={`${ax - 8} ${cy - 8}, ${ax} ${cy + 2}, ${ax + 8} ${cy - 8}`} fill={col}/>
-              <text x={ax - 12} y={(py + cy) / 2 + 4} fontSize="13" fontWeight="800" fill={col} textAnchor="end">{lv.arrow}</text>
+              <rect x={eaArrowX - 3} y={Math.min(py, cy) + 3} width="6" height={Math.abs(cy - py) - 6} fill={col} rx="2"/>
+              {lv.val > 0
+                ? <polygon points={`${eaArrowX - 5} ${cy + 4}, ${eaArrowX} ${cy - 4}, ${eaArrowX + 5} ${cy + 4}`} fill={col}/>
+                : <polygon points={`${eaArrowX - 5} ${cy - 4}, ${eaArrowX} ${cy + 4}, ${eaArrowX + 5} ${cy - 4}`} fill={col}/>
+              }
+              <text x={eaArrowX + 10} y={(py + cy) / 2 + 4} fontSize="10" fontWeight="700" fill={col}>{lv.arrow}</text>
             </g>
           );
         }
