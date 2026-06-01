@@ -1850,52 +1850,72 @@ const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dhL, dhR,
 
 // Born-Haber cycle diagram (exam-style energy level step diagram)
 const BornHaberCycle = ({ compound, steps, find }) => {
-  // Calculate cumulative y positions (up = endothermic, down = exothermic)
-  const scale = 0.08; // pixels per kJ
-  const startY = 180; // starting y for the compound (bottom)
-  let levels = [{ y: startY, label: compound, side: "left" }];
-  let currentY = startY;
+  // Build energy levels: start at bottom (compound), go up for +ve, down for -ve
+  const W = 460, padTop = 30, padBot = 30, lineW = 140;
+  // Calculate cumulative energy from compound
+  let cumulative = [0];
+  let running = 0;
+  steps.forEach(s => { running += (s.value || 0); cumulative.push(running); });
+  const maxE = Math.max(...cumulative);
+  const minE = Math.min(...cumulative);
+  const range = maxE - minE || 1;
+  const H = Math.max(range * 0.35 + padTop + padBot, 280);
+  const scale = (H - padTop - padBot) / range;
+  const toY = (e) => padTop + (maxE - e) * scale;
+
+  const levelData = [{energy: 0, label: compound, side: 0}];
+  let e = 0;
   steps.forEach((s, i) => {
-    const val = parseFloat(s.value) || 0;
-    currentY = currentY - val * scale; // negative value goes down, positive goes up
-    levels.push({ y: currentY, label: s.species, side: i % 2 === 0 ? "right" : "left", arrow: s.label, isMissing: s.label === find, value: val });
+    e += (s.value || 0);
+    levelData.push({energy: e, label: s.species, side: (i + 1) % 2, arrow: s.label, isMissing: s.label === find});
   });
-  const minY = Math.min(...levels.map(l => l.y)) - 20;
-  const maxY = Math.max(...levels.map(l => l.y)) + 20;
-  const h = maxY - minY + 40;
-  const offset = -minY + 20;
+
   return (
-    <svg width="340" height={Math.max(h, 200)} viewBox={`0 0 340 ${Math.max(h, 200)}`} style={{ fontFamily: "'Caveat',cursive", maxHeight: "350px" }}>
-      <defs><marker id="bha" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#29ABE2"/></marker><marker id="bhr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#dc2626"/></marker></defs>
-      {levels.map((l, i) => {
-        const y = l.y + offset;
-        const x1 = l.side === "left" ? 30 : 140;
-        const x2 = x1 + 120;
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ fontFamily: "'Outfit','DM Sans',sans-serif", display: "block", margin: "0 auto" }}>
+      <defs>
+        <marker id="bha" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#29ABE2"/></marker>
+        <marker id="bhr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#dc2626"/></marker>
+      </defs>
+      {levelData.map((lv, i) => {
+        const y = toY(lv.energy);
+        const xOff = lv.side === 0 ? 40 : W - lineW - 40;
         return (
           <g key={i}>
             {/* Energy level line */}
-            <line x1={x1} y1={y} x2={x2} y2={y} stroke="#1a2d45" strokeWidth="2"/>
-            {/* Species label */}
-            <text x={x1 + 60} y={y - 6} textAnchor="middle" fontSize="10" fontWeight="600" fill="#1a2d45">{l.label}</text>
-            {/* Arrow to next level */}
-            {i < levels.length - 1 && (() => {
-              const next = levels[i + 1];
-              const ny = next.y + offset;
-              const ax = i % 2 === 0 ? x2 : x1;
-              const nx = next.side === "left" ? 30 : 140;
+            <line x1={xOff} y1={y} x2={xOff + lineW} y2={y} stroke="#1a2d45" strokeWidth="2.5"/>
+            {/* Species label above line */}
+            <text x={xOff + lineW / 2} y={y - 8} textAnchor="middle" fontSize="12" fontWeight="700" fill="#1a2d45">{lv.label}</text>
+            {/* Arrow from this level to next */}
+            {i < levelData.length - 1 && (() => {
+              const next = levelData[i + 1];
+              const ny = toY(next.energy);
               const isMissing = next.isMissing;
-              const goingUp = ny < y;
+              // Arrow goes from end of current line to start of next line
+              const ax = lv.side === 0 ? xOff + lineW : xOff; // right edge or left edge
+              const midX = W / 2;
+              const col = isMissing ? "#dc2626" : (next.value > 0 ? "#29ABE2" : "#7c3aed");
+              const dash = isMissing ? "6,4" : "0";
+              const mkr = isMissing ? "url(#bhr)" : "url(#bha)";
               return (
                 <g>
-                  <line x1={ax} y1={y} x2={ax} y2={ny} stroke={isMissing ? "#dc2626" : "#29ABE2"} strokeWidth="1.5" strokeDasharray={isMissing ? "4,3" : "0"} markerEnd={isMissing ? "url(#bhr)" : "url(#bha)"}/>
-                  {ax !== nx && <line x1={ax} y1={ny} x2={nx} y2={ny} stroke="#e0e8f0" strokeWidth="1" strokeDasharray="3,3"/>}
-                  <text x={ax + (goingUp ? 8 : 8)} y={(y + ny) / 2 + 4} fontSize="10" fontWeight="700" fill={isMissing ? "#dc2626" : "#7c3aed"}>{next.arrow}</text>
+                  {/* Vertical arrow in the middle */}
+                  <line x1={midX} y1={y + 2} x2={midX} y2={ny - 2} stroke={col} strokeWidth="2" strokeDasharray={dash} markerEnd={mkr}/>
+                  {/* Horizontal connector from level to arrow */}
+                  <line x1={ax} y1={y} x2={midX} y2={y} stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3,3"/>
+                  {/* Horizontal connector from arrow to next level */}
+                  <line x1={midX} y1={ny} x2={next.side === 0 ? 40 : W - lineW - 40} y2={ny} stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3,3"/>
+                  {/* Label on arrow */}
+                  <rect x={midX + 6} y={(y + ny) / 2 - 10} width={isMissing ? 70 : 50} height="18" rx="4" fill="white" fillOpacity="0.9"/>
+                  <text x={midX + 10} y={(y + ny) / 2 + 3} fontSize="12" fontWeight="800" fill={col}>{next.arrow}</text>
                 </g>
               );
             })()}
           </g>
         );
       })}
+      {/* Enthalpy arrow label on left */}
+      <text x="12" y={H / 2} textAnchor="middle" fontSize="11" fill="#7a95b0" transform={`rotate(-90, 12, ${H/2})`}>Enthalpy</text>
+      <line x1="22" y1={padTop} x2="22" y2={H - padBot} stroke="#cbd5e1" strokeWidth="1" markerEnd="url(#bha)"/>
     </svg>
   );
 };
