@@ -5027,11 +5027,20 @@ export default function App() {
           Upgrade to ChemMastery Pro to unlock all content.
         </p>
         <PricingCards />
-        <div style={{ marginTop: "20px", padding: "12px 16px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e0e8f0" }}>
-          <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>HSJ Tuition student?</div>
-          <button onClick={() => setShowUserMenu(true)} style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>
-            Enter your free access key instead
-          </button>
+        <div style={{ marginTop: "20px", padding: "16px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e0e8f0" }}>
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "8px" }}>HSJ Tuition student? Enter your free access key:</div>
+          <div style={{ display: "flex", gap: "6px" }}>
+            <input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="e.g. HSJ-2026-ABCD"
+              style={{ flex: 1, padding: "9px 10px", borderRadius: "8px", border: "1.5px solid #e0e8f0", fontSize: "13px", fontFamily: "inherit", outline: "none" }}
+              onFocus={e => e.target.style.borderColor = "#29ABE2"}
+              onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+              onKeyDown={e => e.key === "Enter" && handleRedeemKey()}
+            />
+            <button onClick={handleRedeemKey} disabled={accessKeyLoading} style={{ padding: "9px 14px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: accessKeyLoading ? 0.6 : 1 }}>
+              {accessKeyLoading ? "..." : "Redeem"}
+            </button>
+          </div>
+          {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "8px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
         </div>
       </div>
     </div>
@@ -6226,10 +6235,20 @@ export default function App() {
               {showPricing && (
                 <div>
                   <PricingCards />
-                  <div style={{ textAlign: "center", marginTop: "12px" }}>
-                    <button onClick={() => setShowUserMenu(true)} style={{ background: "none", border: "none", color: "#92400e", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>
-                      Have an access key? Enter it here
-                    </button>
+                  <div style={{ marginTop: "12px", padding: "12px", background: "#fffbeb", borderRadius: "8px", border: "1px solid #fbbf24" }}>
+                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#92400e", marginBottom: "6px" }}>Have an access key? Enter it here:</div>
+                    <div style={{ display: "flex", gap: "6px" }}>
+                      <input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="e.g. HSJ-2026-ABCD"
+                        style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1.5px solid #fbbf24", fontSize: "12px", fontFamily: "inherit", outline: "none", background: "#fff" }}
+                        onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                        onBlur={e => e.target.style.borderColor = "#fbbf24"}
+                        onKeyDown={e => e.key === "Enter" && handleRedeemKey()}
+                      />
+                      <button onClick={handleRedeemKey} disabled={accessKeyLoading} style={{ padding: "8px 12px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: accessKeyLoading ? 0.6 : 1 }}>
+                        {accessKeyLoading ? "..." : "Redeem"}
+                      </button>
+                    </div>
+                    {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
                   </div>
                 </div>
               )}
