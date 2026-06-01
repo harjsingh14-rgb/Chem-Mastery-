@@ -1848,24 +1848,57 @@ const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dhL, dhR,
   </svg>
 );
 
-// Born-Haber cycle diagram (vertical energy level diagram)
-const BornHaberCycle = ({ compound, steps, find }) => (
-  <svg width="340" height="260" viewBox="0 0 340 260" style={{ fontFamily: "'Caveat',cursive" }}>
-    {steps.map((s, i) => {
-      const y = 30 + i * 38;
-      const isMissing = s.label === find;
-      return (
-        <g key={i}>
-          <line x1="40" y1={y} x2="300" y2={y} stroke="#e0e8f0" strokeWidth="1" strokeDasharray={isMissing ? "4,3" : "0"}/>
-          <line x1="170" y1={y} x2="170" y2={y + 38} stroke={isMissing ? "#dc2626" : "#29ABE2"} strokeWidth="2" markerEnd="url(#ah)"/>
-          <text x="175" y={y + 22} fontSize="11" fontWeight="600" fill={isMissing ? "#dc2626" : "#1a2d45"}>{s.label}</text>
-          <text x="35" y={y - 4} fontSize="10" fill="#7a95b0" textAnchor="end">{s.species || ""}</text>
-        </g>
-      );
-    })}
-    <text x="170" y="16" textAnchor="middle" fontSize="13" fontWeight="700" fill="#1a2d45">{compound}</text>
-  </svg>
-);
+// Born-Haber cycle diagram (exam-style energy level step diagram)
+const BornHaberCycle = ({ compound, steps, find }) => {
+  // Calculate cumulative y positions (up = endothermic, down = exothermic)
+  const scale = 0.08; // pixels per kJ
+  const startY = 180; // starting y for the compound (bottom)
+  let levels = [{ y: startY, label: compound, side: "left" }];
+  let currentY = startY;
+  steps.forEach((s, i) => {
+    const val = parseFloat(s.value) || 0;
+    currentY = currentY - val * scale; // negative value goes down, positive goes up
+    levels.push({ y: currentY, label: s.species, side: i % 2 === 0 ? "right" : "left", arrow: s.label, isMissing: s.label === find, value: val });
+  });
+  const minY = Math.min(...levels.map(l => l.y)) - 20;
+  const maxY = Math.max(...levels.map(l => l.y)) + 20;
+  const h = maxY - minY + 40;
+  const offset = -minY + 20;
+  return (
+    <svg width="340" height={Math.max(h, 200)} viewBox={`0 0 340 ${Math.max(h, 200)}`} style={{ fontFamily: "'Caveat',cursive", maxHeight: "350px" }}>
+      <defs><marker id="bha" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#29ABE2"/></marker><marker id="bhr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#dc2626"/></marker></defs>
+      {levels.map((l, i) => {
+        const y = l.y + offset;
+        const x1 = l.side === "left" ? 30 : 140;
+        const x2 = x1 + 120;
+        return (
+          <g key={i}>
+            {/* Energy level line */}
+            <line x1={x1} y1={y} x2={x2} y2={y} stroke="#1a2d45" strokeWidth="2"/>
+            {/* Species label */}
+            <text x={x1 + 60} y={y - 6} textAnchor="middle" fontSize="10" fontWeight="600" fill="#1a2d45">{l.label}</text>
+            {/* Arrow to next level */}
+            {i < levels.length - 1 && (() => {
+              const next = levels[i + 1];
+              const ny = next.y + offset;
+              const ax = i % 2 === 0 ? x2 : x1;
+              const nx = next.side === "left" ? 30 : 140;
+              const isMissing = next.isMissing;
+              const goingUp = ny < y;
+              return (
+                <g>
+                  <line x1={ax} y1={y} x2={ax} y2={ny} stroke={isMissing ? "#dc2626" : "#29ABE2"} strokeWidth="1.5" strokeDasharray={isMissing ? "4,3" : "0"} markerEnd={isMissing ? "url(#bhr)" : "url(#bha)"}/>
+                  {ax !== nx && <line x1={ax} y1={ny} x2={nx} y2={ny} stroke="#e0e8f0" strokeWidth="1" strokeDasharray="3,3"/>}
+                  <text x={ax + (goingUp ? 8 : 8)} y={(y + ny) / 2 + 4} fontSize="10" fontWeight="700" fill={isMissing ? "#dc2626" : "#7c3aed"}>{next.arrow}</text>
+                </g>
+              );
+            })()}
+          </g>
+        );
+      })}
+    </svg>
+  );
+};
 
 const CALC_SETS = [
   {
@@ -2294,9 +2327,9 @@ const CALC_SETS = [
 
       // ═══ HARD (12) ═══
       // Full Born-Haber cycles
-      { difficulty: "hard", q: "Use the Born-Haber cycle for KCl to find the lattice enthalpy:\nΔHf(KCl) = -437\nΔHat(K) = +89\nΔHat(1/2 Cl₂) = +122\nIE₁(K) = +419\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", answer: -718, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"KCl", steps:[{label:"+89",species:"K(s)->K(g)"},{label:"+122",species:"1/2Cl₂->Cl"},{label:"+419",species:"K->K⁺"},{label:"-349",species:"Cl->Cl⁻"},{label:"ΔHlatt=?",species:"K⁺+Cl⁻->KCl"}], find:"ΔHlatt=?"}), steps: ["ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", "-437 = 89 + 122 + 419 + (-349) + ΔHlatt", "-437 = +281 + ΔHlatt", "ΔHlatt = -437 - 281 = -718 kJ mol⁻¹"] },
-      { difficulty: "hard", q: "Use the Born-Haber cycle for NaCl to find the lattice enthalpy:\nΔHf(NaCl) = -411\nΔHat(Na) = +108\nΔHat(1/2 Cl₂) = +121\nIE₁(Na) = +496\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "Sum all steps = ΔHf. Rearrange for ΔHlatt.", answer: -787, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"NaCl", steps:[{label:"+108",species:"Na(s)->Na(g)"},{label:"+121",species:"1/2Cl₂->Cl"},{label:"+496",species:"Na->Na⁺"},{label:"-349",species:"Cl->Cl⁻"},{label:"ΔHlatt=?",species:"Na⁺+Cl⁻->NaCl"}], find:"ΔHlatt=?"}), steps: ["-411 = 108 + 121 + 496 + (-349) + ΔHlatt", "-411 = +376 + ΔHlatt", "ΔHlatt = -411 - 376 = -787 kJ mol⁻¹"] },
-      { difficulty: "hard", q: "Use the Born-Haber cycle for LiF to find ΔHlatt:\nΔHf(LiF) = -617\nΔHat(Li) = +161\nΔHat(1/2 F₂) = +79\nIE₁(Li) = +520\nEA₁(F) = -328 kJ mol⁻¹", hint: "ΔHf = sum of all steps", answer: -1049, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"LiF", steps:[{label:"+161",species:"Li(s)->Li(g)"},{label:"+79",species:"1/2F₂->F"},{label:"+520",species:"Li->Li⁺"},{label:"-328",species:"F->F⁻"},{label:"ΔHlatt=?",species:"Li⁺+F⁻->LiF"}], find:"ΔHlatt=?"}), steps: ["-617 = 161 + 79 + 520 + (-328) + ΔHlatt", "-617 = +432 + ΔHlatt", "ΔHlatt = -617 - 432 = -1049 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for KCl to find the lattice enthalpy:\nΔHf(KCl) = -437\nΔHat(K) = +89\nΔHat(1/2 Cl₂) = +122\nIE₁(K) = +419\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", answer: -718, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"KCl(s)", steps:[{label:"+89",species:"K(g)",value:89},{label:"+122",species:"K(g)+Cl(g)",value:122},{label:"+419",species:"K⁺(g)+Cl(g)",value:419},{label:"-349",species:"K⁺(g)+Cl⁻(g)",value:-349},{label:"ΔHlatt=?",species:"KCl(s)",value:-718}], find:"ΔHlatt=?"}), steps: ["ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", "-437 = 89 + 122 + 419 + (-349) + ΔHlatt", "-437 = +281 + ΔHlatt", "ΔHlatt = -437 - 281 = -718 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for NaCl to find the lattice enthalpy:\nΔHf(NaCl) = -411\nΔHat(Na) = +108\nΔHat(1/2 Cl₂) = +121\nIE₁(Na) = +496\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "Sum all steps = ΔHf. Rearrange for ΔHlatt.", answer: -787, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"NaCl(s)", steps:[{label:"+108",species:"Na(g)",value:108},{label:"+121",species:"Na(g)+Cl(g)",value:121},{label:"+496",species:"Na⁺(g)+Cl(g)",value:496},{label:"-349",species:"Na⁺(g)+Cl⁻(g)",value:-349},{label:"ΔHlatt=?",species:"NaCl(s)",value:-787}], find:"ΔHlatt=?"}), steps: ["-411 = 108 + 121 + 496 + (-349) + ΔHlatt", "-411 = +376 + ΔHlatt", "ΔHlatt = -411 - 376 = -787 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for LiF to find ΔHlatt:\nΔHf(LiF) = -617\nΔHat(Li) = +161\nΔHat(1/2 F₂) = +79\nIE₁(Li) = +520\nEA₁(F) = -328 kJ mol⁻¹", hint: "ΔHf = sum of all steps", answer: -1049, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"LiF(s)", steps:[{label:"+161",species:"Li(g)",value:161},{label:"+79",species:"Li(g)+F(g)",value:79},{label:"+520",species:"Li⁺(g)+F(g)",value:520},{label:"-328",species:"Li⁺(g)+F⁻(g)",value:-328},{label:"ΔHlatt=?",species:"LiF(s)",value:-1049}], find:"ΔHlatt=?"}), steps: ["-617 = 161 + 79 + 520 + (-328) + ΔHlatt", "-617 = +432 + ΔHlatt", "ΔHlatt = -617 - 432 = -1049 kJ mol⁻¹"] },
       { difficulty: "hard", q: "Use the Born-Haber cycle for CaCl₂ to find ΔHlatt:\nΔHf(CaCl₂) = -795\nΔHat(Ca) = +178\nΔHat(Cl₂) = +242\nIE₁(Ca) = +590\nIE₂(Ca) = +1145\nEA₁(Cl) = -349 kJ mol⁻¹\n(Note: 2 Cl atoms needed)", hint: "Ca loses 2 electrons. 2 x EA₁ for 2 Cl atoms. ΔHat for full Cl₂.", answer: -2253, unit: "kJ mol⁻¹", tolerance: 5, steps: ["-795 = 178 + 242 + 590 + 1145 + 2(-349) + ΔHlatt", "-795 = 178 + 242 + 590 + 1145 - 698 + ΔHlatt", "-795 = +1457 + ΔHlatt", "ΔHlatt = -795 - 1457 = -2252 kJ mol⁻¹"] },
       // Find missing Born-Haber step
       { difficulty: "hard", q: "In the Born-Haber cycle for NaBr:\nΔHf = -361, ΔHat(Na) = +108, IE₁(Na) = +496, ΔHlatt = -747\nEA₁(Br) = -325 kJ mol⁻¹\nCalculate ΔHat(1/2 Br₂).", hint: "ΔHf = ΔHat(Na) + ΔHat(Br) + IE₁ + EA₁ + ΔHlatt. Solve for ΔHat(Br).", answer: 107, unit: "kJ mol⁻¹", tolerance: 2, steps: ["-361 = 108 + ΔHat(Br) + 496 + (-325) + (-747)", "-361 = -468 + ΔHat(Br)", "ΔHat(Br) = -361 + 468 = +107 kJ mol⁻¹"] },
@@ -2312,7 +2345,7 @@ const CALC_SETS = [
       { difficulty: "hard", q: "Calculate ΔS and ΔG at 298 K for:\nNH₄Cl(s) -> NH₃(g) + HCl(g)\nΔH = +176 kJ mol⁻¹\nS°[NH₄Cl] = 94.6, S°[NH₃] = 192, S°[HCl] = 187 J K⁻¹ mol⁻¹", hint: "Find ΔS first, then ΔG = ΔH - TΔS", answer: 91.3, unit: "kJ mol⁻¹", tolerance: 2, steps: ["ΔS = [192 + 187] - 94.6 = 284.4 J K⁻¹ mol⁻¹", "ΔG = +176 - (298 x 0.2844)", "ΔG = 176 - 84.8 = +91.2 kJ mol⁻¹", "Not feasible at 298 K (ΔG > 0)"] },
 
       // ═══ EXAM (10) ═══
-      { difficulty: "exam", q: "Use the Born-Haber cycle for MgCl₂ to find ΔHlatt:\nΔHf = -641, ΔHat(Mg) = +148, IE₁(Mg) = +738, IE₂(Mg) = +1451\nΔHat(Cl₂) = +242, EA₁(Cl) = -349 kJ mol⁻¹", hint: "Mg²⁺ needs IE₁ + IE₂. Full Cl₂ atomisation. 2 x EA₁.", answer: -2523, unit: "kJ mol⁻¹", tolerance: 5, diagram: React.createElement(BornHaberCycle, {compound:"MgCl₂", steps:[{label:"+148",species:"Mg(s)->Mg(g)"},{label:"+242",species:"Cl₂->2Cl"},{label:"+738+1451",species:"Mg->Mg²⁺"},{label:"2x(-349)",species:"2Cl->2Cl⁻"},{label:"ΔHlatt=?",species:"ions->MgCl₂"}], find:"ΔHlatt=?"}), steps: ["-641 = 148 + 242 + 738 + 1451 + 2(-349) + ΔHlatt", "-641 = 148 + 242 + 738 + 1451 - 698 + ΔHlatt", "-641 = 1881 + ΔHlatt", "ΔHlatt = -641 - 1881 = -2522 kJ mol⁻¹"] },
+      { difficulty: "exam", q: "Use the Born-Haber cycle for MgCl₂ to find ΔHlatt:\nΔHf = -641, ΔHat(Mg) = +148, IE₁(Mg) = +738, IE₂(Mg) = +1451\nΔHat(Cl₂) = +242, EA₁(Cl) = -349 kJ mol⁻¹", hint: "Mg²⁺ needs IE₁ + IE₂. Full Cl₂ atomisation. 2 x EA₁.", answer: -2523, unit: "kJ mol⁻¹", tolerance: 5, diagram: React.createElement(BornHaberCycle, {compound:"MgCl₂(s)", steps:[{label:"+148",species:"Mg(g)",value:148},{label:"+242",species:"Mg(g)+2Cl(g)",value:242},{label:"+738",species:"Mg⁺(g)+2Cl(g)",value:738},{label:"+1451",species:"Mg²⁺(g)+2Cl(g)",value:1451},{label:"-698",species:"Mg²⁺(g)+2Cl⁻(g)",value:-698},{label:"ΔHlatt=?",species:"MgCl₂(s)",value:-2522}], find:"ΔHlatt=?"}), steps: ["-641 = 148 + 242 + 738 + 1451 + 2(-349) + ΔHlatt", "-641 = 148 + 242 + 738 + 1451 - 698 + ΔHlatt", "-641 = 1881 + ΔHlatt", "ΔHlatt = -641 - 1881 = -2522 kJ mol⁻¹"] },
       { difficulty: "exam", q: "Calculate ΔHf for KBr using the Born-Haber cycle:\nΔHat(K) = +89, ΔHat(1/2 Br₂) = +112\nIE₁(K) = +419, EA₁(Br) = -325\nΔHlatt(KBr) = -689 kJ mol⁻¹", hint: "ΔHf = sum of all steps including lattice enthalpy", answer: -394, unit: "kJ mol⁻¹", tolerance: 3, steps: ["ΔHf = ΔHat(K) + ΔHat(Br) + IE₁ + EA₁ + ΔHlatt", "ΔHf = 89 + 112 + 419 + (-325) + (-689)", "ΔHf = -394 kJ mol⁻¹"] },
       { difficulty: "exam", q: "The theoretical (Born-Haber) lattice enthalpy of NaCl is -787 kJ mol⁻¹.\nThe calculated (Born-Lande) value is -770 kJ mol⁻¹.\nCalculate the % difference and explain what this suggests about the bonding.", hint: "% diff = |exp - calc| / exp x 100. Small difference = ionic model works well.", answer: 2.2, unit: "%", tolerance: 0.2, steps: ["% difference = |(-787) - (-770)| / 787 x 100", "= 17 / 787 x 100 = 2.2%", "Small % = good agreement with ionic model", "NaCl bonding is almost purely ionic"] },
       { difficulty: "exam", q: "For AgI, the Born-Haber lattice enthalpy is -876 kJ mol⁻¹ but the theoretical (Born-Lande) value is -736 kJ mol⁻¹.\nCalculate the % discrepancy and explain.", hint: "Large discrepancy = covalent character.", answer: 16.0, unit: "%", tolerance: 0.5, steps: ["% = |(-876) - (-736)| / 876 x 100", "= 140 / 876 x 100 = 16.0%", "Large discrepancy = significant covalent character", "Ag⁺ is small and highly polarising; I⁻ is large and polarisable", "The electron cloud of I⁻ is distorted (Fajans' rules)"] },
