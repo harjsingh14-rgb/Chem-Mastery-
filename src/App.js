@@ -5082,6 +5082,7 @@ export default function App() {
   const [calcInput, setCalcInput] = useState("");
   const [calcChecked, setCalcChecked] = useState(false);
   const [calcShowSteps, setCalcShowSteps] = useState(false);
+  const [calcShowHint, setCalcShowHint] = useState(false);
   const [calcScore, setCalcScore] = useState({}); // { topicId: { correct, attempted } }
 
   // --- Study streak & activity tracking ---
@@ -7491,7 +7492,7 @@ export default function App() {
                   const score = calcScore[set.id] || { correct: 0, attempted: 0 };
                   const calcLocked = !hasFullAccess && !FREE_CALC_IDS.includes(set.id);
                   return (
-                    <button key={set.id} onClick={() => { if (!calcLocked) { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); track("select_calc_topic", { topic: set.id, title: set.title }); } }} style={{
+                    <button key={set.id} onClick={() => { if (!calcLocked) { setCalcTopic(set.id); setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); setCalcShowHint(false); track("select_calc_topic", { topic: set.id, title: set.title }); } }} style={{
                       background: "#ffffff", border: `2px solid ${set.color}30`,
                       borderRadius: "14px", padding: "14px 12px", textAlign: "left",
                       cursor: calcLocked ? "default" : "pointer", fontFamily: "inherit",
@@ -7531,7 +7532,7 @@ export default function App() {
                 <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Choose difficulty</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {tiers.map(t => (
-                    <button key={t.key} onClick={() => { setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); track("select_difficulty", { topic: calcTopic, difficulty: t.key }); }} style={{
+                    <button key={t.key} onClick={() => { setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); setCalcShowHint(false); track("select_difficulty", { topic: calcTopic, difficulty: t.key }); }} style={{
                       background: "#ffffff", border: `2px solid ${t.color}20`, borderRadius: "14px",
                       padding: "14px 16px", textAlign: "left", cursor: "pointer", fontFamily: "inherit",
                       display: "flex", alignItems: "center", gap: "14px",
@@ -7665,13 +7666,13 @@ export default function App() {
                         Check
                       </button>
                       {/* Hint toggle */}
-                      <button onClick={() => setCalcShowSteps(!calcShowSteps)} style={{ padding: "12px 16px", background: "none", border: "1.5px solid #29ABE2", borderRadius: "10px", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
-                        {calcShowSteps ? "Hide hint" : "Hint"}
+                      <button onClick={() => setCalcShowHint(!calcShowHint)} style={{ padding: "12px 16px", background: "none", border: "1.5px solid #29ABE2", borderRadius: "10px", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                        {calcShowHint ? "Hide hint" : "Hint"}
                       </button>
                     </div>
                   )}
                   {/* Hint inline */}
-                  {!calcChecked && calcShowSteps && (
+                  {!calcChecked && calcShowHint && (
                     <div style={{ background: "#eaf6fd", borderRadius: "10px", padding: "12px 14px", fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, marginBottom: "8px" }}>{q.hint}</div>
                   )}
                 </div>
@@ -7693,7 +7694,7 @@ export default function App() {
                     {/* Navigation */}
                     <div style={{ display: "flex", gap: "8px", marginTop: "18px" }}>
                       {!isLast ? (
-                        <button onClick={() => { setCalcIndex(currentIdx + 1); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "12px 28px", background: "#29ABE2", border: "none", borderRadius: "10px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                        <button onClick={() => { setCalcIndex(currentIdx + 1); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); setCalcShowHint(false); }} style={{ padding: "12px 28px", background: "#29ABE2", border: "none", borderRadius: "10px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
                           Next →
                         </button>
                       ) : (
@@ -7701,7 +7702,7 @@ export default function App() {
                           Finish
                         </button>
                       )}
-                      <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "12px 16px", background: "#f0f4f8", border: "none", borderRadius: "10px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                      <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); setCalcShowHint(false); }} style={{ padding: "12px 16px", background: "#f0f4f8", border: "none", borderRadius: "10px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
                         Restart
                       </button>
                     </div>
