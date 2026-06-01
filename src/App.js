@@ -1848,74 +1848,111 @@ const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dhL, dhR,
   </svg>
 );
 
-// Born-Haber cycle diagram (exam-style energy level step diagram)
+// Born-Haber cycle diagram (exam-style: left side up, lattice on right)
 const BornHaberCycle = ({ compound, steps, find }) => {
-  // Build energy levels: start at bottom (compound), go up for +ve, down for -ve
-  const W = 460, padTop = 30, padBot = 30, lineW = 140;
-  // Calculate cumulative energy from compound
-  let cumulative = [0];
-  let running = 0;
-  steps.forEach(s => { running += (s.value || 0); cumulative.push(running); });
-  const maxE = Math.max(...cumulative);
-  const minE = Math.min(...cumulative);
+  const W = 520, padT = 25, padB = 25;
+  // Calculate cumulative energies
+  let cumE = [0]; let run = 0;
+  steps.forEach(s => { run += (s.value || 0); cumE.push(run); });
+  const maxE = Math.max(...cumE), minE = Math.min(...cumE);
   const range = maxE - minE || 1;
-  const H = Math.max(range * 0.35 + padTop + padBot, 280);
-  const scale = (H - padTop - padBot) / range;
-  const toY = (e) => padTop + (maxE - e) * scale;
+  const H = Math.max(range * 0.32 + padT + padB + 60, 320);
+  const sc = (H - padT - padB - 40) / range;
+  const toY = e => padT + 20 + (maxE - e) * sc;
 
-  const levelData = [{energy: 0, label: compound, side: 0}];
-  let e = 0;
+  // Build levels with side info
+  // Left side: compound at bottom, then upward steps. Right side: lattice arrow + final compound
+  const lvls = [{ e: 0, label: compound, x: 80 }]; // start
+  let energy = 0;
+  const lattIdx = steps.findIndex(s => s.label === find || s.label.includes("latt"));
   steps.forEach((s, i) => {
-    e += (s.value || 0);
-    levelData.push({energy: e, label: s.species, side: (i + 1) % 2, arrow: s.label, isMissing: s.label === find});
+    energy += (s.value || 0);
+    // Lattice enthalpy and final level go on right; everything else on left
+    const isLatt = (i === steps.length - 1) || s.label.includes("latt") || s.label === find;
+    lvls.push({ e: energy, label: s.species, x: isLatt ? 340 : 80, arrow: s.label, miss: s.label === find, val: s.value });
   });
 
+  const arrowW = 8; // thick arrow width
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ fontFamily: "'Outfit','DM Sans',sans-serif", display: "block", margin: "0 auto" }}>
       <defs>
-        <marker id="bha" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#29ABE2"/></marker>
-        <marker id="bhr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#dc2626"/></marker>
+        <marker id="bhu" markerWidth="12" markerHeight="10" refX="6" refY="10" orient="auto"><polygon points="0 10, 6 0, 12 10" fill="#29ABE2"/></marker>
+        <marker id="bhd" markerWidth="12" markerHeight="10" refX="6" refY="0" orient="auto"><polygon points="0 0, 6 10, 12 0" fill="#29ABE2"/></marker>
+        <marker id="bhdr" markerWidth="12" markerHeight="10" refX="6" refY="0" orient="auto"><polygon points="0 0, 6 10, 12 0" fill="#dc2626"/></marker>
       </defs>
-      {levelData.map((lv, i) => {
-        const y = toY(lv.energy);
-        const xOff = lv.side === 0 ? 40 : W - lineW - 40;
+      {/* Energy axis */}
+      <text x="14" y={H / 2} textAnchor="middle" fontSize="13" fontWeight="700" fill="#1a2d45" transform={`rotate(-90, 14, ${H/2})`}>Energy</text>
+      <line x1="30" y1={H - padB} x2="30" y2={padT} stroke="#1a2d45" strokeWidth="3"/>
+      <polygon points={`24 ${padT + 5}, 30 ${padT - 5}, 36 ${padT + 5}`} fill="#1a2d45"/>
+
+      {/* Draw levels and arrows */}
+      {lvls.map((lv, i) => {
+        const y = toY(lv.e);
+        const lx = lv.x, lw = 140;
         return (
           <g key={i}>
-            {/* Energy level line */}
-            <line x1={xOff} y1={y} x2={xOff + lineW} y2={y} stroke="#1a2d45" strokeWidth="2.5"/>
-            {/* Species label above line */}
-            <text x={xOff + lineW / 2} y={y - 8} textAnchor="middle" fontSize="12" fontWeight="700" fill="#1a2d45">{lv.label}</text>
-            {/* Arrow from this level to next */}
-            {i < levelData.length - 1 && (() => {
-              const next = levelData[i + 1];
-              const ny = toY(next.energy);
-              const isMissing = next.isMissing;
-              // Arrow goes from end of current line to start of next line
-              const ax = lv.side === 0 ? xOff + lineW : xOff; // right edge or left edge
-              const midX = W / 2;
-              const col = isMissing ? "#dc2626" : (next.value > 0 ? "#29ABE2" : "#7c3aed");
-              const dash = isMissing ? "6,4" : "0";
-              const mkr = isMissing ? "url(#bhr)" : "url(#bha)";
+            {/* Horizontal energy level line */}
+            <line x1={lx} y1={y} x2={lx + lw} y2={y} stroke="#475569" strokeWidth="2"/>
+            {/* Species label */}
+            <text x={lx + lw / 2} y={y - 7} textAnchor="middle" fontSize="11" fontWeight="700" fill="#1a2d45">{lv.label}</text>
+
+            {/* Arrow from previous level to this one */}
+            {i > 0 && (() => {
+              const prev = lvls[i - 1];
+              const py = toY(prev.e);
+              const isMiss = lv.miss;
+              const goUp = lv.val > 0;
+              const col = isMiss ? "#dc2626" : "#29ABE2";
+
+              // Determine arrow x position
+              const onLeft = lv.x < 200 && prev.x < 200;
+              const onRight = lv.x >= 200;
+              let ax;
+              if (onLeft) {
+                ax = prev.x + lw + 15; // just right of left levels
+              } else if (onRight && prev.x < 200) {
+                // This is the lattice arrow - draw on right side
+                ax = 350;
+              } else {
+                ax = lv.x - 15;
+              }
+
+              // For lattice: draw from top gaseous ions level to bottom compound
+              if (onRight && prev.x < 200) {
+                // Big lattice arrow on the right
+                const topY = py; // where gaseous ions are
+                return (
+                  <g>
+                    {/* Connecting line from left level to right arrow */}
+                    <line x1={prev.x + lw} y1={py} x2={ax - 5} y2={py} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
+                    {/* Connecting line from right arrow to right level */}
+                    <line x1={ax + 5} y1={y} x2={lv.x} y2={y} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
+                    {/* Big thick arrow */}
+                    <line x1={ax} y1={topY + 5} x2={ax} y2={y - 8} stroke={col} strokeWidth={arrowW} strokeDasharray={isMiss ? "8,5" : "0"} />
+                    <polygon points={`${ax - 8} ${y - 12}, ${ax} ${y - 2}, ${ax + 8} ${y - 12}`} fill={col}/>
+                    {/* Label */}
+                    <text x={ax + 14} y={(topY + y) / 2 + 4} fontSize="12" fontWeight="800" fill={col}>{lv.arrow}</text>
+                  </g>
+                );
+              }
+
+              // Normal upward/downward arrow on left side
               return (
                 <g>
-                  {/* Vertical arrow in the middle */}
-                  <line x1={midX} y1={y + 2} x2={midX} y2={ny - 2} stroke={col} strokeWidth="2" strokeDasharray={dash} markerEnd={mkr}/>
-                  {/* Horizontal connector from level to arrow */}
-                  <line x1={ax} y1={y} x2={midX} y2={y} stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3,3"/>
-                  {/* Horizontal connector from arrow to next level */}
-                  <line x1={midX} y1={ny} x2={next.side === 0 ? 40 : W - lineW - 40} y2={ny} stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3,3"/>
-                  {/* Label on arrow */}
-                  <rect x={midX + 6} y={(y + ny) / 2 - 10} width={isMissing ? 70 : 50} height="18" rx="4" fill="white" fillOpacity="0.9"/>
-                  <text x={midX + 10} y={(y + ny) / 2 + 3} fontSize="12" fontWeight="800" fill={col}>{next.arrow}</text>
+                  {/* Thick arrow */}
+                  <line x1={ax} y1={goUp ? py - 3 : py + 3} x2={ax} y2={goUp ? y + 10 : y - 10} stroke={col} strokeWidth={arrowW - 2}/>
+                  {goUp
+                    ? <polygon points={`${ax - 6} ${y + 12}, ${ax} ${y + 2}, ${ax + 6} ${y + 12}`} fill={col}/>
+                    : <polygon points={`${ax - 6} ${y - 12}, ${ax} ${y - 2}, ${ax + 6} ${y - 12}`} fill={col}/>
+                  }
+                  {/* Label to right of arrow */}
+                  <text x={ax + 12} y={(py + y) / 2 + 4} fontSize="11" fontWeight="700" fill={col}>{lv.arrow}</text>
                 </g>
               );
             })()}
           </g>
         );
       })}
-      {/* Enthalpy arrow label on left */}
-      <text x="12" y={H / 2} textAnchor="middle" fontSize="11" fill="#7a95b0" transform={`rotate(-90, 12, ${H/2})`}>Enthalpy</text>
-      <line x1="22" y1={padTop} x2="22" y2={H - padBot} stroke="#cbd5e1" strokeWidth="1" markerEnd="url(#bha)"/>
     </svg>
   );
 };
