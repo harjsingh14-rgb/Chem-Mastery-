@@ -7645,66 +7645,63 @@ export default function App() {
                     </div>
                   </div>
                 )}
-                {/* Question card */}
-                <div style={{ background: "#ffffff", borderRadius: "16px", padding: "22px 24px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", marginBottom: "14px", border: "1px solid #e8eef4" }}>
-                  <div style={{ fontSize: "16px", color: "#1a2d45", lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: "'Outfit','DM Sans',sans-serif" }}>{q.q}</div>
-                  {q.diagram && <div style={{ margin: "16px 0 4px", display: "flex", justifyContent: "center" }}>{q.diagram}</div>}
+                {/* Question + input layout */}
+                <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", marginBottom: "14px", border: "1px solid #e8eef4" }}>
+                  <div style={{ fontSize: "17px", color: "#1a2d45", lineHeight: 1.75, fontWeight: 500, whiteSpace: "pre-line", fontFamily: "'Outfit','DM Sans',sans-serif", marginBottom: q.diagram ? "0" : "16px" }}>{q.q}</div>
+                  {q.diagram && <div style={{ margin: "16px 0 16px", display: "flex", justifyContent: "center" }}>{q.diagram}</div>}
+                  {/* Input inside the card */}
+                  {!calcChecked && (
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "12px" }}>
+                      <input
+                        type={q.isText ? "text" : "number"}
+                        value={calcInput}
+                        onChange={e => setCalcInput(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && calcInput && checkAnswer()}
+                        placeholder={q.isText ? "e.g. C2H4" : "Your answer"}
+                        style={{ width: "200px", padding: "12px 16px", borderRadius: "10px", border: "2px solid #d0dce8", fontSize: "16px", fontFamily: "'Outfit','DM Sans',sans-serif", outline: "none", color: "#1a2d45", background: "#f8fafc" }}
+                      />
+                      {q.unit && <div style={{ fontSize: "14px", color: "#7a95b0", fontWeight: 600, whiteSpace: "nowrap" }}>{q.unit}</div>}
+                      <button onClick={checkAnswer} disabled={!calcInput} style={{ padding: "12px 28px", background: calcInput ? "#29ABE2" : "#e0e8f0", border: "none", borderRadius: "10px", color: calcInput ? "#ffffff" : "#9ca3af", fontSize: "15px", fontWeight: 700, cursor: calcInput ? "pointer" : "not-allowed", fontFamily: "'Outfit','DM Sans',sans-serif", marginLeft: "4px" }}>
+                        Check
+                      </button>
+                      {/* Hint toggle */}
+                      <button onClick={() => setCalcShowSteps(!calcShowSteps)} style={{ padding: "12px 16px", background: "none", border: "1.5px solid #29ABE2", borderRadius: "10px", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                        {calcShowSteps ? "Hide hint" : "Hint"}
+                      </button>
+                    </div>
+                  )}
+                  {/* Hint inline */}
+                  {!calcChecked && calcShowSteps && (
+                    <div style={{ background: "#eaf6fd", borderRadius: "10px", padding: "12px 14px", fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, marginBottom: "8px" }}>{q.hint}</div>
+                  )}
                 </div>
-                {/* Hint */}
-                {!calcChecked && (
-                  <details style={{ marginBottom: "14px" }}>
-                    <summary style={{ fontSize: "14px", color: "#29ABE2", fontWeight: 600, cursor: "pointer", userSelect: "none" }}>Show hint</summary>
-                    <div style={{ background: "#eaf6fd", borderRadius: "10px", padding: "12px 14px", marginTop: "8px", fontSize: "14px", color: "#1a2d45", lineHeight: 1.6 }}>{q.hint}</div>
-                  </details>
-                )}
-                {/* Input */}
-                {!calcChecked && (
-                  <div style={{ display: "flex", gap: "10px", marginBottom: "14px", maxWidth: "400px" }}>
-                    <input
-                      type={q.isText ? "text" : "number"}
-                      value={calcInput}
-                      onChange={e => setCalcInput(e.target.value)}
-                      onKeyDown={e => e.key === "Enter" && calcInput && checkAnswer()}
-                      placeholder={q.isText ? "e.g. C2H4" : "Your answer"}
-                      style={{ flex: 1, padding: "14px 16px", borderRadius: "12px", border: "2px solid #d0dce8", fontSize: "16px", fontFamily: "'Outfit','DM Sans',sans-serif", outline: "none", color: "#1a2d45", background: "#fff" }}
-                    />
-                    {q.unit && <div style={{ display: "flex", alignItems: "center", fontSize: "14px", color: "#7a95b0", fontWeight: 600, whiteSpace: "nowrap" }}>{q.unit}</div>}
-                  </div>
-                )}
-                {!calcChecked && (
-                  <button onClick={checkAnswer} disabled={!calcInput} style={{ width: "100%", maxWidth: "400px", padding: "14px", background: calcInput ? "#29ABE2" : "#e0e8f0", border: "none", borderRadius: "12px", color: calcInput ? "#ffffff" : "#9ca3af", fontSize: "16px", fontWeight: 700, cursor: calcInput ? "pointer" : "not-allowed", fontFamily: "'Outfit','DM Sans',sans-serif" }}>
-                    Check Answer
-                  </button>
-                )}
-                {/* Result */}
+                {/* Result + worked solution */}
                 {calcChecked && (
-                  <div>
-                    <div style={{ borderRadius: "12px", padding: "14px 16px", marginBottom: "12px", background: isCorrect ? "#dcfce7" : "#fee2e2", border: `2px solid ${isCorrect ? "#16a34a" : "#dc2626"}` }}>
-                      <div style={{ fontSize: "15px", fontWeight: 700, color: isCorrect ? "#15803d" : "#dc2626", marginBottom: "4px" }}>{isCorrect ? "Correct!" : "Not quite"}</div>
-                      {!isCorrect && <div style={{ fontSize: "13px", color: "#1a2d45" }}>Answer: <strong>{q.answer} {q.unit}</strong></div>}
+                  <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", marginBottom: "14px", border: "1px solid #e8eef4" }}>
+                    {/* Result banner */}
+                    <div style={{ borderRadius: "10px", padding: "12px 16px", marginBottom: "16px", background: isCorrect ? "#dcfce7" : "#fee2e2", border: `2px solid ${isCorrect ? "#16a34a" : "#dc2626"}` }}>
+                      <div style={{ fontSize: "16px", fontWeight: 700, color: isCorrect ? "#15803d" : "#dc2626" }}>{isCorrect ? "Correct!" : "Not quite"}{!isCorrect && <span style={{ fontWeight: 500, marginLeft: "8px" }}>Answer: {q.answer} {q.unit}</span>}</div>
                     </div>
                     {/* Worked solution */}
-                    <div style={{ background: "#ffffff", borderRadius: "12px", padding: "14px 16px", border: "1px solid #e8eef4", boxShadow: "0 1px 6px rgba(0,0,0,0.05)", marginBottom: "12px" }}>
-                      <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Worked Solution</div>
-                      {q.steps.map((step, si) => (
-                        <div key={si} style={{ display: "flex", gap: "10px", marginBottom: "8px" }}>
-                          <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", background: "#eaf6fd", borderRadius: "50%", width: "22px", height: "22px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>{si + 1}</div>
-                          <div style={{ fontSize: "17px", color: "#1a2d45", lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{step}</div>
-                        </div>
-                      ))}
-                    </div>
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Worked Solution</div>
+                    {q.steps.map((step, si) => (
+                      <div key={si} style={{ display: "flex", gap: "10px", marginBottom: "8px" }}>
+                        <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", background: "#eaf6fd", borderRadius: "50%", width: "22px", height: "22px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>{si + 1}</div>
+                        <div style={{ fontSize: "18px", color: "#1a2d45", lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{step}</div>
+                      </div>
+                    ))}
                     {/* Navigation */}
-                    <div style={{ display: "flex", gap: "8px" }}>
+                    <div style={{ display: "flex", gap: "8px", marginTop: "18px" }}>
                       {!isLast ? (
-                        <button onClick={() => { setCalcIndex(currentIdx + 1); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ flex: 1, padding: "13px", background: "#29ABE2", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                          Next Question →
+                        <button onClick={() => { setCalcIndex(currentIdx + 1); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "12px 28px", background: "#29ABE2", border: "none", borderRadius: "10px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                          Next →
                         </button>
                       ) : (
-                        <button onClick={() => { setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ flex: 1, padding: "13px", background: "#1a2d45", border: "none", borderRadius: "12px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                          Finish - Back to Difficulty
+                        <button onClick={() => { setCalcDifficulty(null); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); }} style={{ padding: "12px 28px", background: "#1a2d45", border: "none", borderRadius: "10px", color: "#ffffff", fontSize: "15px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                          Finish
                         </button>
                       )}
-                      <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "13px 16px", background: "#f0f4f8", border: "none", borderRadius: "12px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                      <button onClick={() => { setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); }} style={{ padding: "12px 16px", background: "#f0f4f8", border: "none", borderRadius: "10px", color: "#4a6080", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
                         Restart
                       </button>
                     </div>
