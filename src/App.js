@@ -7669,7 +7669,7 @@ export default function App() {
                 )}
                 {/* Question + input layout */}
                 <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", marginBottom: "14px", border: "1px solid #e8eef4" }}>
-                  <div style={{ fontSize: "17px", color: "#1a2d45", lineHeight: 1.75, fontWeight: 500, whiteSpace: "pre-line", fontFamily: "'Outfit','DM Sans',sans-serif", marginBottom: (q.diagram || q.dataTable) ? "0" : "16px" }}>{q.q}</div>
+                  <div style={{ fontSize: "19px", color: "#1a2d45", lineHeight: 1.75, fontWeight: 600, whiteSpace: "pre-line", fontFamily: "'Outfit','DM Sans',sans-serif", marginBottom: (q.diagram || q.dataTable) ? "0" : "16px" }}>{q.q}</div>
                   {q.dataTable && (
                     <table style={{ margin: "12px 0", borderCollapse: "collapse", fontSize: "14px", fontFamily: "'Outfit','DM Sans',sans-serif" }}>
                       <tbody>
@@ -7682,7 +7682,7 @@ export default function App() {
                       </tbody>
                     </table>
                   )}
-                  {q.diagram && <div style={{ margin: "16px 0 16px", display: "flex", justifyContent: "center" }}>{q.diagram}</div>}
+                  {q.diagram && <div style={{ margin: "16px 0 16px", display: "flex", justifyContent: "center" }}><div style={{ width: "100%", maxWidth: "420px" }}>{q.diagram}</div></div>}
                   {/* Input inside the card */}
                   {!calcChecked && (
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "12px" }}>
