@@ -5078,6 +5078,7 @@ export default function App() {
   const [calcTopic, setCalcTopic] = useState(null);
   const [showPT, setShowPT] = useState(null); // null | "aqa" | "ocr"
   const [calcDifficulty, setCalcDifficulty] = useState(null); // null | "all" | "easy" | "medium" | "hard" | "exam"
+  const [calcSortedQs, setCalcSortedQs] = useState([]); // questions sorted once when difficulty selected
   const [calcIndex, setCalcIndex] = useState(0);
   const [calcInput, setCalcInput] = useState("");
   const [calcChecked, setCalcChecked] = useState(false);
@@ -7532,7 +7533,23 @@ export default function App() {
                 <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Choose difficulty</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {tiers.map(t => (
-                    <button key={t.key} onClick={() => { setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); setCalcShowHint(false); track("select_difficulty", { topic: calcTopic, difficulty: t.key }); }} style={{
+                    <button key={t.key} onClick={() => {
+                      const baseQ = t.key === "all" ? set.questions : set.questions.filter(qq => qq.difficulty === t.key);
+                      // Sort by spaced repetition: wrong first, unseen next, correct last
+                      try {
+                        const srData = JSON.parse(localStorage.getItem("hsj-calc-sr") || "{}");
+                        const topicSR = srData[calcTopic] || {};
+                        baseQ.sort((a, b) => {
+                          const aK = JSON.stringify(a.q).slice(0, 40), bK = JSON.stringify(b.q).slice(0, 40);
+                          const aH = topicSR[aK] || { correct: 0, wrong: 0 }, bH = topicSR[bK] || { correct: 0, wrong: 0 };
+                          const aS = aH.wrong > 0 ? 0 : (aH.correct === 0 ? 1 : 2 + aH.correct);
+                          const bS = bH.wrong > 0 ? 0 : (bH.correct === 0 ? 1 : 2 + bH.correct);
+                          return aS - bS;
+                        });
+                      } catch {}
+                      setCalcSortedQs(baseQ);
+                      setCalcDifficulty(t.key); setCalcIndex(0); setCalcInput(""); setCalcChecked(false); setCalcShowSteps(false); setCalcShowHint(false); track("select_difficulty", { topic: calcTopic, difficulty: t.key });
+                    }} style={{
                       background: "#ffffff", border: `2px solid ${t.color}20`, borderRadius: "14px",
                       padding: "14px 16px", textAlign: "left", cursor: "pointer", fontFamily: "inherit",
                       display: "flex", alignItems: "center", gap: "14px",
@@ -7553,23 +7570,8 @@ export default function App() {
           {calcTopic && calcDifficulty && (() => {
             const set = CALC_SETS.find(s => s.id === calcTopic);
             if (!set) return null;
-            const baseQs = calcDifficulty === "all" ? set.questions : set.questions.filter(q => q.difficulty === calcDifficulty);
-            if (baseQs.length === 0) return <div style={{ color: "#7a95b0", fontSize: "14px" }}>No questions at this difficulty yet.</div>;
-
-            // Spaced repetition: sort by performance (wrong answers first, unseen next, correct last)
-            const calcHistory = JSON.parse(localStorage.getItem("hsj-calc-sr") || "{}");
-            const topicHistory = calcHistory[calcTopic] || {};
-            const filteredQs = [...baseQs].sort((a, b) => {
-              const aKey = JSON.stringify(a.q).slice(0, 40);
-              const bKey = JSON.stringify(b.q).slice(0, 40);
-              const aH = topicHistory[aKey] || { correct: 0, wrong: 0, last: 0 };
-              const bH = topicHistory[bKey] || { correct: 0, wrong: 0, last: 0 };
-              // Priority: wrong > unseen > correct. Within same, oldest first.
-              const aScore = aH.wrong > 0 ? 0 : (aH.correct === 0 ? 1 : 2 + Math.min(aH.correct, 5));
-              const bScore = bH.wrong > 0 ? 0 : (bH.correct === 0 ? 1 : 2 + Math.min(bH.correct, 5));
-              if (aScore !== bScore) return aScore - bScore;
-              return (aH.last || 0) - (bH.last || 0);
-            });
+            const filteredQs = calcSortedQs.length > 0 ? calcSortedQs : (calcDifficulty === "all" ? set.questions : set.questions.filter(q => q.difficulty === calcDifficulty));
+            if (filteredQs.length === 0) return <div style={{ color: "#7a95b0", fontSize: "14px" }}>No questions at this difficulty yet.</div>;
 
             const q = filteredQs[calcIndex] || filteredQs[0];
             const currentIdx = Math.min(calcIndex, filteredQs.length - 1);
