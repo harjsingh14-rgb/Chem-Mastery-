@@ -7685,7 +7685,7 @@ export default function App() {
                         </table>
                       )}
                       {q.diagram && (
-                        <div style={{ flex: 1, minWidth: "260px", maxWidth: "480px" }}>{q.diagram}</div>
+                        <div style={{ flex: 1, minWidth: "260px", maxWidth: "850px" }}>{q.diagram}</div>
                       )}
                     </div>
                   )}
