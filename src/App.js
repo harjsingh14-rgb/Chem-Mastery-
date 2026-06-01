@@ -7646,33 +7646,33 @@ export default function App() {
                   </div>
                 )}
                 {/* Question card */}
-                <div style={{ background: "#ffffff", borderRadius: "14px", padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,0.07)", marginBottom: "12px", border: "1px solid #e8eef4" }}>
-                  <div style={{ fontSize: "14px", color: "#1a2d45", lineHeight: 1.6, fontWeight: 500, whiteSpace: "pre-line" }}>{q.q}</div>
-                  {q.diagram && <div style={{ margin: "12px 0 4px", display: "flex", justifyContent: "center" }}>{q.diagram}</div>}
+                <div style={{ background: "#ffffff", borderRadius: "16px", padding: "22px 24px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", marginBottom: "14px", border: "1px solid #e8eef4" }}>
+                  <div style={{ fontSize: "16px", color: "#1a2d45", lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: "'Outfit','DM Sans',sans-serif" }}>{q.q}</div>
+                  {q.diagram && <div style={{ margin: "16px 0 4px", display: "flex", justifyContent: "center" }}>{q.diagram}</div>}
                 </div>
                 {/* Hint */}
                 {!calcChecked && (
-                  <details style={{ marginBottom: "12px" }}>
-                    <summary style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 600, cursor: "pointer", userSelect: "none" }}>Show hint</summary>
-                    <div style={{ background: "#eaf6fd", borderRadius: "8px", padding: "10px 12px", marginTop: "6px", fontSize: "13px", color: "#1a2d45", lineHeight: 1.5 }}>{q.hint}</div>
+                  <details style={{ marginBottom: "14px" }}>
+                    <summary style={{ fontSize: "14px", color: "#29ABE2", fontWeight: 600, cursor: "pointer", userSelect: "none" }}>Show hint</summary>
+                    <div style={{ background: "#eaf6fd", borderRadius: "10px", padding: "12px 14px", marginTop: "8px", fontSize: "14px", color: "#1a2d45", lineHeight: 1.6 }}>{q.hint}</div>
                   </details>
                 )}
                 {/* Input */}
                 {!calcChecked && (
-                  <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+                  <div style={{ display: "flex", gap: "10px", marginBottom: "14px", maxWidth: "400px" }}>
                     <input
                       type={q.isText ? "text" : "number"}
                       value={calcInput}
                       onChange={e => setCalcInput(e.target.value)}
                       onKeyDown={e => e.key === "Enter" && calcInput && checkAnswer()}
-                      placeholder={q.isText ? "e.g. C2H4" : "Enter your answer"}
-                      style={{ flex: 1, padding: "12px 14px", borderRadius: "10px", border: "2px solid #d0dce8", fontSize: "15px", fontFamily: "inherit", outline: "none", color: "#1a2d45" }}
+                      placeholder={q.isText ? "e.g. C2H4" : "Your answer"}
+                      style={{ flex: 1, padding: "14px 16px", borderRadius: "12px", border: "2px solid #d0dce8", fontSize: "16px", fontFamily: "'Outfit','DM Sans',sans-serif", outline: "none", color: "#1a2d45", background: "#fff" }}
                     />
-                    {q.unit && <div style={{ display: "flex", alignItems: "center", fontSize: "13px", color: "#7a95b0", fontWeight: 600, whiteSpace: "nowrap" }}>{q.unit}</div>}
+                    {q.unit && <div style={{ display: "flex", alignItems: "center", fontSize: "14px", color: "#7a95b0", fontWeight: 600, whiteSpace: "nowrap" }}>{q.unit}</div>}
                   </div>
                 )}
                 {!calcChecked && (
-                  <button onClick={checkAnswer} disabled={!calcInput} style={{ width: "100%", padding: "13px", background: calcInput ? "#29ABE2" : "#e0e8f0", border: "none", borderRadius: "12px", color: calcInput ? "#ffffff" : "#9ca3af", fontSize: "15px", fontWeight: 700, cursor: calcInput ? "pointer" : "not-allowed", fontFamily: "inherit" }}>
+                  <button onClick={checkAnswer} disabled={!calcInput} style={{ width: "100%", maxWidth: "400px", padding: "14px", background: calcInput ? "#29ABE2" : "#e0e8f0", border: "none", borderRadius: "12px", color: calcInput ? "#ffffff" : "#9ca3af", fontSize: "16px", fontWeight: 700, cursor: calcInput ? "pointer" : "not-allowed", fontFamily: "'Outfit','DM Sans',sans-serif" }}>
                     Check Answer
                   </button>
                 )}
