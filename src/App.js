@@ -1848,110 +1848,110 @@ const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dhL, dhR,
   </svg>
 );
 
-// Born-Haber cycle diagram (exam-style: left side up, lattice on right)
+// Born-Haber cycle diagram (exam-style: left up, EA top-right, lattice far-right)
 const BornHaberCycle = ({ compound, steps, find }) => {
-  const W = 520, padT = 25, padB = 25;
-  // Calculate cumulative energies
+  const W = 540, padT = 30, padB = 30, lineW = 150;
+  // Cumulative energies
   let cumE = [0]; let run = 0;
   steps.forEach(s => { run += (s.value || 0); cumE.push(run); });
   const maxE = Math.max(...cumE), minE = Math.min(...cumE);
   const range = maxE - minE || 1;
-  const H = Math.max(range * 0.32 + padT + padB + 60, 320);
-  const sc = (H - padT - padB - 40) / range;
-  const toY = e => padT + 20 + (maxE - e) * sc;
+  const H = Math.max(range * 0.28 + padT + padB + 80, 380);
+  const sc = (H - padT - padB - 60) / range;
+  const toY = e => padT + 40 + (maxE - e) * sc;
 
-  // Build levels with side info
-  // Left side: compound at bottom, then upward steps. Right side: lattice arrow + final compound
-  const lvls = [{ e: 0, label: compound, x: 80 }]; // start
+  // Classify steps: endothermic left-side going up, EA = right-top, lattice = right-down
+  // Find which steps are EA (negative value before lattice) and lattice (last step or find)
+  const latticeIdx = steps.length - 1;
+  let eaStart = -1;
+  for (let i = steps.length - 2; i >= 0; i--) {
+    if (steps[i].value < 0) { eaStart = i; } else break;
+  }
+  if (eaStart === -1) eaStart = latticeIdx; // no EA steps
+
+  // Build all levels
   let energy = 0;
-  const lattIdx = steps.findIndex(s => s.label === find || s.label.includes("latt"));
+  const levels = [{ e: 0, label: compound, col: "left" }];
   steps.forEach((s, i) => {
     energy += (s.value || 0);
-    // Lattice enthalpy and final level go on right; everything else on left
-    const isLatt = (i === steps.length - 1) || s.label.includes("latt") || s.label === find;
-    lvls.push({ e: energy, label: s.species, x: isLatt ? 340 : 80, arrow: s.label, miss: s.label === find, val: s.value });
+    const col = i >= eaStart ? "right" : "left";
+    levels.push({ e: energy, label: s.species, arrow: s.label, miss: s.label === find, val: s.value, col, idx: i });
   });
 
-  const arrowW = 8; // thick arrow width
+  const LX = 55, RX = 340; // left and right column x positions
+  const arrowX_L = LX + lineW + 20; // left arrows just right of left levels
+  const arrowX_R = RX - 20; // right arrows just left of right levels
+
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ fontFamily: "'Outfit','DM Sans',sans-serif", display: "block", margin: "0 auto" }}>
-      <defs>
-        <marker id="bhu" markerWidth="12" markerHeight="10" refX="6" refY="10" orient="auto"><polygon points="0 10, 6 0, 12 10" fill="#29ABE2"/></marker>
-        <marker id="bhd" markerWidth="12" markerHeight="10" refX="6" refY="0" orient="auto"><polygon points="0 0, 6 10, 12 0" fill="#29ABE2"/></marker>
-        <marker id="bhdr" markerWidth="12" markerHeight="10" refX="6" refY="0" orient="auto"><polygon points="0 0, 6 10, 12 0" fill="#dc2626"/></marker>
-      </defs>
       {/* Energy axis */}
-      <text x="14" y={H / 2} textAnchor="middle" fontSize="13" fontWeight="700" fill="#1a2d45" transform={`rotate(-90, 14, ${H/2})`}>Energy</text>
-      <line x1="30" y1={H - padB} x2="30" y2={padT} stroke="#1a2d45" strokeWidth="3"/>
-      <polygon points={`24 ${padT + 5}, 30 ${padT - 5}, 36 ${padT + 5}`} fill="#1a2d45"/>
+      <text x="16" y={H / 2} textAnchor="middle" fontSize="14" fontWeight="800" fill="#0f1d35" transform={`rotate(-90, 16, ${H/2})`}>Energy</text>
+      <line x1="32" y1={H - padB + 10} x2="32" y2={padT - 5} stroke="#0f1d35" strokeWidth="3"/>
+      <polygon points={`26 ${padT}, 32 ${padT - 12}, 38 ${padT}`} fill="#0f1d35"/>
 
-      {/* Draw levels and arrows */}
-      {lvls.map((lv, i) => {
+      {/* Draw levels */}
+      {levels.map((lv, i) => {
         const y = toY(lv.e);
-        const lx = lv.x, lw = 140;
+        const x = lv.col === "left" ? LX : RX;
         return (
-          <g key={i}>
-            {/* Horizontal energy level line */}
-            <line x1={lx} y1={y} x2={lx + lw} y2={y} stroke="#475569" strokeWidth="2"/>
-            {/* Species label */}
-            <text x={lx + lw / 2} y={y - 7} textAnchor="middle" fontSize="11" fontWeight="700" fill="#1a2d45">{lv.label}</text>
-
-            {/* Arrow from previous level to this one */}
-            {i > 0 && (() => {
-              const prev = lvls[i - 1];
-              const py = toY(prev.e);
-              const isMiss = lv.miss;
-              const goUp = lv.val > 0;
-              const col = isMiss ? "#dc2626" : "#29ABE2";
-
-              // Determine arrow x position
-              const onLeft = lv.x < 200 && prev.x < 200;
-              const onRight = lv.x >= 200;
-              let ax;
-              if (onLeft) {
-                ax = prev.x + lw + 15; // just right of left levels
-              } else if (onRight && prev.x < 200) {
-                // This is the lattice arrow - draw on right side
-                ax = 350;
-              } else {
-                ax = lv.x - 15;
-              }
-
-              // For lattice: draw from top gaseous ions level to bottom compound
-              if (onRight && prev.x < 200) {
-                // Big lattice arrow on the right
-                const topY = py; // where gaseous ions are
-                return (
-                  <g>
-                    {/* Connecting line from left level to right arrow */}
-                    <line x1={prev.x + lw} y1={py} x2={ax - 5} y2={py} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
-                    {/* Connecting line from right arrow to right level */}
-                    <line x1={ax + 5} y1={y} x2={lv.x} y2={y} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
-                    {/* Big thick arrow */}
-                    <line x1={ax} y1={topY + 5} x2={ax} y2={y - 8} stroke={col} strokeWidth={arrowW} strokeDasharray={isMiss ? "8,5" : "0"} />
-                    <polygon points={`${ax - 8} ${y - 12}, ${ax} ${y - 2}, ${ax + 8} ${y - 12}`} fill={col}/>
-                    {/* Label */}
-                    <text x={ax + 14} y={(topY + y) / 2 + 4} fontSize="12" fontWeight="800" fill={col}>{lv.arrow}</text>
-                  </g>
-                );
-              }
-
-              // Normal upward/downward arrow on left side
-              return (
-                <g>
-                  {/* Thick arrow */}
-                  <line x1={ax} y1={goUp ? py - 3 : py + 3} x2={ax} y2={goUp ? y + 10 : y - 10} stroke={col} strokeWidth={arrowW - 2}/>
-                  {goUp
-                    ? <polygon points={`${ax - 6} ${y + 12}, ${ax} ${y + 2}, ${ax + 6} ${y + 12}`} fill={col}/>
-                    : <polygon points={`${ax - 6} ${y - 12}, ${ax} ${y - 2}, ${ax + 6} ${y - 12}`} fill={col}/>
-                  }
-                  {/* Label to right of arrow */}
-                  <text x={ax + 12} y={(py + y) / 2 + 4} fontSize="11" fontWeight="700" fill={col}>{lv.arrow}</text>
-                </g>
-              );
-            })()}
+          <g key={`lv${i}`}>
+            <line x1={x} y1={y} x2={x + lineW} y2={y} stroke="#334155" strokeWidth="2.5"/>
+            <text x={x + lineW / 2} y={y - 8} textAnchor="middle" fontSize="11" fontWeight="700" fill="#1e293b">{lv.label}</text>
           </g>
         );
+      })}
+
+      {/* Draw arrows */}
+      {levels.map((lv, i) => {
+        if (i === 0) return null;
+        const prev = levels[i - 1];
+        const py = toY(prev.e), cy = toY(lv.e);
+        const isMiss = lv.miss;
+        const col = isMiss ? "#dc2626" : "#29ABE2";
+        const goUp = lv.val > 0;
+
+        // CASE 1: Both on left (endothermic steps going up)
+        if (prev.col === "left" && lv.col === "left") {
+          const ax = arrowX_L;
+          return (
+            <g key={`ar${i}`}>
+              <rect x={ax - 4} y={Math.min(py, cy) + 4} width="8" height={Math.abs(cy - py) - 8} fill={col} rx="2"/>
+              {goUp
+                ? <polygon points={`${ax - 7} ${cy + 6}, ${ax} ${cy - 4}, ${ax + 7} ${cy + 6}`} fill={col}/>
+                : <polygon points={`${ax - 7} ${cy - 6}, ${ax} ${cy + 4}, ${ax + 7} ${cy - 6}`} fill={col}/>
+              }
+              <text x={ax + 14} y={(py + cy) / 2 + 4} fontSize="12" fontWeight="800" fill={col}>{lv.arrow}</text>
+            </g>
+          );
+        }
+
+        // CASE 2: Left to right transition (EA step - goes across and slightly down)
+        if (prev.col === "left" && lv.col === "right") {
+          return (
+            <g key={`ar${i}`}>
+              {/* Horizontal connector from left level to right level */}
+              <line x1={prev.col === "left" ? LX + lineW : RX} y1={py} x2={RX + lineW} y2={py} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3"/>
+              {/* Downward arrow on right side */}
+              <rect x={arrowX_R - 3} y={Math.min(py, cy) + 3} width="6" height={Math.abs(cy - py) - 6} fill={col} rx="2"/>
+              <polygon points={`${arrowX_R - 6} ${cy - 5}, ${arrowX_R} ${cy + 3}, ${arrowX_R + 6} ${cy - 5}`} fill={col}/>
+              <text x={arrowX_R + 12} y={(py + cy) / 2 + 4} fontSize="11" fontWeight="700" fill={col}>{lv.arrow}</text>
+            </g>
+          );
+        }
+
+        // CASE 3: Right to right (lattice enthalpy - big arrow)
+        if (prev.col === "right" && lv.col === "right") {
+          const ax = RX + lineW + 25;
+          return (
+            <g key={`ar${i}`}>
+              <rect x={ax - 5} y={Math.min(py, cy) + 5} width="10" height={Math.abs(cy - py) - 12} fill={col} rx="2" strokeDasharray={isMiss ? "8,5" : "0"} stroke={isMiss ? col : "none"} fillOpacity={isMiss ? 0 : 1}/>
+              {isMiss && <line x1={ax} y1={py + 5} x2={ax} y2={cy - 8} stroke={col} strokeWidth="6" strokeDasharray="8,5"/>}
+              <polygon points={`${ax - 8} ${cy - 8}, ${ax} ${cy + 2}, ${ax + 8} ${cy - 8}`} fill={col}/>
+              <text x={ax + 14} y={(py + cy) / 2 + 4} fontSize="13" fontWeight="800" fill={col}>{lv.arrow}</text>
+            </g>
+          );
+        }
+        return null;
       })}
     </svg>
   );
@@ -2384,9 +2384,9 @@ const CALC_SETS = [
 
       // ═══ HARD (12) ═══
       // Full Born-Haber cycles
-      { difficulty: "hard", q: "Use the Born-Haber cycle for KCl to find the lattice enthalpy:\nΔHf(KCl) = -437\nΔHat(K) = +89\nΔHat(1/2 Cl₂) = +122\nIE₁(K) = +419\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", answer: -718, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"KCl(s)", steps:[{label:"+89",species:"K(g)",value:89},{label:"+122",species:"K(g)+Cl(g)",value:122},{label:"+419",species:"K⁺(g)+Cl(g)",value:419},{label:"-349",species:"K⁺(g)+Cl⁻(g)",value:-349},{label:"ΔHlatt=?",species:"KCl(s)",value:-718}], find:"ΔHlatt=?"}), steps: ["ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", "-437 = 89 + 122 + 419 + (-349) + ΔHlatt", "-437 = +281 + ΔHlatt", "ΔHlatt = -437 - 281 = -718 kJ mol⁻¹"] },
-      { difficulty: "hard", q: "Use the Born-Haber cycle for NaCl to find the lattice enthalpy:\nΔHf(NaCl) = -411\nΔHat(Na) = +108\nΔHat(1/2 Cl₂) = +121\nIE₁(Na) = +496\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "Sum all steps = ΔHf. Rearrange for ΔHlatt.", answer: -787, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"NaCl(s)", steps:[{label:"+108",species:"Na(g)",value:108},{label:"+121",species:"Na(g)+Cl(g)",value:121},{label:"+496",species:"Na⁺(g)+Cl(g)",value:496},{label:"-349",species:"Na⁺(g)+Cl⁻(g)",value:-349},{label:"ΔHlatt=?",species:"NaCl(s)",value:-787}], find:"ΔHlatt=?"}), steps: ["-411 = 108 + 121 + 496 + (-349) + ΔHlatt", "-411 = +376 + ΔHlatt", "ΔHlatt = -411 - 376 = -787 kJ mol⁻¹"] },
-      { difficulty: "hard", q: "Use the Born-Haber cycle for LiF to find ΔHlatt:\nΔHf(LiF) = -617\nΔHat(Li) = +161\nΔHat(1/2 F₂) = +79\nIE₁(Li) = +520\nEA₁(F) = -328 kJ mol⁻¹", hint: "ΔHf = sum of all steps", answer: -1049, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"LiF(s)", steps:[{label:"+161",species:"Li(g)",value:161},{label:"+79",species:"Li(g)+F(g)",value:79},{label:"+520",species:"Li⁺(g)+F(g)",value:520},{label:"-328",species:"Li⁺(g)+F⁻(g)",value:-328},{label:"ΔHlatt=?",species:"LiF(s)",value:-1049}], find:"ΔHlatt=?"}), steps: ["-617 = 161 + 79 + 520 + (-328) + ΔHlatt", "-617 = +432 + ΔHlatt", "ΔHlatt = -617 - 432 = -1049 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for KCl to find the lattice enthalpy:\nΔHf(KCl) = -437\nΔHat(K) = +89\nΔHat(1/2 Cl₂) = +122\nIE₁(K) = +419\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", answer: -718, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"KCl(s)", steps:[{label:"ΔHat(K) +89",species:"K(g)",value:89},{label:"ΔHat(Cl) +122",species:"K(g) + Cl(g)",value:122},{label:"IE₁(K) +419",species:"K⁺(g) + Cl(g) + e⁻",value:419},{label:"EA₁(Cl) -349",species:"K⁺(g) + Cl⁻(g)",value:-349},{label:"ΔHlatt = ?",species:"KCl(s)",value:-718}], find:"ΔHlatt = ?"}), steps: ["ΔHf = ΔHat(K) + ΔHat(Cl) + IE₁ + EA₁ + ΔHlatt", "-437 = 89 + 122 + 419 + (-349) + ΔHlatt", "-437 = +281 + ΔHlatt", "ΔHlatt = -437 - 281 = -718 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for NaCl to find the lattice enthalpy:\nΔHf(NaCl) = -411\nΔHat(Na) = +108\nΔHat(1/2 Cl₂) = +121\nIE₁(Na) = +496\nEA₁(Cl) = -349 kJ mol⁻¹", hint: "Sum all steps = ΔHf. Rearrange for ΔHlatt.", answer: -787, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"NaCl(s)", steps:[{label:"ΔHat(Na) +108",species:"Na(g)",value:108},{label:"ΔHat(Cl) +121",species:"Na(g) + Cl(g)",value:121},{label:"IE₁(Na) +496",species:"Na⁺(g) + Cl(g) + e⁻",value:496},{label:"EA₁(Cl) -349",species:"Na⁺(g) + Cl⁻(g)",value:-349},{label:"ΔHlatt = ?",species:"NaCl(s)",value:-787}], find:"ΔHlatt = ?"}), steps: ["-411 = 108 + 121 + 496 + (-349) + ΔHlatt", "-411 = +376 + ΔHlatt", "ΔHlatt = -411 - 376 = -787 kJ mol⁻¹"] },
+      { difficulty: "hard", q: "Use the Born-Haber cycle for LiF to find ΔHlatt:\nΔHf(LiF) = -617\nΔHat(Li) = +161\nΔHat(1/2 F₂) = +79\nIE₁(Li) = +520\nEA₁(F) = -328 kJ mol⁻¹", hint: "ΔHf = sum of all steps", answer: -1049, unit: "kJ mol⁻¹", tolerance: 3, diagram: React.createElement(BornHaberCycle, {compound:"LiF(s)", steps:[{label:"ΔHat(Li) +161",species:"Li(g)",value:161},{label:"ΔHat(F) +79",species:"Li(g) + F(g)",value:79},{label:"IE₁(Li) +520",species:"Li⁺(g) + F(g) + e⁻",value:520},{label:"EA₁(F) -328",species:"Li⁺(g) + F⁻(g)",value:-328},{label:"ΔHlatt = ?",species:"LiF(s)",value:-1049}], find:"ΔHlatt = ?"}), steps: ["-617 = 161 + 79 + 520 + (-328) + ΔHlatt", "-617 = +432 + ΔHlatt", "ΔHlatt = -617 - 432 = -1049 kJ mol⁻¹"] },
       { difficulty: "hard", q: "Use the Born-Haber cycle for CaCl₂ to find ΔHlatt:\nΔHf(CaCl₂) = -795\nΔHat(Ca) = +178\nΔHat(Cl₂) = +242\nIE₁(Ca) = +590\nIE₂(Ca) = +1145\nEA₁(Cl) = -349 kJ mol⁻¹\n(Note: 2 Cl atoms needed)", hint: "Ca loses 2 electrons. 2 x EA₁ for 2 Cl atoms. ΔHat for full Cl₂.", answer: -2253, unit: "kJ mol⁻¹", tolerance: 5, steps: ["-795 = 178 + 242 + 590 + 1145 + 2(-349) + ΔHlatt", "-795 = 178 + 242 + 590 + 1145 - 698 + ΔHlatt", "-795 = +1457 + ΔHlatt", "ΔHlatt = -795 - 1457 = -2252 kJ mol⁻¹"] },
       // Find missing Born-Haber step
       { difficulty: "hard", q: "In the Born-Haber cycle for NaBr:\nΔHf = -361, ΔHat(Na) = +108, IE₁(Na) = +496, ΔHlatt = -747\nEA₁(Br) = -325 kJ mol⁻¹\nCalculate ΔHat(1/2 Br₂).", hint: "ΔHf = ΔHat(Na) + ΔHat(Br) + IE₁ + EA₁ + ΔHlatt. Solve for ΔHat(Br).", answer: 107, unit: "kJ mol⁻¹", tolerance: 2, steps: ["-361 = 108 + ΔHat(Br) + 496 + (-325) + (-747)", "-361 = -468 + ΔHat(Br)", "ΔHat(Br) = -361 + 468 = +107 kJ mol⁻¹"] },
@@ -2402,7 +2402,7 @@ const CALC_SETS = [
       { difficulty: "hard", q: "Calculate ΔS and ΔG at 298 K for:\nNH₄Cl(s) -> NH₃(g) + HCl(g)\nΔH = +176 kJ mol⁻¹\nS°[NH₄Cl] = 94.6, S°[NH₃] = 192, S°[HCl] = 187 J K⁻¹ mol⁻¹", hint: "Find ΔS first, then ΔG = ΔH - TΔS", answer: 91.3, unit: "kJ mol⁻¹", tolerance: 2, steps: ["ΔS = [192 + 187] - 94.6 = 284.4 J K⁻¹ mol⁻¹", "ΔG = +176 - (298 x 0.2844)", "ΔG = 176 - 84.8 = +91.2 kJ mol⁻¹", "Not feasible at 298 K (ΔG > 0)"] },
 
       // ═══ EXAM (10) ═══
-      { difficulty: "exam", q: "Use the Born-Haber cycle for MgCl₂ to find ΔHlatt:\nΔHf = -641, ΔHat(Mg) = +148, IE₁(Mg) = +738, IE₂(Mg) = +1451\nΔHat(Cl₂) = +242, EA₁(Cl) = -349 kJ mol⁻¹", hint: "Mg²⁺ needs IE₁ + IE₂. Full Cl₂ atomisation. 2 x EA₁.", answer: -2523, unit: "kJ mol⁻¹", tolerance: 5, diagram: React.createElement(BornHaberCycle, {compound:"MgCl₂(s)", steps:[{label:"+148",species:"Mg(g)",value:148},{label:"+242",species:"Mg(g)+2Cl(g)",value:242},{label:"+738",species:"Mg⁺(g)+2Cl(g)",value:738},{label:"+1451",species:"Mg²⁺(g)+2Cl(g)",value:1451},{label:"-698",species:"Mg²⁺(g)+2Cl⁻(g)",value:-698},{label:"ΔHlatt=?",species:"MgCl₂(s)",value:-2522}], find:"ΔHlatt=?"}), steps: ["-641 = 148 + 242 + 738 + 1451 + 2(-349) + ΔHlatt", "-641 = 148 + 242 + 738 + 1451 - 698 + ΔHlatt", "-641 = 1881 + ΔHlatt", "ΔHlatt = -641 - 1881 = -2522 kJ mol⁻¹"] },
+      { difficulty: "exam", q: "Use the Born-Haber cycle for MgCl₂ to find ΔHlatt:\nΔHf = -641, ΔHat(Mg) = +148, IE₁(Mg) = +738, IE₂(Mg) = +1451\nΔHat(Cl₂) = +242, EA₁(Cl) = -349 kJ mol⁻¹", hint: "Mg²⁺ needs IE₁ + IE₂. Full Cl₂ atomisation. 2 x EA₁.", answer: -2523, unit: "kJ mol⁻¹", tolerance: 5, diagram: React.createElement(BornHaberCycle, {compound:"MgCl₂(s)", steps:[{label:"ΔHat(Mg) +148",species:"Mg(g)",value:148},{label:"ΔHat(Cl₂) +242",species:"Mg(g) + 2Cl(g)",value:242},{label:"IE₁(Mg) +738",species:"Mg⁺(g) + 2Cl(g)",value:738},{label:"IE₂(Mg) +1451",species:"Mg²⁺(g) + 2Cl(g)",value:1451},{label:"2×EA₁(Cl) -698",species:"Mg²⁺(g) + 2Cl⁻(g)",value:-698},{label:"ΔHlatt = ?",species:"MgCl₂(s)",value:-2522}], find:"ΔHlatt = ?"}), steps: ["-641 = 148 + 242 + 738 + 1451 + 2(-349) + ΔHlatt", "-641 = 148 + 242 + 738 + 1451 - 698 + ΔHlatt", "-641 = 1881 + ΔHlatt", "ΔHlatt = -641 - 1881 = -2522 kJ mol⁻¹"] },
       { difficulty: "exam", q: "Calculate ΔHf for KBr using the Born-Haber cycle:\nΔHat(K) = +89, ΔHat(1/2 Br₂) = +112\nIE₁(K) = +419, EA₁(Br) = -325\nΔHlatt(KBr) = -689 kJ mol⁻¹", hint: "ΔHf = sum of all steps including lattice enthalpy", answer: -394, unit: "kJ mol⁻¹", tolerance: 3, steps: ["ΔHf = ΔHat(K) + ΔHat(Br) + IE₁ + EA₁ + ΔHlatt", "ΔHf = 89 + 112 + 419 + (-325) + (-689)", "ΔHf = -394 kJ mol⁻¹"] },
       { difficulty: "exam", q: "The theoretical (Born-Haber) lattice enthalpy of NaCl is -787 kJ mol⁻¹.\nThe calculated (Born-Lande) value is -770 kJ mol⁻¹.\nCalculate the % difference and explain what this suggests about the bonding.", hint: "% diff = |exp - calc| / exp x 100. Small difference = ionic model works well.", answer: 2.2, unit: "%", tolerance: 0.2, steps: ["% difference = |(-787) - (-770)| / 787 x 100", "= 17 / 787 x 100 = 2.2%", "Small % = good agreement with ionic model", "NaCl bonding is almost purely ionic"] },
       { difficulty: "exam", q: "For AgI, the Born-Haber lattice enthalpy is -876 kJ mol⁻¹ but the theoretical (Born-Lande) value is -736 kJ mol⁻¹.\nCalculate the % discrepancy and explain.", hint: "Large discrepancy = covalent character.", answer: 16.0, unit: "%", tolerance: 0.5, steps: ["% = |(-876) - (-736)| / 876 x 100", "= 140 / 876 x 100 = 16.0%", "Large discrepancy = significant covalent character", "Ag⁺ is small and highly polarising; I⁻ is large and polarisable", "The electron cloud of I⁻ is distorted (Fajans' rules)"] },
