@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 296,248 C 264,200 262,166 284,142", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 346,132 C 358,108 382,106 402,122", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 332,264 C 300,220 280,180 286,142", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 370,130 C 382,104 410,102 432,122", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4618,7 +4618,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     }
     return (
       <MechSVGBase animKey={animKey}>
-        <image href={imgSrc} x={20} y={-80} width={1100} height={615} />
+        <defs><clipPath id="nuc-sub-reactant"><rect x="0" y="0" width="480" height="280"/></clipPath></defs>
+        <image href={imgSrc} x={20} y={-80} width={1100} height={615} clipPath="url(#nuc-sub-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
