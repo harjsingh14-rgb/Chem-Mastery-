@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 268,218 C 300,170 268,140 236,128", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 296,120 C 310,96 330,96 342,112", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 290,224 C 316,180 290,150 260,138", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 308,130 C 318,108 336,108 348,122", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4638,27 +4638,27 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     }
     return (
       <MechSVGBase animKey={animKey}>
-        {/* CH₃CH₂Br displayed formula */}
+        {/* CH₃CH₂Br — matching reference PNG */}
         {/* C1 (CH₃) */}
-        <A x={140} y={120} el="C" size={18}/>
-        <A x={88} y={120} el="H" size={16}/><Bond x1={128} y1={120} x2={100} y2={120}/>
-        <A x={140} y={68} el="H" size={16}/><Bond x1={140} y1={108} x2={140} y2={80}/>
-        <A x={140} y={172} el="H" size={16}/><Bond x1={140} y1={132} x2={140} y2={160}/>
+        <A x={160} y={130} el="C" size={18}/>
+        <A x={108} y={130} el="H" size={16}/><Bond x1={148} y1={130} x2={120} y2={130}/>
+        <A x={160} y={76} el="H" size={16}/><Bond x1={160} y1={118} x2={160} y2={88}/>
+        <A x={160} y={184} el="H" size={16}/><Bond x1={160} y1={142} x2={160} y2={172}/>
         {/* C1-C2 bond */}
-        <Bond x1={154} y1={120} x2={210} y2={120}/>
+        <Bond x1={174} y1={130} x2={236} y2={130}/>
         {/* C2 (CH₂Br) */}
-        <A x={224} y={120} el="C" size={18}/>
-        <Delta x={240} y={96} sign="+"/>
-        <A x={224} y={62} el="H" size={16}/><Bond x1={224} y1={108} x2={224} y2={74}/>
-        <A x={224} y={178} el="H" size={16}/><Bond x1={224} y1={132} x2={224} y2={166}/>
+        <A x={250} y={130} el="C" size={18}/>
+        <Delta x={266} y={104} sign="+"/>
+        <A x={250} y={76} el="H" size={16}/><Bond x1={250} y1={118} x2={250} y2={88}/>
+        <A x={250} y={184} el="H" size={16}/><Bond x1={250} y1={142} x2={250} y2={172}/>
         {/* C2-Br bond */}
-        <Bond x1={238} y1={120} x2={300} y2={120}/>
-        <A x={320} y={120} el="Br" size={20}/>
-        <Delta x={340} y={96} sign="-"/>
-        {/* :OH⁻ nucleophile below */}
-        <A x={280} y={230} el=":OH" size={17}/>
-        <Charge x={312} y={216} val="-"/>
-        <text x={280} y={260} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
+        <Bond x1={264} y1={130} x2={330} y2={130}/>
+        <A x={350} y={130} el="Br" size={20}/>
+        <Delta x={380} y={104} sign="-"/>
+        {/* :OH⁻ nucleophile below C2 */}
+        <A x={300} y={236} el=":OH" size={17}/>
+        <Charge x={332} y={222} val="-"/>
+        <text x={300} y={264} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:700}}>nucleophile</text>
 
         {renderArrows()}
       </MechSVGBase>
