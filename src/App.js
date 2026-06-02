@@ -4611,20 +4611,19 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
       return (
         <MechSVGBase animKey={animKey}>
           {/* CH3-O-H product */}
-          <A x={130} y={140} el="H" size={16} color="#64748b"/>
-          <Bond x1={141} y1={140} x2={163} y2={140}/>
           <A x={175} y={140} el="C" size={18}/>
-          <A x={175} y={108} el="H" size={16} color="#64748b"/><Bond x1={175} y1={132} x2={175} y2={116}/>
-          <A x={149} y={164} el="H" size={16} color="#64748b"/><Bond x1={168} y1={147} x2={154} y2={160}/>
+          <A x={175} y={96} el="H" size={16} color="#64748b"/><Bond x1={175} y1={128} x2={175} y2={106}/>
+          <A x={145} y={120} el="H" size={16} color="#64748b"/><Bond x1={168} y1={132} x2={150} y2={124}/>
+          <A x={175} y={184} el="H" size={16} color="#64748b"/><Bond x1={175} y1={152} x2={175} y2={174}/>
           <Bond x1={189} y1={140} x2={220} y2={140}/>
           <A x={234} y={140} el="O" size={18}/>
           <Bond x1={248} y1={140} x2={272} y2={140}/>
-          <A x={282} y={140} el="H" size={16} color="#64748b"/>
-          <text x={205} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>methanol</text>
+          <A x={282} y={140} el="H" size={16} color="#b91c1c"/>
+          <text x={205} y={220} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>methanol</text>
           {/* Br⁻ */}
-          <A x={470} y={140} el="Br" size={20} color="#c2410c"/>
-          <Charge x={494} y={124} val="-" color="#c2410c"/>
-          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#c2410c",fontWeight:700}}>bromide ion</text>
+          <A x={470} y={140} el="Br" size={20} color="#1a202c"/>
+          <Charge x={494} y={124} val="-" color="#1a202c"/>
+          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:700}}>bromide ion</text>
           {renderArrows()}
         </MechSVGBase>
       );
