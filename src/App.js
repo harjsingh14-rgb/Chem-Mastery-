@@ -4203,8 +4203,8 @@ const MECHS = [
       { title: "Nucleophile attacks; leaving group departs",
         explanation: "Arrow 1: the lone pair on O⁻ attacks the δ+ carbon, starting to form a new O–C bond. Arrow 2: at the same time, the C–Br bonding electrons shift towards Br, breaking the C–Br bond. Br leaves as Br⁻ (a stable bromide ion). Both arrows are drawn together - the nucleophile donates electrons in and the leaving group takes electrons out simultaneously.",
         arrows: ["a1","a2"] },
-      { title: "Products: CH₃OH + Br⁻",
-        explanation: "The product CH₃OH (methanol) has formed as the nucleophile bonded to the carbon. Br⁻ is released as a free bromide ion. The overall reaction is a substitution - the –Br group has been replaced by –OH. This mechanism applies whenever a nucleophile reacts with a primary or secondary halogenoalkane.",
+      { title: "Products: CH₃CH₂OH + Br⁻",
+        explanation: "The product CH₃CH₂OH (ethanol) has formed as the nucleophile bonded to the carbon. Br⁻ is released as a free bromide ion. The overall reaction is a substitution - the –Br group has been replaced by –OH. This mechanism applies whenever a nucleophile reacts with a primary or secondary halogenoalkane.",
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
@@ -4227,8 +4227,8 @@ const MECHS = [
       { title: "CN⁻ attacks; leaving group departs",
         explanation: "Arrow 1: the lone pair on carbon of CN⁻ attacks the δ+ carbon, forming a new C–C bond. Arrow 2: simultaneously, the C–Br bonding electrons shift to Br, breaking the C–Br bond. Br leaves as Br⁻. The mechanism is identical to OH⁻ substitution - only the nucleophile differs.",
         arrows: ["a1","a2"] },
-      { title: "Products: CH₃CN + Br⁻",
-        explanation: "The product CH₃CN (ethanenitrile) has formed. The carbon chain has increased from 1 to 2 carbons. Br⁻ is released as the leaving group. KCN dissolved in ethanol is typically used to provide the CN⁻ nucleophile.",
+      { title: "Products: CH₃CH₂CN + Br⁻",
+        explanation: "The product CH₃CH₂CN (propanenitrile) has formed. The carbon chain has increased by one carbon. Br⁻ is released as the leaving group. KCN dissolved in ethanol is typically used to provide the CN⁻ nucleophile.",
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
@@ -4611,14 +4611,14 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-520} y={-80} width={1100} height={615} />
+          <image href={imgSrc} x={-600} y={-80} width={1100} height={615} />
           {renderArrows()}
         </MechSVGBase>
       );
     }
     return (
       <MechSVGBase animKey={animKey}>
-        <defs><clipPath id="nuc-sub-reactant"><rect x="0" y="0" width="450" height="280"/></clipPath></defs>
+        <defs><clipPath id="nuc-sub-reactant"><rect x="0" y="0" width="440" height="280"/></clipPath></defs>
         <image href={imgSrc} x={20} y={-80} width={1100} height={615} clipPath="url(#nuc-sub-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
