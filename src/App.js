@@ -4191,7 +4191,7 @@ const MECHS = [
   {
     id: "nuc_sub",
     title: "Nucleophilic Substitution",
-    subtitle: "HO⁻ + CH₃Br → CH₃OH + Br⁻",
+    subtitle: "HO⁻ + CH₃CH₂Br → CH₃CH₂OH + Br⁻",
     category: "Nucleophilic Substitution",
     color: "#3182ce",
     specs: ["AQA","OCR_A"],
@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 116,140 C 160,86 220,86 268,120", label:"O⁻ lone pair → C (new bond forms)", type:"full" },
-      a2: { d:"M 310,132 C 322,112 334,112 344,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 268,218 C 300,170 268,140 236,128", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 296,120 C 310,96 330,96 342,112", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4610,45 +4610,55 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH3-O-H product */}
-          <A x={175} y={140} el="C" size={18}/>
-          <A x={175} y={96} el="H" size={16}/><Bond x1={175} y1={128} x2={175} y2={106}/>
-          <A x={145} y={120} el="H" size={16}/><Bond x1={168} y1={132} x2={150} y2={124}/>
-          <A x={175} y={184} el="H" size={16}/><Bond x1={175} y1={152} x2={175} y2={174}/>
-          <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={234} y={140} el="O" size={18}/>
-          <Bond x1={248} y1={140} x2={272} y2={140}/>
-          <A x={282} y={140} el="H" size={16} color="#b91c1c"/>
-          <text x={205} y={220} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>methanol</text>
-          {/* Br⁻ */}
-          <A x={470} y={140} el="Br" size={20} color="#1a202c"/>
-          <Charge x={494} y={124} val="-" color="#1a202c"/>
-          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:700}}>bromide ion</text>
+          {/* CH₃CH₂OH product */}
+          {/* C1 (CH₃) */}
+          <A x={100} y={130} el="C" size={18}/>
+          <A x={50} y={130} el="H" size={16}/><Bond x1={88} y1={130} x2={62} y2={130}/>
+          <A x={100} y={78} el="H" size={16}/><Bond x1={100} y1={118} x2={100} y2={90}/>
+          <A x={100} y={182} el="H" size={16}/><Bond x1={100} y1={142} x2={100} y2={170}/>
+          {/* C1-C2 bond */}
+          <Bond x1={114} y1={130} x2={166} y2={130}/>
+          {/* C2 (CH₂OH) */}
+          <A x={180} y={130} el="C" size={18}/>
+          <A x={180} y={78} el="H" size={16}/><Bond x1={180} y1={118} x2={180} y2={90}/>
+          <A x={180} y={182} el="H" size={16}/><Bond x1={180} y1={142} x2={180} y2={170}/>
+          {/* C2-OH bond */}
+          <Bond x1={194} y1={130} x2={246} y2={130}/>
+          <A x={264} y={130} el="OH" size={18}/>
+          <text x={170} y={220} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>ethanol</text>
+          {/* + */}
+          <text x={370} y={135} textAnchor="middle" style={{fontSize:"22px",fill:"#64748b",fontWeight:300}}>+</text>
+          {/* :Br⁻ */}
+          <A x={480} y={130} el="Br" size={20}/>
+          <Charge x={504} y={114} val="-" color="#1a202c"/>
+          <text x={480} y={190} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:700}}>bromide ion</text>
           {renderArrows()}
         </MechSVGBase>
       );
     }
     return (
       <MechSVGBase animKey={animKey}>
-        {/* HO⁻ nucleophile */}
-        <A x={55} y={140} el="H" size={16}/>
-        <Bond x1={66} y1={140} x2={88} y2={140}/>
-        <A x={100} y={140} el="O" size={18}/>
-        <Charge x={118} y={124} val="-" color="#b91c1c"/>
-        <LP x={100} y={140} angle={0} color="#b91c1c"/>
-
-        {/* CH₃Br displayed formula */}
-        <A x={290} y={140} el="C" size={18}/>
-        <Delta x={306} y={132} sign="+"/>
-        <A x={290} y={88} el="H" size={16}/><Bond x1={290} y1={128} x2={290} y2={98}/>
-        <A x={242} y={192} el="H" size={16}/><Bond x1={278} y1={154} x2={250} y2={184}/>
-        <A x={338} y={192} el="H" size={16}/><Bond x1={302} y1={154} x2={330} y2={184}/>
-        <Bond x1={306} y1={140} x2={336} y2={140}/>
-        <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={362} y={132} sign="-"/>
-
-        <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
-        <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
+        {/* CH₃CH₂Br displayed formula */}
+        {/* C1 (CH₃) */}
+        <A x={140} y={120} el="C" size={18}/>
+        <A x={88} y={120} el="H" size={16}/><Bond x1={128} y1={120} x2={100} y2={120}/>
+        <A x={140} y={68} el="H" size={16}/><Bond x1={140} y1={108} x2={140} y2={80}/>
+        <A x={140} y={172} el="H" size={16}/><Bond x1={140} y1={132} x2={140} y2={160}/>
+        {/* C1-C2 bond */}
+        <Bond x1={154} y1={120} x2={210} y2={120}/>
+        {/* C2 (CH₂Br) */}
+        <A x={224} y={120} el="C" size={18}/>
+        <Delta x={244} y={108} sign="+"/>
+        <A x={224} y={68} el="H" size={16}/><Bond x1={224} y1={108} x2={224} y2={80}/>
+        <A x={224} y={172} el="H" size={16}/><Bond x1={224} y1={132} x2={224} y2={160}/>
+        {/* C2-Br bond */}
+        <Bond x1={238} y1={120} x2={300} y2={120}/>
+        <A x={320} y={120} el="Br" size={20}/>
+        <Delta x={344} y={108} sign="-"/>
+        {/* :OH⁻ nucleophile below */}
+        <A x={280} y={230} el=":OH" size={17}/>
+        <Charge x={312} y={216} val="-" color="#b91c1c"/>
+        <text x={280} y={260} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
 
         {renderArrows()}
       </MechSVGBase>
