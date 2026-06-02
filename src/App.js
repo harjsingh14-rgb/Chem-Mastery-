@@ -4640,7 +4640,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={320} y={120} sign="+"/>
+        <Delta x={306} y={132} sign="+"/>
         <A x={290} y={88} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={98}/>
         <A x={248} y={186} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={254} y2={180}/>
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
@@ -4696,7 +4696,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={320} y={120} sign="+"/>
+        <Delta x={306} y={132} sign="+"/>
         <A x={290} y={88} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={98}/>
         <A x={248} y={186} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={254} y2={180}/>
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
@@ -4771,7 +4771,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={320} y={120} sign="+"/>
+        <Delta x={306} y={132} sign="+"/>
         <A x={290} y={88} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={98}/>
         <A x={248} y={186} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={254} y2={180}/>
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
