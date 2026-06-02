@@ -4481,7 +4481,7 @@ const MECHS = [
 
 function MechSVGBase({ children, animKey }) {
   return (
-    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block" }}>
+    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block", maxHeight:"340px" }}>
       <defs>
         <marker id={`arr-blue-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -4640,13 +4640,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={268} y={122} sign="+"/>
+        <Delta x={320} y={120} sign="+"/>
         <A x={290} y={88} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={98}/>
         <A x={248} y={186} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={254} y2={180}/>
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={350} y={114} sign="-"/>
+        <Delta x={362} y={120} sign="-"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
@@ -4696,13 +4696,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={268} y={122} sign="+"/>
+        <Delta x={320} y={120} sign="+"/>
         <A x={290} y={88} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={98}/>
         <A x={248} y={186} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={254} y2={180}/>
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={350} y={114} sign="-"/>
+        <Delta x={362} y={120} sign="-"/>
 
         <text x={68} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
@@ -4771,13 +4771,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={268} y={122} sign="+"/>
+        <Delta x={320} y={120} sign="+"/>
         <A x={290} y={88} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={98}/>
         <A x={248} y={186} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={254} y2={180}/>
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={350} y={114} sign="-"/>
+        <Delta x={362} y={120} sign="-"/>
 
         <text x={70} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
