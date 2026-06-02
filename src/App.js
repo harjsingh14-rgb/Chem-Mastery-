@@ -4213,6 +4213,61 @@ const MECHS = [
     },
   },
   {
+    id: "nuc_sub_cn",
+    title: "Nucleophilic Substitution: CN⁻",
+    subtitle: "CN⁻ + CH₃Br → CH₃CN + Br⁻",
+    category: "Nucleophilic Substitution",
+    color: "#1d4ed8",
+    specs: ["AQA","OCR_A"],
+    description: "The cyanide ion (CN⁻) is a nucleophile with a lone pair on carbon. It attacks the δ+ carbon of the halogenoalkane, displacing Br⁻ as the leaving group. The product is a nitrile (CH₃CN). This reaction extends the carbon chain by one carbon - useful in synthesis.",
+    steps: [
+      { title: "Identify: nucleophile and electrophile",
+        explanation: "The C–Br bond is polarised: Cδ+ and Brδ−. The cyanide ion (CN⁻) has a lone pair on carbon and is the nucleophile. It attacks the electrophilic δ+ carbon. This reaction is important because it increases the carbon chain length by one - the nitrile product can be hydrolysed to a carboxylic acid or reduced to an amine.",
+        arrows: [] },
+      { title: "CN⁻ attacks; leaving group departs",
+        explanation: "Arrow 1: the lone pair on carbon of CN⁻ attacks the δ+ carbon, forming a new C–C bond. Arrow 2: simultaneously, the C–Br bonding electrons shift to Br, breaking the C–Br bond. Br leaves as Br⁻. The mechanism is identical to OH⁻ substitution - only the nucleophile differs.",
+        arrows: ["a1","a2"] },
+      { title: "Products: CH₃CN + Br⁻",
+        explanation: "The product CH₃CN (ethanenitrile) has formed. The carbon chain has increased from 1 to 2 carbons. Br⁻ is released as the leaving group. KCN dissolved in ethanol is typically used to provide the CN⁻ nucleophile.",
+        arrows: [], past: [], showProducts: true },
+    ],
+    arrowPaths: {
+      a1: { d:"M 116,140 C 160,86 220,86 268,120", label:"CN⁻ lone pair → C (new C-C bond forms)", type:"full" },
+      a2: { d:"M 310,132 C 322,112 334,112 344,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+    },
+  },
+  {
+    id: "nuc_sub_nh3",
+    title: "Nucleophilic Substitution: NH₃",
+    subtitle: "2NH₃ + CH₃Br → CH₃NH₂ + NH₄Br",
+    category: "Nucleophilic Substitution",
+    color: "#7c3aed",
+    specs: ["AQA","OCR_A"],
+    description: "Ammonia (NH₃) is a nucleophile with a lone pair on nitrogen. It attacks the δ+ carbon, displacing Br⁻. The initial product is an ammonium salt (CH₃NH₃⁺Br⁻). A second NH₃ molecule then deprotonates the salt to give the free amine CH₃NH₂ + NH₄Br. Excess NH₃ is used to minimise further substitution.",
+    steps: [
+      { title: "Identify: nucleophile and electrophile",
+        explanation: "The C–Br bond is polarised: Cδ+ and Brδ−. Ammonia (NH₃) has a lone pair on nitrogen and acts as the nucleophile. It is a weaker nucleophile than OH⁻ or CN⁻ (neutral, not charged), so heating in a sealed tube with excess concentrated ammonia in ethanol is required.",
+        arrows: [] },
+      { title: "NH₃ attacks; leaving group departs",
+        explanation: "Arrow 1: the lone pair on nitrogen of NH₃ attacks the δ+ carbon, forming a new C–N bond. Arrow 2: simultaneously, the C–Br bonding electrons shift to Br, breaking the C–Br bond. Br leaves as Br⁻. However, unlike OH⁻, nitrogen now has 4 bonds and carries a positive charge.",
+        arrows: ["a1","a2"] },
+      { title: "Intermediate: CH₃NH₃⁺ Br⁻ formed",
+        explanation: "The intermediate is an alkylammonium salt: CH₃NH₃⁺Br⁻. The nitrogen has 4 bonds and a positive charge. This is NOT the final product - a proton must be removed to give the free amine. This extra step is unique to NH₃ substitution because NH₃ is a neutral nucleophile.",
+        arrows: [], showIntermediate: true },
+      { title: "Proton loss: NH₃ deprotonates → CH₃NH₂",
+        explanation: "Arrow 3: a second molecule of NH₃ acts as a base, using its lone pair to accept a proton (H⁺) from the NH₃⁺ group. This gives the free amine CH₃NH₂ and NH₄⁺. This is why excess NH₃ is needed: one molecule acts as the nucleophile, another acts as the base. Excess NH₃ also minimises further substitution to secondary and tertiary amines.",
+        arrows: ["a3"], past: [] },
+      { title: "Products: CH₃NH₂ + NH₄Br",
+        explanation: "The free amine CH₃NH₂ (methylamine) is the organic product. NH₄Br is the inorganic by-product formed from the second NH₃ mopping up HBr. The overall equation is: 2NH₃ + CH₃Br → CH₃NH₂ + NH₄Br. Note: the amine product still has a lone pair on N and can react further with more halogenoalkane, giving secondary amines, tertiary amines, and eventually quaternary ammonium salts.",
+        arrows: [], past: [], showProducts: true },
+    ],
+    arrowPaths: {
+      a1: { d:"M 116,140 C 160,86 220,86 268,120", label:"N lone pair → C (new C-N bond forms)", type:"full" },
+      a2: { d:"M 310,132 C 322,112 334,112 344,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a3: { d:"M 424,92 C 390,72 320,76 262,128", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
+    },
+  },
+  {
     id: "ea_br2",
     title: "Electrophilic Addition: Br₂",
     subtitle: "CH₂=CH₂ + Br₂ → CH₂BrCH₂Br",
@@ -4426,7 +4481,7 @@ const MECHS = [
 
 function MechSVGBase({ children, animKey }) {
   return (
-    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block", maxHeight:"280px" }}>
+    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block" }}>
       <defs>
         <marker id={`arr-blue-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -4523,7 +4578,7 @@ function Charge({ x, y, val, color }) {
 // Delta label
 function Delta({ x, y, sign }) {
   return <text x={x} y={y} textAnchor="middle"
-    style={{ fontSize:"11px", fontFamily:"'DM Sans',system-ui,sans-serif", fill:"#64748b", userSelect:"none" }}>δ{sign}</text>;
+    style={{ fontSize:"13px", fontFamily:"'DM Sans',system-ui,sans-serif", fill:"#64748b", userSelect:"none" }}>δ<tspan style={{fontSize:"9px",baselineShift:"super"}}>{sign}</tspan></text>;
 }
 
 function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=999 }) {
@@ -4586,15 +4641,148 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
         <Delta x={278} y={118} sign="+"/>
-        <A x={290} y={106} el="H" size={16} color="#64748b"/><Bond x1={290} y1={132} x2={290} y2={114}/>
-        <A x={262} y={166} el="H" size={16} color="#64748b"/><Bond x1={283} y1={148} x2={268} y2={162}/>
-        <A x={318} y={166} el="H" size={16} color="#64748b"/><Bond x1={297} y1={148} x2={312} y2={162}/>
+        <A x={290} y={98} el="H" size={16} color="#64748b"/><Bond x1={290} y1={130} x2={290} y2={108}/>
+        <A x={256} y={172} el="H" size={16} color="#64748b"/><Bond x1={282} y1={150} x2={262} y2={168}/>
+        <A x={324} y={172} el="H" size={16} color="#64748b"/><Bond x1={298} y1={150} x2={318} y2={168}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
         <Delta x={366} y={118} sign="-"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
         <text x={290} y={210} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
+        <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  // ── nuc_sub_cn ──────────────────────────────────────────────────────
+  if (mech.id === "nuc_sub_cn") {
+    const showProducts = step.showProducts;
+    if (showProducts) {
+      return (
+        <MechSVGBase animKey={animKey}>
+          {/* CH₃-C≡N product */}
+          <A x={130} y={140} el="H" size={16} color="#64748b"/>
+          <Bond x1={141} y1={140} x2={163} y2={140}/>
+          <A x={175} y={140} el="C" size={18}/>
+          <A x={175} y={98} el="H" size={16} color="#64748b"/><Bond x1={175} y1={130} x2={175} y2={108}/>
+          <A x={149} y={172} el="H" size={16} color="#64748b"/><Bond x1={168} y1={150} x2={154} y2={168}/>
+          <Bond x1={189} y1={140} x2={220} y2={140}/>
+          <A x={234} y={140} el="C" size={16} color="#1d4ed8"/>
+          <line x1={246} y1={136} x2={272} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <line x1={246} y1={140} x2={272} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <line x1={246} y1={144} x2={272} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
+          <A x={286} y={140} el="N" size={16} color="#1d4ed8"/>
+          <text x={210} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>ethanenitrile</text>
+          {/* Br⁻ */}
+          <A x={470} y={140} el="Br" size={20} color="#c2410c"/>
+          <Charge x={494} y={124} val="-" color="#c2410c"/>
+          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#c2410c",fontWeight:700}}>bromide ion</text>
+          {renderArrows()}
+        </MechSVGBase>
+      );
+    }
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* CN⁻ nucleophile */}
+        <A x={40} y={140} el="N" size={18} color="#1d4ed8"/>
+        <line x1={54} y1={136} x2={82} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
+        <line x1={54} y1={140} x2={82} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
+        <line x1={54} y1={144} x2={82} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
+        <A x={96} y={140} el="C" size={18} color="#1d4ed8"/>
+        <Charge x={114} y={124} val="-" color="#1d4ed8"/>
+        <LP x={96} y={140} angle={0} color="#1d4ed8"/>
+
+        {/* CH₃Br displayed formula */}
+        <A x={290} y={140} el="C" size={18}/>
+        <Delta x={278} y={118} sign="+"/>
+        <A x={290} y={98} el="H" size={16} color="#64748b"/><Bond x1={290} y1={130} x2={290} y2={108}/>
+        <A x={256} y={172} el="H" size={16} color="#64748b"/><Bond x1={282} y1={150} x2={262} y2={168}/>
+        <A x={324} y={172} el="H" size={16} color="#64748b"/><Bond x1={298} y1={150} x2={318} y2={168}/>
+        <Bond x1={306} y1={140} x2={336} y2={140}/>
+        <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
+        <Delta x={366} y={118} sign="-"/>
+
+        <text x={68} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
+        <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
+        <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+
+        {renderArrows()}
+      </MechSVGBase>
+    );
+  }
+
+  // ── nuc_sub_nh3 ────────────────────────────────────────────────────
+  if (mech.id === "nuc_sub_nh3") {
+    const stepN = Math.min(stepIdx, mech.steps.length - 1);
+    if (step.showProducts) {
+      return (
+        <MechSVGBase animKey={animKey}>
+          {/* CH₃NH₂ product */}
+          <A x={130} y={140} el="H" size={16} color="#64748b"/>
+          <Bond x1={141} y1={140} x2={163} y2={140}/>
+          <A x={175} y={140} el="C" size={18}/>
+          <A x={175} y={98} el="H" size={16} color="#64748b"/><Bond x1={175} y1={130} x2={175} y2={108}/>
+          <A x={149} y={172} el="H" size={16} color="#64748b"/><Bond x1={168} y1={150} x2={154} y2={168}/>
+          <Bond x1={189} y1={140} x2={220} y2={140}/>
+          <A x={240} y={140} el="N" size={18} color="#1d4ed8"/>
+          <A x={240} y={98} el="H" size={16} color="#64748b"/><Bond x1={240} y1={130} x2={240} y2={108}/>
+          <A x={268} y={166} el="H" size={16} color="#64748b"/><Bond x1={248} y1={150} x2={262} y2={162}/>
+          <text x={200} y={210} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>methylamine</text>
+          <text x={340} y={145} textAnchor="middle" style={{fontSize:"22px",fill:"#64748b",fontWeight:300}}>+</text>
+          <A x={450} y={140} el="NH₄Br" size={16} color="#64748b"/>
+          <text x={450} y={185} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>(from 2nd NH₃ + HBr)</text>
+          {renderArrows()}
+        </MechSVGBase>
+      );
+    }
+    if (step.showIntermediate || (step.arrows && step.arrows.includes("a3"))) {
+      return (
+        <MechSVGBase animKey={animKey}>
+          {/* CH₃NH₃⁺ intermediate */}
+          <A x={130} y={140} el="H" size={16} color="#64748b"/>
+          <Bond x1={141} y1={140} x2={163} y2={140}/>
+          <A x={175} y={140} el="C" size={18}/>
+          <A x={175} y={98} el="H" size={16} color="#64748b"/><Bond x1={175} y1={130} x2={175} y2={108}/>
+          <A x={149} y={172} el="H" size={16} color="#64748b"/><Bond x1={168} y1={150} x2={154} y2={168}/>
+          <Bond x1={189} y1={140} x2={220} y2={140}/>
+          <A x={240} y={140} el="N" size={18} color="#1d4ed8"/>
+          <Charge x={260} y={120} val="+" color="#b91c1c"/>
+          <A x={240} y={98} el="H" size={16} color="#64748b"/><Bond x1={240} y1={130} x2={240} y2={108}/>
+          <A x={268} y={166} el="H" size={16} color="#64748b"/><Bond x1={248} y1={150} x2={262} y2={162}/>
+          <A x={272} y={140} el="H" size={16} color="#64748b"/><Bond x1={254} y1={140} x2={266} y2={140}/>
+          <text x={200} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>alkylammonium ion</text>
+          {/* Br⁻ */}
+          <A x={420} y={140} el="Br" size={20} color="#c2410c"/>
+          <Charge x={444} y={124} val="-" color="#c2410c"/>
+          {/* NH₃ base approaching */}
+          <A x={430} y={80} el="NH₃" size={16} color="#1d4ed8"/>
+          <LP x={430} y={80} angle={90} color="#1d4ed8"/>
+          <text x={430} y={56} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:600}}>base</text>
+          {renderArrows()}
+        </MechSVGBase>
+      );
+    }
+    return (
+      <MechSVGBase animKey={animKey}>
+        {/* NH₃ nucleophile */}
+        <A x={70} y={140} el="NH₃" size={17} color="#1d4ed8"/>
+        <LP x={92} y={140} angle={0} color="#1d4ed8"/>
+
+        {/* CH₃Br displayed formula */}
+        <A x={290} y={140} el="C" size={18}/>
+        <Delta x={278} y={118} sign="+"/>
+        <A x={290} y={98} el="H" size={16} color="#64748b"/><Bond x1={290} y1={130} x2={290} y2={108}/>
+        <A x={256} y={172} el="H" size={16} color="#64748b"/><Bond x1={282} y1={150} x2={262} y2={168}/>
+        <A x={324} y={172} el="H" size={16} color="#64748b"/><Bond x1={298} y1={150} x2={318} y2={168}/>
+        <Bond x1={306} y1={140} x2={336} y2={140}/>
+        <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
+        <Delta x={366} y={118} sign="-"/>
+
+        <text x={70} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
+        <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
         <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
@@ -8198,13 +8386,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Overview banner */}
-            <div style={{ margin:"12px 16px 0", padding:"12px 14px", background:`${activeMech.color}12`,
-              borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"12px",
-              color:"#1a2d45", lineHeight:1.6 }}>
-              {activeMech.description}
-            </div>
-
             {/* Toggle animated / still */}
             <div style={{ display:"flex", gap:"8px", padding:"10px 16px 4px" }}>
               {["animated","still"].map(mode => (
@@ -8235,10 +8416,17 @@ export default function App() {
                 <div style={{ fontSize:"17px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>{currentStepData.title}</div>
               </div>
 
-              {/* SVG diagram */}
-              <div style={{ margin:"0 16px", background:"#f8fafc", border:"1.5px solid #e2e8f0",
-                borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
-                <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
+              {/* SVG diagram + overview side-by-side */}
+              <div style={{ margin:"0 16px", display:"flex", gap:"12px", alignItems:"flex-start" }}>
+                <div style={{ flex:"1 1 0%", minWidth:0, background:"#f8fafc", border:"1.5px solid #e2e8f0",
+                  borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
+                  <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
+                </div>
+                <div style={{ flex:"0 0 200px", padding:"12px 14px", background:`${activeMech.color}12`,
+                  borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"11.5px",
+                  color:"#1a2d45", lineHeight:1.55 }}>
+                  {activeMech.description}
+                </div>
               </div>
 
               {/* Latest arrow label */}
