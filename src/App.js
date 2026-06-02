@@ -4195,7 +4195,7 @@ const MECHS = [
     category: "Nucleophilic Substitution",
     color: "#3182ce",
     specs: ["AQA","OCR_A"],
-    description: "The nucleophile (a species with a lone pair) attacks the δ+ carbon of the halogenoalkane. The C–X bond breaks heterolytically - X leaves as X⁻ (the leaving group) taking both bonding electrons. Both bond formation and bond breaking are shown with simultaneous curly arrows.",
+    description: "The nucleophile (a species with a lone pair) attacks the δ+ carbon of the halogenoalkane. The C–X bond breaks heterolytically (where X is any halogen: Br, Cl or I) - X leaves as X⁻ (the leaving group) taking both bonding electrons. Both bond formation and bond breaking are shown with simultaneous curly arrows.",
     steps: [
       { title: "Identify: nucleophile and electrophile",
         explanation: "The C–Br bond is polarised because bromine is more electronegative than carbon. This gives Cδ+ and Brδ−. The hydroxide ion (OH⁻) has a lone pair of electrons and is the nucleophile. The δ+ carbon is the electrophile. Bromine is the leaving group - it can accommodate the negative charge as a stable halide ion Br⁻.",
@@ -4640,17 +4640,16 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={278} y={118} sign="+"/>
-        <A x={290} y={98} el="H" size={16} color="#64748b"/><Bond x1={290} y1={130} x2={290} y2={108}/>
-        <A x={256} y={172} el="H" size={16} color="#64748b"/><Bond x1={282} y1={150} x2={262} y2={168}/>
-        <A x={324} y={172} el="H" size={16} color="#64748b"/><Bond x1={298} y1={150} x2={318} y2={168}/>
+        <Delta x={290} y={112} sign="+"/>
+        <A x={290} y={90} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={100}/>
+        <A x={250} y={178} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={256} y2={174}/>
+        <A x={330} y={178} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={324} y2={174}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={366} y={118} sign="-"/>
+        <Delta x={356} y={118} sign="-"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
-        <text x={290} y={210} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-        <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
+        <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -4697,17 +4696,16 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={278} y={118} sign="+"/>
-        <A x={290} y={98} el="H" size={16} color="#64748b"/><Bond x1={290} y1={130} x2={290} y2={108}/>
-        <A x={256} y={172} el="H" size={16} color="#64748b"/><Bond x1={282} y1={150} x2={262} y2={168}/>
-        <A x={324} y={172} el="H" size={16} color="#64748b"/><Bond x1={298} y1={150} x2={318} y2={168}/>
+        <Delta x={290} y={112} sign="+"/>
+        <A x={290} y={90} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={100}/>
+        <A x={250} y={178} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={256} y2={174}/>
+        <A x={330} y={178} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={324} y2={174}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={366} y={118} sign="-"/>
+        <Delta x={356} y={118} sign="-"/>
 
         <text x={68} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-        <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -4773,17 +4771,16 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
-        <Delta x={278} y={118} sign="+"/>
-        <A x={290} y={98} el="H" size={16} color="#64748b"/><Bond x1={290} y1={130} x2={290} y2={108}/>
-        <A x={256} y={172} el="H" size={16} color="#64748b"/><Bond x1={282} y1={150} x2={262} y2={168}/>
-        <A x={324} y={172} el="H" size={16} color="#64748b"/><Bond x1={298} y1={150} x2={318} y2={168}/>
+        <Delta x={290} y={112} sign="+"/>
+        <A x={290} y={90} el="H" size={16} color="#64748b"/><Bond x1={290} y1={128} x2={290} y2={100}/>
+        <A x={250} y={178} el="H" size={16} color="#64748b"/><Bond x1={280} y1={152} x2={256} y2={174}/>
+        <A x={330} y={178} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={324} y2={174}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={366} y={118} sign="-"/>
+        <Delta x={356} y={118} sign="-"/>
 
         <text x={70} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-        <text x={350} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#9a3412",fontWeight:700}}>leaving group</text>
 
         {renderArrows()}
       </MechSVGBase>
@@ -8422,9 +8419,9 @@ export default function App() {
                   borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
                   <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
                 </div>
-                <div style={{ flex:"0 0 200px", padding:"12px 14px", background:`${activeMech.color}12`,
-                  borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"11.5px",
-                  color:"#1a2d45", lineHeight:1.55 }}>
+                <div style={{ flex:"0 0 240px", padding:"14px 16px", background:`${activeMech.color}12`,
+                  borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"13.5px",
+                  color:"#1a2d45", lineHeight:1.7 }}>
                   {activeMech.description}
                 </div>
               </div>
@@ -8437,18 +8434,6 @@ export default function App() {
                   <span style={{ fontSize:"13px", color:"#1a2d45", fontWeight:600, lineHeight:1.3 }}>{latestArrowLabel}</span>
                 </div>
               )}
-
-              {/* Explanation */}
-              <div style={{ margin:"10px 16px", padding:"16px", background:"#ffffff",
-                border:"1.5px solid #e2e8f0", borderRadius:"14px" }}>
-                <div style={{ fontSize:"12px", fontWeight:700, color:"#29ABE2", textTransform:"uppercase",
-                  letterSpacing:"0.8px", marginBottom:"8px" }}>
-                  {mechArrowIdx === 0 ? "Overview" : "What happens here"}
-                </div>
-                <p style={{ margin:0, fontSize:"14.5px", lineHeight:1.75, color:"#1a2d45" }}>
-                  {currentStepData.explanation}
-                </p>
-              </div>
 
               {/* Prev / Next */}
               <div style={{ padding:"8px 16px 20px", display:"flex", gap:"10px" }}>
