@@ -4646,7 +4646,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={362} y={120} sign="-"/>
+        <Delta x={362} y={132} sign="-"/>
 
         <text x={100} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
@@ -4702,7 +4702,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={362} y={120} sign="-"/>
+        <Delta x={362} y={132} sign="-"/>
 
         <text x={68} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
@@ -4777,7 +4777,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={332} y={186} el="H" size={16} color="#64748b"/><Bond x1={300} y1={152} x2={326} y2={180}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
         <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
-        <Delta x={362} y={120} sign="-"/>
+        <Delta x={362} y={132} sign="-"/>
 
         <text x={70} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
         <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
