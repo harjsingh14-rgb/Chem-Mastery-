@@ -4611,7 +4611,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-600} y={-80} width={1100} height={615} />
+          <image href={imgSrc} x={-680} y={-80} width={1100} height={615} />
           {renderArrows()}
         </MechSVGBase>
       );
