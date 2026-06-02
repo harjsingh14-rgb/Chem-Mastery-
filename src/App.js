@@ -8344,13 +8344,12 @@ export default function App() {
 
         const goNext = () => {
           if (mechArrowIdx < totalStepArrows) {
-            // Reveal next arrow in current step
             setMechArrowIdx(i => i + 1);
             setMechAnimKey(k => k + 1);
           } else if (mechStep < totalSteps - 1) {
-            // Advance to next step
+            const nextStepArrows = (activeMech.steps[mechStep + 1].arrows || []).length;
             setMechStep(s => s + 1);
-            setMechArrowIdx(0);
+            setMechArrowIdx(nextStepArrows > 0 ? 1 : 0);
             setMechAnimKey(k => k + 1);
           }
         };
