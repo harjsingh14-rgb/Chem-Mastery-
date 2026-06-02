@@ -7695,7 +7695,7 @@ export default function App() {
                           <tbody>
                             {q.dataTable.map((row, ri) => (
                               <tr key={ri} style={{ background: ri % 2 === 0 ? "#f8fafc" : "#ffffff" }}>
-                                <td style={{ padding: "10px 20px 10px 12px", fontWeight: 600, color: "#1a2d45", borderBottom: "1px solid #e0e8f0", fontSize: "16px" }}>{row[0]}</td>
+                                <td style={{ padding: "10px 20px 10px 12px", fontWeight: 600, color: "#1a2d45", borderBottom: "1px solid #e0e8f0", fontSize: "16px" }} dangerouslySetInnerHTML={{ __html: row[0].replace(/ΔHlatt/g, "ΔH<sub>latt</sub>").replace(/ΔHat/g, "ΔH<sub>at</sub>").replace(/ΔHf/g, "ΔH<sub>f</sub>") }} />
                                 <td style={{ padding: "10px 12px", fontWeight: 700, color: "#29ABE2", borderBottom: "1px solid #e0e8f0", fontSize: "16px", whiteSpace: "nowrap" }}>{row[1]} kJ mol⁻¹</td>
                               </tr>
                             ))}
