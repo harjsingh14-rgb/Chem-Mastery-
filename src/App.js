@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 288,224 C 256,180 228,156 242,138", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 286,126 C 294,100 316,96 340,108", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 296,248 C 264,200 262,166 284,142", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 346,132 C 358,108 382,106 402,122", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4606,60 +4606,19 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub ─────────────────────────────────────────────────────────
   if (mech.id === "nuc_sub") {
+    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/draw-bromoethane-in-displayed-formula.png";
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃CH₂OH product */}
-          {/* C1 (CH₃) */}
-          <A x={100} y={130} el="C" size={18}/>
-          <A x={50} y={130} el="H" size={16}/><Bond x1={88} y1={130} x2={62} y2={130}/>
-          <A x={100} y={78} el="H" size={16}/><Bond x1={100} y1={118} x2={100} y2={90}/>
-          <A x={100} y={182} el="H" size={16}/><Bond x1={100} y1={142} x2={100} y2={170}/>
-          {/* C1-C2 bond */}
-          <Bond x1={114} y1={130} x2={166} y2={130}/>
-          {/* C2 (CH₂OH) */}
-          <A x={180} y={130} el="C" size={18}/>
-          <A x={180} y={78} el="H" size={16}/><Bond x1={180} y1={118} x2={180} y2={90}/>
-          <A x={180} y={182} el="H" size={16}/><Bond x1={180} y1={142} x2={180} y2={170}/>
-          {/* C2-OH bond */}
-          <Bond x1={194} y1={130} x2={246} y2={130}/>
-          <A x={264} y={130} el="OH" size={18}/>
-          <text x={170} y={220} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>ethanol</text>
-          {/* + */}
-          <text x={370} y={135} textAnchor="middle" style={{fontSize:"22px",fill:"#64748b",fontWeight:300}}>+</text>
-          {/* :Br⁻ */}
-          <A x={480} y={130} el="Br" size={20}/>
-          <Charge x={504} y={114} val="-" color="#1a202c"/>
-          <text x={480} y={190} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:700}}>bromide ion</text>
+          <image href={imgSrc} x={-520} y={-80} width={1100} height={615} />
           {renderArrows()}
         </MechSVGBase>
       );
     }
     return (
       <MechSVGBase animKey={animKey}>
-        {/* CH₃CH₂Br — matching reference PNG */}
-        {/* C1 (CH₃) */}
-        <A x={160} y={130} el="C" size={18}/>
-        <A x={108} y={130} el="H" size={16}/><Bond x1={148} y1={130} x2={120} y2={130}/>
-        <A x={160} y={76} el="H" size={16}/><Bond x1={160} y1={118} x2={160} y2={88}/>
-        <A x={160} y={184} el="H" size={16}/><Bond x1={160} y1={142} x2={160} y2={172}/>
-        {/* C1-C2 bond */}
-        <Bond x1={174} y1={130} x2={236} y2={130}/>
-        {/* C2 (CH₂Br) */}
-        <A x={250} y={130} el="C" size={18}/>
-        <Delta x={266} y={104} sign="+"/>
-        <A x={250} y={76} el="H" size={16}/><Bond x1={250} y1={118} x2={250} y2={88}/>
-        <A x={250} y={184} el="H" size={16}/><Bond x1={250} y1={142} x2={250} y2={172}/>
-        {/* C2-Br bond */}
-        <Bond x1={264} y1={130} x2={330} y2={130}/>
-        <A x={350} y={130} el="Br" size={20}/>
-        <Delta x={380} y={104} sign="-"/>
-        {/* :OH⁻ nucleophile below C2 */}
-        <A x={300} y={236} el=":OH" size={17}/>
-        <Charge x={332} y={222} val="-"/>
-        <text x={300} y={264} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1a202c",fontWeight:700}}>nucleophile</text>
-
+        <image href={imgSrc} x={20} y={-80} width={1100} height={615} />
         {renderArrows()}
       </MechSVGBase>
     );
