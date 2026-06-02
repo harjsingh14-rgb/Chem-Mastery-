@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 290,224 C 316,180 290,150 260,138", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 308,130 C 318,108 336,108 348,122", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 288,224 C 256,180 228,156 242,138", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 286,126 C 294,100 316,96 340,108", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
