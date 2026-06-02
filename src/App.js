@@ -1997,7 +1997,7 @@ const BornHaberCycle = ({ compound, steps, find }) => {
 
 const CALC_SETS = [
   {
-    id: "calc_moles", title: "Moles & Amount of Substance", color: "#29ABE2", board: "both",
+    id: "calc_moles", title: "Moles & Amount of Substance", color: "#29ABE2", board: "both", year: "as",
     questions: [
       // ═══ EASY ═══ (15 questions - basic n=m/M, m=nM, molar volume)
       // n = m/M variations
@@ -2102,7 +2102,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_formula", title: "Empirical & Molecular Formula", color: "#0090cc", board: "both",
+    id: "calc_formula", title: "Empirical & Molecular Formula", color: "#0090cc", board: "both", year: "as",
     questions: [
       // ═══ EASY (12) ═══
       // Empirical to molecular
@@ -2171,7 +2171,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_titration", title: "Titrations & Volumetric Analysis", color: "#16a97d", board: "both",
+    id: "calc_titration", title: "Titrations & Volumetric Analysis", color: "#16a97d", board: "both", year: "as",
     questions: [
       // ═══ EASY (12) ═══
       // Basic 1:1 titrations - find unknown concentration
@@ -2251,7 +2251,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_enthalpy", title: "Enthalpy Changes", color: "#7c3aed", board: "both",
+    id: "calc_enthalpy", title: "Enthalpy Changes", color: "#7c3aed", board: "both", year: "as",
     questions: [
       // ═══ EASY (12) ═══
       // q = mcΔT basics
@@ -2324,9 +2324,8 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_equilibrium", title: "Equilibrium - Kc and Kp", color: "#d97706", board: "both",
+    id: "calc_kc", title: "Equilibrium - Kc", color: "#d97706", board: "both", year: "as",
     questions: [
-      // ═══ EASY ═══
       { difficulty: "easy", q: "A(g) + B(g) ⇌ AB(g)\nAt equilibrium: [A] = 0.50, [B] = 0.50, [AB] = 1.0 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [AB] / ([A][B])", answer: 4.0, unit: "", tolerance: 0.1, steps: ["Kc = [AB] / ([A][B])", "Kc = 1.0 / (0.50 × 0.50) = 1.0 / 0.25 = 4.0"] },
       { difficulty: "easy", q: "A(g) + B(g) ⇌ 2C(g)\nAt equilibrium: [A] = 0.20, [B] = 0.30, [C] = 0.60 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [C]² / ([A][B])", answer: 6.0, unit: "", tolerance: 0.1, steps: ["Kc = [C]² / ([A][B])", "Kc = (0.60)² / (0.20 × 0.30) = 0.36 / 0.06 = 6.0"] },
       { difficulty: "easy", q: "A(g) ⇌ B(g)\nAt equilibrium: [A] = 0.80, [B] = 0.40 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [B] / [A]", answer: 0.50, unit: "", tolerance: 0.02, steps: ["Kc = [B] / [A] = 0.40 / 0.80 = 0.50"] },
@@ -2335,64 +2334,49 @@ const CALC_SETS = [
       { difficulty: "easy", q: "A(g) ⇌ 2B(g)\nAt equilibrium: [A] = 0.50, [B] = 0.40 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [B]² / [A]", answer: 0.32, unit: "mol dm⁻³", tolerance: 0.01, steps: ["Kc = [B]² / [A]", "Kc = (0.40)² / 0.50 = 0.16 / 0.50 = 0.32 mol dm⁻³"] },
       { difficulty: "easy", q: "A(g) + B(g) ⇌ C(g)\nAt equilibrium: [A] = 0.30, [B] = 0.30, [C] = 0.90 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [C] / ([A][B])", answer: 10.0, unit: "mol⁻¹ dm³", tolerance: 0.2, steps: ["Kc = [C] / ([A][B])", "Kc = 0.90 / (0.30 × 0.30) = 0.90 / 0.09 = 10.0 mol⁻¹ dm³"] },
       { difficulty: "easy", q: "2A(g) ⇌ B(g) + C(g)\nAt equilibrium: [A] = 0.40, [B] = 0.20, [C] = 0.10 mol dm⁻³.\nCalculate Kc.", hint: "Kc = ([B][C]) / [A]²", answer: 0.125, unit: "", tolerance: 0.005, steps: ["Kc = ([B][C]) / [A]²", "Kc = (0.20 × 0.10) / (0.40)² = 0.02 / 0.16 = 0.125"] },
-
-      // ═══ MEDIUM ═══
-      // Kc from concentrations
       { difficulty: "medium", q: "H₂(g) + I₂(g) ⇌ 2HI(g)\nAt equilibrium: [H₂] = 0.30, [I₂] = 0.10, [HI] = 0.60 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [HI]² / ([H₂][I₂])", answer: 12, unit: "", tolerance: 0.2, steps: ["Kc = [HI]² / ([H₂][I₂])", "Kc = (0.60)² / (0.30 × 0.10) = 0.36 / 0.030 = 12"] },
       { difficulty: "medium", q: "PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\nAt equilibrium: [PCl₅] = 0.10, [PCl₃] = 0.040, [Cl₂] = 0.040 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [PCl₃][Cl₂] / [PCl₅]", answer: 0.016, unit: "mol dm⁻³", tolerance: 0.001, steps: ["Kc = [PCl₃][Cl₂] / [PCl₅]", "Kc = (0.040 × 0.040) / 0.10 = 0.0016 / 0.10 = 0.016 mol dm⁻³"] },
       { difficulty: "medium", q: "N₂(g) + 3H₂(g) ⇌ 2NH₃(g)\nAt equilibrium: [N₂] = 0.10, [H₂] = 0.30, [NH₃] = 0.20 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [NH₃]² / ([N₂][H₂]³)", answer: 14.8, unit: "mol⁻² dm⁶", tolerance: 0.5, steps: ["Kc = [NH₃]² / ([N₂] × [H₂]³)", "Kc = (0.20)² / (0.10 × (0.30)³)", "Kc = 0.040 / (0.10 × 0.027) = 0.040 / 0.0027 = 14.8 mol⁻² dm⁶"] },
       { difficulty: "medium", q: "CH₃COOH + C₂H₅OH ⇌ CH₃COOC₂H₅ + H₂O\nAt equilibrium: [acid]=0.20, [ethanol]=0.30, [ester]=0.40, [water]=0.40 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [ester][water] / ([acid][ethanol])", answer: 2.67, unit: "", tolerance: 0.05, steps: ["Kc = (0.40 × 0.40) / (0.20 × 0.30)", "Kc = 0.16 / 0.06 = 2.67", "(No units — equal moles on each side)"] },
       { difficulty: "medium", q: "CO(g) + H₂O(g) ⇌ CO₂(g) + H₂(g)\nAt equilibrium: [CO]=0.050, [H₂O]=0.050, [CO₂]=0.15, [H₂]=0.15 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [CO₂][H₂] / ([CO][H₂O])", answer: 9.0, unit: "", tolerance: 0.2, steps: ["Kc = (0.15 × 0.15) / (0.050 × 0.050)", "Kc = 0.0225 / 0.0025 = 9.0"] },
       { difficulty: "medium", q: "H₂(g) + I₂(g) ⇌ 2HI(g)\n[H₂] = 0.20, [I₂] = 0.20, [HI] = 1.00 mol dm⁻³.\nCalculate Kc.", hint: "Kc = [HI]² / ([H₂][I₂])", answer: 25.0, unit: "", tolerance: 0.5, steps: ["Kc = (1.00)² / (0.20 × 0.20)", "Kc = 1.00 / 0.04 = 25.0"] },
-      // ICE table → Kc
       { difficulty: "medium", q: "1.0 mol of ethanoic acid and 1.0 mol of ethanol are mixed in a 1.0 dm³ flask.\nAt equilibrium, 0.67 mol of ester is formed.\nCH₃COOH + C₂H₅OH ⇌ CH₃COOC₂H₅ + H₂O\nCalculate Kc.", hint: "Use ICE table: acid and ethanol each decrease by 0.67, ester and water each = 0.67.", answer: 4.12, unit: "", tolerance: 0.1, steps: ["At equilibrium: acid = 0.33, ethanol = 0.33, ester = 0.67, water = 0.67", "Kc = (0.67 × 0.67) / (0.33 × 0.33)", "Kc = 0.4489 / 0.1089 = 4.12"] },
       { difficulty: "medium", q: "0.50 mol PCl₅ is placed in a 2.0 dm³ vessel. At equilibrium 0.10 mol PCl₃ is formed.\nPCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\nCalculate Kc.", hint: "n(PCl₃) = n(Cl₂) = 0.10. n(PCl₅) = 0.50 − 0.10 = 0.40. Divide by volume for concentrations.", answer: 0.0125, unit: "mol dm⁻³", tolerance: 0.001, steps: ["n(PCl₅) = 0.40, n(PCl₃) = 0.10, n(Cl₂) = 0.10", "[PCl₅] = 0.20, [PCl₃] = 0.050, [Cl₂] = 0.050", "Kc = (0.050 × 0.050) / 0.20 = 0.0025 / 0.20 = 0.0125 mol dm⁻³"] },
-      // Moles and volume → Kc
       { difficulty: "medium", q: "At equilibrium in a 5.0 dm³ flask: 2.0 mol A, 1.0 mol B, 3.0 mol C.\nA(g) + B(g) ⇌ C(g)\nCalculate Kc.", hint: "Divide moles by volume to get concentrations. Then Kc = [C] / ([A][B]).", answer: 7.50, unit: "mol⁻¹ dm³", tolerance: 0.2, steps: ["[A] = 2.0/5.0 = 0.40, [B] = 1.0/5.0 = 0.20, [C] = 3.0/5.0 = 0.60", "Kc = 0.60 / (0.40 × 0.20) = 0.60 / 0.08 = 7.50 mol⁻¹ dm³"] },
       { difficulty: "medium", q: "2.0 mol A placed in a 4.0 dm³ flask. At equilibrium 0.80 mol of B present.\nA(g) ⇌ B(g)\nCalculate Kc.", hint: "n(A) at equilibrium = 2.0 − 0.80 = 1.20. Divide by volume.", answer: 0.667, unit: "", tolerance: 0.02, steps: ["n(A) = 2.0 − 0.80 = 1.20", "[A] = 1.20/4.0 = 0.30, [B] = 0.80/4.0 = 0.20", "Kc = 0.20 / 0.30 = 0.667"] },
       { difficulty: "medium", q: "0.80 mol A and 0.80 mol B in a 2.0 dm³ flask. At equilibrium 0.60 mol C formed.\nA + B ⇌ C\nCalculate Kc.", hint: "n(A) = 0.80 − 0.60 = 0.20. Same for B. Divide by volume.", answer: 30.0, unit: "mol⁻¹ dm³", tolerance: 1.0, steps: ["n(A) = 0.20, n(B) = 0.20, n(C) = 0.60", "[A] = 0.10, [B] = 0.10, [C] = 0.30", "Kc = 0.30 / (0.10 × 0.10) = 30.0 mol⁻¹ dm³"] },
-      // Kp from partial pressures
-      { difficulty: "medium", q: "N₂O₄(g) ⇌ 2NO₂(g)\np(N₂O₄) = 40 kPa, p(NO₂) = 20 kPa.\nCalculate Kp.", hint: "Kp = p(NO₂)² / p(N₂O₄)", answer: 10, unit: "kPa", tolerance: 0.3, steps: ["Kp = p(NO₂)² / p(N₂O₄)", "Kp = (20)² / 40 = 400 / 40 = 10 kPa"] },
-      { difficulty: "medium", q: "PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\np(PCl₅) = 60, p(PCl₃) = 30, p(Cl₂) = 30 kPa.\nCalculate Kp.", hint: "Kp = p(PCl₃) × p(Cl₂) / p(PCl₅)", answer: 15.0, unit: "kPa", tolerance: 0.3, steps: ["Kp = (30 × 30) / 60 = 900 / 60 = 15.0 kPa"] },
-
-      // ═══ HARD ═══
-      // Kp from mole fractions
-      { difficulty: "hard", q: "A(g) + B(g) ⇌ C(g)\nMole fractions: χ(A)=0.25, χ(B)=0.25, χ(C)=0.50. Total pressure = 200 kPa.\nCalculate Kp.", hint: "Partial pressure = mole fraction × total pressure.", answer: 0.04, unit: "kPa⁻¹", tolerance: 0.003, steps: ["p(A) = 0.25 × 200 = 50, p(B) = 50, p(C) = 100 kPa", "Kp = p(C) / (p(A) × p(B)) = 100 / (50 × 50) = 0.040 kPa⁻¹"] },
-      // ICE → Kc (hard)
       { difficulty: "hard", q: "2.0 mol SO₂ and 1.0 mol O₂ in a 5.0 dm³ vessel at equilibrium.\n2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nAt equilibrium, 1.40 mol SO₃ is present. Calculate Kc.", hint: "1.40 mol SO₃ formed → 1.40 mol SO₂ used, 0.70 mol O₂ used. Divide by volume.", answer: 90.7, unit: "mol⁻¹ dm³", tolerance: 2.0, steps: ["n(SO₂) = 2.0 − 1.40 = 0.60, n(O₂) = 1.0 − 0.70 = 0.30, n(SO₃) = 1.40", "[SO₂] = 0.12, [O₂] = 0.060, [SO₃] = 0.280", "Kc = (0.280)² / ((0.12)² × 0.060) = 0.0784 / 0.000864 = 90.7 mol⁻¹ dm³"] },
       { difficulty: "hard", q: "2.0 mol H₂ and 1.0 mol I₂ in a 1.0 dm³ flask. At equilibrium 1.6 mol HI formed.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kc.", hint: "1.6 mol HI → 0.80 mol each of H₂ and I₂ reacted.", answer: 10.7, unit: "", tolerance: 0.3, steps: ["n(H₂) = 2.0 − 0.80 = 1.20, n(I₂) = 1.0 − 0.80 = 0.20, n(HI) = 1.60", "V = 1.0 dm³ so [conc] = moles", "Kc = (1.60)² / (1.20 × 0.20) = 2.56 / 0.24 = 10.7"] },
       { difficulty: "hard", q: "1.0 mol N₂O₄ in a 10.0 dm³ flask. At equilibrium 0.20 mol N₂O₄ has dissociated.\nN₂O₄(g) ⇌ 2NO₂(g)\nCalculate Kc.", hint: "n(N₂O₄) = 0.80, n(NO₂) = 2 × 0.20 = 0.40. Divide by volume.", answer: 0.020, unit: "mol dm⁻³", tolerance: 0.001, steps: ["n(N₂O₄) = 0.80, n(NO₂) = 0.40", "[N₂O₄] = 0.080, [NO₂] = 0.040", "Kc = (0.040)² / 0.080 = 0.0016 / 0.080 = 0.020 mol dm⁻³"] },
       { difficulty: "hard", q: "3.0 mol H₂ and 1.0 mol N₂ in a 2.0 dm³ vessel. At equilibrium 0.40 mol NH₃ formed.\nN₂(g) + 3H₂(g) ⇌ 2NH₃(g)\nCalculate Kc.", hint: "0.40 mol NH₃ → 0.20 mol N₂ used, 0.60 mol H₂ used. Divide by volume.", answer: 0.0579, unit: "mol⁻² dm⁶", tolerance: 0.003, steps: ["n(N₂) = 0.80, n(H₂) = 2.40, n(NH₃) = 0.40", "[N₂] = 0.40, [H₂] = 1.20, [NH₃] = 0.20", "Kc = (0.20)² / (0.40 × (1.20)³)", "Kc = 0.04 / (0.40 × 1.728) = 0.04 / 0.6912 = 0.0579 mol⁻² dm⁶"] },
-      // Kp from partial pressures (hard)
+      { difficulty: "exam", q: "0.50 mol H₂ and 0.50 mol I₂ heated in a 1.0 dm³ flask. At equilibrium 0.40 mol HI present.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kc.", hint: "0.40 mol HI → 0.20 mol each of H₂ and I₂ reacted.", answer: 1.78, unit: "", tolerance: 0.05, steps: ["n(H₂) = 0.30, n(I₂) = 0.30, n(HI) = 0.40", "V = 1.0 dm³, so [conc] = moles", "Kc = (0.40)² / (0.30 × 0.30) = 0.16 / 0.09 = 1.78"] },
+      { difficulty: "exam", q: "4.0 mol SO₂ and 2.0 mol O₂ in a 5.0 dm³ vessel. At equilibrium 2.80 mol SO₃ present.\n2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nCalculate Kc.", hint: "2.80 mol SO₃ → 2.80 mol SO₂ used, 1.40 mol O₂ used.", answer: 45.4, unit: "mol⁻¹ dm³", tolerance: 1.5, steps: ["n(SO₂) = 1.20, n(O₂) = 0.60, n(SO₃) = 2.80", "[SO₂] = 0.24, [O₂] = 0.12, [SO₃] = 0.56", "Kc = (0.56)² / ((0.24)² × 0.12) = 0.3136 / 0.006912 = 45.4 mol⁻¹ dm³"] },
+      { difficulty: "exam", q: "Kc = 4.0 for A(g) + B(g) ⇌ C(g) + D(g).\n1.0 mol A and 1.0 mol B are mixed in a 1.0 dm³ vessel.\nCalculate the equilibrium concentration of C.", hint: "Let x = [C] = [D]. Then [A] = [B] = 1.0 − x. Substitute into Kc and solve.", answer: 0.667, unit: "mol dm⁻³", tolerance: 0.01, steps: ["4.0 = x² / (1.0 − x)²", "Take square root: 2.0 = x / (1.0 − x)", "2.0 − 2.0x = x → 3.0x = 2.0", "x = 0.667 mol dm⁻³"] },
+      { difficulty: "exam", q: "Kc = 0.50 mol dm⁻³ for N₂O₄(g) ⇌ 2NO₂(g).\n[N₂O₄] = 0.20 mol dm⁻³ at equilibrium.\nCalculate [NO₂].", hint: "Kc = [NO₂]² / [N₂O₄]. Rearrange for [NO₂].", answer: 0.316, unit: "mol dm⁻³", tolerance: 0.005, steps: ["0.50 = [NO₂]² / 0.20", "[NO₂]² = 0.50 × 0.20 = 0.10", "[NO₂] = √0.10 = 0.316 mol dm⁻³"] },
+    ]
+  },
+  {
+    id: "calc_kp", title: "Equilibrium - Kp", color: "#ea580c", board: "both", year: "a2",
+    questions: [
+      { difficulty: "medium", q: "N₂O₄(g) ⇌ 2NO₂(g)\np(N₂O₄) = 40 kPa, p(NO₂) = 20 kPa.\nCalculate Kp.", hint: "Kp = p(NO₂)² / p(N₂O₄)", answer: 10, unit: "kPa", tolerance: 0.3, steps: ["Kp = p(NO₂)² / p(N₂O₄)", "Kp = (20)² / 40 = 400 / 40 = 10 kPa"] },
+      { difficulty: "medium", q: "PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\np(PCl₅) = 60, p(PCl₃) = 30, p(Cl₂) = 30 kPa.\nCalculate Kp.", hint: "Kp = p(PCl₃) × p(Cl₂) / p(PCl₅)", answer: 15.0, unit: "kPa", tolerance: 0.3, steps: ["Kp = (30 × 30) / 60 = 900 / 60 = 15.0 kPa"] },
+      { difficulty: "hard", q: "A(g) + B(g) ⇌ C(g)\nMole fractions: χ(A)=0.25, χ(B)=0.25, χ(C)=0.50. Total pressure = 200 kPa.\nCalculate Kp.", hint: "Partial pressure = mole fraction × total pressure.", answer: 0.04, unit: "kPa⁻¹", tolerance: 0.003, steps: ["p(A) = 0.25 × 200 = 50, p(B) = 50, p(C) = 100 kPa", "Kp = p(C) / (p(A) × p(B)) = 100 / (50 × 50) = 0.040 kPa⁻¹"] },
       { difficulty: "hard", q: "N₂(g) + 3H₂(g) ⇌ 2NH₃(g)\np(N₂) = 50, p(H₂) = 150, p(NH₃) = 100 kPa.\nCalculate Kp.", hint: "Kp = p(NH₃)² / (p(N₂) × p(H₂)³)", answer: 5.93e-5, unit: "kPa⁻²", tolerance: 3e-6, steps: ["Kp = (100)² / (50 × (150)³)", "Kp = 10000 / (50 × 3375000)", "Kp = 10000 / 168750000 = 5.93 × 10⁻⁵ kPa⁻²"] },
-      // Kp from moles + total pressure (hard)
       { difficulty: "hard", q: "2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nAt equilibrium: 0.30 mol SO₂, 0.20 mol O₂, 0.50 mol SO₃.\nTotal pressure = 200 kPa. Calculate Kp.", hint: "Find mole fractions, then partial pressures = mole fraction × total P.", answer: 0.0694, unit: "kPa⁻¹", tolerance: 0.003, steps: ["Total = 1.00 mol", "p(SO₂) = 60, p(O₂) = 40, p(SO₃) = 100 kPa", "Kp = (100)² / ((60)² × 40) = 10000 / 144000 = 0.0694 kPa⁻¹"] },
       { difficulty: "hard", q: "At equilibrium: 0.50 mol SO₂, 0.30 mol O₂, 1.20 mol SO₃.\nTotal pressure = 400 kPa.\n2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nCalculate Kp.", hint: "Total moles, then partial pressures, then Kp expression.", answer: 0.0960, unit: "kPa⁻¹", tolerance: 0.005, steps: ["Total = 2.00 mol", "p(SO₂) = (0.50/2.00) × 400 = 100 kPa", "p(O₂) = 60, p(SO₃) = 240 kPa", "Kp = (240)² / ((100)² × 60) = 57600 / 600000 = 0.0960 kPa⁻¹"] },
-      // ICE → Kp (hard)
       { difficulty: "hard", q: "2.0 mol N₂O₄ placed in a flask. At equilibrium 0.50 mol NO₂ present.\nTotal pressure = 150 kPa.\nN₂O₄(g) ⇌ 2NO₂(g)\nCalculate Kp.", hint: "0.50 mol NO₂ → 0.25 mol N₂O₄ dissociated. Find equilibrium moles, mole fractions, partial pressures.", answer: 9.50, unit: "kPa", tolerance: 0.3, steps: ["n(N₂O₄) = 2.0 − 0.25 = 1.75, n(NO₂) = 0.50", "Total = 2.25 mol", "p(N₂O₄) = (1.75/2.25) × 150 = 116.7 kPa", "p(NO₂) = (0.50/2.25) × 150 = 33.3 kPa", "Kp = (33.3)² / 116.7 = 1108.9 / 116.7 = 9.50 kPa"] },
       { difficulty: "hard", q: "1.0 mol H₂ and 1.0 mol I₂ heated in a flask. At equilibrium 1.20 mol HI present.\nTotal pressure = 300 kPa.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kp.", hint: "1.20 mol HI → 0.60 mol each of H₂ and I₂ reacted. Find partial pressures.", answer: 9.0, unit: "", tolerance: 0.2, steps: ["n(H₂) = 0.40, n(I₂) = 0.40, n(HI) = 1.20. Total = 2.00", "p(H₂) = 60, p(I₂) = 60, p(HI) = 180 kPa", "Kp = (180)² / (60 × 60) = 32400 / 3600 = 9.0", "(No units — equal moles gas on each side)"] },
-
-      // ═══ EXAM ═══
-      // Kp from partial pressures
       { difficulty: "exam", q: "2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nAt equilibrium: p(SO₂)=10, p(O₂)=5, p(SO₃)=40 kPa.\nCalculate Kp.", hint: "Kp = p(SO₃)² / (p(SO₂)² × p(O₂))", answer: 3.2, unit: "kPa⁻¹", tolerance: 0.1, steps: ["Kp = (40)² / ((10)² × 5) = 1600 / 500 = 3.2 kPa⁻¹"] },
-      // ICE → Kp (exam)
       { difficulty: "exam", q: "1.0 mol N₂O₄ partially dissociates. At equilibrium 0.40 mol has dissociated.\nTotal pressure = 100 kPa.\nN₂O₄(g) ⇌ 2NO₂(g)\nCalculate Kp.", hint: "n(N₂O₄) = 0.60, n(NO₂) = 0.80. Total = 1.40. Find partial pressures.", answer: 76.2, unit: "kPa", tolerance: 1.5, steps: ["n(N₂O₄) = 0.60, n(NO₂) = 0.80, total = 1.40", "p(N₂O₄) = (0.60/1.40) × 100 = 42.86 kPa", "p(NO₂) = (0.80/1.40) × 100 = 57.14 kPa", "Kp = (57.14)² / 42.86 = 3265 / 42.86 = 76.2 kPa"] },
       { difficulty: "exam", q: "0.40 mol PCl₅ heated in a flask. At equilibrium: 0.60 mol PCl₃, 0.60 mol Cl₂ present.\n(Note: some PCl₃ and Cl₂ were initially present.)\nActual n(PCl₅) at equilibrium = 0.40 − x where x mol dissociated.\nGiven total moles = 1.60. Total pressure = 300 kPa.\nPCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\nCalculate Kp.", hint: "Use equilibrium moles directly. Find partial pressures from mole fractions.", answer: 168.8, unit: "kPa", tolerance: 3.0, steps: ["n(PCl₅) = 0.40, n(PCl₃) = 0.60, n(Cl₂) = 0.60, total = 1.60", "p(PCl₅) = (0.40/1.60) × 300 = 75 kPa", "p(PCl₃) = (0.60/1.60) × 300 = 112.5 kPa", "p(Cl₂) = 112.5 kPa", "Kp = (112.5 × 112.5) / 75 = 12656 / 75 = 168.8 kPa"] },
       { difficulty: "exam", q: "1.0 mol PCl₅ is heated. At equilibrium 0.30 mol of PCl₃ is present.\nTotal pressure = 200 kPa.\nPCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\nCalculate Kp.", hint: "n(PCl₃) = n(Cl₂) = 0.30. n(PCl₅) = 0.70. Find partial pressures.", answer: 19.8, unit: "kPa", tolerance: 0.5, steps: ["n(PCl₅) = 0.70, n(PCl₃) = 0.30, n(Cl₂) = 0.30", "Total = 1.30 mol", "p(PCl₅) = (0.70/1.30) × 200 = 107.7 kPa", "p(PCl₃) = (0.30/1.30) × 200 = 46.15 kPa", "p(Cl₂) = 46.15 kPa", "Kp = (46.15 × 46.15) / 107.7 = 2130 / 107.7 = 19.8 kPa"] },
       { difficulty: "exam", q: "2.0 mol SO₃ is placed in a vessel. At equilibrium 0.50 mol of SO₂ is present.\nTotal pressure = 400 kPa.\n2SO₃(g) ⇌ 2SO₂(g) + O₂(g)\nCalculate Kp.", hint: "0.50 mol SO₂ → 0.50 mol SO₃ decomposed (2:2), 0.25 mol O₂ formed (2:1).", answer: 4.94, unit: "kPa", tolerance: 0.2, steps: ["n(SO₃) = 1.50, n(SO₂) = 0.50, n(O₂) = 0.25", "Total = 2.25 mol", "p(SO₃) = (1.50/2.25) × 400 = 266.7 kPa", "p(SO₂) = (0.50/2.25) × 400 = 88.9 kPa", "p(O₂) = (0.25/2.25) × 400 = 44.4 kPa", "Kp = (88.9)² × 44.4 / (266.7)² = 350903 / 71113 = 4.94 kPa"] },
-      // ICE → Kc (exam)
-      { difficulty: "exam", q: "0.50 mol H₂ and 0.50 mol I₂ heated in a 1.0 dm³ flask. At equilibrium 0.40 mol HI present.\nH₂(g) + I₂(g) ⇌ 2HI(g)\nCalculate Kc.", hint: "0.40 mol HI → 0.20 mol each of H₂ and I₂ reacted.", answer: 1.78, unit: "", tolerance: 0.05, steps: ["n(H₂) = 0.30, n(I₂) = 0.30, n(HI) = 0.40", "V = 1.0 dm³, so [conc] = moles", "Kc = (0.40)² / (0.30 × 0.30) = 0.16 / 0.09 = 1.78"] },
-      { difficulty: "exam", q: "4.0 mol SO₂ and 2.0 mol O₂ in a 5.0 dm³ vessel. At equilibrium 2.80 mol SO₃ present.\n2SO₂(g) + O₂(g) ⇌ 2SO₃(g)\nCalculate Kc.", hint: "2.80 mol SO₃ → 2.80 mol SO₂ used, 1.40 mol O₂ used.", answer: 45.4, unit: "mol⁻¹ dm³", tolerance: 1.5, steps: ["n(SO₂) = 1.20, n(O₂) = 0.60, n(SO₃) = 2.80", "[SO₂] = 0.24, [O₂] = 0.12, [SO₃] = 0.56", "Kc = (0.56)² / ((0.24)² × 0.12) = 0.3136 / 0.006912 = 45.4 mol⁻¹ dm³"] },
       { difficulty: "exam", q: "0.80 mol PCl₅ heated in a flask. At equilibrium 0.24 mol Cl₂ present.\nTotal pressure = 250 kPa.\nPCl₅(g) ⇌ PCl₃(g) + Cl₂(g)\nCalculate Kp.", hint: "n(Cl₂) = n(PCl₃) = 0.24. n(PCl₅) = 0.56. Find partial pressures.", answer: 24.7, unit: "kPa", tolerance: 0.5, steps: ["n(PCl₅) = 0.56, n(PCl₃) = 0.24, n(Cl₂) = 0.24", "Total = 1.04 mol", "p(PCl₅) = (0.56/1.04) × 250 = 134.6 kPa", "p(PCl₃) = (0.24/1.04) × 250 = 57.7 kPa", "p(Cl₂) = 57.7 kPa", "Kp = (57.7 × 57.7) / 134.6 = 3329 / 134.6 = 24.7 kPa"] },
-      // Reverse calc from Kc
-      { difficulty: "exam", q: "Kc = 4.0 for A(g) + B(g) ⇌ C(g) + D(g).\n1.0 mol A and 1.0 mol B are mixed in a 1.0 dm³ vessel.\nCalculate the equilibrium concentration of C.", hint: "Let x = [C] = [D]. Then [A] = [B] = 1.0 − x. Substitute into Kc and solve.", answer: 0.667, unit: "mol dm⁻³", tolerance: 0.01, steps: ["4.0 = x² / (1.0 − x)²", "Take square root: 2.0 = x / (1.0 − x)", "2.0 − 2.0x = x → 3.0x = 2.0", "x = 0.667 mol dm⁻³"] },
-      { difficulty: "exam", q: "Kc = 0.50 mol dm⁻³ for N₂O₄(g) ⇌ 2NO₂(g).\n[N₂O₄] = 0.20 mol dm⁻³ at equilibrium.\nCalculate [NO₂].", hint: "Kc = [NO₂]² / [N₂O₄]. Rearrange for [NO₂].", answer: 0.316, unit: "mol dm⁻³", tolerance: 0.005, steps: ["0.50 = [NO₂]² / 0.20", "[NO₂]² = 0.50 × 0.20 = 0.10", "[NO₂] = √0.10 = 0.316 mol dm⁻³"] },
-      // ICE → Kp (exam)
       { difficulty: "exam", q: "0.60 mol N₂ and 1.80 mol H₂ in a vessel. At equilibrium 0.20 mol NH₃ present.\nTotal pressure = 500 kPa.\nN₂(g) + 3H₂(g) ⇌ 2NH₃(g)\nCalculate Kp.", hint: "0.20 mol NH₃ → 0.10 mol N₂ used, 0.30 mol H₂ used. Find partial pressures.", answer: 4.59e-7, unit: "kPa⁻²", tolerance: 3e-8, steps: ["n(N₂) = 0.50, n(H₂) = 1.50, n(NH₃) = 0.20, total = 2.20", "p(N₂) = (0.50/2.20) × 500 = 113.6 kPa", "p(H₂) = (1.50/2.20) × 500 = 340.9 kPa", "p(NH₃) = (0.20/2.20) × 500 = 45.45 kPa", "Kp = (45.45)² / (113.6 × (340.9)³)", "= 2065.7 / (113.6 × 3.966 × 10⁷) = 4.59 × 10⁻⁷ kPa⁻²"] },
     ]
   },
   {
-    id: "calc_ph", title: "pH and Acids & Bases", color: "#0d8c68", board: "both",
+    id: "calc_ph", title: "pH and Acids & Bases", color: "#0d8c68", board: "both", year: "a2",
     questions: [
       // ═══ EASY ═══
       // Type 1: Strong acid
@@ -2540,7 +2524,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_rates", title: "Rate Equations", color: "#6d28d9", board: "both",
+    id: "calc_rates", title: "Rate Equations", color: "#6d28d9", board: "both", year: "a2",
     questions: [
       // ═══ EASY ═══
       // Type 1: Calculate rate
@@ -2612,7 +2596,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_thermo", title: "Thermodynamics - Delta G & Born-Haber", color: "#b45309", board: "both",
+    id: "calc_thermo", title: "Thermodynamics - Delta G & Born-Haber", color: "#b45309", board: "both", year: "a2",
     questions: [
       // ═══ EASY (10) ═══
       // ΔG = ΔH - TΔS basics
@@ -2685,7 +2669,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_electrode", title: "Electrode Potentials", color: "#1a6b9a", board: "both",
+    id: "calc_electrode", title: "Electrode Potentials", color: "#1a6b9a", board: "both", year: "a2",
     questions: [
       // ═══ EASY ═══
       { difficulty: "easy", q: "Calculate E°cell for a cell made from Zn²⁺/Zn (E° = −0.76 V) and Cu²⁺/Cu (E° = +0.34 V).", hint: "E°cell = E°(more positive) − E°(more negative). More positive = cathode.", answer: 1.10, unit: "V", tolerance: 0.01, steps: ["E°cell = E°(Cu²⁺/Cu) − E°(Zn²⁺/Zn)", "E°cell = +0.34 − (−0.76) = +1.10 V"] },
@@ -2723,7 +2707,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_ram", title: "Relative Atomic Mass & Mass Spec", color: "#e11d48", board: "both",
+    id: "calc_ram", title: "Relative Atomic Mass & Mass Spec", color: "#e11d48", board: "both", year: "as",
     questions: [
       // ═══ EASY ═══
       // Type 1: Ar from isotope abundances
@@ -2786,7 +2770,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_tof", title: "TOF Mass Spectrometry", color: "#be185d", board: "aqa",
+    id: "calc_tof", title: "TOF Mass Spectrometry", color: "#be185d", board: "aqa", year: "as",
     questions: [
       // ═══ EASY (10) ═══
       { difficulty: "easy", q: "In a TOF mass spectrometer, an ion has a velocity of 5000 m s⁻¹. The drift region is 1.50 m long.\nCalculate the time of flight (s).", hint: "t = d / v", answer: 3.00e-4, unit: "s", tolerance: 5e-6, steps: ["t = d / v", "t = 1.50 / 5000", "t = 3.00 x 10⁻⁴ s"] },
@@ -2843,7 +2827,7 @@ const CALC_SETS = [
     ]
   },
   {
-    id: "calc_yield", title: "% Yield & Atom Economy", color: "#059669", board: "both",
+    id: "calc_yield", title: "% Yield & Atom Economy", color: "#059669", board: "both", year: "as",
     questions: [
       // EASY
       { difficulty: "easy", q: "A reaction produces 4.2 g of product. The theoretical yield was 6.0 g. Calculate the % yield.", hint: "% yield = (actual / theoretical) x 100", answer: 70, unit: "%", tolerance: 0.5, steps: ["% yield = (actual / theoretical) x 100", "% yield = (4.2 / 6.0) x 100 = 70%"] },
@@ -5429,6 +5413,7 @@ export default function App() {
   const [extShowModel, setExtShowModel] = useState(false); // model answer toggle
   const [extAiError, setExtAiError] = useState(null);      // error message if API fails
   const [calcTopic, setCalcTopic] = useState(null);
+  const [calcYear, setCalcYear] = useState("as"); // "as" | "a2"
   const [showPT, setShowPT] = useState(null); // null | "aqa" | "ocr"
   const [calcDifficulty, setCalcDifficulty] = useState(null); // null | "all" | "easy" | "medium" | "hard" | "exam"
   const [calcSortedQs, setCalcSortedQs] = useState([]); // questions sorted once when difficulty selected
@@ -7848,11 +7833,28 @@ export default function App() {
           {/* ── Topic selection ── */}
           {!calcTopic && (
             <div>
-              <p style={{ color: "#4a6080", fontSize: "14px", marginBottom: "16px", lineHeight: 1.5 }}>
+              <p style={{ color: "#4a6080", fontSize: "14px", marginBottom: "12px", lineHeight: 1.5 }}>
                 Worked calc questions across all topics. Pick a topic then choose your difficulty.
               </p>
+              {/* AS / A2 toggle */}
+              <div style={{ display: "flex", gap: "0", marginBottom: "16px", borderRadius: "10px", overflow: "hidden", border: "2px solid #29ABE2" }}>
+                {[{key:"as",label:"AS (Year 1)"},{key:"a2",label:"A2 (Year 2)"}].map(tab => (
+                  <button key={tab.key} onClick={() => setCalcYear(tab.key)} style={{
+                    flex: 1, padding: "10px", border: "none", fontSize: "13px", fontWeight: 700,
+                    fontFamily: "inherit", cursor: "pointer",
+                    background: calcYear === tab.key ? "#29ABE2" : "#ffffff",
+                    color: calcYear === tab.key ? "#ffffff" : "#29ABE2",
+                  }}>{tab.label}</button>
+                ))}
+              </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                {CALC_SETS.map(set => {
+                {CALC_SETS.filter(set => {
+                  // Filter by board
+                  if (set.board !== "both" && set.board !== board) return false;
+                  // AS shows only AS topics, A2 shows all
+                  if (calcYear === "as" && set.year === "a2") return false;
+                  return true;
+                }).map(set => {
                   const score = calcScore[set.id] || { correct: 0, attempted: 0 };
                   const calcLocked = !hasFullAccess && !FREE_CALC_IDS.includes(set.id);
                   return (
@@ -7864,7 +7866,10 @@ export default function App() {
                       position: "relative", overflow: "hidden",
                     }}>
                       {calcLocked && <LockedOverlay />}
-                      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: set.color, marginBottom: "8px" }} />
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
+                        <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: set.color }} />
+                        {set.year === "a2" && calcYear === "a2" && <span style={{ fontSize: "9px", fontWeight: 700, color: "#fff", background: "#7c3aed", borderRadius: "4px", padding: "1px 5px" }}>A2</span>}
+                      </div>
                       <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3, marginBottom: "4px" }}>{set.title}</div>
                       <div style={{ fontSize: "11px", color: set.color, fontWeight: 600 }}>{set.questions.length} questions</div>
                       {score.attempted > 0 && (
