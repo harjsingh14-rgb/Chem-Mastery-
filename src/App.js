@@ -4507,7 +4507,7 @@ function MechSVGBase({ children, animKey }) {
 
 // Atom label helper
 function A({ x, y, el, charge, partial, size=18, color }) {
-  const c = color || (el==="O"||el==="OH"||el==="OH⁻"?"#b91c1c":el==="N"||el==="NH₃"||el==="NH₂"?"#1d4ed8":el==="Br"?"#9a3412":el==="Cl"?"#166534":"#1a202c");
+  const c = color || "#1a202c";
   return (
     <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
       style={{ fontSize:`${size}px`, fontFamily:"'DM Sans',system-ui,sans-serif", fontWeight:700, fill:c, userSelect:"none" }}>
@@ -4648,16 +4648,16 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <Bond x1={154} y1={120} x2={210} y2={120}/>
         {/* C2 (CH₂Br) */}
         <A x={224} y={120} el="C" size={18}/>
-        <Delta x={244} y={108} sign="+"/>
-        <A x={224} y={68} el="H" size={16}/><Bond x1={224} y1={108} x2={224} y2={80}/>
-        <A x={224} y={172} el="H" size={16}/><Bond x1={224} y1={132} x2={224} y2={160}/>
+        <Delta x={240} y={96} sign="+"/>
+        <A x={224} y={62} el="H" size={16}/><Bond x1={224} y1={108} x2={224} y2={74}/>
+        <A x={224} y={178} el="H" size={16}/><Bond x1={224} y1={132} x2={224} y2={166}/>
         {/* C2-Br bond */}
         <Bond x1={238} y1={120} x2={300} y2={120}/>
         <A x={320} y={120} el="Br" size={20}/>
-        <Delta x={344} y={108} sign="-"/>
+        <Delta x={340} y={96} sign="-"/>
         {/* :OH⁻ nucleophile below */}
         <A x={280} y={230} el=":OH" size={17}/>
-        <Charge x={312} y={216} val="-" color="#b91c1c"/>
+        <Charge x={312} y={216} val="-"/>
         <text x={280} y={260} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#3182ce",fontWeight:700}}>nucleophile</text>
 
         {renderArrows()}
@@ -4678,15 +4678,15 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={175} y={98} el="H" size={16}/><Bond x1={175} y1={130} x2={175} y2={108}/>
           <A x={149} y={172} el="H" size={16}/><Bond x1={168} y1={150} x2={154} y2={168}/>
           <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={234} y={140} el="C" size={16} color="#1d4ed8"/>
+          <A x={234} y={140} el="C" size={16}/>
           <line x1={246} y1={136} x2={272} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
           <line x1={246} y1={140} x2={272} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
           <line x1={246} y1={144} x2={272} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
-          <A x={286} y={140} el="N" size={16} color="#1d4ed8"/>
+          <A x={286} y={140} el="N" size={16}/>
           <text x={210} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>ethanenitrile</text>
           {/* Br⁻ */}
-          <A x={470} y={140} el="Br" size={20} color="#c2410c"/>
-          <Charge x={494} y={124} val="-" color="#c2410c"/>
+          <A x={470} y={140} el="Br" size={20}/>
+          <Charge x={494} y={124} val="-"/>
           <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#c2410c",fontWeight:700}}>bromide ion</text>
           {renderArrows()}
         </MechSVGBase>
@@ -4695,13 +4695,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         {/* CN⁻ nucleophile */}
-        <A x={40} y={140} el="N" size={18} color="#1d4ed8"/>
+        <A x={40} y={140} el="N" size={18}/>
         <line x1={54} y1={136} x2={82} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
         <line x1={54} y1={140} x2={82} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
         <line x1={54} y1={144} x2={82} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
-        <A x={96} y={140} el="C" size={18} color="#1d4ed8"/>
-        <Charge x={114} y={124} val="-" color="#1d4ed8"/>
-        <LP x={96} y={140} angle={0} color="#1d4ed8"/>
+        <A x={96} y={140} el="C" size={18}/>
+        <Charge x={114} y={124} val="-"/>
+        <LP x={96} y={140} angle={0}/>
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
@@ -4710,7 +4710,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={242} y={192} el="H" size={16}/><Bond x1={278} y1={154} x2={250} y2={184}/>
         <A x={338} y={192} el="H" size={16}/><Bond x1={302} y1={154} x2={330} y2={184}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
-        <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
+        <A x={350} y={140} el="Br" size={18}/>
         <Delta x={362} y={132} sign="-"/>
 
         <text x={68} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
@@ -4734,7 +4734,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={175} y={98} el="H" size={16}/><Bond x1={175} y1={130} x2={175} y2={108}/>
           <A x={149} y={172} el="H" size={16}/><Bond x1={168} y1={150} x2={154} y2={168}/>
           <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={240} y={140} el="N" size={18} color="#1d4ed8"/>
+          <A x={240} y={140} el="N" size={18}/>
           <A x={240} y={98} el="H" size={16}/><Bond x1={240} y1={130} x2={240} y2={108}/>
           <A x={268} y={166} el="H" size={16}/><Bond x1={248} y1={150} x2={262} y2={162}/>
           <text x={200} y={210} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>methylamine</text>
@@ -4755,18 +4755,18 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={175} y={98} el="H" size={16}/><Bond x1={175} y1={130} x2={175} y2={108}/>
           <A x={149} y={172} el="H" size={16}/><Bond x1={168} y1={150} x2={154} y2={168}/>
           <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={240} y={140} el="N" size={18} color="#1d4ed8"/>
-          <Charge x={260} y={120} val="+" color="#b91c1c"/>
+          <A x={240} y={140} el="N" size={18}/>
+          <Charge x={260} y={120} val="+"/>
           <A x={240} y={98} el="H" size={16}/><Bond x1={240} y1={130} x2={240} y2={108}/>
           <A x={268} y={166} el="H" size={16}/><Bond x1={248} y1={150} x2={262} y2={162}/>
           <A x={272} y={140} el="H" size={16}/><Bond x1={254} y1={140} x2={266} y2={140}/>
           <text x={200} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>alkylammonium ion</text>
           {/* Br⁻ */}
-          <A x={420} y={140} el="Br" size={20} color="#c2410c"/>
-          <Charge x={444} y={124} val="-" color="#c2410c"/>
+          <A x={420} y={140} el="Br" size={20}/>
+          <Charge x={444} y={124} val="-"/>
           {/* NH₃ base approaching */}
-          <A x={430} y={80} el="NH₃" size={16} color="#1d4ed8"/>
-          <LP x={430} y={80} angle={90} color="#1d4ed8"/>
+          <A x={430} y={80} el="NH₃" size={16}/>
+          <LP x={430} y={80} angle={90}/>
           <text x={430} y={56} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:600}}>base</text>
           {renderArrows()}
         </MechSVGBase>
@@ -4775,8 +4775,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         {/* NH₃ nucleophile */}
-        <A x={70} y={140} el="NH₃" size={17} color="#1d4ed8"/>
-        <LP x={92} y={140} angle={0} color="#1d4ed8"/>
+        <A x={70} y={140} el="NH₃" size={17}/>
+        <LP x={92} y={140} angle={0}/>
 
         {/* CH₃Br displayed formula */}
         <A x={290} y={140} el="C" size={18}/>
@@ -4785,7 +4785,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={242} y={192} el="H" size={16}/><Bond x1={278} y1={154} x2={250} y2={184}/>
         <A x={338} y={192} el="H" size={16}/><Bond x1={302} y1={154} x2={330} y2={184}/>
         <Bond x1={306} y1={140} x2={336} y2={140}/>
-        <A x={350} y={140} el="Br" size={18} color="#c2410c"/>
+        <A x={350} y={140} el="Br" size={18}/>
         <Delta x={362} y={132} sign="-"/>
 
         <text x={70} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
@@ -4807,16 +4807,16 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={90} y={176} el="H" size={16}/><Bond x1={110} y1={155} x2={100} y2={168}/>
           <A x={125} y={140} el="C" size={18}/>
           <Bond x1={137} y1={128} x2={158} y2={108}/>
-          <A x={168} y={100} el="Br" size={17} color="#c2410c"/>
+          <A x={168} y={100} el="Br" size={17}/>
           <Bond x1={142} y1={140} x2={218} y2={140}/>
           <A x={235} y={140} el="C" size={18}/>
-          <Charge x={250} y={122} val="+" color="#b91c1c"/>
+          <Charge x={250} y={122} val="+"/>
           <A x={235} y={100} el="H" size={16}/><Bond x1={235} y1={130} x2={235} y2={108}/>
           <A x={235} y={182} el="H" size={16}/><Bond x1={235} y1={152} x2={235} y2={174}/>
           {/* Br⁻ approaching */}
-          <A x={440} y={140} el="Br" size={20} color="#c2410c"/>
-          <Charge x={466} y={124} val="-" color="#c2410c"/>
-          <LP x={440} y={140} angle={180} color="#c2410c"/>
+          <A x={440} y={140} el="Br" size={20}/>
+          <Charge x={466} y={124} val="-"/>
+          <LP x={440} y={140} angle={180}/>
           <Bond x1={258} y1={140} x2={412} y2={140} dash color="#94a3b8" width={1.5}/>
           <text x={180} y={224} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>carbocation intermediate</text>
           {renderArrows()}
@@ -4836,10 +4836,10 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={284} y={168} el="H" size={16}/><Bond x1={262} y1={153} x2={276} y2={163}/>
         <text x={220} y={84} textAnchor="middle" style={{fontSize:"12px",fill:"#64748b",fontFamily:"'DM Sans',system-ui,sans-serif",fontStyle:"italic"}}>π bond</text>
         {/* Br₂ */}
-        <A x={370} y={140} el="Br" size={18} color="#c2410c"/>
+        <A x={370} y={140} el="Br" size={18}/>
         <Delta x={358} y={118} sign="+"/>
         <Bond x1={388} y1={140} x2={425} y2={140}/>
-        <A x={440} y={140} el="Br" size={18} color="#c2410c"/>
+        <A x={440} y={140} el="Br" size={18}/>
         <Delta x={458} y={118} sign="-"/>
         {renderArrows()}
       </MechSVGBase>
@@ -4856,15 +4856,15 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={75} y={140} el="CH₃" size={16}/>
           <Bond x1={100} y1={140} x2={145} y2={140}/>
           <A x={160} y={140} el="C" size={18}/>
-          <Charge x={180} y={120} val="+" color="#b91c1c"/>
+          <Charge x={180} y={120} val="+"/>
           <A x={160} y={106} el="H" size={16}/><Bond x1={160} y1={132} x2={160} y2={114}/>
           <Bond x1={175} y1={140} x2={225} y2={140}/>
           <A x={250} y={140} el="CH₃" size={16}/>
           <text x={160} y={200} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>secondary carbocation (more stable)</text>
           {/* Br⁻ approaching */}
-          <A x={470} y={140} el="Br" size={20} color="#c2410c"/>
-          <Charge x={496} y={124} val="-" color="#c2410c"/>
-          <LP x={470} y={140} angle={180} color="#c2410c"/>
+          <A x={470} y={140} el="Br" size={20}/>
+          <Charge x={496} y={124} val="-"/>
+          <LP x={470} y={140} angle={180}/>
           <Bond x1={276} y1={140} x2={442} y2={140} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
         </MechSVGBase>
@@ -4887,7 +4887,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={380} y={140} el="H" size={18}/>
         <Delta x={370} y={118} sign="+"/>
         <Bond x1={394} y1={140} x2={438} y2={140}/>
-        <A x={456} y={140} el="Br" size={18} color="#c2410c"/>
+        <A x={456} y={140} el="Br" size={18}/>
         <Delta x={474} y={118} sign="-"/>
         {renderArrows()}
       </MechSVGBase>
@@ -4907,15 +4907,15 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           {/* O⁻ upward */}
           <Bond x1={155} y1={130} x2={155} y2={96}/>
           <A x={155} y={84} el="O" size={18}/>
-          <Charge x={174} y={68} val="-" color="#b91c1c"/>
-          <LP x={155} y={84} angle={180} color="#b91c1c"/>
+          <Charge x={174} y={68} val="-"/>
+          <LP x={155} y={84} angle={180}/>
           {/* CN down-right */}
           <Bond x1={164} y1={150} x2={194} y2={178}/>
-          <A x={205} y={188} el="C" size={16} color="#1d4ed8"/>
+          <A x={205} y={188} el="C" size={16}/>
           <line x1={216} y1={184} x2={242} y2={178} stroke="#1d4ed8" strokeWidth={2.4}/>
           <line x1={217} y1={188} x2={243} y2={182} stroke="#1d4ed8" strokeWidth={2.4}/>
           <line x1={218} y1={192} x2={244} y2={186} stroke="#1d4ed8" strokeWidth={2.4}/>
-          <A x={256} y={182} el="N" size={16} color="#1d4ed8"/>
+          <A x={256} y={182} el="N" size={16}/>
           {/* H on C */}
           <Bond x1={146} y1={150} x2={128} y2={170}/>
           <A x={122} y={180} el="H" size={16}/>
@@ -4923,11 +4923,11 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           {/* HCN proton source */}
           <A x={430} y={130} el="H" size={18}/>
           <Bond x1={442} y1={130} x2={462} y2={130}/>
-          <A x={475} y={130} el="C" size={16} color="#1d4ed8"/>
+          <A x={475} y={130} el="C" size={16}/>
           <line x1={486} y1={126} x2={508} y2={122} stroke="#1d4ed8" strokeWidth={2.4}/>
           <line x1={486} y1={130} x2={508} y2={126} stroke="#1d4ed8" strokeWidth={2.4}/>
           <line x1={486} y1={134} x2={508} y2={130} stroke="#1d4ed8" strokeWidth={2.4}/>
-          <A x={520} y={126} el="N" size={16} color="#1d4ed8"/>
+          <A x={520} y={126} el="N" size={16}/>
           <text x={475} y={170} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>HCN (proton source)</text>
           {renderArrows()}
         </MechSVGBase>
@@ -4937,13 +4937,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         {/* CN⁻ */}
-        <A x={52} y={140} el="N" size={18} color="#1d4ed8"/>
+        <A x={52} y={140} el="N" size={18}/>
         <line x1={66} y1={136} x2={94} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
         <line x1={66} y1={140} x2={94} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
         <line x1={66} y1={144} x2={94} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
-        <A x={108} y={140} el="C" size={18} color="#1d4ed8"/>
-        <Charge x={128} y={122} val="-" color="#1d4ed8"/>
-        <LP x={108} y={140} angle={0} color="#1d4ed8"/>
+        <A x={108} y={140} el="C" size={18}/>
+        <Charge x={128} y={122} val="-"/>
+        <LP x={108} y={140} angle={0}/>
         <text x={80} y={192} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
 
         {/* Ethanal CH₃CHO */}
@@ -4972,12 +4972,12 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={190} y={140} el="C" size={18}/>
           {/* NH₂ up */}
           <Bond x1={190} y1={130} x2={190} y2={96}/>
-          <A x={190} y={82} el="NH₂" size={16} color="#1d4ed8"/>
+          <A x={190} y={82} el="NH₂" size={16}/>
           {/* O⁻ right-up */}
           <Bond x1={200} y1={132} x2={245} y2={104}/>
           <A x={258} y={96} el="O" size={18}/>
-          <Charge x={278} y={80} val="-" color="#b91c1c"/>
-          <LP x={258} y={96} angle={0} color="#b91c1c"/>
+          <Charge x={278} y={80} val="-"/>
+          <LP x={258} y={96} angle={0}/>
           {/* Cl down-right */}
           <Bond x1={200} y1={148} x2={245} y2={176}/>
           <A x={258} y={184} el="Cl" size={18}/>
@@ -4998,7 +4998,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <Bond x1={186} y1={132} x2={220} y2={112} dbl/>
           <A x={234} y={104} el="O" size={18}/>
           <Bond x1={186} y1={148} x2={222} y2={168}/>
-          <A x={240} y={176} el="NH₂" size={16} color="#1d4ed8"/>
+          <A x={240} y={176} el="NH₂" size={16}/>
           <text x={175} y={218} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>ethanamide (CH₃CONH₂)</text>
           <text x={340} y={145} textAnchor="middle" style={{fontSize:"22px",fill:"#64748b",fontWeight:300}}>+</text>
           <A x={440} y={140} el="NH₄Cl" size={16}/>
@@ -5010,8 +5010,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     // Steps 0 & 1: NH₃ + CH₃COCl
     return (
       <MechSVGBase animKey={animKey}>
-        <A x={70} y={140} el="NH₃" size={17} color="#1d4ed8"/>
-        <LP x={92} y={140} angle={0} color="#1d4ed8"/>
+        <A x={70} y={140} el="NH₃" size={17}/>
+        <LP x={92} y={140} angle={0}/>
         <text x={70} y={188} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>nucleophile</text>
 
         <A x={230} y={140} el="CH₃" size={16}/>
@@ -5064,7 +5064,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <A x={478} y={140} el="C" size={18}/>
           <Bond x1={490} y1={132} x2={514} y2={116} dbl/>
           <A x={524} y={108} el="O" size={18}/>
-          <Charge x={494} y={120} val="+" color="#b91c1c"/>
+          <Charge x={494} y={120} val="+"/>
           <text x={478} y={185} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>acylium ion</text>
           <Bond x1={254} y1={140} x2={388} y2={140} dash color="#94a3b8" width={1.5}/>
           {renderArrows()}
@@ -5085,7 +5085,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={378} y={68} el="O" size={16}/>
         <Bond x1={338} y1={104} x2={370} y2={116}/>
         <A x={385} y={122} el="CH₃" size={14}/>
-        <Charge x={160} y={190} val="+" color="#b91c1c"/>
+        <Charge x={160} y={190} val="+"/>
         <text x={195} y={245} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion</text>
         {renderArrows()}
       </MechSVGBase>
@@ -5117,8 +5117,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
           <circle cx={cx} cy={cy} r={28} fill="none" stroke="#1a202c" strokeWidth={1.5} strokeDasharray="4,3"/>
           <A x={195} y={76} el="H" size={16}/>
           <Bond x1={195} y1={84} x2={195} y2={90}/>
-          <A x={420} y={145} el="NO₂" size={18} color="#0284c7"/>
-          <Charge x={452} y={128} val="+" color="#0284c7"/>
+          <A x={420} y={145} el="NO₂" size={18}/>
+          <Charge x={452} y={128} val="+"/>
           <Bond x1={254} y1={145} x2={394} y2={145} dash color="#94a3b8" width={1.5}/>
           <text x={420} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophile</text>
           {renderArrows()}
@@ -5132,8 +5132,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         <A x={195} y={76} el="H" size={16}/>
         <Bond x1={195} y1={84} x2={195} y2={90}/>
         <Bond x1={195} y1={90} x2={310} y2={100}/>
-        <A x={330} y={98} el="NO₂" size={16} color="#0284c7"/>
-        <Charge x={160} y={190} val="+" color="#0284c7"/>
+        <A x={330} y={98} el="NO₂" size={16}/>
+        <Charge x={160} y={190} val="+"/>
         <text x={195} y={248} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>arenium ion</text>
         {renderArrows()}
       </MechSVGBase>
@@ -5145,9 +5145,9 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         {/* OH⁻ base */}
-        <A x={60} y={140} el="HO" size={18} color="#b91c1c"/>
-        <Charge x={86} y={122} val="-" color="#b91c1c"/>
-        <LP x={80} y={140} angle={0} color="#b91c1c"/>
+        <A x={60} y={140} el="HO" size={18}/>
+        <Charge x={86} y={122} val="-"/>
+        <LP x={80} y={140} angle={0}/>
         <text x={60} y={192} textAnchor="middle" style={{fontSize:"12px",fill:"#9333ea",fontFamily:"'DM Sans',system-ui,sans-serif",fontWeight:700}}>base</text>
 
         {/* β-carbon */}
@@ -5171,7 +5171,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
         {/* C-Br bond */}
         <Bond x1={326} y1={140} x2={378} y2={140}/>
-        <A x={395} y={140} el="Br" size={18} color="#c2410c"/>
+        <A x={395} y={140} el="Br" size={18}/>
 
         {renderArrows()}
       </MechSVGBase>
