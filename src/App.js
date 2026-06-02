@@ -4215,7 +4215,7 @@ const MECHS = [
   {
     id: "nuc_sub_cn",
     title: "Nucleophilic Substitution: CN⁻",
-    subtitle: "CN⁻ + CH₃Br → CH₃CN + Br⁻",
+    subtitle: "CN⁻ + CH₃CH₂Br → CH₃CH₂CN + Br⁻",
     category: "Nucleophilic Substitution",
     color: "#1d4ed8",
     specs: ["AQA","OCR_A"],
@@ -4232,14 +4232,14 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 116,140 C 160,86 220,86 268,120", label:"CN⁻ lone pair → C (new C-C bond forms)", type:"full" },
-      a2: { d:"M 310,132 C 322,112 334,112 344,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 336,266 C 306,222 286,184 286,150", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
+      a2: { d:"M 358,140 C 372,114 398,112 418,134", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
     id: "nuc_sub_nh3",
     title: "Nucleophilic Substitution: NH₃",
-    subtitle: "2NH₃ + CH₃Br → CH₃NH₂ + NH₄Br",
+    subtitle: "2NH₃ + CH₃CH₂Br → CH₃CH₂NH₂ + NH₄Br",
     category: "Nucleophilic Substitution",
     color: "#7c3aed",
     specs: ["AQA","OCR_A"],
@@ -4262,9 +4262,9 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 116,140 C 160,86 220,86 268,120", label:"N lone pair → C (new C-N bond forms)", type:"full" },
-      a2: { d:"M 310,132 C 322,112 334,112 344,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
-      a3: { d:"M 424,92 C 390,72 320,76 262,128", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
+      a1: { d:"M 240,210 C 210,170 190,140 190,108", label:"N lone pair → δ+C (new C-N bond forms)", type:"full" },
+      a2: { d:"M 220,80 C 240,56 270,54 290,72", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a3: { d:"M 210,220 C 240,190 280,178 310,160", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
     },
   },
   {
@@ -4627,55 +4627,20 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub_cn ──────────────────────────────────────────────────────
   if (mech.id === "nuc_sub_cn") {
+    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_cn/draw-bromoethane-in-displayed-formula.png";
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃-C≡N product */}
-          <A x={130} y={140} el="H" size={16}/>
-          <Bond x1={141} y1={140} x2={163} y2={140}/>
-          <A x={175} y={140} el="C" size={18}/>
-          <A x={175} y={98} el="H" size={16}/><Bond x1={175} y1={130} x2={175} y2={108}/>
-          <A x={149} y={172} el="H" size={16}/><Bond x1={168} y1={150} x2={154} y2={168}/>
-          <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={234} y={140} el="C" size={16}/>
-          <line x1={246} y1={136} x2={272} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
-          <line x1={246} y1={140} x2={272} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
-          <line x1={246} y1={144} x2={272} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
-          <A x={286} y={140} el="N" size={16}/>
-          <text x={210} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>ethanenitrile</text>
-          {/* Br⁻ */}
-          <A x={470} y={140} el="Br" size={20}/>
-          <Charge x={494} y={124} val="-"/>
-          <text x={470} y={200} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#c2410c",fontWeight:700}}>bromide ion</text>
+          <image href={imgSrc} x={-520} y={-80} width={1100} height={615} />
           {renderArrows()}
         </MechSVGBase>
       );
     }
     return (
       <MechSVGBase animKey={animKey}>
-        {/* CN⁻ nucleophile */}
-        <A x={40} y={140} el="N" size={18}/>
-        <line x1={54} y1={136} x2={82} y2={136} stroke="#1d4ed8" strokeWidth={2.4}/>
-        <line x1={54} y1={140} x2={82} y2={140} stroke="#1d4ed8" strokeWidth={2.4}/>
-        <line x1={54} y1={144} x2={82} y2={144} stroke="#1d4ed8" strokeWidth={2.4}/>
-        <A x={96} y={140} el="C" size={18}/>
-        <Charge x={114} y={124} val="-"/>
-        <LP x={96} y={140} angle={0}/>
-
-        {/* CH₃Br displayed formula */}
-        <A x={290} y={140} el="C" size={18}/>
-        <Delta x={306} y={132} sign="+"/>
-        <A x={290} y={88} el="H" size={16}/><Bond x1={290} y1={128} x2={290} y2={98}/>
-        <A x={242} y={192} el="H" size={16}/><Bond x1={278} y1={154} x2={250} y2={184}/>
-        <A x={338} y={192} el="H" size={16}/><Bond x1={302} y1={154} x2={330} y2={184}/>
-        <Bond x1={306} y1={140} x2={336} y2={140}/>
-        <A x={350} y={140} el="Br" size={18}/>
-        <Delta x={362} y={132} sign="-"/>
-
-        <text x={68} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
-        <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-
+        <defs><clipPath id="nuc-sub-cn-reactant"><rect x="0" y="0" width="450" height="280"/></clipPath></defs>
+        <image href={imgSrc} x={20} y={-80} width={1100} height={615} clipPath="url(#nuc-sub-cn-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -4683,74 +4648,32 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub_nh3 ────────────────────────────────────────────────────
   if (mech.id === "nuc_sub_nh3") {
+    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/draw-bromoethane-in-displayed-formula.png";
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (step.showProducts) {
+      // Show bottom-right of image: products (CH₃CH₂NH₂ + NH₄⁺)
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃NH₂ product */}
-          <A x={130} y={140} el="H" size={16}/>
-          <Bond x1={141} y1={140} x2={163} y2={140}/>
-          <A x={175} y={140} el="C" size={18}/>
-          <A x={175} y={98} el="H" size={16}/><Bond x1={175} y1={130} x2={175} y2={108}/>
-          <A x={149} y={172} el="H" size={16}/><Bond x1={168} y1={150} x2={154} y2={168}/>
-          <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={240} y={140} el="N" size={18}/>
-          <A x={240} y={98} el="H" size={16}/><Bond x1={240} y1={130} x2={240} y2={108}/>
-          <A x={268} y={166} el="H" size={16}/><Bond x1={248} y1={150} x2={262} y2={162}/>
-          <text x={200} y={210} textAnchor="middle" style={{fontSize:"13px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#059669",fontWeight:700}}>methylamine</text>
-          <text x={340} y={145} textAnchor="middle" style={{fontSize:"22px",fill:"#64748b",fontWeight:300}}>+</text>
-          <A x={450} y={140} el="NH₄Br" size={16}/>
-          <text x={450} y={185} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>(from 2nd NH₃ + HBr)</text>
+          <image href={imgSrc} x={-440} y={-100} width={1100} height={615} />
           {renderArrows()}
         </MechSVGBase>
       );
     }
     if (step.showIntermediate || (step.arrows && step.arrows.includes("a3"))) {
+      // Show middle of image: intermediate + NH₃ deprotonation
       return (
         <MechSVGBase animKey={animKey}>
-          {/* CH₃NH₃⁺ intermediate */}
-          <A x={130} y={140} el="H" size={16}/>
-          <Bond x1={141} y1={140} x2={163} y2={140}/>
-          <A x={175} y={140} el="C" size={18}/>
-          <A x={175} y={98} el="H" size={16}/><Bond x1={175} y1={130} x2={175} y2={108}/>
-          <A x={149} y={172} el="H" size={16}/><Bond x1={168} y1={150} x2={154} y2={168}/>
-          <Bond x1={189} y1={140} x2={220} y2={140}/>
-          <A x={240} y={140} el="N" size={18}/>
-          <Charge x={260} y={120} val="+"/>
-          <A x={240} y={98} el="H" size={16}/><Bond x1={240} y1={130} x2={240} y2={108}/>
-          <A x={268} y={166} el="H" size={16}/><Bond x1={248} y1={150} x2={262} y2={162}/>
-          <A x={272} y={140} el="H" size={16}/><Bond x1={254} y1={140} x2={266} y2={140}/>
-          <text x={200} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#64748b"}}>alkylammonium ion</text>
-          {/* Br⁻ */}
-          <A x={420} y={140} el="Br" size={20}/>
-          <Charge x={444} y={124} val="-"/>
-          {/* NH₃ base approaching */}
-          <A x={430} y={80} el="NH₃" size={16}/>
-          <LP x={430} y={80} angle={90}/>
-          <text x={430} y={56} textAnchor="middle" style={{fontSize:"11px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:600}}>base</text>
+          <defs><clipPath id="nuc-sub-nh3-mid"><rect x="0" y="0" width="620" height="280"/></clipPath></defs>
+          <image href={imgSrc} x={-200} y={-60} width={1100} height={615} clipPath="url(#nuc-sub-nh3-mid)"/>
           {renderArrows()}
         </MechSVGBase>
       );
     }
+    // Steps 0-1: Show top-left of image (reactants: CH₃CH₂Br + NH₃)
     return (
       <MechSVGBase animKey={animKey}>
-        {/* NH₃ nucleophile */}
-        <A x={70} y={140} el="NH₃" size={17}/>
-        <LP x={92} y={140} angle={0}/>
-
-        {/* CH₃Br displayed formula */}
-        <A x={290} y={140} el="C" size={18}/>
-        <Delta x={306} y={132} sign="+"/>
-        <A x={290} y={88} el="H" size={16}/><Bond x1={290} y1={128} x2={290} y2={98}/>
-        <A x={242} y={192} el="H" size={16}/><Bond x1={278} y1={154} x2={250} y2={184}/>
-        <A x={338} y={192} el="H" size={16}/><Bond x1={302} y1={154} x2={330} y2={184}/>
-        <Bond x1={306} y1={140} x2={336} y2={140}/>
-        <A x={350} y={140} el="Br" size={18}/>
-        <Delta x={362} y={132} sign="-"/>
-
-        <text x={70} y={190} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#1d4ed8",fontWeight:700}}>nucleophile</text>
-        <text x={290} y={218} textAnchor="middle" style={{fontSize:"12px",fontFamily:"'DM Sans',system-ui,sans-serif",fill:"#0284c7",fontWeight:700}}>electrophilic carbon</text>
-
+        <defs><clipPath id="nuc-sub-nh3-reactant"><rect x="0" y="0" width="400" height="280"/></clipPath></defs>
+        <image href={imgSrc} x={30} y={-10} width={1100} height={615} clipPath="url(#nuc-sub-nh3-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
