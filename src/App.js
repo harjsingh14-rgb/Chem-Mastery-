@@ -8323,14 +8323,14 @@ export default function App() {
               {/* Arrow label box + SVG diagram + overview */}
               <div style={{ margin:"0 16px", display:"flex", gap:"12px", alignItems:"flex-start" }}>
                 {/* Arrow label on left */}
-                <div style={{ flex:"0 0 160px", padding:"12px 14px", background:"#29ABE212",
-                  border:"1.5px solid #29ABE230", borderRadius:"12px", fontSize:"12.5px",
-                  color:"#1a2d45", lineHeight:1.6, minHeight:"80px", display:"flex", alignItems:"center" }}>
+                <div style={{ flex:"0 0 180px", padding:"14px 16px", background:"#29ABE212",
+                  border:"1.5px solid #29ABE230", borderRadius:"12px", fontSize:"14.5px",
+                  color:"#1a2d45", lineHeight:1.65, minHeight:"80px", display:"flex", alignItems:"center" }}>
                   {latestArrowLabel ? (
-                    <div><span style={{ color:"#29ABE2", fontWeight:700, marginRight:"6px" }}>↷</span>
+                    <div><span style={{ color:"#29ABE2", fontWeight:700, marginRight:"8px", fontSize:"18px" }}>↷</span>
                     <span style={{ fontWeight:600 }}>{latestArrowLabel}</span></div>
                   ) : (
-                    <span style={{ color:"#94a3b8", fontSize:"12px" }}>Arrow details appear here</span>
+                    <span style={{ color:"#94a3b8", fontSize:"13px" }}>Arrow details appear here</span>
                   )}
                 </div>
                 {/* SVG diagram */}
@@ -8377,7 +8377,7 @@ export default function App() {
             {mechStill && (
               <div style={{ padding:"12px 16px 24px" }}>
                 <div style={{ fontSize:"13px", color:"#64748b", marginBottom:"10px", lineHeight:1.6 }}>
-                  Exam diagram: key curly arrows shown in blue. All arrow labels listed below.
+                  Exam diagram: key curly arrows shown. All arrow labels listed below.
                 </div>
                 {/* Show key step arrows in red on correct molecule layout */}
                 <div style={{ background:"#ffffff", border:"1.5px solid #e2e8f0", borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
