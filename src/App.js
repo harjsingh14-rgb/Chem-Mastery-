@@ -4264,7 +4264,7 @@ const MECHS = [
     arrowPaths: {
       a1: { d:"M 365,215 C 362,182 348,155 318,142", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
       a2: { d:"M 316,123 C 326,95 345,92 350,117", label:"C–Br breaks → Br⁻ leaves", type:"full" },
-      a3: { d:"M 233,221 C 260,210 220,188 195,188", label:"NH₃ lone pair attacks H⁺", type:"full" },
+      a3: { d:"M 233,221 C 205,215 175,200 195,188", label:"NH₃ lone pair attacks H⁺", type:"full" },
       a4: { d:"M 188,146 C 192,138 187,132 183,127", label:"N–H bond breaks → electrons to N⁺", type:"full" },
     },
   },
