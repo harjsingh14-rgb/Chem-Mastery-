@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 296,254 C 248,240 232,204 260,164", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 308,132 C 316,98 338,96 348,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 270,240 C 224,226 208,192 234,156", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 280,126 C 290,100 310,98 326,120", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4232,8 +4232,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 296,254 C 248,240 232,204 260,164", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
-      a2: { d:"M 308,132 C 316,98 338,96 348,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 270,240 C 224,226 208,192 234,156", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
+      a2: { d:"M 280,126 C 290,100 310,98 326,120", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4611,7 +4611,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-680} y={-80} width={1100} height={615} />
+          <image href={imgSrc} x={-580} y={-30} width={1000} height={559} />
           {renderArrows()}
         </MechSVGBase>
       );
@@ -4619,7 +4619,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         <defs><clipPath id="nuc-sub-reactant"><rect x="0" y="0" width="440" height="280"/></clipPath></defs>
-        <image href={imgSrc} x={20} y={-80} width={1100} height={615} clipPath="url(#nuc-sub-reactant)"/>
+        <image href={imgSrc} x={10} y={-30} width={1000} height={559} clipPath="url(#nuc-sub-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -4632,15 +4632,15 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-520} y={-80} width={1100} height={615} />
+          <image href={imgSrc} x={-580} y={-30} width={1000} height={559} />
           {renderArrows()}
         </MechSVGBase>
       );
     }
     return (
       <MechSVGBase animKey={animKey}>
-        <defs><clipPath id="nuc-sub-cn-reactant"><rect x="0" y="0" width="450" height="280"/></clipPath></defs>
-        <image href={imgSrc} x={20} y={-80} width={1100} height={615} clipPath="url(#nuc-sub-cn-reactant)"/>
+        <defs><clipPath id="nuc-sub-cn-reactant"><rect x="0" y="0" width="440" height="280"/></clipPath></defs>
+        <image href={imgSrc} x={10} y={-30} width={1000} height={559} clipPath="url(#nuc-sub-cn-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
