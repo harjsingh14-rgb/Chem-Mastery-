@@ -4264,7 +4264,7 @@ const MECHS = [
     arrowPaths: {
       a1: { d:"M 365,215 C 362,182 348,155 318,142", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
       a2: { d:"M 300,126 C 310,100 345,98 358,120", label:"C–Br breaks → Br⁻ leaves", type:"full" },
-      a3: { d:"M 0,0 L 0,0", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
+      a3: { d:"M 230,210 C 200,160 220,100 280,80", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
     },
   },
   {
@@ -4686,6 +4686,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
       return (
         <MechSVGBase animKey={animKey}>
           <image href={intermediateImg} x={0} y={0} width={620} height={269} />
+          {renderArrows()}
         </MechSVGBase>
       );
     }
@@ -5331,6 +5332,7 @@ export default function App() {
   };
 
   const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin");
+  const isAdmin = userProfile && userProfile.role === "admin";
 
   const LockedBadge = () => (
     <div style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", borderRadius: "6px", padding: "3px 8px", display: "flex", alignItems: "center", gap: "4px", zIndex: 2 }}>
@@ -5570,6 +5572,8 @@ export default function App() {
   const [mechArrowIdx, setMechArrowIdx] = useState(0); // arrows revealed in current step
   const [mechAnimKey, setMechAnimKey] = useState(0);
   const [mechStill, setMechStill] = useState(false);
+  const [mechDevCoords, setMechDevCoords] = useState(false);
+  const [mechClickLog, setMechClickLog] = useState([]);
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
@@ -6673,11 +6677,12 @@ export default function App() {
           )}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => {
+              const mechComingSoon = card.id === "mechanisms" && !isAdmin;
               const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
-              const partiallyLocked = !hasFullAccess && !fullyLocked;
+              const partiallyLocked = !hasFullAccess && !fullyLocked && !mechComingSoon;
               return (
-              <button key={card.id} onClick={() => { setTopicsTab(card.id); track("open_section", { section: card.id, board }); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
-                style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s" }}
+              <button key={card.id} onClick={() => { if (mechComingSoon) return; setTopicsTab(card.id); track("open_section", { section: card.id, board }); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechArrowIdx(0); } }}
+                style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: mechComingSoon ? "default" : "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s", opacity: mechComingSoon ? 0.75 : 1 }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
               >
@@ -6689,8 +6694,14 @@ export default function App() {
                   <div style={{ position: "absolute", top: "14px", left: "16px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "4px 10px" }}>
                     <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
                   </div>
+                  {/* Coming Soon badge for mechanisms */}
+                  {mechComingSoon && (
+                    <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(217,119,6,0.9)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>COMING SOON</span>
+                    </div>
+                  )}
                   {/* Lock badge for free users */}
-                  {(fullyLocked || partiallyLocked) && (
+                  {!mechComingSoon && (fullyLocked || partiallyLocked) && (
                     <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(0,0,0,0.5)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
                       <span style={{ fontSize: "10px" }}>🔒</span>
                       <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>{fullyLocked ? "PRO" : "PREVIEW"}</span>
@@ -8191,7 +8202,16 @@ export default function App() {
       )}
 
       {/* ── MECHANISMS TAB ────────────────────────────────── */}
-      {topicsTab === "mechanisms" && (() => {
+      {topicsTab === "mechanisms" && !isAdmin && (
+        <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
+          <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧪</div>
+          <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Mechanisms Coming Soon</div>
+          <div style={{ fontSize:"15px", color:"#64748b", lineHeight:1.6, maxWidth:"400px" }}>
+            Step-by-step animated curly arrow mechanisms are being built. This feature will be available soon!
+          </div>
+        </div>
+      )}
+      {topicsTab === "mechanisms" && isAdmin && (() => {
         const activeMech = mechId ? MECHS.find(m => m.id === mechId) : null;
 
         // ── List view ──
@@ -8294,7 +8314,7 @@ export default function App() {
             </div>
 
             {/* Toggle animated / still */}
-            <div style={{ display:"flex", gap:"8px", padding:"10px 16px 4px" }}>
+            <div style={{ display:"flex", gap:"8px", padding:"10px 16px 4px", alignItems:"center" }}>
               {["animated","still"].map(mode => (
                 <button key={mode} onClick={()=>setMechStill(mode==="still")}
                   style={{ padding:"6px 16px", borderRadius:"20px", border:"none", cursor:"pointer",
@@ -8304,6 +8324,14 @@ export default function App() {
                   {mode==="animated" ? "▶ Animated" : "📄 Still (Exam)"}
                 </button>
               ))}
+              {isAdmin && (
+                <button onClick={()=>{ setMechDevCoords(c=>!c); setMechClickLog([]); }}
+                  style={{ marginLeft:"auto", padding:"6px 12px", borderRadius:"20px", border:"none", cursor:"pointer",
+                    fontFamily:"'Space Mono',monospace", fontSize:"11px", fontWeight:700,
+                    background: mechDevCoords ? "#dc2626" : "#374151", color:"#fff" }}>
+                  {mechDevCoords ? "Coords ON" : "Dev Coords"}
+                </button>
+              )}
             </div>
 
             {!mechStill && <>
@@ -8337,9 +8365,34 @@ export default function App() {
                   )}
                 </div>
                 {/* SVG diagram */}
-                <div style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border:"1.5px solid #e2e8f0",
-                  borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
+                <div style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border: mechDevCoords ? "2px solid #dc2626" : "1.5px solid #e2e8f0",
+                  borderRadius:"16px", padding:"14px 10px", overflow:"hidden", position:"relative", cursor: mechDevCoords ? "crosshair" : "default" }}
+                  onClick={mechDevCoords ? (e) => {
+                    const svg = e.currentTarget.querySelector("svg");
+                    if (!svg) return;
+                    const rect = svg.getBoundingClientRect();
+                    const svgX = Math.round(((e.clientX - rect.left) / rect.width) * 620);
+                    const svgY = Math.round(((e.clientY - rect.top) / rect.height) * 280);
+                    setMechClickLog(prev => [...prev, { x: svgX, y: svgY }]);
+                  } : undefined}>
                   <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
+                  {mechDevCoords && mechClickLog.length > 0 && (
+                    <div style={{ position:"absolute", top:"6px", right:"6px", background:"rgba(0,0,0,0.85)", color:"#4ade80",
+                      padding:"8px 10px", borderRadius:"8px", fontSize:"11px", fontFamily:"'Space Mono',monospace",
+                      maxHeight:"200px", overflowY:"auto", lineHeight:1.6, zIndex:10 }}>
+                      {mechClickLog.map((c, i) => <div key={i}>{i+1}. x={c.x}, y={c.y}</div>)}
+                      <button onClick={(e)=>{ e.stopPropagation(); navigator.clipboard.writeText(mechClickLog.map((c,i)=>`${i+1}. x=${c.x}, y=${c.y}`).join("\n")); }}
+                        style={{ marginTop:"4px", padding:"3px 8px", borderRadius:"4px", border:"none", cursor:"pointer",
+                          background:"#4ade80", color:"#000", fontSize:"10px", fontWeight:700, fontFamily:"inherit" }}>
+                        Copy All
+                      </button>
+                      <button onClick={(e)=>{ e.stopPropagation(); setMechClickLog([]); }}
+                        style={{ marginTop:"4px", marginLeft:"4px", padding:"3px 8px", borderRadius:"4px", border:"none", cursor:"pointer",
+                          background:"#f87171", color:"#000", fontSize:"10px", fontWeight:700, fontFamily:"inherit" }}>
+                        Clear
+                      </button>
+                    </div>
+                  )}
                 </div>
                 {/* Overview on right */}
                 <div style={{ flex:"0 0 220px", padding:"14px 16px", background:`${activeMech.color}12`,
