@@ -4209,7 +4209,7 @@ const MECHS = [
     ],
     arrowPaths: {
       a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 195,155 C 205,130 238,128 248,150", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a2: { d:"M 192,150 C 204,120 242,118 252,145", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4233,7 +4233,7 @@ const MECHS = [
     ],
     arrowPaths: {
       a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
-      a2: { d:"M 195,155 C 205,130 238,128 248,150", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a2: { d:"M 192,150 C 204,120 242,118 252,145", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4606,12 +4606,22 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub ─────────────────────────────────────────────────────────
   if (mech.id === "nuc_sub") {
-    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/clean.png";
+    const cleanImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/clean.png";
+    const arrowsImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/arrows.png";
+    // Still/exam mode: show the full arrow PNG
+    if (isStill) {
+      return (
+        <MechSVGBase animKey={animKey}>
+          <image href={arrowsImg} x={10} y={-80} width={900} height={502} />
+        </MechSVGBase>
+      );
+    }
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-400} y={-80} width={900} height={502} />
+          <defs><clipPath id="nuc-sub-products"><rect x="60" y="0" width="560" height="280"/></clipPath></defs>
+          <image href={cleanImg} x={-340} y={-80} width={900} height={502} clipPath="url(#nuc-sub-products)"/>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -4619,7 +4629,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         <defs><clipPath id="nuc-sub-reactant"><rect x="0" y="0" width="320" height="280"/></clipPath></defs>
-        <image href={imgSrc} x={10} y={-80} width={900} height={502} clipPath="url(#nuc-sub-reactant)"/>
+        <image href={cleanImg} x={10} y={-80} width={900} height={502} clipPath="url(#nuc-sub-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
@@ -4627,12 +4637,21 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub_cn ──────────────────────────────────────────────────────
   if (mech.id === "nuc_sub_cn") {
-    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_cn/clean.png";
+    const cleanImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_cn/clean.png";
+    const arrowsImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_cn/arrows.png";
+    if (isStill) {
+      return (
+        <MechSVGBase animKey={animKey}>
+          <image href={arrowsImg} x={10} y={-80} width={900} height={502} />
+        </MechSVGBase>
+      );
+    }
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-400} y={-80} width={900} height={502} />
+          <defs><clipPath id="nuc-sub-cn-products"><rect x="60" y="0" width="560" height="280"/></clipPath></defs>
+          <image href={cleanImg} x={-340} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-products)"/>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -4640,7 +4659,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         <defs><clipPath id="nuc-sub-cn-reactant"><rect x="0" y="0" width="320" height="280"/></clipPath></defs>
-        <image href={imgSrc} x={10} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-reactant)"/>
+        <image href={cleanImg} x={10} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-reactant)"/>
         {renderArrows()}
       </MechSVGBase>
     );
