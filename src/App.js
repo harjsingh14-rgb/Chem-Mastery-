@@ -4620,8 +4620,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-products"><rect x="180" y="0" width="440" height="280"/></clipPath></defs>
-          <image href={cleanImg} x={-240} y={-80} width={900} height={502} clipPath="url(#nuc-sub-products)"/>
+          <defs><clipPath id="nuc-sub-products"><rect x="230" y="0" width="390" height="280"/></clipPath></defs>
+          <image href={cleanImg} x={-260} y={-80} width={900} height={502} clipPath="url(#nuc-sub-products)"/>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -4650,8 +4650,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-cn-products"><rect x="180" y="0" width="440" height="280"/></clipPath></defs>
-          <image href={cleanImg} x={-240} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-products)"/>
+          <defs><clipPath id="nuc-sub-cn-products"><rect x="230" y="0" width="390" height="280"/></clipPath></defs>
+          <image href={cleanImg} x={-260} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-products)"/>
           {renderArrows()}
         </MechSVGBase>
       );
