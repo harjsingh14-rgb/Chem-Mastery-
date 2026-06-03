@@ -8330,55 +8330,58 @@ export default function App() {
                 </div>
               )}
 
-              {/* Mechanism image */}
-              <div key={`mech-img-${mechStep}`} style={{ margin:"10px 16px 0", background:"#fff", border:"1.5px solid #e2e8f0",
-                borderRadius:"16px", padding:"12px", overflow:"hidden", animation:"mechFadeIn 0.3s ease" }}>
-                <img
-                  src={process.env.PUBLIC_URL + images[Math.min(mechStep, images.length - 1)].src}
-                  alt={activeMech.title}
-                  style={{ width:"100%", height:"auto", display:"block", borderRadius:"10px" }}
-                />
-              </div>
-
-              {/* Interactive explainer cards */}
-              <div style={{ padding:"14px 16px 24px", display:"flex", flexDirection:"column", gap:"8px" }}>
-                <div style={{ fontSize:"13px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"4px" }}>
-                  Tap to learn each part
+              {/* Side-by-side: image left, explainers right */}
+              <div style={{ display:"flex", gap:"16px", padding:"10px 16px 24px", flex:1, minHeight:0 }}>
+                {/* Mechanism image — left */}
+                <div key={`mech-img-${mechStep}`} style={{ flex:"1 1 55%", minWidth:0, background:"#fff", border:"1.5px solid #e2e8f0",
+                  borderRadius:"16px", padding:"12px", overflow:"hidden", animation:"mechFadeIn 0.3s ease", alignSelf:"flex-start" }}>
+                  <img
+                    src={process.env.PUBLIC_URL + images[Math.min(mechStep, images.length - 1)].src}
+                    alt={activeMech.title}
+                    style={{ width:"100%", height:"auto", display:"block", borderRadius:"10px" }}
+                  />
                 </div>
-                {explainers.map((ex, idx) => {
-                  const isOpen = mechOpenCards[idx];
-                  return (
-                    <button key={idx} onClick={()=> setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                      style={{ background: isOpen ? `${activeMech.color}08` : "#fff",
-                        border: isOpen ? `2px solid ${activeMech.color}40` : "1.5px solid #e2e8f0",
-                        borderRadius:"14px", padding:"14px 16px", textAlign:"left", cursor:"pointer",
-                        fontFamily:"inherit", transition:"all 0.2s" }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                        <div style={{ width:"26px", height:"26px", borderRadius:"50%", flexShrink:0,
-                          background: isOpen ? activeMech.color : "#f0f4f8",
-                          color: isOpen ? "#fff" : "#64748b",
-                          display:"flex", alignItems:"center", justifyContent:"center",
-                          fontSize:"12px", fontWeight:800, transition:"all 0.2s" }}>
-                          {idx + 1}
+
+                {/* Interactive explainer cards — right */}
+                <div style={{ flex:"1 1 45%", minWidth:0, display:"flex", flexDirection:"column", gap:"8px", overflowY:"auto" }}>
+                  <div style={{ fontSize:"12px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"2px" }}>
+                    Tap to learn each part
+                  </div>
+                  {explainers.map((ex, idx) => {
+                    const isOpen = mechOpenCards[idx];
+                    return (
+                      <button key={idx} onClick={()=> setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
+                        style={{ background: isOpen ? `${activeMech.color}08` : "#fff",
+                          border: isOpen ? `2px solid ${activeMech.color}40` : "1.5px solid #e2e8f0",
+                          borderRadius:"12px", padding:"10px 14px", textAlign:"left", cursor:"pointer",
+                          fontFamily:"inherit", transition:"all 0.2s" }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+                          <div style={{ width:"24px", height:"24px", borderRadius:"50%", flexShrink:0,
+                            background: isOpen ? activeMech.color : "#f0f4f8",
+                            color: isOpen ? "#fff" : "#64748b",
+                            display:"flex", alignItems:"center", justifyContent:"center",
+                            fontSize:"11px", fontWeight:800, transition:"all 0.2s" }}>
+                            {idx + 1}
+                          </div>
+                          <div style={{ flex:1, fontSize:"13px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>
+                            {ex.title}
+                          </div>
+                          <div style={{ fontSize:"14px", color:"#94a3b8", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                            transition:"transform 0.2s", flexShrink:0 }}>
+                            ▼
+                          </div>
                         </div>
-                        <div style={{ flex:1, fontSize:"14px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>
-                          {ex.title}
-                        </div>
-                        <div style={{ fontSize:"16px", color:"#94a3b8", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                          transition:"transform 0.2s", flexShrink:0 }}>
-                          ▼
-                        </div>
-                      </div>
-                      {isOpen && (
-                        <div style={{ marginTop:"10px", paddingTop:"10px", borderTop:`1px solid ${activeMech.color}20`,
-                          fontSize:"14px", color:"#475569", lineHeight:1.7, fontWeight:400,
-                          animation:"mechFadeIn 0.2s ease" }}>
-                          {ex.text}
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
+                        {isOpen && (
+                          <div style={{ marginTop:"8px", paddingTop:"8px", borderTop:`1px solid ${activeMech.color}20`,
+                            fontSize:"13px", color:"#475569", lineHeight:1.65, fontWeight:400,
+                            animation:"mechFadeIn 0.2s ease" }}>
+                            {ex.text}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );
