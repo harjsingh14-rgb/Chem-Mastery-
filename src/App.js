@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 236,223 C 198,208 184,176 210,140", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 248,110 C 256,88 274,86 284,106", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 188,228 C 152,214 142,182 168,152", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 200,130 C 208,106 225,104 235,126", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4232,8 +4232,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 236,223 C 198,208 184,176 210,140", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
-      a2: { d:"M 248,110 C 256,88 274,86 284,106", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 188,228 C 152,214 142,182 168,152", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
+      a2: { d:"M 200,130 C 208,106 225,104 235,126", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
