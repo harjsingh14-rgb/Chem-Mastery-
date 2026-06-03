@@ -4620,9 +4620,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-products"><rect x="230" y="0" width="390" height="280"/></clipPath></defs>
-          <image href={cleanImg} x={-260} y={-80} width={900} height={502} clipPath="url(#nuc-sub-products)"/>
-          {renderArrows()}
+          <image href={cleanImg} x={-140} y={-80} width={900} height={502} />
         </MechSVGBase>
       );
     }
@@ -4650,9 +4648,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-cn-products"><rect x="230" y="0" width="390" height="280"/></clipPath></defs>
-          <image href={cleanImg} x={-260} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-products)"/>
-          {renderArrows()}
+          <image href={cleanImg} x={-140} y={-80} width={900} height={502} />
         </MechSVGBase>
       );
     }
