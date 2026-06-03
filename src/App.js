@@ -4263,8 +4263,8 @@ const MECHS = [
     ],
     arrowPaths: {
       a1: { d:"M 365,215 C 362,182 348,155 318,142", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
-      a2: { d:"M 300,126 C 310,100 345,98 358,120", label:"C–Br breaks → Br⁻ leaves", type:"full" },
-      a3: { d:"M 230,210 C 200,160 220,100 280,80", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
+      a2: { d:"M 316,123 C 326,95 345,92 350,117", label:"C–Br breaks → Br⁻ leaves", type:"full" },
+      a3: { d:"M 238,202 C 200,178 190,148 209,129", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
     },
   },
   {
