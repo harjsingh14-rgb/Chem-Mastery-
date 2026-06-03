@@ -4664,32 +4664,36 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub_nh3 ────────────────────────────────────────────────────
   if (mech.id === "nuc_sub_nh3") {
-    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/clean.png";
-    const stepN = Math.min(stepIdx, mech.steps.length - 1);
-    if (step.showProducts) {
-      // Show bottom-right of image: products (CH₃CH₂NH₂ + NH₄⁺)
+    const reactantsImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/reactants.png";
+    const intermediateImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/intermediate.png";
+    const fullImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/full.png";
+    // Still/exam: show full overview
+    if (isStill) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={imgSrc} x={-440} y={-100} width={1100} height={615} />
-          {renderArrows()}
+          <image href={fullImg} x={-140} y={-80} width={900} height={502} />
+        </MechSVGBase>
+      );
+    }
+    if (step.showProducts) {
+      return (
+        <MechSVGBase animKey={animKey}>
+          <image href={intermediateImg} x={0} y={0} width={620} height={269} />
         </MechSVGBase>
       );
     }
     if (step.showIntermediate || (step.arrows && step.arrows.includes("a3"))) {
-      // Show middle of image: intermediate + NH₃ deprotonation
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-nh3-mid"><rect x="0" y="0" width="620" height="280"/></clipPath></defs>
-          <image href={imgSrc} x={-200} y={-60} width={1100} height={615} clipPath="url(#nuc-sub-nh3-mid)"/>
+          <image href={intermediateImg} x={0} y={0} width={620} height={269} />
           {renderArrows()}
         </MechSVGBase>
       );
     }
-    // Steps 0-1: Show top-left of image (reactants: CH₃CH₂Br + NH₃)
+    // Steps 0-1: reactants
     return (
       <MechSVGBase animKey={animKey}>
-        <defs><clipPath id="nuc-sub-nh3-reactant"><rect x="0" y="0" width="400" height="280"/></clipPath></defs>
-        <image href={imgSrc} x={30} y={-10} width={1100} height={615} clipPath="url(#nuc-sub-nh3-reactant)"/>
+        <image href={reactantsImg} x={60} y={-10} width={470} height={555} />
         {renderArrows()}
       </MechSVGBase>
     );
