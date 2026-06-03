@@ -4606,7 +4606,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub ─────────────────────────────────────────────────────────
   if (mech.id === "nuc_sub") {
-    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/draw-bromoethane-in-displayed-formula.png";
+    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/clean.png";
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
@@ -4627,7 +4627,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub_cn ──────────────────────────────────────────────────────
   if (mech.id === "nuc_sub_cn") {
-    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_cn/draw-bromoethane-in-displayed-formula.png";
+    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_cn/clean.png";
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
@@ -4648,7 +4648,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
 
   // ── nuc_sub_nh3 ────────────────────────────────────────────────────
   if (mech.id === "nuc_sub_nh3") {
-    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/draw-bromoethane-in-displayed-formula.png";
+    const imgSrc = process.env.PUBLIC_URL + "/mechanisms/nuc_sub_nh3/clean.png";
     const stepN = Math.min(stepIdx, mech.steps.length - 1);
     if (step.showProducts) {
       // Show bottom-right of image: products (CH₃CH₂NH₂ + NH₄⁺)
