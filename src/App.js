@@ -4264,7 +4264,7 @@ const MECHS = [
     arrowPaths: {
       a1: { d:"M 365,215 C 362,182 348,155 318,142", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
       a2: { d:"M 316,123 C 326,95 345,92 350,117", label:"C–Br breaks → Br⁻ leaves", type:"full" },
-      a3: { d:"M 233,221 C 205,215 175,200 195,188", label:"NH₃ lone pair attacks H⁺", type:"full" },
+      a3: { d:"M 233,221 C 205,215 172,202 190,188", label:"NH₃ lone pair attacks H⁺", type:"full" },
       a4: { d:"M 188,146 C 192,138 187,132 183,127", label:"N–H bond breaks → electrons to N⁺", type:"full" },
     },
   },
@@ -8218,7 +8218,7 @@ export default function App() {
         // ── List view ──
         if (!activeMech) return (
           <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
-            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}`}</style>
+            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}@keyframes mechFadeIn{from{opacity:0}to{opacity:1}}`}</style>
             <p style={{ color:"#475569", fontSize:"15px", marginBottom:"20px", lineHeight:1.6 }}>
               Step-by-step animated curly-arrow mechanisms. Each arrow is explained. Tap a mechanism to start.
             </p>
@@ -8299,7 +8299,7 @@ export default function App() {
 
         return (
           <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
-            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}`}</style>
+            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}@keyframes mechFadeIn{from{opacity:0}to{opacity:1}}`}</style>
 
             {/* Header */}
             <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
@@ -8366,8 +8366,9 @@ export default function App() {
                   )}
                 </div>
                 {/* SVG diagram */}
-                <div style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border: mechDevCoords ? "2px solid #dc2626" : "1.5px solid #e2e8f0",
-                  borderRadius:"16px", padding:"14px 10px", overflow:"hidden", position:"relative", cursor: mechDevCoords ? "crosshair" : "default" }}
+                <div key={`mech-diagram-${mechStep}`} style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border: mechDevCoords ? "2px solid #dc2626" : "1.5px solid #e2e8f0",
+                  borderRadius:"16px", padding:"14px 10px", overflow:"hidden", position:"relative", cursor: mechDevCoords ? "crosshair" : "default",
+                  animation:"mechFadeIn 0.3s ease" }}
                   onClick={mechDevCoords ? (e) => {
                     const svg = e.currentTarget.querySelector("svg");
                     if (!svg) return;
