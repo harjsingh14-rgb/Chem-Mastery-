@@ -4616,11 +4616,12 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
         </MechSVGBase>
       );
     }
+    const productsImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/products.png";
     const showProducts = step.showProducts;
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={cleanImg} x={-140} y={-80} width={900} height={502} />
+          <image href={productsImg} x={0} y={0} width={620} height={248} />
         </MechSVGBase>
       );
     }
