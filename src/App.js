@@ -4262,8 +4262,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 0,0 L 0,0", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
-      a2: { d:"M 0,0 L 0,0", label:"C–Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 355,205 C 348,172 315,150 292,142", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
+      a2: { d:"M 300,126 C 310,100 345,98 358,120", label:"C–Br breaks → Br⁻ leaves", type:"full" },
       a3: { d:"M 0,0 L 0,0", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
     },
   },
@@ -4693,6 +4693,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     return (
       <MechSVGBase animKey={animKey}>
         <image href={reactantsImg} x={150} y={-30} width={296} height={350} />
+        {renderArrows()}
       </MechSVGBase>
     );
   }
