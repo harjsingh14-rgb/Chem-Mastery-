@@ -4686,15 +4686,13 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
       return (
         <MechSVGBase animKey={animKey}>
           <image href={intermediateImg} x={0} y={0} width={620} height={269} />
-          {renderArrows()}
         </MechSVGBase>
       );
     }
     // Steps 0-1: reactants
     return (
       <MechSVGBase animKey={animKey}>
-        <image href={reactantsImg} x={150} y={-15} width={296} height={350} />
-        {renderArrows()}
+        <image href={reactantsImg} x={150} y={-30} width={296} height={350} />
       </MechSVGBase>
     );
   }
