@@ -4195,6 +4195,15 @@ const MECHS = [
     category: "Nucleophilic Substitution",
     color: "#3182ce",
     specs: ["AQA","OCR_A"],
+    hasHanddrawn: true,
+    handdrawnImages: [{ src: "/mechanisms/nuc_sub/mechanism.jpg", label: "Full Mechanism" }],
+    explainers: [
+      { title: "What is the nucleophile?", text: "The hydroxide ion (OH⁻) has a lone pair of electrons on oxygen. It is the nucleophile — it donates this lone pair to form a new bond." },
+      { title: "Arrow 1: Nucleophile attacks δ+ carbon", text: "The lone pair on oxygen attacks the δ+ carbon of bromoethane, forming a new C–O bond. The curly arrow goes from the lone pair to the carbon atom." },
+      { title: "Arrow 2: C–Br bond breaks", text: "Simultaneously, the C–Br bonding pair shifts to bromine. Br leaves as Br⁻ (the leaving group). The curly arrow goes from the bond to Br." },
+      { title: "Why is this a substitution?", text: "The –Br group has been replaced (substituted) by –OH. The product is ethanol (CH₃CH₂OH) and the by-product is bromide ion (Br⁻)." },
+      { title: "Conditions", text: "Warm aqueous NaOH (dilute). Reflux. The OH⁻ acts as a nucleophile in this reaction." },
+    ],
     description: "The nucleophile (a species with a lone pair) attacks the δ+ carbon of the halogenoalkane. The C–X bond breaks heterolytically (where X is any halogen: Br, Cl or I) - X leaves as X⁻ (the leaving group) taking both bonding electrons. Both bond formation and bond breaking are shown with simultaneous curly arrows.",
     steps: [
       { title: "Identify: nucleophile and electrophile",
@@ -4219,6 +4228,15 @@ const MECHS = [
     category: "Nucleophilic Substitution",
     color: "#1d4ed8",
     specs: ["AQA","OCR_A"],
+    hasHanddrawn: true,
+    handdrawnImages: [{ src: "/mechanisms/nuc_sub_cn/mechanism.jpg", label: "Full Mechanism" }],
+    explainers: [
+      { title: "What is the nucleophile?", text: "The cyanide ion (CN⁻) has a lone pair on carbon. It is the nucleophile — it attacks the electrophilic carbon." },
+      { title: "Arrow 1: CN⁻ attacks δ+ carbon", text: "The lone pair on carbon of CN⁻ attacks the δ+ carbon of bromoethane, forming a new C–C bond. This extends the carbon chain by one." },
+      { title: "Arrow 2: C–Br bond breaks", text: "Simultaneously, the C–Br bonding pair shifts to bromine. Br leaves as Br⁻. Both arrows are drawn at the same time." },
+      { title: "Why is this reaction useful?", text: "It increases the carbon chain length by one. The nitrile product (propanenitrile) can be hydrolysed to a carboxylic acid or reduced to an amine — key in organic synthesis." },
+      { title: "Conditions", text: "KCN dissolved in ethanol/water. Reflux. KCN provides the CN⁻ nucleophile. Caution: HCN is toxic — use a fume cupboard." },
+    ],
     description: "The cyanide ion (CN⁻) is a nucleophile with a lone pair on carbon. It attacks the δ+ carbon of the halogenoalkane, displacing Br⁻ as the leaving group. The product is a nitrile (CH₃CN). This reaction extends the carbon chain by one carbon - useful in synthesis.",
     steps: [
       { title: "Identify: nucleophile and electrophile",
@@ -4243,6 +4261,20 @@ const MECHS = [
     category: "Nucleophilic Substitution",
     color: "#7c3aed",
     specs: ["AQA","OCR_A"],
+    hasHanddrawn: true,
+    handdrawnImages: [
+      { src: "/mechanisms/nuc_sub_nh3/step1.jpg", label: "Step 1: NH₃ attacks" },
+      { src: "/mechanisms/nuc_sub_nh3/step2.jpg", label: "Step 2: Deprotonation" },
+      { src: "/mechanisms/nuc_sub_nh3/full_overview.jpg", label: "Full Overview" },
+    ],
+    explainers: [
+      { title: "Why is NH₃ different to OH⁻ and CN⁻?", text: "NH₃ is a neutral nucleophile (not charged). It's weaker, so excess concentrated NH₃ in ethanol and heating in a sealed tube is required." },
+      { title: "Step 1 — Arrow 1: N lone pair attacks δ+ C", text: "The lone pair on nitrogen attacks the δ+ carbon, forming a new C–N bond. Unlike OH⁻, the nitrogen now has 4 bonds and carries a positive charge." },
+      { title: "Step 1 — Arrow 2: C–Br bond breaks", text: "Simultaneously, the C–Br bonding electrons shift to Br, which leaves as Br⁻. The intermediate formed is an alkylammonium salt: CH₃CH₂NH₃⁺Br⁻." },
+      { title: "Step 2 — Why a second step?", text: "The intermediate has N⁺ with 4 bonds — this is NOT the final product. A proton must be removed to give the free amine. This extra step is unique to NH₃." },
+      { title: "Step 2 — Deprotonation by NH₃", text: "A second NH₃ molecule acts as a base, using its lone pair to remove H⁺ from the NH₃⁺ group. This gives the free amine CH₃CH₂NH₂ and NH₄⁺." },
+      { title: "Why excess NH₃?", text: "One NH₃ acts as the nucleophile, another as the base. Excess also minimises further substitution to secondary amines, tertiary amines, and quaternary ammonium salts." },
+    ],
     description: "Ammonia (NH₃) is a nucleophile with a lone pair on nitrogen. It attacks the δ+ carbon, displacing Br⁻. The initial product is an ammonium salt (CH₃NH₃⁺Br⁻). A second NH₃ molecule then deprotonates the salt to give the free amine CH₃NH₂ + NH₄Br. Excess NH₃ is used to minimise further substitution.",
     steps: [
       { title: "Identify: nucleophile and electrophile",
@@ -5575,6 +5607,7 @@ export default function App() {
   const [mechStill, setMechStill] = useState(false);
   const [mechDevCoords, setMechDevCoords] = useState(false);
   const [mechClickLog, setMechClickLog] = useState([]);
+  const [mechOpenCards, setMechOpenCards] = useState({}); // { cardIndex: true/false }
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
@@ -6592,7 +6625,7 @@ export default function App() {
     { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Animated curly arrow mechanisms step by step.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Animated" },
   ];
 
-  const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechArrowIdx(0); };
+  const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechArrowIdx(0); setMechOpenCards({}); };
 
   if (screen === "topics") return (
     <div style={base}>
@@ -8218,9 +8251,9 @@ export default function App() {
         // ── List view ──
         if (!activeMech) return (
           <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
-            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}@keyframes mechFadeIn{from{opacity:0}to{opacity:1}}`}</style>
+            <style>{`@keyframes mechFadeIn{from{opacity:0}to{opacity:1}}`}</style>
             <p style={{ color:"#475569", fontSize:"15px", marginBottom:"20px", lineHeight:1.6 }}>
-              Step-by-step animated curly-arrow mechanisms. Each arrow is explained. Tap a mechanism to start.
+              Handdrawn curly-arrow mechanisms with interactive explanations. Tap a mechanism to start.
             </p>
             {Object.entries(
               MECHS.reduce((acc,m)=>{ (acc[m.category]=acc[m.category]||[]).push(m); return acc; }, {})
@@ -8230,11 +8263,13 @@ export default function App() {
                 <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
                   {list.map((m, mIdx) => {
                     const mechLocked = !hasFullAccess && mIdx >= FREE_MECH_COUNT;
+                    const hasImages = m.hasHanddrawn;
                     return (
-                    <button key={m.id} onClick={()=>{ if (!mechLocked) { setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); track("view_mechanism", { mechanism: m.id, title: m.title }); logActivity("mechanism"); } }}
+                    <button key={m.id} onClick={()=>{ if (!mechLocked) { setMechId(m.id); setMechStep(0); setMechArrowIdx(0); setMechAnimKey(k=>k+1); setMechStill(false); setMechOpenCards({}); track("view_mechanism", { mechanism: m.id, title: m.title }); logActivity("mechanism"); } }}
                       style={{ background:"#ffffff", border:`2px solid ${m.color}30`, borderRadius:"14px",
                         padding:"16px 18px", textAlign:"left", cursor: mechLocked ? "default" : "pointer", fontFamily:"inherit",
-                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s", position:"relative", overflow:"hidden" }}>
+                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"border-color 0.2s", position:"relative", overflow:"hidden",
+                        opacity: hasImages ? 1 : 0.5 }}>
                       {mechLocked && <LockedOverlay />}
                       <div style={{ display:"flex", alignItems:"center", gap:"12px" }}>
                         <div style={{ width:"12px", height:"12px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
@@ -8243,6 +8278,7 @@ export default function App() {
                           <div style={{ fontSize:"14px", color:"#475569", fontFamily:"'DM Sans',system-ui,sans-serif", letterSpacing:"0.3px" }}>{m.subtitle}</div>
                         </div>
                         <div style={{ display:"flex", gap:"5px", flexShrink:0 }}>
+                          {!hasImages && <span style={{ fontSize:"11px", fontWeight:700, background:"#f59e0b20", color:"#d97706", padding:"3px 8px", borderRadius:"8px" }}>SOON</span>}
                           {m.specs.map(s=><span key={s} style={{ fontSize:"11px", fontWeight:700, background:`${m.color}15`, color:m.color, padding:"3px 8px", borderRadius:"8px" }}>{s.replace("_"," ")}</span>)}
                         </div>
                       </div>
@@ -8255,209 +8291,112 @@ export default function App() {
           </div>
         );
 
-        // ── Mechanism viewer ──
-        const totalSteps = activeMech.steps.length;
-        const currentStepData = activeMech.steps[mechStep];
-        const stepArrows = currentStepData.arrows || [];
-        const totalStepArrows = stepArrows.length;
+        // ── Handdrawn mechanism viewer ──
+        if (activeMech.hasHanddrawn) {
+          const images = activeMech.handdrawnImages || [];
+          const explainers = activeMech.explainers || [];
+          const hasMultipleImages = images.length > 1;
 
-        // Build flat total for progress bar: sum all arrows + 1 per step (for the "intro" frame)
-        const totalFrames = activeMech.steps.reduce((n, s) => n + 1 + (s.arrows||[]).length, 0);
-        const framesBeforeStep = activeMech.steps.slice(0, mechStep).reduce((n, s) => n + 1 + (s.arrows||[]).length, 0);
-        const currentFrame = framesBeforeStep + 1 + mechArrowIdx; // +1 for step intro frame
+          return (
+            <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
+              <style>{`@keyframes mechFadeIn{from{opacity:0}to{opacity:1}}`}</style>
 
-        // Currently visible arrow IDs for this step (revealed so far)
-        const visibleArrowIds = stepArrows.slice(0, mechArrowIdx);
-        // The most recently revealed arrow label (for the legend)
-        const latestArrowLabel = mechArrowIdx > 0 ? activeMech.arrowPaths[stepArrows[mechArrowIdx - 1]]?.label : null;
-
-        const isAtStart = mechStep === 0 && mechArrowIdx === 0;
-        const isAtEnd = mechStep === totalSteps - 1 && mechArrowIdx >= totalStepArrows;
-
-        const goNext = () => {
-          if (mechArrowIdx < totalStepArrows) {
-            setMechArrowIdx(i => i + 1);
-            setMechAnimKey(k => k + 1);
-          } else if (mechStep < totalSteps - 1) {
-            const nextStepArrows = (activeMech.steps[mechStep + 1].arrows || []).length;
-            setMechStep(s => s + 1);
-            setMechArrowIdx(nextStepArrows > 0 ? 1 : 0);
-            setMechAnimKey(k => k + 1);
-          }
-        };
-        const goPrev = () => {
-          if (mechArrowIdx > 0) {
-            setMechArrowIdx(i => i - 1);
-            setMechAnimKey(k => k + 1);
-          } else if (mechStep > 0) {
-            const prevArrows = (activeMech.steps[mechStep - 1].arrows || []).length;
-            setMechStep(s => s - 1);
-            setMechArrowIdx(prevArrows); // show all arrows of prev step
-            setMechAnimKey(k => k + 1);
-          }
-        };
-
-        return (
-          <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
-            <style>{`@keyframes mechDrawArrow{from{stroke-dashoffset:350}to{stroke-dashoffset:0}}@keyframes mechFadeIn{from{opacity:0}to{opacity:1}}`}</style>
-
-            {/* Header */}
-            <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
-              <button onClick={()=>{ setMechId(null); setMechStep(0); setMechArrowIdx(0); }}
-                style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
-                  color:"#29ABE2", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
-                ← Back
-              </button>
-              <div>
-                <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45" }}>{activeMech.title}</div>
-                <div style={{ fontSize:"11px", color:"#64748b", fontFamily:"'DM Sans',system-ui,sans-serif" }}>{activeMech.subtitle}</div>
-              </div>
-            </div>
-
-            {/* Toggle animated / still */}
-            <div style={{ display:"flex", gap:"8px", padding:"10px 16px 4px", alignItems:"center" }}>
-              {["animated","still"].map(mode => (
-                <button key={mode} onClick={()=>setMechStill(mode==="still")}
-                  style={{ padding:"6px 16px", borderRadius:"20px", border:"none", cursor:"pointer",
-                    fontFamily:"inherit", fontSize:"12px", fontWeight:700,
-                    background: (mechStill ? mode==="still" : mode==="animated") ? activeMech.color : "#f0f4f8",
-                    color: (mechStill ? mode==="still" : mode==="animated") ? "#fff" : "#4a6080" }}>
-                  {mode==="animated" ? "▶ Animated" : "📄 Still (Exam)"}
-                </button>
-              ))}
-              {isAdmin && (
-                <button onClick={()=>{ setMechDevCoords(c=>!c); setMechClickLog([]); }}
-                  style={{ marginLeft:"auto", padding:"6px 12px", borderRadius:"20px", border:"none", cursor:"pointer",
-                    fontFamily:"'Space Mono',monospace", fontSize:"11px", fontWeight:700,
-                    background: mechDevCoords ? "#dc2626" : "#374151", color:"#fff" }}>
-                  {mechDevCoords ? "Coords ON" : "Dev Coords"}
-                </button>
-              )}
-            </div>
-
-            {!mechStill && <>
-              {/* Progress bar */}
-              <div style={{ padding:"10px 16px 4px", display:"flex", alignItems:"center", gap:"10px" }}>
-                <div style={{ fontSize:"12px", color:"#94a3b8", fontWeight:600, whiteSpace:"nowrap" }}>
-                  Step {mechStep + 1} of {totalSteps}
-                </div>
-                <div style={{ flex:1, height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
-                  <div style={{ height:"100%", width:`${(currentFrame/totalFrames)*100}%`,
-                    background:"#29ABE2", borderRadius:"2px", transition:"width 0.25s ease" }}/>
-                </div>
-              </div>
-
-              {/* Step title */}
-              <div style={{ padding:"4px 16px 8px" }}>
-                <div style={{ fontSize:"17px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>{currentStepData.title}</div>
-              </div>
-
-              {/* Arrow label box + SVG diagram + overview */}
-              <div style={{ margin:"0 16px", display:"flex", gap:"12px", alignItems:"flex-start" }}>
-                {/* Arrow label on left */}
-                <div style={{ flex:"0 0 180px", padding:"14px 16px", background:"#29ABE212",
-                  border:"1.5px solid #29ABE230", borderRadius:"12px", fontSize:"14.5px",
-                  color:"#1a2d45", lineHeight:1.65, minHeight:"80px", display:"flex", alignItems:"center" }}>
-                  {latestArrowLabel ? (
-                    <div><span style={{ color:"#29ABE2", fontWeight:700, marginRight:"8px", fontSize:"18px" }}>↷</span>
-                    <span style={{ fontWeight:600 }}>{latestArrowLabel}</span></div>
-                  ) : (
-                    <span style={{ color:"#94a3b8", fontSize:"13px" }}>Arrow details appear here</span>
-                  )}
-                </div>
-                {/* SVG diagram */}
-                <div key={`mech-diagram-${mechStep}`} style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border: mechDevCoords ? "2px solid #dc2626" : "1.5px solid #e2e8f0",
-                  borderRadius:"16px", padding:"14px 10px", overflow:"hidden", position:"relative", cursor: mechDevCoords ? "crosshair" : "default",
-                  animation:"mechFadeIn 0.3s ease" }}
-                  onClick={mechDevCoords ? (e) => {
-                    const svg = e.currentTarget.querySelector("svg");
-                    if (!svg) return;
-                    const rect = svg.getBoundingClientRect();
-                    const svgX = Math.round(((e.clientX - rect.left) / rect.width) * 620);
-                    const svgY = Math.round(((e.clientY - rect.top) / rect.height) * 280);
-                    setMechClickLog(prev => [...prev, { x: svgX, y: svgY }]);
-                  } : undefined}>
-                  <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
-                  {mechDevCoords && mechClickLog.length > 0 && (
-                    <div style={{ position:"absolute", top:"6px", right:"6px", background:"rgba(0,0,0,0.85)", color:"#4ade80",
-                      padding:"8px 10px", borderRadius:"8px", fontSize:"11px", fontFamily:"'Space Mono',monospace",
-                      maxHeight:"200px", overflowY:"auto", lineHeight:1.6, zIndex:10 }}>
-                      {mechClickLog.map((c, i) => <div key={i}>{i+1}. x={c.x}, y={c.y}</div>)}
-                      <button onClick={(e)=>{ e.stopPropagation(); navigator.clipboard.writeText(mechClickLog.map((c,i)=>`${i+1}. x=${c.x}, y=${c.y}`).join("\n")); }}
-                        style={{ marginTop:"4px", padding:"3px 8px", borderRadius:"4px", border:"none", cursor:"pointer",
-                          background:"#4ade80", color:"#000", fontSize:"10px", fontWeight:700, fontFamily:"inherit" }}>
-                        Copy All
-                      </button>
-                      <button onClick={(e)=>{ e.stopPropagation(); setMechClickLog([]); }}
-                        style={{ marginTop:"4px", marginLeft:"4px", padding:"3px 8px", borderRadius:"4px", border:"none", cursor:"pointer",
-                          background:"#f87171", color:"#000", fontSize:"10px", fontWeight:700, fontFamily:"inherit" }}>
-                        Clear
-                      </button>
-                    </div>
-                  )}
-                </div>
-                {/* Overview on right */}
-                <div style={{ flex:"0 0 220px", padding:"14px 16px", background:`${activeMech.color}12`,
-                  borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"13px",
-                  color:"#1a2d45", lineHeight:1.65 }}>
-                  {activeMech.description}
-                </div>
-              </div>
-
-              {/* Prev / Next */}
-              <div style={{ padding:"8px 16px 20px", display:"flex", gap:"10px" }}>
-                <button onClick={goPrev} disabled={isAtStart}
-                  style={{ flex:1, padding:"13px", borderRadius:"12px", border:"none",
-                    cursor: isAtStart ? "default" : "pointer",
-                    background: isAtStart ? "#e8edf3" : "#f0f4f8",
-                    color: isAtStart ? "#b0c4d4" : "#4a6080",
-                    fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
+              {/* Header */}
+              <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
+                <button onClick={()=>{ setMechId(null); setMechStep(0); setMechOpenCards({}); }}
+                  style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
+                    color:"#29ABE2", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
                   ← Back
                 </button>
-                {!isAtEnd ? (
-                  <button onClick={goNext}
-                    style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
-                      background:"#29ABE2", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit",
-                      boxShadow:"0 4px 14px rgba(41,171,226,0.35)" }}>
-                    {mechArrowIdx < totalStepArrows ? "Show Next Arrow →" : "Next Step →"}
-                  </button>
-                ) : (
-                  <button onClick={()=>{ setMechId(null); setMechStep(0); setMechArrowIdx(0); }}
-                    style={{ flex:2, padding:"13px", borderRadius:"12px", border:"none", cursor:"pointer",
-                      background:"#1a2d45", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
-                    Done - Back to List
-                  </button>
-                )}
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:"15px", fontWeight:700, color:"#1a2d45" }}>{activeMech.title}</div>
+                  <div style={{ fontSize:"12px", color:"#64748b", fontFamily:"'DM Sans',system-ui,sans-serif" }}>{activeMech.subtitle}</div>
+                </div>
               </div>
-            </>}
 
-            {/* STILL / EXAM version */}
-            {mechStill && (
-              <div style={{ padding:"12px 16px 24px" }}>
-                <div style={{ fontSize:"13px", color:"#64748b", marginBottom:"10px", lineHeight:1.6 }}>
-                  Exam diagram: key curly arrows shown. All arrow labels listed below.
-                </div>
-                {/* Show key step arrows in red on correct molecule layout */}
-                <div style={{ background:"#ffffff", border:"1.5px solid #e2e8f0", borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
-                  <MechSVGStill mech={activeMech}/>
-                </div>
-                {/* Step-by-step key */}
-                <div style={{ marginTop:"14px", display:"flex", flexDirection:"column", gap:"10px" }}>
-                  {activeMech.steps.filter(s=>(s.arrows||[]).length>0).map((s,i) => (
-                    <div key={i} style={{ background:"#fff", border:"1px solid #e2e8f0", borderRadius:"12px", padding:"12px" }}>
-                      <div style={{ fontSize:"12px", fontWeight:700, color:activeMech.color, marginBottom:"4px" }}>{s.title}</div>
-                      {(s.arrows||[]).map(id => {
-                        const ap = activeMech.arrowPaths[id];
-                        return ap ? <div key={id} style={{ fontSize:"12px", color:"#1a2d45", lineHeight:1.6, display:"flex", gap:"6px", alignItems:"flex-start" }}>
-                          <span style={{ color:"#29ABE2", fontWeight:700, marginTop:"1px" }}>↷</span>
-                          <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif" }}>{ap.label}</span>
-                        </div> : null;
-                      })}
-                    </div>
+              {/* Image tabs for multi-step mechanisms */}
+              {hasMultipleImages && (
+                <div style={{ display:"flex", gap:"6px", padding:"10px 16px 4px", overflowX:"auto" }}>
+                  {images.map((img, idx) => (
+                    <button key={idx} onClick={()=>setMechStep(idx)}
+                      style={{ padding:"7px 14px", borderRadius:"20px", border:"none", cursor:"pointer",
+                        fontFamily:"inherit", fontSize:"12px", fontWeight:700, whiteSpace:"nowrap",
+                        background: mechStep === idx ? activeMech.color : "#f0f4f8",
+                        color: mechStep === idx ? "#fff" : "#4a6080",
+                        transition:"all 0.2s" }}>
+                      {img.label}
+                    </button>
                   ))}
                 </div>
+              )}
+
+              {/* Mechanism image */}
+              <div key={`mech-img-${mechStep}`} style={{ margin:"10px 16px 0", background:"#fff", border:"1.5px solid #e2e8f0",
+                borderRadius:"16px", padding:"12px", overflow:"hidden", animation:"mechFadeIn 0.3s ease" }}>
+                <img
+                  src={process.env.PUBLIC_URL + images[Math.min(mechStep, images.length - 1)].src}
+                  alt={activeMech.title}
+                  style={{ width:"100%", height:"auto", display:"block", borderRadius:"10px" }}
+                />
               </div>
-            )}
+
+              {/* Interactive explainer cards */}
+              <div style={{ padding:"14px 16px 24px", display:"flex", flexDirection:"column", gap:"8px" }}>
+                <div style={{ fontSize:"13px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"4px" }}>
+                  Tap to learn each part
+                </div>
+                {explainers.map((ex, idx) => {
+                  const isOpen = mechOpenCards[idx];
+                  return (
+                    <button key={idx} onClick={()=> setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
+                      style={{ background: isOpen ? `${activeMech.color}08` : "#fff",
+                        border: isOpen ? `2px solid ${activeMech.color}40` : "1.5px solid #e2e8f0",
+                        borderRadius:"14px", padding:"14px 16px", textAlign:"left", cursor:"pointer",
+                        fontFamily:"inherit", transition:"all 0.2s" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                        <div style={{ width:"26px", height:"26px", borderRadius:"50%", flexShrink:0,
+                          background: isOpen ? activeMech.color : "#f0f4f8",
+                          color: isOpen ? "#fff" : "#64748b",
+                          display:"flex", alignItems:"center", justifyContent:"center",
+                          fontSize:"12px", fontWeight:800, transition:"all 0.2s" }}>
+                          {idx + 1}
+                        </div>
+                        <div style={{ flex:1, fontSize:"14px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>
+                          {ex.title}
+                        </div>
+                        <div style={{ fontSize:"16px", color:"#94a3b8", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                          transition:"transform 0.2s", flexShrink:0 }}>
+                          ▼
+                        </div>
+                      </div>
+                      {isOpen && (
+                        <div style={{ marginTop:"10px", paddingTop:"10px", borderTop:`1px solid ${activeMech.color}20`,
+                          fontSize:"14px", color:"#475569", lineHeight:1.7, fontWeight:400,
+                          animation:"mechFadeIn 0.2s ease" }}>
+                          {ex.text}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+
+        // ── Fallback: old animated viewer for mechanisms without handdrawn images ──
+        return (
+          <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
+            <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧪</div>
+            <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Animated Version Coming Soon</div>
+            <div style={{ fontSize:"15px", color:"#64748b", lineHeight:1.6, maxWidth:"400px" }}>
+              The animated step-by-step version of this mechanism is being built. Check back soon!
+            </div>
+            <button onClick={()=>{ setMechId(null); setMechStep(0); }}
+              style={{ marginTop:"20px", padding:"10px 24px", borderRadius:"12px", border:"none", cursor:"pointer",
+                background:"#29ABE2", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
+              ← Back to List
+            </button>
           </div>
         );
       })()}
