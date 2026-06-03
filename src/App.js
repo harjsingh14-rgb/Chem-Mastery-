@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 215,241 C 130,234 120,214 165,200", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 200,168 C 210,143 245,141 258,163", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 195,155 C 205,130 238,128 248,150", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4232,8 +4232,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 215,241 C 130,234 120,214 165,200", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
-      a2: { d:"M 200,168 C 210,143 245,141 258,163", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
+      a2: { d:"M 195,155 C 205,130 238,128 248,150", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4481,7 +4481,7 @@ const MECHS = [
 
 function MechSVGBase({ children, animKey }) {
   return (
-    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block", maxHeight:"340px" }}>
+    <svg viewBox="0 0 620 280" style={{ width:"100%", height:"auto", display:"block", maxHeight:"400px" }}>
       <defs>
         <marker id={`arr-blue-${animKey}`} viewBox="0 0 10 10" refX="9" refY="5"
           markerWidth="5" markerHeight="5" orient="auto-start-reverse">
