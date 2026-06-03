@@ -4255,8 +4255,8 @@ const MECHS = [
         explanation: "The intermediate is an alkylammonium salt: CH₃NH₃⁺Br⁻. The nitrogen has 4 bonds and a positive charge. This is NOT the final product - a proton must be removed to give the free amine. This extra step is unique to NH₃ substitution because NH₃ is a neutral nucleophile.",
         arrows: [], showIntermediate: true },
       { title: "Proton loss: NH₃ deprotonates → CH₃NH₂",
-        explanation: "Arrow 3: a second molecule of NH₃ acts as a base, using its lone pair to accept a proton (H⁺) from the NH₃⁺ group. This gives the free amine CH₃NH₂ and NH₄⁺. This is why excess NH₃ is needed: one molecule acts as the nucleophile, another acts as the base. Excess NH₃ also minimises further substitution to secondary and tertiary amines.",
-        arrows: ["a3"], past: [] },
+        explanation: "Arrow 3: a second molecule of NH₃ acts as a base, using its lone pair to accept a proton (H⁺) from the NH₃⁺ group. Arrow 4: the N–H bond breaks and the bonding electrons return to nitrogen, removing the positive charge. This gives the free amine CH₃NH₂ and NH₄⁺. This is why excess NH₃ is needed: one molecule acts as the nucleophile, another acts as the base. Excess NH₃ also minimises further substitution to secondary and tertiary amines.",
+        arrows: ["a3","a4"], past: [] },
       { title: "Products: CH₃NH₂ + NH₄Br",
         explanation: "The free amine CH₃NH₂ (methylamine) is the organic product. NH₄Br is the inorganic by-product formed from the second NH₃ mopping up HBr. The overall equation is: 2NH₃ + CH₃Br → CH₃NH₂ + NH₄Br. Note: the amine product still has a lone pair on N and can react further with more halogenoalkane, giving secondary amines, tertiary amines, and eventually quaternary ammonium salts.",
         arrows: [], past: [], showProducts: true },
@@ -4264,7 +4264,8 @@ const MECHS = [
     arrowPaths: {
       a1: { d:"M 365,215 C 362,182 348,155 318,142", label:"N lone pair → δ⁺C (new C–N bond forms)", type:"full" },
       a2: { d:"M 316,123 C 326,95 345,92 350,117", label:"C–Br breaks → Br⁻ leaves", type:"full" },
-      a3: { d:"M 238,202 C 200,178 190,148 209,129", label:"NH₃ removes H⁺ (deprotonation)", type:"full" },
+      a3: { d:"M 233,221 C 260,210 220,188 195,188", label:"NH₃ lone pair attacks H⁺", type:"full" },
+      a4: { d:"M 188,146 C 192,138 187,132 183,127", label:"N–H bond breaks → electrons to N⁺", type:"full" },
     },
   },
   {
