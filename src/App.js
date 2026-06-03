@@ -4208,8 +4208,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 336,266 C 264,232 224,192 232,152", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
-      a2: { d:"M 284,134 C 294,112 316,110 332,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 320,260 C 260,240 220,200 234,162", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a2: { d:"M 270,134 C 280,110 302,108 318,126", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -4232,8 +4232,8 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 336,266 C 264,232 224,192 232,152", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
-      a2: { d:"M 284,134 C 294,112 316,110 332,128", label:"C-Br breaks → Br⁻ leaves", type:"full" },
+      a1: { d:"M 320,260 C 260,240 220,200 234,162", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
+      a2: { d:"M 270,134 C 280,110 302,108 318,126", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
   {
@@ -8306,7 +8306,7 @@ export default function App() {
 
               {/* SVG diagram + overview side-by-side */}
               <div style={{ margin:"0 16px", display:"flex", gap:"12px", alignItems:"flex-start" }}>
-                <div style={{ flex:"1 1 0%", minWidth:0, background:"#f8fafc", border:"1.5px solid #e2e8f0",
+                <div style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border:"1.5px solid #e2e8f0",
                   borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
                   <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
                 </div>
@@ -8360,7 +8360,7 @@ export default function App() {
                   Exam diagram: key curly arrows shown in blue. All arrow labels listed below.
                 </div>
                 {/* Show key step arrows in red on correct molecule layout */}
-                <div style={{ background:"#f8fafc", border:"1.5px solid #e2e8f0", borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
+                <div style={{ background:"#ffffff", border:"1.5px solid #e2e8f0", borderRadius:"16px", padding:"12px 8px", overflow:"hidden" }}>
                   <MechSVGStill mech={activeMech}/>
                 </div>
                 {/* Step-by-step key */}
