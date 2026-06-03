@@ -4208,7 +4208,7 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"OH⁻ lone pair → δ+C (new C-O bond forms)", type:"full" },
+      a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"OH⁻ lone pair → δ⁺C (new C–O bond forms)", type:"full" },
       a2: { d:"M 192,150 C 204,120 242,118 252,145", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
@@ -4232,7 +4232,7 @@ const MECHS = [
         arrows: [], past: [], showProducts: true },
     ],
     arrowPaths: {
-      a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"CN⁻ lone pair → δ+C (new C-C bond forms)", type:"full" },
+      a1: { d:"M 222,242 C 222,205 205,180 192,168", label:"CN⁻ lone pair → δ⁺C (new C–C bond forms)", type:"full" },
       a2: { d:"M 192,150 C 204,120 242,118 252,145", label:"C-Br breaks → Br⁻ leaves", type:"full" },
     },
   },
@@ -4608,11 +4608,11 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
   if (mech.id === "nuc_sub") {
     const cleanImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/clean.png";
     const arrowsImg = process.env.PUBLIC_URL + "/mechanisms/nuc_sub/arrows.png";
-    // Still/exam mode: show the full arrow PNG
+    // Still/exam mode: show the full arrow PNG centred
     if (isStill) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={arrowsImg} x={10} y={-80} width={900} height={502} />
+          <image href={arrowsImg} x={-140} y={-80} width={900} height={502} />
         </MechSVGBase>
       );
     }
@@ -4620,8 +4620,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-products"><rect x="60" y="0" width="560" height="280"/></clipPath></defs>
-          <image href={cleanImg} x={-340} y={-80} width={900} height={502} clipPath="url(#nuc-sub-products)"/>
+          <defs><clipPath id="nuc-sub-products"><rect x="80" y="0" width="540" height="280"/></clipPath></defs>
+          <image href={cleanImg} x={-310} y={-80} width={900} height={502} clipPath="url(#nuc-sub-products)"/>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -4642,7 +4642,7 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (isStill) {
       return (
         <MechSVGBase animKey={animKey}>
-          <image href={arrowsImg} x={10} y={-80} width={900} height={502} />
+          <image href={arrowsImg} x={-140} y={-80} width={900} height={502} />
         </MechSVGBase>
       );
     }
@@ -4650,8 +4650,8 @@ function MechSVG({ mech, stepIdx, animKey, stillMode=false, visibleArrowCount=99
     if (showProducts) {
       return (
         <MechSVGBase animKey={animKey}>
-          <defs><clipPath id="nuc-sub-cn-products"><rect x="60" y="0" width="560" height="280"/></clipPath></defs>
-          <image href={cleanImg} x={-340} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-products)"/>
+          <defs><clipPath id="nuc-sub-cn-products"><rect x="80" y="0" width="540" height="280"/></clipPath></defs>
+          <image href={cleanImg} x={-310} y={-80} width={900} height={502} clipPath="url(#nuc-sub-cn-products)"/>
           {renderArrows()}
         </MechSVGBase>
       );
@@ -8323,27 +8323,31 @@ export default function App() {
                 <div style={{ fontSize:"17px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>{currentStepData.title}</div>
               </div>
 
-              {/* SVG diagram + overview side-by-side */}
+              {/* Arrow label box + SVG diagram + overview */}
               <div style={{ margin:"0 16px", display:"flex", gap:"12px", alignItems:"flex-start" }}>
+                {/* Arrow label on left */}
+                <div style={{ flex:"0 0 160px", padding:"12px 14px", background:"#29ABE212",
+                  border:"1.5px solid #29ABE230", borderRadius:"12px", fontSize:"12.5px",
+                  color:"#1a2d45", lineHeight:1.6, minHeight:"80px", display:"flex", alignItems:"center" }}>
+                  {latestArrowLabel ? (
+                    <div><span style={{ color:"#29ABE2", fontWeight:700, marginRight:"6px" }}>↷</span>
+                    <span style={{ fontWeight:600 }}>{latestArrowLabel}</span></div>
+                  ) : (
+                    <span style={{ color:"#94a3b8", fontSize:"12px" }}>Arrow details appear here</span>
+                  )}
+                </div>
+                {/* SVG diagram */}
                 <div style={{ flex:"1 1 0%", minWidth:0, background:"#ffffff", border:"1.5px solid #e2e8f0",
                   borderRadius:"16px", padding:"14px 10px", overflow:"hidden" }}>
                   <MechSVG mech={activeMech} stepIdx={mechStep} animKey={mechAnimKey} visibleArrowCount={mechArrowIdx}/>
                 </div>
-                <div style={{ flex:"0 0 240px", padding:"14px 16px", background:`${activeMech.color}12`,
-                  borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"13.5px",
-                  color:"#1a2d45", lineHeight:1.7 }}>
+                {/* Overview on right */}
+                <div style={{ flex:"0 0 220px", padding:"14px 16px", background:`${activeMech.color}12`,
+                  borderLeft:`4px solid ${activeMech.color}`, borderRadius:"0 10px 10px 0", fontSize:"13px",
+                  color:"#1a2d45", lineHeight:1.65 }}>
                   {activeMech.description}
                 </div>
               </div>
-
-              {/* Latest arrow label */}
-              {latestArrowLabel && (
-                <div style={{ margin:"10px 16px 0", display:"flex", alignItems:"center", gap:"8px",
-                  background:"#29ABE212", padding:"8px 14px", borderRadius:"10px", border:"1px solid #29ABE230" }}>
-                  <span style={{ color:"#29ABE2", fontSize:"16px", fontWeight:700 }}>&#8635;</span>
-                  <span style={{ fontSize:"13px", color:"#1a2d45", fontWeight:600, lineHeight:1.3 }}>{latestArrowLabel}</span>
-                </div>
-              )}
 
               {/* Prev / Next */}
               <div style={{ padding:"8px 16px 20px", display:"flex", gap:"10px" }}>
