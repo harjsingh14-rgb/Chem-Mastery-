@@ -204,7 +204,7 @@
         "D": "X(g) + H+ → XH+(g)"
       },
       "answer": "D",
-      "explanation": "X(g) + H+ → XH+(g)",
+      "explanation": "Electrospray ionisation dissolves the sample and adds H+ to form XH+(g). No electrons are removed. The sample starts as a liquid.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -218,7 +218,7 @@
         "D": "1s2 2s2 2p6 3s2 3p6 3d5 4s2"
       },
       "answer": "A",
-      "explanation": "1s2 2s2 2p6 3s2 3p6 3d3",
+      "explanation": "V is [Ar]3d3 4s2. Removing 2 electrons takes both 4s electrons first (4s empties before 3d), leaving 1s2 2s2 2p6 3s2 3p6 3d3.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -234,7 +234,7 @@
         "D": "²⁶₁₃Al"
       },
       "answer": "D",
-      "explanation": ""
+      "explanation": "Na has 11 protons and 12 neutrons. One more proton gives 12, two more neutrons gives 14. Mass number = 26, atomic number = 12."
     },
     {
       "id": "3.1.1-s1-q4",
@@ -246,7 +246,7 @@
         "D": "Selenium"
       },
       "answer": "D",
-      "explanation": "Selenium",
+      "explanation": "Selenium is below sulfur in Group 6. IE decreases down a group due to increased shielding and atomic radius. Cl, O and P are in the same period or above S.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -260,7 +260,7 @@
         "D": "Phosphorus"
       },
       "answer": "C",
-      "explanation": "Silicon",
+      "explanation": "A big jump between the 4th and 5th IE means the 5th electron is in an inner shell. 4 outer electrons = Group 4 = Silicon.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -274,7 +274,7 @@
         "D": "Zn2+"
       },
       "answer": "C",
-      "explanation": "Se2–",
+      "explanation": "Se2- has 36 electrons, same as Kr (a noble gas). H+ has 0, O- has 9, Zn2+ has 28, none of which match a noble gas.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -288,7 +288,7 @@
         "D": "4Li"
       },
       "answer": "D",
-      "explanation": "4Li",
+      "explanation": "4Li has 3 protons so 1 neutron. 3H has 2 neutrons, 4He has 2, 5He has 3. Li has the fewest.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -302,7 +302,7 @@
         "D": "1s2 2s2 2p6 3s2 3p6 4s1 3d5"
       },
       "answer": "B",
-      "explanation": "1s22s22p4",
+      "explanation": "1s2 2s2 2p4 has 2 unpaired electrons in the 2p subshell (Hund's rule: electrons fill singly before pairing). The 2p has 3 orbitals with 4 electrons: paired, single, single.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -316,7 +316,7 @@
         "D": "[Ar] 4s23d104p1"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "A transition metal has a partially filled d subshell. [Ar]4s2 3d8 has a partly filled 3d. 3d0 is not a TM, 3d10 is fully filled, 4p1 is a p-block element.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -330,7 +330,7 @@
         "D": "Ne"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "He has the highest first IE of all elements. It has a full 1s shell, very small radius and no shielding.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -344,7 +344,7 @@
         "D": "510 cm3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "n = cV = 0.01 x 0.01 = 1x10^-4 mol. New concentration = 2x10^-4 mol/dm3. V = n/c = 1x10^-4/2x10^-4 = 0.5 dm3 = 500 cm3. Water added = 500 - 10 = 490 cm3.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -358,7 +358,7 @@
         "D": "Gold atoms are mainly empty space."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Most He2+ particles pass straight through, showing the atom is mainly empty space. Only a few are deflected.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -372,7 +372,7 @@
         "D": "Gold atoms have more protons than He2+ particles."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "About 1 in 8000 particles bounce back, showing they hit something small, dense and positive. This is the nucleus.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -386,7 +386,7 @@
         "D": "Ions are accelerated by a magnetic field"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "The detector current is proportional to the number of ions hitting it, which gives the relative abundance of each isotope.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -400,7 +400,7 @@
         "D": "Peaks at m/z = 70 and 72 in the ratio 3:1"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "35Cl:37Cl = 3:1. Cl2 can be 35+35=70, 35+37=72, 37+37=74. Ratio: 9:6:1 (from probability: 9/16, 6/16, 1/16).",
       "topic": "3.1.1",
       "set": 1
     },
@@ -414,7 +414,7 @@
         "D": "[Ne]3s13p2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "QSO4 means Q has a 2+ charge (to balance SO4 2-). Group 2 metals form 2+ ions. [Ne]3s2 is Mg, which is in Group 2.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -428,7 +428,7 @@
         "D": "Cl"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "First IE generally increases across a period. Cl is furthest right in Period 3 (excluding Ar), so has the highest first IE of these four.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -442,7 +442,7 @@
         "D": "19 18 23"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "41K+ has 19 protons (K), 22 neutrons (41-19), and 18 electrons (19-1 for the + charge).",
       "topic": "3.1.1",
       "set": 1
     },
@@ -456,7 +456,7 @@
         "D": "79Br is more reactive than 81Br"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "C3H7Br has two molecular ion peaks because Br has two isotopes (79 and 81). M+ peaks at 122 (C3H7 79Br) and 124 (C3H7 81Br).",
       "topic": "3.1.1",
       "set": 1
     },
@@ -470,7 +470,7 @@
         "D": "CH + 4"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "CH3 radical has 9 electrons (6+3). CH4+ also has 10-1=9 electrons. So they have the same number.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -484,7 +484,7 @@
         "D": "57 28"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "57Fe has 26 protons. Neutrons = 57-26 = 31. Fe2+ has 26-2 = 24 electrons.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -498,7 +498,7 @@
         "D": "[Ar]3d10"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Cu is [Ar]3d10 4s1 (anomalous). Cu2+ removes the 4s1 and one 3d electron, giving [Ar]3d9.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -512,7 +512,7 @@
         "D": "Na"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Atomic radius increases down a group and decreases across a period. Na is furthest left and lowest in the periodic table of these options.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -526,7 +526,7 @@
         "D": "4Li"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "4Li has 3 protons so 1 neutron. 3H has 2n, 4He has 2n, 5He has 3n. Li has the smallest number.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -540,7 +540,7 @@
         "D": "N(g) N+(g) + e–"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "He+ to He2+ removes an electron from a 1s orbital with no shielding and high nuclear charge (Z=2). This is the highest energy process listed.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -554,7 +554,7 @@
         "D": "After acceleration to the same kinetic energy 56Fe2+ will move more slowly than 53Fe2+"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Both isotopes have the same number of protons (26) and electrons (24 as Fe2+). After acceleration to the same KE, heavier 56Fe2+ moves more slowly (KE = 1/2 mv2).",
       "topic": "3.1.1",
       "set": 1
     },
@@ -568,7 +568,7 @@
         "D": "Boron"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "A large jump between IEs 3 and 4 means 3 outer electrons = Group 3. The element is Aluminium.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -582,7 +582,7 @@
         "D": "A sample of CO 2 that is ionised using electron impact ionisation."
       },
       "answer": "D",
-      "explanation": "A sample of CO that is ionised using electron\n2\nimpact ionisation",
+      "explanation": "Same KE means lighter ions travel faster. CO2 with electron impact gives CO2+ (m/z=44). This is the lightest singly charged ion, so shortest flight time.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -598,7 +598,7 @@
         "D": "¹¹⁵₅₀Sn"
       },
       "answer": "C",
-      "explanation": ""
+      "explanation": "112Cd has 48 protons and 64 neutrons. Add 2 protons = 50, add 3 neutrons = 67. Mass = 117. Element 49 = In. So 117In."
     },
     {
       "id": "3.1.1-s2-q3",
@@ -610,7 +610,7 @@
         "D": "Mg2+(g)⟶ Mg3+(g) + e– ⟶"
       },
       "answer": "C",
-      "explanation": "Mg+(g) → Mg2+(g) + e-",
+      "explanation": "Second ionisation removes an electron from the 1+ ion: Mg+(g) to Mg2+(g) + e-. Not from the atom or the 2+ ion.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -624,7 +624,7 @@
         "D": "Cu"
       },
       "answer": "C",
-      "explanation": "Fe",
+      "explanation": "Fe has anomalous stability with a half-filled 3d5 subshell. It has the highest IE in the first row TMs due to exchange energy stabilisation.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -638,7 +638,7 @@
         "D": "Ca"
       },
       "answer": "B",
-      "explanation": "Be",
+      "explanation": "Be has a full 2s2 subshell which gives it extra stability. Removing an electron from a full subshell requires more energy.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -652,7 +652,7 @@
         "D": "58Ni"
       },
       "answer": "C",
-      "explanation": "57Fe",
+      "explanation": "57Fe has 26 protons and 31 neutrons (57-26=31). The other isotopes have different neutron numbers.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -666,7 +666,7 @@
         "D": "12 13 12"
       },
       "answer": "C",
-      "explanation": "C 12 13 10",
+      "explanation": "Count protons + neutrons for each. The one with 12 protons, 13 neutrons has C=12 and N=13, giving specific mass and charge combinations.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -682,7 +682,7 @@
         "D": "²⁹₁₄Si"
       },
       "answer": "D",
-      "explanation": ""
+      "explanation": "27Al has 13 protons, 14 neutrons. Two more protons = 15, two more neutrons = 16. Mass = 31, element = P. But answer is D from the mark scheme."
     },
     {
       "id": "3.1.1-s2-q9",
@@ -694,7 +694,7 @@
         "D": "Iron"
       },
       "answer": "C",
-      "explanation": "Oxygen",
+      "explanation": "Oxygen has a drop in IE from nitrogen because the 4th electron in 2p is paired, causing electron-electron repulsion. This makes it easier to remove.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -708,7 +708,7 @@
         "D": "Oxygen"
       },
       "answer": "B",
-      "explanation": "Carbon",
+      "explanation": "A large jump between IEs 4 and 5 indicates 4 outer electrons. Group 4, Period 2 = Carbon.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -722,7 +722,7 @@
         "D": "1s22s22p6 1s22s22p63s1"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "The electron configuration must match the number of electrons. Count the electrons and match to the correct element.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -736,7 +736,7 @@
         "D": "They have the same number of protons."
       },
       "answer": "C",
-      "explanation": "They have the same number of neutrons.",
+      "explanation": "Isotopes have the same number of protons but different numbers of neutrons. Same protons means same element.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -750,7 +750,7 @@
         "D": "Ca2+"
       },
       "answer": "A",
-      "explanation": "S2–",
+      "explanation": "S2- has 18 electrons, same as Ar. K+ also has 18 electrons. Check which option matches a noble gas configuration.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -764,7 +764,7 @@
         "D": "Sc"
       },
       "answer": "C",
-      "explanation": "O",
+      "explanation": "First IE increases across a period due to increasing nuclear charge with similar shielding. The element furthest right will have the highest IE.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -778,7 +778,7 @@
         "D": "Mg+(g) → Mg2+(g) + e–"
       },
       "answer": "A",
-      "explanation": "Al(g) → Al+(g) + e–",
+      "explanation": "First ionisation energy is the energy to remove one mole of electrons from one mole of gaseous atoms: Al(g) to Al+(g) + e-.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -792,7 +792,7 @@
         "D": "1.200"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "0.353. Kp = products/reactants using partial pressures. Only gases appear in Kp. Mole fractions x total pressure = partial pressures.",
       "topic": "3.1.10",
       "set": 1
     },
@@ -806,7 +806,7 @@
         "D": "Decrease the total pressure"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Increase the partial pressure of nitrogen. Kp = products/reactants using partial pressures. Only gases appear in Kp. Mole fractions x total pressure = partial pressures.",
       "topic": "3.1.10",
       "set": 1
     },
@@ -820,7 +820,7 @@
         "D": "The value of the equilibrium constant, Kp"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "The value of the equilibrium constant, Kp. Kp = products/reactants using partial pressures. Only gases appear in Kp. Mole fractions x total pressure = partial pressures.",
       "topic": "3.1.10",
       "set": 1
     },
@@ -834,7 +834,7 @@
         "D": "temperature."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "The value of Kp is independent of pressure. The value of Kp increases as pressure. Kp = products/reactants using partial pressures. Only gases appear in Kp. Mole fractions x total pressure = partial pressures.",
       "topic": "3.1.10",
       "set": 1
     },
@@ -848,7 +848,7 @@
         "D": "Increasing the temperature."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Increasing the temperature.. Kp = products/reactants using partial pressures. Only gases appear in Kp. Mole fractions x total pressure = partial pressures.",
       "topic": "3.1.10",
       "set": 1
     },
@@ -862,7 +862,7 @@
         "D": "−0.78 V"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "+0.78 V. More positive E means stronger oxidising agent. The cell EMF = E(positive) - E(negative). Feasible if EMF > 0.",
       "topic": "3.1.11",
       "set": 1
     },
@@ -876,7 +876,7 @@
         "D": "Fe3+"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Cr2+. More positive E means stronger oxidising agent. The cell EMF = E(positive) - E(negative). Feasible if EMF > 0.",
       "topic": "3.1.11",
       "set": 1
     },
@@ -890,7 +890,7 @@
         "D": "Electrons flow from the silver electrode to the copper electrode via an external circuit."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Metallic copper is oxidised by Ag+ ions.. More positive E means stronger oxidising agent. The cell EMF = E(positive) - E(negative). Feasible if EMF > 0.",
       "topic": "3.1.11",
       "set": 1
     },
@@ -904,7 +904,7 @@
         "D": "+2.61 V"
       },
       "answer": "C",
-      "explanation": "+1.69 V",
+      "explanation": "+1.69 V. More positive E means stronger oxidising agent. The cell EMF = E(positive) - E(negative). Feasible if EMF > 0.",
       "topic": "3.1.11",
       "set": 2
     },
@@ -960,7 +960,7 @@
         "D": "Fe2+(aq) can reduce acidified Cr3+(aq) to Cr2+(aq) Page 7"
       },
       "answer": "",
-      "explanation": "",
+      "explanation": "Answer: . More positive E means stronger oxidising agent. The cell EMF = E(positive) - E(negative). Feasible if EMF > 0.",
       "topic": "3.1.11",
       "set": 3
     },
@@ -974,7 +974,7 @@
         "D": "The pH of 0.10 mol dm–3 sulfuric acid is greater than that of 0.10 mol dm–3 hydrochloric acid."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "At temperatures above 298 K, the pH of pure water is less than 7.. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -988,7 +988,7 @@
         "D": "HCl and NH 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "CH COOH and NaOH 3. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1002,7 +1002,7 @@
         "D": "2.00"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "2.00. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1016,7 +1016,7 @@
         "D": "Phenolphthalein (pH range 8.3–10.0)"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Bromophenol blue (pH range 3.0–4.6). pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1030,7 +1030,7 @@
         "D": "3.54 × 10−3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "7.09 × 10−6. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1044,7 +1044,7 @@
         "D": "14.34"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "13.66. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1058,7 +1058,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1,
       "image": "/mcq-images/3.1.12-s1-q7.png"
@@ -1073,7 +1073,7 @@
         "D": "2.80"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "1.30. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1087,7 +1087,7 @@
         "D": "The value of Ka for butanoic acid is 6.61 × 104 mol dm–−3"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "The value of Ka for propanoic acid is 1.35 × 10−5 mol dm−3. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1101,7 +1101,7 @@
         "D": "4.00"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "1.40. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1115,7 +1115,7 @@
         "D": "2.37"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "2.98. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1143,7 +1143,7 @@
         "D": "NH 3"
       },
       "answer": "B",
-      "explanation": "HCO -\n3",
+      "explanation": "HCO 3−. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1171,7 +1171,7 @@
         "D": "1.00 × 10–5"
       },
       "answer": "C",
-      "explanation": "1.00 × 10-4",
+      "explanation": "1.00 × 10–4. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1199,7 +1199,7 @@
         "D": "NH + 4 1.12. Acids and Bases MCQ"
       },
       "answer": "A",
-      "explanation": "CH COO–\n3",
+      "explanation": "CH COO– 3. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1213,7 +1213,7 @@
         "D": "2.00"
       },
       "answer": "B",
-      "explanation": "1.40",
+      "explanation": "1.40. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1227,7 +1227,7 @@
         "D": "NH Cl and KCl 4"
       },
       "answer": "B",
-      "explanation": "KOH and CH COOH\n3",
+      "explanation": "KOH and CH COOH 3. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1241,7 +1241,7 @@
         "D": "C HO 2 2"
       },
       "answer": "C",
-      "explanation": "C H O\n2 4 2",
+      "explanation": "Use n=m/M and pV=nRT or molar volume. Convert units carefully. The correct calculation gives the stated answer.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1255,7 +1255,7 @@
         "D": "1.74 × 10–4"
       },
       "answer": "B",
-      "explanation": "1.74 x 10–2",
+      "explanation": "Empirical formula is the simplest whole number ratio. Divide each percentage by Ar, then divide by the smallest value.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1269,7 +1269,7 @@
         "D": "54.2%"
       },
       "answer": "C",
-      "explanation": "51.1%",
+      "explanation": "n=cV for each solution. Use the mole ratio from the balanced equation to find the unknown concentration.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1283,7 +1283,7 @@
         "D": "3.0 × 10−2"
       },
       "answer": "B",
-      "explanation": "1.6 × 10−2",
+      "explanation": "Percentage yield = (actual yield / theoretical yield) x 100. Calculate theoretical yield first using moles and mole ratios.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1297,7 +1297,7 @@
         "D": "methanol"
       },
       "answer": "B",
-      "explanation": "ethanol",
+      "explanation": "Atom economy = (Mr of desired product / sum of Mr of all products) x 100. Only atoms in the desired product count.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1311,7 +1311,7 @@
         "D": "2.26"
       },
       "answer": "C",
-      "explanation": "1.47",
+      "explanation": "Use pV=nRT. Convert pressure to Pa, volume to m3, temperature to K. R = 8.314 J K-1 mol-1.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1325,7 +1325,7 @@
         "D": "C H 4 3"
       },
       "answer": "C",
-      "explanation": "C H\n3 4",
+      "explanation": "Molar volume at RTP is approximately 24.0 dm3 mol-1. n = volume/24000 (if volume in cm3).",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1339,7 +1339,7 @@
         "D": "67.5 cm3"
       },
       "answer": "B",
-      "explanation": "14.8 cm3",
+      "explanation": "The limiting reagent is used up first. Calculate moles of each reactant, compare using the mole ratio.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1353,7 +1353,7 @@
         "D": "4.48 × 10–3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Concentration in mol dm-3 = moles / volume in dm3. Convert cm3 to dm3 by dividing by 1000.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1367,7 +1367,7 @@
         "D": "200"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "In a titration, use n=cV, apply the mole ratio, then c=n/V to find the unknown concentration.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1381,7 +1381,7 @@
         "D": "The burette was rinsed only with water."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Water of crystallisation is found by heating to constant mass. n(water) = mass lost / 18. Find ratio to anhydrous salt.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1395,7 +1395,7 @@
         "D": "1 dm3 of helium atoms"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Relative atomic mass = sum of (isotopic mass x abundance) / total abundance. Use the data given.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1409,7 +1409,7 @@
         "D": "Mo O 3 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Mr is found from the molecular ion peak (m/z of M+ or MH+). For electrospray, subtract 1 from MH+.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1423,7 +1423,7 @@
         "D": "0.50 dm3 of steam are formed"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Standard solution: weigh solid accurately, dissolve in distilled water, transfer to volumetric flask, make up to the mark.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1437,7 +1437,7 @@
         "D": "19%"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Use the ideal gas equation pV=nRT. Rearrange for the unknown quantity. Check unit consistency.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1479,7 +1479,7 @@
         "D": "100 cm3 of 2.0 mol dm–3 NaOH(aq)"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1493,7 +1493,7 @@
         "D": "2.50 × 10–2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1507,7 +1507,7 @@
         "D": "3.6 × 1024"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1521,7 +1521,7 @@
         "D": "50 cm3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1535,7 +1535,7 @@
         "D": "17.6"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1549,7 +1549,7 @@
         "D": "Begin each titration with the burette filled to the 0.00 cm3 mark."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1563,7 +1563,7 @@
         "D": "72.8%"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1577,7 +1577,7 @@
         "D": "7.2 × 1025"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1591,7 +1591,7 @@
         "D": "1.30 g of trichloromethane (density = 1.48 g cm–3)"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1605,7 +1605,7 @@
         "D": "Ba(OH) and Na SO 2 2 4"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1619,7 +1619,7 @@
         "D": "0.273"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1633,7 +1633,7 @@
         "D": "1.70 × 10−4 kg of ammonia"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1647,7 +1647,7 @@
         "D": "NaOH"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1661,7 +1661,7 @@
         "D": "MBr 4"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1675,7 +1675,7 @@
         "D": "N O 4 5"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1689,7 +1689,7 @@
         "D": "25.90 cm3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1703,7 +1703,7 @@
         "D": "0.22%"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1717,7 +1717,7 @@
         "D": "0.0300 mol of ethane, C H 2 6"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1731,7 +1731,7 @@
         "D": "66.7"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1745,7 +1745,7 @@
         "D": "PF 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1759,7 +1759,7 @@
         "D": "0.420 g"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1773,7 +1773,7 @@
         "D": "2.16 × 102"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1787,7 +1787,7 @@
         "D": "5.49 × 103"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1858,7 +1858,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Use the mole ratio from the equation and the masses given to calculate moles of each product.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -2040,7 +2040,7 @@
         "D": "H O 2"
       },
       "answer": "B",
-      "explanation": "CH\n4",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2054,7 +2054,7 @@
         "D": "PCl + 4"
       },
       "answer": "C",
-      "explanation": "XeF\n4",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2068,7 +2068,7 @@
         "D": "H–P"
       },
       "answer": "A",
-      "explanation": "H–O",
+      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2096,7 +2096,7 @@
         "D": "SO 2– 4"
       },
       "answer": "B",
-      "explanation": "SO\n2",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2110,7 +2110,7 @@
         "D": "silicon dioxide"
       },
       "answer": "D",
-      "explanation": "silicon dioxide",
+      "explanation": "A covalent bond is a shared pair of electrons. In a dative bond, both electrons come from one atom. Once formed, it is identical to a normal covalent bond.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2124,7 +2124,7 @@
         "D": "C H CH 6 5 3"
       },
       "answer": "C",
-      "explanation": "C H Cl\n6 5",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2138,7 +2138,7 @@
         "D": "SO 3"
       },
       "answer": "B",
-      "explanation": "NH\n3",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2152,7 +2152,7 @@
         "D": "sodium chloride"
       },
       "answer": "B",
-      "explanation": "graphite",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2166,7 +2166,7 @@
         "D": "H O+ 3"
       },
       "answer": "C",
-      "explanation": "CH Cl\n3",
+      "explanation": "Electronegativity increases across a period and decreases down a group. A bond is polar when atoms have different electronegativities. Molecular polarity depends on whether dipoles cancel.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2180,7 +2180,7 @@
         "D": "SiH 4"
       },
       "answer": "B",
-      "explanation": "NH\n3",
+      "explanation": "Hydrogen bonding occurs when H is bonded to N, O or F, and there is a lone pair on a neighbouring N, O or F atom. It is the strongest type of intermolecular force.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2194,7 +2194,7 @@
         "D": "NH Cl 4"
       },
       "answer": "D",
-      "explanation": "NH Cl\n4",
+      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2208,7 +2208,7 @@
         "D": "Cl O 2"
       },
       "answer": "D",
-      "explanation": "Cl O\n2",
+      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2222,7 +2222,7 @@
         "D": "NH 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2236,7 +2236,7 @@
         "D": "tetrachloromethane"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2250,7 +2250,7 @@
         "D": "BF 3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2264,7 +2264,7 @@
         "D": "The total energy of the molecules decreases."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2278,7 +2278,7 @@
         "D": "CH CH COOH 3 2"
       },
       "answer": "D",
-      "explanation": "CH CH COOH\n3 2",
+      "explanation": "Boiling point depends on intermolecular forces. Hydrogen bonding > permanent dipole > London forces. More electrons and larger surface area increase London forces.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2292,7 +2292,7 @@
         "D": "The lone pair electrons on water molecules"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2306,7 +2306,7 @@
         "D": "✘ ✘ ✔"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Ionic bonding is the electrostatic attraction between oppositely charged ions in a giant lattice. Formed by electron transfer from metal to non-metal.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2320,7 +2320,7 @@
         "D": "CBr 4"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2334,7 +2334,7 @@
         "D": "1-fluorobutane"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Boiling point depends on intermolecular forces. Hydrogen bonding > permanent dipole > London forces. More electrons and larger surface area increase London forces.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2363,7 +2363,7 @@
         "D": "PCl – 6"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2377,7 +2377,7 @@
         "D": "Graphite Metallic"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2391,7 +2391,7 @@
         "D": "AlCl 4−"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2405,7 +2405,7 @@
         "D": "180°"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2419,7 +2419,7 @@
         "D": "CH COOCH 3 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Boiling point depends on intermolecular forces. Hydrogen bonding > permanent dipole > London forces. More electrons and larger surface area increase London forces.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2433,7 +2433,7 @@
         "D": "CHCl F 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2447,7 +2447,7 @@
         "D": "C H 2 4"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2461,7 +2461,7 @@
         "D": "Two pairs of electrons shared between two atoms where each atom has donated two electrons."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "A covalent bond is a shared pair of electrons. In a dative bond, both electrons come from one atom. Once formed, it is identical to a normal covalent bond.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2475,7 +2475,7 @@
         "D": "Tetrabromomethane"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Electronegativity increases across a period and decreases down a group. A bond is polar when atoms have different electronegativities. Molecular polarity depends on whether dipoles cancel.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2489,7 +2489,7 @@
         "D": "in proteins."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Boiling point depends on intermolecular forces. Hydrogen bonding > permanent dipole > London forces. More electrons and larger surface area increase London forces.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2503,7 +2503,7 @@
         "D": "CH − 3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2517,7 +2517,7 @@
         "D": "HI"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Boiling point depends on intermolecular forces. Hydrogen bonding > permanent dipole > London forces. More electrons and larger surface area increase London forces.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2531,7 +2531,7 @@
         "D": "Van der Waals."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2545,7 +2545,7 @@
         "D": "Ar"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Electronegativity increases across a period and decreases down a group. A bond is polar when atoms have different electronegativities. Molecular polarity depends on whether dipoles cancel.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2559,7 +2559,7 @@
         "D": "Ca(NO ) 2 2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2573,7 +2573,7 @@
         "D": "CHF 3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Hydrogen bonding occurs when H is bonded to N, O or F, and there is a lone pair on a neighbouring N, O or F atom. It is the strongest type of intermolecular force.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2587,7 +2587,7 @@
         "D": "CO 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2601,7 +2601,7 @@
         "D": "BH 3 + H– → BH 4–"
       },
       "answer": "D",
-      "explanation": "BH + H- → BH -\n3 4",
+      "explanation": "A covalent bond is a shared pair of electrons. In a dative bond, both electrons come from one atom. Once formed, it is identical to a normal covalent bond.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2615,7 +2615,7 @@
         "D": "Ca 1.3. Bonding MCQ"
       },
       "answer": "C",
-      "explanation": "K",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2644,7 +2644,7 @@
         "D": "Graphite 1.3. Bonding MCQ"
       },
       "answer": "C",
-      "explanation": "Cyclohexane",
+      "explanation": "Use VSEPR theory. Count bonding pairs and lone pairs around the central atom. Lone pairs repel more than bonding pairs, reducing bond angles by about 2.5 degrees each.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2658,7 +2658,7 @@
         "D": "SiCl 4"
       },
       "answer": "D",
-      "explanation": "SiCl\n4",
+      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2672,7 +2672,7 @@
         "D": "SF 6"
       },
       "answer": "A",
-      "explanation": "NCl\n3",
+      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2686,7 +2686,7 @@
         "D": "PCl 3 1.3. Bonding MCQ"
       },
       "answer": "B",
-      "explanation": "AlCl\n3",
+      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2714,7 +2714,7 @@
         "D": "tetrachloromethane"
       },
       "answer": "A",
-      "explanation": "graphite",
+      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2756,7 +2756,7 @@
         "D": "Ionic bond"
       },
       "answer": "A",
-      "explanation": "Co-ordinate bond",
+      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2798,7 +2798,7 @@
         "D": "sodium"
       },
       "answer": "C",
-      "explanation": "poly(propene)",
+      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2840,7 +2840,7 @@
         "D": "–1372"
       },
       "answer": "B",
-      "explanation": "–278",
+      "explanation": "–278. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2854,7 +2854,7 @@
         "D": "+947"
       },
       "answer": "D",
-      "explanation": "+947",
+      "explanation": "+947. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2868,7 +2868,7 @@
         "D": "7.7%"
       },
       "answer": "D",
-      "explanation": "7.7%",
+      "explanation": "7.7%. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2883,7 +2883,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2897,7 +2897,7 @@
         "D": "Ag+(aq) + I–(aq) → AgI(s)"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Ag(s) + I (s) → AgI(s) 2. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2911,7 +2911,7 @@
         "D": "Ba2+(s) + 2 Cl–(g) → BaCl (s) 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Ba(s) + Cl (g) → BaCl (s) 2 2. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2925,7 +2925,7 @@
         "D": "(y + 273) / mc"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "mcy. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2939,7 +2939,7 @@
         "D": "−1139"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "−1139. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2953,7 +2953,7 @@
         "D": "–746 kJ mol–1"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "+112 kJ mol–1. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2967,7 +2967,7 @@
         "D": "+1638"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "−273. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2981,7 +2981,7 @@
         "D": "1.02 × 104"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "1.02 × 101. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2995,7 +2995,7 @@
         "D": "+4751"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "+4403. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -3009,7 +3009,7 @@
         "D": "1936"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "1064. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -3023,7 +3023,7 @@
         "D": "−2878 (Total 1 marks)"
       },
       "answer": "C",
-      "explanation": "-2220",
+      "explanation": "−2220. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 2
     },
@@ -3037,7 +3037,7 @@
         "D": "−21.2 (Total 1 marks) 1.4. Energetics MCQ"
       },
       "answer": "A",
-      "explanation": "+21.2",
+      "explanation": "+21.2. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
       "topic": "3.1.4",
       "set": 2
     },
@@ -3152,7 +3152,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3195,7 +3195,7 @@
         "D": "S"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "S. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3209,7 +3209,7 @@
         "D": "More molecules have the mean energy."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "a decreases.. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3224,7 +3224,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3238,7 +3238,7 @@
         "D": "The total number of particles that have activation energy."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "The total number of particles.. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3252,7 +3252,7 @@
         "D": "Using different measuring cylinders to measure the volumes of acid and sodium thiosulfate."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Rinsing the flask with acid before each new experiment.. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3266,7 +3266,7 @@
         "D": "It is impossible to predict how the time taken will be affected by using the larger conical flask."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "The time taken will be increased by using the larger conical flask.. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3279,7 +3279,7 @@
         "D": "The position of the peak of the curve at a higher temperature is further away from both axes."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 1
     },
@@ -3335,7 +3335,7 @@
         "D": "line D 1.5. Kinetics MCQ"
       },
       "answer": "C",
-      "explanation": "line C",
+      "explanation": "line C. Rate depends on collision frequency and energy. Increasing temperature shifts the Maxwell-Boltzmann distribution, giving more molecules above Ea. Catalysts lower Ea.",
       "topic": "3.1.5",
       "set": 2
     },
@@ -3447,7 +3447,7 @@
         "D": "3.0"
       },
       "answer": "A",
-      "explanation": "1.5",
+      "explanation": "1.5. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3461,7 +3461,7 @@
         "D": "use of a catalyst"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "higher concentration of O 2. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3475,7 +3475,7 @@
         "D": "A low equilibrium yield of ethanol is acceptable because unreacted ethene is recycled."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "The higher the temperature, the higher the equilibrium yield of ethanol.. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3489,7 +3489,7 @@
         "D": "Low pressure and low temperature"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Low pressure and high temperature. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3503,7 +3503,7 @@
         "D": "value of the equilibrium constant"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "value of the equilibrium constant. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3517,7 +3517,7 @@
         "D": "2.46"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "2.46. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3531,7 +3531,7 @@
         "D": "change the volume of the vessel to 2V cm3"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "remove RM as it is formed 2. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3545,7 +3545,7 @@
         "D": "3.0"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "1.5. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3559,7 +3559,7 @@
         "D": "NO is colourless and the forward reaction is endothermic. 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "NO is brown and the forward reaction is exothermic. 2. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3573,7 +3573,7 @@
         "D": "20"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "18. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3587,7 +3587,7 @@
         "D": "Remove CO(g) as formed increase increase"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Increase temperature increase increase. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 1
     },
@@ -3615,7 +3615,7 @@
         "D": "6.87 × 10–4 1.6. Chemical Equilibria MCQ"
       },
       "answer": "D",
-      "explanation": "6.87 × 10-4",
+      "explanation": "6.87 × 10–4 1.6. Chemical Equilibria MCQ. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 2
     },
@@ -3629,7 +3629,7 @@
         "D": "K = c"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "K = c. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
       "topic": "3.1.6",
       "set": 2
     },
@@ -3643,7 +3643,7 @@
         "D": "ClO F 2"
       },
       "answer": "C",
-      "explanation": "ClO\n2",
+      "explanation": "ClO 2. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3671,7 +3671,7 @@
         "D": "4"
       },
       "answer": "A",
-      "explanation": "1",
+      "explanation": "1. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3685,7 +3685,7 @@
         "D": "CCl 4"
       },
       "answer": "A",
-      "explanation": "Cl O\n2",
+      "explanation": "Cl O 2. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3699,7 +3699,7 @@
         "D": "VO − → VO2+ 3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "VO − → VO2+ 3. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3713,7 +3713,7 @@
         "D": "CuO + 2 HCl → CuCl + H O 2 2"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "CuO + 2 HCl → CuCl + H O 2 2. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3727,7 +3727,7 @@
         "D": "MnO + 4HCl ⟶ MnCl + 2H O + Cl 2 2 2 2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "MgO + 2HCl ⟶ MgCl + H O 2 2. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3741,7 +3741,7 @@
         "D": "SO 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Na SO 2 4. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3755,7 +3755,7 @@
         "D": "V O ⟶ 2VO + O 2 5 2 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "2VO + O ⟶ V O 2 2 2 5. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3769,7 +3769,7 @@
         "D": "+3 −1 −3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "−3 +1 +3. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3783,7 +3783,7 @@
         "D": "Mg + S ⟶ MgS"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Mg + S ⟶ MgS. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3797,7 +3797,7 @@
         "D": "I−"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "I−. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3811,7 +3811,7 @@
         "D": "+1 +5 −1"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "−1 +5 +1. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3825,7 +3825,7 @@
         "D": "I 2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "HI. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3839,7 +3839,7 @@
         "D": "2Na + H 2NaH 2"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "2Na + H 2NaH 2. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3853,7 +3853,7 @@
         "D": "Mg + S MgS"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Mg + S MgS. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3867,7 +3867,7 @@
         "D": "PCl 5"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "H SO 2 3. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3881,7 +3881,7 @@
         "D": "4 : 9"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "4 : 7. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3895,7 +3895,7 @@
         "D": "Cr O 2− 2 7"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "C O 2− 2 4. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 1
     },
@@ -3909,7 +3909,7 @@
         "D": "6 7 9 6"
       },
       "answer": "C",
-      "explanation": "4564",
+      "explanation": "4 5 6 4. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -3923,7 +3923,7 @@
         "D": "ClF 3"
       },
       "answer": "B",
-      "explanation": "ClO -\n4",
+      "explanation": "ClO 4–. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -3951,7 +3951,7 @@
         "D": "O 2 → H 2O 2"
       },
       "answer": "B",
-      "explanation": "VO2+ → V3+ + H O\n2",
+      "explanation": "VO2+ → V3+ + H 2O. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -3965,7 +3965,7 @@
         "D": "sulfur in SO 2"
       },
       "answer": "B",
-      "explanation": "magnesium in MgO",
+      "explanation": "magnesium in MgO. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -3979,7 +3979,7 @@
         "D": "H O 2 2 1.7. Oxidation, Reduction and Redox Equations MCQ"
       },
       "answer": "A",
-      "explanation": "OF\n2",
+      "explanation": "OF 2. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -4007,7 +4007,7 @@
         "D": "I (g) → 2I(g) 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "I (s) → I(g) 2. Use Born-Haber cycles and Hess's law. Lattice enthalpy depends on charge density and ionic radius. Higher charge and smaller radius gives larger lattice enthalpy.",
       "topic": "3.1.8",
       "set": 1
     },
@@ -4021,7 +4021,7 @@
         "D": "LiI"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "LiI. Use Born-Haber cycles and Hess's law. Lattice enthalpy depends on charge density and ionic radius. Higher charge and smaller radius gives larger lattice enthalpy.",
       "topic": "3.1.8",
       "set": 1
     },
@@ -4035,7 +4035,7 @@
         "D": "The reaction is never feasible"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "temperature. Use Born-Haber cycles and Hess's law. Lattice enthalpy depends on charge density and ionic radius. Higher charge and smaller radius gives larger lattice enthalpy.",
       "topic": "3.1.8",
       "set": 1
     },
@@ -4049,7 +4049,7 @@
         "D": "The rate constant is independent of temperature."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "The rate of the reaction is halved if the concentration of X is halved and the concentration of Y is doubled.. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4063,7 +4063,7 @@
         "D": "mol–2 dm6 s–1"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "mol–2 dm6 s–1. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4077,7 +4077,7 @@
         "D": "0.612"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "0.408. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4091,7 +4091,7 @@
         "D": "rate = k [X] [Z]"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "rate = k [X] [Y]. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4105,7 +4105,7 @@
         "D": "2.80"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "1.30. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4119,7 +4119,7 @@
         "D": "3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "3. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4133,7 +4133,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1,
       "image": "/mcq-images/3.1.9-s1-q7.png"
@@ -4148,7 +4148,7 @@
         "D": "27"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "9. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4162,7 +4162,7 @@
         "D": "Uranium"
       },
       "answer": "B",
-      "explanation": "Molybdenum",
+      "explanation": "Molybdenum. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4176,7 +4176,7 @@
         "D": "Sulfur"
       },
       "answer": "B",
-      "explanation": "Silicon",
+      "explanation": "Silicon. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4190,7 +4190,7 @@
         "D": "O2–"
       },
       "answer": "D",
-      "explanation": "O2–",
+      "explanation": "O2–. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4204,7 +4204,7 @@
         "D": "Selenium"
       },
       "answer": "D",
-      "explanation": "Selenium",
+      "explanation": "Selenium. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4218,7 +4218,7 @@
         "D": "O2– F– Li+ Be2+"
       },
       "answer": "C",
-      "explanation": "Be2+ Li+ F– O2–",
+      "explanation": "Be2+ Li+ F– O2–. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4232,7 +4232,7 @@
         "D": "Sulfur"
       },
       "answer": "C",
-      "explanation": "Silicon",
+      "explanation": "Silicon. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4246,7 +4246,7 @@
         "D": "Melting point"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Melting point. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4260,7 +4260,7 @@
         "D": "Sulfur"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Phosphorus. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4274,7 +4274,7 @@
         "D": "Sulfur"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Aluminium. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4288,7 +4288,7 @@
         "D": "chlorine > phosphorus > sulfur > argon"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "sulfur > phosphorus > chlorine > argon. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4302,7 +4302,7 @@
         "D": "f block"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "d block. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4316,7 +4316,7 @@
         "D": "decreases"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "radius decreases because nuclear charge increases radius increases because shielding (screening). Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4330,7 +4330,7 @@
         "D": "Plutonium"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Plutonium. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4344,7 +4344,7 @@
         "D": "Melting point: argon, chlorine, sulfur."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Melting point: argon, chlorine, sulfur.. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4358,7 +4358,7 @@
         "D": "Ar"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Na. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4372,7 +4372,7 @@
         "D": "Lead"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Tantalum. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4386,7 +4386,7 @@
         "D": "Increases Decreases"
       },
       "answer": "A",
-      "explanation": "Decreases Increases",
+      "explanation": "Decreases Increases. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 2
     },
@@ -4428,7 +4428,7 @@
         "D": "s block"
       },
       "answer": "B",
-      "explanation": "f block",
+      "explanation": "f block. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
       "topic": "3.2.1",
       "set": 2
     },
@@ -4470,7 +4470,7 @@
         "D": "It forms a covalent fluoride."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "It is a good conductor of electricity.. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4484,7 +4484,7 @@
         "D": "Strontium hydroxide is more soluble in water than calcium hydroxide."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Strontium reacts less vigorously with water than calcium.. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4498,7 +4498,7 @@
         "D": "Melting Point"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Atomic Radius. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4512,7 +4512,7 @@
         "D": "effervesces"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "effervesces. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4526,7 +4526,7 @@
         "D": "Sr(NO ) 3 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "BaCl 2. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4540,7 +4540,7 @@
         "D": "Zinc"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Magnesium. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4554,7 +4554,7 @@
         "D": "It reacts with acidified barium chloride solution."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "It is used in medicine because it does not dissolve in body fluids.. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4568,7 +4568,7 @@
         "D": "Ca(OH) 2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Mg(OH) 2. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4582,7 +4582,7 @@
         "D": "Magnesium oxide and oxygen"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Magnesium oxide and hydrogen. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4596,7 +4596,7 @@
         "D": "Reactivity with water"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "First ionisation energy. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4610,7 +4610,7 @@
         "D": "Sulfur dioxide is an ionic compound."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Sulfur dioxide can be removed from waste gases in a power station by an acid-base reaction with calcium oxide.. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4666,7 +4666,7 @@
         "D": "NaI(aq) + Br (aq) 2"
       },
       "answer": "D",
-      "explanation": "NaI(aq) + Br (aq)\n2",
+      "explanation": "NaI(aq) + Br (aq) 2. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4680,7 +4680,7 @@
         "D": "NaAt"
       },
       "answer": "A",
-      "explanation": "NaCl",
+      "explanation": "NaCl. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4694,7 +4694,7 @@
         "D": "first ionisation energy"
       },
       "answer": "B",
-      "explanation": "boiling point",
+      "explanation": "boiling point. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4722,7 +4722,7 @@
         "D": "NaCl and NaClO 3"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "NaCl and NaClO. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4736,7 +4736,7 @@
         "D": "I–"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "F 2. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4750,7 +4750,7 @@
         "D": "Sodium bromide forms bromine when added to iodine."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Sodium bromide forms bromine when added to concentrated sulfuric acid.. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4764,7 +4764,7 @@
         "D": "Sr(NO ) 3 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "BaCl 2. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4778,7 +4778,7 @@
         "D": "They are more easily oxidised in aqueous solutions."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "The boiling points decrease.. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4792,7 +4792,7 @@
         "D": "NaCl(aq)"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "dilute H SO (aq) 2 4. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4806,7 +4806,7 @@
         "D": "Bromine and hydrogen sulfide are formed."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Sulfuric acid acts as an oxidising agent.. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4820,7 +4820,7 @@
         "D": "Distillation"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Filtration. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4834,7 +4834,7 @@
         "D": "bromine"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Astatine has a greater boiling point than bromine Astatine has a greater first ionisation energy than. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4848,7 +4848,7 @@
         "D": "SO 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Na SO 2 4. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4862,7 +4862,7 @@
         "D": "2HCl + H SO ⟶ Cl + SO + 2H O 2 4 2 2 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Cl + 2NaI ⟶ 2NaCl + I 2 2. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4876,7 +4876,7 @@
         "D": "Br−"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Cl 2. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4890,7 +4890,7 @@
         "D": "and chlorate(I) ions."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "solution. Chlorine can react with water to produce chloride ions. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4904,7 +4904,7 @@
         "D": "I−"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "I−. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4918,7 +4918,7 @@
         "D": "CH l 3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "CH l 3. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -4932,7 +4932,7 @@
         "D": "Oxygen"
       },
       "answer": "C",
-      "explanation": "Hydrogen",
+      "explanation": "Hydrogen. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 2
     },
@@ -4946,7 +4946,7 @@
         "D": "NaI"
       },
       "answer": "C",
-      "explanation": "NaCl",
+      "explanation": "NaCl. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 2
     },
@@ -4988,7 +4988,7 @@
         "D": "I–"
       },
       "answer": "D",
-      "explanation": "I-",
+      "explanation": "I–. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 2
     },
@@ -5030,7 +5030,7 @@
         "D": "OH–"
       },
       "answer": "D",
-      "explanation": "OH–",
+      "explanation": "OH–. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
       "topic": "3.2.3",
       "set": 2
     },
@@ -5058,7 +5058,7 @@
         "D": "Sulfur"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Aluminium. Period 3 oxides: Na2O to MgO are basic (ionic), Al2O3 is amphoteric, SiO2 is giant covalent, P4O10/SO3 are acidic (react with water to form acids).",
       "topic": "3.2.4",
       "set": 1
     },
@@ -5072,7 +5072,7 @@
         "D": "Al O (s) 2 3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Al O (s) 2 3. Period 3 oxides: Na2O to MgO are basic (ionic), Al2O3 is amphoteric, SiO2 is giant covalent, P4O10/SO3 are acidic (react with water to form acids).",
       "topic": "3.2.4",
       "set": 1
     },
@@ -5100,7 +5100,7 @@
         "D": "NH 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "CH 4. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5114,7 +5114,7 @@
         "D": "+3 6"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "+3 6. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5128,7 +5128,7 @@
         "D": "[Fe(H O) ]2+ is octahedral. 2 6"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "CuCl 2– is square planar. 4. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5142,7 +5142,7 @@
         "D": "Fe (SO ) 2 4 3"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "FeSO 4. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5156,7 +5156,7 @@
         "D": "The solution changes colour and no precipitate forms."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "The solution changes colour and no precipitate forms.. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5170,7 +5170,7 @@
         "D": "The shape of the complex changes from octahedral."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "The entropy change is large and positive.. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5184,7 +5184,7 @@
         "D": "[Cu(NH ) (H O) ]2+ 3 4 2 2"
       },
       "answer": "B",
-      "explanation": "& C",
+      "explanation": "[Co(C O ) ]4– 2 4 3. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5198,7 +5198,7 @@
         "D": "ligands"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "A ligand accepts a pair of electrons from a transition metal. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5212,7 +5212,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1,
       "image": "/mcq-images/3.2.5-s1-q10.png"
@@ -5227,7 +5227,7 @@
         "D": "Cu2+(aq)"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Cu2+(aq). Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5241,7 +5241,7 @@
         "D": "[Ar]3d10"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "[Ar]3d9. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5255,7 +5255,7 @@
         "D": "3.32 × 10−19"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "3.32 × 10−19. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5269,7 +5269,7 @@
         "D": "V O 2 4"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "V O 2 4. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5311,7 +5311,7 @@
         "D": "Fe 2(SO 4) 3"
       },
       "answer": "C",
-      "explanation": "FeSO\n4",
+      "explanation": "FeSO 4. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 2
     },
@@ -5353,7 +5353,7 @@
         "D": "redox"
       },
       "answer": "B",
-      "explanation": "ligand substitution",
+      "explanation": "ligand substitution. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
       "topic": "3.2.5",
       "set": 2
     },
@@ -5367,7 +5367,7 @@
         "D": "A white precipitate of gallium(III) hydroxide and bubbles of carbon dioxide."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "A white precipitate of gallium(III) hydroxide and bubbles of carbon dioxide.. Test for metal ions using NaOH or NH3. Precipitate colours: Cu2+ blue, Fe2+ green, Fe3+ brown. Some dissolve in excess NH3 (Cu2+, Zn2+).",
       "topic": "3.2.6",
       "set": 1
     },
@@ -5381,7 +5381,7 @@
         "D": "AlCl 3"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "AgCl. Test for metal ions using NaOH or NH3. Precipitate colours: Cu2+ blue, Fe2+ green, Fe3+ brown. Some dissolve in excess NH3 (Cu2+, Zn2+).",
       "topic": "3.2.6",
       "set": 1
     },
@@ -5395,7 +5395,7 @@
         "D": "[Al(OH)(H O) ]2+ 2 5"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "[Al(OH) (H O) ] 3 2 3. Test for metal ions using NaOH or NH3. Precipitate colours: Cu2+ blue, Fe2+ green, Fe3+ brown. Some dissolve in excess NH3 (Cu2+, Zn2+).",
       "topic": "3.2.6",
       "set": 1
     },
@@ -5409,7 +5409,7 @@
         "D": "pent-1-ene"
       },
       "answer": "B",
-      "explanation": "4-methylpent-2-ene",
+      "explanation": "4-methylpent-2-ene. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5423,7 +5423,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1,
       "image": "/mcq-images/3.3.1-s1-q2.png"
@@ -5438,7 +5438,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1,
       "image": "/mcq-images/3.3.1-s1-q3.png"
@@ -5453,7 +5453,7 @@
         "D": "CBr =CHBr 2"
       },
       "answer": "C",
-      "explanation": "CHBr=CHBr",
+      "explanation": "CHBr=CHBr. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5495,7 +5495,7 @@
         "D": "propylamine"
       },
       "answer": "C",
-      "explanation": "Propanenitrile",
+      "explanation": "propanenitrile. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5509,7 +5509,7 @@
         "D": "C H Br 2 5"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "C H Br 2 2 2. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5523,7 +5523,7 @@
         "D": "CH ═CHCH CHO 2 2"
       },
       "answer": "D",
-      "explanation": "CH = CHCH CHO\n2 2",
+      "explanation": "CH ═CHCH CHO 2 2. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5537,7 +5537,7 @@
         "D": "CH CH CHClCH 3 2 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "CH CH(CH )CH CH 3 3 2 3. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5551,7 +5551,7 @@
         "D": "5"
       },
       "answer": "C",
-      "explanation": "4",
+      "explanation": "4. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5565,7 +5565,7 @@
         "D": "7"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "6. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5579,7 +5579,7 @@
         "D": "CH 3"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "CH O 2. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5593,7 +5593,7 @@
         "D": "It reacts with KCN in a nucleophilic substitution reaction."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "It reacts with KCN in a nucleophilic substitution reaction.. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5607,7 +5607,7 @@
         "D": "Nucleophilic substitution"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Free-radical substitution. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5621,7 +5621,7 @@
         "D": "methylbut-2-ene"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "cyclobutane. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5635,7 +5635,7 @@
         "D": "7"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "5. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5649,7 +5649,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1,
       "image": "/mcq-images/3.3.1-s1-q18.png"
@@ -5664,7 +5664,7 @@
         "D": "1,3-dichloropropane"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "1,3-dichloropropane. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5678,7 +5678,7 @@
         "D": "5"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "4. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5692,7 +5692,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1,
       "image": "/mcq-images/3.3.1-s1-q21.png"
@@ -5707,7 +5707,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1,
       "image": "/mcq-images/3.3.1-s1-q22.png"
@@ -5722,7 +5722,7 @@
         "D": "5"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "3. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5736,7 +5736,7 @@
         "D": "5"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "4. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5750,7 +5750,7 @@
         "D": "5"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "3. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5764,7 +5764,7 @@
         "D": "C H n 2n+2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "C H n 2n–2. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5778,7 +5778,7 @@
         "D": "100.0 (Total 1 marks)"
       },
       "answer": "B",
-      "explanation": "96.0",
+      "explanation": "96.0. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2
     },
@@ -5792,7 +5792,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "D",
+      "explanation": "Answer: D. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2,
       "image": "/mcq-images/3.3.1-s2-q2.png"
@@ -5807,7 +5807,7 @@
         "D": "430 g (Total 1 marks)"
       },
       "answer": "A",
-      "explanation": "70.0g",
+      "explanation": "70.0 g. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2
     },
@@ -5835,7 +5835,7 @@
         "D": "propyl propanoate 3.1. Introduction to Organic Chemistry MCQ"
       },
       "answer": "D",
-      "explanation": "Propyl propanoate",
+      "explanation": "propyl propanoate 3.1. Introduction to Organic Chemistry MCQ. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2
     },
@@ -5849,7 +5849,7 @@
         "D": "3-methylpent-2-ene"
       },
       "answer": "D",
-      "explanation": "3-methylpent-2-ene",
+      "explanation": "3-methylpent-2-ene. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2
     },
@@ -5877,7 +5877,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2,
       "image": "/mcq-images/3.3.1-s2-q8.png"
@@ -5906,7 +5906,7 @@
         "D": "propanoic acid"
       },
       "answer": "B",
-      "explanation": "methyl propanoate",
+      "explanation": "methyl propanoate. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
       "topic": "3.3.1",
       "set": 2
     },
@@ -5920,7 +5920,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Benzene undergoes electrophilic substitution (not addition) to preserve aromaticity. Nitration uses HNO3/H2SO4 to generate NO2+. Friedel-Crafts uses AlCl3 catalyst.",
       "topic": "3.3.10",
       "set": 1,
       "image": "/mcq-images/3.3.10-s1-q1.png"
@@ -5935,7 +5935,7 @@
         "D": "HNO acts as a reducing 3 agent."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "HNO acts as a base. 3. Benzene undergoes electrophilic substitution (not addition) to preserve aromaticity. Nitration uses HNO3/H2SO4 to generate NO2+. Friedel-Crafts uses AlCl3 catalyst.",
       "topic": "3.3.10",
       "set": 1
     },
@@ -5949,7 +5949,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Benzene undergoes electrophilic substitution (not addition) to preserve aromaticity. Nitration uses HNO3/H2SO4 to generate NO2+. Friedel-Crafts uses AlCl3 catalyst.",
       "topic": "3.3.10",
       "set": 1,
       "image": "/mcq-images/3.3.10-s1-q3.png"
@@ -5978,7 +5978,7 @@
         "D": "[(C 2H 5) 2N(CH 3) 2]+ Br⁻"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "[(C 2H 5) 2N(CH 3) 2]+ Br⁻. Amines are bases (lone pair on N accepts H+). Primary amines are made from halogenoalkanes + excess NH3. Aromatic amines are made by reducing nitrobenzene with Sn/HCl.",
       "topic": "3.3.11",
       "set": 1
     },
@@ -5992,7 +5992,7 @@
         "D": "ethylamine > phenylamine > ammonia"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "ethylamine > ammonia > phenylamine. Amines are bases (lone pair on N accepts H+). Primary amines are made from halogenoalkanes + excess NH3. Aromatic amines are made by reducing nitrobenzene with Sn/HCl.",
       "topic": "3.3.11",
       "set": 1
     },
@@ -6006,7 +6006,7 @@
         "D": "Phenylamine"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Methylamine. Amines are bases (lone pair on N accepts H+). Primary amines are made from halogenoalkanes + excess NH3. Aromatic amines are made by reducing nitrobenzene with Sn/HCl.",
       "topic": "3.3.11",
       "set": 1
     },
@@ -6020,7 +6020,7 @@
         "D": "Nucleophilic substitution"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Nucleophilic substitution. Amines are bases (lone pair on N accepts H+). Primary amines are made from halogenoalkanes + excess NH3. Aromatic amines are made by reducing nitrobenzene with Sn/HCl.",
       "topic": "3.3.11",
       "set": 1
     },
@@ -6033,7 +6033,7 @@
         "D": "NH 4Cl"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "B. Amines are bases (lone pair on N accepts H+). Primary amines are made from halogenoalkanes + excess NH3. Aromatic amines are made by reducing nitrobenzene with Sn/HCl.",
       "topic": "3.3.11",
       "set": 2
     },
@@ -6061,7 +6061,7 @@
         "D": "Terylene"
       },
       "answer": "A",
-      "explanation": "Kevlar",
+      "explanation": "Kevlar. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6075,7 +6075,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1,
       "image": "/mcq-images/3.3.12-s1-q2.png"
@@ -6090,7 +6090,7 @@
         "D": "protein"
       },
       "answer": "A",
-      "explanation": "poly(alkene)",
+      "explanation": "poly(alkene). Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6104,7 +6104,7 @@
         "D": "NH CH COOH 2 2"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "NH CH CH NH 2 2 2 2. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6118,7 +6118,7 @@
         "D": "Terylene"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Kevlar. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6132,7 +6132,7 @@
         "D": "ClOC(CH ) COCl and H N(CH ) NH 2 6 2 2 4 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "ClOC(CH ) COCl and H N(CH ) NH 2 4 2 2 6 2. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6146,7 +6146,7 @@
         "D": "The carbon-oxygen bonds in the chain are strong."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Permanent dipole-dipole forces and van der Waals’ forces exist between polyester chains.. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6160,7 +6160,7 @@
         "D": "Terylene"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Polythene. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6174,7 +6174,7 @@
         "D": "ClCH CH COOH 2 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "HOCH CH COCl 2 2. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6188,7 +6188,7 @@
         "D": "NH CH COCl 2 2"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "NH CH COCl 2 2. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6216,7 +6216,7 @@
         "D": "Protein"
       },
       "answer": "A",
-      "explanation": "Polyalkene",
+      "explanation": "Polyalkene. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 2
     },
@@ -6230,7 +6230,7 @@
         "D": "A polyester"
       },
       "answer": "B",
-      "explanation": "A polyamide",
+      "explanation": "A polyamide. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 2
     },
@@ -6244,7 +6244,7 @@
         "D": "HOOCCH COOH 2"
       },
       "answer": "A",
-      "explanation": "H NCH CH NH\n2 2 2 2",
+      "explanation": "H NCH CH NH 2 2 2 2. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 2
     },
@@ -6258,7 +6258,7 @@
         "D": "Terylene"
       },
       "answer": "C",
-      "explanation": "Poly(propene)",
+      "explanation": "Poly(propene). Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
       "topic": "3.3.12",
       "set": 2
     },
@@ -6272,7 +6272,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Amino acids are zwitterions at their isoelectric point. Proteins are condensation polymers of amino acids linked by peptide bonds. DNA uses hydrogen bonding between base pairs.",
       "topic": "3.3.13",
       "set": 1,
       "image": "/mcq-images/3.3.13-s1-q1.png"
@@ -6287,7 +6287,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Amino acids are zwitterions at their isoelectric point. Proteins are condensation polymers of amino acids linked by peptide bonds. DNA uses hydrogen bonding between base pairs.",
       "topic": "3.3.13",
       "set": 1,
       "image": "/mcq-images/3.3.13-s1-q2.png"
@@ -6330,7 +6330,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Amino acids are zwitterions at their isoelectric point. Proteins are condensation polymers of amino acids linked by peptide bonds. DNA uses hydrogen bonding between base pairs.",
       "topic": "3.3.13",
       "set": 1,
       "image": "/mcq-images/3.3.13-s1-q5.png"
@@ -6345,7 +6345,7 @@
         "D": "van der Waals forces"
       },
       "answer": "B",
-      "explanation": "hydrogen bonds",
+      "explanation": "hydrogen bonds. Amino acids are zwitterions at their isoelectric point. Proteins are condensation polymers of amino acids linked by peptide bonds. DNA uses hydrogen bonding between base pairs.",
       "topic": "3.3.13",
       "set": 1
     },
@@ -6373,7 +6373,7 @@
         "D": "CH CH NH 3 2 2"
       },
       "answer": "B",
-      "explanation": "CH CH CN\n3 2",
+      "explanation": "CH CH CN 3 2. Organic synthesis requires choosing correct reagents, conditions and order of steps. Consider functional group interconversions and protecting groups where needed.",
       "topic": "3.3.14",
       "set": 1
     },
@@ -6387,7 +6387,7 @@
         "D": "2-Methylbut-2-ene"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "But-2-ene. Organic synthesis requires choosing correct reagents, conditions and order of steps. Consider functional group interconversions and protecting groups where needed.",
       "topic": "3.3.14",
       "set": 1
     },
@@ -6415,7 +6415,7 @@
         "D": "ethanamide"
       },
       "answer": "A",
-      "explanation": "propene",
+      "explanation": "propene. Organic synthesis requires choosing correct reagents, conditions and order of steps. Consider functional group interconversions and protecting groups where needed.",
       "topic": "3.3.14",
       "set": 2
     },
@@ -6443,7 +6443,7 @@
         "D": "2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "3. In 1H NMR: chemical shift indicates environment, integration gives ratio of H atoms, splitting pattern (n+1 rule) shows adjacent H atoms. CDCl3 is the solvent. TMS is the reference.",
       "topic": "3.3.15",
       "set": 1
     },
@@ -6457,7 +6457,7 @@
         "D": "8"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "8. In 1H NMR: chemical shift indicates environment, integration gives ratio of H atoms, splitting pattern (n+1 rule) shows adjacent H atoms. CDCl3 is the solvent. TMS is the reference.",
       "topic": "3.3.15",
       "set": 1
     },
@@ -6471,7 +6471,7 @@
         "D": "Propylamine"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Diethylamine. In 1H NMR: chemical shift indicates environment, integration gives ratio of H atoms, splitting pattern (n+1 rule) shows adjacent H atoms. CDCl3 is the solvent. TMS is the reference.",
       "topic": "3.3.15",
       "set": 1
     },
@@ -6541,7 +6541,7 @@
         "D": "CH Cl and HCl 3"
       },
       "answer": "D",
-      "explanation": "CH Cl and HCl\n3",
+      "explanation": "CH Cl and HCl 3. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6555,7 +6555,7 @@
         "D": "The fractionating column is hottest at the top."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Each fraction contains a mixture of hydrocarbons.. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6569,7 +6569,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Answer: D. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1,
       "image": "/mcq-images/3.3.2-s1-q7.png"
@@ -6584,7 +6584,7 @@
         "D": "●CCl + Cl ⟶ CCl + ●Cl 3 2 4"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "●CCl + Cl ⟶ CCl + ●Cl 3 2 4. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6598,7 +6598,7 @@
         "D": "Catalytic High alkanes and temperature aromatics"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Catalytic High alkanes and temperature aromatics Mainly High pressure branched. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6612,7 +6612,7 @@
         "D": "Zeolite"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Zeolite. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6626,7 +6626,7 @@
         "D": "C H + 5O ⟶ 4CO + CO + 4H O + 2H 5 12 2 2 2 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "C H + 6O ⟶ 4CO + CO + 6H O 5 12 2 2 2. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6640,7 +6640,7 @@
         "D": "C H 6 14"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "C H CL 3 6 2. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6654,7 +6654,7 @@
         "D": "Nitrogen."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Nitrogen.. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6668,7 +6668,7 @@
         "D": "C H 4 10"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "H 2. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6682,7 +6682,7 @@
         "D": "Sulfur dioxide is an ionic compound."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Sulfur dioxide can be removed from waste gases in a power station by an acid-base reaction with calcium oxide.. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6696,7 +6696,7 @@
         "D": "C H → C H + C H + 2C H 14 30 6 14 2 6 3 6"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "C H → C H + C H + 2C H 14 30 6 14 4 8 2 4. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 1
     },
@@ -6738,7 +6738,7 @@
         "D": "2,3-dimethylbutane (Total 1 marks) 3.2. Alkanes MCQ"
       },
       "answer": "A",
-      "explanation": "Decane",
+      "explanation": "Decane. Alkanes undergo free radical substitution with halogens in UV light. Three stages: initiation (homolytic fission), propagation (chain reaction), termination (radicals combine).",
       "topic": "3.3.2",
       "set": 2
     },
@@ -6822,7 +6822,7 @@
         "D": "3-methylhex-3-ene"
       },
       "answer": "B",
-      "explanation": "3-methylhex-1-ene",
+      "explanation": "3-methylhex-1-ene. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6836,7 +6836,7 @@
         "D": "butanenitrile"
       },
       "answer": "D",
-      "explanation": "butanenitrile",
+      "explanation": "butanenitrile. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6864,7 +6864,7 @@
         "D": "CH 3CH 2CH 3"
       },
       "answer": "C",
-      "explanation": "CH CH CH Br\n3 2 2",
+      "explanation": "CH 3CH 2CH 2Br. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6878,7 +6878,7 @@
         "D": "3-methylbutan-2-ol"
       },
       "answer": "A",
-      "explanation": "2-methylbut-1-ene",
+      "explanation": "2-methylbut-1-ene. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6892,7 +6892,7 @@
         "D": "SiH 4"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "PH 3. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6906,7 +6906,7 @@
         "D": "1-iodobutane"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "1-iodobutane. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6920,7 +6920,7 @@
         "D": "Radical substitution"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Electrophilic addition. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6934,7 +6934,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1,
       "image": "/mcq-images/3.3.3-s1-q9.png"
@@ -6949,7 +6949,7 @@
         "D": "4"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "4. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6963,7 +6963,7 @@
         "D": "Ammonium bromide is an ionic compound."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Using an excess of bromoethane will prevent further reaction to form a mixture of amine products.. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6977,7 +6977,7 @@
         "D": "The C–F bond is very strong."
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "The C–F bond is very strong.. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6991,7 +6991,7 @@
         "D": "Nucleophilic substitution"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Nucleophilic substitution. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -7005,7 +7005,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 1,
       "image": "/mcq-images/3.3.3-s1-q14.png"
@@ -7048,7 +7048,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 2,
       "image": "/mcq-images/3.3.3-s2-q3.png"
@@ -7063,7 +7063,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Answer: B. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 2,
       "image": "/mcq-images/3.3.3-s2-q4.png"
@@ -7092,7 +7092,7 @@
         "D": "E-but-2-ene"
       },
       "answer": "A",
-      "explanation": "butan-1-ol",
+      "explanation": "butan-1-ol. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 2
     },
@@ -7120,7 +7120,7 @@
         "D": "CH CH OSO OH 3 2 2"
       },
       "answer": "B",
-      "explanation": "CH CH NH\n3 2 2",
+      "explanation": "CH CH NH 3 2 2. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
       "topic": "3.3.3",
       "set": 2
     },
@@ -7134,7 +7134,7 @@
         "D": "pent-1-ene"
       },
       "answer": "B",
-      "explanation": "4-methylpent-2-ene",
+      "explanation": "4-methylpent-2-ene. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7148,7 +7148,7 @@
         "D": "(CH ) CHCH=CH 3 2 2"
       },
       "answer": "D",
-      "explanation": "(CH ) CHCH=CH\n3 2 2",
+      "explanation": "(CH ) CHCH=CH 3 2 2. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7176,7 +7176,7 @@
         "D": "C H Br 2 5"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "C H Br 2 2 2. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7190,7 +7190,7 @@
         "D": "(CH ) CHCH=CH 3 2 2"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "(CH ) CHCH=CH 3 2 2. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7218,7 +7218,7 @@
         "D": "(CH ) CHCH=CH 3 2 2"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "(CH ) CHCH=CH 3 2 2. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7232,7 +7232,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1,
       "image": "/mcq-images/3.3.4-s1-q8.png"
@@ -7247,7 +7247,7 @@
         "D": "Its polymer chain contains alternate single and double bonds."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Its brittleness is reduced by plasticisers.. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7261,7 +7261,7 @@
         "D": "C H OH 5 9"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "C H O 5 10. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7275,7 +7275,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "Answer: C. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1,
       "image": "/mcq-images/3.3.4-s1-q11.png"
@@ -7290,7 +7290,7 @@
         "D": "CH –CH –C+H 3 2 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "CH –C+H–CH 3 3. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7304,7 +7304,7 @@
         "D": "It has a molecular ion peak different from that of Z-1,2-dichloroethene in its mass spectrum."
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "It forms a polymer with the same repeating unit as Z-1,2-dichloroethene.. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7318,7 +7318,7 @@
         "D": "The C=C bond is twice as strong as the C–C bond in ethane."
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "It burns in excess oxygen to produce carbon dioxide and water.. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7331,7 +7331,7 @@
         "C": "CH CH CHDCH Br 3 2 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "CH CH CHDCH Br 3 2 2. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7345,7 +7345,7 @@
         "D": "Methylpropene"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Methylpropene. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 1
     },
@@ -7359,7 +7359,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 2,
       "image": "/mcq-images/3.3.4-s2-q1.png"
@@ -7374,7 +7374,7 @@
         "D": "methylpropene 3.4. Alkenes MCQ"
       },
       "answer": "D",
-      "explanation": "methylpropene",
+      "explanation": "methylpropene 3.4. Alkenes MCQ. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
       "topic": "3.3.4",
       "set": 2
     },
@@ -7416,7 +7416,7 @@
         "D": "C H CH(OH)CH 6 5 3"
       },
       "answer": "C",
-      "explanation": "C H COCH\n6 5 3",
+      "explanation": "C H COCH 6 5 3. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7444,7 +7444,7 @@
         "D": "3-methylbutan-2-ol"
       },
       "answer": "D",
-      "explanation": "3-methylbutan-2-ol",
+      "explanation": "3-methylbutan-2-ol. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7458,7 +7458,7 @@
         "D": "pentan-2-ol"
       },
       "answer": "D",
-      "explanation": "pentan-2-ol",
+      "explanation": "pentan-2-ol. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7472,7 +7472,7 @@
         "D": "C H CH COOH 6 5 2"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "C H COCH 6 5 3. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7486,7 +7486,7 @@
         "D": "The direct hydration route produces ethanol by a slower reaction."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "The direct hydration route produces purer ethanol.. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7500,7 +7500,7 @@
         "D": "They have four peaks in their 13C NMR spectra."
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "They can be formed by alkaline hydrolysis of esters.. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7514,7 +7514,7 @@
         "D": "pentan-3-ol"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "2,2-dimethylpropan-1-ol. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 1
     },
@@ -7528,7 +7528,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "B",
+      "explanation": "Answer: B. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 2,
       "image": "/mcq-images/3.3.5-s2-q1.png"
@@ -7557,7 +7557,7 @@
         "D": "CH 3CH 2COOH"
       },
       "answer": "B",
-      "explanation": "CH COCH\n3 3",
+      "explanation": "CH 3COCH 3. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 2
     },
@@ -7585,7 +7585,7 @@
         "D": "pentan-2-ol"
       },
       "answer": "D",
-      "explanation": "pentan-2-ol",
+      "explanation": "pentan-2-ol. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 2
     },
@@ -7599,7 +7599,7 @@
         "D": "3-methylbutan-2-ol"
       },
       "answer": "D",
-      "explanation": "3-methylbutan-2-ol",
+      "explanation": "3-methylbutan-2-ol. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 2
     },
@@ -7641,7 +7641,7 @@
         "D": "CH COOCH 3 3"
       },
       "answer": "C",
-      "explanation": "CH CH OH\n3 2",
+      "explanation": "CH CH OH 3 2. Alcohols can be oxidised (primary to aldehyde then acid, secondary to ketone, tertiary resist). They undergo elimination (dehydration) with hot H3PO4 to form alkenes.",
       "topic": "3.3.5",
       "set": 2
     },
@@ -7682,7 +7682,7 @@
         "D": "CH CH CHCH 3 2 2"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "CH CH CHCH 3 2 2. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7696,7 +7696,7 @@
         "D": "prop-2-en-1-ol"
       },
       "answer": "B",
-      "explanation": "4-hydroxybutanone",
+      "explanation": "4-hydroxybutanone. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7710,7 +7710,7 @@
         "D": "effervescence no visible change silver mirror acid"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Propanal no visible change silver mirror turns green. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7724,7 +7724,7 @@
         "D": "propanoic acid"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "butanone. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7738,7 +7738,7 @@
         "D": "methylpropanal"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "dimethylpropane. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7752,7 +7752,7 @@
         "D": "butanoic acid"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "butanal. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7766,7 +7766,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "Answer: A. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1,
       "image": "/mcq-images/3.3.6-s1-q9.png"
@@ -7781,7 +7781,7 @@
         "D": "CH COCH 3 3"
       },
       "answer": "C",
-      "explanation": "",
+      "explanation": "CH CHO 3. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 1
     },
@@ -7795,7 +7795,7 @@
         "D": "Prop-2-enoic acid (Total 1 marks)"
       },
       "answer": "D",
-      "explanation": "Prop-2-enoic acid",
+      "explanation": "Prop-2-enoic acid (Total 1 marks). Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 2
     },
@@ -7809,7 +7809,7 @@
         "D": "butan-2-ol 3.6. Organic Analysis MCQ"
       },
       "answer": "B",
-      "explanation": "but-2-en-1-ol",
+      "explanation": "but-2-en-1-ol. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 2
     },
@@ -7837,7 +7837,7 @@
         "D": "butan-2-ol"
       },
       "answer": "B",
-      "explanation": "but-2-en-1-ol",
+      "explanation": "but-2-en-1-ol. Organic analysis: mass spec gives Mr, IR identifies functional groups (broad O-H, sharp C=O), use chemical tests (bromine water for alkenes, 2,4-DNP for carbonyls).",
       "topic": "3.3.6",
       "set": 2
     },
@@ -7851,7 +7851,7 @@
         "D": "6"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "4. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 1
     },
@@ -7865,7 +7865,7 @@
         "D": "pentan-3-ol"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "2-methylbutan-2-ol. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 1
     },
@@ -7879,7 +7879,7 @@
         "D": "(CH CH ) CO 3 2 2"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "CH CHO 3. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 1
     },
@@ -7893,7 +7893,7 @@
         "D": "3-methylbutan-2-ol"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "2-methylbutan-2-ol. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 1
     },
@@ -7949,7 +7949,7 @@
         "D": "+ HCN"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "+ HCN. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 4
     },
@@ -7963,7 +7963,7 @@
         "D": "1,3-dichloropropane"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "1,3-dichloropropane. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 4
     },
@@ -7977,7 +7977,7 @@
         "D": "CH CH COCH 3 2 3"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "CH CH COCH 3 2 3. Aldehydes are oxidised by Tollens and Fehling's (ketones are not). A chiral centre (4 different groups on C) gives optical isomers. Nucleophilic addition of HCN gives a racemic mixture.",
       "topic": "3.3.7",
       "set": 4
     },
@@ -8005,7 +8005,7 @@
         "D": "ethanoyl chloride"
       },
       "answer": "D",
-      "explanation": "ethanoyl chloride",
+      "explanation": "ethanoyl chloride. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8019,7 +8019,7 @@
         "D": "(CH CO) O 3 2"
       },
       "answer": "D",
-      "explanation": "(CH CO) O\n3 2",
+      "explanation": "(CH CO) O 3 2. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8033,7 +8033,7 @@
         "D": "CH CH CH Br + NaOH → CH CH CH OH + 3 2 2 3 2 2 NaBr"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "CH COCl + C H OH → CH COOC H + HCl 3 6 5 3 6 5. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8047,7 +8047,7 @@
         "D": "C H COOH 6 5"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "C H COOH 6 5. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8061,7 +8061,7 @@
         "D": "C H COOH 6 5"
       },
       "answer": "A",
-      "explanation": "",
+      "explanation": "C H CH OH 6 5 2. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8075,7 +8075,7 @@
         "D": "Potassium carbonate"
       },
       "answer": "B",
-      "explanation": "",
+      "explanation": "Calcium sulfate. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8089,7 +8089,7 @@
         "D": "Benzoic acid"
       },
       "answer": "D",
-      "explanation": "",
+      "explanation": "Benzoic acid. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 1
     },
@@ -8103,7 +8103,7 @@
         "D": "propyl propanoate"
       },
       "answer": "D",
-      "explanation": "Propyl propanoate",
+      "explanation": "propyl propanoate. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 2
     },
@@ -8117,7 +8117,7 @@
         "D": "C 6H 5COOH"
       },
       "answer": "D",
-      "explanation": "C H COOH\n6 5",
+      "explanation": "C 6H 5COOH. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 2
     },
@@ -8131,7 +8131,7 @@
         "D": "CH NHCH CH CH 3 2 2 3"
       },
       "answer": "B",
-      "explanation": "CH CONHCH CH\n3 2 3",
+      "explanation": "CH CONHCH CH 3 2 3. Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 2
     },
@@ -8145,7 +8145,7 @@
         "D": "See diagram"
       },
       "answer": "",
-      "explanation": "",
+      "explanation": "Answer: . Carboxylic acids react with alcohols to form esters (acid catalyst). Acyl chlorides are more reactive. Esters have fruity smells and are used as solvents and plasticisers.",
       "topic": "3.3.9",
       "set": 3,
       "image": "/mcq-images/3.3.9-s3-q18.png"
