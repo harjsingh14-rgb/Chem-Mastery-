@@ -5007,6 +5007,7 @@ export default function App() {
   const [mcqScore, setMcqScore] = useState({ correct: 0, total: 0 });
   const [mcqMode, setMcqMode] = useState("topic"); // "topic" | "random"
   const [mcqQuizSize, setMcqQuizSize] = useState(null); // null = not chosen, number = chosen
+  const [mcqOpenCats, setMcqOpenCats] = useState({}); // { "Physical Chemistry": true }
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
@@ -7900,33 +7901,47 @@ export default function App() {
                   </button>
                 </div>
               </div>
-              {/* Grouped topic cards */}
-              {Object.entries(grouped).map(([cat, topics]) => (
-                <div key={cat} style={{ marginBottom:"18px" }}>
-                  <div style={{ fontSize:"12px", fontWeight:800, color: getCatColor(topics[0].id), textTransform:"uppercase",
-                    letterSpacing:"1px", marginBottom:"10px", paddingBottom:"6px", borderBottom:`2px solid ${getCatColor(topics[0].id)}20` }}>
-                    {cat}
+              {/* Grouped topic cards — collapsible */}
+              {Object.entries(grouped).map(([cat, topics]) => {
+                const color = getCatColor(topics[0].id);
+                const isOpen = mcqOpenCats[cat];
+                const totalQs = topics.reduce((sum, t) => sum + t.questionCount, 0);
+                return (
+                  <div key={cat} style={{ marginBottom:"10px" }}>
+                    <button onClick={() => setMcqOpenCats(prev => ({ ...prev, [cat]: !prev[cat] }))}
+                      style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between",
+                        padding:"12px 14px", borderRadius:"12px", border:`2px solid ${color}25`,
+                        background: isOpen ? `${color}08` : "#fff", cursor:"pointer", fontFamily:"inherit",
+                        boxShadow:"0 2px 8px rgba(0,0,0,0.04)", transition:"all 0.2s" }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+                        <div style={{ width:"10px", height:"10px", borderRadius:"50%", background: color }} />
+                        <div style={{ fontSize:"14px", fontWeight:800, color: color, letterSpacing:"0.3px" }}>{cat}</div>
+                      </div>
+                      <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+                        <span style={{ fontSize:"11px", fontWeight:600, color:"#64748b" }}>{topics.length} topics · {totalQs} Qs</span>
+                        <span style={{ fontSize:"14px", color:"#94a3b8", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                          transition:"transform 0.2s" }}>▼</span>
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px", marginTop:"10px", paddingLeft:"4px", paddingRight:"4px" }}>
+                        {topics.map(t => (
+                          <button key={t.id} onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+                            style={{ background:"#fff", border:`2px solid ${color}30`, borderRadius:"14px", padding:"14px 12px",
+                              textAlign:"left", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:"6px", marginBottom:"8px" }}>
+                              <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: color }} />
+                              {t.level === "A2" && mcqYear === "a2" && <span style={{ fontSize:"9px", fontWeight:700, color:"#fff", background:"#7c3aed", borderRadius:"4px", padding:"1px 5px" }}>A2</span>}
+                            </div>
+                            <div style={{ fontSize:"13px", fontWeight:700, color:"#1a2d45", lineHeight:1.3, marginBottom:"4px" }}>{t.name}</div>
+                            <div style={{ fontSize:"11px", color: color, fontWeight:600 }}>{t.questionCount} questions</div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px" }}>
-                    {topics.map(t => {
-                      const color = getCatColor(t.id);
-                      return (
-                        <button key={t.id} onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
-                          style={{ background:"#fff", border:`2px solid ${color}30`, borderRadius:"14px", padding:"14px 12px",
-                            textAlign:"left", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.06)",
-                            position:"relative", overflow:"hidden" }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:"6px", marginBottom:"8px" }}>
-                            <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: color }} />
-                            {t.level === "A2" && mcqYear === "a2" && <span style={{ fontSize:"9px", fontWeight:700, color:"#fff", background:"#7c3aed", borderRadius:"4px", padding:"1px 5px" }}>A2</span>}
-                          </div>
-                          <div style={{ fontSize:"13px", fontWeight:700, color:"#1a2d45", lineHeight:1.3, marginBottom:"4px" }}>{t.name}</div>
-                          <div style={{ fontSize:"11px", color: color, fontWeight:600 }}>{t.questionCount} questions</div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           );
         }
