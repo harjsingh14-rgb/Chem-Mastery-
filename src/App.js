@@ -6140,14 +6140,11 @@ export default function App() {
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
               >
-                {/* Thumbnail */}
-                <div style={{ height: "140px", background: card.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "16px 18px", position: "relative", overflow: "hidden" }}>
-                  {/* Chemistry artwork */}
-                  <ChemArt id={card.id} />
-                  {/* Stat badge top-left */}
-                  <div style={{ position: "absolute", top: "14px", left: "16px", background: "rgba(255,255,255,0.2)", borderRadius: "6px", padding: "4px 10px" }}>
-                    <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>{card.stat}</span>
-                  </div>
+                {/* Thumbnail — FigureLabs card image */}
+                <div style={{ position: "relative", overflow: "hidden" }}>
+                  <img src={process.env.PUBLIC_URL + `/card-${card.id === "extended" ? "ai-examiner" : card.id === "mcq" ? "mcqs" : card.id === "calc" ? "calculations" : card.id}.png`}
+                    alt={card.label}
+                    style={{ width: "100%", height: "140px", objectFit: "cover", objectPosition: "top", display: "block" }} />
                   {/* Coming Soon badge for mechanisms */}
                   {mechComingSoon && (
                     <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(217,119,6,0.9)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
@@ -6161,8 +6158,6 @@ export default function App() {
                       <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>{fullyLocked ? "PRO" : "PREVIEW"}</span>
                     </div>
                   )}
-                  {/* Single bold title */}
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "34px", color: "#ffffff", lineHeight: 1, letterSpacing: "-1px" }}>{card.label}</div>
                 </div>
                 {/* Card body */}
                 <div style={{ padding: "16px 18px 22px", flex: 1 }}>
