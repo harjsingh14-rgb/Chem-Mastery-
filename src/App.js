@@ -7801,9 +7801,9 @@ export default function App() {
         return (
           <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
             <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧪</div>
-            <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Animated Version Coming Soon</div>
+            <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Handdrawn Explanation Coming Soon</div>
             <div style={{ fontSize:"15px", color:"#64748b", lineHeight:1.6, maxWidth:"400px" }}>
-              The animated step-by-step version of this mechanism is being built. Check back soon!
+              The handdrawn step-by-step explanation of this mechanism is being built. Check back soon!
             </div>
             <button onClick={()=>{ setMechId(null); setMechStep(0); }}
               style={{ marginTop:"20px", padding:"10px 24px", borderRadius:"12px", border:"none", cursor:"pointer",
