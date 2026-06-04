@@ -5006,6 +5006,7 @@ export default function App() {
   const [mcqRevealed, setMcqRevealed] = useState(false); // answer revealed
   const [mcqScore, setMcqScore] = useState({ correct: 0, total: 0 });
   const [mcqMode, setMcqMode] = useState("topic"); // "topic" | "random"
+  const [mcqQuizSize, setMcqQuizSize] = useState(null); // null = not chosen, number = chosen
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
@@ -7824,7 +7825,7 @@ export default function App() {
       {topicsTab === "mcq" && (() => {
         const mcqTopics = Object.entries(mcqData.topics).map(([id, t]) => ({ id, ...t }));
         const topicQuestions = mcqTopic ? mcqData.questions.filter(q => q.topic === mcqTopic) : [];
-        const shuffledAll = mcqMode === "random" ? [...mcqData.questions].sort(() => Math.random() - 0.5).slice(0, 25) : [];
+        const shuffledAll = mcqMode === "random" && mcqQuizSize ? [...mcqData.questions].sort(() => Math.random() - 0.5).slice(0, mcqQuizSize) : [];
         const activeQuestions = mcqMode === "random" ? shuffledAll : topicQuestions;
         const currentQ = activeQuestions[mcqIdx];
 
@@ -7869,13 +7870,36 @@ export default function App() {
                   }}>{tab.label}</button>
                 ))}
               </div>
-              {/* Random quiz button */}
-              <button onClick={() => { setMcqMode("random"); setMcqTopic("_random"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
-                style={{ width:"100%", padding:"14px", borderRadius:"14px", border:"none", cursor:"pointer",
-                  background:"linear-gradient(135deg,#f87171,#dc2626)", color:"#fff", fontSize:"14px", fontWeight:700,
-                  fontFamily:"inherit", marginBottom:"18px", boxShadow:"0 4px 16px rgba(220,38,38,0.3)" }}>
-                🎲 Random Quiz (25 questions)
-              </button>
+              {/* Random quiz size picker */}
+              <div style={{ marginBottom:"18px" }}>
+                <div style={{ fontSize:"12px", fontWeight:700, color:"#dc2626", textTransform:"uppercase", letterSpacing:"0.8px", marginBottom:"8px" }}>
+                  🎲 Random Quiz
+                </div>
+                <div style={{ display:"flex", gap:"8px" }}>
+                  {[25, 50, 100].map(size => (
+                    <button key={size} onClick={() => { setMcqMode("random"); setMcqTopic("_random"); setMcqQuizSize(size); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+                      style={{ flex:1, padding:"12px 8px", borderRadius:"12px", border:"2px solid #dc262630", cursor:"pointer",
+                        background:"#fff", fontFamily:"inherit", textAlign:"center",
+                        boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
+                      <div style={{ fontSize:"18px", fontWeight:800, color:"#dc2626" }}>{size}</div>
+                      <div style={{ fontSize:"10px", color:"#64748b", fontWeight:600, marginTop:"2px" }}>questions</div>
+                    </button>
+                  ))}
+                  <button onClick={() => {
+                    const custom = prompt("How many questions? (1-" + mcqData.questions.length + ")");
+                    const num = parseInt(custom);
+                    if (num && num > 0 && num <= mcqData.questions.length) {
+                      setMcqMode("random"); setMcqTopic("_random"); setMcqQuizSize(num); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 });
+                    }
+                  }}
+                    style={{ flex:1, padding:"12px 8px", borderRadius:"12px", border:"2px solid #dc262630", cursor:"pointer",
+                      background:"#fff", fontFamily:"inherit", textAlign:"center",
+                      boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
+                    <div style={{ fontSize:"18px", fontWeight:800, color:"#dc2626" }}>?</div>
+                    <div style={{ fontSize:"10px", color:"#64748b", fontWeight:600, marginTop:"2px" }}>custom</div>
+                  </button>
+                </div>
+              </div>
               {/* Grouped topic cards */}
               {Object.entries(grouped).map(([cat, topics]) => (
                 <div key={cat} style={{ marginBottom:"18px" }}>
@@ -7916,7 +7940,7 @@ export default function App() {
             <div style={{ fontSize:"15px", color:"#64748b", marginBottom:"20px" }}>
               {mcqScore.total > 0 ? `${Math.round((mcqScore.correct / mcqScore.total) * 100)}%` : ""}
             </div>
-            <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); }}
+            <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); setMcqQuizSize(null); }}
               style={{ padding:"12px 28px", borderRadius:"12px", border:"none", cursor:"pointer",
                 background:"#dc2626", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
               ← Back to Topics
@@ -7932,7 +7956,7 @@ export default function App() {
 
             {/* Header */}
             <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
-              <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); }}
+              <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); setMcqQuizSize(null); }}
                 style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
                   color:"#dc2626", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
                 ← Back
