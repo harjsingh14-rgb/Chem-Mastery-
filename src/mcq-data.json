@@ -1,0 +1,558 @@
+{
+  "topics": {
+    "3.1.1": {
+      "name": "Atomic Structure",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 39
+    }
+  },
+  "questions": [
+    {
+      "id": "3.1.1-s1-q1",
+      "q": "In a time of flight mass spectrometer, molecule X is ionised using electrospray ionisation. What is the equation for this ionisation?",
+      "options": {
+        "A": "X(l) + e– → X+(g) + 2 e–",
+        "B": "X(g) + e– → X+(g) + 2 e–",
+        "C": "X(l) + H+ → XH+(g)",
+        "D": "X(g) + H+ → XH+(g)"
+      },
+      "answer": "D",
+      "explanation": "X(g) + H+ → XH+(g)",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q2",
+      "q": "What is the electron configuration of V2+ in the ground state?",
+      "options": {
+        "A": "1s2 2s2 2p6 3s2 3p6 3d3",
+        "B": "1s2 2s2 2p6 3s2 3p6 3d1 4s2",
+        "C": "1s2 2s2 2p6 3s2 3p6 3d3 4s2",
+        "D": "1s2 2s2 2p6 3s2 3p6 3d5 4s2"
+      },
+      "answer": "A",
+      "explanation": "1s2 2s2 2p6 3s2 3p6 3d3",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q4",
+      "q": "Which element has a first ionisation energy lower than that of sulfur?",
+      "options": {
+        "A": "Chlorine",
+        "B": "Oxygen",
+        "C": "Phosphorus",
+        "D": "Selenium"
+      },
+      "answer": "D",
+      "explanation": "Selenium",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q5",
+      "q": "The first seven successive ionisation energies for element Z are shown. What is element Z?",
+      "options": {
+        "A": "Carbon",
+        "B": "Nitrogen",
+        "C": "Silicon",
+        "D": "Phosphorus"
+      },
+      "answer": "C",
+      "explanation": "Silicon",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q6",
+      "q": "Which has the electron configuration of a noble gas?",
+      "options": {
+        "A": "H+",
+        "B": "O–",
+        "C": "Se2–",
+        "D": "Zn2+"
+      },
+      "answer": "C",
+      "explanation": "Se2–",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q7",
+      "q": "Which atom has the smallest number of neutrons?",
+      "options": {
+        "A": "3H",
+        "B": "4He",
+        "C": "5He",
+        "D": "4Li"
+      },
+      "answer": "D",
+      "explanation": "4Li",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q8",
+      "q": "Which is the electron configuration of an atom with only two unpaired electrons?",
+      "options": {
+        "A": "1s2 2s2 2p3",
+        "B": "1s2 2s2 2p4",
+        "C": "1s2 2s2 2p6 3s2 3p5",
+        "D": "1s2 2s2 2p6 3s2 3p6 4s1 3d5"
+      },
+      "answer": "B",
+      "explanation": "1s22s22p4",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q9",
+      "q": "Which shows the electron configuration of an atom of a transition metal?",
+      "options": {
+        "A": "[Ar] 4s23d0",
+        "B": "[Ar] 4s23d8",
+        "C": "[Ar] 4s23d10",
+        "D": "[Ar] 4s23d104p1"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q10",
+      "q": "Which atom has the greatest first ionisation energy?",
+      "options": {
+        "A": "H",
+        "B": "He",
+        "C": "Li",
+        "D": "Ne"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q11",
+      "q": "A student has a 10 cm3 sample of 1.00 × 10–2 mol dm–3 methanoic acid solution. The student is asked to dilute the methanoic acid solution to a concentration of 2.00 × 10–4 mol dm–3 by adding distilled water. Which volume of water should be added?",
+      "options": {
+        "A": "200 cm3",
+        "B": "490 cm3",
+        "C": "500 cm3",
+        "D": "510 cm3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q12",
+      "q": "In the early twentieth century the apparatus shown in the diagram was used to investigate atomic structure. When He2+ particles were fired at a thin sheet of gold, most of the particles were detected at point P. What conclusion can be drawn from the detection of He2+ particles at point P?",
+      "options": {
+        "A": "Gold atoms contain electrons.",
+        "B": "Gold atoms contain protons.",
+        "C": "Gold atoms contain neutrons.",
+        "D": "Gold atoms are mainly empty space."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q13",
+      "q": "When He2+ particles were fired at a thin sheet of gold, about 1 in 8000 of the particles were detected at point Q. What conclusion can be drawn from the detection of He2+ particles at point Q?",
+      "options": {
+        "A": "Gold atoms have a small, positive nucleus.",
+        "B": "Gold atoms have electrons in orbitals.",
+        "C": "Gold consists of ions in a sea of delocalised electrons.",
+        "D": "Gold atoms have more protons than He2+ particles."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q14",
+      "q": "Which statement about time of flight mass spectrometry is correct? The current in the detector is proportional to the ion",
+      "options": {
+        "A": "abundance",
+        "B": "Sample particles gain electrons to form positive ions Particles are detected in the order of their kinetic",
+        "C": "energies",
+        "D": "Ions are accelerated by a magnetic field"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q15",
+      "q": "Chlorine exists as two isotopes 35Cl and 37Cl in the ratio 3:1 Which statement about peaks in the mass spectrum of Cl is correct? 2",
+      "options": {
+        "A": "Peaks at m/z = 70 and 74 in the ratio 3:1 Peaks at m/z = 70, 72 and 74 in the ratio",
+        "B": "9:6:1 Peaks at m/z = 70, 72 and 74 in the ratio",
+        "C": "9:3:1",
+        "D": "Peaks at m/z = 70 and 72 in the ratio 3:1"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q16",
+      "q": "Element Q forms a sulfate with formula QSO 4 Which of these could represent the electronic configuration of an atom of Q?",
+      "options": {
+        "A": "[Ne]3s1",
+        "B": "[Ne]3s2",
+        "C": "[Ne]3s23p1",
+        "D": "[Ne]3s13p2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q17",
+      "q": "Which of these has the highest first ionisation energy?",
+      "options": {
+        "A": "Na",
+        "B": "Al",
+        "C": "Si",
+        "D": "Cl"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q18",
+      "q": "Which of these correctly shows the numbers of sub-atomic particles in a 41K+ ion? Number of Number of Number of electrons protons neutrons",
+      "options": {
+        "A": "19 19 20",
+        "B": "18 20 21",
+        "C": "18 19 22",
+        "D": "19 18 23"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q19",
+      "q": "Bromine exists as two isotopes 79Br and 81Br, which are found in almost equal abundance. Which of the statements is correct? The first ionisation energy of 79Br is less than the first",
+      "options": {
+        "A": "ionisation energy of 81Br The atomic radius of 79Br is less than the atomic radius",
+        "B": "of 81Br The mass spectrum of C H Br has two molecular ion",
+        "C": "3 7 peaks at 122 and 124",
+        "D": "79Br is more reactive than 81Br"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q20",
+      "q": "Which species has the same number of electrons as the radical •CH ? 3",
+      "options": {
+        "A": "CH 2",
+        "B": "CH + 3",
+        "C": "CH − 3",
+        "D": "CH + 4"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q21",
+      "q": "What are the numbers of neutrons and electrons in the 57Fe2+ ion? Neutrons Electrons",
+      "options": {
+        "A": "31 24",
+        "B": "57 24",
+        "C": "31 26",
+        "D": "57 28"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q22",
+      "q": "What is the electron configuration of Cu2+?",
+      "options": {
+        "A": "[Ar]3d94s2",
+        "B": "[Ar]3d104s1",
+        "C": "[Ar]3d9",
+        "D": "[Ar]3d10"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q23",
+      "q": "Which of these atoms has the largest atomic radius?",
+      "options": {
+        "A": "Ar",
+        "B": "Cl",
+        "C": "Mg",
+        "D": "Na"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q24",
+      "q": "Which of these atoms has the smallest number of neutrons?",
+      "options": {
+        "A": "3H",
+        "B": "4He",
+        "C": "5He",
+        "D": "4Li"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q25",
+      "q": "Which change requires the largest amount of energy?",
+      "options": {
+        "A": "He+(g) He2+(g) + e–",
+        "B": "Li(g) Li+(g) + e–",
+        "C": "Mg+(g) Mg2+(g) + e–",
+        "D": "N(g) N+(g) + e–"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q26",
+      "q": "Ions of two isotopes of iron are 53Fe2+ 56Fe2+ Which statement is correct?",
+      "options": {
+        "A": "The ions of both the isotopes have the electronic configuration 1s22s22p63s23p64s23d6",
+        "B": "The ions of both the isotopes contains 26 neutrons",
+        "C": "53Fe2+ has fewer protons than 56Fe2+",
+        "D": "After acceleration to the same kinetic energy 56Fe2+ will move more slowly than 53Fe2+"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q27",
+      "q": "The successive ionisation energies for element X are shown in the following graph. Which element is X?",
+      "options": {
+        "A": "Nitrogen",
+        "B": "Phosphorus",
+        "C": "Aluminium",
+        "D": "Boron"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s2-q1",
+      "q": "Samples of four different substances are analysed using time of flight mass spectrometry. In each case, the samples are ionised to form ions with a single positive charge. The ions are accelerated to the same kinetic energy. Which sample gives ions with the shortest time of flight?",
+      "options": {
+        "A": "A sample of 45Sc that is ionised using electron impact ionisation.",
+        "B": "A sample of C 3H 8 that is ionised using electrospray ionisation.",
+        "C": "A sample of CH 3CH 2OH that is ionised using electrospray ionisation.",
+        "D": "A sample of CO 2 that is ionised using electron impact ionisation."
+      },
+      "answer": "D",
+      "explanation": "A sample of CO that is ionised using electron\n2\nimpact ionisation",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q3",
+      "q": "Which equation shows the process that occurs during the second ionisation of magnesium?",
+      "options": {
+        "A": "Mg(g) Mg+(g) + e–",
+        "B": "Mg(g) ⟶ Mg2+(g) + 2 e–",
+        "C": "Mg+(g)⟶ Mg2+(g) + e–",
+        "D": "Mg2+(g)⟶ Mg3+(g) + e– ⟶"
+      },
+      "answer": "C",
+      "explanation": "Mg+(g) → Mg2+(g) + e-",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q4",
+      "q": "Which atom has the greatest number of unpaired electrons?",
+      "options": {
+        "A": "P",
+        "B": "V",
+        "C": "Fe",
+        "D": "Cu"
+      },
+      "answer": "C",
+      "explanation": "Fe",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q5",
+      "q": "Which element has the highest third ionisation energy?",
+      "options": {
+        "A": "Li",
+        "B": "Be",
+        "C": "K",
+        "D": "Ca"
+      },
+      "answer": "B",
+      "explanation": "Be",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q6",
+      "q": "Which atom contains the most neutrons?",
+      "options": {
+        "A": "54Cr",
+        "B": "55Mn",
+        "C": "57Fe",
+        "D": "58Ni"
+      },
+      "answer": "C",
+      "explanation": "57Fe",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q7",
+      "q": "Which row shows the number of each fundamental particle in one 25Mg2+ ion? protons neutrons electrons",
+      "options": {
+        "A": "12 12 10",
+        "B": "14 11 12",
+        "C": "12 13 10",
+        "D": "12 13 12"
+      },
+      "answer": "C",
+      "explanation": "C 12 13 10",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q9",
+      "q": "An atom has all its electrons in their lowest energy levels. Which atom contains only two unpaired electrons?",
+      "options": {
+        "A": "Helium",
+        "B": "Beryllium",
+        "C": "Oxygen",
+        "D": "Iron"
+      },
+      "answer": "C",
+      "explanation": "Oxygen",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q10",
+      "q": "The first six ionisation energies, in kJ mol–1, of an element are: 1090, 2350, 4610, 6220, 37 800, 47 000 What is the element?",
+      "options": {
+        "A": "Boron",
+        "B": "Carbon",
+        "C": "Nitrogen",
+        "D": "Oxygen"
+      },
+      "answer": "B",
+      "explanation": "Carbon",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q11",
+      "q": "In which pair is the first ionisation energy of atom Y greater than that of atom X? Electron Electron configuration configuration of of atom X atom Y",
+      "options": {
+        "A": "1s22s2 1s22s22p1",
+        "B": "1s22s22p3 1s22s22p4",
+        "C": "1s22s22p5 1s22s22p6",
+        "D": "1s22s22p6 1s22s22p63s1"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q12",
+      "q": "Which statement about isotopes of an element is not correct?",
+      "options": {
+        "A": "They have the same chemical properties.",
+        "B": "They have the same number of electrons in ions of the same charge.",
+        "C": "They have the same number of neutrons.",
+        "D": "They have the same number of protons."
+      },
+      "answer": "C",
+      "explanation": "They have the same number of neutrons.",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q13",
+      "q": "Which of these ions has the largest ionic radius?",
+      "options": {
+        "A": "S2–",
+        "B": "Cl–",
+        "C": "K+",
+        "D": "Ca2+"
+      },
+      "answer": "A",
+      "explanation": "S2–",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q14",
+      "q": "Which atom in the ground state contains at least one unpaired p electron?",
+      "options": {
+        "A": "Na",
+        "B": "Ne",
+        "C": "O",
+        "D": "Sc"
+      },
+      "answer": "C",
+      "explanation": "O",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q15",
+      "q": "Which ionisation needs less energy than this process? Mg(g) → Mg+(g) + e–",
+      "options": {
+        "A": "Al(g) → Al+(g) + e–",
+        "B": "Ar(g) → Ar+(g) + e–",
+        "C": "Be(g) → Be+(g) + e–",
+        "D": "Mg+(g) → Mg2+(g) + e–"
+      },
+      "answer": "A",
+      "explanation": "Al(g) → Al+(g) + e–",
+      "topic": "3.1.1",
+      "set": 2
+    }
+  ]
+}

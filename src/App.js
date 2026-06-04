@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { signInGoogle, signInEmail, signUpEmail, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
+import mcqData from "./mcq-data.json";
 
 const SETS = {
   "3.1.1": { title: "Atomic Structure", cards: [
@@ -4850,7 +4851,7 @@ export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
-  const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms"
+  const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms" | "mcq"
   const [extCategory, setExtCategory] = useState(null);
   const [extIndex, setExtIndex] = useState(0);
   const [extQPicker, setExtQPicker] = useState(false); // true = show question list, false = show question
@@ -4930,6 +4931,13 @@ export default function App() {
   const [mechId, setMechId] = useState(null);
   const [mechStep, setMechStep] = useState(0);
   const [mechOpenCards, setMechOpenCards] = useState({});
+  // MCQ state
+  const [mcqTopic, setMcqTopic] = useState(null); // selected topic id
+  const [mcqIdx, setMcqIdx] = useState(0); // current question index
+  const [mcqSelected, setMcqSelected] = useState(null); // selected answer letter
+  const [mcqRevealed, setMcqRevealed] = useState(false); // answer revealed
+  const [mcqScore, setMcqScore] = useState({ correct: 0, total: 0 });
+  const [mcqMode, setMcqMode] = useState("topic"); // "topic" | "random"
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
@@ -5499,6 +5507,24 @@ export default function App() {
         <line x1="231" y1="32" x2="249" y2="18" stroke="white" strokeWidth="1.5"/>
       </svg>
     );
+    if (id === "mcq") return (
+      <svg style={s} width={W} height={H} viewBox="0 0 300 140" fill="none" preserveAspectRatio="xMidYMid slice">
+        {/* MCQ bubbles */}
+        <circle cx="80" cy="40" r="14" stroke="white" strokeWidth="2.5"/>
+        <circle cx="80" cy="75" r="14" stroke="white" strokeWidth="2.5" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="80" cy="110" r="14" stroke="white" strokeWidth="2.5"/>
+        {/* Labels */}
+        <text x="80" y="45" textAnchor="middle" fill="white" fontSize="14" fontFamily="'Space Mono',monospace" fontWeight="700">A</text>
+        <text x="80" y="80" textAnchor="middle" fill="white" fontSize="14" fontFamily="'Space Mono',monospace" fontWeight="700">B</text>
+        <text x="80" y="115" textAnchor="middle" fill="white" fontSize="14" fontFamily="'Space Mono',monospace" fontWeight="700">C</text>
+        {/* Lines representing text */}
+        <line x1="110" y1="40" x2="220" y2="40" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
+        <line x1="110" y1="75" x2="240" y2="75" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
+        <line x1="110" y1="110" x2="200" y2="110" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
+        {/* Checkmark on B */}
+        <polyline points="72,75 78,82 90,68" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    );
     return null;
   };
 
@@ -5944,7 +5970,8 @@ export default function App() {
     { id: "pathways",   label: "Pathways",              labelBig: "Path",     labelSmall: "ways",    desc: "Explore all routes between functional groups.",  color: "#059669", grad: "linear-gradient(145deg,#10b981,#059669,#047857)", stat: "Reaction map" },
     { id: "calc",       label: "Calculations",          labelBig: "Worked",   labelSmall: "Calcs",   desc: "Practise every calculation type with worked steps.", color: "#0284c7", grad: "linear-gradient(145deg,#0ea5e9,#0284c7,#075985)", stat: "Step-by-step" },
     { id: "extended",   label: "AI Examiner",           labelBig: "AI",       labelSmall: "Examiner",desc: "ChemMastery AI marks your extended answers.",    color: "#7c3aed", grad: "linear-gradient(145deg,#a855f7,#7c3aed,#5b21b6)", stat: "AI powered" },
-    { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Animated curly arrow mechanisms step by step.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Animated" },
+    { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Handdrawn curly arrow mechanisms with explanations.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Handdrawn" },
+    { id: "mcq",        label: "MCQs",                  labelBig: "MC",       labelSmall: "Qs",      desc: "Multiple choice questions with solutions by topic.", color: "#dc2626", grad: "linear-gradient(145deg,#f87171,#dc2626,#991b1b)", stat: `${mcqData.questions.length} Qs` },
   ];
 
   const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechOpenCards({}); };
@@ -7725,6 +7752,187 @@ export default function App() {
           </div>
         );
       })()}
+
+      {/* ── MCQ TAB ────────────────────────────────────────── */}
+      {topicsTab === "mcq" && (() => {
+        const mcqTopics = Object.entries(mcqData.topics).map(([id, t]) => ({ id, ...t }));
+        const topicQuestions = mcqTopic ? mcqData.questions.filter(q => q.topic === mcqTopic) : [];
+        const shuffledAll = mcqMode === "random" ? [...mcqData.questions].sort(() => Math.random() - 0.5).slice(0, 25) : [];
+        const activeQuestions = mcqMode === "random" ? shuffledAll : topicQuestions;
+        const currentQ = activeQuestions[mcqIdx];
+
+        // Topic selection view
+        if (!mcqTopic && mcqMode === "topic") return (
+          <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
+            <p style={{ color:"#475569", fontSize:"15px", marginBottom:"16px", lineHeight:1.6 }}>
+              Multiple choice questions with solutions. Pick a topic or try a random quiz.
+            </p>
+            {/* Random quiz button */}
+            <button onClick={() => { setMcqMode("random"); setMcqTopic("_random"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+              style={{ width:"100%", padding:"16px", borderRadius:"14px", border:"none", cursor:"pointer",
+                background:"linear-gradient(135deg,#f87171,#dc2626)", color:"#fff", fontSize:"15px", fontWeight:700,
+                fontFamily:"inherit", marginBottom:"20px", boxShadow:"0 4px 16px rgba(220,38,38,0.3)" }}>
+              🎲 Random Quiz (25 questions)
+            </button>
+            {/* Topic list */}
+            <div style={{ fontSize:"13px", fontWeight:800, color:"#0f1d35", textTransform:"uppercase", letterSpacing:"1.2px", marginBottom:"10px", borderBottom:"2px solid #e2e8f0", paddingBottom:"6px" }}>
+              By Topic
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+              {mcqTopics.map(t => (
+                <button key={t.id} onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+                  style={{ background:"#fff", border:"2px solid #dc262630", borderRadius:"14px", padding:"16px 18px",
+                    textAlign:"left", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
+                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                    <div>
+                      <div style={{ fontSize:"15px", fontWeight:700, color:"#0f1d35" }}>{t.id} — {t.name}</div>
+                      <div style={{ fontSize:"12px", color:"#64748b", marginTop:"2px" }}>{t.board} · {t.level} · {t.questionCount} questions</div>
+                    </div>
+                    <div style={{ fontSize:"13px", fontWeight:700, color:"#dc2626" }}>→</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+
+        // Quiz view
+        if (!currentQ) return (
+          <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
+            <div style={{ fontSize:"48px", marginBottom:"16px" }}>🏆</div>
+            <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Quiz Complete!</div>
+            <div style={{ fontSize:"18px", color:"#dc2626", fontWeight:700, marginBottom:"4px" }}>{mcqScore.correct} / {mcqScore.total} correct</div>
+            <div style={{ fontSize:"15px", color:"#64748b", marginBottom:"20px" }}>
+              {mcqScore.total > 0 ? `${Math.round((mcqScore.correct / mcqScore.total) * 100)}%` : ""}
+            </div>
+            <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); }}
+              style={{ padding:"12px 28px", borderRadius:"12px", border:"none", cursor:"pointer",
+                background:"#dc2626", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
+              ← Back to Topics
+            </button>
+          </div>
+        );
+
+        const optionLetters = ["A","B","C","D"];
+
+        return (
+          <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
+            <style>{`@keyframes mcqFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
+
+            {/* Header */}
+            <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
+              <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); }}
+                style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
+                  color:"#dc2626", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
+                ← Back
+              </button>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45" }}>
+                  {mcqMode === "random" ? "Random Quiz" : `${mcqTopic} — ${mcqData.topics[mcqTopic]?.name || ""}`}
+                </div>
+              </div>
+              <div style={{ fontSize:"13px", fontWeight:700, color:"#dc2626", background:"#dc262612", padding:"4px 10px", borderRadius:"8px" }}>
+                {mcqScore.correct}/{mcqScore.total} · Q{mcqIdx + 1}/{activeQuestions.length}
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div style={{ padding:"8px 16px 0" }}>
+              <div style={{ height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
+                <div style={{ height:"100%", width:`${((mcqIdx + 1) / activeQuestions.length) * 100}%`,
+                  background:"#dc2626", borderRadius:"2px", transition:"width 0.3s ease" }}/>
+              </div>
+            </div>
+
+            {/* Question */}
+            <div key={currentQ.id} style={{ padding:"16px", animation:"mcqFadeIn 0.3s ease" }}>
+              <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom:"16px" }}>
+                {currentQ.q}
+              </div>
+
+              {/* Options */}
+              <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+                {optionLetters.map(letter => {
+                  const optText = currentQ.options[letter];
+                  if (!optText) return null;
+                  const isSelected = mcqSelected === letter;
+                  const isCorrect = letter === currentQ.answer;
+                  const showResult = mcqRevealed;
+
+                  let bg = "#fff";
+                  let border = "1.5px solid #e2e8f0";
+                  let textColor = "#1a2d45";
+                  if (showResult && isCorrect) { bg = "#dcfce7"; border = "2px solid #22c55e"; }
+                  else if (showResult && isSelected && !isCorrect) { bg = "#fef2f2"; border = "2px solid #ef4444"; }
+                  else if (isSelected && !showResult) { bg = "#dc262610"; border = "2px solid #dc2626"; }
+
+                  return (
+                    <button key={letter} onClick={() => { if (!mcqRevealed) setMcqSelected(letter); }}
+                      style={{ display:"flex", alignItems:"center", gap:"12px", padding:"14px 16px", borderRadius:"12px",
+                        border, background: bg, cursor: mcqRevealed ? "default" : "pointer", fontFamily:"inherit",
+                        textAlign:"left", transition:"all 0.2s" }}>
+                      <div style={{ width:"30px", height:"30px", borderRadius:"50%", flexShrink:0,
+                        background: isSelected ? "#dc2626" : "#f0f4f8",
+                        color: isSelected ? "#fff" : "#64748b",
+                        display:"flex", alignItems:"center", justifyContent:"center",
+                        fontSize:"13px", fontWeight:800, transition:"all 0.2s" }}>
+                        {showResult && isCorrect ? "✓" : showResult && isSelected && !isCorrect ? "✗" : letter}
+                      </div>
+                      <div style={{ fontSize:"14px", color: textColor, lineHeight:1.4, fontWeight: showResult && isCorrect ? 700 : 400 }}>
+                        {optText}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Explanation (shown after reveal) */}
+              {mcqRevealed && currentQ.explanation && (
+                <div style={{ marginTop:"14px", padding:"12px 16px", background:"#f0fdf4", border:"1.5px solid #bbf7d0",
+                  borderRadius:"12px", fontSize:"13px", color:"#166534", lineHeight:1.6, animation:"mcqFadeIn 0.3s ease" }}>
+                  <span style={{ fontWeight:700 }}>Answer: {currentQ.answer}</span>
+                  {currentQ.explanation && ` — ${currentQ.explanation}`}
+                </div>
+              )}
+
+              {/* Check / Next buttons */}
+              <div style={{ marginTop:"16px", display:"flex", gap:"10px" }}>
+                {!mcqRevealed ? (
+                  <button onClick={() => {
+                    if (!mcqSelected) return;
+                    setMcqRevealed(true);
+                    setMcqScore(prev => ({
+                      correct: prev.correct + (mcqSelected === currentQ.answer ? 1 : 0),
+                      total: prev.total + 1
+                    }));
+                  }}
+                    disabled={!mcqSelected}
+                    style={{ flex:1, padding:"14px", borderRadius:"12px", border:"none",
+                      cursor: mcqSelected ? "pointer" : "default",
+                      background: mcqSelected ? "#dc2626" : "#e8edf3",
+                      color: mcqSelected ? "#fff" : "#b0c4d4",
+                      fontSize:"14px", fontWeight:700, fontFamily:"inherit",
+                      boxShadow: mcqSelected ? "0 4px 14px rgba(220,38,38,0.3)" : "none" }}>
+                    Check Answer
+                  </button>
+                ) : (
+                  <button onClick={() => {
+                    setMcqIdx(i => i + 1);
+                    setMcqSelected(null);
+                    setMcqRevealed(false);
+                  }}
+                    style={{ flex:1, padding:"14px", borderRadius:"12px", border:"none", cursor:"pointer",
+                      background:"#dc2626", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit",
+                      boxShadow:"0 4px 14px rgba(220,38,38,0.3)" }}>
+                    {mcqIdx < activeQuestions.length - 1 ? "Next Question →" : "See Results"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
     </div>
   );
 
