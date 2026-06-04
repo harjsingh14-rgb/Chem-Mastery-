@@ -41,6 +41,24 @@
       "board": "AQA",
       "level": "AS",
       "questionCount": 26
+    },
+    "3.2.1": {
+      "name": "Periodicity",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 21
+    },
+    "3.2.2": {
+      "name": "Group 2",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 15
+    },
+    "3.2.3": {
+      "name": "Group 7 (Halogens)",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 28
     }
   },
   "questions": [
@@ -3354,6 +3372,902 @@
       "answer": "C",
       "explanation": "Fluorine in F O is –1\n2",
       "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.2.1-s1-q1",
+      "q": "Which element is classified as a d block element?",
+      "options": {
+        "A": "Antimony",
+        "B": "Molybdenum",
+        "C": "Strontium",
+        "D": "Uranium"
+      },
+      "answer": "B",
+      "explanation": "Molybdenum",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q2",
+      "q": "Which element in Period 3 has the highest melting point?",
+      "options": {
+        "A": "Aluminium",
+        "B": "Silicon",
+        "C": "Sodium",
+        "D": "Sulfur"
+      },
+      "answer": "B",
+      "explanation": "Silicon",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q3",
+      "q": "Which ion has the largest radius?",
+      "options": {
+        "A": "F–",
+        "B": "Mg2+",
+        "C": "Na+",
+        "D": "O2–"
+      },
+      "answer": "D",
+      "explanation": "O2–",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q4",
+      "q": "Which element has a first ionisation energy lower than that of sulfur?",
+      "options": {
+        "A": "Chlorine",
+        "B": "Oxygen",
+        "C": "Phosphorus",
+        "D": "Selenium"
+      },
+      "answer": "D",
+      "explanation": "Selenium",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q5",
+      "q": "Which represents the correct order of increasing radius of the ions?",
+      "options": {
+        "A": "F– O2– Li+ Be2+",
+        "B": "Li+ Be2+ O2– F–",
+        "C": "Be2+ Li+ F– O2–",
+        "D": "O2– F– Li+ Be2+"
+      },
+      "answer": "C",
+      "explanation": "Be2+ Li+ F– O2–",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q6",
+      "q": "Which of these elements has the highest melting point?",
+      "options": {
+        "A": "Argon",
+        "B": "Chlorine",
+        "C": "Silicon",
+        "D": "Sulfur"
+      },
+      "answer": "C",
+      "explanation": "Silicon",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q7",
+      "q": "The diagram shows how a property of Period 3 elements varies across the period. What is the property?",
+      "options": {
+        "A": "Atomic radius",
+        "B": "Electronegativity",
+        "C": "First ionisation energy",
+        "D": "Melting point"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q8",
+      "q": "Which element has the highest first ionisation energy?",
+      "options": {
+        "A": "Aluminium",
+        "B": "Phosphorus",
+        "C": "Silicon",
+        "D": "Sulfur"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q9",
+      "q": "Which of these Period 3 elements has the highest melting point?",
+      "options": {
+        "A": "Aluminium",
+        "B": "Phosphorus",
+        "C": "Sodium",
+        "D": "Sulfur"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q10",
+      "q": "Which is the correct order of melting points of these Period 3 elements?",
+      "options": {
+        "A": "phosphorus > sulfur > chlorine > argon",
+        "B": "argon > chlorine > phosphorus > sulfur",
+        "C": "sulfur > phosphorus > chlorine > argon",
+        "D": "chlorine > phosphorus > sulfur > argon"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q11",
+      "q": "Which is the correct classification for the element yttrium (Y)?",
+      "options": {
+        "A": "s block",
+        "B": "p block",
+        "C": "d block",
+        "D": "f block"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q12",
+      "q": "Which of the following is a correct statement about the trend in atomic radius across Period 3 of the Periodic Table? radius increases because the atoms have more",
+      "options": {
+        "A": "electrons",
+        "B": "radius decreases because nuclear charge increases radius increases because shielding (screening)",
+        "C": "increases radius decreases because shielding (screening)",
+        "D": "decreases"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q13",
+      "q": "Which element is in the f-block of the Periodic Table?",
+      "options": {
+        "A": "Palladium",
+        "B": "Phosphorus",
+        "C": "Platinum",
+        "D": "Plutonium"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q14",
+      "q": "Which elements are shown in increasing order of the stated property?",
+      "options": {
+        "A": "Atomic radius: phosphorus, sulfur, chlorine. First ionisation energy: sodium, magnesium,",
+        "B": "aluminium.",
+        "C": "Electronegativity: sulfur, phosphorus, silicon.",
+        "D": "Melting point: argon, chlorine, sulfur."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q15",
+      "q": "Which of these elements has the highest second ionisation energy?",
+      "options": {
+        "A": "Na",
+        "B": "Mg",
+        "C": "Ne",
+        "D": "Ar"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s1-q16",
+      "q": "Which element is in the d-block of the Periodic Table?",
+      "options": {
+        "A": "Selenium",
+        "B": "Antimony",
+        "C": "Tantalum",
+        "D": "Lead"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.1",
+      "set": 1
+    },
+    {
+      "id": "3.2.1-s2-q1",
+      "q": "Which row correctly shows general trends in properties across Period 3? Atomic radius First ionisation energy",
+      "options": {
+        "A": "Decreases Increases",
+        "B": "Decreases Decreases",
+        "C": "Increases Increases",
+        "D": "Increases Decreases"
+      },
+      "answer": "A",
+      "explanation": "Decreases Increases",
+      "topic": "3.2.1",
+      "set": 2
+    },
+    {
+      "id": "3.2.1-s2-q2",
+      "q": "Consider the Period 3 elements from sodium to chlorine. Which statement is correct?",
+      "options": {
+        "A": "Sodium has the smallest atomic radius.",
+        "B": "Aluminium has the highest melting point.",
+        "C": "Sulfur is the most electronegative.",
+        "D": "Chlorine has the highest first ionisation energy."
+      },
+      "answer": "D",
+      "explanation": "Chlorine has the highest first ionisation energy.",
+      "topic": "3.2.1",
+      "set": 2
+    },
+    {
+      "id": "3.2.1-s2-q3",
+      "q": "Which statement is not correct about the Period 3 elements sodium to chlorine?",
+      "options": {
+        "A": "Sodium has the largest atomic radius.",
+        "B": "Sodium has the lowest melting point.",
+        "C": "Silicon has the highest melting point.",
+        "D": "Chlorine has the highest first ionisation energy. 2.1. Periodicity MCQ"
+      },
+      "answer": "B",
+      "explanation": "Sodium has the lowest melting point.",
+      "topic": "3.2.1",
+      "set": 2
+    },
+    {
+      "id": "3.2.1-s2-q4",
+      "q": "Which block in the Periodic Table contains the element samarium (Sm)?",
+      "options": {
+        "A": "d block",
+        "B": "f block",
+        "C": "p block",
+        "D": "s block"
+      },
+      "answer": "B",
+      "explanation": "f block",
+      "topic": "3.2.1",
+      "set": 2
+    },
+    {
+      "id": "3.2.1-s2-q5",
+      "q": "Which statement is correct about the Group 1 elements?",
+      "options": {
+        "A": "The Cs+ ion has a more negative enthalpy of hydration than the Rb+ ion.",
+        "B": "The enthalpy of atomisation for potassium is greater than the enthalpy of atomisation for sodium.",
+        "C": "The melting point of potassium is higher than the melting point of sodium.",
+        "D": "The second ionisation energy of rubidium is lower than the second ionisation energy of lithium."
+      },
+      "answer": "D",
+      "explanation": "The second ionisation energy of rubidium is lower\nthan the second ionisation energy of lithium.",
+      "topic": "3.2.1",
+      "set": 2
+    },
+    {
+      "id": "3.2.2-s1-q1",
+      "q": "What is a use for barium sulfate?",
+      "options": {
+        "A": "In agriculture to act as a fertiliser",
+        "B": "In agriculture to neutralise acidic soil",
+        "C": "In medicine to produce an X-ray image",
+        "D": "In medicine as an antacid to treat indigestion"
+      },
+      "answer": "C",
+      "explanation": "In medicine to produce an X-ray image",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q2",
+      "q": "Which property would you expect the element radium, Ra, to possess?",
+      "options": {
+        "A": "It forms a soluble sulfate.",
+        "B": "It does not react with water.",
+        "C": "It is a good conductor of electricity.",
+        "D": "It forms a covalent fluoride."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q3",
+      "q": "Which statement is not correct?",
+      "options": {
+        "A": "Strontium has a lower first ionisation energy than calcium.",
+        "B": "Strontium has a larger ionic radius than calcium.",
+        "C": "Strontium reacts less vigorously with water than calcium.",
+        "D": "Strontium hydroxide is more soluble in water than calcium hydroxide."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q4",
+      "q": "Which property of the Group 2 elements, Ca to Ba, increases with increasing atomic number?",
+      "options": {
+        "A": "Atomic Radius",
+        "B": "Electronegativity",
+        "C": "First ionisation energy",
+        "D": "Melting Point"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q5",
+      "q": "What is the correct observation when barium metal is added to an excess of water?",
+      "options": {
+        "A": "Forms a colourless solution only Forms a colourless solution and",
+        "B": "effervesces",
+        "C": "Forms a white precipitate only Forms a white precipitate and",
+        "D": "effervesces"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q6",
+      "q": "An aqueous solution of a salt gives a white precipitate when mixed with aqueous silver nitrate and when mixed with dilute sulfuric acid. Which could be the formula of the salt?",
+      "options": {
+        "A": "BaCl 2",
+        "B": "(NH ) SO 4 2 4",
+        "C": "KCl",
+        "D": "Sr(NO ) 3 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q7",
+      "q": "Which substance is used to reduce titanium(IV) chloride in the extraction of titanium metal?",
+      "options": {
+        "A": "Magnesium",
+        "B": "Manganese",
+        "C": "Vanadium",
+        "D": "Zinc"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q8",
+      "q": "Which statement about barium sulfate is correct?",
+      "options": {
+        "A": "It is soluble in water at a temperature of 100 °C.",
+        "B": "It is used in medicine because it does not dissolve in body fluids.",
+        "C": "It is a pale yellow solid.",
+        "D": "It reacts with acidified barium chloride solution."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q9",
+      "q": "Which compound is used to treat the symptoms of indigestion?",
+      "options": {
+        "A": "MgO",
+        "B": "Mg(OH) 2",
+        "C": "CaO",
+        "D": "Ca(OH) 2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q10",
+      "q": "Which products are formed when magnesium reacts with steam?",
+      "options": {
+        "A": "Magnesium hydroxide and hydrogen",
+        "B": "Magnesium hydroxide and oxygen",
+        "C": "Magnesium oxide and hydrogen",
+        "D": "Magnesium oxide and oxygen"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q11",
+      "q": "Which of these decreases down Group 2?",
+      "options": {
+        "A": "First ionisation energy",
+        "B": "Atomic radius",
+        "C": "Number of protons",
+        "D": "Reactivity with water"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s1-q12",
+      "q": "Sulfur dioxide (SO ) is produced when some fossil fuels are burned. 2 Which of the following statements is true?",
+      "options": {
+        "A": "Sulfur dioxide can be removed from waste gases in a power station by an acid-base reaction with calcium oxide.",
+        "B": "Sulfur dioxide is insoluble in water.",
+        "C": "Sulfur dioxide is a basic oxide.",
+        "D": "Sulfur dioxide is an ionic compound."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.2",
+      "set": 1
+    },
+    {
+      "id": "3.2.2-s2-q1",
+      "q": "Which statement is correct?",
+      "options": {
+        "A": "Calcium oxide is used to remove sulfur dioxide from flue gases.",
+        "B": "Calcium has a larger atomic radius than barium.",
+        "C": "Magnesium has a lower electronegativity than barium.",
+        "D": "Magnesium is used to oxidise titanium(IV) chloride in the extraction of titanium."
+      },
+      "answer": "A",
+      "explanation": "Calcium oxide is used to remove sulfur dioxide from\nflue gases.",
+      "topic": "3.2.2",
+      "set": 2
+    },
+    {
+      "id": "3.2.2-s2-q2",
+      "q": "Barium metal is added to a large excess of water. Which observation is correct and complete?",
+      "options": {
+        "A": "a colourless solution",
+        "B": "a colourless solution with effervescence",
+        "C": "a dense white precipitate",
+        "D": "a dense white precipitate with effervescence"
+      },
+      "answer": "B",
+      "explanation": "a colourless solution with effervescence",
+      "topic": "3.2.2",
+      "set": 2
+    },
+    {
+      "id": "3.2.2-s2-q3",
+      "q": "Which statement is correct?",
+      "options": {
+        "A": "Magnesium reacts with steam to give magnesium oxide as one of the products.",
+        "B": "Magnesium acts as an oxidising agent in the extraction of titanium.",
+        "C": "Magnesium has a lower melting point than sodium.",
+        "D": "Magnesium hydroxide is very soluble in water."
+      },
+      "answer": "A",
+      "explanation": "Magnesium oxide is a product when magnesium\nreacts with steam.",
+      "topic": "3.2.2",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s1-q1",
+      "q": "Which pair of solutions, when mixed, reacts to form a dark brown solution?",
+      "options": {
+        "A": "NaF(aq) + Cl (aq) 2",
+        "B": "NaCl(aq) + Br (aq) 2",
+        "C": "NaBr(aq) + Cl (aq) 2",
+        "D": "NaI(aq) + Br (aq) 2"
+      },
+      "answer": "D",
+      "explanation": "NaI(aq) + Br (aq)\n2",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q2",
+      "q": "Some solid sodium halides are reacted with concentrated sulfuric acid. Which solid sodium halide does not produce a sulfur-containing gas as one of the products?",
+      "options": {
+        "A": "NaCl",
+        "B": "NaBr",
+        "C": "NaI",
+        "D": "NaAt"
+      },
+      "answer": "A",
+      "explanation": "NaCl",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q3",
+      "q": "Which property increases down Group 7?",
+      "options": {
+        "A": "ability to oxidise a given reducing agent",
+        "B": "boiling point",
+        "C": "electronegativity",
+        "D": "first ionisation energy"
+      },
+      "answer": "B",
+      "explanation": "boiling point",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q4",
+      "q": "Which equation shows a redox reaction that does not occur?",
+      "options": {
+        "A": "Br (aq) + 2 KI(aq) → I (aq) + 2 KBr(aq) 2 2",
+        "B": "Cl (g) + 2 KI(aq) → I (aq) + 2 KCl(aq) 2 2",
+        "C": "Cl (g) + 2 KBr(aq) → Br (aq) + 2 KCl(aq) 2 2",
+        "D": "I (aq) + 2 KBr(aq) → Br (aq) + 2 KI(aq) 2 2"
+      },
+      "answer": "D",
+      "explanation": "I (aq) + 2 KBr(aq) → Br (aq) + 2KI(aq)\n2 2",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q5",
+      "q": "Which shows the major product(s) formed when chlorine reacts with cold, dilute, aqueous sodium hydroxide?",
+      "options": {
+        "A": "NaCl only",
+        "B": "NaClO only",
+        "C": "NaCl and NaClO",
+        "D": "NaCl and NaClO 3"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q6",
+      "q": "What is the best oxidising agent?",
+      "options": {
+        "A": "F 2",
+        "B": "F–",
+        "C": "I 2",
+        "D": "I–"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q7",
+      "q": "Which statement is correct about reactions involving halide ions?",
+      "options": {
+        "A": "Sodium chloride forms chlorine when added to concentrated sulfuric acid.",
+        "B": "Sodium chloride forms chlorine when added to bromine.",
+        "C": "Sodium bromide forms bromine when added to concentrated sulfuric acid.",
+        "D": "Sodium bromide forms bromine when added to iodine."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q8",
+      "q": "An aqueous solution of a salt gives a white precipitate when mixed with aqueous silver nitrate and when mixed with dilute sulfuric acid. Which could be the formula of the salt?",
+      "options": {
+        "A": "BaCl 2",
+        "B": "(NH ) SO 4 2 4",
+        "C": "KCl",
+        "D": "Sr(NO ) 3 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q9",
+      "q": "Which statement is not correct about the trends in properties of the hydrogen halides from HCl to HI ?",
+      "options": {
+        "A": "The boiling points decrease.",
+        "B": "The bond dissociation energy of H−X decreases.",
+        "C": "The polarity of the H−X bond decreases.",
+        "D": "They are more easily oxidised in aqueous solutions."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q10",
+      "q": "What is the most suitable reagent for detecting the presence of carbonate ions in the presence of an excess of sulfate ions?",
+      "options": {
+        "A": "dilute NaOH(aq)",
+        "B": "dilute H SO (aq) 2 4",
+        "C": "BaCl (aq) 2",
+        "D": "NaCl(aq)"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q11",
+      "q": "Which statement is correct about the reaction between concentrated sulfuric acid and solid sodium bromide?",
+      "options": {
+        "A": "Bromide ions are reduced.",
+        "B": "Hydrogen bromide and sulfur are formed.",
+        "C": "Sulfuric acid acts as an oxidising agent.",
+        "D": "Bromine and hydrogen sulfide are formed."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q12",
+      "q": "Which is the best technique to remove the silver chloride that forms when aqueous solutions of silver nitrate and sodium chloride react?",
+      "options": {
+        "A": "Refluxing",
+        "B": "Evaporation",
+        "C": "Filtration",
+        "D": "Distillation"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q13",
+      "q": "Which statement about astatine is correct?",
+      "options": {
+        "A": "Astatine has a greater electronegativity than bromine",
+        "B": "Astatine is a better oxidising agent than bromine",
+        "C": "Astatine has a greater boiling point than bromine Astatine has a greater first ionisation energy than",
+        "D": "bromine"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q14",
+      "q": "Which species is not produced by a redox reaction between solid sodium iodide and concentrated sulfuric acid?",
+      "options": {
+        "A": "Na SO 2 4",
+        "B": "H S 2",
+        "C": "S",
+        "D": "SO 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q15",
+      "q": "Which equation represents a reaction that does take place?",
+      "options": {
+        "A": "Cl + 2NaI ⟶ 2NaCl + I 2 2",
+        "B": "Br + 2NaCl ⟶ 2NaBr + Cl 2 2",
+        "C": "NaCl + H O ⟶ HCl + NaOH 2",
+        "D": "2HCl + H SO ⟶ Cl + SO + 2H O 2 4 2 2 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q16",
+      "q": "Which species is the best oxidising agent?",
+      "options": {
+        "A": "Cl 2",
+        "B": "Cl−",
+        "C": "Br 2",
+        "D": "Br−"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q17",
+      "q": "Which statement is not correct about the addition of chlorine to water? Chlorine can react with water to form an alkaline",
+      "options": {
+        "A": "solution. Chlorine can react with water to produce chloride ions",
+        "B": "and oxygen.",
+        "C": "Chlorine can be added to drinking water to kill bacteria. Chlorine can react with water to produce chloride ions",
+        "D": "and chlorate(I) ions."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q18",
+      "q": "Which of these species is the best reducing agent?",
+      "options": {
+        "A": "Cl 2",
+        "B": "Cl−",
+        "C": "I 2",
+        "D": "I−"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s1-q19",
+      "q": "Which of these substances reacts most rapidly to produce a silver halide precipitate with acidified silver nitrate?",
+      "options": {
+        "A": "CH Br 3",
+        "B": "CH Cl 3",
+        "C": "CH F 3",
+        "D": "CH l 3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.3",
+      "set": 1
+    },
+    {
+      "id": "3.2.3-s2-q1",
+      "q": "Which species is never formed during the reactions of chlorine with water?",
+      "options": {
+        "A": "Chloride ions",
+        "B": "Chlorate(I) ions",
+        "C": "Hydrogen",
+        "D": "Oxygen"
+      },
+      "answer": "C",
+      "explanation": "Hydrogen",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q2",
+      "q": "Which of these solid sodium halides does not reduce concentrated sulfuric acid?",
+      "options": {
+        "A": "NaAt",
+        "B": "NaBr",
+        "C": "NaCl",
+        "D": "NaI"
+      },
+      "answer": "C",
+      "explanation": "NaCl",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q3",
+      "q": "Which statement correctly describes a trend down Group 7 from Cl to I? X represents Cl, Br or I",
+      "options": {
+        "A": "The boiling point of HX increases.",
+        "B": "The bond dissociation energy of H–X increases.",
+        "C": "The standard electrode potential value for X (aq) + 2 e– 2 X–(aq) becomes more positive. 2",
+        "D": "The solubility ⟶of AgX in ammonia increases. 2.3. Group 7 the Halogens MCQ"
+      },
+      "answer": "A",
+      "explanation": "The boiling point of HX increases.",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q4",
+      "q": "Which statement about chloride ions is correct?",
+      "options": {
+        "A": "They are oxidised by concentrated sulfuric acid.",
+        "B": "They form a cream precipitate with silver nitrate solution.",
+        "C": "They form a cobalt(II) complex with a tetrahedral shape.",
+        "D": "They have the electron configuration 1s22s22p63s23p4"
+      },
+      "answer": "C",
+      "explanation": "They form a cobalt(II) complex with a tetrahedral\nshape.",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q5",
+      "q": "Which species is the strongest reducing agent?",
+      "options": {
+        "A": "F 2",
+        "B": "I 2",
+        "C": "F–",
+        "D": "I–"
+      },
+      "answer": "D",
+      "explanation": "I-",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q6",
+      "q": "Which statement is correct?",
+      "options": {
+        "A": "Chloride ions reduce concentrated sulfuric acid to form sulfur dioxide.",
+        "B": "Bromide ions reduce concentrated sulfuric acid to form sulfur.",
+        "C": "Bromide ions reduce iodine to form iodide ions.",
+        "D": "Iodide ions reduce chlorine to form chloride ions. 2.3. Group 7 the Halogens MCQ"
+      },
+      "answer": "D",
+      "explanation": "Iodide ions reduce chlorine to form chloride ions.",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q7",
+      "q": "Which is a correct trend down Group 7 from fluorine to iodine?",
+      "options": {
+        "A": "The boiling point of the element decreases.",
+        "B": "The oxidising ability of the element decreases.",
+        "C": "The electronegativity of the atom increases.",
+        "D": "The first ionisation energy of the atom increases."
+      },
+      "answer": "B",
+      "explanation": "The oxidising ability of the element decreases.\n\n2.3. Group 7 the Halogens MCQ",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q8",
+      "q": "Which species is not a possible product of the reactions between chlorine and water?",
+      "options": {
+        "A": "Cl–",
+        "B": "ClO–",
+        "C": "O 2",
+        "D": "OH–"
+      },
+      "answer": "D",
+      "explanation": "OH–",
+      "topic": "3.2.3",
+      "set": 2
+    },
+    {
+      "id": "3.2.3-s2-q9",
+      "q": "A test for chloride ions in aqueous solution involves adding dilute nitric acid followed by aqueous silver nitrate. What is the reason for adding the nitric acid?",
+      "options": {
+        "A": "To convert AgNO into [Ag(NO ) ]− 3 3 2",
+        "B": "To decrease the solubility of silver chloride",
+        "C": "To increase the pH of the solution",
+        "D": "To prevent the precipitation of other silver compounds"
+      },
+      "answer": "D",
+      "explanation": "To prevent the precipitation of other silver\ncompounds",
+      "topic": "3.2.3",
       "set": 2
     }
   ]
