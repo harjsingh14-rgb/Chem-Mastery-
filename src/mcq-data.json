@@ -59,6 +59,78 @@
       "board": "AQA",
       "level": "AS",
       "questionCount": 28
+    },
+    "3.3.1": {
+      "name": "Intro to Organic Chemistry",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 36
+    },
+    "3.3.2": {
+      "name": "Alkanes",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 24
+    },
+    "3.3.3": {
+      "name": "Halogenoalkanes",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 22
+    },
+    "3.3.4": {
+      "name": "Alkenes",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 19
+    },
+    "3.3.5": {
+      "name": "Alcohols",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 18
+    },
+    "3.3.6": {
+      "name": "Organic Analysis",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 14
+    },
+    "3.1.8": {
+      "name": "Thermodynamics",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 3
+    },
+    "3.1.9": {
+      "name": "Rate Equations",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 8
+    },
+    "3.1.10": {
+      "name": "Kp",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 5
+    },
+    "3.1.11": {
+      "name": "Electrode Potentials",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 8
+    },
+    "3.1.12": {
+      "name": "Acids & Bases",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 19
+    },
+    "3.3.7": {
+      "name": "Optical Isomerism, Aldehydes & Ketones",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 10
     }
   },
   "questions": [
@@ -606,6 +678,455 @@
       "answer": "A",
       "explanation": "Al(g) → Al+(g) + e–",
       "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.10-s1-q1",
+      "q": "The equation for the reaction between sulfur dioxide and oxygen is shown. 2 SO (g) + O (g) ⇌ 2 SO (g) 2 2 3 In an experiment, 2.00 mol of sulfur dioxide are mixed with 2.00 mol of oxygen. The total amount of the three gases at equilibrium is 3.40 mol What is the mole fraction of sulfur trioxide in the equilibrium mixture?",
+      "options": {
+        "A": "0.176",
+        "B": "0.353",
+        "C": "0.600",
+        "D": "1.200"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.10",
+      "set": 1
+    },
+    {
+      "id": "3.1.10-s1-q2",
+      "q": "Nitrogen reacts with hydrogen in this exothermic reaction N (g) + 3 H (g) ⇌ 2 NH (g) 2 2 3 Which change increases the equilibrium yield of ammonia but has no effect on the value of the equilibrium constant K ? p",
+      "options": {
+        "A": "Add a catalyst",
+        "B": "Increase the partial pressure of nitrogen",
+        "C": "Decrease the temperature",
+        "D": "Decrease the total pressure"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.10",
+      "set": 1
+    },
+    {
+      "id": "3.1.10-s1-q3",
+      "q": "An equilibrium mixture is prepared in a container of fixed volume. CO(g) + Cl2(g) ⇌ COCl 2(g) ΔH = −108 kJ mol−1 The temperature of this mixture is decreased and the mixture is allowed to reach a new equilibrium. Which is greater for the new equilibrium than for the original equilibrium?",
+      "options": {
+        "A": "The mole fraction of carbon monoxide",
+        "B": "The partial pressure of chlorine",
+        "C": "The total pressure of the mixture",
+        "D": "The value of the equilibrium constant, Kp"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.10",
+      "set": 1
+    },
+    {
+      "id": "3.1.10-s1-q4",
+      "q": "Which statement about Kp is correct for this reaction in the gas phase? W + X + Y ⇌ WXY + Y ΔH = −46 kJ mol−1 2",
+      "options": {
+        "A": "The value of Kp is independent of pressure. The value of Kp increases as pressure",
+        "B": "increases. The value of Kp increases as temperature",
+        "C": "increases. The value of Kp is independent of",
+        "D": "temperature."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.10",
+      "set": 1
+    },
+    {
+      "id": "3.1.10-s1-q5",
+      "q": "Which change would alter the value of the equilibrium constant (K ) for this p reaction? 2SO (g) + O (g) 2SO (g) 2 2 3",
+      "options": {
+        "A": "Increasing the total pressure of the system.",
+        "B": "Increasing the concentration of sulfur trioxide.",
+        "C": "Increasing the concentration of sulfur dioxide.",
+        "D": "Increasing the temperature."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.10",
+      "set": 1
+    },
+    {
+      "id": "3.1.11-s1-q1",
+      "q": "The EΘ values for two electrodes are shown. Fe2+(aq) + 2 e– → Fe(s) EΘ= –0.44 V Cu2+(aq) + 2 e– → Cu(s) EΘ= +0.34 V What is the EMF of the cell Fe(s)|Fe2+(aq)||Cu2+(aq)|Cu(s)?",
+      "options": {
+        "A": "+0.78 V",
+        "B": "+0.10 V",
+        "C": "−0.10 V",
+        "D": "−0.78 V"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.11",
+      "set": 1
+    },
+    {
+      "id": "3.1.11-s1-q2",
+      "q": "Which ion cannot catalyse the reaction between iodide (I–) and peroxodisulfate (S O 2–)? 2 8 Use the data below to help you answer this question. Half-equation EO / V S O 2– + 2e– → 2SO 2– +2.01 2 8 4 Co3+ + e– → Co2+ +1.82 Fe3+ + e– → Fe2+ +0.77 I + 2e– → 2I– +0.54 2 Cr3+ + e– → Cr2+ –0.41",
+      "options": {
+        "A": "Co2+",
+        "B": "Cr2+",
+        "C": "Fe2+",
+        "D": "Fe3+"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.11",
+      "set": 1
+    },
+    {
+      "id": "3.1.11-s1-q3",
+      "q": "The following cell has an EMF of +0.46 V. Cu Cu2+ Ag+ Ag Which statement is correct about the operation of the cell?",
+      "options": {
+        "A": "Metallic copper is oxidised by Ag+ ions.",
+        "B": "The silver electrode has a negative polarity.",
+        "C": "The silver electrode gradually dissolves to form Ag+ ions.",
+        "D": "Electrons flow from the silver electrode to the copper electrode via an external circuit."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.11",
+      "set": 1
+    },
+    {
+      "id": "3.1.11-s2-q1",
+      "q": "A cell with EMF = +2.15 V is made from two electrodes. The half-equations for the two electrodes are shown. Positive electrode: PbO (s) + 3 H+(aq) + HSO –(aq) + 2 e– PbSO (s) + 2 H O(l) 2 4 4 2 Negative electrode: ⟶ PbSO (s) + H+(aq) + 2 e– Pb(s) + HSO –(aq) Eθ = –0.46 V 4 4 What is the standard electrode poten⟶tial of the PbO / PbSO electrode? 2 4",
+      "options": {
+        "A": "–2.61 V",
+        "B": "–1.69 V",
+        "C": "+1.69 V",
+        "D": "+2.61 V"
+      },
+      "answer": "C",
+      "explanation": "+1.69 V",
+      "topic": "3.1.11",
+      "set": 2
+    },
+    {
+      "id": "3.1.11-s2-q2",
+      "q": "Which statement correctly describes a trend down Group 7 from Cl to I? X represents Cl, Br or I",
+      "options": {
+        "A": "The boiling point of HX increases.",
+        "B": "The bond dissociation energy of H–X increases.",
+        "C": "The standard electrode potential value for X (aq) + 2 e– 2 X–(aq) becomes more positive. 2",
+        "D": "The solubility ⟶of AgX in ammonia increases. 1.11. Electrode Potentials and Cells MCQ"
+      },
+      "answer": "A",
+      "explanation": "The boiling point of HX increases.",
+      "topic": "3.1.11",
+      "set": 2
+    },
+    {
+      "id": "3.1.11-s2-q3",
+      "q": "Which change to a hydrogen electrode has no effect on the electrode potential?",
+      "options": {
+        "A": "the concentration of the hydrogen ions",
+        "B": "the pressure of the hydrogen",
+        "C": "the surface area of the platinum electrode",
+        "D": "the temperature of the acid"
+      },
+      "answer": "C",
+      "explanation": "the surface area of the platinum electrode",
+      "topic": "3.1.11",
+      "set": 2
+    },
+    {
+      "id": "3.1.11-s2-q4",
+      "q": "Some electrode potential data are shown. Zn2+(aq) + 2 e− → Zn(s) Eɵ = − 0.76 V Pb2+(aq) + 2 e− → Pb(s) Eɵ = − 0.13 V Which is a correct statement about this cell?",
+      "options": {
+        "A": "Electrons travel in the external circuit from zinc to lead.",
+        "B": "The concentration of lead(II) ions increases.",
+        "C": "The maximum EMF of the cell is 0.89 V",
+        "D": "Zinc is deposited."
+      },
+      "answer": "A",
+      "explanation": "Electrons travel in the external circuit from zinc to\nlead.",
+      "topic": "3.1.11",
+      "set": 2
+    },
+    {
+      "id": "3.1.11-s3-q5",
+      "q": "CrO (aq) + 14H+(aq) + 6e− → 2Cr3+(aq) + 7HO(l) E = +1.33 V 2 2 Br(aq) + 2e− → 2Br−(aq) E = +1.09 V 2 Fe3+(aq) + e− → Fe2+(aq) E = +0.77 V VO2+(aq) + 2H+(aq) + e− → V3+(aq) + HO(l) E = +0.34 V 2 SO (aq) + 4H+(aq) + 2e− → HSO(aq) + HO(l) E = +0.17 V 2 3 2 Based on the above data, which one of the following could reduce 0.012 mol of bromine to bromide ions?",
+      "options": {
+        "A": "Fe2+(aq) can reduce acidified MnO (aq) to Mn2+(aq)",
+        "B": "CrO (aq) can oxidise acidified Fe2+(aq) to Fe3+(aq)",
+        "C": "Zn(s) can reduce acidified CrO (aq) to Cr2+(aq) 2",
+        "D": "Fe2+(aq) can reduce acidified Cr3+(aq) to Cr2+(aq) Page 7"
+      },
+      "answer": "",
+      "explanation": "",
+      "topic": "3.1.11",
+      "set": 3
+    },
+    {
+      "id": "3.1.12-s1-q1",
+      "q": "Which statement about pH is correct?",
+      "options": {
+        "A": "The pH of a weak base is independent of temperature.",
+        "B": "At temperatures above 298 K, the pH of pure water is less than 7.",
+        "C": "The pH of 2.0 mol dm–3 nitric acid is approximately 0.30",
+        "D": "The pH of 0.10 mol dm–3 sulfuric acid is greater than that of 0.10 mol dm–3 hydrochloric acid."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q2",
+      "q": "A 0.10 mol dm–3 aqueous solution of an acid is added slowly to 25 cm3 of a 0.10 mol dm–3 aqueous solution of a base. Which acid–base pair has the highest pH at the equivalence point?",
+      "options": {
+        "A": "CH COOH and NaOH 3",
+        "B": "CH COOH and NH 3 3",
+        "C": "HCl and NaOH",
+        "D": "HCl and NH 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q3",
+      "q": "Which is the concentration of NaOH(aq), in mol dm–3, that has pH = 14.30? K = 1.00 × 10–14 mol2 dm–6 at 25 °C w",
+      "options": {
+        "A": "–1.16",
+        "B": "5.01 × 10–15",
+        "C": "2.00 × 1014",
+        "D": "2.00"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q4",
+      "q": "Which indicator should be used in a titration to find the concentration of a solution of methylamine using 0.010 mol dm–3 hydrochloric acid?",
+      "options": {
+        "A": "Thymol blue (pH range 1.2–2.8)",
+        "B": "Bromophenol blue (pH range 3.0–4.6)",
+        "C": "Phenol red. (pH range 6.8–8.4)",
+        "D": "Phenolphthalein (pH range 8.3–10.0)"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q5",
+      "q": "2,4,6-Trichlorophenol is a weak monoprotic acid, with Ka = 2.51 × 10−8 mol dm−3 at 298 K. What is the concentration, in mol dm−3, of hydrogen ions in a 2.00 × 10−3 mol dm−3 solution of 2,4,6-trichlorophenol at 298 K?",
+      "options": {
+        "A": "5.02 × 10−11",
+        "B": "7.09 × 10−6",
+        "C": "1.26 × 10−5",
+        "D": "3.54 × 10−3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q6",
+      "q": "What is the pH of a 0.46 mol dm−3 solution of potassium hydroxide at 298 K? (Kw = 1.0 × 10−14 mol2 dm−6 at 298 K)",
+      "options": {
+        "A": "0.34",
+        "B": "13.66",
+        "C": "13.96",
+        "D": "14.34"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q7",
+      "q": "The diagram shows a pH curve produced by adding a strong alkali to a weak acid. Which point on the curve represents a solution that can act as a buffer?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1,
+      "image": "/mcq-images/3.1.12-s1-q7.png"
+    },
+    {
+      "id": "3.1.12-s1-q8",
+      "q": "The rate equation for the acid-catalysed reaction between iodine and propanone is: rate = k [H+] [C H O] 3 6 The rate of reaction was measured for a mixture of iodine, propanone and sulfuric acid at pH = 0.70 In a second mixture the concentration of the sulfuric acid was different but the concentrations of iodine and propanone were unchanged. The new rate of reaction was a quarter of the original rate. What was the pH of the second mixture?",
+      "options": {
+        "A": "1.00",
+        "B": "1.30",
+        "C": "1.40",
+        "D": "2.80"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q9",
+      "q": "The table shows the pKa values for two acids. Name of acid pKa P ropanoic acid 4.87 Butanoic acid 4.82 Which statement is correct?",
+      "options": {
+        "A": "Propanoic acid is a stronger acid than butanoic acid. The value of Ka for propanoic acid is greater than that for",
+        "B": "butanoic acid.",
+        "C": "The value of Ka for propanoic acid is 1.35 × 10−5 mol dm−3",
+        "D": "The value of Ka for butanoic acid is 6.61 × 104 mol dm–−3"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q10",
+      "q": "What is the pH of a 0.020 mol dm–3 solution of a diprotic acid which is completely dissociated?",
+      "options": {
+        "A": "1.00",
+        "B": "1.40",
+        "C": "1.70",
+        "D": "4.00"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s1-q11",
+      "q": "The acid dissociation constant, K , of a weak acid HA has the value a 2.56 × 10–4 mol dm–3. What is the pH of a 4.25 × 10–3 mol dm−3 solution of HA?",
+      "options": {
+        "A": "5.96",
+        "B": "3.59",
+        "C": "2.98",
+        "D": "2.37"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.12",
+      "set": 1
+    },
+    {
+      "id": "3.1.12-s2-q1",
+      "q": "Values of the ionic product of water (K ) at different temperatures are given. w K = 6.40 × 10–15 mol2 dm–6 at 18 °C w K = 1.00 × 10–14 mol2 dm–6 at 25 °C w Which statement is correct?",
+      "options": {
+        "A": "The concentration of hydroxide ions in water at 18 °C is 8.00 × 10–8 mol dm–3",
+        "B": "The dissociation of water into ions is an exothermic process.",
+        "C": "The pH of water is the same at 25 °C and at 18 °C",
+        "D": "Water becomes less acidic as the temperature is raised."
+      },
+      "answer": "A",
+      "explanation": "The concentration of hydroxide ions in water at 18\n°C is 8.00 × 10-8 mol dm-3",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q2",
+      "q": "Which species can behave as a Brønsted–Lowry acid in aqueous solution?",
+      "options": {
+        "A": "SO 42−",
+        "B": "HCO 3−",
+        "C": "BF 3",
+        "D": "NH 3"
+      },
+      "answer": "B",
+      "explanation": "HCO -\n3",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q3",
+      "q": "Which change causes the pH of 10 cm3 of 1.0 mol dm–3 NaOH to be halved at 298 K? K = 1.0 × 10–14 at 298 K w",
+      "options": {
+        "A": "adding 10 cm3 of water",
+        "B": "adding 10 dm3 of water",
+        "C": "adding 5 cm3 of 1.0 mol dm–3 HCl",
+        "D": "adding 10 cm3 of 1.0 mol dm–3 HCl 1.12. Acids and Bases MCQ"
+      },
+      "answer": "D",
+      "explanation": "adding 10 cm3 of 1.0 mol dm-3 HCl",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q4",
+      "q": "A 0.100 mol dm–3 solution of a weak acid has pH = 2.50 What is the value of K for this acid, in mol dm–3? a",
+      "options": {
+        "A": "3.16 × 10–2",
+        "B": "3.16 × 10–3",
+        "C": "1.00 × 10–4",
+        "D": "1.00 × 10–5"
+      },
+      "answer": "C",
+      "explanation": "1.00 × 10-4",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q5",
+      "q": "Equal volumes of pairs of solutions are mixed. Which pair forms a buffer solution?",
+      "options": {
+        "A": "ammonia and ammonium chloride",
+        "B": "ammonia and methylamine",
+        "C": "ethanoic acid and methanoic acid",
+        "D": "hydrochloric acid and sodium hydroxide"
+      },
+      "answer": "A",
+      "explanation": "ammonia and ammonium chloride",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q6",
+      "q": "Which can not function as a Brønsted-Lowry acid?",
+      "options": {
+        "A": "CH COO– 3",
+        "B": "HCO – 3",
+        "C": "H O+ 3",
+        "D": "NH + 4 1.12. Acids and Bases MCQ"
+      },
+      "answer": "A",
+      "explanation": "CH COO–\n3",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q7",
+      "q": "A strong acid H X dissociates in aqueous solution. 2 H X(aq) → 2 H+(aq) + X2– (aq) 2 What is the pH of a 0.020 mol dm–3 solution of this acid?",
+      "options": {
+        "A": "1.00",
+        "B": "1.40",
+        "C": "1.70",
+        "D": "2.00"
+      },
+      "answer": "B",
+      "explanation": "1.40",
+      "topic": "3.1.12",
+      "set": 2
+    },
+    {
+      "id": "3.1.12-s2-q8",
+      "q": "Equal volumes of two solutions, each with the same concentration, are mixed together at 298 K Which two solutions, when mixed, form a solution with a pH >7?",
+      "options": {
+        "A": "HCOOH and HCOOK",
+        "B": "KOH and CH COOH 3",
+        "C": "NH and HCl 3",
+        "D": "NH Cl and KCl 4"
+      },
+      "answer": "B",
+      "explanation": "KOH and CH COOH\n3",
+      "topic": "3.1.12",
       "set": 2
     },
     {
@@ -3375,6 +3896,161 @@
       "set": 2
     },
     {
+      "id": "3.1.8-s1-q1",
+      "q": "Which equation represents the process that occurs when the standard enthalpy of atomisation of iodine is measured?",
+      "options": {
+        "A": "I (s) → I(g) 2",
+        "B": "I (s) → 2I(g) 2",
+        "C": "I (g) → I(g) 2",
+        "D": "I (g) → 2I(g) 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.8",
+      "set": 1
+    },
+    {
+      "id": "3.1.8-s1-q2",
+      "q": "Lattice enthalpy values can be obtained from Born–Haber cycles and by calculations based on a perfect ionic model. Which compound shows the greatest percentage difference between these two values?",
+      "options": {
+        "A": "CsF",
+        "B": "CsI",
+        "C": "LiF",
+        "D": "LiI"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.8",
+      "set": 1
+    },
+    {
+      "id": "3.1.8-s1-q3",
+      "q": "A reaction is exothermic and has a negative entropy change. Which statement is correct?",
+      "options": {
+        "A": "The reaction is always feasible The reaction is feasible above a certain",
+        "B": "temperature The reaction is feasible below a certain",
+        "C": "temperature",
+        "D": "The reaction is never feasible"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.8",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q1",
+      "q": "The rate expression for the reaction between X and Y is rate = k [X]2 [Y] Which statement is correct?",
+      "options": {
+        "A": "The rate constant has units mol−1 dm3 s−1",
+        "B": "The rate of the reaction is halved if the concentration of X is halved and the concentration of Y is doubled.",
+        "C": "The rate increases by a factor of 16 if the concentration of X is tripled and the concentration of Y is doubled.",
+        "D": "The rate constant is independent of temperature."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q2",
+      "q": "What are the units of the rate constant for a third order reaction?",
+      "options": {
+        "A": "mol dm–3 s–1",
+        "B": "mol–1 dm3 s–1",
+        "C": "mol2 dm–6 s–1",
+        "D": "mol–2 dm6 s–1"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q3",
+      "q": "The results of an investigation of the reaction between P and Q are shown in this table. Initial [P] Initial [Q] Initial rate Experiment / mol dm–3 / mol dm–3 / mol dm–3 s–1 1 0.200 0.500 0.400 To be 2 0.600 0.800 calculated The rate equation is: rate = k [P] [Q]2 What is the initial concentration of Q in experiment 2?",
+      "options": {
+        "A": "0.167",
+        "B": "0.333",
+        "C": "0.408",
+        "D": "0.612"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q4",
+      "q": "Solutions of two compounds, W and X, react together in the presence of a soluble catalyst, Y, as shown in the equation 2W + X → Z When the concentrations of W, X and Y are all doubled, the rate of reaction increases by a factor of four. Which is a possible rate equation for this reaction?",
+      "options": {
+        "A": "rate = k [W]2 [X]",
+        "B": "rate = k [W]2 [Y]",
+        "C": "rate = k [X] [Y]",
+        "D": "rate = k [X] [Z]"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q5",
+      "q": "The rate equation for the acid-catalysed reaction between iodine and propanone is: rate = k [H+] [C H O] 3 6 The rate of reaction was measured for a mixture of iodine, propanone and sulfuric acid at pH = 0.70 In a second mixture the concentration of the sulfuric acid was different but the concentrations of iodine and propanone were unchanged. The new rate of reaction was a quarter of the original rate. What was the pH of the second mixture?",
+      "options": {
+        "A": "1.00",
+        "B": "1.30",
+        "C": "1.40",
+        "D": "2.80"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q6",
+      "q": "A rate investigation was carried out on a reaction involving three reactants, X, Y and Z. The concentrations of the reactants were varied and the relative rate for each mixture determined. Experiment [X]/mol dm−3 [Y]/mol dm−3 [Z]/mol dm−3 Relative rate 1 1 × 10−3 1 × 10−3 2 × 10−3 1 2 2 × 10−3 2 × 10−3 2 × 10−3 4 3 5 × 10−4 2 × 10−3 4 × 10−3 0.5 The reaction is zero order with respect to Y. What is the overall order of reaction?",
+      "options": {
+        "A": "0",
+        "B": "1",
+        "C": "2",
+        "D": "3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
+      "id": "3.1.9-s1-q7",
+      "q": "A series of experiments was carried out to find the order of reaction with respect to reactant X. In these experiments, only the concentration of X was changed. Which graph would show that the reaction is second-order with respect to X?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1,
+      "image": "/mcq-images/3.1.9-s1-q7.png"
+    },
+    {
+      "id": "3.1.9-s1-q8",
+      "q": "The rate equation for the hydrogenation of ethene",
+      "options": {
+        "C": "12",
+        "A": "6",
+        "B": "9",
+        "D": "27"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.9",
+      "set": 1
+    },
+    {
       "id": "3.2.1-s1-q1",
       "q": "Which element is classified as a d block element?",
       "options": {
@@ -4269,6 +4945,2023 @@
       "explanation": "To prevent the precipitation of other silver\ncompounds",
       "topic": "3.2.3",
       "set": 2
+    },
+    {
+      "id": "3.3.1-s1-q1",
+      "q": "Which alkene shows E–Z isomerism?",
+      "options": {
+        "A": "2,3-dimethylbut-2-ene",
+        "B": "4-methylpent-2-ene",
+        "C": "methylpropene",
+        "D": "pent-1-ene"
+      },
+      "answer": "B",
+      "explanation": "4-methylpent-2-ene",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q2",
+      "q": "The question below refers to the reaction of 1-bromopropane with a solution of potassium cyanide in aqueous ethanol. Which is the correct mechanism for the reaction?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1,
+      "image": "/mcq-images/3.3.1-s1-q2.png"
+    },
+    {
+      "id": "3.3.1-s1-q3",
+      "q": "Which compound has a molecular formula that is different from the others?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1,
+      "image": "/mcq-images/3.3.1-s1-q3.png"
+    },
+    {
+      "id": "3.3.1-s1-q4",
+      "q": "Which compound has E–Z isomers?",
+      "options": {
+        "A": "CH =CHBr 2",
+        "B": "CH =CBr 2 2",
+        "C": "CHBr=CHBr",
+        "D": "CBr =CHBr 2"
+      },
+      "answer": "C",
+      "explanation": "CHBr=CHBr",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q5",
+      "q": "Which is the correct general formula for non-cyclic compounds in the homologous series?",
+      "options": {
+        "A": "alcohols C H O n 2n+2",
+        "B": "aldehydes C H O n 2n+1",
+        "C": "esters C H O n 2n+1 2",
+        "D": "primary amines C H N n 2n+2"
+      },
+      "answer": "A",
+      "explanation": "alcohols C H O\nn 2n+2",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q6",
+      "q": "What is the IUPAC name for this compound?",
+      "options": {
+        "A": "2-dimethyl-3-fluoropentane",
+        "B": "2,2-dimethyl-3-fluoropentane",
+        "C": "3-fluoro-2,2-dimethylpentane",
+        "D": "3-fluoro-2-dimethylpentane"
+      },
+      "answer": "C",
+      "explanation": "3-fluoro-2,2-dimethylpentane",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q7",
+      "q": "Which compound has the lowest relative molecular mass?",
+      "options": {
+        "A": "ethanoic acid",
+        "B": "1-fluoropropane",
+        "C": "propanenitrile",
+        "D": "propylamine"
+      },
+      "answer": "C",
+      "explanation": "Propanenitrile",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q8",
+      "q": "Which has E-Z isomers?",
+      "options": {
+        "A": "C H Br 2 2 2",
+        "B": "C H Br 2 3",
+        "C": "C H Br 2 4 2",
+        "D": "C H Br 2 5"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q9",
+      "q": "Which compound is not an isomer of the following compound?",
+      "options": {
+        "A": "CH CH COCH 3 2 3",
+        "B": "CH CH═CHCH OH 3 2",
+        "C": "(CH ) CHCHO 3 2",
+        "D": "CH ═CHCH CHO 2 2"
+      },
+      "answer": "D",
+      "explanation": "CH = CHCH CHO\n2 2",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q10",
+      "q": "Which does not contain an asymmetric carbon atom?",
+      "options": {
+        "A": "CH CH(CH )CH CH 3 3 2 3",
+        "B": "CH CH CH(CH )CH CH CH 3 2 3 2 2 3",
+        "C": "CH CH(OH)CH OH 3 2",
+        "D": "CH CH CHClCH 3 2 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q11",
+      "q": "How many isomers are there of C H N? 3 9",
+      "options": {
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5"
+      },
+      "answer": "C",
+      "explanation": "4",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q12",
+      "q": "How many structural isomers with an unbranched carbon chain have the molecular formula C H Br ? 4 8 2",
+      "options": {
+        "A": "4",
+        "B": "5",
+        "C": "6",
+        "D": "7"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q13",
+      "q": "Which can be both an empirical and molecular formula of a stable compound?",
+      "options": {
+        "A": "CH O 2",
+        "B": "P O 4 10",
+        "C": "NH 2",
+        "D": "CH 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q14",
+      "q": "Which statement is correct about the molecule shown?",
+      "options": {
+        "A": "It reacts with HBr in an electrophilic substitution reaction.",
+        "B": "It reacts with NaBH in a nucleophilic 4 addition-elimination reaction.",
+        "C": "It reacts with ethanolic KOH in an elimination reaction.",
+        "D": "It reacts with KCN in a nucleophilic substitution reaction."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q15",
+      "q": "Which is the mechanism for this conversion?",
+      "options": {
+        "A": "Addition-elimination",
+        "B": "Electrophilic substitution",
+        "C": "Free-radical substitution",
+        "D": "Nucleophilic substitution"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q16",
+      "q": "Which compound is a structural isomer of Z-but-2-ene?",
+      "options": {
+        "A": "butane",
+        "B": "E-but-2-ene",
+        "C": "cyclobutane",
+        "D": "methylbut-2-ene"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q17",
+      "q": "How many structural isomers are there with the molecular formula C H BrCl? 3 6",
+      "options": {
+        "A": "4",
+        "B": "5",
+        "C": "6",
+        "D": "7"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q18",
+      "q": "In concentrated alkali, propanone reacts with hydroxide ions to form an equilibrium mixture as shown. Which curly arrow does not appear in the mechanism of this reaction?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1,
+      "image": "/mcq-images/3.3.1-s1-q18.png"
+    },
+    {
+      "id": "3.3.1-s1-q19",
+      "q": "Which compound does not show stereoisomerism?",
+      "options": {
+        "A": "1,2-dichloropropene",
+        "B": "1,2-dichloropropane",
+        "C": "1,3-dichloropropene",
+        "D": "1,3-dichloropropane"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q20",
+      "q": "What is the total number of structural isomers with the molecular formula",
+      "options": {
+        "C": "4",
+        "A": "2",
+        "B": "3",
+        "D": "5"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q21",
+      "q": "Which is a pair of functional group isomers?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1,
+      "image": "/mcq-images/3.3.1-s1-q21.png"
+    },
+    {
+      "id": "3.3.1-s1-q22",
+      "q": "Z-Retinal, shown in the diagram, is a component in vitamin A. Which of the double bonds, labelled A, B, C or D, is responsible for the letter Z in the name?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1,
+      "image": "/mcq-images/3.3.1-s1-q22.png"
+    },
+    {
+      "id": "3.3.1-s1-q23",
+      "q": "How many isomers have the molecular formula C H ? 5 12",
+      "options": {
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q24",
+      "q": "How many structural isomers have the molecular formula C H Br? 4 9",
+      "options": {
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q25",
+      "q": "How many secondary amines have the molecular formula C H N? 4 11",
+      "options": {
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s1-q26",
+      "q": "The structure of cyclohexene is shown. Which of the following is the general formula of cyclic alkenes such as cyclohexene?",
+      "options": {
+        "A": "C H n 2n–4",
+        "B": "C H n 2n–2",
+        "C": "C H n 2n",
+        "D": "C H n 2n+2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 1
+    },
+    {
+      "id": "3.3.1-s2-q1",
+      "q": "What is the M of this compound? r",
+      "options": {
+        "A": "94.0",
+        "B": "96.0",
+        "C": "98.0",
+        "D": "100.0 (Total 1 marks)"
+      },
+      "answer": "B",
+      "explanation": "96.0",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q2",
+      "q": "Which labelled curly arrow shows an incorrect movement of an electron pair?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "D",
+      "topic": "3.3.1",
+      "set": 2,
+      "image": "/mcq-images/3.3.1-s2-q2.png"
+    },
+    {
+      "id": "3.3.1-s2-q3",
+      "q": "A sample of cyclohexane contains 3.011 × 1024 atoms of carbon. What is the mass of this sample? The Avogadro constant, L = 6.022 × 1023 mol–1",
+      "options": {
+        "A": "70.0 g",
+        "B": "71.7 g",
+        "C": "420 g",
+        "D": "430 g (Total 1 marks)"
+      },
+      "answer": "A",
+      "explanation": "70.0g",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q4",
+      "q": "What is the correct structural formula for 4-chloro-2-methylpent-2-enoic acid?",
+      "options": {
+        "A": "CH 3CCl=CHCH(CH 3)COOH",
+        "B": "(CH 3) 2C=CHCHClCOOH",
+        "C": "CH 3CHClCH=C(CH 3)COOH",
+        "D": "(CH 3) 2CHCH=CClCOOH"
+      },
+      "answer": "C",
+      "explanation": "CH CHClCH=C(CH )COOH\n3 3",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q5",
+      "q": "Compound Y has the structural formula CH 3COOCH 2CH(CH 3) 2 Which compound is a position isomer of Y?",
+      "options": {
+        "A": "5-hydroxyhexan-3-one",
+        "B": "butyl ethanoate",
+        "C": "hexanoic acid",
+        "D": "propyl propanoate 3.1. Introduction to Organic Chemistry MCQ"
+      },
+      "answer": "D",
+      "explanation": "Propyl propanoate",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q6",
+      "q": "Which compound shows E–Z isomerism?",
+      "options": {
+        "A": "2,3-dimethylbut-1-ene",
+        "B": "2,3-dimethylbut-2-ene",
+        "C": "2-methylpent-2-ene",
+        "D": "3-methylpent-2-ene"
+      },
+      "answer": "D",
+      "explanation": "3-methylpent-2-ene",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q7",
+      "q": "Which is the IUPAC name for this compound?",
+      "options": {
+        "A": "E-3-fluorohex-3-ene",
+        "B": "E-4-fluorohex-3-ene",
+        "C": "Z-3-fluorohex-3-ene",
+        "D": "Z-4-fluorohex-3-ene 3.1. Introduction to Organic Chemistry MCQ"
+      },
+      "answer": "A",
+      "explanation": "E-3-fluorohex-3-ene\n\n3.1. Introduction to Organic Chemistry MCQ",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q8",
+      "q": "Which compound has the greatest M? r",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.1",
+      "set": 2,
+      "image": "/mcq-images/3.3.1-s2-q8.png"
+    },
+    {
+      "id": "3.3.1-s2-q9",
+      "q": "Which compound has the empirical formula C H O? 2 4",
+      "options": {
+        "A": "butanal",
+        "B": "ethanoic acid",
+        "C": "ethanol",
+        "D": "methylpropanoic acid"
+      },
+      "answer": "D",
+      "explanation": "methylpropanoic acid",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.1-s2-q10",
+      "q": "Which compound is an isomer of ethyl ethanoate?",
+      "options": {
+        "A": "butyl methanoate",
+        "B": "methyl propanoate",
+        "C": "methyl butanoate",
+        "D": "propanoic acid"
+      },
+      "answer": "B",
+      "explanation": "methyl propanoate",
+      "topic": "3.3.1",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s1-q1",
+      "q": "Which is a propagation step in the chlorination of methane?",
+      "options": {
+        "A": "H● + Cl → HCl + Cl● 2",
+        "B": "Cl● + CH → CH Cl + H● 4 3",
+        "C": "● CH + Cl● → CH Cl 3 3",
+        "D": "● CH + Cl → CH Cl + Cl● 3 2 3"
+      },
+      "answer": "D",
+      "explanation": "•CH + Cl → CH Cl + Cl•\n3 2 3",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q2",
+      "q": "Which statement is not correct about the pollutant sulfur dioxide?",
+      "options": {
+        "A": "It can be removed from car exhaust gases by a catalytic converter.",
+        "B": "It can be removed from power station flue gases by reaction with calcium oxide.",
+        "C": "It can cause respiratory problems.",
+        "D": "It can cause acid rain."
+      },
+      "answer": "A",
+      "explanation": "It can be removed from car exhaust gases by a\ncatalytic converter.",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q3",
+      "q": "Which statement is correct about thermal cracking?",
+      "options": {
+        "A": "A pressure between 100 and 200 kPa is used.",
+        "B": "Aromatic hydrocarbons are the major products.",
+        "C": "C–C bonds are broken.",
+        "D": "Zeolite catalysts are used."
+      },
+      "answer": "C",
+      "explanation": "C-C bonds are broken",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q4",
+      "q": "Which equation represents a propagation step?",
+      "options": {
+        "A": "•CH Cl + Cl• → CH Cl 2 2 2",
+        "B": "•CH + •CH → C H 3 3 2 6",
+        "C": "Cl → Cl• + Cl• 2",
+        "D": "CH Cl + Cl• → •CH Cl + HCl 3 2"
+      },
+      "answer": "D",
+      "explanation": "CH Cl + Cl• CH Cl• + HCl\n3 2",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q5",
+      "q": "An excess of methane reacts with chlorine in the presence of ultraviolet radiation. What are the main products of this reaction?",
+      "options": {
+        "A": "CCl and H 4 2",
+        "B": "CCl and HCl 4",
+        "C": "CH Cl and H 3 2",
+        "D": "CH Cl and HCl 3"
+      },
+      "answer": "D",
+      "explanation": "CH Cl and HCl\n3",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q6",
+      "q": "Which statement is correct about the fractional distillation of crude oil?",
+      "options": {
+        "A": "A zeolite catalyst is used.",
+        "B": "Each fraction contains a mixture of hydrocarbons.",
+        "C": "Gaseous fractions are formed by breaking covalent bonds.",
+        "D": "The fractionating column is hottest at the top."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q7",
+      "q": "Which equation represents a termination step?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1,
+      "image": "/mcq-images/3.3.2-s1-q7.png"
+    },
+    {
+      "id": "3.3.2-s1-q8",
+      "q": "Which equation is a propagation step in the conversion of trichloromethane into tetrachloromethane by reaction with chlorine in the presence of ultraviolet light?",
+      "options": {
+        "A": "CHCl + Cl ⟶ CCl + HCl 3 2 4",
+        "B": "●CCl + ●Cl ⟶ CCl 3 4",
+        "C": "CHCl + ●Cl ⟶ CCl + ●H 3 4",
+        "D": "●CCl + Cl ⟶ CCl + ●Cl 3 2 4"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q9",
+      "q": "The table shows possible conditions and products for the cracking of alkanes. Which row is correct? Type of cracking Conditions Products High pressure Mainly",
+      "options": {
+        "A": "Thermal High alkanes temperature Slight pressure Mainly",
+        "B": "Thermal High alkenes temperature Mainly Slight pressure branched",
+        "C": "Catalytic High alkanes and temperature aromatics Mainly High pressure branched",
+        "D": "Catalytic High alkanes and temperature aromatics"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q10",
+      "q": "Which catalyst is used in the catalytic cracking of alkanes?",
+      "options": {
+        "A": "Concentrated phosphoric acid",
+        "B": "Iron",
+        "C": "Nickel",
+        "D": "Zeolite"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q11",
+      "q": "Which correctly represents an incomplete combustion of pentane?",
+      "options": {
+        "A": "C H + 8O ⟶ 5CO + 6H O 5 12 2 2 2",
+        "B": "C H + 8O ⟶ 4CO + CO + 6H O 5 12 2 2 2",
+        "C": "C H + 6O ⟶ 4CO + CO + 6H O 5 12 2 2 2",
+        "D": "C H + 5O ⟶ 4CO + CO + 4H O + 2H 5 12 2 2 2 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q12",
+      "q": "Which species is produced in a propagation step during the reaction of propane with an excess of chlorine in the presence of UV light?",
+      "options": {
+        "A": "H•",
+        "B": "C H Cl 3 5",
+        "C": "C H CL 3 6 2",
+        "D": "C H 6 14"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q13",
+      "q": "Which of these substances does not contribute to the greenhouse effect?",
+      "options": {
+        "A": "Unburned hydrocarbons.",
+        "B": "Carbon dioxide.",
+        "C": "Water vapour.",
+        "D": "Nitrogen."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q14",
+      "q": "Which molecule is not produced when ethane reacts with bromine in the presence of ultraviolet light?",
+      "options": {
+        "A": "C H Br 2 4 2",
+        "B": "HBr",
+        "C": "H 2",
+        "D": "C H 4 10"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q15",
+      "q": "Sulfur dioxide (SO ) is produced when some fossil fuels are burned. 2 Which of the following statements is true?",
+      "options": {
+        "A": "Sulfur dioxide can be removed from waste gases in a power station by an acid-base reaction with calcium oxide.",
+        "B": "Sulfur dioxide is insoluble in water.",
+        "C": "Sulfur dioxide is a basic oxide.",
+        "D": "Sulfur dioxide is an ionic compound."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s1-q16",
+      "q": "Tetradecane (C H ) is an alkane found in crude oil. When tetradecane is 14 30 heated to a high temperature, one molecule of tetradecane decomposes to form one molecule of hexane and three more molecules. Which of the following could represent this reaction?",
+      "options": {
+        "A": "C H → C H + C H + 2C H 14 30 6 14 4 8 2 4",
+        "B": "C H → C H + C H + C H 14 30 6 14 6 12 2 4",
+        "C": "C H → C H + 3C H 14 30 5 12 3 6",
+        "D": "C H → C H + C H + 2C H 14 30 6 14 2 6 3 6"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.2",
+      "set": 1
+    },
+    {
+      "id": "3.3.2-s2-q1",
+      "q": "1,1-Dichloroethane (Y) reacts with chlorine to form hexachloroethane (Z). Which is the correct equation for this reaction?",
+      "options": {
+        "A": "Y + 6 Cl 2 → Z + 6 HCl",
+        "B": "Y + 4 Cl 2 → Z + 4 HCl",
+        "C": "Y + 3 Cl 2 → Z + 3 H 2",
+        "D": "Y + 2 Cl 2 → Z + 2 H 2 (Total 1 marks)"
+      },
+      "answer": "B",
+      "explanation": "Y + 4 Cl 2 → Z + 4 HCl",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q2",
+      "q": "Octadecane is a straight-chain alkane containing 18 carbon atoms per molecule. It is cracked to produce oct-1-ene and two other compounds. Which equation represents this reaction?",
+      "options": {
+        "A": "C 18H 36 → C 8H 16 + C 6H 12 + 2 C 2H 4",
+        "B": "C 18H 38 → C 8H 16 + C 4H 10 + 2 C 3H 6",
+        "C": "C 18H 38 → C 8H 18 + C 2H 4 + 2 C 4H 8",
+        "D": "C 18H 38 → C 8H 18 + C 4H 8 + 2 C 3H 6 (Total 1 marks)"
+      },
+      "answer": "B",
+      "explanation": "C H → C H + C H + 2 C H\n18 38 8 16 4 10 3 6",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q3",
+      "q": "Which of these alkanes has the highest boiling point?",
+      "options": {
+        "A": "Decane",
+        "B": "Hexane",
+        "C": "2,3-dimethyloctane",
+        "D": "2,3-dimethylbutane (Total 1 marks) 3.2. Alkanes MCQ"
+      },
+      "answer": "A",
+      "explanation": "Decane",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q4",
+      "q": "Which equation represents a propagation step in the chlorination of methane?",
+      "options": {
+        "A": "●H + Cl 2 → HCl + ●Cl",
+        "B": "●Cl + CH 4 → CH 3Cl + ●H",
+        "C": "●CH 3 + Cl 2 → CH 3Cl + ●Cl",
+        "D": "●CH 3 + ●Cl → CH 3Cl"
+      },
+      "answer": "C",
+      "explanation": "●CH + Cl → CH 3Cl + ●Cl\n3 2",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q5",
+      "q": "Which is the overall equation for the reaction of CCl CH CCl with an excess of 3 2 3 chlorine in ultraviolet radiation?",
+      "options": {
+        "A": "CCl 3CH 2CCl + Cl → CCl 3CHClCCl + H 3 2 3 2",
+        "B": "CCl 3CH 2CCl 3 + Cl 2 → CCl 3CHClCCl 3 + HCl",
+        "C": "CCl 3CH 2CCl 3 + 2 Cl 2 → CCl 3CCl 2CCl 3 + 2 HCl",
+        "D": "CCl 3CH 2CCl 3 + Cl 2 → CCl 3CCl 2CCl 3 + H 2"
+      },
+      "answer": "C",
+      "explanation": "CCl CH CCl + 2 Cl → CCl CCl CCl + 2 HCl\n3 2 3 2 3 2 3",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q6",
+      "q": "When hexadecane (C H ) is heated to a high temperature, one molecule of 16 34 hexadecane decomposes to form an alkane containing eight carbon atoms and two different unsaturated compounds. Which equation could represent this reaction?",
+      "options": {
+        "A": "C H → C H + C H + C H 16 34 8 16 5 12 3 6",
+        "B": "C H → C H + C H + C H 16 34 8 18 6 10 2 6",
+        "C": "C H → C H + 2 C H + C H 16 34 8 18 2 4 4 8",
+        "D": "C H → C H + C H + C H 16 34 8 18 6 14 2 2 3.2. Alkanes MCQ"
+      },
+      "answer": "C",
+      "explanation": "C H → C H + 2C H + C H\n16 34 8 18 2 4 4 8",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q7",
+      "q": "The diagram shows a fractionating column used in the industrial fractional distillation of crude oil. Which statement is correct?",
+      "options": {
+        "A": "The most viscous product is fuel oil.",
+        "B": "The boiling point of naphtha is higher than diesel oil.",
+        "C": "Molecules in diesel oil are held together by hydrogen bonds.",
+        "D": "Kerosene is a mixture of compounds."
+      },
+      "answer": "D",
+      "explanation": "Kerosene is a mixture of compounds",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.2-s2-q8",
+      "q": "2-Bromopropane reacts with bromine to form 2,2-dibromopropane. What is the name of the mechanism of this reaction?",
+      "options": {
+        "A": "Electrophilic addition",
+        "B": "Elimination",
+        "C": "Free-radical substitution",
+        "D": "Nucleophilic substitution"
+      },
+      "answer": "C",
+      "explanation": "Free-radical substitution",
+      "topic": "3.3.2",
+      "set": 2
+    },
+    {
+      "id": "3.3.3-s1-q1",
+      "q": "Which compound is not formed by reacting 3-bromo-3-methylhexane with warm, ethanolic potassium hydroxide?",
+      "options": {
+        "A": "2-ethylpent-1-ene",
+        "B": "3-methylhex-1-ene",
+        "C": "3-methylhex-2-ene",
+        "D": "3-methylhex-3-ene"
+      },
+      "answer": "B",
+      "explanation": "3-methylhex-1-ene",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q2",
+      "q": "The question below refers to the reaction of 1-bromopropane with a solution of potassium cyanide in aqueous ethanol. What is the organic product of this reaction?",
+      "options": {
+        "A": "propylamine",
+        "B": "butylamine",
+        "C": "propanenitrile",
+        "D": "butanenitrile"
+      },
+      "answer": "D",
+      "explanation": "butanenitrile",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q3",
+      "q": "The question below refers to the reaction of 1-bromopropane with a solution of potassium cyanide in aqueous ethanol. The reactions of 1-bromopropane and 1-chloropropane with potassium cyanide in aqueous ethanol occur at different rates under the same conditions. Which row correctly shows the compound that has a faster rate of reaction and the correct reason for this? Compound Reason",
+      "options": {
+        "A": "1-bromopropane C–Br bond weaker than C–Cl bond",
+        "B": "1-bromopropane C–Br bond stronger than C–Cl bond",
+        "C": "1-chloropropane C–Br bond weaker than C–Cl bond",
+        "D": "1-chloropropane C–Br bond stronger than C–Cl bond"
+      },
+      "answer": "A",
+      "explanation": "1-bromopropane, C–Br bond weaker than C–Cl\nbond",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q4",
+      "q": "Which compound can react with ammonia to produce propylamine?",
+      "options": {
+        "A": "CH 3CH═CH 2",
+        "B": "CH 3CH 2CH 2OH",
+        "C": "CH 3CH 2CH 2Br",
+        "D": "CH 3CH 2CH 3"
+      },
+      "answer": "C",
+      "explanation": "CH CH CH Br\n3 2 2",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q5",
+      "q": "Which compound could not be produced by reacting 2-bromo-3-methylbutane with sodium hydroxide?",
+      "options": {
+        "A": "2-methylbut-1-ene",
+        "B": "3-methylbut-1-ene",
+        "C": "2-methylbut-2-ene",
+        "D": "3-methylbutan-2-ol"
+      },
+      "answer": "A",
+      "explanation": "2-methylbut-1-ene",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q6",
+      "q": "Which species could act as a nucleophile?",
+      "options": {
+        "A": "BH 3",
+        "B": "NH + 4",
+        "C": "PH 3",
+        "D": "SiH 4"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q7",
+      "q": "Which compound has the fastest rate of reaction with potassium cyanide to form pentanenitrile?",
+      "options": {
+        "A": "1-bromobutane",
+        "B": "1-chlorobutane",
+        "C": "1-fluorobutane",
+        "D": "1-iodobutane"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q8",
+      "q": "Which of the following mechanisms does not occur in reactions of bromoethane?",
+      "options": {
+        "A": "Electrophilic addition",
+        "B": "Elimination",
+        "C": "Nucleophilic substitution",
+        "D": "Radical substitution"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q9",
+      "q": "Which of the arrows, labelled A, B, C or D in the mechanism in the diagram, is not correct?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1,
+      "image": "/mcq-images/3.3.3-s1-q9.png"
+    },
+    {
+      "id": "3.3.3-s1-q10",
+      "q": "This question is about a method that can be used to prepare ethylamine. CH CH Br + 2NH CH CH NH + NH Br 3 2 3 3 2 2 4 Which of the curly arrows in the mechanism is not correct?",
+      "options": {
+        "A": "1",
+        "B": "2",
+        "C": "3",
+        "D": "4"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q11",
+      "q": "This question is about a method that can be used to prepare ethylamine. CH CH Br + 2NH CH CH NH + NH Br 3 2 3 3 2 2 4 Which statement about the reaction is not correct?",
+      "options": {
+        "A": "Ethylamine is a primary amine.",
+        "B": "The mechanism is a nucleophilic substitution.",
+        "C": "Using an excess of bromoethane will prevent further reaction to form a mixture of amine products.",
+        "D": "Ammonium bromide is an ionic compound."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q12",
+      "q": "Why are fluoroalkanes unreactive?",
+      "options": {
+        "A": "Fluorine is highly electronegative.",
+        "B": "The F– ion is very stable.",
+        "C": "They are polar molecules.",
+        "D": "The C–F bond is very strong."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q13",
+      "q": "Pentanenitrile can be made by reaction of 1-bromobutane with potassium cyanide. Which of these is the correct name for the mechanism of this reaction?",
+      "options": {
+        "A": "Electrophilic addition",
+        "B": "Electrophilic substitution",
+        "C": "Nucleophilic addition",
+        "D": "Nucleophilic substitution"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1
+    },
+    {
+      "id": "3.3.3-s1-q14",
+      "q": "Which of the following is a correct mechanism for the formation of 2-methylbut-2-ene from 2-bromo-3-methylbutane?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 1,
+      "image": "/mcq-images/3.3.3-s1-q14.png"
+    },
+    {
+      "id": "3.3.3-s2-q1",
+      "q": "A halogenoalkane reacts with ethanolic potassium hydroxide to form these alkenes by elimination: • 2-ethylpent-1-ene • E-3-methylhex-2-ene • Z-3-methylhex-2-ene • E-3-methylhex-3-ene • Z-3-methylhex-3-ene Which halogenoalkane would form these alkenes in this reaction?",
+      "options": {
+        "A": "1-bromo-2-ethylpentane",
+        "B": "2-bromo-3-methylhexane",
+        "C": "3-bromo-3-methylhexane",
+        "D": "3-bromo-4-methylhexane (Total 1 marks)"
+      },
+      "answer": "C",
+      "explanation": "3-bromo-3-methylhexane",
+      "topic": "3.3.3",
+      "set": 2
+    },
+    {
+      "id": "3.3.3-s2-q2",
+      "q": "Most scientists believe that ozone in the upper atmosphere should not be allowed to become depleted. Which is a valid reason for this belief?",
+      "options": {
+        "A": "Ozone absorbs ultraviolet radiation.",
+        "B": "Ozone helps to prevent global warming.",
+        "C": "Ozone helps to remove pollutants such as chloroalkanes.",
+        "D": "Ozone is an efficient disinfectant. 3.3. Halogenoalkanes MCQ"
+      },
+      "answer": "A",
+      "explanation": "Ozone absorbs ultraviolet radiation",
+      "topic": "3.3.3",
+      "set": 2
+    },
+    {
+      "id": "3.3.3-s2-q3",
+      "q": "Which is not a possible product of the reaction of this compound with potassium hydroxide?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 2,
+      "image": "/mcq-images/3.3.3-s2-q3.png"
+    },
+    {
+      "id": "3.3.3-s2-q4",
+      "q": "Which is not a possible product of a reaction between KOH and ?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.3",
+      "set": 2,
+      "image": "/mcq-images/3.3.3-s2-q4.png"
+    },
+    {
+      "id": "3.3.3-s2-q5",
+      "q": "Most scientists believe that the concentration of ozone in the upper atmosphere should not be allowed to decrease. Which statement is a correct reason for this belief?",
+      "options": {
+        "A": "Ozone helps to prevent global warming.",
+        "B": "Ozone is an efficient disinfectant.",
+        "C": "Ozone helps to remove pollutants such as chloroalkanes.",
+        "D": "Ozone absorbs ultraviolet radiation. 3.3. Halogenoalkanes MCQ"
+      },
+      "answer": "D",
+      "explanation": "Ozone absorbs ultraviolet radiation.",
+      "topic": "3.3.3",
+      "set": 2
+    },
+    {
+      "id": "3.3.3-s2-q6",
+      "q": "When 2-bromobutane is warmed with potassium hydroxide solution, substitution and elimination reactions both occur. Which of these compounds is not produced?",
+      "options": {
+        "A": "butan-1-ol",
+        "B": "butan-2-ol",
+        "C": "but-1-ene",
+        "D": "E-but-2-ene"
+      },
+      "answer": "A",
+      "explanation": "butan-1-ol",
+      "topic": "3.3.3",
+      "set": 2
+    },
+    {
+      "id": "3.3.3-s2-q7",
+      "q": "When 2-bromobutane is warmed with potassium hydroxide solution, substitution and elimination reactions both occur. What is the role of the hydroxide ions in the elimination reaction?",
+      "options": {
+        "A": "base",
+        "B": "catalyst",
+        "C": "electrophile",
+        "D": "nucleophile"
+      },
+      "answer": "A",
+      "explanation": "base\n\n3.3. Halogenoalkanes MCQ",
+      "topic": "3.3.3",
+      "set": 2
+    },
+    {
+      "id": "3.3.3-s2-q8",
+      "q": "Which compound is formed from bromoethane in a nucleophilic substitution reaction?",
+      "options": {
+        "A": "CH CN 3",
+        "B": "CH CH NH 3 2 2",
+        "C": "CH =CH 2 2",
+        "D": "CH CH OSO OH 3 2 2"
+      },
+      "answer": "B",
+      "explanation": "CH CH NH\n3 2 2",
+      "topic": "3.3.3",
+      "set": 2
+    },
+    {
+      "id": "3.3.4-s1-q1",
+      "q": "Which alkene shows E–Z isomerism?",
+      "options": {
+        "A": "2,3-dimethylbut-2-ene",
+        "B": "4-methylpent-2-ene",
+        "C": "methylpropene",
+        "D": "pent-1-ene"
+      },
+      "answer": "B",
+      "explanation": "4-methylpent-2-ene",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q2",
+      "q": "Which compound reacts with hydrogen bromide to give 2-bromo-3-methylbutane as the major product?",
+      "options": {
+        "A": "(CH ) C=CHCH 3 2 3",
+        "B": "(CH ) C=CH 3 2 2",
+        "C": "CH =C(CH )CH CH 2 3 2 3",
+        "D": "(CH ) CHCH=CH 3 2 2"
+      },
+      "answer": "D",
+      "explanation": "(CH ) CHCH=CH\n3 2 2",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q3",
+      "q": "What is the IUPAC name of the major product of the reaction between 2-ethylbut-1-ene and hydrogen bromide?",
+      "options": {
+        "A": "1-bromo-2-ethylbutane",
+        "B": "2-bromo-2-ethylbutane",
+        "C": "2-bromo-2-methylpentane",
+        "D": "3-bromo-3-methylpentane"
+      },
+      "answer": "D",
+      "explanation": "3-bromo-3-methylpentane",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q4",
+      "q": "Which has E-Z isomers?",
+      "options": {
+        "A": "C H Br 2 2 2",
+        "B": "C H Br 2 3",
+        "C": "C H Br 2 4 2",
+        "D": "C H Br 2 5"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q5",
+      "q": "Which compound reacts with hydrogen bromide to give 2-bromo-3-methylbutane as the major product?",
+      "options": {
+        "A": "(CH ) C=CHCH 3 2 3",
+        "B": "CH (CH ) CH=CH 3 2 2 2",
+        "C": "CH CH C(CH )=CH 3 2 3 2",
+        "D": "(CH ) CHCH=CH 3 2 2"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q6",
+      "q": "Which statement is not correct about CH ═C(CH )CH Br? 2 3 2",
+      "options": {
+        "A": "It displays E-Z isomerism.",
+        "B": "It forms an addition polymer.",
+        "C": "It reacts with electrophiles.",
+        "D": "It decolourises bromine water."
+      },
+      "answer": "A",
+      "explanation": "It displays E-Z isomerism",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q7",
+      "q": "Which alkene reacts with hydrogen bromide to give 2-bromo-3-methylbutane as the major product?",
+      "options": {
+        "A": "(CH ) C=CHCH 3 2 3",
+        "B": "CH CH CH=CHCH 3 2 3",
+        "C": "CH CH C(CH )=CH 3 2 3 2",
+        "D": "(CH ) CHCH=CH 3 2 2"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q8",
+      "q": "Which is the major product of the reaction between 2-methylbut-2-ene and iodine monochloride (ICl)?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1,
+      "image": "/mcq-images/3.3.4-s1-q8.png"
+    },
+    {
+      "id": "3.3.4-s1-q9",
+      "q": "Which statement is correct about poly(chloroethene)?",
+      "options": {
+        "A": "It has the empirical formula CHCl",
+        "B": "It decolourises bromine water.",
+        "C": "Its brittleness is reduced by plasticisers.",
+        "D": "Its polymer chain contains alternate single and double bonds."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q10",
+      "q": "What is the empirical formula of 4-hydroxypent-2-ene?",
+      "options": {
+        "A": "C H O 5 12",
+        "B": "C H O 5 10",
+        "C": "CH O 2",
+        "D": "C H OH 5 9"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q11",
+      "q": "Z-Retinal, shown in the diagram, is a component in vitamin A. Which of the double bonds, labelled A, B, C or D, is responsible for the letter Z in the name?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1,
+      "image": "/mcq-images/3.3.4-s1-q11.png"
+    },
+    {
+      "id": "3.3.4-s1-q12",
+      "q": "Consider the reaction between propene and hydrogen bromide to form the major product. Which species is formed in the mechanism of this reaction?",
+      "options": {
+        "A": "CH –C+H–CH Br 3 2",
+        "B": "CH –CHBr–C+H 3 2",
+        "C": "CH –C+H–CH 3 3",
+        "D": "CH –CH –C+H 3 2 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q13",
+      "q": "Which statement about E-1,2-dichloroethene is correct? It has the same boiling point as",
+      "options": {
+        "A": "Z-1,2-dichloroethene.",
+        "B": "It forms a polymer with the same repeating unit as Z-1,2-dichloroethene.",
+        "C": "It has the same IR spectrum as Z-1,2-dichloroethene in the range 400–1500 cm−1.",
+        "D": "It has a molecular ion peak different from that of Z-1,2-dichloroethene in its mass spectrum."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q14",
+      "q": "Which statement about ethene is correct?",
+      "options": {
+        "A": "It has no geometric isomers because there is free rotation around the C=C bond.",
+        "B": "It reacts with HBr in a nucleophilic addition reaction.",
+        "C": "It burns in excess oxygen to produce carbon dioxide and water.",
+        "D": "The C=C bond is twice as strong as the C–C bond in ethane."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q15",
+      "q": "What is the major product of the reaction between but-1-ene and DBr? (D is deuterium and represents 2H)",
+      "options": {
+        "A": "CH DCH CH CH Br 2 2 2 2",
+        "B": "CH DCH CHBrCH 2 2 3",
+        "C": "CH CH CHDCH Br 3 2 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s1-q16",
+      "q": "The repeating unit of a polymer is Which of the following molecules would form a polymer containing this repeating unit?",
+      "options": {
+        "A": "But-1-ene",
+        "B": "E-but-2-ene",
+        "C": "Z-but-2-ene",
+        "D": "Methylpropene"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 1
+    },
+    {
+      "id": "3.3.4-s2-q1",
+      "q": "Which is the structure of poly(1-chloropropene)?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.4",
+      "set": 2,
+      "image": "/mcq-images/3.3.4-s2-q1.png"
+    },
+    {
+      "id": "3.3.4-s2-q2",
+      "q": "Which monomer forms this polymer?",
+      "options": {
+        "A": "but-1-ene",
+        "B": "E-but-2-ene",
+        "C": "Z-but-2-ene",
+        "D": "methylpropene 3.4. Alkenes MCQ"
+      },
+      "answer": "D",
+      "explanation": "methylpropene",
+      "topic": "3.3.4",
+      "set": 2
+    },
+    {
+      "id": "3.3.4-s2-q3",
+      "q": "Which statement about poly(ethene) is correct?",
+      "options": {
+        "A": "It has a lower relative molecular mass than ethene.",
+        "B": "It has a lower density than ethene at standard temperature and pressure.",
+        "C": "It has a higher melting point than ethene.",
+        "D": "It decolourises bromine water."
+      },
+      "answer": "C",
+      "explanation": "It has a higher melting point than ethene",
+      "topic": "3.3.4",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s1-q1",
+      "q": "Which statement is not correct about the industrial production of ethanol from ethene at 300 °C?",
+      "options": {
+        "C": "An increase in temperature decreases the equilibrium yield of ethanol.",
+        "A": "The reaction is catalysed by an acid.",
+        "B": "The reaction has 100% atom economy.",
+        "D": "An increase in pressure increases the value of K c"
+      },
+      "answer": "D",
+      "explanation": "An increase in pressure increases the value of K\nc",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q2",
+      "q": "Which compound is produced when 1-phenylethanol reacts with acidified potassium dichromate(VI)?",
+      "options": {
+        "A": "C H CH CH OH 6 5 2 2",
+        "B": "C H CH CHO 6 5 2",
+        "C": "C H COCH 6 5 3",
+        "D": "C H CH(OH)CH 6 5 3"
+      },
+      "answer": "C",
+      "explanation": "C H COCH\n6 5 3",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q3",
+      "q": "Which statement is correct about the production and use of ethanol as a biofuel?",
+      "options": {
+        "A": "Biofuel ethanol is produced by the fermentation of glucose in the presence of yeast and air.",
+        "B": "Biofuel ethanol is purified by fractional distillation.",
+        "C": "No carbon dioxide is released when biofuel ethanol is burned.",
+        "D": "Biofuel ethanol burns with a cleaner flame than ethanol made by hydration of ethene."
+      },
+      "answer": "B",
+      "explanation": "Biofuel ethanol is purified by fractional distillation",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q4",
+      "q": "Which compound can be oxidised to form (CH ) CHCOCH ? 3 2 3",
+      "options": {
+        "A": "2-methylpropan-1-ol",
+        "B": "2,2-dimethylpropanol",
+        "C": "2-methylbutan-2-ol",
+        "D": "3-methylbutan-2-ol"
+      },
+      "answer": "D",
+      "explanation": "3-methylbutan-2-ol",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q5",
+      "q": "Which alcohol forms a mixture of alkenes when dehydrated?",
+      "options": {
+        "A": "propan-1-ol",
+        "B": "propan-2-ol",
+        "C": "pentan-1-ol",
+        "D": "pentan-2-ol"
+      },
+      "answer": "D",
+      "explanation": "pentan-2-ol",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q6",
+      "q": "Which compound is formed when 1-phenylethanol reacts with acidified potassium dichromate(VI)?",
+      "options": {
+        "A": "C H CH CH OH 6 5 2 2",
+        "B": "C H CH CHO 6 5 2",
+        "C": "C H COCH 6 5 3",
+        "D": "C H CH COOH 6 5 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q7",
+      "q": "In the UK industrial ethanol is now produced by the direct hydration of ethene. This process has largely replaced the fermentation method. Which is a likely reason for this change of method?",
+      "options": {
+        "A": "The direct hydration route produces purer ethanol.",
+        "B": "The direct hydration route employs milder conditions.",
+        "C": "The direct hydration route does NOT use a catalyst.",
+        "D": "The direct hydration route produces ethanol by a slower reaction."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q8",
+      "q": "Which statement is correct about both 2-methylbutan-1-ol and 2-methylbutan-2-ol?",
+      "options": {
+        "A": "They can be formed by alkaline hydrolysis of esters.",
+        "B": "They can be oxidised by reaction with acidified potassium dichromate(VI).",
+        "C": "They can be formed by hydration of 2-methylbut-2-ene.",
+        "D": "They have four peaks in their 13C NMR spectra."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s1-q9",
+      "q": "Which alcohol can be oxidised by acidified potassium dichromate(VI) but cannot be dehydrated by heating with concentrated sulfuric acid?",
+      "options": {
+        "A": "2,3-dimethylbutan-2-ol",
+        "B": "2,2-dimethylpropan-1-ol",
+        "C": "2-methylpropan-2-ol",
+        "D": "pentan-3-ol"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.5",
+      "set": 1
+    },
+    {
+      "id": "3.3.5-s2-q1",
+      "q": "Which diagram shows the correct apparatus for the conversion of hexan-1-ol to hexanal?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "B",
+      "topic": "3.3.5",
+      "set": 2,
+      "image": "/mcq-images/3.3.5-s2-q1.png"
+    },
+    {
+      "id": "3.3.5-s2-q2",
+      "q": "Which statement about the industrial production of ethanol from ethene at 300 °C is correct?",
+      "options": {
+        "C": "An increase in temperature, at constant pressure, increases the value of K . p",
+        "A": "The use of an acid catalyst increases the yield of ethanol.",
+        "B": "The reaction is slower than fermentation.",
+        "D": "An increase in pressure, at constant temperature, increases the equilibrium yield of ethanol."
+      },
+      "answer": "D",
+      "explanation": "An increase in pressure, at constant temperature,\nincreases the equilibrium yield of ethanol.",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q3",
+      "q": "The alcohol CH CH CH OH can be oxidised. 3 2 2 Which compound cannot be produced by oxidation of this alcohol?",
+      "options": {
+        "A": "CO 2",
+        "B": "CH 3COCH 3",
+        "C": "CH 3CH 2CHO",
+        "D": "CH 3CH 2COOH"
+      },
+      "answer": "B",
+      "explanation": "CH COCH\n3 3",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q4",
+      "q": "Which is a correct equation for the oxidation of 1-phenylethanol? [O] represents oxygen from an oxidising agent.",
+      "options": {
+        "A": "C 6H 5CH 2CH 2OH + 2 [O] → C 6H 5CH 2COOH + H 2O",
+        "B": "C 6H 5CH 2CH 2OH + [O] → C 6H 5CH 2CHO + H 2O",
+        "C": "C 6H 5CH(OH)CH 3 + [O] → C 6H 5CH 2CHO + H 2O",
+        "D": "C 6H 5CH(OH)CH 3 + [O] → C 6H 5COCH 3 + H 2O 3.5. Alcohols MCQ"
+      },
+      "answer": "D",
+      "explanation": "C H CH(OH)CH + [O] → C H COCH + H O\n6 5 3 6 5 3 2",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q5",
+      "q": "Which alcohol when dehydrated forms a mixture of alkenes?",
+      "options": {
+        "A": "propan-1-ol",
+        "B": "propan-2-ol",
+        "C": "pentan-1-ol",
+        "D": "pentan-2-ol"
+      },
+      "answer": "D",
+      "explanation": "pentan-2-ol",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q6",
+      "q": "Which compound produces (CH ) CHCOCH when oxidised? 3 2 3",
+      "options": {
+        "A": "2-methylpropan-1-ol",
+        "B": "2,2-dimethylpropanol",
+        "C": "2-methylbutan-2-ol",
+        "D": "3-methylbutan-2-ol"
+      },
+      "answer": "D",
+      "explanation": "3-methylbutan-2-ol",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q7",
+      "q": "Which statement is not correct for both primary and secondary alcohols?",
+      "options": {
+        "A": "They are easily oxidised to carboxylic acids by acidified K Cr O solution. 2 2 7",
+        "B": "They can be formed from bromoalkanes by hydrolysis.",
+        "C": "They form esters with carboxylic acids.",
+        "D": "They show hydrogen bonding in the liquid state. 3.5. Alcohols MCQ"
+      },
+      "answer": "A",
+      "explanation": "They are easily oxidised to carboxylic acids by\nacidified K Cr O solution.\n2 2 7\n\n3.5. Alcohols MCQ",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q8",
+      "q": "Which pair of reagents does not produce ethanol?",
+      "options": {
+        "A": "CH CH Br and NaOH(aq) 3 2",
+        "B": "CH COOCH and NaOH(aq) 3 3",
+        "C": "HCOOCH CH and NaOH(aq) 2 3",
+        "D": "CH CHO and NaBH (aq) 3 4"
+      },
+      "answer": "B",
+      "explanation": "CH COOCH and NaOH(aq)\n3 3",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.5-s2-q9",
+      "q": "Which compound can be dehydrated to form an alkene?",
+      "options": {
+        "A": "CH CHO 3",
+        "B": "CH COOH 3",
+        "C": "CH CH OH 3 2",
+        "D": "CH COOCH 3 3"
+      },
+      "answer": "C",
+      "explanation": "CH CH OH\n3 2",
+      "topic": "3.3.5",
+      "set": 2
+    },
+    {
+      "id": "3.3.6-s1-q1",
+      "q": "Which statement does not support the suggestion that an unknown organic compound is",
+      "options": {
+        "A": "Its 1H NMR spectrum has 3 peaks with an integration ratio of 2:3:3",
+        "B": "Its 13C NMR spectrum has 3 peaks.",
+        "C": "Its infrared spectrum has an absorption at 1735 cm−1",
+        "D": "It has 36.36% by mass of oxygen and 9.09% by mass of hydrogen."
+      },
+      "answer": "B",
+      "explanation": "Its 13C NMR spectrum has 3 peaks.",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q2",
+      "q": "Which can be used to distinguish between these two compounds? (CH ) CHCH CHO and (CH ) CCHO 3 2 2 3 3",
+      "options": {
+        "A": "Acidified potassium dichromate(VI)",
+        "B": "Fingerprint region of infrared spectrum",
+        "C": "M value in high resolution mass r spectrometry",
+        "D": "Tollens’ reagent"
+      },
+      "answer": "B",
+      "explanation": "Fingerprint region of infrared spectrum",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q3",
+      "q": "Which compound decolourises bromine water in the absence of sunlight?",
+      "options": {
+        "A": "CH CH CH Br 3 2 2",
+        "B": "C",
+        "D": "CH CH CHCH 3 2 2"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q4",
+      "q": "The infrared spectrum of an organic compound is shown. Which compound produces this spectrum?",
+      "options": {
+        "A": "ethanoic acid",
+        "B": "4-hydroxybutanone",
+        "C": "propan-1-ol",
+        "D": "prop-2-en-1-ol"
+      },
+      "answer": "B",
+      "explanation": "4-hydroxybutanone",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q5",
+      "q": "Three reagents are added separately to four organic compounds. Which row shows the correct observations? Sodium Acidified Tollens’ hydrogen potassium reagent carbonate dichromate(VI) orange solution no visible",
+      "options": {
+        "A": "Propan-1-ol effervescence turns green change orange solution",
+        "B": "Propanal no visible change silver mirror turns green",
+        "C": "Propanone no visible change no visible change silver mirror Propanoic",
+        "D": "effervescence no visible change silver mirror acid"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q6",
+      "q": "The infrared spectrum of an organic compound is shown. Which compound produces this spectrum?",
+      "options": {
+        "A": "butanone",
+        "B": "ethanol",
+        "C": "pent-2-ene",
+        "D": "propanoic acid"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q7",
+      "q": "Which compound forms a molecular ion with a different precise molecular mass from the other three?",
+      "options": {
+        "A": "butanone",
+        "B": "cyclobutanol",
+        "C": "dimethylpropane",
+        "D": "methylpropanal"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q8",
+      "q": "Which compound gives this infrared spectrum?",
+      "options": {
+        "A": "1-bromobutane",
+        "B": "butan-1-ol",
+        "C": "butanal",
+        "D": "butanoic acid"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s1-q9",
+      "q": "Which of these infrared spectra could represent a carboxylic acid?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1,
+      "image": "/mcq-images/3.3.6-s1-q9.png"
+    },
+    {
+      "id": "3.3.6-s1-q10",
+      "q": "Which of the following compounds would form an orange-red precipitate when heated with Fehling’s solution?",
+      "options": {
+        "A": "CH CH CN 3 2",
+        "B": "CH CH COOH 3 2",
+        "C": "CH CHO 3",
+        "D": "CH COCH 3 3"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.6",
+      "set": 1
+    },
+    {
+      "id": "3.3.6-s2-q1",
+      "q": "High resolution mass spectrometry can be used to determine the precise relative molecular mass of compounds. Which compound has a precise relative molecular mass that is different from the precise relative molecular mass of butanone?",
+      "options": {
+        "A": "But-3-en-1-ol",
+        "B": "Cyclobutanol",
+        "C": "Methylpropanal",
+        "D": "Prop-2-enoic acid (Total 1 marks)"
+      },
+      "answer": "D",
+      "explanation": "Prop-2-enoic acid",
+      "topic": "3.3.6",
+      "set": 2
+    },
+    {
+      "id": "3.3.6-s2-q2",
+      "q": "The infrared spectrum of an organic compound is shown. Which compound could produce this spectrum?",
+      "options": {
+        "A": "but-1-ene",
+        "B": "but-2-en-1-ol",
+        "C": "butanoic acid",
+        "D": "butan-2-ol 3.6. Organic Analysis MCQ"
+      },
+      "answer": "B",
+      "explanation": "but-2-en-1-ol",
+      "topic": "3.3.6",
+      "set": 2
+    },
+    {
+      "id": "3.3.6-s2-q3",
+      "q": "The skeletal formulas of two compounds are shown. Which method would distinguish between samples of these compounds?",
+      "options": {
+        "A": "comparing fingerprint regions of their infrared spectra",
+        "B": "obtaining molecular masses from their high resolution mass spectra",
+        "C": "warming with acidified potassium dichromate(VI) solution",
+        "D": "warming with Tollens’ reagent"
+      },
+      "answer": "A",
+      "explanation": "comparing fingerprint regions of their infrared\nspectra",
+      "topic": "3.3.6",
+      "set": 2
+    },
+    {
+      "id": "3.3.6-s2-q4",
+      "q": "The infrared spectrum of an organic compound is shown. Which compound could produce this spectrum?",
+      "options": {
+        "A": "but-1-ene",
+        "B": "but-2-en-1-ol",
+        "C": "butanoic acid",
+        "D": "butan-2-ol"
+      },
+      "answer": "B",
+      "explanation": "but-2-en-1-ol",
+      "topic": "3.3.6",
+      "set": 2
+    },
+    {
+      "id": "3.3.7-s1-q1",
+      "q": "How many structural isomers with the molecular formula C H O react with 5 10 Tollens’ reagent?",
+      "options": {
+        "A": "3",
+        "B": "4",
+        "C": "5",
+        "D": "6"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 1
+    },
+    {
+      "id": "3.3.7-s1-q2",
+      "q": "Which alcohol could not be produced by the reduction of an aldehyde or a ketone?",
+      "options": {
+        "A": "2,2-dimethylpropan-1-ol",
+        "B": "2-methylbutan-2-ol",
+        "C": "3-methylbutan-2-ol",
+        "D": "pentan-3-ol"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 1
+    },
+    {
+      "id": "3.3.7-s1-q3",
+      "q": "Which compound forms a racemic mixture when reacted with KCN followed by dilute acid?",
+      "options": {
+        "A": "HCHO",
+        "B": "CH CHO 3",
+        "C": "CH COCH 3 3",
+        "D": "(CH CH ) CO 3 2 2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 1
+    },
+    {
+      "id": "3.3.7-s1-q4",
+      "q": "Which alcohol could not be produced by the reduction of an aldehyde or a ketone?",
+      "options": {
+        "A": "2-methylbutan-1-ol",
+        "B": "2-methylbutan-2-ol",
+        "C": "3-methylbutan-1-ol",
+        "D": "3-methylbutan-2-ol"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 1
+    },
+    {
+      "id": "3.3.7-s2-q1",
+      "q": "In which conversion does a nucleophile attack the organic reactant?",
+      "options": {
+        "A": "CH CH CH CH CHClCH 3 2 3 3 3",
+        "B": "CH CH=CH ⟶ CH CHBrCH 3 2 3 3",
+        "C": "CH CH CH O⟶H CH CH=CH 3 2 2 3 2",
+        "D": "CH CH CHO ⟶ CH CH CH(OH)CN 3 2 3 2 ⟶"
+      },
+      "answer": "D",
+      "explanation": "CH CH CHO → CH CH CH(OH)CN\n3 2 3 2",
+      "topic": "3.3.7",
+      "set": 2
+    },
+    {
+      "id": "3.3.7-s2-q2",
+      "q": "What is the product when 3-methylbutan-2-one reacts with acidified KCN?",
+      "options": {
+        "A": "2-hydroxy-2,3-dimethylbutanenitrile",
+        "B": "3-hydroxy-2,3-dimethylbutanenitrile",
+        "C": "2-hydroxy-3-methylpentanenitrile",
+        "D": "3-hydroxy-2-methylpentanenitrile"
+      },
+      "answer": "A",
+      "explanation": "2-hydroxy-2,3-dimethylbutanenitrile",
+      "topic": "3.3.7",
+      "set": 2
+    },
+    {
+      "id": "3.3.7-s2-q3",
+      "q": "The skeletal formulas of two compounds are shown. Which method would distinguish between samples of these compounds?",
+      "options": {
+        "A": "comparing fingerprint regions of their infrared spectra",
+        "B": "obtaining molecular masses from their high resolution mass spectra",
+        "C": "warming with acidified potassium dichromate(VI) solution",
+        "D": "warming with Tollens’ reagent"
+      },
+      "answer": "A",
+      "explanation": "comparing fingerprint regions of their infrared\nspectra",
+      "topic": "3.3.7",
+      "set": 2
+    },
+    {
+      "id": "3.3.7-s4-q1",
+      "q": "Which pair of compounds does not form a racemic mixture when the compounds react? +",
+      "options": {
+        "A": "HCl",
+        "B": "+ HCN +",
+        "C": "HCl",
+        "D": "+ HCN"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 4
+    },
+    {
+      "id": "3.3.7-s4-q2",
+      "q": "Which compound does not show stereoisomerism?",
+      "options": {
+        "A": "1,2-dichloropropene",
+        "B": "1,2-dichloropropane",
+        "C": "1,3-dichloropropene",
+        "D": "1,3-dichloropropane"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 4
+    },
+    {
+      "id": "3.3.7-s4-q3",
+      "q": "Which compound forms optically active compounds on reduction?",
+      "options": {
+        "A": "CH CH C(CH )=CHCH 3 2 3 3",
+        "B": "CH CH C(CH )=CH 3 2 3 2",
+        "C": "CH COCH 3 3",
+        "D": "CH CH COCH 3 2 3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.7",
+      "set": 4
     }
   ]
 }
