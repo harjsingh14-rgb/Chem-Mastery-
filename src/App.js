@@ -5037,8 +5037,10 @@ export default function App() {
   const selectBoard = (b) => { setBoard(b); setScreen("topics"); setTopicsTab("home"); track("select_board", { board: b }); };
   const selectTopic = (t) => {
     setTopic(t);
-    setOrder(SETS[t].cards.map((_, i) => i));
-    setIndex(0); setFlipped(false); setShuffled(false); setShowMenu(false);
+    const arr = SETS[t].cards.map((_, i) => i);
+    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+    setOrder(arr);
+    setIndex(0); setFlipped(false); setShuffled(true); setShowMenu(false);
     setScreen("cards");
     track("select_flashcard_topic", { topic: t, title: SETS[t]?.title, board });
   };
@@ -7825,7 +7827,7 @@ export default function App() {
       {/* ── MCQ TAB ────────────────────────────────────────── */}
       {topicsTab === "mcq" && (() => {
         const mcqTopics = Object.entries(mcqData.topics).map(([id, t]) => ({ id, ...t }));
-        const topicQuestions = mcqTopic ? mcqData.questions.filter(q => q.topic === mcqTopic) : [];
+        const topicQuestions = mcqTopic ? [...mcqData.questions.filter(q => q.topic === mcqTopic)].sort(() => Math.random() - 0.5) : [];
         const shuffledAll = mcqMode === "random" && mcqQuizSize ? [...mcqData.questions].sort(() => Math.random() - 0.5).slice(0, mcqQuizSize) : [];
         const activeQuestions = mcqMode === "random" ? shuffledAll : topicQuestions;
         const currentQ = activeQuestions[mcqIdx];
