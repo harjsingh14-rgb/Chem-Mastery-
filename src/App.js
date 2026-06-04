@@ -2,6 +2,73 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { signInGoogle, signInEmail, signUpEmail, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
 import mcqData from "./mcq-data.json";
 
+// Chemistry text formatter — converts plain text to JSX with proper sub/superscripts
+function chemFormat(text) {
+  if (!text || typeof text !== "string") return text;
+  // Process in order: electron configs, charges, state symbols, molecular formulas, delta signs
+  const parts = [];
+  let remaining = text;
+  let key = 0;
+
+  // Regex patterns (processed left-to-right through the string)
+  const patterns = [
+    // Electron config: 1s2, 2p6, 3d10, 4s1 etc (digit + letter + digit)
+    { re: /\b(\d)([spdf])(\d{1,2})\b/g, render: (m) => <span key={key++}>{m[1]}{m[2]}<sup>{m[3]}</sup></span> },
+    // Ion charges at end: Fe2+, Cu2+, OH-, Br-, SO4 2-, Al3+, MH+ etc
+    { re: /([A-Za-z)])(\d*)([\+\−–-])(?=[\s,.\]);}]|$)/g, render: (m) => <span key={key++}>{m[1]}<sup>{m[2]}{m[3].replace('–','−').replace('-','−')}</sup></span> },
+    // State symbols: (g), (l), (s), (aq)
+    { re: /\((g|l|s|aq)\)/g, render: (m) => <sub key={key++}>({m[1]})</sub> },
+    // Molecular formulas: letter(s) followed by digits (H2O, CO2, CH3, NH3, C2H5OH, SO4, NO3)
+    // Match uppercase letter optionally followed by lowercase, then digit(s)
+    { re: /([A-Z][a-z]?)(\d+)/g, render: (m) => <span key={key++}>{m[1]}<sub>{m[2]}</sub></span> },
+    // Delta signs: δ+, δ-, δ+, δ−
+    { re: /δ([\+\−–-])/g, render: (m) => <span key={key++}>δ<sup>{m[1].replace('–','−').replace('-','−')}</sup></span> },
+  ];
+
+  // Apply all patterns using a single pass approach
+  // Build a combined regex that captures all patterns
+  const combined = /(\d)([spdf])(\d{1,2})(?=\s|,|$)|([A-Za-z\)])([\d]*)([\+\−–-])(?=[\s,.\]);}]|$)|\((g|l|s|aq)\)|([A-Z][a-z]?)(\d+)|δ([\+\−–-])/g;
+
+  let lastIdx = 0;
+  let result = [];
+  let match;
+
+  while ((match = combined.exec(remaining)) !== null) {
+    // Add text before match
+    if (match.index > lastIdx) {
+      result.push(remaining.slice(lastIdx, match.index));
+    }
+
+    if (match[1] !== undefined && match[2] !== undefined && match[3] !== undefined) {
+      // Electron config: 1s2
+      result.push(<span key={key++}>{match[1]}{match[2]}<sup>{match[3]}</sup></span>);
+    } else if (match[4] !== undefined && match[6] !== undefined) {
+      // Ion charge: Fe2+, OH-
+      const ch = match[6].replace('–','−').replace('-','−');
+      result.push(<span key={key++}>{match[4]}<sup>{match[5]}{ch}</sup></span>);
+    } else if (match[7] !== undefined) {
+      // State symbol: (g), (l), (s), (aq)
+      result.push(<sub key={key++}>({match[7]})</sub>);
+    } else if (match[8] !== undefined && match[9] !== undefined) {
+      // Molecular formula: H2, CO2
+      result.push(<span key={key++}>{match[8]}<sub>{match[9]}</sub></span>);
+    } else if (match[10] !== undefined) {
+      // Delta: δ+
+      const dch = match[10].replace('–','−').replace('-','−');
+      result.push(<span key={key++}>δ<sup>{dch}</sup></span>);
+    }
+
+    lastIdx = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIdx < remaining.length) {
+    result.push(remaining.slice(lastIdx));
+  }
+
+  return result.length > 0 ? result : text;
+}
+
 const SETS = {
   "3.1.1": { title: "Atomic Structure", cards: [
     {q:"What are the relative mass and charge of a proton?", a:"Relative mass: 1\nRelative charge: +1"},
@@ -7846,7 +7913,7 @@ export default function App() {
             {/* Question */}
             <div key={currentQ.id} style={{ padding:"16px", animation:"mcqFadeIn 0.3s ease" }}>
               <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom: currentQ.image ? "10px" : "16px" }}>
-                {currentQ.q}
+                {chemFormat(currentQ.q)}
               </div>
 
               {/* Question image (for diagram-based questions) */}
@@ -7888,7 +7955,7 @@ export default function App() {
                       </div>
                       {optText !== "See diagram" && (
                         <div style={{ fontSize:"14px", color: textColor, lineHeight:1.4, fontWeight: showResult && isCorrect ? 700 : 400 }}>
-                          {optText}
+                          {chemFormat(optText)}
                         </div>
                       )}
                     </button>
@@ -7901,7 +7968,7 @@ export default function App() {
                 <div style={{ marginTop:"14px", padding:"12px 16px", background:"#f0fdf4", border:"1.5px solid #bbf7d0",
                   borderRadius:"12px", fontSize:"13px", color:"#166534", lineHeight:1.6, animation:"mcqFadeIn 0.3s ease" }}>
                   <span style={{ fontWeight:700 }}>Answer: {currentQ.answer}</span>
-                  {currentQ.explanation && ` — ${currentQ.explanation}`}
+                  {currentQ.explanation && <span> — {chemFormat(currentQ.explanation)}</span>}
                 </div>
               )}
 
