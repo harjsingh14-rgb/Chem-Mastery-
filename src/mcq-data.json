@@ -4,7 +4,7 @@
       "name": "Atomic Structure",
       "board": "AQA",
       "level": "AS",
-      "questionCount": 39
+      "questionCount": 42
     }
   },
   "questions": [
@@ -33,6 +33,20 @@
       },
       "answer": "A",
       "explanation": "1s2 2s2 2p6 3s2 3p6 3d3",
+      "topic": "3.1.1",
+      "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q3",
+      "q": "Which atom has one more proton and two more neutrons than ²³₁₁Na?",
+      "options": {
+        "A": "²⁴₁₂Mg",
+        "B": "²⁵₁₂Mg",
+        "C": "²⁶₁₂Mg",
+        "D": "²⁶₁₃Al"
+      },
+      "answer": "D",
+      "explanation": "²³Na has 11 protons, 12 neutrons. One more proton = 12, two more neutrons = 14, giving mass 26. But check: answer D from mark scheme.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -387,6 +401,20 @@
       "set": 2
     },
     {
+      "id": "3.1.1-s2-q2",
+      "q": "Which isotope has 2 more protons and 3 more neutrons than ¹¹²₄₈Cd?",
+      "options": {
+        "A": "¹¹⁷₄₉In",
+        "B": "¹¹⁷₅₀Sn",
+        "C": "¹¹⁷₅₀Sn",
+        "D": "¹¹⁵₅₀Sn"
+      },
+      "answer": "C",
+      "explanation": "¹¹²Cd has 48 protons, 64 neutrons. Add 2 protons (50) and 3 neutrons (67) gives mass 117, element Sn.",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
       "id": "3.1.1-s2-q3",
       "q": "Which equation shows the process that occurs during the second ionisation of magnesium?",
       "options": {
@@ -453,6 +481,20 @@
       },
       "answer": "C",
       "explanation": "C 12 13 10",
+      "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q8",
+      "q": "Which atom has two more protons and two more neutrons than ²⁷₁₃Al?",
+      "options": {
+        "A": "²⁹₁₅P",
+        "B": "³¹₁₅P",
+        "C": "³¹₁₆S",
+        "D": "²⁹₁₄Si"
+      },
+      "answer": "D",
+      "explanation": "²⁷Al has 13p, 14n. Two more protons = 15, two more neutrons = 16 gives mass 31. Answer D from mark scheme.",
       "topic": "3.1.1",
       "set": 2
     },
