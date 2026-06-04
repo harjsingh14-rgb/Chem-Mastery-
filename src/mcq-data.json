@@ -4,7 +4,7 @@
       "name": "Atomic Structure",
       "board": "AQA",
       "level": "AS",
-      "questionCount": 39
+      "questionCount": 42
     },
     "3.1.2": {
       "name": "Amount of Substance",
@@ -221,6 +221,20 @@
       "explanation": "1s2 2s2 2p6 3s2 3p6 3d3",
       "topic": "3.1.1",
       "set": 1
+    },
+    {
+      "id": "3.1.1-s1-q3",
+      "topic": "3.1.1",
+      "set": 1,
+      "q": "Which atom has one more proton and two more neutrons than ²³₁₁Na?",
+      "options": {
+        "A": "²⁴₁₂Mg",
+        "B": "²⁵₁₂Mg",
+        "C": "²⁶₁₂Mg",
+        "D": "²⁶₁₃Al"
+      },
+      "answer": "D",
+      "explanation": ""
     },
     {
       "id": "3.1.1-s1-q4",
@@ -573,6 +587,20 @@
       "set": 2
     },
     {
+      "id": "3.1.1-s2-q2",
+      "topic": "3.1.1",
+      "set": 2,
+      "q": "Which isotope has 2 more protons and 3 more neutrons than ¹¹²₄₈Cd?",
+      "options": {
+        "A": "¹¹⁵₄₉In",
+        "B": "¹¹⁷₅₀Sn",
+        "C": "¹¹⁷₄₉In",
+        "D": "¹¹⁵₅₀Sn"
+      },
+      "answer": "C",
+      "explanation": ""
+    },
+    {
       "id": "3.1.1-s2-q3",
       "q": "Which equation shows the process that occurs during the second ionisation of magnesium?",
       "options": {
@@ -641,6 +669,20 @@
       "explanation": "C 12 13 10",
       "topic": "3.1.1",
       "set": 2
+    },
+    {
+      "id": "3.1.1-s2-q8",
+      "topic": "3.1.1",
+      "set": 2,
+      "q": "Which atom has two more protons and two more neutrons than ²⁷₁₃Al?",
+      "options": {
+        "A": "²⁹₁₅P",
+        "B": "³¹₁₅P",
+        "C": "³¹₁₆S",
+        "D": "²⁹₁₄Si"
+      },
+      "answer": "D",
+      "explanation": ""
     },
     {
       "id": "3.1.1-s2-q9",

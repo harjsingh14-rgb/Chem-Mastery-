@@ -4999,6 +4999,7 @@ export default function App() {
   const [mechStep, setMechStep] = useState(0);
   const [mechOpenCards, setMechOpenCards] = useState({});
   // MCQ state
+  const [mcqYear, setMcqYear] = useState("as"); // "as" | "a2"
   const [mcqTopic, setMcqTopic] = useState(null); // selected topic id
   const [mcqIdx, setMcqIdx] = useState(0); // current question index
   const [mcqSelected, setMcqSelected] = useState(null); // selected answer letter
@@ -7828,39 +7829,83 @@ export default function App() {
         const currentQ = activeQuestions[mcqIdx];
 
         // Topic selection view
-        if (!mcqTopic && mcqMode === "topic") return (
-          <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
-            <p style={{ color:"#475569", fontSize:"15px", marginBottom:"16px", lineHeight:1.6 }}>
-              Multiple choice questions with solutions. Pick a topic or try a random quiz.
-            </p>
-            {/* Random quiz button */}
-            <button onClick={() => { setMcqMode("random"); setMcqTopic("_random"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
-              style={{ width:"100%", padding:"16px", borderRadius:"14px", border:"none", cursor:"pointer",
-                background:"linear-gradient(135deg,#f87171,#dc2626)", color:"#fff", fontSize:"15px", fontWeight:700,
-                fontFamily:"inherit", marginBottom:"20px", boxShadow:"0 4px 16px rgba(220,38,38,0.3)" }}>
-              🎲 Random Quiz (25 questions)
-            </button>
-            {/* Topic list */}
-            <div style={{ fontSize:"13px", fontWeight:800, color:"#0f1d35", textTransform:"uppercase", letterSpacing:"1.2px", marginBottom:"10px", borderBottom:"2px solid #e2e8f0", paddingBottom:"6px" }}>
-              By Topic
-            </div>
-            <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
-              {mcqTopics.map(t => (
-                <button key={t.id} onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
-                  style={{ background:"#fff", border:"2px solid #dc262630", borderRadius:"14px", padding:"16px 18px",
-                    textAlign:"left", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
-                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                    <div>
-                      <div style={{ fontSize:"15px", fontWeight:700, color:"#0f1d35" }}>{t.id} — {t.name}</div>
-                      <div style={{ fontSize:"12px", color:"#64748b", marginTop:"2px" }}>{t.board} · {t.level} · {t.questionCount} questions</div>
-                    </div>
-                    <div style={{ fontSize:"13px", fontWeight:700, color:"#dc2626" }}>→</div>
+        if (!mcqTopic && mcqMode === "topic") {
+          const mcqCategoryColors = {
+            "Physical": "#0284c7",
+            "Inorganic": "#059669",
+            "Organic": "#d97706",
+          };
+          const getCategory = (id) => {
+            if (id.startsWith("3.1")) return "Physical Chemistry";
+            if (id.startsWith("3.2")) return "Inorganic Chemistry";
+            return "Organic Chemistry";
+          };
+          const getCatColor = (id) => {
+            if (id.startsWith("3.1")) return mcqCategoryColors["Physical"];
+            if (id.startsWith("3.2")) return mcqCategoryColors["Inorganic"];
+            return mcqCategoryColors["Organic"];
+          };
+          const filteredTopics = mcqTopics.filter(t => mcqYear === "as" ? t.level === "AS" : true);
+          const grouped = {};
+          filteredTopics.forEach(t => {
+            const cat = getCategory(t.id);
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(t);
+          });
+
+          return (
+            <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
+              <p style={{ color:"#4a6080", fontSize:"14px", marginBottom:"12px", lineHeight:1.5 }}>
+                Multiple choice questions with solutions. Pick a topic or try a random quiz.
+              </p>
+              {/* AS / A2 toggle */}
+              <div style={{ display:"flex", gap:"0", marginBottom:"16px", borderRadius:"10px", overflow:"hidden", border:"2px solid #dc2626" }}>
+                {[{key:"as",label:"AS (Year 1)"},{key:"a2",label:"A2 (Year 2)"}].map(tab => (
+                  <button key={tab.key} onClick={() => setMcqYear(tab.key)} style={{
+                    flex:1, padding:"10px", border:"none", fontSize:"13px", fontWeight:700,
+                    fontFamily:"inherit", cursor:"pointer",
+                    background: mcqYear === tab.key ? "#dc2626" : "#ffffff",
+                    color: mcqYear === tab.key ? "#ffffff" : "#dc2626",
+                  }}>{tab.label}</button>
+                ))}
+              </div>
+              {/* Random quiz button */}
+              <button onClick={() => { setMcqMode("random"); setMcqTopic("_random"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+                style={{ width:"100%", padding:"14px", borderRadius:"14px", border:"none", cursor:"pointer",
+                  background:"linear-gradient(135deg,#f87171,#dc2626)", color:"#fff", fontSize:"14px", fontWeight:700,
+                  fontFamily:"inherit", marginBottom:"18px", boxShadow:"0 4px 16px rgba(220,38,38,0.3)" }}>
+                🎲 Random Quiz (25 questions)
+              </button>
+              {/* Grouped topic cards */}
+              {Object.entries(grouped).map(([cat, topics]) => (
+                <div key={cat} style={{ marginBottom:"18px" }}>
+                  <div style={{ fontSize:"12px", fontWeight:800, color: getCatColor(topics[0].id), textTransform:"uppercase",
+                    letterSpacing:"1px", marginBottom:"10px", paddingBottom:"6px", borderBottom:`2px solid ${getCatColor(topics[0].id)}20` }}>
+                    {cat}
                   </div>
-                </button>
+                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px" }}>
+                    {topics.map(t => {
+                      const color = getCatColor(t.id);
+                      return (
+                        <button key={t.id} onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+                          style={{ background:"#fff", border:`2px solid ${color}30`, borderRadius:"14px", padding:"14px 12px",
+                            textAlign:"left", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.06)",
+                            position:"relative", overflow:"hidden" }}>
+                          <div style={{ display:"flex", alignItems:"center", gap:"6px", marginBottom:"8px" }}>
+                            <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: color }} />
+                            {t.level === "A2" && mcqYear === "a2" && <span style={{ fontSize:"9px", fontWeight:700, color:"#fff", background:"#7c3aed", borderRadius:"4px", padding:"1px 5px" }}>A2</span>}
+                          </div>
+                          <div style={{ fontSize:"13px", fontWeight:700, color:"#1a2d45", lineHeight:1.3, marginBottom:"4px" }}>{t.name}</div>
+                          <div style={{ fontSize:"11px", color: color, fontWeight:600 }}>{t.questionCount} questions</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               ))}
             </div>
-          </div>
-        );
+          );
+        }
 
         // Quiz view
         if (!currentQ) return (
