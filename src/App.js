@@ -5711,18 +5711,11 @@ export default function App() {
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.16)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.1)"; }}
             >
-              {/* Fancy thumbnail */}
-              <div style={{ height: "170px", background: b.grad, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", padding: "22px 24px", position: "relative", overflow: "hidden" }}>
-                {/* Chemistry art -unique per board */}
-                <ChemArt id={b.id} />
-                {/* Label */}
-                <div>
-                  <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.65)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "6px" }}>Exam Board</div>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontWeight: 700, lineHeight: 1 }}>
-                    <span style={{ fontSize: "48px", color: "#ffffff", letterSpacing: "-2px", display: "block" }}>{b.label}</span>
-                    <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.7)", letterSpacing: "0.5px" }}>{b.sub}</span>
-                  </div>
-                </div>
+              {/* Fancy thumbnail — FigureLabs image */}
+              <div style={{ position: "relative", overflow: "hidden" }}>
+                <img src={process.env.PUBLIC_URL + `/card-${b.id === "ocr" ? "ocra" : b.id}.png`}
+                  alt={b.label}
+                  style={{ width: "100%", height: "170px", objectFit: "cover", objectPosition: "top", display: "block" }} />
               </div>
               {/* Card body */}
               <div style={{ padding: "22px 24px 26px", flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
