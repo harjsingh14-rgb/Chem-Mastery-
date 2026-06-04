@@ -131,6 +131,24 @@
       "board": "AQA",
       "level": "A2",
       "questionCount": 10
+    },
+    "3.2.4": {
+      "name": "Period 3 Elements & Oxides",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 2
+    },
+    "3.2.5": {
+      "name": "Transition Metals",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 20
+    },
+    "3.2.6": {
+      "name": "Aqueous Ions",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 3
     }
   },
   "questions": [
@@ -4945,6 +4963,357 @@
       "explanation": "To prevent the precipitation of other silver\ncompounds",
       "topic": "3.2.3",
       "set": 2
+    },
+    {
+      "id": "3.2.4-s1-q1",
+      "q": "Which element forms an ionic oxide that reacts with strong alkalis?",
+      "options": {
+        "A": "Aluminium",
+        "B": "Magnesium",
+        "C": "Sodium",
+        "D": "Sulfur"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.4",
+      "set": 1
+    },
+    {
+      "id": "3.2.4-s1-q2",
+      "q": "Which is the formula of the main aluminium-containing species present when aluminium oxide is added to an excess of water?",
+      "options": {
+        "A": "[Al(H O) ]3+(aq) 2 6",
+        "B": "Al(H O) (OH) (s) 2 3 3",
+        "C": "[Al(H O) (OH) ]−(aq) 2 2 4",
+        "D": "Al O (s) 2 3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.4",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q1",
+      "q": "Which equation does not show the reduction of a transition metal?",
+      "options": {
+        "A": "TiCl + 2 Mg → Ti + 2 MgCl 4 2",
+        "B": "2 FeCl + 2 KI → 2 FeCl + 2 KCl + I 3 2 2",
+        "C": "MnO + 4 HCl → MnCl + Cl + 2 H O 2 2 2 2",
+        "D": "CoO + 4 HCl → [CoCl ]2‒ + H O + 2 H+ 4 2"
+      },
+      "answer": "D",
+      "explanation": "CoO + 4 HCl → [CoCl ]2‒ + H O + 2 H+\n4 2",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q2",
+      "q": "Which will not act as a ligand in the formation of a complex ion?",
+      "options": {
+        "A": "CH 4",
+        "B": "CO",
+        "C": "H O 2",
+        "D": "NH 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q3",
+      "q": "Which shows the correct oxidation state and co-ordination number of cobalt in [Co(NH ) Cl]Cl ? 3 5 2 oxidation co-ordination state number",
+      "options": {
+        "A": "+2 5",
+        "B": "+2 6",
+        "C": "+3 5",
+        "D": "+3 6"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q4",
+      "q": "Which statement is not correct?",
+      "options": {
+        "A": "CuCl 2– is square planar. 4",
+        "B": "NH + is tetrahedral. 4",
+        "C": "[Co(H NCH CH NH ) ]2+ is octahedral. 2 2 2 2 3",
+        "D": "[Fe(H O) ]2+ is octahedral. 2 6"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q5",
+      "q": "Which compound decolourises acidified potassium manganate(VII) solution?",
+      "options": {
+        "A": "Al (SO ) 2 4 3",
+        "B": "CuSO 4",
+        "C": "FeSO 4",
+        "D": "Fe (SO ) 2 4 3"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q6",
+      "q": "What is observed when concentrated hydrochloric acid is added to an aqueous solution of CuSO until no further change occurs? 4",
+      "options": {
+        "A": "A colourless gas is evolved and a precipitate forms.",
+        "B": "A colourless gas is evolved and no precipitate forms.",
+        "C": "A precipitate forms that dissolves in an excess of concentrated hydrochloric acid.",
+        "D": "The solution changes colour and no precipitate forms."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q7",
+      "q": "Which statement is correct about this reaction? [Co(NH )6]2+ + 3H NCH CH NH → [Co(H NCH CH NH ) ]2+ + 6NH 3 2 2 2 2 2 2 2 2 3 3",
+      "options": {
+        "A": "The co-ordination number of cobalt decreases.",
+        "B": "The enthalpy change is large and positive.",
+        "C": "The entropy change is large and positive.",
+        "D": "The shape of the complex changes from octahedral."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q8",
+      "q": "Which complex exists as optical isomers?",
+      "options": {
+        "A": "[Ag(NH ) ]+ 3 2",
+        "B": "[Co(C O ) ]4– 2 4 3",
+        "C": "[Cu(EDTA)]2–",
+        "D": "[Cu(NH ) (H O) ]2+ 3 4 2 2"
+      },
+      "answer": "B",
+      "explanation": "& C",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q9",
+      "q": "Which is not a correct statement?",
+      "options": {
+        "A": "complex is a central metal atom or ion surrounded by",
+        "B": "Transition metals display variable oxidation states",
+        "C": "A ligand accepts a pair of electrons from a transition metal",
+        "D": "ligands"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q10",
+      "q": "Cisplatin is an anti-cancer drug. Which structure represents a stereoisomer of cisplatin?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1,
+      "image": "/mcq-images/3.2.5-s1-q10.png"
+    },
+    {
+      "id": "3.2.5-s1-q11",
+      "q": "A solution absorbs light with wavelengths corresponding to red, yellow and green light. Which ion is most likely to be in the solution?",
+      "options": {
+        "A": "Cr O 2−(aq) 2 7",
+        "B": "Fe2+(aq)",
+        "C": "Fe3+(aq)",
+        "D": "Cu2+(aq)"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q12",
+      "q": "What is the electron configuration of Cu2+?",
+      "options": {
+        "A": "[Ar]3d94s2",
+        "B": "[Ar]3d104s1",
+        "C": "[Ar]3d9",
+        "D": "[Ar]3d10"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q13",
+      "q": "Electrons in copper(II) ions can be excited by the absorption of light with a wavelength of 600 nm. What is the increase in energy, in J, for each electron excited? Speed of light, c = 3.00 × 108 m s−1 Planck’s constant, h = 6.63 × 10−34J s",
+      "options": {
+        "A": "3.98 × 10−40",
+        "B": "1.33 × 10−39",
+        "C": "3.32 × 10−28",
+        "D": "3.32 × 10−19"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s1-q14",
+      "q": "An oxide of vanadium catalyses the following reaction: ⇌ SO (g) 3 What is the formula of the vanadium-containing intermediate formed in this reaction?",
+      "options": {
+        "A": "V O 2",
+        "B": "VO",
+        "C": "V O 2 3",
+        "D": "V O 2 4"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.5",
+      "set": 1
+    },
+    {
+      "id": "3.2.5-s2-q1",
+      "q": "Which statement about chloride ions is correct?",
+      "options": {
+        "A": "They are oxidised by concentrated sulfuric acid.",
+        "B": "They form a cream precipitate with silver nitrate solution.",
+        "C": "They form a cobalt(II) complex with a tetrahedral shape.",
+        "D": "They have the electron configuration 1s22s22p63s23p4"
+      },
+      "answer": "C",
+      "explanation": "They form a cobalt(II) complex with a tetrahedral\nshape.",
+      "topic": "3.2.5",
+      "set": 2
+    },
+    {
+      "id": "3.2.5-s2-q2",
+      "q": "Which statement about the shapes of ions is not correct?",
+      "options": {
+        "A": "[CoCl 4]2– is square planar.",
+        "B": "NH 4+ is tetrahedral.",
+        "C": "[Co(H 2NCH 2CH 2NH 2) 3]2+ is octahedral.",
+        "D": "[Co(H 2O) 6]2+ is octahedral."
+      },
+      "answer": "A",
+      "explanation": "[CoCl ]2- is square planar.\n4",
+      "topic": "3.2.5",
+      "set": 2
+    },
+    {
+      "id": "3.2.5-s2-q3",
+      "q": "Which compound can decolourise acidified potassium manganate(VII) solution?",
+      "options": {
+        "A": "AgNO 3",
+        "B": "CuSO 4",
+        "C": "FeSO 4",
+        "D": "Fe 2(SO 4) 3"
+      },
+      "answer": "C",
+      "explanation": "FeSO\n4",
+      "topic": "3.2.5",
+      "set": 2
+    },
+    {
+      "id": "3.2.5-s2-q4",
+      "q": "Which statement about catalysts used in reactions at equilibrium, at a constant temperature, is correct?",
+      "options": {
+        "A": "They are always used in the solid state.",
+        "B": "They increase the rate of the forward reaction but decrease the rate of the reverse reaction.",
+        "C": "They have no effect on the value of the equilibrium constant.",
+        "D": "They make the forward reaction more exothermic."
+      },
+      "answer": "C",
+      "explanation": "They have no effect on the value of the equilibrium\nconstant.",
+      "topic": "3.2.5",
+      "set": 2
+    },
+    {
+      "id": "3.2.5-s2-q5",
+      "q": "Which process does not involve a heterogeneous catalyst?",
+      "options": {
+        "A": "catalytic cracking of alkanes",
+        "B": "Contact process",
+        "C": "decomposition of ozone",
+        "D": "Haber process"
+      },
+      "answer": "C",
+      "explanation": "decomposition of ozone",
+      "topic": "3.2.5",
+      "set": 2
+    },
+    {
+      "id": "3.2.5-s2-q6",
+      "q": "Cobalt(II) chloride solution changes colour when an excess of concentrated hydrochloric acid is added. What type of reaction takes place?",
+      "options": {
+        "A": "hydrolysis",
+        "B": "ligand substitution",
+        "C": "precipitation",
+        "D": "redox"
+      },
+      "answer": "B",
+      "explanation": "ligand substitution",
+      "topic": "3.2.5",
+      "set": 2
+    },
+    {
+      "id": "3.2.6-s1-q1",
+      "q": "What forms when a solution of sodium carbonate is added to a solution of gallium(III) nitrate?",
+      "options": {
+        "A": "A white precipitate of gallium(III) carbonate.",
+        "B": "A white precipitate of gallium(III) hydroxide.",
+        "C": "A white precipitate of gallium(III) carbonate and bubbles of carbon dioxide.",
+        "D": "A white precipitate of gallium(III) hydroxide and bubbles of carbon dioxide."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.2.6",
+      "set": 1
+    },
+    {
+      "id": "3.2.6-s1-q2",
+      "q": "Which compound gives a colourless solution when an excess of dilute aqueous ammonia is added?",
+      "options": {
+        "A": "MgCl 2",
+        "B": "AgCl",
+        "C": "CuCl 2",
+        "D": "AlCl 3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.6",
+      "set": 1
+    },
+    {
+      "id": "3.2.6-s1-q3",
+      "q": "What is the final species produced when an excess of aqueous ammonia is added to aqueous aluminium chloride?",
+      "options": {
+        "A": "[Al(NH ) ]3+ 3 6",
+        "B": "[Al(OH) (H O) ] 3 2 3",
+        "C": "[Al(OH) (H O) ]– 4 2 2",
+        "D": "[Al(OH)(H O) ]2+ 2 5"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.2.6",
+      "set": 1
     },
     {
       "id": "3.3.1-s1-q1",
