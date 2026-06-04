@@ -149,6 +149,48 @@
       "board": "AQA",
       "level": "A2",
       "questionCount": 3
+    },
+    "3.3.9": {
+      "name": "Carboxylic Acids & Derivatives",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 12
+    },
+    "3.3.10": {
+      "name": "Aromatic Chemistry",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 3
+    },
+    "3.3.11": {
+      "name": "Amines",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 7
+    },
+    "3.3.12": {
+      "name": "Polymers",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 15
+    },
+    "3.3.13": {
+      "name": "Amino Acids, Proteins & DNA",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 7
+    },
+    "3.3.14": {
+      "name": "Organic Synthesis",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 4
+    },
+    "3.3.15": {
+      "name": "NMR Spectroscopy",
+      "board": "AQA",
+      "level": "A2",
+      "questionCount": 4
     }
   },
   "questions": [
@@ -5827,6 +5869,571 @@
       "set": 2
     },
     {
+      "id": "3.3.10-s1-q1",
+      "q": "The reaction between propanoyl chloride and benzene is an example of acylation. Which is a correct representation of part of the mechanism of this reaction?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.10",
+      "set": 1,
+      "image": "/mcq-images/3.3.10-s1-q1.png"
+    },
+    {
+      "id": "3.3.10-s1-q2",
+      "q": "The nitration of benzene uses a nitrating mixture of concentrated nitric acid and concentrated sulfuric acid. HNO + 2H SO → NO + + H O+ + 2HSO – 3 2 4 2 3 4 Which statement is correct?",
+      "options": {
+        "A": "HNO acts as a base. 3",
+        "B": "HNO acts as a catalyst. 3",
+        "C": "HNO acts as an electrophile. 3",
+        "D": "HNO acts as a reducing 3 agent."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.10",
+      "set": 1
+    },
+    {
+      "id": "3.3.10-s1-q3",
+      "q": "Use your understanding of the bonding in benzene to identify the compound that has the most exothermic enthalpy of hydrogenation.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.10",
+      "set": 1,
+      "image": "/mcq-images/3.3.10-s1-q3.png"
+    },
+    {
+      "id": "3.3.11-s1-q1",
+      "q": "Methylamine reacts with bromoethane by nucleophilic substitution to produce a mixture of products. Which is not a possible product of this reaction?",
+      "options": {
+        "A": "C H NHCH 2 5 3",
+        "B": "(C H ) NCH 2 5 2 3",
+        "C": "[(C H ) N(CH ) ]+ Br – 2 5 2 3 2",
+        "D": "[(C H ) NCH ]+ Br – 2 5 3 3"
+      },
+      "answer": "C",
+      "explanation": "[(C H ) N(CH ) ]+ Br –\n2 5 2 3 2",
+      "topic": "3.3.11",
+      "set": 1
+    },
+    {
+      "id": "3.3.11-s1-q2",
+      "q": "Methylamine reacts with bromoethane by substitution to produce a mixture of products. Which compound is not a possible product of this reaction?",
+      "options": {
+        "A": "C H NHCH 2 5 3",
+        "B": "(C H ) NCH 2 5 2 3",
+        "C": "[(C 2H 5) 3NCH 3]+ Br⁻",
+        "D": "[(C 2H 5) 2N(CH 3) 2]+ Br⁻"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.11",
+      "set": 1
+    },
+    {
+      "id": "3.3.11-s1-q3",
+      "q": "Aqueous solutions of ammonia, ethylamine and phenylamine are prepared. Each solution has the same concentration. Which is the correct order for the pH values of these solutions?",
+      "options": {
+        "A": "ammonia > ethylamine > phenylamine",
+        "B": "ammonia > phenylamine > ethylamine",
+        "C": "ethylamine > ammonia > phenylamine",
+        "D": "ethylamine > phenylamine > ammonia"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.11",
+      "set": 1
+    },
+    {
+      "id": "3.3.11-s1-q4",
+      "q": "Which compound is the strongest base?",
+      "options": {
+        "A": "Ammonia",
+        "B": "Ammonium chloride",
+        "C": "Methylamine",
+        "D": "Phenylamine"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.11",
+      "set": 1
+    },
+    {
+      "id": "3.3.11-s1-q5",
+      "q": "What type of reaction is used to convert (CH ) N into the cationic surfactant 3 3 [(CH ) N(CH ) CH ]Cl? 3 3 2 15 3 Bronsted–Lowry acid-base",
+      "options": {
+        "A": "reaction",
+        "B": "Nucleophilic addition Nucleophilic",
+        "C": "addition-elimination",
+        "D": "Nucleophilic substitution"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.11",
+      "set": 1
+    },
+    {
+      "id": "3.3.11-s2-q1",
+      "q": "Which compound is the strongest base?",
+      "options": {
+        "A": "B",
+        "C": "NH 3",
+        "D": "NH 4Cl"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.11",
+      "set": 2
+    },
+    {
+      "id": "3.3.11-s2-q2",
+      "q": "Which statement about HOCH CH(NH )COOH is correct? 2 2",
+      "options": {
+        "A": "It decolourises bromine water.",
+        "B": "It is a component of DNA.",
+        "C": "It is insoluble in water.",
+        "D": "It reacts with hydrochloric acid."
+      },
+      "answer": "D",
+      "explanation": "It reacts with hydrochloric acid.",
+      "topic": "3.3.11",
+      "set": 2
+    },
+    {
+      "id": "3.3.12-s1-q1",
+      "q": "Which polymer has hydrogen bonding between the polymer chains?",
+      "options": {
+        "A": "Kevlar",
+        "B": "PVC",
+        "C": "poly(phenylethene)",
+        "D": "Terylene"
+      },
+      "answer": "A",
+      "explanation": "Kevlar",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q2",
+      "q": "Which is the repeating unit of a polyamide?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1,
+      "image": "/mcq-images/3.3.12-s1-q2.png"
+    },
+    {
+      "id": "3.3.12-s1-q3",
+      "q": "Which type of polymer is not hydrolysed by heating with concentrated aqueous sodium hydroxide?",
+      "options": {
+        "A": "poly(alkene)",
+        "B": "poly(amide)",
+        "C": "poly(ester)",
+        "D": "protein"
+      },
+      "answer": "A",
+      "explanation": "poly(alkene)",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q4",
+      "q": "Which forms a polymer with ClOC(CH ) COCl? 2 8",
+      "options": {
+        "A": "NH CH CH NH 2 2 2 2",
+        "B": "(CH CO) O 3 2",
+        "C": "CH CH CONH 3 2 2",
+        "D": "NH CH COOH 2 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q5",
+      "q": "Which polymer has hydrogen bonding between its chains?",
+      "options": {
+        "A": "Kevlar",
+        "B": "Polythene",
+        "C": "PVC",
+        "D": "Terylene"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q6",
+      "q": "The repeating unit of a polymer is shown. Which monomer or pair of monomers could be used to make this polymer?",
+      "options": {
+        "A": "ClOC(CH ) NH only 2 4 2",
+        "B": "ClOC(CH ) COCl only 2 4",
+        "C": "ClOC(CH ) COCl and H N(CH ) NH 2 4 2 2 6 2",
+        "D": "ClOC(CH ) COCl and H N(CH ) NH 2 6 2 2 4 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q7",
+      "q": "The structure of part of a polyester chain is shown. Which statement correctly explains why plastics made from this polyester only soften at high temperatures?",
+      "options": {
+        "A": "Hydrogen bonds and van der Waals’ forces exist between polyester chains.",
+        "B": "Permanent dipole-dipole forces and van der Waals’ forces exist between polyester chains.",
+        "C": "The carbon-carbon bonds in the chain are strong.",
+        "D": "The carbon-oxygen bonds in the chain are strong."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q8",
+      "q": "Which polymer is least likely to be biodegraded after several years in a landfill site?",
+      "options": {
+        "A": "Kevlar",
+        "B": "Nylon",
+        "C": "Polythene",
+        "D": "Terylene"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q9",
+      "q": "Which compound can form a polymer without needing another reagent?",
+      "options": {
+        "A": "HOCH CH OH 2 2",
+        "B": "HOOCCH CH COOH 2 2",
+        "C": "HOCH CH COCl 2 2",
+        "D": "ClCH CH COOH 2 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s1-q10",
+      "q": "Which compound can polymerise by reaction with itself?",
+      "options": {
+        "A": "NH CH CH NH 2 2 2 2",
+        "B": "CH CH CONH 3 2 2",
+        "C": "HOOCCH COOH 2",
+        "D": "NH CH COCl 2 2"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.12",
+      "set": 1
+    },
+    {
+      "id": "3.3.12-s2-q1",
+      "q": "Which statement concerning nylon-6,6 is correct?",
+      "options": {
+        "A": "Butanedioic acid is one of the reactants used to make nylon-6,6",
+        "B": "Nylon-6,6 is an addition polymer.",
+        "C": "Nylon-6,6 can be hydrolysed by aqueous sodium hydroxide.",
+        "D": "All molecules of nylon-6,6 have the same relative molecular mass."
+      },
+      "answer": "C",
+      "explanation": "Nylon-6,6 can be hydrolysed by aqueous sodium\nhydroxide.",
+      "topic": "3.3.12",
+      "set": 2
+    },
+    {
+      "id": "3.3.12-s2-q2",
+      "q": "Which type of polymer is most difficult to hydrolyse?",
+      "options": {
+        "A": "Polyalkene",
+        "B": "Polyamide",
+        "C": "Polyester",
+        "D": "Protein"
+      },
+      "answer": "A",
+      "explanation": "Polyalkene",
+      "topic": "3.3.12",
+      "set": 2
+    },
+    {
+      "id": "3.3.12-s2-q3",
+      "q": "In which polymer does hydrogen bonding occur between the polymer chains?",
+      "options": {
+        "A": "A polyalkene",
+        "B": "A polyamide",
+        "C": "A polychloroalkene",
+        "D": "A polyester"
+      },
+      "answer": "B",
+      "explanation": "A polyamide",
+      "topic": "3.3.12",
+      "set": 2
+    },
+    {
+      "id": "3.3.12-s2-q4",
+      "q": "Suberoyl chloride, ClOC(CH ) COCl, is commonly used in the manufacture of 2 6 polymers. Which compound can form a polymer with suberoyl chloride?",
+      "options": {
+        "A": "H NCH CH NH 2 2 2 2",
+        "B": "ClOCCH COCl 2",
+        "C": "CH CH CONH 3 2 2",
+        "D": "HOOCCH COOH 2"
+      },
+      "answer": "A",
+      "explanation": "H NCH CH NH\n2 2 2 2",
+      "topic": "3.3.12",
+      "set": 2
+    },
+    {
+      "id": "3.3.12-s2-q5",
+      "q": "Which polymer is not hydrolysed when heated with aqueous alkali?",
+      "options": {
+        "A": "Kevlar",
+        "B": "Nylon 6,6",
+        "C": "Poly(propene)",
+        "D": "Terylene"
+      },
+      "answer": "C",
+      "explanation": "Poly(propene)",
+      "topic": "3.3.12",
+      "set": 2
+    },
+    {
+      "id": "3.3.13-s1-q1",
+      "q": "Which structure shows a zwitterion of an amino acid?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.13",
+      "set": 1,
+      "image": "/mcq-images/3.3.13-s1-q1.png"
+    },
+    {
+      "id": "3.3.13-s1-q2",
+      "q": "Which structure is formed by phenylalanine in solution at pH = 3?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.13",
+      "set": 1,
+      "image": "/mcq-images/3.3.13-s1-q2.png"
+    },
+    {
+      "id": "3.3.13-s1-q3",
+      "q": "Which statement about enzymes is not correct?",
+      "options": {
+        "A": "The tertiary structure of an enzyme influences which molecules can bind to the active site.",
+        "B": "The action of enzymes can be inhibited by a molecule or ion that binds to the active site.",
+        "C": "Enzymes work equally well on both optical isomers of a substrate.",
+        "D": "Computers can be used to design drugs to block active sites on enzymes."
+      },
+      "answer": "C",
+      "explanation": "Enzymes work equally well on both optical isomers\nof a substrate.",
+      "topic": "3.3.13",
+      "set": 1
+    },
+    {
+      "id": "3.3.13-s1-q4",
+      "q": "Cisplatin has the formula [Pt(NH ) Cl ] 3 2 2 Cisplatin is an anti-cancer drug that prevents replication of DNA. When cisplatin bonds to DNA, which is the correct ligand replacement reaction?",
+      "options": {
+        "A": "replacement of one NH 3 ligand",
+        "B": "replacement of two NH 3 ligands",
+        "C": "replacement of one NH 3 ligand and one Cl– ligand",
+        "D": "replacement of two Cl– ligands"
+      },
+      "answer": "D",
+      "explanation": "replacement of two Cl- ligands",
+      "topic": "3.3.13",
+      "set": 1
+    },
+    {
+      "id": "3.3.13-s1-q5",
+      "q": "Which is the main species present in an aqueous solution of aspartic acid at pH = 14?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.13",
+      "set": 1,
+      "image": "/mcq-images/3.3.13-s1-q5.png"
+    },
+    {
+      "id": "3.3.13-s1-q6",
+      "q": "Which type of interaction between polypeptide chains is mainly responsible for maintaining the secondary structure of a protein in the form of an alpha helix?",
+      "options": {
+        "A": "covalent bonds",
+        "B": "hydrogen bonds",
+        "C": "ionic interactions",
+        "D": "van der Waals forces"
+      },
+      "answer": "B",
+      "explanation": "hydrogen bonds",
+      "topic": "3.3.13",
+      "set": 1
+    },
+    {
+      "id": "3.3.13-s1-q7",
+      "q": "Which compound is not a 2-aminocarboxylic acid?",
+      "options": {
+        "A": "CH CH(NH )COOH 3 2",
+        "B": "CH CH(NH )CH COOH 3 2 2",
+        "C": "CH CH CH(NH )COOH 3 2 2",
+        "D": "(CH ) CHCH(NH )COOH 3 2 2"
+      },
+      "answer": "B",
+      "explanation": "CH CH(NH )CH COOH\n3 2 2",
+      "topic": "3.3.13",
+      "set": 1
+    },
+    {
+      "id": "3.3.14-s1-q1",
+      "q": "A two-step preparation of propylamine is shown. bromoethane → X → propylamine What is X?",
+      "options": {
+        "A": "CH CH CH NH 3 2 2 2",
+        "B": "CH CH CN 3 2",
+        "C": "CH CH CH Br 3 2 2",
+        "D": "CH CH NH 3 2 2"
+      },
+      "answer": "B",
+      "explanation": "CH CH CN\n3 2",
+      "topic": "3.3.14",
+      "set": 1
+    },
+    {
+      "id": "3.3.14-s1-q2",
+      "q": "2-Methylbutylamine can be synthesised from an alkene. What is the identity of the alkene?",
+      "options": {
+        "A": "But-2-ene",
+        "B": "Methylpropene",
+        "C": "2-Methylbut-1-ene",
+        "D": "2-Methylbut-2-ene"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.14",
+      "set": 1
+    },
+    {
+      "id": "3.3.14-s2-q1",
+      "q": "Consider this reaction scheme. Which step is shown with a correct reagent and a correct condition?",
+      "options": {
+        "A": "Step 1 HCN dissolved in water",
+        "B": "Step 2 KOH dissolved in warm water",
+        "C": "Step 4 CH 3OH with an alkaline catalyst",
+        "D": "Step 5 H 2 with a nickel catalyst"
+      },
+      "answer": "D",
+      "explanation": "Step 5 H with a nickel catalyst\n2",
+      "topic": "3.3.14",
+      "set": 2
+    },
+    {
+      "id": "3.3.14-s2-q2",
+      "q": "Compound X can be converted into an alcohol in a two-stage process. What is the name of compound X?",
+      "options": {
+        "A": "propene",
+        "B": "propanal",
+        "C": "methylbenzene",
+        "D": "ethanamide"
+      },
+      "answer": "A",
+      "explanation": "propene",
+      "topic": "3.3.14",
+      "set": 2
+    },
+    {
+      "id": "3.3.15-s1-q1",
+      "q": "Which statement does not support the suggestion that an unknown organic compound is",
+      "options": {
+        "A": "Its 1H NMR spectrum has 3 peaks with an integration ratio of 2:3:3",
+        "B": "Its 13C NMR spectrum has 3 peaks.",
+        "C": "Its infrared spectrum has an absorption at 1735 cm−1",
+        "D": "It has 36.36% by mass of oxygen and 9.09% by mass of hydrogen."
+      },
+      "answer": "B",
+      "explanation": "Its 13C NMR spectrum has 3 peaks.",
+      "topic": "3.3.15",
+      "set": 1
+    },
+    {
+      "id": "3.3.15-s1-q2",
+      "q": "How many peaks are there in the 13C NMR spectrum of 1,4-dimethylbenzene?",
+      "options": {
+        "A": "8",
+        "B": "4",
+        "C": "3",
+        "D": "2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.15",
+      "set": 1
+    },
+    {
+      "id": "3.3.15-s1-q3",
+      "q": "How many peaks does this compound have in its 13C spectrum?",
+      "options": {
+        "A": "5",
+        "B": "6",
+        "C": "7",
+        "D": "8"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.15",
+      "set": 1
+    },
+    {
+      "id": "3.3.15-s1-q4",
+      "q": "Which amine has only three peaks in its proton NMR spectrum?",
+      "options": {
+        "A": "Methylamine",
+        "B": "Trimethylamine",
+        "C": "Diethylamine",
+        "D": "Propylamine"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.3.15",
+      "set": 1
+    },
+    {
       "id": "3.3.2-s1-q1",
       "q": "Which is a propagation step in the chlorination of methane?",
       "options": {
@@ -7331,6 +7938,175 @@
       "explanation": "",
       "topic": "3.3.7",
       "set": 4
+    },
+    {
+      "id": "3.3.9-s1-q1",
+      "q": "Which statement about (CH ) CHCH COOH is correct? 3 2 2",
+      "options": {
+        "A": "In aqueous solution it reacts with magnesium to form carbon dioxide.",
+        "B": "It can form hydrogen bonds.",
+        "C": "It has optical isomers.",
+        "D": "It has the IUPAC name 2-methylbutanoic acid."
+      },
+      "answer": "B",
+      "explanation": "It can form hydrogen bonds.",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q2",
+      "q": "Which compound forms a white precipitate when added to aqueous silver nitrate?",
+      "options": {
+        "A": "bromoethane",
+        "B": "ethanal",
+        "C": "ethanoic anhydride",
+        "D": "ethanoyl chloride"
+      },
+      "answer": "D",
+      "explanation": "ethanoyl chloride",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q3",
+      "q": "Which compound reacts with warm dilute aqueous sodium hydroxide?",
+      "options": {
+        "A": "C H 6 6",
+        "B": "CH CH=CH 3 2",
+        "C": "CH CH CH NH 3 2 2 2",
+        "D": "(CH CO) O 3 2"
+      },
+      "answer": "D",
+      "explanation": "(CH CO) O\n3 2",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q4",
+      "q": "Which reaction involves addition-elimination?",
+      "options": {
+        "A": "(CH ) CHBr + KOH → CH CH=CH + KBr + H O 3 2 3 2 2",
+        "B": "CH COCl + C H OH → CH COOC H + HCl 3 6 5 3 6 5",
+        "C": "CH CH=CH + Cl → CH CHClCH Cl 3 2 2 3 2",
+        "D": "CH CH CH Br + NaOH → CH CH CH OH + 3 2 2 3 2 2 NaBr"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q5",
+      "q": "Which compound is formed when phenyl benzenecarboxylate is hydrolysed under acidic conditions?",
+      "options": {
+        "A": "C H CH OH 6 5 2",
+        "B": "C H CHO 6 5",
+        "C": "C H COCH 6 5 3",
+        "D": "C H COOH 6 5"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q6",
+      "q": "Which compound is formed by acid hydrolysis of phenylmethyl ethanoate?",
+      "options": {
+        "A": "C H CH OH 6 5 2",
+        "B": "C H CHO 6 5",
+        "C": "C H COCH 6 5 3",
+        "D": "C H COOH 6 5"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q7",
+      "q": "A student is required to dry a liquid sample of pentanoic acid. Which drying agent is suitable?",
+      "options": {
+        "A": "Calcium oxide",
+        "B": "Calcium sulfate",
+        "C": "Potassium hydroxide",
+        "D": "Potassium carbonate"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s1-q8",
+      "q": "Which compound can be purified by forming a hot aqueous solution that recrystallises on cooling?",
+      "options": {
+        "A": "Cyclohexene",
+        "B": "Ethanoic acid",
+        "C": "Phenylamine",
+        "D": "Benzoic acid"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.3.9",
+      "set": 1
+    },
+    {
+      "id": "3.3.9-s2-q1",
+      "q": "Compound Y has the structural formula CH 3COOCH 2CH(CH 3) 2 Which compound is a position isomer of Y?",
+      "options": {
+        "A": "5-hydroxyhexan-3-one",
+        "B": "butyl ethanoate",
+        "C": "hexanoic acid",
+        "D": "propyl propanoate"
+      },
+      "answer": "D",
+      "explanation": "Propyl propanoate",
+      "topic": "3.3.9",
+      "set": 2
+    },
+    {
+      "id": "3.3.9-s2-q2",
+      "q": "Which compound is formed by the acid hydrolysis of phenyl benzenecarboxylate?",
+      "options": {
+        "A": "C 6H 5CH 2OH",
+        "B": "C 6H 5CHO",
+        "C": "C 6H 5COCH 3",
+        "D": "C 6H 5COOH"
+      },
+      "answer": "D",
+      "explanation": "C H COOH\n6 5",
+      "topic": "3.3.9",
+      "set": 2
+    },
+    {
+      "id": "3.3.9-s2-q3",
+      "q": "Which compound is an amide?",
+      "options": {
+        "A": "CH CH CH CN 3 2 2",
+        "B": "CH CONHCH CH 3 2 3",
+        "C": "CH COOCH CH 3 2 3",
+        "D": "CH NHCH CH CH 3 2 2 3"
+      },
+      "answer": "B",
+      "explanation": "CH CONHCH CH\n3 2 3",
+      "topic": "3.3.9",
+      "set": 2
+    },
+    {
+      "id": "3.3.9-s3-q18",
+      "q": "Summarised directions for recording responses to multiple completion questions",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "",
+      "explanation": "",
+      "topic": "3.3.9",
+      "set": 3,
+      "image": "/mcq-images/3.3.9-s3-q18.png"
     }
   ]
 }
