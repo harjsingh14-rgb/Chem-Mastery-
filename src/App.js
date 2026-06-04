@@ -7845,12 +7845,21 @@ export default function App() {
 
             {/* Question */}
             <div key={currentQ.id} style={{ padding:"16px", animation:"mcqFadeIn 0.3s ease" }}>
-              <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom:"16px" }}>
+              <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom: currentQ.image ? "10px" : "16px" }}>
                 {currentQ.q}
               </div>
 
+              {/* Question image (for diagram-based questions) */}
+              {currentQ.image && (
+                <div style={{ marginBottom:"14px", background:"#fff", border:"1.5px solid #e2e8f0",
+                  borderRadius:"12px", padding:"8px", overflow:"hidden" }}>
+                  <img src={process.env.PUBLIC_URL + currentQ.image} alt="Question diagram"
+                    style={{ width:"100%", height:"auto", display:"block", borderRadius:"8px" }} />
+                </div>
+              )}
+
               {/* Options */}
-              <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+              <div style={{ display:"flex", flexDirection: currentQ.image && Object.values(currentQ.options).every(v => v === "See diagram") ? "row" : "column", gap:"10px", flexWrap:"wrap" }}>
                 {optionLetters.map(letter => {
                   const optText = currentQ.options[letter];
                   if (!optText) return null;
@@ -7877,9 +7886,11 @@ export default function App() {
                         fontSize:"13px", fontWeight:800, transition:"all 0.2s" }}>
                         {showResult && isCorrect ? "✓" : showResult && isSelected && !isCorrect ? "✗" : letter}
                       </div>
-                      <div style={{ fontSize:"14px", color: textColor, lineHeight:1.4, fontWeight: showResult && isCorrect ? 700 : 400 }}>
-                        {optText}
-                      </div>
+                      {optText !== "See diagram" && (
+                        <div style={{ fontSize:"14px", color: textColor, lineHeight:1.4, fontWeight: showResult && isCorrect ? 700 : 400 }}>
+                          {optText}
+                        </div>
+                      )}
                     </button>
                   );
                 })}

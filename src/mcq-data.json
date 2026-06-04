@@ -4,7 +4,43 @@
       "name": "Atomic Structure",
       "board": "AQA",
       "level": "AS",
-      "questionCount": 42
+      "questionCount": 39
+    },
+    "3.1.2": {
+      "name": "Amount of Substance",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 57
+    },
+    "3.1.3": {
+      "name": "Bonding",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 56
+    },
+    "3.1.4": {
+      "name": "Energetics",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 18
+    },
+    "3.1.5": {
+      "name": "Kinetics",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 23
+    },
+    "3.1.6": {
+      "name": "Equilibria",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 17
+    },
+    "3.1.7": {
+      "name": "Redox",
+      "board": "AQA",
+      "level": "AS",
+      "questionCount": 26
     }
   },
   "questions": [
@@ -33,20 +69,6 @@
       },
       "answer": "A",
       "explanation": "1s2 2s2 2p6 3s2 3p6 3d3",
-      "topic": "3.1.1",
-      "set": 1
-    },
-    {
-      "id": "3.1.1-s1-q3",
-      "q": "Which atom has one more proton and two more neutrons than ²³₁₁Na?",
-      "options": {
-        "A": "²⁴₁₂Mg",
-        "B": "²⁵₁₂Mg",
-        "C": "²⁶₁₂Mg",
-        "D": "²⁶₁₃Al"
-      },
-      "answer": "D",
-      "explanation": "²³Na has 11 protons, 12 neutrons. One more proton = 12, two more neutrons = 14, giving mass 26. But check: answer D from mark scheme.",
       "topic": "3.1.1",
       "set": 1
     },
@@ -401,20 +423,6 @@
       "set": 2
     },
     {
-      "id": "3.1.1-s2-q2",
-      "q": "Which isotope has 2 more protons and 3 more neutrons than ¹¹²₄₈Cd?",
-      "options": {
-        "A": "¹¹⁷₄₉In",
-        "B": "¹¹⁷₅₀Sn",
-        "C": "¹¹⁷₅₀Sn",
-        "D": "¹¹⁵₅₀Sn"
-      },
-      "answer": "C",
-      "explanation": "¹¹²Cd has 48 protons, 64 neutrons. Add 2 protons (50) and 3 neutrons (67) gives mass 117, element Sn.",
-      "topic": "3.1.1",
-      "set": 2
-    },
-    {
       "id": "3.1.1-s2-q3",
       "q": "Which equation shows the process that occurs during the second ionisation of magnesium?",
       "options": {
@@ -481,20 +489,6 @@
       },
       "answer": "C",
       "explanation": "C 12 13 10",
-      "topic": "3.1.1",
-      "set": 2
-    },
-    {
-      "id": "3.1.1-s2-q8",
-      "q": "Which atom has two more protons and two more neutrons than ²⁷₁₃Al?",
-      "options": {
-        "A": "²⁹₁₅P",
-        "B": "³¹₁₅P",
-        "C": "³¹₁₆S",
-        "D": "²⁹₁₄Si"
-      },
-      "answer": "D",
-      "explanation": "²⁷Al has 13p, 14n. Two more protons = 15, two more neutrons = 16 gives mass 31. Answer D from mark scheme.",
       "topic": "3.1.1",
       "set": 2
     },
@@ -594,6 +588,2772 @@
       "answer": "A",
       "explanation": "Al(g) → Al+(g) + e–",
       "topic": "3.1.1",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s1-q1",
+      "q": "A compound contains 40.0% carbon, 6.7% hydrogen and 53.3% oxygen by mass. Which could be the molecular formula of this compound?",
+      "options": {
+        "A": "C H O 2 2 2",
+        "B": "C H O 2 2",
+        "C": "C H O 2 4 2",
+        "D": "C HO 2 2"
+      },
+      "answer": "C",
+      "explanation": "C H O\n2 4 2",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q2",
+      "q": "When driving a car, a legal limit for ethanol (M = 46.0) is 80 mg per 100 cm3 of r blood. What is this concentration in mol dm–3?",
+      "options": {
+        "A": "1.74 × 10–1",
+        "B": "1.74 × 10–2",
+        "C": "1.74 × 10–3",
+        "D": "1.74 × 10–4"
+      },
+      "answer": "B",
+      "explanation": "1.74 x 10–2",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q3",
+      "q": "What is the percentage atom economy for the production of ethanol from glucose?",
+      "options": {
+        "C": "51.1%",
+        "A": "25.6%",
+        "B": "27.1%",
+        "D": "54.2%"
+      },
+      "answer": "C",
+      "explanation": "51.1%",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q4",
+      "q": "What is the mole fraction of 1.0 g of a compound of relative molecular mass 100.0 dissolved in 30.0 g of a solvent of relative molecular mass 50.0?",
+      "options": {
+        "A": "6.0 × 10−3",
+        "B": "1.6 × 10−2",
+        "C": "1.7 × 10−2",
+        "D": "3.0 × 10−2"
+      },
+      "answer": "B",
+      "explanation": "1.6 × 10−2",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q5",
+      "q": "Which compound needs the greatest amount of oxygen for the complete combustion of 1 mol of the compound?",
+      "options": {
+        "A": "ethanal",
+        "B": "ethanol",
+        "C": "ethane-1,2-diol",
+        "D": "methanol"
+      },
+      "answer": "B",
+      "explanation": "ethanol",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q6",
+      "q": "Nitration of 1.70 g of methyl benzoate (M = 136.0) produces methyl r 3-nitrobenzoate (M = 181.0). The percentage yield is 65.0% r What mass, in g, of methyl 3-nitrobenzoate is produced?",
+      "options": {
+        "A": "0.830",
+        "B": "1.10",
+        "C": "1.47",
+        "D": "2.26"
+      },
+      "answer": "C",
+      "explanation": "1.47",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q7",
+      "q": "What is the empirical formula of a hydrocarbon that contains 90% carbon by mass?",
+      "options": {
+        "A": "C H 2 3",
+        "B": "C H 3 2",
+        "C": "C H 3 4",
+        "D": "C H 4 3"
+      },
+      "answer": "C",
+      "explanation": "C H\n3 4",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q8",
+      "q": "What is the minimum volume of 0.0500 mol dm–3 aqueous bromine needed to react completely with 0.0200 g of buta-1,3-diene? (M of buta-1,3-diene = 54.0) r",
+      "options": {
+        "A": "7.40 cm3",
+        "B": "14.8 cm3",
+        "C": "29.6 cm3",
+        "D": "67.5 cm3"
+      },
+      "answer": "B",
+      "explanation": "14.8 cm3",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q9",
+      "q": "When heated, a sample of potassium chlorate(V) (KClO ) produced 67.2 cm3 of 3 oxygen, measured at 298 K and 110 kPa 2 KClO (s) → 2 KCl(s) + 3 O (g) 3 2 What is the amount, in moles, of potassium chlorate(V) that has decomposed? The gas constant, R = 8.31 J K–1 mol–1",
+      "options": {
+        "A": "9.95 × 10–4",
+        "B": "1.99 × 10–3",
+        "C": "2.99 × 10–3",
+        "D": "4.48 × 10–3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q10",
+      "q": "What is the minimum volume, in cm3, of 0.02 mol dm–3 KMnO solution needed to 4 oxidise 0.01 mol of VO2+? 5 VO2+ + MnO – + H O → 5 VO + + Mn2+ + 2 H+ 4 2 2",
+      "options": {
+        "A": "10",
+        "B": "50",
+        "C": "100",
+        "D": "200"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q11",
+      "q": "A student rinsed the apparatus before starting an acid-base titration. The results of the titration showed that the volume of acid added from the burette was larger than expected. Which is a possible reason for this?",
+      "options": {
+        "A": "The conical flask was rinsed with water before the titration.",
+        "B": "The walls of the conical flask were rinsed with water during the titration.",
+        "C": "The pipette was rinsed only with water.",
+        "D": "The burette was rinsed only with water."
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q12",
+      "q": "Which sample, measured at room temperature and pressure, contains the greatest number of the stated particles?",
+      "options": {
+        "A": "1 g of hydrogen molecules",
+        "B": "1 g of helium atoms",
+        "C": "1 dm3 of hydrogen molecules",
+        "D": "1 dm3 of helium atoms"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q13",
+      "q": "5.0 g of an oxide of molybdenum contain 4.0 g of molybdenum. What is the empirical formula of this oxide?",
+      "options": {
+        "A": "MoO 2",
+        "B": "Mo O 4 5",
+        "C": "Mo O 2 3",
+        "D": "Mo O 3 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q14",
+      "q": "The equation below represents the complete combustion of butane. 20 cm3 of butane are completely burned in 0.20 dm3 of oxygen. Which statement is correct? All volumes are measured at the same temperature and pressure.",
+      "options": {
+        "A": "40 cm3 of carbon dioxide are formed",
+        "B": "0.065 dm3 of oxygen react",
+        "C": "70 cm3 of oxygen remain",
+        "D": "0.50 dm3 of steam are formed"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q15",
+      "q": "What is the percentage yield when 20 g of aluminium are produced from 50 g of aluminium oxide? 2Al O → 4Al + 3O 2 3 2",
+      "options": {
+        "A": "76%",
+        "B": "40%",
+        "C": "33%",
+        "D": "19%"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q16",
+      "q": "A ‘drink-driving’ offence is committed if the blood alcohol level of a driver is over 80 mg of ethanol per 100 cm3 of blood. What is the concentration, in mol dm–3, of ethanol if there are 80 mg of ethanol (M = 46.0) per 100 cm3 of blood? r",
+      "options": {
+        "A": "0.00017",
+        "B": "0.0017",
+        "C": "0.017",
+        "D": "1.7"
+      },
+      "answer": "C",
+      "explanation": "0.017",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q17",
+      "q": "The heat released when 1.00 g of ethanol (M = 46.0) undergoes complete r combustion is 29.8 kJ What is the heat released by each molecule, in joules, when ethanol undergoes complete combustion? (the Avogadro constant L = 6.022 × 1023 mol–1)",
+      "options": {
+        "A": "2.28 × 10–18 J",
+        "B": "4.95 × 10–20 J",
+        "C": "2.28 × 10–21 J",
+        "D": "4.95 × 10–23 J"
+      },
+      "answer": "A",
+      "explanation": "2.28 × 10–18 J",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q18",
+      "q": "Which amount of sodium hydroxide would react exactly with 7.5 g of a diprotic acid, H A (M = 150)? 2 r",
+      "options": {
+        "A": "50 cm3 of 0.05 mol dm–3 NaOH(aq)",
+        "B": "100 cm3 of 0.50 mol dm–3 NaOH(aq)",
+        "C": "100 cm3 of 1.0 mol dm–3 NaOH(aq)",
+        "D": "100 cm3 of 2.0 mol dm–3 NaOH(aq)"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q19",
+      "q": "Lead(II) nitrate and potassium iodide react according to the equation Pb(NO ) (aq) + 2 KI(aq) → PbI (s) + 2 KNO (aq) 3 2 2 3 In an experiment, 25.0 cm3 of a 0.100 mol dm–3 solution of each compound are mixed together. Which amount, in mol, of lead(II) iodide is formed?",
+      "options": {
+        "A": "1.25 × 10–3",
+        "B": "2.50 × 10–3",
+        "C": "1.25 × 10–2",
+        "D": "2.50 × 10–2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q20",
+      "q": "How many protons are there in 6.0 g of nitrogen gas? Avogadro constant, L = 6.022 × 1023 mol–1",
+      "options": {
+        "A": "1.3 × 1023",
+        "B": "9.0 × 1023",
+        "C": "1.8 × 1024",
+        "D": "3.6 × 1024"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q21",
+      "q": "A 30 cm3 sample of nitrogen was reacted with a 60 cm3 sample of fluorine according to the equation What is the volume of the gas mixture after the reaction, at constant temperature and pressure?",
+      "options": {
+        "A": "20 cm3",
+        "B": "30 cm3",
+        "C": "40 cm3",
+        "D": "50 cm3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q22",
+      "q": "A solution of volume 500 cm3 contains 150 g of ammonia. What is the concentration, in mol dm–3, of ammonia in this solution?",
+      "options": {
+        "A": "0.51",
+        "B": "8.82",
+        "C": "16.7",
+        "D": "17.6"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q23",
+      "q": "A student devised an experiment to find the concentration of sulfuric acid in a sample of battery acid. • A measuring cylinder was used to transfer 10 cm3 of battery acid to a volumetric flask. • Distilled water was added to the volumetric flask until the volume reached 250 cm3 • A 25.0 cm3 sample of diluted acid was transferred from the volumetric flask to a conical flask using a pipette. • A few drops of methyl orange indicator were added to the acid in the conical flask before titrating the acid with sodium hydroxide. • The titration was repeated five times but concordant results were not obtained. (Note: Methyl orange is red in acid and yellow in alkali.) Which suggestion would reduce the overall measurement uncertainty in the titration?",
+      "options": {
+        "A": "Use less concentrated alkali in the burette.",
+        "B": "Use phenolphthalein indicator instead of methyl orange.",
+        "C": "Use smaller samples of the diluted acid in each titration.",
+        "D": "Begin each titration with the burette filled to the 0.00 cm3 mark."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q24",
+      "q": "Ethanol can be made from glucose by fermentation.",
+      "options": {
+        "C": "51.1%",
+        "A": "18.6%",
+        "B": "36.4%",
+        "D": "72.8%"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q25",
+      "q": "A gas cylinder contains 5.0 kg of propane. How many propane molecules are in the cylinder? The Avogadro constant, L = 6.022 × 1023 mol–1",
+      "options": {
+        "A": "6.8 × 1022",
+        "B": "7.2 × 1022",
+        "C": "6.8 × 1025",
+        "D": "7.2 × 1025"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q26",
+      "q": "Which sample of liquid has the greatest volume?",
+      "options": {
+        "A": "500 mg of pentane (density = 0.63 g cm–3)",
+        "B": "650 mg of propan-1-ol (density = 0.80 g cm–3)",
+        "C": "1.20 g of dichloromethane (density = 1.33 g cm–3)",
+        "D": "1.30 g of trichloromethane (density = 1.48 g cm–3)"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q27",
+      "q": "Some 1.0 mol dm–3 solutions were mixed using equal volumes of each solution. Which pair of solutions would give the greatest mass of solid?",
+      "options": {
+        "A": "Ba(OH) and MgCl 2 2",
+        "B": "Ba(OH) and MgSO 2 4",
+        "C": "Ba(OH) and NaCl 2",
+        "D": "Ba(OH) and Na SO 2 2 4"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q28",
+      "q": "A 4.85 g sample of anhydrous sodium sulfate is dissolved in water and the solution made up to 250 cm3 in a volumetric flask. What is the concentration in mol dm−3 of sodium sulfate in the solution?",
+      "options": {
+        "A": "0.0341",
+        "B": "0.137",
+        "C": "0.163",
+        "D": "0.273"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q29",
+      "q": "Which of these contains the greatest number of atoms?",
+      "options": {
+        "A": "127 mg of iodine",
+        "B": "1.54 × 10−4 kg of phosphorus",
+        "C": "81.0 mg of carbon dioxide",
+        "D": "1.70 × 10−4 kg of ammonia"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q30",
+      "q": "25.0 cm3 samples of NaOH solution were taken by pipette from a beaker. These were then titrated with an aqueous solution of ethanoic acid. The concentration of ethanoic acid calculated from the experimental results was found to be lower than the actual value. Which of these could explain the difference? Rinsing the pipette with distilled water before filling with",
+      "options": {
+        "A": "NaOH Rinsing the burette with distilled water before filling with",
+        "B": "ethanoic acid Rinsing the walls of the conical flask with distilled water",
+        "C": "during the titration Rinsing the beaker with distilled water before filling with",
+        "D": "NaOH"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q31",
+      "q": "A 20.0 cm3 sample of a 0.400 mol dm−3 aqueous solution of a metal bromide (MBrn) reacts exactly with 160 cm3 of 0.100 mol dm−3 aqueous silver nitrate. What is the formula of the metal bromide?",
+      "options": {
+        "A": "MBr",
+        "B": "MBr 2",
+        "C": "MBr 3",
+        "D": "MBr 4"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q32",
+      "q": "What is the empirical formula of an oxide of nitrogen that contains 26% nitrogen by mass?",
+      "options": {
+        "A": "NO 2",
+        "B": "N O 2 3",
+        "C": "N O 2 5",
+        "D": "N O 4 5"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q33",
+      "q": "What is the burette reading for this transparent liquid?",
+      "options": {
+        "A": "24.10 cm3",
+        "B": "24.30 cm3",
+        "C": "25.70 cm3",
+        "D": "25.90 cm3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q34",
+      "q": "A volumetric flask was used to prepare 250 cm3 of a solution. The solute was added from a plastic weighing container. Mass / g Weighing container with solute 10.13 Weighing container after solute added to 4.48 volumetric flask Each reading from the balance has an uncertainty of ±0.005 g What is the percentage uncertainty in the mass of the solute used?",
+      "options": {
+        "A": "0.09%",
+        "B": "0.11%",
+        "C": "0.18%",
+        "D": "0.22%"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q35",
+      "q": "Which sample contains the most molecules? The Avogadro constant, L = 6.022 x 1023 mol−1",
+      "options": {
+        "A": "2.10 × 1022 molecules of methane, CH 4",
+        "B": "1.00 g of oxygen, O 2",
+        "C": "65.0 mg of hydrogen, H 2",
+        "D": "0.0300 mol of ethane, C H 2 6"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q36",
+      "q": "A sample of 2.0 mol dm−3 acid has a volume of 100 cm3 What volume of water, in cm3, should be added to this acid to dilute the sample to a concentration of 1.5 mol dm−3?",
+      "options": {
+        "A": "25",
+        "B": "33.3",
+        "C": "50",
+        "D": "66.7"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q37",
+      "q": "Two sealed flasks with the same volume are left side by side. Flask A contains 4.0 × 10−3 mol of methane. Flask B contains 340 mg of a different gas. Both gases are at the same temperature and pressure. Which gas could be in Flask B?",
+      "options": {
+        "A": "CH Cl 2 2",
+        "B": "HBr",
+        "C": "Kr",
+        "D": "PF 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q38",
+      "q": "Analysis of a sample of a chemical with formula C H N O S, showed that it 22 30 6 4 contained 0.0195 mol of carbon. What mass of nitrogen was present in the sample?",
+      "options": {
+        "A": "0.041 g",
+        "B": "0.057 g",
+        "C": "0.074 g",
+        "D": "0.420 g"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q39",
+      "q": "What is the mass, in mg, of carbon formed when 3.0 × 10−3 mol of propene undergoes incomplete combustion? 2C H + 3O ⟶ 6C + 6H O 3 6 2 2",
+      "options": {
+        "A": "9.0 × 10−3",
+        "B": "3.6 × 10−2",
+        "C": "1.08 × 102",
+        "D": "2.16 × 102"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s1-q40",
+      "q": "The equation for the reaction between zinc and hydrochloric acid is Zn + 2HCl ⟶ ZnCl + H 2 2 What is the minimum mass, in mg, of zinc (A = 65.4) needed to react with r 50.0 cm3 of 1.68 mol dm−3 hydrochloric acid?",
+      "options": {
+        "A": "2.75",
+        "B": "5.49",
+        "C": "2.75 × 103",
+        "D": "5.49 × 103"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 1
+    },
+    {
+      "id": "3.1.2-s2-q1",
+      "q": "What is the percentage atom economy for the formation of sodium nitrate in the reaction between sodium carbonate and nitric acid? Na CO + 2 HNO → 2 NaNO + H O + CO 2 3 3 3 2 2",
+      "options": {
+        "A": "36.6%",
+        "B": "50.3%",
+        "C": "57.8%",
+        "D": "73.3%"
+      },
+      "answer": "D",
+      "explanation": "73.3%",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q2",
+      "q": "The table shows some results from a titration. Titration Rough Titre 1 Titre 2 Titre 3 Initial reading / cm3 0.00 11.30 0.00 8.55 Final reading / cm3 26.85 37.20 26.20 34.55 Titre volume / cm3 26.85 25.90 26.20 26.00 What is the correct mean titre?",
+      "options": {
+        "A": "25.95 cm3",
+        "B": "26.03 cm3",
+        "C": "26.10 cm3",
+        "D": "26.24 cm3"
+      },
+      "answer": "A",
+      "explanation": "25.95 cm3",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q3",
+      "q": "What is the empirical formula of an oxide of chlorine that contains 42.5% by mass of chlorine?",
+      "options": {
+        "A": "ClO 2",
+        "B": "ClO 3",
+        "C": "Cl 2O 3",
+        "D": "Cl 2O 5"
+      },
+      "answer": "B",
+      "explanation": "ClO\n3",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q4",
+      "q": "Which of these practical steps will improve the accuracy of a titration?",
+      "options": {
+        "A": "Using a 10.0 cm3 pipette instead of a 25.0 cm3 pipette.",
+        "B": "Rinsing the sides of the conical flask with water.",
+        "C": "Rinsing the burette with water before filling.",
+        "D": "Using 6 drops of indicator instead of 3 drops of indicator."
+      },
+      "answer": "B",
+      "explanation": "Rinsing the sides of the conical flask with water",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q5",
+      "q": "The equation shows how P reacts with Q to make R and S. When a mass of P reacts with an excess of Q, which row shows the amounts formed?",
+      "image": "/mcq-images/3.1.2-s2-q5.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q6",
+      "q": "What is the M of this compound? r",
+      "options": {
+        "A": "94.0",
+        "B": "96.0",
+        "C": "98.0",
+        "D": "100.0 (Total 1 marks)"
+      },
+      "answer": "B",
+      "explanation": "96.0",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q7",
+      "q": "This is the equation for the conversion of 1,2-dibromoethane to butanedinitrile. CH BrCH Br + 2 KCN → NCCH CH CN + 2 KBr 2 2 2 2 What is the percentage atom economy for the production of butanedinitrile in this reaction? Relative formula masses, M r CH BrCH Br = 187.8 2 2 KCN = 65.1 NCCH CH CN = 80.0 2 2 KBr = 119.0",
+      "options": {
+        "A": "100%",
+        "B": "40.2%",
+        "C": "31.6%",
+        "D": "25.2% (Total 1 marks)"
+      },
+      "answer": "D",
+      "explanation": "25.2%",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q8",
+      "q": "A sample of cyclohexane contains 3.011 × 1024 atoms of carbon. What is the mass of this sample? The Avogadro constant, L = 6.022 × 1023 mol–1",
+      "options": {
+        "A": "70.0 g",
+        "B": "71.7 g",
+        "C": "420 g",
+        "D": "430 g (Total 1 marks)"
+      },
+      "answer": "A",
+      "explanation": "70.0g",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q9",
+      "q": "Compound P is converted into compound R by a two-stage synthesis via compound Q. The yields for the individual steps are: P → Q 50% Q → R 30% What is the overall yield of R in this synthesis?",
+      "options": {
+        "A": "15%",
+        "B": "30%",
+        "C": "40%",
+        "D": "80%"
+      },
+      "answer": "A",
+      "explanation": "15%",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q10",
+      "q": "A student completes a titration to determine the concentration of ethanoic acid in vinegar. 25.0 cm3 of vinegar are transferred to a conical flask using a pipette.",
+      "options": {
+        "A": "Rinsing the conical flask with vinegar between each titration.",
+        "B": "Rinsing the conical flask with sodium hydroxide solution between each titration.",
+        "C": "Rinsing the conical flask with water between each titration.",
+        "D": "Not rinsing the conical flask between each titration."
+      },
+      "answer": "C",
+      "explanation": "Rinsing the conical flask with water between each\ntitration.",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q11",
+      "q": "A student completes a titration to determine the concentration of ethanoic acid in vinegar. 25.0 cm3 of vinegar are transferred to a conical flask using a pipette.",
+      "options": {
+        "A": "Use a more dilute solution of sodium hydroxide in the burette.",
+        "B": "Use a more dilute solution of vinegar.",
+        "C": "Rinse the inside of the conical flask with distilled water during each titration.",
+        "D": "Rinse the tip of the burette with distilled water near the end point in each titration."
+      },
+      "answer": "A",
+      "explanation": "Use a more dilute solution of sodium hydroxide in\nthe burette.",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q12",
+      "q": "Which reaction has the highest percentage atom economy for the production of hydrogen?",
+      "options": {
+        "A": "LiH + H 2O → LiOH + H 2",
+        "B": "CO + H 2O → CO 2 + H 2",
+        "C": "2 Al + 3 H 2O → Al 2O 3 + 3 H 2",
+        "D": "CH 4 + H 2O → CO + 3 H 2"
+      },
+      "answer": "D",
+      "explanation": "CH + H O → CO + 3 H\n4 2 2",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q13",
+      "q": "What is the minimum volume, in dm3, of air needed for the complete combustion of 1 dm3 of methane? Assume that air contains 20% of oxygen by volume. Assume that all volumes are measured at the same temperature and pressure.",
+      "options": {
+        "A": "1",
+        "B": "2",
+        "C": "5",
+        "D": "10"
+      },
+      "answer": "D",
+      "explanation": "10",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q14",
+      "q": "What is the atom economy for the formation of ethylamine in this reaction? CH CH Br + 2 NH → CH CH NH + NH Br 3 2 3 3 2 2 4",
+      "options": {
+        "A": "31.5%",
+        "B": "35.7%",
+        "C": "36.1%",
+        "D": "41.3%"
+      },
+      "answer": "A",
+      "explanation": "31.5%",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q15",
+      "q": "What is the relative molecular mass (M) of benzene-1,4-dicarboxylic acid? r",
+      "options": {
+        "A": "164.0",
+        "B": "166.0",
+        "C": "168.0",
+        "D": "170.0"
+      },
+      "answer": "B",
+      "explanation": "166.0",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q16",
+      "q": "5.0 g of an oxide contains 4.0 g of molybdenum. What is the empirical formula of this oxide?",
+      "options": {
+        "A": "MoO 2",
+        "B": "MoO 5",
+        "C": "Mo O 2 3",
+        "D": "Mo O 3 2"
+      },
+      "answer": "C",
+      "explanation": "Mo O\n2 3",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.2-s2-q17",
+      "q": "Which compound has the same empirical formula and molecular formula?",
+      "options": {
+        "A": "butane",
+        "B": "but-1-ene",
+        "C": "propane",
+        "D": "propene"
+      },
+      "answer": "C",
+      "explanation": "propane",
+      "topic": "3.1.2",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s1-q1",
+      "q": "Which molecule is not able to form a co-ordinate bond with another species?",
+      "options": {
+        "A": "BH 3",
+        "B": "CH 4",
+        "C": "NH 3",
+        "D": "H O 2"
+      },
+      "answer": "B",
+      "explanation": "CH\n4",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q2",
+      "q": "Which species has a square planar shape?",
+      "options": {
+        "A": "NH + 4",
+        "B": "SF 4",
+        "C": "XeF 4",
+        "D": "PCl + 4"
+      },
+      "answer": "C",
+      "explanation": "XeF\n4",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q3",
+      "q": "Which bond has the most unsymmetrical electron distribution?",
+      "options": {
+        "A": "H–O",
+        "B": "H–S",
+        "C": "H–N",
+        "D": "H–P"
+      },
+      "answer": "A",
+      "explanation": "H–O",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q4",
+      "q": "Which statement about inorganic ionic compounds is always correct?",
+      "options": {
+        "A": "They dissolve in water to give neutral solutions.",
+        "B": "They release energy when they melt.",
+        "C": "They contain metal cations.",
+        "D": "They form giant structures."
+      },
+      "answer": "D",
+      "explanation": "They form giant structures.",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q5",
+      "q": "Which species has a lone pair of electrons on the central atom?",
+      "options": {
+        "A": "CO 2",
+        "B": "SO 2",
+        "C": "PCl ‒ 6",
+        "D": "SO 2– 4"
+      },
+      "answer": "B",
+      "explanation": "SO\n2",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q6",
+      "q": "In which substance do covalent bonds break when it melts?",
+      "options": {
+        "A": "hexane",
+        "B": "ice",
+        "C": "iodine",
+        "D": "silicon dioxide"
+      },
+      "answer": "D",
+      "explanation": "silicon dioxide",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q7",
+      "q": "In which molecule are all the atoms in the same plane?",
+      "options": {
+        "A": "CH CHO 3",
+        "B": "CH NH 3 2",
+        "C": "C H Cl 6 5",
+        "D": "C H CH 6 5 3"
+      },
+      "answer": "C",
+      "explanation": "C H Cl\n6 5",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q8",
+      "q": "Which molecule has a permanent dipole?",
+      "options": {
+        "A": "BF 3",
+        "B": "NH 3",
+        "C": "SiCl 4",
+        "D": "SO 3"
+      },
+      "answer": "B",
+      "explanation": "NH\n3",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q9",
+      "q": "Which substance contains delocalised electrons?",
+      "options": {
+        "A": "cyclohexane",
+        "B": "graphite",
+        "C": "iodine",
+        "D": "sodium chloride"
+      },
+      "answer": "B",
+      "explanation": "graphite",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q10",
+      "q": "Which species contains bonds that have different polarities?",
+      "options": {
+        "A": "NH + 4",
+        "B": "CCl 4",
+        "C": "CH Cl 3",
+        "D": "H O+ 3"
+      },
+      "answer": "C",
+      "explanation": "CH Cl\n3",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q11",
+      "q": "Which compound has hydrogen bonding?",
+      "options": {
+        "A": "NaH",
+        "B": "NH 3",
+        "C": "HI",
+        "D": "SiH 4"
+      },
+      "answer": "B",
+      "explanation": "NH\n3",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q12",
+      "q": "Which compound contains a co-ordinate bond?",
+      "options": {
+        "A": "HF",
+        "B": "NH 3",
+        "C": "CHCl 3",
+        "D": "NH Cl 4"
+      },
+      "answer": "D",
+      "explanation": "NH Cl\n4",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q13",
+      "q": "Which molecule has a permanent dipole?",
+      "options": {
+        "A": "CF 4",
+        "B": "PCl 5",
+        "C": "CO 2",
+        "D": "Cl O 2"
+      },
+      "answer": "D",
+      "explanation": "Cl O\n2",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q14",
+      "q": "Which has a bond angle of 109.5°?",
+      "options": {
+        "A": "C (diamond)",
+        "B": "C (graphite)",
+        "C": "NH – 2",
+        "D": "NH 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q15",
+      "q": "Which substance has delocalised electrons?",
+      "options": {
+        "A": "graphite",
+        "B": "iodine",
+        "C": "sodium chloride",
+        "D": "tetrachloromethane"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q16",
+      "q": "Which species is not pyramidal in shape?",
+      "options": {
+        "A": "PF 3",
+        "B": "H O+ 3",
+        "C": "CH – 3",
+        "D": "BF 3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q17",
+      "q": "Which change occurs when water is vaporised?",
+      "options": {
+        "A": "An exothermic change occurs.",
+        "B": "Covalent bonds are broken.",
+        "C": "Intermolecular forces are overcome.",
+        "D": "The total energy of the molecules decreases."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q18",
+      "q": "Which compound has the highest boiling point?",
+      "options": {
+        "A": "CH CH CH Br 3 2 2",
+        "B": "CH CH CH F 3 2 2",
+        "C": "CH CH CHO 3 2",
+        "D": "CH CH COOH 3 2"
+      },
+      "answer": "D",
+      "explanation": "CH CH COOH\n3 2",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q19",
+      "q": "Which is not responsible for conduction of electricity?",
+      "options": {
+        "A": "The sodium ions in molten sodium chloride",
+        "B": "The electrons between layers of carbon atoms in graphite",
+        "C": "The bonding electrons in a metal",
+        "D": "The lone pair electrons on water molecules"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q20",
+      "q": "Which row shows the bonding in ammonium chloride? Dative Covalent Ionic covalent",
+      "options": {
+        "A": "✔ ✘ ✘",
+        "B": "✔ ✔ ✘",
+        "C": "✔ ✔ ✔",
+        "D": "✘ ✘ ✔"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q21",
+      "q": "Which molecule does not have a permanent dipole?",
+      "options": {
+        "A": "CH Br 3",
+        "B": "CH Br 2 2",
+        "C": "CHBr 3",
+        "D": "CBr 4"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q22",
+      "q": "Which compound has the highest boiling point?",
+      "options": {
+        "A": "butanal",
+        "B": "butan-2-ol",
+        "C": "but-2-ene",
+        "D": "1-fluorobutane"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q23",
+      "q": "Which diagram shows the correct bonding and correct bond polarity in a molecule of oxygen difluoride?",
+      "image": "/mcq-images/3.1.3-s1-q23.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "O is less electronegative than F, so O is δ+ and F is δ−. O has 2 lone pairs and 2 bonding pairs.",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q24",
+      "q": "Which species has a shape that is influenced by the presence of one or more lone pairs of electrons around the central atom?",
+      "options": {
+        "A": "AlCl 3",
+        "B": "ClF 3",
+        "C": "IF + 6",
+        "D": "PCl – 6"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q25",
+      "q": "Which is the correct crystal structure for the substance named? Substance Structure",
+      "options": {
+        "A": "Iodine Simple molecular",
+        "B": "Diamond Ionic",
+        "C": "Sodium chloride Giant covalent",
+        "D": "Graphite Metallic"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q26",
+      "q": "Which species has one or more bond angle(s) of 90°?",
+      "options": {
+        "A": "CH 4",
+        "B": "NH 4+",
+        "C": "ClF 4−",
+        "D": "AlCl 4−"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q27",
+      "q": "Which is the most likely bond angle around the oxygen atom in ethanol?",
+      "options": {
+        "A": "104.5°",
+        "B": "109.5°",
+        "C": "120°",
+        "D": "180°"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q28",
+      "q": "Which compound has the highest boiling point?",
+      "options": {
+        "A": "CH CH CH OH 3 2 2",
+        "B": "CH CH CHO 3 2",
+        "C": "CH COCH 3 3",
+        "D": "CH COOCH 3 3"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q29",
+      "q": "Which molecule does not have a permanent dipole?",
+      "options": {
+        "A": "CH Cl 3",
+        "B": "CHCl 3",
+        "C": "CF 4",
+        "D": "CHCl F 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q30",
+      "q": "Which of these species is not planar?",
+      "options": {
+        "A": "HCHO",
+        "B": "CH + 3",
+        "C": "CH OH 3",
+        "D": "C H 2 4"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q31",
+      "q": "Which of these statements best describes a dative covalent bond?",
+      "options": {
+        "A": "A pair of electrons shared between two atoms where each atom has donated one electron.",
+        "B": "A pair of electrons shared between two atoms where one atom has donated two electrons.",
+        "C": "Two pairs of electrons shared between two atoms where each atom has donated one electron.",
+        "D": "Two pairs of electrons shared between two atoms where each atom has donated two electrons."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q32",
+      "q": "Which molecule is the least polar?",
+      "options": {
+        "A": "Bromomethane",
+        "B": "Dibromomethane",
+        "C": "Tribromomethane",
+        "D": "Tetrabromomethane"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q33",
+      "q": "Which statement about intermolecular forces is not correct?",
+      "options": {
+        "A": "Intermolecular forces exist between all simple molecules. Hydrogen bonding occurs between HBr",
+        "B": "molecules. Hydrogen bonding is the strongest",
+        "C": "intermolecular force in liquid ethanol. Hydrogen bonds occur between C=O and H−N",
+        "D": "in proteins."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q34",
+      "q": "Which of these species has a trigonal planar structure?",
+      "options": {
+        "A": "PH 3",
+        "B": "BCl 3",
+        "C": "H O+ 3",
+        "D": "CH − 3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q35",
+      "q": "Use your understanding of intermolecular forces to predict which of these compounds has the highest boiling point.",
+      "options": {
+        "A": "HF",
+        "B": "HCl",
+        "C": "HBr",
+        "D": "HI"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q36",
+      "q": "Which type of bond is formed between N and B when a molecule of NH reacts 3 with a molecule of BF ? 3",
+      "options": {
+        "A": "Ionic.",
+        "B": "Covalent.",
+        "C": "Co-ordinate.",
+        "D": "Van der Waals."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q37",
+      "q": "Which of these atoms has the highest electronegativity?",
+      "options": {
+        "A": "Na",
+        "B": "Mg",
+        "C": "Cl",
+        "D": "Ar"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q38",
+      "q": "What is the formula of calcium nitrate(V)?",
+      "options": {
+        "A": "CaNO 3",
+        "B": "Ca(NO ) 3 2",
+        "C": "Ca NO 2 2",
+        "D": "Ca(NO ) 2 2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q39",
+      "q": "Which of these substances does not show hydrogen bonding?",
+      "options": {
+        "A": "HF",
+        "B": "NH 3",
+        "C": "CH COOH 3",
+        "D": "CHF 3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s1-q40",
+      "q": "Which of these substances has permanent dipole-dipole attractions between molecules?",
+      "options": {
+        "A": "CCl 4",
+        "B": "C F 2 4",
+        "C": "(CH ) CO 3 2",
+        "D": "CO 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.3",
+      "set": 1
+    },
+    {
+      "id": "3.1.3-s2-q1",
+      "q": "Which involves the formation of a dative covalent bond?",
+      "options": {
+        "A": "PCl 3 + Cl 2 → PCl 5",
+        "B": "Na+ + H– → NaH",
+        "C": "Mg + Cl 2 → MgCl 2",
+        "D": "BH 3 + H– → BH 4–"
+      },
+      "answer": "D",
+      "explanation": "BH + H- → BH -\n3 4",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q2",
+      "q": "Which element has the lowest melting point?",
+      "options": {
+        "A": "Na",
+        "B": "Mg",
+        "C": "K",
+        "D": "Ca 1.3. Bonding MCQ"
+      },
+      "answer": "C",
+      "explanation": "K",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q3",
+      "q": "Which diagram shows the formation of a dative covalent bond?",
+      "image": "/mcq-images/3.1.3-s2-q3.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "A dative covalent bond forms when one atom donates both electrons in the shared pair.",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q4",
+      "q": "Which substance does not have any bond angles of 120°?",
+      "options": {
+        "A": "Benzene",
+        "B": "Boron trifluoride",
+        "C": "Cyclohexane",
+        "D": "Graphite 1.3. Bonding MCQ"
+      },
+      "answer": "C",
+      "explanation": "Cyclohexane",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q5",
+      "q": "Which molecule does not have a permanent dipole?",
+      "options": {
+        "A": "NH 3",
+        "B": "PCl 3",
+        "C": "SCl 2",
+        "D": "SiCl 4"
+      },
+      "answer": "D",
+      "explanation": "SiCl\n4",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q6",
+      "q": "Which molecule has a permanent dipole?",
+      "options": {
+        "A": "NCl 3",
+        "B": "CCl 4",
+        "C": "PF 5",
+        "D": "SF 6"
+      },
+      "answer": "A",
+      "explanation": "NCl\n3",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q7",
+      "q": "Which molecule can accept an electron pair during the formation of a coordinate bond?",
+      "options": {
+        "A": "NH 3",
+        "B": "AlCl 3",
+        "C": "SiH 4",
+        "D": "PCl 3 1.3. Bonding MCQ"
+      },
+      "answer": "B",
+      "explanation": "AlCl\n3",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q8",
+      "q": "Which reaction results in an overall change in shape around a carbon atom?",
+      "options": {
+        "A": "oxidation of propanal with acidified potassium dichromate(VI)",
+        "B": "polymerisation of tetrafluoroethene",
+        "C": "reaction of bromoethane with an excess of concentrated ammonia",
+        "D": "reaction of methane with an excess of chlorine in ultraviolet radiation"
+      },
+      "answer": "B",
+      "explanation": "polymerisation of tetrafluoroethene\n\n1.3. Bonding MCQ",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q9",
+      "q": "Which substance has significant electron delocalisation?",
+      "options": {
+        "A": "graphite",
+        "B": "iodine",
+        "C": "sodium chloride",
+        "D": "tetrachloromethane"
+      },
+      "answer": "A",
+      "explanation": "graphite",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q10",
+      "q": "What happens when water is vaporised?",
+      "options": {
+        "A": "Covalent bonds break within molecules.",
+        "B": "Intermolecular forces are overcome.",
+        "C": "The enthalpy of the molecules decreases.",
+        "D": "The disorder of the molecules decreases. 1.3. Bonding MCQ"
+      },
+      "answer": "B",
+      "explanation": "Intermolecular forces are overcome.",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q11",
+      "q": "Which statement about the shapes of ions is not correct?",
+      "options": {
+        "A": "[CoCl 4]2– is square planar.",
+        "B": "NH 4+ is tetrahedral.",
+        "C": "[Co(H 2NCH 2CH 2NH 2) 3]2+ is octahedral.",
+        "D": "[Co(H 2O) 6]2+ is octahedral."
+      },
+      "answer": "A",
+      "explanation": "[CoCl ]2- is square planar.\n4",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q12",
+      "q": "The equation for a reaction is AsH + H+ → AsH + 3 4 What type of interaction forms in this reaction?",
+      "options": {
+        "A": "Co-ordinate bond",
+        "B": "Dipole–dipole force",
+        "C": "Hydrogen bond",
+        "D": "Ionic bond"
+      },
+      "answer": "A",
+      "explanation": "Co-ordinate bond",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q13",
+      "q": "Which is not responsible for conducting electricity?",
+      "options": {
+        "A": "The sodium ions in molten sodium chloride",
+        "B": "The electrons between layers of carbon atoms in graphite",
+        "C": "The bonding electrons in a metal",
+        "D": "The lone pair electrons in liquid water molecules 1.3. Bonding MCQ"
+      },
+      "answer": "D",
+      "explanation": "The lone pair electrons in liquid water molecules",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q14",
+      "q": "Which reaction does not result in a change in the shape around a carbon atom?",
+      "options": {
+        "A": "chloromethane with aqueous sodium hydroxide",
+        "B": "ethene with bromine",
+        "C": "propane with excess oxygen",
+        "D": "propan-1-ol with acidified potassium dichromate(VI)"
+      },
+      "answer": "A",
+      "explanation": "chloromethane with aqueous sodium hydroxide",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q15",
+      "q": "Which substance has no delocalised electrons?",
+      "options": {
+        "A": "graphite",
+        "B": "methylbenzene",
+        "C": "poly(propene)",
+        "D": "sodium"
+      },
+      "answer": "C",
+      "explanation": "poly(propene)",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.3-s2-q16",
+      "q": "Which pair of reagents reacts to form a tetrahedral complex?",
+      "options": {
+        "A": "CoCl (aq) and concentrated NH (aq) 2 3",
+        "B": "CuSO (aq) and concentrated NH (aq) 4 3",
+        "C": "CuSO (aq) and sodium ethanedioate(aq) 4",
+        "D": "FeCl (aq) and concentrated HCl(aq) 3"
+      },
+      "answer": "D",
+      "explanation": "FeCl (aq) and concentrated HCl(aq)\n3",
+      "topic": "3.1.3",
+      "set": 2
+    },
+    {
+      "id": "3.1.4-s1-q1",
+      "q": "Which reaction has an enthalpy change equal to the standard enthalpy of formation of lithium fluoride?",
+      "options": {
+        "A": "Li(g) + F (g) → LiF(s) 2",
+        "B": "Li+(g) + F–(g) → LiF(s)",
+        "C": "Li+(aq) + F–(aq) → LiF(s)",
+        "D": "Li(s) + F (g) → LiF(s) 2"
+      },
+      "answer": "D",
+      "explanation": "Li(s) + ½ F (g) → LiF(s)\n2",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q2",
+      "q": "Two reactions of iron with oxygen are shown. ΔH = – 272 kJ mol–1 Fe(s) + O (g) → FeO(s) 2 ΔH = – 822 kJ mol–1 2 Fe(s) + O (g) → Fe O (s) 2 2 3 What is the enthalpy change, in kJ mol–1, for this reaction? 2 FeO(s) + O (g) → Fe O (s) 2 2 3",
+      "options": {
+        "A": "+550",
+        "B": "–278",
+        "C": "–1094",
+        "D": "–1372"
+      },
+      "answer": "B",
+      "explanation": "–278",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q3",
+      "q": "Some enthalpy change data are shown. C(s) + 2 H (g) → CH (g) ΔH = –75 kJ mol–1 2 4 H (g) → 2 H(g) ΔH = +436 kJ mol–1 2 What is the enthalpy change, in kJ mol–1, for the following reaction? CH (g) → C(s) + 4 H(g) 4",
+      "options": {
+        "A": "–947",
+        "B": "–361",
+        "C": "+361",
+        "D": "+947"
+      },
+      "answer": "D",
+      "explanation": "+947",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q4",
+      "q": "The temperature changed from 21.8 °C to 19.2 °C during a calorimetry experiment. The uncertainty of each reading of the thermometer is ±0.1 °C What is the percentage uncertainty in the temperature change?",
+      "options": {
+        "A": "0.5%",
+        "B": "1.0%",
+        "C": "3.8%",
+        "D": "7.7%"
+      },
+      "answer": "D",
+      "explanation": "7.7%",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q5",
+      "q": "An experiment is done to determine the enthalpy of combustion of a fuel using a simple calorimeter. Which change would improve the accuracy?",
+      "image": "/mcq-images/3.1.4-s1-q5.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q6",
+      "q": "Which reaction has an enthalpy change equal to the standard enthalpy of formation of silver iodide?",
+      "options": {
+        "A": "Ag(g) + I (g) → AgI(s) 2",
+        "B": "Ag(s) + I (s) → AgI(s) 2",
+        "C": "Ag+(g) + I–(g) → AgI(s)",
+        "D": "Ag+(aq) + I–(aq) → AgI(s)"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q7",
+      "q": "Which equation represents the reaction that has a standard enthalpy change equal to the standard enthalpy of formation for barium chloride?",
+      "options": {
+        "A": "Ba(g) + Cl (g) → BaCl (s) 2 2",
+        "B": "Ba2+(g) + 2 Cl–(g) → BaCl (s) 2",
+        "C": "Ba(s) + Cl (g) → BaCl (s) 2 2",
+        "D": "Ba2+(s) + 2 Cl–(g) → BaCl (s) 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q8",
+      "q": "Some fuel in a spirit burner is burned, and the heat produced is used to heat a container of water. In this experiment: The mass of water heated = m g The temperature rise = y °C The specific heat capacity of water = c J K–1 g–1 What is the amount of heat energy absorbed by the water?",
+      "options": {
+        "A": "mcy",
+        "B": "mc(y + 273)",
+        "C": "y / mc",
+        "D": "(y + 273) / mc"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q9",
+      "q": "Nitrogen dioxide is produced from ammonia and air as shown in these equations 4 NH (g) + 5 O (g) → 4 NO(g) + 6 H O(g) ΔH = –909 kJ mol–1 3 2 2 2 NO(g) + O (g) → 2 NO (g) ΔH = –115 kJ mol–1 2 2 What is the enthalpy change (in kJ mol–1) for the following reaction? 4 NH (g) + 7 O (g) → 4 NO (g) + 6 H O(g) 3 2 2 2",
+      "options": {
+        "A": "−679",
+        "B": "−794",
+        "C": "−1024",
+        "D": "−1139"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q10",
+      "q": "What is the enthalpy of formation of buta-1,3-diene, C H (g)? 4 6 Substance Enthalpy of combustion / kJ mol–1",
+      "options": {
+        "C": "+746 kJ mol–1",
+        "A": "+112 kJ mol–1",
+        "B": "–112 kJ mol–1",
+        "D": "–746 kJ mol–1"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q11",
+      "q": "The table shows the standard enthalpy of formation, ΔHθ, for some of the f substances in the reaction",
+      "options": {
+        "C": "+273",
+        "A": "−1638",
+        "B": "−273",
+        "D": "+1638"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q12",
+      "q": "What is the temperature rise, in K, when 504 J of heat energy are absorbed by 0.110 kg of solid iron? Specific heat capacity of iron = 0.448 J K−1 g−1",
+      "options": {
+        "A": "9.78 × 10−2",
+        "B": "1.02 × 101",
+        "C": "2.83 × 102",
+        "D": "1.02 × 104"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q13",
+      "q": "Calculate the enthalpy change, in kJ, for this dissociation of mole of propan-1-ol.",
+      "options": {
+        "C": "+4403",
+        "A": "−4751",
+        "B": "−4403",
+        "D": "+4751"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s1-q14",
+      "q": "Hydrogen is produced by the reaction of methane with steam. The reaction mixture reaches a state of dynamic equilibrium. ⇌ CH (g) + H O(g) CO(g) + 3H (g) ∆H = +206 kJ mol−1 4 2 2 Some enthalpy data is given in the table. Bond C–H O–H H–H C≡H Bond enthalpy / 413 463 436 To be calculated kJ mol−1 Use the information in the table and the stated enthalpy change to calculate the missing bond enthalpy.",
+      "options": {
+        "A": "234",
+        "B": "1064",
+        "C": "1476",
+        "D": "1936"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.4",
+      "set": 1
+    },
+    {
+      "id": "3.1.4-s2-q1",
+      "q": "Use this information to answer the question below C(s) + O (g) → CO (g) ΔH = −393.5 kJ mol–1 2 2 ΔH = −285.8 kJ mol–1 H (g) + O (g) → H O(l) 2 2 2 3 C(s) + 4 H (g) → C H (g) ΔH = −104.0 kJ mol–1 2 3 8 4 C(s) + 5 H (g) → C H (g) ΔH = −125.2 kJ mol–1 2 4 10 What is the enthalpy of combustion, in kJ mol–1, of propane?",
+      "options": {
+        "A": "−211.7",
+        "B": "−419.7",
+        "C": "−2220",
+        "D": "−2878 (Total 1 marks)"
+      },
+      "answer": "C",
+      "explanation": "-2220",
+      "topic": "3.1.4",
+      "set": 2
+    },
+    {
+      "id": "3.1.4-s2-q2",
+      "q": "Use this information to answer the question below C(s) + O (g) → CO (g) ΔH = −393.5 kJ mol–1 2 2 ΔH = −285.8 kJ mol–1 H (g) + O (g) → H O(l) 2 2 2 3 C(s) + 4 H (g) → C H (g) ΔH = −104.0 kJ mol–1 2 3 8 4 C(s) + 5 H (g) → C H (g) ΔH = −125.2 kJ mol–1 2 4 10 What is the enthalpy change, in kJ mol–1, when butane reacts to form propane, hydrogen and carbon?",
+      "options": {
+        "A": "+21.2",
+        "B": "+17.5",
+        "C": "−17.5",
+        "D": "−21.2 (Total 1 marks) 1.4. Energetics MCQ"
+      },
+      "answer": "A",
+      "explanation": "+21.2",
+      "topic": "3.1.4",
+      "set": 2
+    },
+    {
+      "id": "3.1.4-s2-q3",
+      "q": "Which reaction has an enthalpy change equal to the standard enthalpy of formation of potassium oxide?",
+      "options": {
+        "A": "4 K(s) + O 2(g) → 2 K 2O(s)",
+        "B": "2 K(s) + O(g) → K 2O(s)",
+        "C": "2 K+(g) + O2–(g) → K 2O(s)",
+        "D": "2 K(s) + O (g) → K O(s) 2 2"
+      },
+      "answer": "D",
+      "explanation": "2 K(s) + O (g) → K O(s)\n2 2",
+      "topic": "3.1.4",
+      "set": 2
+    },
+    {
+      "id": "3.1.4-s2-q4",
+      "q": "Which reaction has a standard enthalpy change equal to the standard enthalpy of formation for barium chloride?",
+      "options": {
+        "A": "Ba(g) + Cl 2(g) → BaCl 2(s)",
+        "B": "Ba2+(g) + 2 Cl–(g) → BaCl 2(s)",
+        "C": "Ba(s) + Cl 2(g) → BaCl 2(s)",
+        "D": "Ba2+(s) + 2 Cl–(g) → BaCl 2(s)"
+      },
+      "answer": "C",
+      "explanation": "Ba(s) + Cl (g) → BaCl (s)\n2 2",
+      "topic": "3.1.4",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s1-q1",
+      "q": "An excess of magnesium reacts with hydrochloric acid to form hydrogen gas. Line X shows the reaction with 30 cm³ of 1.0 mol dm⁻³ HCl. Which line shows the reaction with 20 cm³ of 2.0 mol dm⁻³ HCl?",
+      "image": "/mcq-images/3.1.5-s1-q1.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "Same moles of HCl (0.04 mol) but higher concentration → faster rate, same final volume.",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q2",
+      "q": "A mixture of 2 dm3 of hydrogen and 1 dm3 of oxygen is at room temperature. Which statement is correct?",
+      "options": {
+        "A": "There is no reaction to form water because the molecules do not collide with sufficient energy.",
+        "B": "There is no reaction to form water because the molecules do not collide with sufficient frequency.",
+        "C": "The mean velocity of the hydrogen molecules is less than that of the oxygen molecules.",
+        "D": "The partial pressure of each gas is the same."
+      },
+      "answer": "A",
+      "explanation": "There is no reaction to form water because the\nmolecules do not collide with sufficient energy.",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q3",
+      "q": "Which statement about the molecules in a sample of a gas is correct?",
+      "options": {
+        "A": "At a given temperature they all move at the same speed.",
+        "B": "At a given temperature their average kinetic energy is constant.",
+        "C": "As temperature increases, there are more molecules with the most probable energy.",
+        "D": "As temperature decreases, there are fewer molecules with the mean energy."
+      },
+      "answer": "B",
+      "explanation": "At a given temperature their average kinetic energy\nis constant",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q4",
+      "q": "Which statement is correct for the distribution curve of molecular energies in a gas?",
+      "options": {
+        "A": "The curve is symmetrical about the maximum.",
+        "B": "There are always some molecules with zero energy. The position of the maximum of the curve is not",
+        "C": "dependent on the temperature. The mean energy of the molecules is greater than the",
+        "D": "most probable energy of the molecules."
+      },
+      "answer": "D",
+      "explanation": "The mean energy of the molecules is greater than the\nmost probable energy of the molecules",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q5",
+      "q": "The Maxwell–Boltzmann distribution of molecular energies in a sample of gas at a fixed temperature is shown. Which letter represents the mean energy of the molecules?",
+      "image": "/mcq-images/3.1.5-s1-q5.png",
+      "options": {
+        "A": "A",
+        "B": "B",
+        "C": "C",
+        "D": "D"
+      },
+      "answer": "D",
+      "explanation": "The mean energy is to the right of the most probable energy (peak) on a Maxwell-Boltzmann distribution.",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q6",
+      "q": "The diagram shows the Maxwell-Boltzmann distribution of molecular energies in a gas. Which change would increase the rate of reaction?",
+      "image": "/mcq-images/3.1.5-s1-q6.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q7",
+      "q": "Which statement about the distribution curve of molecular energies in an ideal gas at a given temperature is correct?",
+      "options": {
+        "A": "There are no molecules with zero energy.",
+        "B": "The curve is symmetrical about the maximum.",
+        "C": "Changing the temperature has no effect on the position of the maximum.",
+        "D": "Most molecules have the mean energy."
+      },
+      "answer": "A",
+      "explanation": "There are no molecules with zero energy.",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q8",
+      "q": "Line X in the diagram represents the volume of gas formed with time in a reaction. Which line represents the same reaction at a higher temperature?",
+      "image": "/mcq-images/3.1.5-s1-q8.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "Higher temperature → faster rate (steeper initial gradient) but same final volume.",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q9",
+      "q": "The question below is about the Maxwell–Boltzmann distribution shown for a sample of a gas, X, at two different temperatures. Which letter shows the mean energy of the molecules at the higher temperature?",
+      "options": {
+        "A": "P",
+        "B": "Q",
+        "C": "R",
+        "D": "S"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q10",
+      "q": "The question below is about the Maxwell–Boltzmann distribution shown for a sample of a gas, X, at two different temperatures. Which statement is correct for the higher temperature? The area under the curve to the left of E",
+      "options": {
+        "A": "a decreases.",
+        "B": "The total area under the curve increases.",
+        "C": "The activation energy decreases.",
+        "D": "More molecules have the mean energy."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q11",
+      "q": "This question is about the Maxwell–Boltzmann distribution of molecular energies. Which statement is correct?",
+      "image": "/mcq-images/3.1.5-s1-q11.png",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q12",
+      "q": "This question is about the Maxwell–Boltzmann distribution of molecular energies in a sample of a gas shown in the following figure. What does the area under the curve represent?",
+      "options": {
+        "A": "The total energy of the particles.",
+        "B": "The total number of particles.",
+        "C": "The number of particles that can react with each other.",
+        "D": "The total number of particles that have activation energy."
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q13",
+      "q": "The apparatus in the figure below was set up to measure the time taken for 20.0 cm3 of sodium thiosulfate solution to react with 5.0 cm3 of hydrochloric acid in a 100 cm3 conical flask at 20 °C. The timer was started when the sodium thiosulfate solution was added to the acid in the flask. The timer was stopped when it was no longer possible to see the cross on the paper. What is likely to decrease the accuracy of the experiment?",
+      "options": {
+        "A": "Rinsing the flask with acid before each new experiment.",
+        "B": "Stirring the solution throughout each experiment.",
+        "C": "Using the same piece of paper for each experiment.",
+        "D": "Using different measuring cylinders to measure the volumes of acid and sodium thiosulfate."
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q14",
+      "q": "The experiment was repeated at 20 °C using a 250 cm3 conical flask. Which statement is correct about the time taken for the cross to disappear when using the larger conical flask?",
+      "options": {
+        "A": "The time taken will not be affected by using the larger conical flask.",
+        "B": "The time taken will be decreased by using the larger conical flask.",
+        "C": "The time taken will be increased by using the larger conical flask.",
+        "D": "It is impossible to predict how the time taken will be affected by using the larger conical flask."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s1-q15",
+      "q": "The graph below shows a typical energy distribution for particles of an ideal gas in a sealed container at a fixed temperature. Which of the following statements is true?",
+      "options": {
+        "A": "number of molecules with enough energy to react.",
+        "B": "Addition of a catalyst moves the position of E to the right.",
+        "D": "The position of the peak of the curve at a higher temperature is further away from both axes."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.5",
+      "set": 1
+    },
+    {
+      "id": "3.1.5-s2-q1",
+      "q": "Which statement explains why the rate of a reaction increases when a catalyst is added to a reaction mixture at a constant temperature?",
+      "options": {
+        "A": "The collision frequency increases because there is an increase in the activation energy.",
+        "B": "The collision frequency increases because there is an increase in the mean energy of the particles.",
+        "C": "The proportion of successful collisions increases because there is a decrease in the activation energy.",
+        "D": "The proportion of successful collisions increases because there is an increase in the mean energy of the particles. (Total 1 marks)"
+      },
+      "answer": "C",
+      "explanation": "The proportion of successful collisions increases\nbecause there is a decrease in the activation\nenergy.",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q2",
+      "q": "The Maxwell–Boltzmann distribution curve is shown for a gaseous reaction mixture. What is represented by the total area under the curve?",
+      "options": {
+        "A": "The total energy of the molecules in the reaction mixture",
+        "B": "The total energy of reacting molecules in the reaction mixture",
+        "C": "The total number of molecules in the reaction mixture",
+        "D": "The total number of reacting molecules in the reaction mixture 1.5. Kinetics MCQ"
+      },
+      "answer": "C",
+      "explanation": "The total number of molecules in the reaction\nmixture",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q3",
+      "q": "Which statement explains why the rate of a reaction increases when a catalyst is added at a constant temperature?",
+      "options": {
+        "A": "The collision frequency increases because there is a decrease in activation energy.",
+        "B": "The collision frequency increases because there is an increase in the average energy of the particles.",
+        "C": "The proportion of successful collisions increases because there is a decrease in activation energy.",
+        "D": "The proportion of successful collisions increases because there is an increase in the average energy of the particles. 1.5. Kinetics MCQ"
+      },
+      "answer": "C",
+      "explanation": "The proportion of successful collisions increases\nbecause there is a decrease in activation energy.",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q4",
+      "q": "Magnesium reacts with an acid to form hydrogen gas. Line X on the graph shows how the volume of hydrogen gas varies with time when 50 cm3 of 0.50 mol dm–3 acid reacts with an excess of magnesium. The reaction is repeated under the same conditions but using 25 cm3 of 1.50 mol dm–3 acid. The magnesium is in excess. Which line represents this second reaction?",
+      "options": {
+        "A": "line A",
+        "B": "line B",
+        "C": "line C",
+        "D": "line D 1.5. Kinetics MCQ"
+      },
+      "answer": "C",
+      "explanation": "line C",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q5",
+      "q": "This is a Maxwell–Boltzmann distribution for a gaseous reactant. What is represented by the total area under the curve?",
+      "options": {
+        "A": "total energy of the particles",
+        "B": "activation energy for the reaction",
+        "C": "total number of reacting particles",
+        "D": "total number of particles present"
+      },
+      "answer": "D",
+      "explanation": "total number of particles present",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q6",
+      "q": "The rate of reaction is greater when a catalyst is used, without changing the temperature. Which statement explains why the rate of reaction is greater with a catalyst?",
+      "options": {
+        "A": "The collision frequency increases because the catalysed reaction has a lower activation energy.",
+        "B": "The collision frequency increases because there is an increase in the average energy of the particles.",
+        "C": "The proportion of successful collisions increases because the catalysed reaction has a lower activation energy.",
+        "D": "The proportion of successful collisions increases because there is an increase in the average energy of the particles. 1.5. Kinetics MCQ"
+      },
+      "answer": "C",
+      "explanation": "The proportion of successful collisions increases\nbecause the catalysed reaction has a lower\nactivation energy.",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q7",
+      "q": "Which statement about molecules in a gas is correct?",
+      "options": {
+        "A": "At a fixed temperature they all move at the same speed.",
+        "B": "At a fixed temperature their average kinetic energy is constant.",
+        "C": "As temperature increases, there are more molecules with the most probable energy.",
+        "D": "As temperature decreases, there are fewer molecules with the mean energy."
+      },
+      "answer": "B",
+      "explanation": "At a fixed temperature their average kinetic energy\nis constant\n\n1.5. Kinetics MCQ",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.5-s2-q8",
+      "q": "Consider the change that occurs in the shape of the curve for the distribution of molecular energies in a gas when the temperature of the gas is increased. Which is a correct statement about the gas molecules at a higher temperature?",
+      "options": {
+        "A": "There are more molecules with any given energy.",
+        "B": "There are more molecules with the mean energy.",
+        "C": "There are more molecules with the most probable energy.",
+        "D": "There is an increase in the most probable energy of the molecules."
+      },
+      "answer": "D",
+      "explanation": "There is an increase in the most probable energy of\nthe molecules.",
+      "topic": "3.1.5",
+      "set": 2
+    },
+    {
+      "id": "3.1.6-s1-q1",
+      "q": "Which statement about the use of a catalyst in a reversible reaction is correct?",
+      "options": {
+        "A": "The activation energy for the reverse reaction is increased.",
+        "B": "The equilibrium constant increases.",
+        "C": "The rate of the reverse reaction increases.",
+        "D": "The enthalpy change for the forward reaction decreases."
+      },
+      "answer": "C",
+      "explanation": "The rate of the reverse reaction increases.",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q2",
+      "q": "Which statement about the addition of a catalyst to an equilibrium mixture is correct?",
+      "options": {
+        "A": "The activation energy for the reverse reaction increases.",
+        "B": "The equilibrium constant for the forward reaction increases.",
+        "C": "The rate of the reverse reaction increases.",
+        "D": "The enthalpy change for the forward reaction decreases."
+      },
+      "answer": "C",
+      "explanation": "The rate of the reverse reaction increases.",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q3",
+      "q": "Which statement is not always correct for a reaction at equilibrium? reactants ⇌ products",
+      "options": {
+        "A": "The concentrations of the reactants and products are equal.",
+        "B": "The equilibrium can be achieved starting from the reactants.",
+        "C": "The equilibrium can be achieved starting from the products.",
+        "D": "The rate of the forward reaction is equal to the rate of the reverse reaction."
+      },
+      "answer": "A",
+      "explanation": "The concentrations of the reactants and products\nare equal.",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q4",
+      "q": "When one mole of ammonia is heated to a given temperature, 50 % of it dissociates and the following equilibrium is established. What is the total amount, in moles, of gas in this equilibrium mixture?",
+      "options": {
+        "A": "1.5",
+        "B": "2.0",
+        "C": "2.5",
+        "D": "3.0"
+      },
+      "answer": "A",
+      "explanation": "1.5",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q5",
+      "q": "Which change leads to a higher concentration of SO in this equilibrium mixture? 3 2 SO (g) + O (g) ⇌ 2 SO (g) ΔH = −188 kJ mol–1 2 2 3",
+      "options": {
+        "A": "higher concentration of O 2",
+        "B": "higher temperature",
+        "C": "lower pressure",
+        "D": "use of a catalyst"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q6",
+      "q": "Which statement is not correct about the industrial preparation of ethanol by the hydration of ethene at 300 °C?",
+      "options": {
+        "C": "The higher the temperature, the higher the equilibrium yield of ethanol.",
+        "A": "The reaction is catalysed by an acid.",
+        "B": "The higher the pressure, the higher the equilibrium yield of ethanol.",
+        "D": "A low equilibrium yield of ethanol is acceptable because unreacted ethene is recycled."
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q7",
+      "q": "For this reaction at equilibrium, which combination of temperature and pressure would give the greatest equilibrium yield of products? W(g) + X(g) ⇌ 2Y(g) + Z(g) ∆H = +47 kJ mol–1",
+      "options": {
+        "A": "High pressure and high temperature",
+        "B": "High pressure and low temperature",
+        "C": "Low pressure and high temperature",
+        "D": "Low pressure and low temperature"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q8",
+      "q": "The forward reaction in this equilibrium is endothermic COCl (g) ⇌ CO(g) + Cl (g) 2 2 Which statement is correct? If the total pressure is increased at constant temperature, the",
+      "options": {
+        "A": "proportion of COCl in the equilibrium mixture will decrease 2 Use of a catalyst will increase the proportion of COCl in the",
+        "B": "2 equilibrium mixture at constant temperature and pressure Reducing the equilibrium concentration of CO will increase",
+        "C": "the value of the equilibrium constant Raising the temperature from 373 K to 473 K will increase the",
+        "D": "value of the equilibrium constant"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q9",
+      "q": "Hydrogen can be produced by this reaction. CO(g) + H O(g) ⇌ CO (g) + H (g) 2 2 2 In an experiment 4.20 mol of carbon monoxide were mixed with 2.00 mol of steam. When the reaction reached equilibrium, 1.60 mol of hydrogen had been formed. What is the value of the equilibrium constant, Kc, for this reaction?",
+      "options": {
+        "A": "0.30",
+        "B": "0.41",
+        "C": "1.54",
+        "D": "2.46"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q10",
+      "q": "The following equilibrium was established in a container with volume V cm3 at 393 K and 200 kPa. M (g) + R(g) ⇌ RM (g) ΔH = +150 kJ mol−1 2 2 Which change would increase the yield of RM ? 2",
+      "options": {
+        "A": "change the pressure to 150 kPa",
+        "B": "change the temperature to 293 K",
+        "C": "remove RM as it is formed 2",
+        "D": "change the volume of the vessel to 2V cm3"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q11",
+      "q": "When one mole of ammonia is heated to a given temperature, 50% of the compound dissociates and the following equilibrium is established. NH (g) N (g) + H (g) 3 2 2 What is the total number of moles of gas present in this equilibrium mixture?",
+      "options": {
+        "A": "1.5",
+        "B": "2.0",
+        "C": "2.5",
+        "D": "3.0"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q12",
+      "q": "A pale brown mixture of NO and N O is allowed to reach equilibrium in a sealed 2 2 4 gas syringe according to the following equation. 2NO (g) ⇌ N O (g) 2 2 4 When the plunger is pushed further into the syringe the pressure increases and the mixture becomes paler in colour. When the syringe is placed in a hot oven the mixture becomes darker in colour. Which of the following statements is correct?",
+      "options": {
+        "A": "NO is brown and the forward reaction is exothermic. 2",
+        "B": "NO is brown and the forward reaction is endothermic. 2",
+        "C": "NO is colourless and the forward reaction is exothermic. 2",
+        "D": "NO is colourless and the forward reaction is endothermic. 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q13",
+      "q": "A and B react together in this reversible reaction. ⇌",
+      "options": {
+        "A": "14",
+        "B": "16",
+        "C": "18",
+        "D": "20"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s1-q14",
+      "q": "Hydrogen is produced by the reaction of methane with steam. The reaction mixture reaches a state of dynamic equilibrium. ⇌ CH (g) + H O(g) CO(g) + 3H (g) ∆H = +206 kJ mol−1 4 2 2 Which of the following shows how the equilibrium yield of hydrogen and the value of the equilibrium constant are affected by the changes shown? Effect on Effect on Change equilibrium value of K yield of H (g) c 2",
+      "options": {
+        "A": "Increase pressure decrease decrease",
+        "B": "Add a catalyst increase no effect",
+        "C": "Increase temperature increase increase",
+        "D": "Remove CO(g) as formed increase increase"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 1
+    },
+    {
+      "id": "3.1.6-s2-q1",
+      "q": "Which statement about the industrial production of ethanol from ethene at 300 °C is correct?",
+      "options": {
+        "C": "An increase in temperature increases the equilibrium yield of ethanol.",
+        "A": "An increase in pressure decreases the equilibrium yield of ethanol.",
+        "B": "An increase in pressure increases the value of K c",
+        "D": "An increase in temperature decreases the value of K c"
+      },
+      "answer": "D",
+      "explanation": "An increase in temperature decreases the value of\nK\nc",
+      "topic": "3.1.6",
+      "set": 2
+    },
+    {
+      "id": "3.1.6-s2-q2",
+      "q": "When HF is added to water at 298 K, this equilibrium is established. HF(aq) H+(aq) + F–(aq) At equilibrium, [HF] = 7.70 × 10–3 mo⇌l dm–3 and [F–] = 2.30 × 10–3 mol dm–3 What is the value of the equilibrium constant, in mol dm–3, at 298 K?",
+      "options": {
+        "A": "1.45 × 103",
+        "B": "3.35",
+        "C": "2.99 × 10–1",
+        "D": "6.87 × 10–4 1.6. Chemical Equilibria MCQ"
+      },
+      "answer": "D",
+      "explanation": "6.87 × 10-4",
+      "topic": "3.1.6",
+      "set": 2
+    },
+    {
+      "id": "3.1.6-s2-q3",
+      "q": "Methanol is made in this equilibrium reaction, using a catalyst. CO(g) + 2 H (g) CH OH(g) ΔH = – 91 kJ mol–1 2 3 The reaction reaches equilibrium⇌ in a container of fixed volume. Which is the expression for K for this equilibrium? c",
+      "options": {
+        "A": "K = c",
+        "B": "K = c",
+        "C": "K = c",
+        "D": "K = c"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.6",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s1-q1",
+      "q": "Which compound contains a chlorine atom with an oxidation state of +4?",
+      "options": {
+        "A": "KClO 4",
+        "B": "CCl 4",
+        "C": "ClO 2",
+        "D": "ClO F 2"
+      },
+      "answer": "C",
+      "explanation": "ClO\n2",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q2",
+      "q": "Which equation does not show the reduction of a transition metal?",
+      "options": {
+        "A": "TiCl + 2 Mg → Ti + 2 MgCl 4 2",
+        "B": "2 FeCl + 2 KI → 2 FeCl + 2 KCl + I 3 2 2",
+        "C": "MnO + 4 HCl → MnCl + Cl + 2 H O 2 2 2 2",
+        "D": "CoO + 4 HCl → [CoCl ]2‒ + H O + 2 H+ 4 2"
+      },
+      "answer": "D",
+      "explanation": "CoO + 4 HCl → [CoCl ]2‒ + H O + 2 H+\n4 2",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q3",
+      "q": "NO − ions can be reduced in acidic solution to NO How many electrons are 2 gained when each NO − ion is reduced? 2",
+      "options": {
+        "A": "1",
+        "B": "2",
+        "C": "3",
+        "D": "4"
+      },
+      "answer": "A",
+      "explanation": "1",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q4",
+      "q": "Which compound contains chlorine in an oxidation state of +1?",
+      "options": {
+        "A": "Cl O 2",
+        "B": "KClO 3",
+        "C": "ClF 3",
+        "D": "CCl 4"
+      },
+      "answer": "A",
+      "explanation": "Cl O\n2",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q5",
+      "q": "In which conversion is the metal reduced?",
+      "options": {
+        "A": "Cr O 2− → CrO 2− 2 7 4",
+        "B": "MnO 2− → MnO − 4 4",
+        "C": "TiO → TiO 2− 2 3",
+        "D": "VO − → VO2+ 3"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q6",
+      "q": "Which equation does not represent a redox reaction?",
+      "options": {
+        "A": "Mg + 2 HCl → MgCl + H 2 2",
+        "B": "CH + 2 O → CO + 2 H O 4 2 2 2",
+        "C": "Fe + CuSO → FeSO + Cu 4 4",
+        "D": "CuO + 2 HCl → CuCl + H O 2 2"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q7",
+      "q": "Which of these is not a redox reaction?",
+      "options": {
+        "A": "Cu O + H SO ⟶ CuSO + Cu + H O 2 2 4 4 2",
+        "B": "MgO + 2HCl ⟶ MgCl + H O 2 2",
+        "C": "SnCl + HgCl ⟶ Hg + SnCl 2 2 4",
+        "D": "MnO + 4HCl ⟶ MnCl + 2H O + Cl 2 2 2 2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q8",
+      "q": "Which species is not produced by a redox reaction between solid sodium iodide and concentrated sulfuric acid?",
+      "options": {
+        "A": "Na SO 2 4",
+        "B": "H S 2",
+        "C": "S",
+        "D": "SO 2"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q9",
+      "q": "V O can be used as a catalyst in the Contact Process. 2 5 Which is a step in the Contact Process in which the vanadium is oxidised?",
+      "options": {
+        "A": "SO + V O ⟶ SO + 2VO 2 2 5 3 2",
+        "B": "SO + 2VO ⟶ SO + V O 3 2 2 2 5",
+        "C": "2VO + O ⟶ V O 2 2 2 5",
+        "D": "V O ⟶ 2VO + O 2 5 2 2"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q10",
+      "q": "Which of these shows nitrogen in its correct oxidation states in the compounds given? NH N O HNO 3 2 2",
+      "options": {
+        "A": "+3 −1 +5",
+        "B": "−3 +1 +3",
+        "C": "−3 +1 −5",
+        "D": "+3 −1 −3"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q11",
+      "q": "Which of these is a redox reaction?",
+      "options": {
+        "A": "CaO + SiO ⟶ CaSiO 2 3",
+        "B": "H SO + Na O ⟶ Na SO + H O 2 4 2 2 4 2",
+        "C": "NaBr + H SO ⟶ NaHSO + HBr 2 4 4",
+        "D": "Mg + S ⟶ MgS"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q12",
+      "q": "Which of these species is the best reducing agent?",
+      "options": {
+        "A": "Cl 2",
+        "B": "Cl−",
+        "C": "I 2",
+        "D": "I−"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q13",
+      "q": "Which of the following shows chlorine in its correct oxidation states in the compounds shown? HCl KClO HClO 3",
+      "options": {
+        "A": "−1 +3 +1",
+        "B": "+1 −5 −1",
+        "C": "−1 +5 +1",
+        "D": "+1 +5 −1"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q14",
+      "q": "Which substance is not produced in a redox reaction when solid sodium iodide reacts with concentrated sulfuric acid?",
+      "options": {
+        "A": "H S 2",
+        "B": "HI",
+        "C": "SO 2",
+        "D": "I 2"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q15",
+      "q": "In which reaction is hydrogen acting as an oxidising agent?",
+      "options": {
+        "A": "Cl + H 2HCl 2 2",
+        "B": "(CH ) CO + H (CH ) CHOH 3 2 2 3 2",
+        "C": "N + 3H 2NH 2 2 3",
+        "D": "2Na + H 2NaH 2"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q16",
+      "q": "In which reaction is the metal oxidised?",
+      "options": {
+        "A": "2Cu2+ + 4I– 2CuI + I 2",
+        "B": "[Fe(H O) ]3+ + Cl– [Fe(H O) (Cl)]2+ + H O 2 6 2 5 2",
+        "C": "[CoCl ]2– + 6H O [Co(H O) ]2+ + 4Cl– 4 2 2 6",
+        "D": "Mg + S MgS"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q17",
+      "q": "Which species contains an element with an oxidation state of +4?",
+      "options": {
+        "A": "NO + 2",
+        "B": "ClO − 3",
+        "C": "H SO 2 3",
+        "D": "PCl 5"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q18",
+      "q": "Refer to the unbalanced equation below when answering this question. → K Cr O7 + 3H C O + _H SO Cr (SO ) + _H O + 6CO + K SO 2 2 2 2 4 2 4 2 4 3 2 2 2 4 In the balanced equation the mole ratio for sulfuric acid to water is",
+      "options": {
+        "A": "1 : 4",
+        "B": "1 : 2",
+        "C": "4 : 7",
+        "D": "4 : 9"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s1-q19",
+      "q": "Refer to the unbalanced equation below when answering this question. → K Cr O7 + 3H C O + _H SO Cr (SO ) + _H O + 6CO + K SO 2 2 2 2 4 2 4 2 4 3 2 2 2 4 What is the reducing agent in this reaction?",
+      "options": {
+        "A": "H+",
+        "B": "C O 2− 2 4",
+        "C": "K+",
+        "D": "Cr O 2− 2 7"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "3.1.7",
+      "set": 1
+    },
+    {
+      "id": "3.1.7-s2-q1",
+      "q": "Ammonia is oxidised as shown. w NH + x O → y H O + z NO 3 2 2 Which whole number values for w, x, y and z balance the equation? w x y z",
+      "options": {
+        "A": "2 3 3 2",
+        "B": "4 7 4 4",
+        "C": "4 5 6 4",
+        "D": "6 7 9 6"
+      },
+      "answer": "C",
+      "explanation": "4564",
+      "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s2-q2",
+      "q": "In which species is chlorine in its highest oxidation state?",
+      "options": {
+        "A": "ClF 2–",
+        "B": "ClO 4–",
+        "C": "ClO 2",
+        "D": "ClF 3"
+      },
+      "answer": "B",
+      "explanation": "ClO -\n4",
+      "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s2-q3",
+      "q": "Which statement about this redox reaction is correct? 3 Sn2+(aq) + Cr O 2– (aq) + 2 H+(aq) → 2 Cr3+(aq) + 3 SnO (s) + H O(l) 2 7 2 2",
+      "options": {
+        "A": "Sn2+ is the oxidising agent and it gains electrons.",
+        "B": "Sn2+ is the reducing agent and it gains electrons.",
+        "C": "Cr 2O 72– is the oxidising agent and it gains electrons.",
+        "D": "Cr 2O 72– is the reducing agent and it gains electrons. 1.7. Oxidation, Reduction and Redox Equations MCQ"
+      },
+      "answer": "C",
+      "explanation": "Cr O 2- is the oxidising agent and it gains electrons.\n2 7",
+      "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s2-q4",
+      "q": "Which incomplete half-equation is balanced by adding two H+ ions and one electron to the left-hand side?",
+      "options": {
+        "A": "CH 3CHO → CH 3CH 2OH",
+        "B": "VO2+ → V3+ + H 2O",
+        "C": "HNO 2 → NO + H 2O",
+        "D": "O 2 → H 2O 2"
+      },
+      "answer": "B",
+      "explanation": "VO2+ → V3+ + H O\n2",
+      "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s2-q5",
+      "q": "In which oxide is the named element in its highest oxidation state?",
+      "options": {
+        "A": "chlorine in ClO 2",
+        "B": "magnesium in MgO",
+        "C": "nitrogen in N 2O 4",
+        "D": "sulfur in SO 2"
+      },
+      "answer": "B",
+      "explanation": "magnesium in MgO",
+      "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s2-q6",
+      "q": "In which of these substances is oxygen in the highest oxidation state?",
+      "options": {
+        "A": "OF 2",
+        "B": "H O 2",
+        "C": "O 2",
+        "D": "H O 2 2 1.7. Oxidation, Reduction and Redox Equations MCQ"
+      },
+      "answer": "A",
+      "explanation": "OF\n2",
+      "topic": "3.1.7",
+      "set": 2
+    },
+    {
+      "id": "3.1.7-s2-q7",
+      "q": "Which of these oxidation states is correct?",
+      "options": {
+        "A": "Chlorine in Cl is –1 2",
+        "B": "Chromium in K Cr O is +7 2 2 7",
+        "C": "Fluorine in F O is –1 2",
+        "D": "Hydrogen in NaH is +1"
+      },
+      "answer": "C",
+      "explanation": "Fluorine in F O is –1\n2",
+      "topic": "3.1.7",
       "set": 2
     }
   ]
