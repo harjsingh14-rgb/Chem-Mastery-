@@ -7729,8 +7729,8 @@ export default function App() {
                   ← Back
                 </button>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:"15px", fontWeight:700, color:"#1a2d45" }}>{activeMech.title}</div>
-                  <div style={{ fontSize:"12px", color:"#64748b", fontFamily:"'DM Sans',system-ui,sans-serif" }}>{activeMech.subtitle}</div>
+                  <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", letterSpacing:"-0.3px" }}>{activeMech.title}</div>
+                  <div style={{ fontSize:"15px", color:"#475569", fontFamily:"'DM Sans',system-ui,sans-serif", fontWeight:500, marginTop:"2px" }}>{activeMech.subtitle}</div>
                 </div>
               </div>
 
@@ -7764,23 +7764,25 @@ export default function App() {
 
                 {/* Interactive explainer cards — right */}
                 <div style={{ flex:"1 1 45%", minWidth:0, display:"flex", flexDirection:"column", gap:"8px", overflowY:"auto" }}>
-                  <div style={{ fontSize:"12px", fontWeight:700, color:"#94a3b8", textTransform:"uppercase", letterSpacing:"1px", marginBottom:"2px" }}>
+                  <div style={{ fontSize:"13px", fontWeight:800, color:"#64748b", textTransform:"uppercase", letterSpacing:"1.5px", marginBottom:"6px" }}>
                     Tap to learn each part
                   </div>
                   {explainers.map((ex, idx) => {
                     const isOpen = mechOpenCards[idx];
+                    const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed", "#0284c7", "#ea580c", "#0d9488"];
+                    const circleColor = stepColors[idx % stepColors.length];
                     return (
                       <button key={idx} onClick={()=> setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                        style={{ background: isOpen ? `${activeMech.color}08` : "#fff",
-                          border: isOpen ? `2px solid ${activeMech.color}40` : "1.5px solid #e2e8f0",
+                        style={{ background: isOpen ? `${circleColor}08` : "#fff",
+                          border: isOpen ? `2px solid ${circleColor}40` : "1.5px solid #e2e8f0",
                           borderRadius:"12px", padding:"10px 14px", textAlign:"left", cursor:"pointer",
                           fontFamily:"inherit", transition:"all 0.2s" }}>
                         <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
-                          <div style={{ width:"24px", height:"24px", borderRadius:"50%", flexShrink:0,
-                            background: isOpen ? activeMech.color : "#f0f4f8",
-                            color: isOpen ? "#fff" : "#64748b",
+                          <div style={{ width:"26px", height:"26px", borderRadius:"50%", flexShrink:0,
+                            background: circleColor,
+                            color: "#fff",
                             display:"flex", alignItems:"center", justifyContent:"center",
-                            fontSize:"11px", fontWeight:800, transition:"all 0.2s" }}>
+                            fontSize:"12px", fontWeight:800, transition:"all 0.2s" }}>
                             {idx + 1}
                           </div>
                           <div style={{ flex:1, fontSize:"13px", fontWeight:700, color:"#1a2d45", lineHeight:1.3 }}>
@@ -7792,7 +7794,7 @@ export default function App() {
                           </div>
                         </div>
                         {isOpen && (
-                          <div style={{ marginTop:"8px", paddingTop:"8px", borderTop:`1px solid ${activeMech.color}20`,
+                          <div style={{ marginTop:"8px", paddingTop:"8px", borderTop:`1px solid ${circleColor}20`,
                             fontSize:"13px", color:"#475569", lineHeight:1.65, fontWeight:400,
                             animation:"mechFadeIn 0.2s ease" }}>
                             {ex.text}
