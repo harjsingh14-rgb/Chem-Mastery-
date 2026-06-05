@@ -5835,188 +5835,100 @@ export default function App() {
       <div style={base}>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
         <Header sub="Progress Dashboard" back={goBack} />
-        <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "16px" }}>
-
-          {/* Streak & Activity Hero */}
-          <div style={{ display: "flex", gap: "10px" }}>
-            {/* Streak card */}
-            <div style={{ flex: 1, background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: "20px", padding: "20px", color: "#fff", boxShadow: "0 8px 24px rgba(245,158,11,0.3)", textAlign: "center" }}>
-              <div style={{ fontSize: "42px", marginBottom: "4px" }}>🔥</div>
-              <div style={{ fontSize: "36px", fontWeight: 800, lineHeight: 1 }}>{currentStreak}</div>
-              <div style={{ fontSize: "13px", fontWeight: 600, opacity: 0.9, marginTop: "4px" }}>{currentStreak === 1 ? "day streak" : "day streak"}</div>
-              {currentStreak >= 7 && <div style={{ fontSize: "11px", opacity: 0.8, marginTop: "4px" }}>Keep it going!</div>}
-            </div>
-            {/* Overall progress card */}
-            <div style={{ flex: 2, background: "linear-gradient(135deg, #29ABE2, #1a8fc4)", borderRadius: "20px", padding: "20px", color: "#fff", boxShadow: "0 8px 24px rgba(41,171,226,0.3)" }}>
-              <div style={{ fontSize: "13px", fontWeight: 600, opacity: 0.85, marginBottom: "4px" }}>Overall Progress</div>
-              <div style={{ fontSize: "42px", fontWeight: 800, lineHeight: 1 }}>{overallPct}%</div>
-              <div style={{ fontSize: "13px", opacity: 0.85, marginTop: "4px" }}>{totalMastered} of {totalCards} cards mastered</div>
-              <div style={{ marginTop: "10px", height: "6px", background: "rgba(255,255,255,0.25)", borderRadius: "3px", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${overallPct}%`, background: "#ffffff", borderRadius: "3px", transition: "width 0.5s" }} />
+        {(() => {
+          const td = studyLog[todayKey] || {};
+          const tdTotal = (td.cards||0) + (td.calcs||0) + (td.extended||0) + (td.mechanisms||0);
+          return (
+          <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "12px" }}>
+            {/* Top row: Streak + Progress + Today */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
+              <div style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: "16px", padding: "16px", color: "#fff", textAlign: "center" }}>
+                <div style={{ fontSize: "28px" }}>🔥</div>
+                <div style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1 }}>{currentStreak}</div>
+                <div style={{ fontSize: "11px", fontWeight: 600, opacity: 0.9, marginTop: "2px" }}>day streak</div>
+              </div>
+              <div style={{ background: "linear-gradient(135deg, #29ABE2, #1a8fc4)", borderRadius: "16px", padding: "16px", color: "#fff", textAlign: "center" }}>
+                <div style={{ fontSize: "11px", fontWeight: 600, opacity: 0.8 }}>Mastered</div>
+                <div style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.2 }}>{overallPct}%</div>
+                <div style={{ fontSize: "10px", opacity: 0.8 }}>{totalMastered}/{totalCards}</div>
+              </div>
+              <div style={{ background: "#fff", borderRadius: "16px", padding: "16px", textAlign: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
+                <div style={{ fontSize: "11px", fontWeight: 600, color: "#7a95b0" }}>Today</div>
+                <div style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", lineHeight: 1.2 }}>{tdTotal}</div>
+                <div style={{ fontSize: "10px", color: "#7a95b0" }}>actions</div>
               </div>
             </div>
-          </div>
 
-          {/* Activity Heatmap - last 28 days */}
-          <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
-            <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "10px" }}>Activity - Last 28 Days</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
-              {["M","T","W","T","F","S","S"].map((d, i) => (
-                <div key={i} style={{ fontSize: "10px", color: "#7a95b0", textAlign: "center", fontWeight: 600, marginBottom: "2px" }}>{d}</div>
-              ))}
-              {(() => {
-                const cells = [];
-                const today = new Date();
-                // Find the Monday 4 weeks ago
-                const start = new Date(today);
-                start.setDate(start.getDate() - 27 - ((start.getDay() + 6) % 7));
-                for (let i = 0; i < 28; i++) {
-                  const d = new Date(start);
-                  d.setDate(d.getDate() + i);
-                  const key = d.toISOString().slice(0, 10);
-                  const dayData = studyLog[key];
-                  const total = dayData ? (dayData.cards || 0) + (dayData.calcs || 0) + (dayData.extended || 0) + (dayData.mechanisms || 0) : 0;
-                  const isToday = key === todayKey;
-                  const intensity = total === 0 ? 0 : total < 5 ? 1 : total < 15 ? 2 : total < 30 ? 3 : 4;
-                  const colors = ["#edf2f7", "#bae6fd", "#38bdf8", "#0284c7", "#0c4a6e"];
-                  cells.push(
-                    <div key={key} title={`${key}: ${total} actions`} style={{
-                      aspectRatio: "1", borderRadius: "4px",
-                      background: colors[intensity],
-                      border: isToday ? "2px solid #f59e0b" : "none",
-                    }} />
-                  );
-                }
-                return cells;
-              })()}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "8px", justifyContent: "flex-end" }}>
-              <span style={{ fontSize: "10px", color: "#7a95b0" }}>Less</span>
-              {["#edf2f7", "#bae6fd", "#38bdf8", "#0284c7", "#0c4a6e"].map(c => (
-                <div key={c} style={{ width: "10px", height: "10px", borderRadius: "2px", background: c }} />
-              ))}
-              <span style={{ fontSize: "10px", color: "#7a95b0" }}>More</span>
-            </div>
-          </div>
-
-          {/* Today's activity */}
-          {(() => {
-            const today = studyLog[todayKey] || {};
-            const todayTotal = (today.cards || 0) + (today.calcs || 0) + (today.extended || 0) + (today.mechanisms || 0);
-            return (
-              <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
-                <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "10px" }}>Today</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
-                  <div style={{ textAlign: "center", padding: "8px", background: "#f0f9ff", borderRadius: "10px" }}>
-                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#29ABE2" }}>{today.cards || 0}</div>
-                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Cards</div>
-                  </div>
-                  <div style={{ textAlign: "center", padding: "8px", background: "#f0f9ff", borderRadius: "10px" }}>
-                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#0284c7" }}>{today.calcs || 0}</div>
-                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Calcs</div>
-                  </div>
-                  <div style={{ textAlign: "center", padding: "8px", background: "#f5f3ff", borderRadius: "10px" }}>
-                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#7c3aed" }}>{today.extended || 0}</div>
-                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Extended</div>
-                  </div>
-                  <div style={{ textAlign: "center", padding: "8px", background: "#fff7ed", borderRadius: "10px" }}>
-                    <div style={{ fontSize: "20px", fontWeight: 800, color: "#d97706" }}>{today.mechanisms || 0}</div>
-                    <div style={{ fontSize: "10px", color: "#7a95b0", fontWeight: 600 }}>Mechs</div>
-                  </div>
+            {/* Today breakdown */}
+            <div style={{ display: "flex", gap: "6px" }}>
+              {[{l:"Cards",v:td.cards||0,c:"#29ABE2",b:"#f0f9ff"},{l:"Calcs",v:td.calcs||0,c:"#0284c7",b:"#f0f9ff"},{l:"Extended",v:td.extended||0,c:"#7c3aed",b:"#f5f3ff"},{l:"Mechs",v:td.mechanisms||0,c:"#d97706",b:"#fff7ed"}].map(s=>(
+                <div key={s.l} style={{ flex:1, textAlign:"center", padding:"8px 4px", background:s.b, borderRadius:"10px" }}>
+                  <div style={{ fontSize:"16px", fontWeight:800, color:s.c }}>{s.v}</div>
+                  <div style={{ fontSize:"9px", color:"#7a95b0", fontWeight:600 }}>{s.l}</div>
                 </div>
-                {todayTotal === 0 && <div style={{ textAlign: "center", fontSize: "12px", color: "#7a95b0", marginTop: "8px" }}>Start studying to fill this up!</div>}
-              </div>
-            );
-          })()}
+              ))}
+            </div>
 
-          {/* Score Trends */}
-          {scoreHistory.length > 0 && (
-            <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginBottom: "10px" }}>Recent Calc Scores</div>
-              <div style={{ display: "flex", alignItems: "flex-end", gap: "3px", height: "60px" }}>
-                {scoreHistory.filter(s => s.type === "calc").slice(-20).map((s, i) => (
-                  <div key={i} title={`${s.topic}: ${s.score}/${s.total}`} style={{
-                    flex: 1, maxWidth: "20px",
-                    height: `${s.score ? 100 : 20}%`, minHeight: "4px",
-                    background: s.score ? "linear-gradient(180deg, #29ABE2, #0284c7)" : "#fecaca",
-                    borderRadius: "3px 3px 0 0",
-                    transition: "height 0.3s",
-                  }} />
-                ))}
+            {/* Activity heatmap */}
+            <div style={{ background:"#fff", borderRadius:"14px", padding:"12px", boxShadow:"0 2px 8px rgba(0,0,0,0.05)" }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"8px" }}>
+                <span style={{ fontSize:"12px", fontWeight:700, color:"#1a2d45" }}>Last 28 Days</span>
+                <div style={{ display:"flex", alignItems:"center", gap:"3px" }}>
+                  <span style={{ fontSize:"9px", color:"#94a3b8" }}>Less</span>
+                  {["#edf2f7","#bae6fd","#38bdf8","#0284c7","#0c4a6e"].map(c=><div key={c} style={{ width:"8px", height:"8px", borderRadius:"2px", background:c }}/>)}
+                  <span style={{ fontSize:"9px", color:"#94a3b8" }}>More</span>
+                </div>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-                <span style={{ fontSize: "10px", color: "#7a95b0" }}>Oldest</span>
-                <span style={{ fontSize: "10px", color: "#7a95b0" }}>
-                  {(() => {
-                    const calcScores = scoreHistory.filter(s => s.type === "calc");
-                    const correct = calcScores.filter(s => s.score > 0).length;
-                    return calcScores.length > 0 ? `${Math.round((correct / calcScores.length) * 100)}% correct overall` : "";
-                  })()}
-                </span>
-                <span style={{ fontSize: "10px", color: "#7a95b0" }}>Latest</span>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(7, 1fr)", gap:"3px" }}>
+                {["M","T","W","T","F","S","S"].map((d,i)=><div key={i} style={{ fontSize:"9px", color:"#94a3b8", textAlign:"center", fontWeight:600 }}>{d}</div>)}
+                {(()=>{
+                  const cells=[]; const now=new Date(); const st=new Date(now);
+                  st.setDate(st.getDate()-27-((st.getDay()+6)%7));
+                  for(let i=0;i<28;i++){const d=new Date(st);d.setDate(d.getDate()+i);const k=d.toISOString().slice(0,10);const dd=studyLog[k];
+                  const tot=dd?(dd.cards||0)+(dd.calcs||0)+(dd.extended||0)+(dd.mechanisms||0):0;
+                  const int=tot===0?0:tot<5?1:tot<15?2:tot<30?3:4;
+                  cells.push(<div key={k} title={`${k}: ${tot}`} style={{aspectRatio:"1",borderRadius:"3px",background:["#edf2f7","#bae6fd","#38bdf8","#0284c7","#0c4a6e"][int],border:k===todayKey?"2px solid #f59e0b":"none"}}/>);}
+                  return cells;
+                })()}
               </div>
             </div>
-          )}
 
-          {/* Quick stats row */}
-          <div style={{ display: "flex", gap: "10px" }}>
-            <StatCard label="Topics Started" value={started.length} sub={`of ${CURRENT_TOPIC_ORDER.length} total`} color="#29ABE2" />
-            <StatCard label="Fully Mastered" value={allTopics.filter(t => t.pct === 100).length} sub="100% complete" color="#1a8fc4" />
-            <StatCard label="Not Started" value={allTopics.filter(t => t.mastered === 0).length} sub="topics" color="#b0c4d4" />
-          </div>
-
-          {/* Section breakdown */}
-          <div>
-            <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>By Section</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {CURRENT_SECTIONS.map(sec => {
-                const secTotal = sec.topics.reduce((a, id) => a + SETS[id].cards.length, 0);
-                const secMastered = sec.topics.reduce((a, id) => a + (known[id] || new Set()).size, 0);
-                const secPct = Math.round((secMastered / secTotal) * 100);
-                return (
-                  <div key={sec.id} style={{ background: "#ffffff", borderRadius: "12px", padding: "12px 14px", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>{sec.label}</span>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#29ABE2" }}>{secPct}%</span>
-                    </div>
-                    <div style={{ height: "5px", background: "#e8edf3", borderRadius: "3px", overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${secPct}%`, background: "linear-gradient(90deg, #29ABE2, #1a8fc4)", borderRadius: "3px" }} />
-                    </div>
-                    <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "4px" }}>{secMastered} / {secTotal} cards</div>
+            {/* Section progress */}
+            <div style={{ background:"#fff", borderRadius:"14px", padding:"12px", boxShadow:"0 2px 8px rgba(0,0,0,0.05)" }}>
+              <div style={{ fontSize:"12px", fontWeight:700, color:"#1a2d45", marginBottom:"10px" }}>Progress by Section</div>
+              {CURRENT_SECTIONS.map(sec=>{
+                const sT=sec.topics.reduce((a,id)=>a+SETS[id].cards.length,0);
+                const sM=sec.topics.reduce((a,id)=>a+(known[id]||new Set()).size,0);
+                const sP=Math.round((sM/sT)*100);
+                return(<div key={sec.id} style={{ marginBottom:"8px" }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"4px" }}>
+                    <span style={{ fontSize:"12px", fontWeight:600, color:"#1a2d45" }}>{sec.label}</span>
+                    <span style={{ fontSize:"11px", fontWeight:700, color:sP===0?"#94a3b8":"#29ABE2" }}>{sP}% · {sM}/{sT}</span>
                   </div>
-                );
+                  <div style={{ height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
+                    <div style={{ height:"100%", width:`${sP}%`, background:"linear-gradient(90deg,#29ABE2,#1a8fc4)", borderRadius:"2px" }}/>
+                  </div>
+                </div>);
               })}
             </div>
-          </div>
 
-          {/* Needs work */}
-          {needsWork.length > 0 && (
-            <div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>⚠️ Needs Attention</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                {needsWork.map(t => <TopicRow key={t.id} t={t} showBar={true} />)}
+            {/* Quick stats */}
+            <div style={{ display:"flex", gap:"8px" }}>
+              <div style={{ flex:1, background:"#fff", borderRadius:"12px", padding:"12px", textAlign:"center", boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
+                <div style={{ fontSize:"22px", fontWeight:800, color:"#29ABE2" }}>{started.length}</div>
+                <div style={{ fontSize:"10px", color:"#7a95b0", fontWeight:600 }}>Started</div>
+              </div>
+              <div style={{ flex:1, background:"#fff", borderRadius:"12px", padding:"12px", textAlign:"center", boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
+                <div style={{ fontSize:"22px", fontWeight:800, color:"#059669" }}>{allTopics.filter(t=>t.pct===100).length}</div>
+                <div style={{ fontSize:"10px", color:"#7a95b0", fontWeight:600 }}>Mastered</div>
+              </div>
+              <div style={{ flex:1, background:"#fff", borderRadius:"12px", padding:"12px", textAlign:"center", boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
+                <div style={{ fontSize:"22px", fontWeight:800, color:"#94a3b8" }}>{allTopics.filter(t=>t.mastered===0).length}</div>
+                <div style={{ fontSize:"10px", color:"#7a95b0", fontWeight:600 }}>Not Started</div>
               </div>
             </div>
-          )}
-
-          {/* Going well */}
-          {goingWell.length > 0 && (
-            <div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#7a95b0", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "10px" }}>Going Well</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                {goingWell.map(t => <TopicRow key={t.id} t={t} showBar={false} />)}
-              </div>
-            </div>
-          )}
-
-          {totalMastered === 0 && (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "#7a95b0" }}>
-              <div style={{ fontSize: "40px", marginBottom: "12px", color: "#29ABE2", fontWeight: 700 }}>0%</div>
-              <div style={{ fontSize: "16px", fontWeight: 600 }}>No progress yet</div>
-              <div style={{ fontSize: "13px", marginTop: "6px" }}>Start studying and your progress will appear here</div>
-            </div>
-          )}
-        </div>
+          </div>);
+        })()}
       </div>
     );
   }
