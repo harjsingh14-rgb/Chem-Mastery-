@@ -5757,32 +5757,17 @@ export default function App() {
             { id: "ocr", label: "OCR A", sub: "Chemistry", count: OCR_TOPIC_ORDER.length, desc: "Modules 2-6 fully covered. Module 1 is PAG practical skills only.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","Organic","Physical","PAG Skills"] },
           ].map(b => (
             <button key={b.id} onClick={() => selectBoard(b.id)} style={{
-              display: "flex", flexDirection: "column", borderRadius: "24px",
-              border: "none", cursor: "pointer", fontFamily: "inherit",
-              background: "#ffffff", boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
-              overflow: "hidden", transition: "transform 0.18s, box-shadow 0.18s", textAlign: "left",
+              border: "none", cursor: "pointer", fontFamily: "inherit", padding: 0,
+              background: "none", borderRadius: "24px", overflow: "hidden",
+              boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
+              transition: "transform 0.18s, box-shadow 0.18s",
             }}
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.16)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.1)"; }}
             >
-              {/* Fancy thumbnail — FigureLabs image */}
-              <div style={{ position: "relative", overflow: "hidden" }}>
-                <img src={process.env.PUBLIC_URL + `/card-${b.id === "ocr" ? "ocra" : b.id}.png`}
-                  alt={b.label}
-                  style={{ width: "100%", height: "170px", objectFit: "cover", objectPosition: "top", display: "block" }} />
-              </div>
-              {/* Card body */}
-              <div style={{ padding: "22px 24px 26px", flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
-                <div style={{ fontSize: "15px", color: "#5a7090", lineHeight: 1.6 }}>{b.desc}</div>
-                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                  {b.features.map(f => (
-                    <span key={f} style={{ fontSize: "13px", fontWeight: 700, color: b.accent, background: `${b.accent}15`, borderRadius: "6px", padding: "5px 12px" }}>{f}</span>
-                  ))}
-                </div>
-                <div style={{ marginTop: "auto", background: b.grad, borderRadius: "12px", padding: "14px 16px", color: "#fff", fontWeight: 700, fontSize: "16px", textAlign: "center" }}>
-                  Let's Go →
-                </div>
-              </div>
+              <img src={process.env.PUBLIC_URL + `/card-${b.id === "ocr" ? "ocra" : b.id}.png`}
+                alt={b.label}
+                style={{ width: "100%", height: "auto", display: "block", borderRadius: "24px" }} />
             </button>
           ))}
         </div>
