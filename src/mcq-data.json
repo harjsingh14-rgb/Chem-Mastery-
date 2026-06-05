@@ -1016,7 +1016,7 @@
         "D": "Phenolphthalein (pH range 8.3–10.0)"
       },
       "answer": "B",
-      "explanation": "Bromophenol blue (pH range 3.0–4.6). pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
+      "explanation": "Bromophenol blue changes colour in the pH range 3.0 to 4.6. Choose an indicator whose colour change range includes the pH at the equivalence point.",
       "topic": "3.1.12",
       "set": 1
     },
@@ -1171,7 +1171,7 @@
         "D": "1.00 × 10–5"
       },
       "answer": "C",
-      "explanation": "1.00 × 10–4. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
+      "explanation": "pH = -log[H+]. If [H+] = 1.00 x 10-4 mol dm-3, then pH = 4.00.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1199,7 +1199,7 @@
         "D": "NH + 4 1.12. Acids and Bases MCQ"
       },
       "answer": "A",
-      "explanation": "CH COO– 3. pH = -log[H+]. For weak acids use Ka. Buffer solutions resist pH change. At half-equivalence point, pH = pKa.",
+      "explanation": "In a buffer solution, the conjugate base (CH3COO-) reacts with added H+ ions to resist pH change. The weak acid provides H+ if base is added.",
       "topic": "3.1.12",
       "set": 2
     },
@@ -1451,7 +1451,7 @@
         "D": "1.7"
       },
       "answer": "C",
-      "explanation": "0.017",
+      "explanation": "Use n = m/M to find moles, then c = n/V to find concentration. Convert volumes to dm3 by dividing cm3 by 1000.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1465,7 +1465,7 @@
         "D": "4.95 × 10–23 J"
       },
       "answer": "A",
-      "explanation": "2.28 × 10–18 J",
+      "explanation": "Use KE = 1/2 mv2. Rearrange for velocity. Convert mass to kg using Avogadro's constant. Calculate the energy per particle first.",
       "topic": "3.1.2",
       "set": 1
     },
@@ -1801,7 +1801,7 @@
         "D": "73.3%"
       },
       "answer": "D",
-      "explanation": "73.3%",
+      "explanation": "Percentage yield = (actual yield / theoretical yield) x 100. Find theoretical yield using moles and mole ratios first.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1815,7 +1815,7 @@
         "D": "26.24 cm3"
       },
       "answer": "A",
-      "explanation": "25.95 cm3",
+      "explanation": "Use the titration formula: c1V1/n1 = c2V2/n2. Rearrange to find the unknown volume.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1829,7 +1829,7 @@
         "D": "Cl 2O 5"
       },
       "answer": "B",
-      "explanation": "ClO\n3",
+      "explanation": "Work out the formula by finding the ratio of atoms. Use oxidation states to check: Cl is +5 in ClO3-.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1872,7 +1872,7 @@
         "D": "100.0 (Total 1 marks)"
       },
       "answer": "B",
-      "explanation": "96.0",
+      "explanation": "Use Ar = sum of (isotopic mass x abundance) / 100. Multiply each isotope mass by its percentage, add them up, divide by 100.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1886,7 +1886,7 @@
         "D": "25.2% (Total 1 marks)"
       },
       "answer": "D",
-      "explanation": "25.2%",
+      "explanation": "Atom economy = (Mr of desired product / sum of Mr of all products) x 100. Only the desired product counts in the numerator.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1900,7 +1900,7 @@
         "D": "430 g (Total 1 marks)"
       },
       "answer": "A",
-      "explanation": "70.0g",
+      "explanation": "Use n = m/M to find moles of each reactant. Identify the limiting reagent using the mole ratio, then calculate mass of product.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1914,7 +1914,7 @@
         "D": "80%"
       },
       "answer": "A",
-      "explanation": "15%",
+      "explanation": "Percentage yield = (actual yield / theoretical yield) x 100. Low yields are common due to side reactions and losses during purification.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1970,7 +1970,7 @@
         "D": "10"
       },
       "answer": "D",
-      "explanation": "10",
+      "explanation": "Use the mole ratio from the balanced equation. Calculate moles of the known substance first, then use the ratio to find moles of the unknown.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1984,7 +1984,7 @@
         "D": "41.3%"
       },
       "answer": "A",
-      "explanation": "31.5%",
+      "explanation": "Atom economy = (Mr of desired product / sum of Mr of all products) x 100. Addition reactions have 100% atom economy.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -1998,7 +1998,7 @@
         "D": "170.0"
       },
       "answer": "B",
-      "explanation": "166.0",
+      "explanation": "Find the Mr by adding up the relative atomic masses of all atoms in the formula. Check you have the correct number of each atom.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -2012,7 +2012,7 @@
         "D": "Mo O 3 2"
       },
       "answer": "C",
-      "explanation": "Mo O\n2 3",
+      "explanation": "Find the empirical formula by dividing each mass by the Ar, then dividing by the smallest to get the simplest ratio.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -2026,7 +2026,7 @@
         "D": "propene"
       },
       "answer": "C",
-      "explanation": "propane",
+      "explanation": "Use the Mr from the molecular ion peak in the mass spectrum. Compare with the Mr of each option to identify the compound.",
       "topic": "3.1.2",
       "set": 2
     },
@@ -2040,7 +2040,7 @@
         "D": "H O 2"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "CH4 has no lone pairs on the central carbon, so it cannot form a coordinate bond. BH3 can accept a lone pair, NH3 and H2O both have lone pairs to donate.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2068,7 +2068,7 @@
         "D": "H–P"
       },
       "answer": "A",
-      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "H-O has the biggest difference in electronegativity (O = 3.5, H = 2.1). The larger the electronegativity difference, the more polar the bond.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2096,7 +2096,7 @@
         "D": "SO 2– 4"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "SO2 is bent with one lone pair on the sulfur. CO2 is linear with no lone pairs on C. PCl6- and SO4 2- have no lone pairs on the central atom.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2124,7 +2124,7 @@
         "D": "C H CH 6 5 3"
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "C6H5Cl (chlorobenzene) is planar because the benzene ring and attached atoms are all in one plane. CH3CHO and CH3NH2 have tetrahedral carbons. C6H5CH3 has a tetrahedral CH3.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2138,7 +2138,7 @@
         "D": "SO 3"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "NH3 is pyramidal so the bond dipoles do not cancel, giving a permanent dipole. BF3, SiCl4, and SO3 are all symmetrical so their dipoles cancel out.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2152,7 +2152,7 @@
         "D": "sodium chloride"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Graphite has delocalised electrons between its carbon layers. Cyclohexane, iodine and NaCl do not have delocalised electrons.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2194,7 +2194,7 @@
         "D": "NH Cl 4"
       },
       "answer": "D",
-      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "NH4Cl contains a coordinate bond. The NH4+ ion forms when the lone pair on N in NH3 is donated to H+. Once formed, all four N-H bonds are identical.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2208,7 +2208,7 @@
         "D": "Cl O 2"
       },
       "answer": "D",
-      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Cl2O is bent (like water) so the bond dipoles do not cancel. CF4, PCl5 and CO2 are all symmetrical so their dipoles cancel out.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2236,7 +2236,7 @@
         "D": "tetrachloromethane"
       },
       "answer": "A",
-      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Graphite has delocalised electrons between layers of carbon atoms. This is why graphite conducts electricity. The other substances do not have delocalised electrons.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2264,7 +2264,7 @@
         "D": "The total energy of the molecules decreases."
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "When water boils, only the intermolecular forces (hydrogen bonds) between molecules are broken. The covalent bonds within the water molecules stay intact.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2292,7 +2292,7 @@
         "D": "The lone pair electrons on water molecules"
       },
       "answer": "D",
-      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Lone pairs on water molecules do not move through the liquid to conduct electricity. Conduction needs mobile charged particles like ions or delocalised electrons.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2320,7 +2320,7 @@
         "D": "CBr 4"
       },
       "answer": "D",
-      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "CBr4 is tetrahedral and symmetrical, so all the bond dipoles cancel out. The other molecules are not symmetrical, so they have a permanent dipole.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2377,7 +2377,7 @@
         "D": "Graphite Metallic"
       },
       "answer": "A",
-      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Iodine is a simple molecular substance held together by weak London forces. Diamond is giant covalent, NaCl is ionic, graphite is giant covalent.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2433,7 +2433,7 @@
         "D": "CHCl F 2"
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "CF4 is tetrahedral and symmetrical, so the bond dipoles cancel. CH3Cl, CHCl3 and CHClF2 are all asymmetric so they have permanent dipoles.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2447,7 +2447,7 @@
         "D": "C H 2 4"
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "CH3OH has a tetrahedral carbon so it is not planar. HCHO is trigonal planar, CH3+ is trigonal planar, C2H4 is planar.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2503,7 +2503,7 @@
         "D": "CH − 3"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "BCl3 has 3 bonding pairs and no lone pairs on B, giving a trigonal planar shape (120 degrees). PH3 is pyramidal, H3O+ is pyramidal, CH3- is pyramidal.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2531,7 +2531,7 @@
         "D": "Van der Waals."
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "NH3 donates its lone pair to the empty orbital on BF3. Both electrons in the new bond come from nitrogen, so this is a coordinate (dative covalent) bond.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2559,7 +2559,7 @@
         "D": "Ca(NO ) 2 2"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Calcium is Ca2+, nitrate(V) is NO3-. Two NO3- ions are needed to balance the 2+ charge: Ca(NO3)2.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2587,7 +2587,7 @@
         "D": "CO 2"
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Propanone (CH3)2CO has a polar C=O bond and the molecule is not symmetrical, so it has a permanent dipole. CCl4, C2F4 and CO2 are symmetrical.",
       "topic": "3.1.3",
       "set": 1
     },
@@ -2615,7 +2615,7 @@
         "D": "Ca 1.3. Bonding MCQ"
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "K has the lowest melting point. It is the largest atom with the weakest metallic bonding (fewest delocalised electrons and largest ionic radius).",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2658,7 +2658,7 @@
         "D": "SiCl 4"
       },
       "answer": "D",
-      "explanation": "Answer: D. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "SiCl4 is tetrahedral and symmetrical, so the bond dipoles cancel. NH3, PCl3 and SCl2 are all asymmetric shapes with permanent dipoles.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2672,7 +2672,7 @@
         "D": "SF 6"
       },
       "answer": "A",
-      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "NCl3 is pyramidal (like NH3) so the bond dipoles do not cancel. CCl4 is tetrahedral, PF5 is trigonal bipyramidal, SF6 is octahedral, all symmetrical.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2686,7 +2686,7 @@
         "D": "PCl 3 1.3. Bonding MCQ"
       },
       "answer": "B",
-      "explanation": "Answer: B. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "AlCl3 has an empty orbital on Al and only 6 electrons, so it can accept a lone pair to form a coordinate bond. NH3, SiH4 and PCl3 already have full outer shells.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2714,7 +2714,7 @@
         "D": "tetrachloromethane"
       },
       "answer": "A",
-      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Graphite has delocalised electrons between its layers of carbon atoms. Iodine, NaCl and CCl4 do not have delocalised electrons.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2756,7 +2756,7 @@
         "D": "Ionic bond"
       },
       "answer": "A",
-      "explanation": "Answer: A. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "The lone pair on As in AsH3 is donated to H+ to form AsH4+. Both electrons in the new bond come from arsenic, so this is a coordinate bond.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2798,7 +2798,7 @@
         "D": "sodium"
       },
       "answer": "C",
-      "explanation": "Answer: C. Apply bonding principles: consider the type of bonding, structure, and intermolecular forces present to determine properties.",
+      "explanation": "Poly(propene) is a simple addition polymer with no delocalised electrons. Graphite and methylbenzene have delocalised pi electrons. Sodium has delocalised electrons in its metallic bonding.",
       "topic": "3.1.3",
       "set": 2
     },
@@ -2840,7 +2840,7 @@
         "D": "–1372"
       },
       "answer": "B",
-      "explanation": "–278. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
+      "explanation": "Use Hess's law: DeltaH reaction = sum of DeltaHf(products) minus sum of DeltaHf(reactants). Remember to multiply by the correct coefficients.",
       "topic": "3.1.4",
       "set": 1
     },
@@ -2953,7 +2953,7 @@
         "D": "–746 kJ mol–1"
       },
       "answer": "A",
-      "explanation": "+112 kJ mol–1. Use Hess's law or q=mcDeltaT. Bond enthalpy calculations: energy in (bonds broken) minus energy out (bonds formed). Exothermic = negative DeltaH.",
+      "explanation": "Use mean bond enthalpies: DeltaH = bonds broken minus bonds formed. Breaking bonds is endothermic (+), forming bonds is exothermic (-).",
       "topic": "3.1.4",
       "set": 1
     },
@@ -3615,7 +3615,7 @@
         "D": "6.87 × 10–4 1.6. Chemical Equilibria MCQ"
       },
       "answer": "D",
-      "explanation": "6.87 × 10–4 1.6. Chemical Equilibria MCQ. Le Chatelier's principle: the system shifts to oppose any change. Kc only changes with temperature. Changing concentration or pressure shifts position but not Kc.",
+      "explanation": "Calculate Kc using the equilibrium concentrations. Kc = products/reactants, each raised to the power of their coefficients.",
       "topic": "3.1.6",
       "set": 2
     },
@@ -3923,7 +3923,7 @@
         "D": "ClF 3"
       },
       "answer": "B",
-      "explanation": "ClO 4–. Oxidation is loss of electrons (OIL). Reduction is gain of electrons (RIG). Assign oxidation states to track electron transfer. Oxidising agents are reduced.",
+      "explanation": "In ClO4-, chlorine has an oxidation state of +7. Assign -2 to each oxygen: x + 4(-2) = -1, so x = +7.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -3993,7 +3993,7 @@
         "D": "Hydrogen in NaH is +1"
       },
       "answer": "C",
-      "explanation": "Fluorine in F O is –1\n2",
+      "explanation": "In F2O, fluorine is more electronegative than oxygen. F is always -1 (except in F2). So oxygen is +2 in this compound, which is unusual.",
       "topic": "3.1.7",
       "set": 2
     },
@@ -4063,7 +4063,7 @@
         "D": "mol–2 dm6 s–1"
       },
       "answer": "D",
-      "explanation": "mol–2 dm6 s–1. Rate = k[A]^m[B]^n. Orders are found experimentally. The rate-determining step controls the overall rate and determines the rate equation.",
+      "explanation": "The units of k depend on the overall order. For a second order reaction: k = rate/[A]2, so units are mol-1 dm3 s-1.",
       "topic": "3.1.9",
       "set": 1
     },
@@ -4190,7 +4190,7 @@
         "D": "O2–"
       },
       "answer": "D",
-      "explanation": "O2–. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
+      "explanation": "O2- has a 2- charge. Oxide ions are formed when oxygen gains 2 electrons.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4218,7 +4218,7 @@
         "D": "O2– F– Li+ Be2+"
       },
       "answer": "C",
-      "explanation": "Be2+ Li+ F– O2–. Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
+      "explanation": "Arrange the ions in order of increasing ionic radius. Smaller ions with higher charge have larger charge density.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4316,7 +4316,7 @@
         "D": "decreases"
       },
       "answer": "B",
-      "explanation": "radius decreases because nuclear charge increases radius increases because shielding (screening). Properties show periodicity across Period 3. Metals have giant structures (high mp), non-metals form simple molecules (low mp). Na to Al are metallic, Si is giant covalent, P4/S8/Cl2/Ar are simple molecular.",
+      "explanation": "Across a period, atomic radius decreases because nuclear charge increases while shielding stays roughly the same. Down a group, radius increases due to more electron shells.",
       "topic": "3.2.1",
       "set": 1
     },
@@ -4988,7 +4988,7 @@
         "D": "I–"
       },
       "answer": "D",
-      "explanation": "I–. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
+      "explanation": "Iodide ions (I-) are the strongest reducing agent among the halide ions. Reducing power increases down Group 7.",
       "topic": "3.2.3",
       "set": 2
     },
@@ -5030,7 +5030,7 @@
         "D": "OH–"
       },
       "answer": "D",
-      "explanation": "OH–. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
+      "explanation": "Hydroxide ions (OH-) are produced when halogens disproportionate in cold dilute NaOH.",
       "topic": "3.2.3",
       "set": 2
     },
@@ -5128,7 +5128,7 @@
         "D": "[Fe(H O) ]2+ is octahedral. 2 6"
       },
       "answer": "A",
-      "explanation": "CuCl 2– is square planar. 4. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
+      "explanation": "CuCl4 2- is square planar because the 4 chloride ligands arrange around the Cu2+ ion in a plane.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5184,7 +5184,7 @@
         "D": "[Cu(NH ) (H O) ]2+ 3 4 2 2"
       },
       "answer": "B",
-      "explanation": "[Co(C O ) ]4– 2 4 3. Transition metals form coloured compounds, have variable oxidation states, and act as catalysts. Complex ions have coordinate bonds from ligands to the central metal ion.",
+      "explanation": "Count the number of coordinate bonds from each ligand to the metal. Bidentate ligands form 2 bonds, monodentate form 1.",
       "topic": "3.2.5",
       "set": 1
     },
@@ -5764,7 +5764,7 @@
         "D": "C H n 2n+2"
       },
       "answer": "B",
-      "explanation": "C H n 2n–2. Name organic compounds using IUPAC rules: longest chain gives the root, functional group gives the suffix, substituents are prefixes in alphabetical order with locants.",
+      "explanation": "Alkynes have the general formula CnH2n-2. They contain a carbon-carbon triple bond.",
       "topic": "3.3.1",
       "set": 1
     },
@@ -5964,7 +5964,7 @@
         "D": "[(C H ) NCH ]+ Br – 2 5 3 3"
       },
       "answer": "C",
-      "explanation": "[(C H ) N(CH ) ]+ Br –\n2 5 2 3 2",
+      "explanation": "Quaternary ammonium salts have four organic groups attached to nitrogen, giving a permanent positive charge on N.",
       "topic": "3.3.11",
       "set": 1
     },
@@ -6850,7 +6850,7 @@
         "D": "1-chloropropane C–Br bond stronger than C–Cl bond"
       },
       "answer": "A",
-      "explanation": "1-bromopropane, C–Br bond weaker than C–Cl\nbond",
+      "explanation": "1-bromopropane reacts fastest because the C-Br bond is weaker than C-Cl and C-F bonds, making it easier to break.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -6977,7 +6977,7 @@
         "D": "The C–F bond is very strong."
       },
       "answer": "D",
-      "explanation": "The C–F bond is very strong.. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
+      "explanation": "The C-F bond is very strong (484 kJ/mol), so fluoroalkanes are very unreactive. Bond strength: C-F > C-Cl > C-Br > C-I.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -7290,7 +7290,7 @@
         "D": "CH –CH –C+H 3 2 2"
       },
       "answer": "C",
-      "explanation": "CH –C+H–CH 3 3. Alkenes undergo electrophilic addition. The pi bond attacks the electrophile. Markownikoff's rule: H adds to the C with more H atoms, forming the more stable carbocation.",
+      "explanation": "Markownikoff's rule: H adds to the carbon with more H atoms, forming the more stable secondary carbocation (CH3-C+H-CH3).",
       "topic": "3.3.4",
       "set": 1
     },
