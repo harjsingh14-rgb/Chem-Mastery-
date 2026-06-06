@@ -23,8 +23,8 @@ module.exports = async function handler(req, res) {
     }
 
     const priceConfig = plan === "yearly"
-      ? { "line_items[0][price_data][unit_amount]": "4399", "line_items[0][price_data][recurring][interval]": "year" }
-      : { "line_items[0][price_data][unit_amount]": "499", "line_items[0][price_data][recurring][interval]": "month" };
+      ? { "line_items[0][price_data][unit_amount]": "24999", "line_items[0][price_data][recurring][interval]": "year" }
+      : { "line_items[0][price_data][unit_amount]": "2799", "line_items[0][price_data][recurring][interval]": "month" };
 
     const params = new URLSearchParams({
       "mode": "subscription",

@@ -4640,8 +4640,452 @@ function track(event, params = {}) {
   }
 }
 
+// --- Landing Page Component (unauthenticated visitors) ---
+function LandingPage({ onGoToLogin }) {
+  const [activeSection, setActiveSection] = useState("mechanisms"); // "mechanisms" | "mcqs"
+  const [activeMechIdx, setActiveMechIdx] = useState(null); // null = list, 0 = first mech, 1 = second
+  const [mechOpenCards, setMechOpenCards] = useState({});
+  const [mcqIdx, setMcqIdx] = useState(0);
+  const [mcqSelected, setMcqSelected] = useState(null);
+  const [mcqShowExplanation, setMcqShowExplanation] = useState(false);
+  const [mcqScore, setMcqScore] = useState(0);
+  const [mcqAnswered, setMcqAnswered] = useState(0);
+
+  // Preview mechanisms data (subset of real content)
+  const previewMechs = [
+    {
+      id: "nuc_sub",
+      title: "Nucleophilic Substitution",
+      subtitle: "OH⁻ + CH₃CH₂Br → CH₃CH₂OH + Br⁻",
+      color: "#3182ce",
+      image: "/mechanisms/nuc_sub/mechanism.jpg",
+      locked: false,
+      explainers: [
+        { title: "What is the nucleophile?", text: "The hydroxide ion (OH⁻) has a lone pair of electrons on oxygen. It is the nucleophile. It donates this lone pair to form a new bond." },
+        { title: "Arrow 1: Nucleophile attacks δ+ carbon", text: "The lone pair on oxygen attacks the δ+ carbon of bromoethane, forming a new C–O bond. The curly arrow goes from the lone pair to the carbon atom." },
+        { title: "Arrow 2: C–Br bond breaks", text: "Simultaneously, the C–Br bonding pair shifts to bromine. Br leaves as Br⁻ (the leaving group). The curly arrow goes from the bond to Br." },
+        { title: "Why is this a substitution?", text: "The –Br group has been replaced (substituted) by –OH. The product is ethanol (CH₃CH₂OH) and the by-product is bromide ion (Br⁻)." },
+        { title: "Conditions", text: "Warm aqueous NaOH (dilute). Reflux. The OH⁻ acts as a nucleophile in this reaction." },
+      ],
+    },
+    {
+      id: "ea_br2",
+      title: "Electrophilic Addition: Br₂",
+      subtitle: "CH₂=CH₂ + Br₂ → CH₂BrCH₂Br",
+      color: "#c05621",
+      image: "/mechanisms/ea/IMG_0887.jpg",
+      locked: true, // half-locked
+      explainers: [
+        { title: "Why does the π bond react?", text: "The C=C double bond has a region of high electron density (the π bond) above and below the plane. This electron-rich area attracts electrophiles." },
+        { title: "Arrow 1: π electrons attack δ+ Br", text: "As Br₂ approaches, the π electrons repel the electrons in Br–Br, inducing a dipole: Brδ+–Brδ−. The π electrons attack the δ+ Br, forming a new C–Br bond." },
+        { title: "Arrow 2: Br–Br bond breaks", text: "Simultaneously, the Br–Br bonding pair shifts entirely to the far Br atom, which leaves as Br⁻. The π bond is now completely used up." },
+        { title: "Carbocation intermediate", text: "A carbocation (C⁺) forms on the carbon that didn't bond to Br. This is a reactive intermediate." },
+        { title: "Arrow 3: Br⁻ attacks C⁺", text: "The Br⁻ ion uses a lone pair to attack the positive carbon, forming the second C–Br bond." },
+        { title: "Test for alkenes", text: "This reaction decolourises orange bromine water — the standard test for a C=C double bond." },
+      ],
+    },
+  ];
+
+  // Preview MCQs (3 real questions from organic topics)
+  const previewMCQs = [
+    {
+      q: "Which compound can react with ammonia to produce propylamine?",
+      options: { A: "CH₃CH=CH₂", B: "CH₃CH₂CH₂OH", C: "CH₃CH₂CH₂Br", D: "CH₃CH₂CH₃" },
+      answer: "C",
+      explanation: "Halogenoalkanes undergo nucleophilic substitution with NH₃. The lone pair on nitrogen attacks the δ+ carbon, displacing Br⁻. Excess NH₃ in a sealed tube with heat is required.",
+    },
+    {
+      q: "What is the organic product when 1-bromopropane reacts with KCN in aqueous ethanol?",
+      options: { A: "Propylamine", B: "Butylamine", C: "Propanenitrile", D: "Butanenitrile" },
+      answer: "D",
+      explanation: "CN⁻ replaces Br⁻ by nucleophilic substitution. The carbon chain increases by one: C₃ bromide → C₄ nitrile (butanenitrile). This is a key synthesis step.",
+    },
+    {
+      q: "1-bromopropane reacts faster than 1-chloropropane with KCN. Which row is correct?",
+      options: { A: "1-bromopropane: C–Br bond weaker than C–Cl", B: "1-bromopropane: C–Br bond stronger than C–Cl", C: "1-chloropropane: C–Br bond weaker than C–Cl", D: "1-chloropropane: C–Br bond stronger than C–Cl" },
+      answer: "A",
+      explanation: "The C–Br bond is weaker than C–Cl (lower bond enthalpy), so it breaks more easily. Rate of substitution: C–I > C–Br > C–Cl > C–F.",
+    },
+  ];
+
+  const currentQ = previewMCQs[mcqIdx];
+
+  // Days until exams
+  const now = new Date();
+  const paper1 = new Date("2026-06-09");
+  const paper2 = new Date("2026-06-15");
+  const daysTo1 = Math.max(0, Math.ceil((paper1 - now) / 86400000));
+  const daysTo2 = Math.max(0, Math.ceil((paper2 - now) / 86400000));
+
+  const sectionBg = { background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)" };
+
+  return (
+    <div style={{ minHeight: "100vh", ...sectionBg, fontFamily: "'DM Sans','Outfit',system-ui,sans-serif", color: "#fff", overflowX: "hidden" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} @keyframes lpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}`}</style>
+
+      {/* ── HERO ──────────────────────────────────────── */}
+      <div style={{ padding: "60px 24px 40px", textAlign: "center", maxWidth: "700px", margin: "0 auto", animation: "lpFadeIn 0.6s ease" }}>
+        <img src="/hsj-logo.png" alt="ChemMastery" style={{ height: "80px", objectFit: "contain", display: "block", margin: "0 auto 20px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
+        <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.15, margin: "0 0 16px", letterSpacing: "-0.5px" }}>
+          <span style={{ color: "#29ABE2" }}>Ace</span> Your A-Level Chemistry Exams
+        </h1>
+        <p style={{ fontSize: "clamp(15px, 2.5vw, 18px)", color: "#94a3b8", lineHeight: 1.6, margin: "0 0 24px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
+          Step-by-step curly arrow mechanisms, exam-style MCQs, flashcards, calculations and more. Everything you need to smash Papers 1 & 2.
+        </p>
+
+        {/* Exam countdown pills */}
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", marginBottom: "32px" }}>
+          {daysTo1 > 0 && (
+            <div style={{ background: "rgba(41,171,226,0.15)", border: "1px solid rgba(41,171,226,0.3)", borderRadius: "12px", padding: "10px 18px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "20px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
+              <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 1 (June 9th)</span>
+            </div>
+          )}
+          {daysTo2 > 0 && (
+            <div style={{ background: "rgba(5,150,105,0.15)", border: "1px solid rgba(5,150,105,0.3)", borderRadius: "12px", padding: "10px 18px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "20px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
+              <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 2 (June 15th)</span>
+            </div>
+          )}
+        </div>
+
+        {/* CTA buttons */}
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+          <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)", animation: "lpPulse 2s infinite", letterSpacing: "0.3px" }}>
+            Get Full Access — £27.99/mo
+          </button>
+          <button onClick={() => { document.getElementById("lp-preview")?.scrollIntoView({ behavior: "smooth" }); }} style={{ padding: "14px 24px", borderRadius: "14px", border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.05)", color: "#fff", fontSize: "15px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+            Try Free Preview ↓
+          </button>
+        </div>
+      </div>
+
+      {/* ── WHAT'S INCLUDED STRIP ─────────────────────── */}
+      <div style={{ background: "rgba(255,255,255,0.03)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "28px 24px", margin: "0 0 40px" }}>
+        <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap", maxWidth: "800px", margin: "0 auto" }}>
+          {[
+            { icon: "🧪", label: "11 Mechanisms", sub: "Handdrawn curly arrows" },
+            { icon: "🎯", label: "566+ MCQs", sub: "AQA & OCR A" },
+            { icon: "📚", label: "1400+ Flashcards", sub: "Every topic covered" },
+            { icon: "🧮", label: "Calculations", sub: "Step-by-step worked" },
+          ].map((item, i) => (
+            <div key={i} style={{ textAlign: "center", minWidth: "140px" }}>
+              <div style={{ fontSize: "28px", marginBottom: "6px" }}>{item.icon}</div>
+              <div style={{ fontSize: "14px", fontWeight: 800, color: "#fff" }}>{item.label}</div>
+              <div style={{ fontSize: "11px", color: "#64748b", fontWeight: 500 }}>{item.sub}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── FREE PREVIEW SECTION ────────────────────── */}
+      <div id="lp-preview" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px 60px" }}>
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", margin: "0 0 8px" }}>Try It Free</h2>
+          <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>Explore real content from the app. No sign-up needed.</p>
+        </div>
+
+        {/* Tab switcher */}
+        <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "24px" }}>
+          {[{ id: "mechanisms", label: "🧪 Mechanisms" }, { id: "mcqs", label: "🎯 MCQs" }].map(tab => (
+            <button key={tab.id} onClick={() => setActiveSection(tab.id)}
+              style={{ padding: "10px 24px", borderRadius: "12px", border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: "14px", fontWeight: 700,
+                background: activeSection === tab.id ? "#29ABE2" : "rgba(255,255,255,0.08)",
+                color: activeSection === tab.id ? "#fff" : "#94a3b8",
+                transition: "all 0.2s" }}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── MECHANISMS PREVIEW ─────────────────── */}
+        {activeSection === "mechanisms" && activeMechIdx === null && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", animation: "lpFadeIn 0.4s ease" }}>
+            {previewMechs.map((m, idx) => (
+              <button key={m.id} onClick={() => { if (!m.locked) { setActiveMechIdx(idx); setMechOpenCards({}); } }}
+                style={{ background: "rgba(255,255,255,0.06)", border: `2px solid ${m.locked ? "rgba(255,255,255,0.08)" : m.color + "40"}`, borderRadius: "16px",
+                  padding: "20px 22px", textAlign: "left", cursor: m.locked ? "default" : "pointer", fontFamily: "inherit",
+                  position: "relative", overflow: "hidden", transition: "border-color 0.2s" }}>
+                {m.locked && (
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(13,27,42,0.95) 70%)",
+                    display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: "20px", zIndex: 2, borderRadius: "inherit" }}>
+                    <div style={{ textAlign: "center" }}>
+                      <div style={{ fontSize: "24px", marginBottom: "6px" }}>🔒</div>
+                      <div style={{ fontSize: "13px", fontWeight: 800, color: "#fff" }}>Unlock with ChemMastery Pro</div>
+                      <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>£27.99/mo • Full access to all mechanisms</div>
+                    </div>
+                  </div>
+                )}
+                <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                  <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: m.color, flexShrink: 0 }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: "17px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>{m.title}</div>
+                    <div style={{ fontSize: "14px", color: "#94a3b8", fontWeight: 500 }}>{m.subtitle}</div>
+                  </div>
+                  {!m.locked && <div style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 700 }}>Try it →</div>}
+                  {m.locked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "4px 10px", borderRadius: "8px" }}>PRO</div>}
+                </div>
+              </button>
+            ))}
+            {/* Locked placeholder cards */}
+            {[
+              { title: "Electrophilic Addition: HBr", sub: "Markovnikov's Rule" },
+              { title: "Elimination", sub: "E1 & E2 pathways" },
+              { title: "Electrophilic Aromatic Substitution", sub: "Nitration, Friedel-Crafts" },
+            ].map((m, i) => (
+              <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "18px 22px", position: "relative", overflow: "hidden" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "14px", opacity: 0.4 }}>
+                  <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#475569", flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff" }}>{m.title}</div>
+                    <div style={{ fontSize: "13px", color: "#64748b" }}>{m.sub}</div>
+                  </div>
+                </div>
+                <div style={{ position: "absolute", top: "10px", right: "14px", fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "3px 10px", borderRadius: "8px" }}>PRO</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── ACTIVE MECHANISM VIEWER ───────────── */}
+        {activeSection === "mechanisms" && activeMechIdx !== null && (() => {
+          const mech = previewMechs[activeMechIdx];
+          return (
+            <div style={{ animation: "lpFadeIn 0.4s ease" }}>
+              {/* Header */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                <button onClick={() => { setActiveMechIdx(null); setMechOpenCards({}); }}
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 14px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>
+                  ← Back
+                </button>
+                <div>
+                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#fff" }}>{mech.title}</div>
+                  <div style={{ fontSize: "14px", color: "#94a3b8" }}>{mech.subtitle}</div>
+                </div>
+              </div>
+
+              {/* Side-by-side: image + explainers */}
+              <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+                {/* Image */}
+                <div style={{ flex: "1 1 50%", minWidth: "280px", background: "#fff", borderRadius: "16px", padding: "12px", overflow: "hidden" }}>
+                  <img src={process.env.PUBLIC_URL + mech.image} alt={mech.title} style={{ width: "100%", height: "auto", display: "block", borderRadius: "10px" }} />
+                </div>
+
+                {/* Explainer cards */}
+                <div style={{ flex: "1 1 40%", minWidth: "260px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
+                    Tap to learn each part
+                  </div>
+                  {mech.explainers.map((ex, idx) => {
+                    const isOpen = mechOpenCards[idx];
+                    const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed"];
+                    const c = stepColors[idx % stepColors.length];
+                    return (
+                      <button key={idx} onClick={() => setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
+                        style={{ background: isOpen ? `${c}15` : "rgba(255,255,255,0.06)", border: isOpen ? `2px solid ${c}50` : "1.5px solid rgba(255,255,255,0.1)",
+                          borderRadius: "12px", padding: "10px 14px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: c, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800 }}>
+                            {idx + 1}
+                          </div>
+                          <div style={{ flex: 1, fontSize: "13px", fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>{ex.title}</div>
+                          <div style={{ fontSize: "14px", color: "#64748b", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>▼</div>
+                        </div>
+                        {isOpen && (
+                          <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${c}30`, fontSize: "13px", color: "#94a3b8", lineHeight: 1.65, fontWeight: 400 }}>
+                            {ex.text}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* CTA after viewing */}
+              <div style={{ textAlign: "center", marginTop: "28px", padding: "24px", background: "rgba(41,171,226,0.08)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "16px" }}>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>Want all 11 mechanisms?</div>
+                <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "14px" }}>Unlock every mechanism with handdrawn diagrams and interactive explanations.</div>
+                <button onClick={onGoToLogin} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 16px rgba(41,171,226,0.3)" }}>
+                  Get Full Access — £27.99/mo
+                </button>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ── MCQ PREVIEW ───────────────────────── */}
+        {activeSection === "mcqs" && (
+          <div style={{ animation: "lpFadeIn 0.4s ease" }}>
+            {/* Progress bar */}
+            <div style={{ display: "flex", gap: "6px", marginBottom: "20px" }}>
+              {previewMCQs.map((_, i) => (
+                <div key={i} style={{ flex: 1, height: "4px", borderRadius: "2px", background: i < mcqAnswered ? "#059669" : i === mcqIdx ? "#29ABE2" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+              ))}
+              {/* Locked indicators */}
+              {[0,1,2].map(i => (
+                <div key={`locked-${i}`} style={{ flex: 1, height: "4px", borderRadius: "2px", background: "rgba(255,255,255,0.04)" }} />
+              ))}
+            </div>
+
+            {mcqIdx < previewMCQs.length ? (
+              <div style={{ background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: "18px", padding: "28px 24px" }}>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>
+                  Question {mcqIdx + 1} of {previewMCQs.length} (free preview)
+                </div>
+                <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff", lineHeight: 1.5, marginBottom: "20px" }}>{currentQ.q}</div>
+
+                {/* Options */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {Object.entries(currentQ.options).map(([letter, text]) => {
+                    const isSelected = mcqSelected === letter;
+                    const isCorrect = letter === currentQ.answer;
+                    const showResult = mcqShowExplanation;
+                    let bg = "rgba(255,255,255,0.04)";
+                    let borderC = "rgba(255,255,255,0.1)";
+                    if (showResult && isCorrect) { bg = "rgba(5,150,105,0.15)"; borderC = "#059669"; }
+                    else if (showResult && isSelected && !isCorrect) { bg = "rgba(220,38,38,0.15)"; borderC = "#dc2626"; }
+                    else if (isSelected && !showResult) { bg = "rgba(41,171,226,0.15)"; borderC = "#29ABE2"; }
+
+                    return (
+                      <button key={letter} onClick={() => { if (!mcqShowExplanation) setMcqSelected(letter); }}
+                        style={{ padding: "14px 16px", borderRadius: "12px", border: `2px solid ${borderC}`, background: bg,
+                          cursor: mcqShowExplanation ? "default" : "pointer", fontFamily: "inherit", textAlign: "left", transition: "all 0.2s", display: "flex", alignItems: "center", gap: "12px" }}>
+                        <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: isSelected ? "#29ABE2" : "rgba(255,255,255,0.08)", color: isSelected ? "#fff" : "#94a3b8",
+                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, flexShrink: 0 }}>
+                          {letter}
+                        </div>
+                        <div style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 500, lineHeight: 1.4 }}>{text}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Check / Explanation */}
+                {mcqSelected && !mcqShowExplanation && (
+                  <button onClick={() => { setMcqShowExplanation(true); setMcqAnswered(prev => prev + 1); if (mcqSelected === currentQ.answer) setMcqScore(prev => prev + 1); }}
+                    style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", marginTop: "16px" }}>
+                    Check Answer
+                  </button>
+                )}
+                {mcqShowExplanation && (
+                  <div style={{ marginTop: "16px" }}>
+                    <div style={{ padding: "14px 16px", borderRadius: "12px", background: mcqSelected === currentQ.answer ? "rgba(5,150,105,0.12)" : "rgba(220,38,38,0.12)", border: `1px solid ${mcqSelected === currentQ.answer ? "#059669" : "#dc2626"}40`, marginBottom: "12px" }}>
+                      <div style={{ fontSize: "14px", fontWeight: 800, color: mcqSelected === currentQ.answer ? "#059669" : "#dc2626", marginBottom: "4px" }}>
+                        {mcqSelected === currentQ.answer ? "✓ Correct!" : `✗ Incorrect — answer is ${currentQ.answer}`}
+                      </div>
+                      <div style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.5 }}>{currentQ.explanation}</div>
+                    </div>
+                    <button onClick={() => { setMcqIdx(prev => prev + 1); setMcqSelected(null); setMcqShowExplanation(false); }}
+                      style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                      {mcqIdx < previewMCQs.length - 1 ? "Next Question →" : "See Results"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Results + Upsell */
+              <div style={{ textAlign: "center", padding: "40px 24px", background: "rgba(255,255,255,0.06)", borderRadius: "18px", border: "1.5px solid rgba(255,255,255,0.1)" }}>
+                <div style={{ fontSize: "48px", marginBottom: "12px" }}>{mcqScore === 3 ? "🎉" : mcqScore >= 2 ? "💪" : "📚"}</div>
+                <div style={{ fontSize: "24px", fontWeight: 900, color: "#fff", marginBottom: "4px" }}>{mcqScore}/{previewMCQs.length}</div>
+                <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "24px" }}>
+                  {mcqScore === 3 ? "Perfect score! Imagine having 566+ more questions like these." : "There are 566+ more exam-style MCQs waiting for you."}
+                </div>
+                <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)", marginBottom: "12px" }}>
+                  Unlock All MCQs — £27.99/mo
+                </button>
+                <div>
+                  <button onClick={() => { setMcqIdx(0); setMcqSelected(null); setMcqShowExplanation(false); setMcqScore(0); setMcqAnswered(0); }}
+                    style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: "8px" }}>
+                    Retry free questions
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Locked MCQ placeholders */}
+            {mcqIdx < previewMCQs.length && (
+              <div style={{ marginTop: "16px", opacity: 0.4 }}>
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", textAlign: "center" }}>
+                  🔒 563+ more questions with Pro
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ── PRICING SECTION ────────────────────────── */}
+      <div style={{ background: "rgba(255,255,255,0.03)", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "60px 24px" }}>
+        <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", margin: "0 0 8px" }}>Unlock Everything</h2>
+          <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 28px" }}>One subscription. Full access. Cancel anytime.</p>
+
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            {/* Monthly */}
+            <div style={{ background: "rgba(255,255,255,0.06)", border: "2px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "28px 24px", width: "220px", textAlign: "center" }}>
+              <div style={{ fontSize: "12px", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Monthly</div>
+              <div style={{ fontSize: "40px", fontWeight: 900, color: "#fff" }}>£27.99</div>
+              <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "20px" }}>per month</div>
+              <button onClick={onGoToLogin}
+                style={{ width: "100%", padding: "13px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                Get Started
+              </button>
+              <div style={{ fontSize: "11px", color: "#475569", marginTop: "10px" }}>Cancel anytime</div>
+            </div>
+            {/* Yearly */}
+            <div style={{ background: "rgba(41,171,226,0.08)", border: "2px solid rgba(41,171,226,0.3)", borderRadius: "20px", padding: "28px 24px", width: "220px", textAlign: "center", position: "relative" }}>
+              <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#29ABE2", color: "#fff", fontSize: "11px", fontWeight: 800, padding: "4px 14px", borderRadius: "8px", letterSpacing: "0.5px" }}>SAVE 26%</div>
+              <div style={{ fontSize: "12px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Yearly</div>
+              <div style={{ fontSize: "40px", fontWeight: 900, color: "#fff" }}>£249.99</div>
+              <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "20px" }}>per year (£20.83/mo)</div>
+              <button onClick={onGoToLogin}
+                style={{ width: "100%", padding: "13px", borderRadius: "12px", border: "1.5px solid rgba(41,171,226,0.3)", background: "#1a2d45", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                Get Started
+              </button>
+              <div style={{ fontSize: "11px", color: "#29ABE2", marginTop: "10px", fontWeight: 600 }}>Best value</div>
+            </div>
+          </div>
+
+          {/* What's included list */}
+          <div style={{ marginTop: "32px", textAlign: "left", maxWidth: "360px", margin: "32px auto 0" }}>
+            {[
+              "All 11 curly arrow mechanisms",
+              "566+ exam-style MCQs",
+              "1400+ topic flashcards",
+              "Step-by-step calculations",
+              "Synthesis pathways map",
+              "AI-marked extended questions",
+              "AQA & OCR A exam boards",
+            ].map((item, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                <span style={{ color: "#059669", fontSize: "16px", fontWeight: 800 }}>✓</span>
+                <span style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 500 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── FOOTER / SIGN IN ───────────────────────── */}
+      <div style={{ padding: "40px 24px", textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "12px" }}>Already have an account?</div>
+        <button onClick={onGoToLogin}
+          style={{ padding: "12px 28px", borderRadius: "12px", border: "1.5px solid rgba(255,255,255,0.2)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          Log In
+        </button>
+        <div style={{ marginTop: "24px", fontSize: "11px", color: "#334155", lineHeight: 1.6 }}>
+          This platform is an independent revision tool and is not affiliated with, endorsed by, or connected to AQA, OCR, or any exam board.
+          <br />© {new Date().getFullYear()} HSJ Tuition. All rights reserved.
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // --- Login Screen Component ---
-function LoginScreen({ onLogin }) {
+function LoginScreen({ onLogin, onBack }) {
   const [mode, setMode] = useState("login"); // "login" | "signup"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -4678,6 +5122,12 @@ function LoginScreen({ onLogin }) {
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'DM Sans', sans-serif" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <div style={{ width: "100%", maxWidth: "420px" }}>
+        {/* Back to landing page */}
+        {onBack && (
+          <button onClick={onBack} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 16px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, marginBottom: "20px", display: "flex", alignItems: "center", gap: "6px" }}>
+            ← Back to overview
+          </button>
+        )}
         {/* Logo / Brand */}
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "120px", objectFit: "contain", display: "block", margin: "0 auto 20px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
@@ -4771,6 +5221,7 @@ export default function App() {
   const [accessKeyInput, setAccessKeyInput] = useState("");
   const [accessKeyMsg, setAccessKeyMsg] = useState(null);
   const [accessKeyLoading, setAccessKeyLoading] = useState(false);
+  const [showLogin, setShowLogin] = useState(false); // false = landing page, true = login screen
 
   useEffect(() => {
     const unsub = onAuthChange(async (user) => {
@@ -4895,7 +5346,7 @@ export default function App() {
       {/* Monthly */}
       <div style={{ background: "#fff", border: "2px solid #e0e8f0", borderRadius: "16px", padding: "20px", width: "180px", textAlign: "center" }}>
         <div style={{ fontSize: "12px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Monthly</div>
-        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£4.99</div>
+        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£27.99</div>
         <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per month</div>
         <button onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}
           style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: checkoutLoading ? "wait" : "pointer", fontFamily: "inherit", opacity: checkoutLoading === "yearly" ? 0.5 : 1 }}>
@@ -4905,10 +5356,10 @@ export default function App() {
       </div>
       {/* Yearly */}
       <div style={{ background: "#fff", border: "2px solid #29ABE2", borderRadius: "16px", padding: "20px", width: "180px", textAlign: "center", position: "relative" }}>
-        <div style={{ position: "absolute", top: "-10px", left: "50%", transform: "translateX(-50%)", background: "#29ABE2", color: "#fff", fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "6px", letterSpacing: "0.5px" }}>SAVE 27%</div>
+        <div style={{ position: "absolute", top: "-10px", left: "50%", transform: "translateX(-50%)", background: "#29ABE2", color: "#fff", fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "6px", letterSpacing: "0.5px" }}>SAVE 26%</div>
         <div style={{ fontSize: "12px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Yearly</div>
-        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£43.99</div>
-        <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per year (£3.67/mo)</div>
+        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£249.99</div>
+        <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per year (£20.83/mo)</div>
         <button onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}
           style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: checkoutLoading ? "wait" : "pointer", fontFamily: "inherit", opacity: checkoutLoading === "monthly" ? 0.5 : 1 }}>
           {checkoutLoading === "yearly" ? "Loading..." : "Subscribe"}
@@ -5355,10 +5806,10 @@ export default function App() {
                     <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "8px" }}>Or upgrade to Pro</div>
                     <div style={{ display: "flex", gap: "6px" }}>
                       <button onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        {checkoutLoading === "monthly" ? "..." : "£4.99/mo"}
+                        {checkoutLoading === "monthly" ? "..." : "£27.99/mo"}
                       </button>
                       <button onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        {checkoutLoading === "yearly" ? "..." : "£43.99/yr"}
+                        {checkoutLoading === "yearly" ? "..." : "£249.99/yr"}
                       </button>
                     </div>
                   </div>
@@ -5664,8 +6115,11 @@ export default function App() {
     </div>
   );
 
-  // LOGIN SCREEN
-  if (!authUser) return <LoginScreen />;
+  // LANDING PAGE / LOGIN SCREEN
+  if (!authUser) {
+    if (showLogin) return <LoginScreen onBack={() => setShowLogin(false)} />;
+    return <LandingPage onGoToLogin={() => setShowLogin(true)} />;
+  }
 
   // ACCOUNT SETTINGS MODAL (buried - only for paid users managing subscription)
   if (showAccountSettings) return (
@@ -5704,7 +6158,7 @@ export default function App() {
               </p>
               <div style={{ background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "2px solid #f59e0b", borderRadius: "14px", padding: "20px", marginBottom: "20px" }}>
                 <div style={{ fontSize: "16px", fontWeight: 800, color: "#92400e", marginBottom: "4px" }}>Stay for 50% off!</div>
-                <div style={{ fontSize: "13px", color: "#a16207", marginBottom: "12px" }}>Get your next month for just £2.50 instead of £4.99</div>
+                <div style={{ fontSize: "13px", color: "#a16207", marginBottom: "12px" }}>Get your next month for just £14.99 instead of £27.99</div>
                 <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{
                   padding: "10px 24px", borderRadius: "10px", border: "none",
                   background: "#f59e0b", color: "#fff", fontSize: "14px", fontWeight: 700,
