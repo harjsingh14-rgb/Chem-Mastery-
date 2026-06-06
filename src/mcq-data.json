@@ -4622,7 +4622,7 @@
         "D": "Sulfur dioxide is an ionic compound."
       },
       "answer": "A",
-      "explanation": "Sulfur dioxide can be removed from waste gases in a power station by an acid-base reaction with calcium oxide.. Group 2 metals become more reactive down the group. They reduce water and acids. Solubility of hydroxides increases down the group, sulfates decrease.",
+      "explanation": "Sulfur dioxide can be removed from waste gases in a power station by an acid-base reaction with calcium oxide.. Group 2 metals become more reactive down the group. They reduce water and acids.",
       "topic": "3.2.2",
       "set": 1
     },
@@ -4846,7 +4846,7 @@
         "D": "bromine"
       },
       "answer": "C",
-      "explanation": "Astatine has a greater boiling point than bromine Astatine has a greater first ionisation energy than. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one. HF has hydrogen bonding. Cl2 disproportionates in NaOH.",
+      "explanation": "Astatine has a greater boiling point than bromine Astatine has a greater first ionisation energy than. Halogens become less reactive down the group. A more reactive halogen displaces a less reactive one.",
       "topic": "3.2.3",
       "set": 1
     },
@@ -6158,7 +6158,7 @@
         "D": "The carbon-oxygen bonds in the chain are strong."
       },
       "answer": "B",
-      "explanation": "Permanent dipole-dipole forces and van der Waals’ forces exist between polyester chains.. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O. Condensation polymers can be hydrolysed, addition polymers cannot.",
+      "explanation": "Permanent dipole-dipole forces and van der Waals’ forces exist between polyester chains.. Addition polymers form from alkenes (no small molecule lost). Condensation polymers (polyesters, polyamides) lose H2O.",
       "topic": "3.3.12",
       "set": 1
     },
@@ -6975,7 +6975,7 @@
         "D": "Ammonium bromide is an ionic compound."
       },
       "answer": "C",
-      "explanation": "Using an excess of bromoethane will prevent further reaction to form a mixture of amine products.. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH. Rate depends on bond strength: C-I reacts fastest.",
+      "explanation": "Using an excess of bromoethane will prevent further reaction to form a mixture of amine products.. Halogenoalkanes undergo nucleophilic substitution with OH-, CN- or NH3. They also undergo elimination with hot ethanolic NaOH.",
       "topic": "3.3.3",
       "set": 1
     },
@@ -8172,7 +8172,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q10.png"
@@ -8187,7 +8187,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q11.png"
@@ -8202,7 +8202,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q12.png"
@@ -8217,7 +8217,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q13.png"
@@ -8232,7 +8232,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q14.png"
@@ -8247,7 +8247,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q15.png"
@@ -8262,7 +8262,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q10.png"
@@ -8277,7 +8277,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q11.png"
@@ -8292,7 +8292,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q12.png"
@@ -8307,7 +8307,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q13.png"
@@ -8322,7 +8322,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q14.png"
@@ -8337,7 +8337,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q15.png"
@@ -8352,7 +8352,7 @@
         "D": "barium"
       },
       "answer": "B",
-      "explanation": "Find moles of Cl: mass of chloride - mass of metal = mass of Cl. Then moles of Cl = mass/35.5. Use the ratio of metal:Cl to find the identity. Calcium gives the correct ratio.",
+      "explanation": "Mass of Cl = 9.775 - 3.528 = 6.247g. Moles of Cl = 6.247/35.5 = 0.176. Moles of M = 3.528/Ar. Trying Ca (Ar=40): 3.528/40 = 0.088. Ratio 0.176/0.088 = 2. So MCl2 = calcium chloride.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -8366,7 +8366,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q10.png"
@@ -8381,7 +8381,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q11.png"
@@ -8396,7 +8396,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q12.png"
@@ -8411,7 +8411,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q13.png"
@@ -8426,7 +8426,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q14.png"
@@ -8441,7 +8441,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q15.png"
@@ -8456,7 +8456,7 @@
         "D": "+"
       },
       "answer": "A",
-      "explanation": "The Arrhenius equation gives ln(k) = -Ea/R x (1/T) + ln(A). The gradient = -Ea/R. Rearrange to find Ea, then convert units as needed.",
+      "explanation": "The gradient of ln(k) vs 1/T = -Ea/R. Rearrange to find Ea. Use R = 8.314.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -8470,7 +8470,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q10.png"
@@ -8485,7 +8485,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q11.png"
@@ -8500,7 +8500,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q12.png"
@@ -8515,7 +8515,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q13.png"
@@ -8530,7 +8530,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q14.png"
@@ -8545,7 +8545,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q15.png"
@@ -8560,7 +8560,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q10.png"
@@ -8575,7 +8575,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q11.png"
@@ -8590,7 +8590,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q12.png"
@@ -8605,7 +8605,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q13.png"
@@ -8620,7 +8620,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q14.png"
@@ -8635,7 +8635,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q15.png"
@@ -8650,7 +8650,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers foundations: atoms, moles, bonding or amount of substance calculations. Check your working carefully with units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q2.png"
@@ -8665,7 +8665,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers foundations: atoms, moles, bonding or amount of substance calculations. Check your working carefully with units.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q3.png"
@@ -8680,7 +8680,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers foundations: atoms, moles, bonding or amount of substance calculations. Check your working carefully with units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q4.png"
@@ -8695,7 +8695,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers foundations: atoms, moles, bonding or amount of substance calculations. Check your working carefully with units.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q5.png"
@@ -8710,7 +8710,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q10.png"
@@ -8725,7 +8725,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q11.png"
@@ -8740,7 +8740,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q12.png"
@@ -8755,7 +8755,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q14.png"
@@ -8770,7 +8770,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q15.png"
@@ -8785,7 +8785,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers foundations: atoms, moles, bonding or amount of substance calculations. Check your working carefully with units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q2.png"
@@ -8800,7 +8800,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers foundations: atoms, moles, bonding or amount of substance calculations. Check your working carefully with units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q4.png"
@@ -8815,7 +8815,7 @@
         "D": "effervescence precipitate"
       },
       "answer": "A",
-      "explanation": "K2CO3 is soluble so no precipitate forms with most ions. AgNO3 forms insoluble AgCl, AgBr or AgI precipitates with halide ions.",
+      "explanation": "K2CO3 is soluble so no visible change. AgNO3 reacts with halide ions to form an insoluble precipitate.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -8829,7 +8829,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q8.png"
@@ -8844,7 +8844,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q10.png"
@@ -8859,7 +8859,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q11.png"
@@ -8874,7 +8874,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q12.png"
@@ -8889,7 +8889,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q13.png"
@@ -8904,7 +8904,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q14.png"
@@ -8919,7 +8919,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q15.png"
@@ -8934,7 +8934,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q10.png"
@@ -8949,7 +8949,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q11.png"
@@ -8964,7 +8964,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q12.png"
@@ -8979,7 +8979,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q13.png"
@@ -8994,7 +8994,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q14.png"
@@ -9009,7 +9009,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q15.png"
@@ -9024,7 +9024,7 @@
         "D": "0.37%"
       },
       "answer": "C",
-      "explanation": "Titre = 29.35 - 2.60 = 26.75 cm3. Percentage uncertainty = (absolute uncertainty / titre) x 100. A burette has an uncertainty of 0.05 cm3 per reading, so 0.10 cm3 total.",
+      "explanation": "Titre = 29.35 - 2.60 = 26.75 cm3. Two burette readings so uncertainty = 2 x 0.05 = 0.10 cm3. Percentage = (0.10/26.75) x 100 = 0.37%. But 0.34% uses 0.05 per reading differently.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -9037,7 +9037,7 @@
         "C": "112 D"
       },
       "answer": "D",
-      "explanation": "For first order: half-life = ln2 / k = 0.693 / 6.19 x 10-3 = 112 s. Answer D.",
+      "explanation": "Half-life for first order = ln2/k = 0.693/0.00619 = 112 s.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -9051,7 +9051,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This tests physical chemistry concepts: energetics, rates, equilibria or acid-base chemistry. Apply the correct formula and check units.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q10.png"
@@ -9066,7 +9066,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q11.png"
@@ -9081,7 +9081,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q12.png"
@@ -9096,7 +9096,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q13.png"
@@ -9111,7 +9111,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q14.png"
@@ -9126,7 +9126,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers inorganic or advanced physical chemistry: periodic trends, transition metals, electrode potentials or pH calculations.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q15.png"
@@ -9141,7 +9141,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q10.png"
@@ -9156,7 +9156,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q11.png"
@@ -9171,7 +9171,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q12.png"
@@ -9186,7 +9186,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q13.png"
@@ -9201,7 +9201,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q14.png"
@@ -9216,7 +9216,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q15.png"
@@ -9231,7 +9231,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q10.png"
@@ -9246,7 +9246,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q11.png"
@@ -9261,7 +9261,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q12.png"
@@ -9276,7 +9276,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q13.png"
@@ -9291,7 +9291,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q14.png"
@@ -9306,7 +9306,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q15.png"
@@ -9321,7 +9321,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q10.png"
@@ -9336,7 +9336,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q11.png"
@@ -9351,7 +9351,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q12.png"
@@ -9366,7 +9366,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q13.png"
@@ -9381,7 +9381,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q14.png"
@@ -9396,7 +9396,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q15.png"
@@ -9411,7 +9411,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q10.png"
@@ -9426,7 +9426,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q11.png"
@@ -9441,7 +9441,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q12.png"
@@ -9456,7 +9456,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q13.png"
@@ -9471,7 +9471,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q14.png"
@@ -9486,7 +9486,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q15.png"
@@ -9501,7 +9501,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q10.png"
@@ -9516,7 +9516,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q11.png"
@@ -9531,7 +9531,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q12.png"
@@ -9546,7 +9546,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q13.png"
@@ -9561,7 +9561,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q14.png"
@@ -9576,7 +9576,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q15.png"
@@ -9591,7 +9591,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers organic foundations: naming, functional groups, isomerism or reaction types. Identify the functional group first.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q1.png"
@@ -9606,7 +9606,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q10.png"
@@ -9621,7 +9621,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q11.png"
@@ -9636,7 +9636,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q12.png"
@@ -9651,7 +9651,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q13.png"
@@ -9666,7 +9666,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q14.png"
@@ -9681,7 +9681,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q15.png"
@@ -9696,7 +9696,7 @@
         "D": "NH"
       },
       "answer": "B",
-      "explanation": "Acyl chlorides react with nucleophiles that have a lone pair (like OH, NH2, or NH groups). Identify which compound has a suitable nucleophile.",
+      "explanation": "Acyl chlorides react with nucleophiles that have a lone pair, like OH or NH2 groups.",
       "topic": "OCR-P2",
       "set": 1
     },
@@ -9710,7 +9710,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q10.png"
@@ -9725,7 +9725,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q11.png"
@@ -9740,7 +9740,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q12.png"
@@ -9755,7 +9755,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q13.png"
@@ -9770,7 +9770,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q14.png"
@@ -9785,7 +9785,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q15.png"
@@ -9800,7 +9800,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q10.png"
@@ -9815,7 +9815,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q11.png"
@@ -9830,7 +9830,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q12.png"
@@ -9845,7 +9845,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: C.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q13.png"
@@ -9860,7 +9860,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q14.png"
@@ -9875,7 +9875,7 @@
         "D": "Global warming Your answer [1]"
       },
       "answer": "C",
-      "explanation": "Catalytic ozone depletion involves UV radiation, not infrared. IR is used in gas monitoring, breathalysers (IR spectroscopy) and greenhouse effect. But breathalysers use IR absorption, so the answer is A (ozone depletion uses UV).",
+      "explanation": "Ozone depletion involves UV light breaking bonds in CFCs, not infrared. The other options all use IR radiation.",
       "topic": "OCR-P2",
       "set": 1
     },
@@ -9889,7 +9889,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This tests organic reactions: mechanisms, reagents and conditions, or synthesis routes. Think about the type of reaction and what attacks what.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q10.png"
@@ -9904,7 +9904,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q11.png"
@@ -9919,7 +9919,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: A.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q12.png"
@@ -9934,7 +9934,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q13.png"
@@ -9949,7 +9949,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: B.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q14.png"
@@ -9964,7 +9964,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D. This covers analytical techniques or advanced organic: NMR, mass spec, IR spectroscopy or multi-step synthesis. Use the data provided carefully.",
+      "explanation": "Answer: D.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q15.png"
