@@ -4710,7 +4710,9 @@ function LandingPage({ onGoToLogin }) {
       subtitle: "CH₂=CH₂ + Br₂ → CH₂BrCH₂Br",
       color: "#c05621",
       image: "/mechanisms/ea/IMG_0887.jpg",
-      locked: true, // half-locked
+      locked: false,
+      halfLocked: true, // show first 3 explainers, lock the rest
+      freeExplainers: 3,
       explainers: [
         { title: "Why does the π bond react?", text: "The C=C double bond has a region of high electron density (the π bond) above and below the plane. This electron-rich area attracts electrophiles." },
         { title: "Arrow 1: π electrons attack δ+ Br", text: "As Br₂ approaches, the π electrons repel the electrons in Br–Br, inducing a dipole: Brδ+–Brδ−. The π electrons attack the δ+ Br, forming a new C–Br bond." },
@@ -4756,13 +4758,17 @@ function LandingPage({ onGoToLogin }) {
   // Shared styles
   const darkBg = { background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)" };
   const creamBg = { background: "#f5f0e8" };
-  const wrap = { maxWidth: "960px", margin: "0 auto", padding: "0 clamp(24px, 4vw, 60px)" };
+  const wrap = { maxWidth: "1200px", margin: "0 auto", padding: "0 clamp(24px, 4vw, 60px)" };
   const labelStyle = { fontSize: "12px", fontWeight: 700, letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: "16px" };
+  // Brighter text colors
+  const bodyText = "#c8d0db"; // was #94a3b8
+  const mutedText = "#8a96a8"; // was #64748b
+  const dimText = "#6b7a8d"; // was #475569
 
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'DM Sans','Outfit',system-ui,sans-serif", color: "#fff", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} .lp-faq-card{transition:all 0.2s} .lp-faq-card:hover{border-color:rgba(255,255,255,0.2)!important}`}</style>
+      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} .lp-faq-card{transition:all 0.2s} .lp-faq-card:hover{border-color:rgba(255,255,255,0.2)!important} .lp-flip{perspective:800px;cursor:pointer} .lp-flip-inner{position:relative;width:100%;min-height:160px;transition:transform 0.6s;transform-style:preserve-3d} .lp-flip-inner.flipped{transform:rotateY(180deg)} .lp-flip-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:28px 24px;display:flex;align-items:center;justify-content:center;text-align:center} .lp-flip-front{background:linear-gradient(145deg,#162d3d,#0f1f30);border:1px solid rgba(255,255,255,0.1)} .lp-flip-back{transform:rotateY(180deg);background:linear-gradient(145deg,#059669,#047857);border:1px solid rgba(255,255,255,0.15)}`}</style>
 
       {/* ── STICKY HEADER ─────────────────────────────── */}
       <div style={{ position: "sticky", top: 0, zIndex: 100, ...darkBg, borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", backdropFilter: "blur(12px)" }}>
@@ -4770,7 +4776,7 @@ function LandingPage({ onGoToLogin }) {
           <img src="/hsj-logo.png" alt="" style={{ height: "32px", objectFit: "contain" }} />
           <div>
             <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "15px", color: "#fff", lineHeight: 1 }}>ChemMastery</div>
-            <div style={{ fontSize: "10px", color: "#64748b", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
+            <div style={{ fontSize: "10px", color: mutedText, fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
           </div>
         </div>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -4791,10 +4797,10 @@ function LandingPage({ onGoToLogin }) {
               You understand the Chemistry.<br />
               You're <span style={{ color: "#e2a03f" }}>still losing marks.</span>
             </h1>
-            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 12px" }}>
+            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.7, margin: "0 0 12px" }}>
               It's almost never that you don't understand it. It's that the exact answer the examiner gives marks for never made it into your memory.
             </p>
-            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 32px" }}>
+            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.7, margin: "0 0 32px" }}>
               This app fixes that. Mechanisms you can step through. MCQs that drill the gaps. Flashcards written to match the real mark scheme.
             </p>
 
@@ -4803,13 +4809,13 @@ function LandingPage({ onGoToLogin }) {
               {daysTo1 > 0 && (
                 <div style={{ background: "rgba(41,171,226,0.12)", border: "1px solid rgba(41,171,226,0.25)", borderRadius: "10px", padding: "8px 14px", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span style={{ fontSize: "18px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
-                  <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 1</span>
+                  <span style={{ fontSize: "11px", color: bodyText, fontWeight: 600 }}>days to Paper 1</span>
                 </div>
               )}
               {daysTo2 > 0 && (
                 <div style={{ background: "rgba(5,150,105,0.12)", border: "1px solid rgba(5,150,105,0.25)", borderRadius: "10px", padding: "8px 14px", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span style={{ fontSize: "18px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
-                  <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 2</span>
+                  <span style={{ fontSize: "11px", color: bodyText, fontWeight: 600 }}>days to Paper 2</span>
                 </div>
               )}
             </div>
@@ -4817,23 +4823,30 @@ function LandingPage({ onGoToLogin }) {
             <button onClick={onGoToLogin} style={{ padding: "16px 36px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "8px" }}>
               Get full access <span style={{ fontSize: "18px" }}>→</span>
             </button>
-            <div style={{ fontSize: "12px", color: "#475569", marginTop: "10px" }}>Cancel anytime. Instant access.</div>
+            <div style={{ fontSize: "12px", color: dimText, marginTop: "10px" }}>Cancel anytime. Instant access.</div>
           </div>
 
-          {/* Right: interactive flashcard demo */}
-          <div style={{ flex: "0 1 360px", minWidth: "280px" }}>
-            <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "20px", textAlign: "center" }}>
+          {/* Right: interactive flashcard demo with 3D flip */}
+          <div style={{ flex: "0 1 400px", minWidth: "300px" }}>
+            <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "24px", textAlign: "center" }}>
               <div style={{ ...labelStyle, color: "#059669", fontSize: "11px", marginBottom: "10px" }}>TAP TO TEST YOURSELF</div>
-              <div style={{ fontSize: "10px", color: "#475569", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>PHYSICAL • RATES</div>
-              <div onClick={() => setFlippedCard(!flippedCard)} style={{ cursor: "pointer", background: flippedCard ? "linear-gradient(145deg, #059669, #047857)" : "linear-gradient(145deg, #162d3d, #0f1f30)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "32px 24px", minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s", marginBottom: "10px" }}>
-                <div style={{ fontSize: "clamp(16px, 2.5vw, 19px)", fontWeight: 600, color: "#fff", lineHeight: 1.5 }}>
-                  {flippedCard
-                    ? "A catalyst provides an alternative reaction pathway with a lower activation energy, so more particles have energy ≥ Ea."
-                    : "How does a catalyst increase the rate of a reaction?"}
+              <div style={{ fontSize: "10px", color: dimText, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>PHYSICAL • RATES</div>
+              <div className="lp-flip" onClick={() => setFlippedCard(!flippedCard)}>
+                <div className={`lp-flip-inner${flippedCard ? " flipped" : ""}`}>
+                  <div className="lp-flip-face lp-flip-front">
+                    <div style={{ fontSize: "clamp(17px, 2.5vw, 21px)", fontWeight: 600, color: "#fff", lineHeight: 1.5 }}>
+                      How does a catalyst increase the rate of a reaction?
+                    </div>
+                  </div>
+                  <div className="lp-flip-face lp-flip-back">
+                    <div style={{ fontSize: "clamp(15px, 2vw, 18px)", fontWeight: 600, color: "#fff", lineHeight: 1.6 }}>
+                      A catalyst provides an <strong>alternative reaction pathway</strong> with a <strong>lower activation energy</strong>, so more particles have energy ≥ Ea.
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div style={{ fontSize: "12px", color: flippedCard ? "#059669" : "#475569", fontWeight: 600 }}>
-                {flippedCard ? "← tap to flip back" : "tap the card →"}
+              <div style={{ fontSize: "12px", color: flippedCard ? "#059669" : dimText, fontWeight: 600, marginTop: "12px" }}>
+                {flippedCard ? "tap to flip back" : "tap the card to reveal →"}
               </div>
             </div>
           </div>
@@ -4862,7 +4875,7 @@ function LandingPage({ onGoToLogin }) {
             This isn't a knowledge problem.<br />
             It's a <span style={{ color: "#e2a03f" }}>marks</span> problem. And marks are grades.
           </h2>
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 36px", maxWidth: "680px" }}>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: bodyText, lineHeight: 1.7, margin: "0 0 36px", maxWidth: "680px" }}>
             Two marks here, three there, a loose definition, the wrong keyword on a six-marker. It stacks up fast. And Chemistry punishes it harder than most subjects, because it builds on itself. Physical, inorganic, organic, all cumulative. Fall behind on one topic and it drags the next three down with it.
           </p>
 
@@ -4874,13 +4887,13 @@ function LandingPage({ onGoToLogin }) {
               { from: "Near miss", to: "A*", color: "#059669", text: "What medicine, dentistry and the top courses actually ask for." },
             ].map((card, i) => (
               <div key={i} style={{ flex: "1 1 260px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "24px" }}>
-                <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "4px" }}>{card.from} → <span style={{ color: card.color, fontWeight: 800, fontSize: "16px" }}>{card.to}</span></div>
-                <div style={{ fontSize: "14px", color: "#94a3b8", lineHeight: 1.6 }}>{card.text}</div>
+                <div style={{ fontSize: "14px", color: mutedText, marginBottom: "4px" }}>{card.from} → <span style={{ color: card.color, fontWeight: 800, fontSize: "16px" }}>{card.to}</span></div>
+                <div style={{ fontSize: "14px", color: bodyText, lineHeight: 1.6 }}>{card.text}</div>
               </div>
             ))}
           </div>
 
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#64748b", textAlign: "center", fontStyle: "italic", maxWidth: "680px", margin: "0 auto" }}>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: mutedText, textAlign: "center", fontStyle: "italic", maxWidth: "680px", margin: "0 auto" }}>
             Every week before the exam you spend rereading instead of testing yourself is a week you don't get back.
           </p>
         </div>
@@ -4895,7 +4908,7 @@ function LandingPage({ onGoToLogin }) {
           <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 16px", color: "#1a2d45" }}>
             Everything the examiner is looking for, in one place.
           </h2>
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#64748b", lineHeight: 1.7, margin: "0 0 40px", maxWidth: "620px" }}>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: mutedText, lineHeight: 1.7, margin: "0 0 40px", maxWidth: "620px" }}>
             Not just content. The exact phrasing, the right keywords, the mechanism arrows drawn how the mark scheme expects. Try it below.
           </p>
 
@@ -4910,7 +4923,7 @@ function LandingPage({ onGoToLogin }) {
               <div key={i} style={{ flex: "1 1 200px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "20px" }}>
                 <div style={{ fontSize: "28px", marginBottom: "8px" }}>{item.icon}</div>
                 <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{item.label}</div>
-                <div style={{ fontSize: "13px", color: "#64748b", lineHeight: 1.5 }}>{item.sub}</div>
+                <div style={{ fontSize: "13px", color: mutedText, lineHeight: 1.5 }}>{item.sub}</div>
               </div>
             ))}
           </div>
@@ -4956,9 +4969,10 @@ function LandingPage({ onGoToLogin }) {
                       <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: m.color, flexShrink: 0 }} />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: "17px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>{m.title}</div>
-                        <div style={{ fontSize: "14px", color: "#94a3b8", fontWeight: 500 }}>{m.subtitle}</div>
+                        <div style={{ fontSize: "14px", color: bodyText, fontWeight: 500 }}>{m.subtitle}</div>
                       </div>
-                      {!m.locked && <div style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 700 }}>Try it →</div>}
+                      {!m.locked && !m.halfLocked && <div style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 700 }}>Try it →</div>}
+                      {!m.locked && m.halfLocked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(226,160,63,0.15)", color: "#e2a03f", padding: "4px 10px", borderRadius: "8px" }}>PREVIEW</div>}
                       {m.locked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "4px 10px", borderRadius: "8px" }}>PRO</div>}
                     </div>
                   </button>
@@ -4973,7 +4987,7 @@ function LandingPage({ onGoToLogin }) {
                       <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#475569", flexShrink: 0 }} />
                       <div>
                         <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff" }}>{m.title}</div>
-                        <div style={{ fontSize: "13px", color: "#64748b" }}>{m.sub}</div>
+                        <div style={{ fontSize: "13px", color: mutedText }}>{m.sub}</div>
                       </div>
                     </div>
                     <div style={{ position: "absolute", top: "10px", right: "14px", fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "3px 10px", borderRadius: "8px" }}>PRO</div>
@@ -4994,7 +5008,7 @@ function LandingPage({ onGoToLogin }) {
                     </button>
                     <div>
                       <div style={{ fontSize: "22px", fontWeight: 800, color: "#fff" }}>{mech.title}</div>
-                      <div style={{ fontSize: "14px", color: "#94a3b8" }}>{mech.subtitle}</div>
+                      <div style={{ fontSize: "14px", color: bodyText }}>{mech.subtitle}</div>
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
@@ -5002,24 +5016,26 @@ function LandingPage({ onGoToLogin }) {
                       <img src={process.env.PUBLIC_URL + mech.image} alt={mech.title} style={{ width: "100%", height: "auto", display: "block", borderRadius: "10px" }} />
                     </div>
                     <div style={{ flex: "1 1 40%", minWidth: "260px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <div style={{ fontSize: "12px", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
+                      <div style={{ fontSize: "12px", fontWeight: 800, color: mutedText, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
                         Tap to learn each part
                       </div>
                       {mech.explainers.map((ex, idx) => {
-                        const isOpen = mechOpenCards[idx];
+                        const isLocked = mech.halfLocked && idx >= (mech.freeExplainers || 3);
+                        const isOpen = !isLocked && mechOpenCards[idx];
                         const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed"];
                         const c = stepColors[idx % stepColors.length];
                         return (
-                          <button key={idx} onClick={() => setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                            style={{ background: isOpen ? `${c}15` : "rgba(255,255,255,0.06)", border: isOpen ? `2px solid ${c}50` : "1.5px solid rgba(255,255,255,0.1)",
-                              borderRadius: "12px", padding: "10px 14px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}>
+                          <button key={idx} onClick={() => { if (!isLocked) setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] })); }}
+                            style={{ background: isLocked ? "rgba(255,255,255,0.02)" : isOpen ? `${c}15` : "rgba(255,255,255,0.06)", border: isLocked ? "1.5px solid rgba(255,255,255,0.05)" : isOpen ? `2px solid ${c}50` : "1.5px solid rgba(255,255,255,0.1)",
+                              borderRadius: "12px", padding: "10px 14px", textAlign: "left", cursor: isLocked ? "default" : "pointer", fontFamily: "inherit", transition: "all 0.2s", opacity: isLocked ? 0.45 : 1, position: "relative" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: c, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800 }}>{idx + 1}</div>
+                              <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: isLocked ? "#475569" : c, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800 }}>{isLocked ? "🔒" : idx + 1}</div>
                               <div style={{ flex: 1, fontSize: "13px", fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>{ex.title}</div>
-                              <div style={{ fontSize: "14px", color: "#64748b", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>▼</div>
+                              {!isLocked && <div style={{ fontSize: "14px", color: mutedText, transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>▼</div>}
+                              {isLocked && <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", background: "rgba(41,171,226,0.15)", padding: "2px 8px", borderRadius: "6px" }}>PRO</div>}
                             </div>
                             {isOpen && (
-                              <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${c}30`, fontSize: "13px", color: "#94a3b8", lineHeight: 1.65, fontWeight: 400 }}>{ex.text}</div>
+                              <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${c}30`, fontSize: "13px", color: bodyText, lineHeight: 1.65, fontWeight: 400 }}>{ex.text}</div>
                             )}
                           </button>
                         );
@@ -5053,7 +5069,7 @@ function LandingPage({ onGoToLogin }) {
                     <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>
                       Question {mcqIdx + 1} of {previewMCQs.length} (free preview)
                     </div>
-                    <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff", lineHeight: 1.5, marginBottom: "20px" }}>{currentQ.q}</div>
+                    <div style={{ fontSize: "clamp(18px, 2.5vw, 22px)", fontWeight: 700, color: "#fff", lineHeight: 1.5, marginBottom: "24px" }}>{currentQ.q}</div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                       {Object.entries(currentQ.options).map(([letter, text]) => {
                         const isSelected = mcqSelected === letter;
@@ -5070,7 +5086,7 @@ function LandingPage({ onGoToLogin }) {
                               cursor: mcqShowExplanation ? "default" : "pointer", fontFamily: "inherit", textAlign: "left", transition: "all 0.2s", display: "flex", alignItems: "center", gap: "12px" }}>
                             <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: isSelected ? "#29ABE2" : "rgba(255,255,255,0.08)", color: isSelected ? "#fff" : "#94a3b8",
                               display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, flexShrink: 0 }}>{letter}</div>
-                            <div style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 500, lineHeight: 1.4 }}>{text}</div>
+                            <div style={{ fontSize: "15px", color: "#e2e8f0", fontWeight: 500, lineHeight: 1.5 }}>{text}</div>
                           </button>
                         );
                       })}
@@ -5087,7 +5103,7 @@ function LandingPage({ onGoToLogin }) {
                           <div style={{ fontSize: "14px", fontWeight: 800, color: mcqSelected === currentQ.answer ? "#059669" : "#dc2626", marginBottom: "4px" }}>
                             {mcqSelected === currentQ.answer ? "Correct!" : `Incorrect. Answer: ${currentQ.answer}`}
                           </div>
-                          <div style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.5 }}>{currentQ.explanation}</div>
+                          <div style={{ fontSize: "13px", color: bodyText, lineHeight: 1.5 }}>{currentQ.explanation}</div>
                         </div>
                         <button onClick={() => { setMcqIdx(prev => prev + 1); setMcqSelected(null); setMcqShowExplanation(false); }}
                           style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
@@ -5100,7 +5116,7 @@ function LandingPage({ onGoToLogin }) {
                   <div style={{ textAlign: "center", padding: "40px 24px", background: "rgba(255,255,255,0.06)", borderRadius: "18px", border: "1.5px solid rgba(255,255,255,0.1)" }}>
                     <div style={{ fontSize: "48px", marginBottom: "12px" }}>{mcqScore === 3 ? "🎉" : mcqScore >= 2 ? "💪" : "📚"}</div>
                     <div style={{ fontSize: "24px", fontWeight: 900, color: "#fff", marginBottom: "4px" }}>{mcqScore}/{previewMCQs.length}</div>
-                    <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "24px" }}>
+                    <div style={{ fontSize: "14px", color: mutedText, marginBottom: "24px" }}>
                       {mcqScore === 3 ? "Perfect. Imagine 566+ more questions like these." : "There are 566+ more exam-style MCQs waiting for you."}
                     </div>
                     <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)" }}>
@@ -5125,7 +5141,7 @@ function LandingPage({ onGoToLogin }) {
           <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(24px, 4vw, 38px)", lineHeight: 1.15, margin: "0 0 12px", color: "#1a2d45", maxWidth: "700px", marginLeft: "auto", marginRight: "auto" }}>
             Three things that actually move your grade.<br />This app is built on all three.
           </h2>
-          <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 44px" }}>Not theory. Not motivation. Just what the evidence says works.</p>
+          <p style={{ fontSize: "14px", color: mutedText, margin: "0 0 44px" }}>Not theory. Not motivation. Just what the evidence says works.</p>
 
           <div style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "center" }}>
             {[
@@ -5137,7 +5153,7 @@ function LandingPage({ onGoToLogin }) {
                 <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "36px", fontWeight: 900, color: "#e8e3db" }}>{item.num}</div>
                 <div style={{ fontSize: "28px", marginBottom: "12px" }}>{item.icon}</div>
                 <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px" }}>{item.title}</div>
-                <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.7 }}>{item.text}</div>
+                <div style={{ fontSize: "14px", color: mutedText, lineHeight: 1.7 }}>{item.text}</div>
               </div>
             ))}
           </div>
@@ -5164,7 +5180,7 @@ function LandingPage({ onGoToLogin }) {
             ].map((item, i) => (
               <div key={i} className="lp-faq-card" style={{ background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "22px 24px" }}>
                 <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px", fontStyle: "italic" }}>{item.q}</div>
-                <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.7 }}>{item.a}</div>
+                <div style={{ fontSize: "14px", color: mutedText, lineHeight: 1.7 }}>{item.a}</div>
               </div>
             ))}
           </div>
@@ -5180,15 +5196,15 @@ function LandingPage({ onGoToLogin }) {
           <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.1, margin: "0 0 12px" }}>
             You can start right now.
           </h2>
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#94a3b8", margin: "0 0 36px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: bodyText, margin: "0 0 36px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
             Set up takes under a minute on your phone.
           </p>
 
           {/* Option 1 vs Option 2 */}
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
             <div style={{ flex: "1 1 280px", maxWidth: "360px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", padding: "28px 24px", textAlign: "left" }}>
-              <div style={{ ...labelStyle, color: "#64748b", fontSize: "11px" }}>OPTION 1</div>
-              <div style={{ fontSize: "14px", color: "#94a3b8", lineHeight: 1.7 }}>
+              <div style={{ ...labelStyle, color: mutedText, fontSize: "11px" }}>OPTION 1</div>
+              <div style={{ fontSize: "14px", color: bodyText, lineHeight: 1.7 }}>
                 Reread Chapter 7 a third time, feel like you know it, and write "speeds it up" again in the exam.
               </div>
             </div>
@@ -5207,12 +5223,12 @@ function LandingPage({ onGoToLogin }) {
           <button onClick={onGoToLogin} style={{ padding: "18px 44px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 24px rgba(41,171,226,0.4)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
             Get full access <span style={{ fontSize: "20px" }}>→</span>
           </button>
-          <div style={{ fontSize: "12px", color: "#475569", marginTop: "10px" }}>£27.99/mo. Cancel anytime.</div>
+          <div style={{ fontSize: "12px", color: dimText, marginTop: "10px" }}>£27.99/mo. Cancel anytime.</div>
 
           {/* P.S. */}
           <div style={{ marginTop: "48px", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "28px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto" }}>
-            <p style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.7, textAlign: "left" }}>
-              <strong style={{ color: "#94a3b8" }}>P.S.</strong>&nbsp;&nbsp;The exam doesn't reward the student who understands the most. It rewards the one who can write the mark-scheme answer under pressure. You build that by testing yourself, not by reading.
+            <p style={{ fontSize: "14px", color: mutedText, lineHeight: 1.7, textAlign: "left" }}>
+              <strong style={{ color: bodyText }}>P.S.</strong>&nbsp;&nbsp;The exam doesn't reward the student who understands the most. It rewards the one who can write the mark-scheme answer under pressure. You build that by testing yourself, not by reading.
             </p>
           </div>
         </div>
@@ -5223,15 +5239,15 @@ function LandingPage({ onGoToLogin }) {
         <div style={{ ...wrap, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
           <div>
             <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "14px", color: "#fff" }}>ChemMastery</div>
-            <div style={{ fontSize: "10px", color: "#475569", letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
+            <div style={{ fontSize: "10px", color: dimText, letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
           </div>
           <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <button onClick={onGoToLogin} style={{ background: "none", border: "none", color: "#64748b", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
+            <button onClick={onGoToLogin} style={{ background: "none", border: "none", color: mutedText, fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
             <button onClick={onGoToLogin} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
           </div>
         </div>
         <div style={{ ...wrap, marginTop: "20px" }}>
-          <div style={{ fontSize: "11px", color: "#334155", lineHeight: 1.6 }}>
+          <div style={{ fontSize: "11px", color: "#5a6a7d", lineHeight: 1.6 }}>
             This platform is an independent revision tool and is not affiliated with, endorsed by, or connected to AQA, OCR, or any exam board.
             &nbsp;© {new Date().getFullYear()} HSJ Tuition. All rights reserved.
           </div>
