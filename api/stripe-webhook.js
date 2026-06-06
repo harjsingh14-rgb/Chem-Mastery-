@@ -89,6 +89,113 @@ async function updateFirestoreUser(uid, fields, accessToken) {
   });
 }
 
+// Send welcome email via Resend
+async function sendWelcomeEmail(email, name) {
+  const resendKey = (process.env.RESEND_API_KEY || "").trim();
+  if (!resendKey) {
+    console.log("RESEND_API_KEY not set, skipping welcome email");
+    return;
+  }
+
+  const firstName = name ? name.split(" ")[0] : "there";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0d1b2a;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;padding:40px 24px;">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-size:28px;font-weight:900;color:#ffffff;letter-spacing:1px;">
+        <span style="color:#29ABE2;">Chem</span>Mastery Pro
+      </div>
+      <div style="font-size:13px;color:#29ABE2;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-top:6px;">
+        A-Level Chemistry. Mastered.
+      </div>
+    </div>
+
+    <!-- Main card -->
+    <div style="background:#ffffff;border-radius:16px;padding:36px 28px;box-shadow:0 8px 30px rgba(0,0,0,0.3);">
+
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:40px;margin-bottom:8px;">🎉</div>
+        <h1 style="font-size:24px;font-weight:800;color:#1a2d45;margin:0 0 6px;">Welcome to ChemMastery Pro!</h1>
+        <p style="font-size:15px;color:#64748b;margin:0;">Hey ${firstName}, you're all set. Full access is now unlocked.</p>
+      </div>
+
+      <div style="background:#f0fdf4;border:1.5px solid #059669;border-radius:12px;padding:16px;text-align:center;margin-bottom:24px;">
+        <div style="font-size:14px;font-weight:700;color:#059669;">✓ Your subscription is active</div>
+        <div style="font-size:12px;color:#047857;margin-top:4px;">All premium content is now unlocked</div>
+      </div>
+
+      <!-- How to access -->
+      <div style="margin-bottom:24px;">
+        <div style="font-size:14px;font-weight:800;color:#1a2d45;margin-bottom:12px;">How to access:</div>
+        <div style="font-size:14px;color:#475569;line-height:1.8;">
+          1. Go to <a href="https://fc.hsjtuition.co.uk" style="color:#29ABE2;font-weight:700;text-decoration:none;">fc.hsjtuition.co.uk</a><br>
+          2. Log in with the email you signed up with<br>
+          3. Everything is unlocked — start revising!
+        </div>
+      </div>
+
+      <!-- What's included -->
+      <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:24px;">
+        <div style="font-size:13px;font-weight:800;color:#1a2d45;margin-bottom:10px;">What's inside:</div>
+        <table style="width:100%;font-size:13px;color:#475569;line-height:2;">
+          <tr><td>🧪</td><td style="padding-left:8px;">11 curly arrow mechanisms with handdrawn diagrams</td></tr>
+          <tr><td>🎯</td><td style="padding-left:8px;">566+ exam-style MCQs (AQA & OCR A)</td></tr>
+          <tr><td>📚</td><td style="padding-left:8px;">1400+ topic flashcards</td></tr>
+          <tr><td>🧮</td><td style="padding-left:8px;">Step-by-step calculations</td></tr>
+          <tr><td>🗺️</td><td style="padding-left:8px;">Synthesis pathway maps</td></tr>
+          <tr><td>🤖</td><td style="padding-left:8px;">AI-marked extended questions</td></tr>
+        </table>
+      </div>
+
+      <!-- CTA button -->
+      <div style="text-align:center;">
+        <a href="https://fc.hsjtuition.co.uk" style="display:inline-block;padding:14px 36px;background:#29ABE2;color:#ffffff;font-size:15px;font-weight:800;text-decoration:none;border-radius:12px;box-shadow:0 4px 12px rgba(41,171,226,0.3);">
+          Start Revising →
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center;margin-top:28px;font-size:11px;color:#475569;line-height:1.6;">
+      <div>Good luck with your exams! 💪</div>
+      <div style="margin-top:12px;color:#334155;">© ${new Date().getFullYear()} HSJ Tuition. All rights reserved.</div>
+      <div style="margin-top:4px;">Questions? Reply to this email.</div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${resendKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "ChemMastery <noreply@hsjtuition.co.uk>",
+        to: email,
+        subject: "Welcome to ChemMastery Pro! 🎉 You're all set",
+        html: html,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      console.log(`Welcome email sent to ${email}`, data.id);
+    } else {
+      console.error("Resend error:", data);
+    }
+  } catch (err) {
+    console.error("Failed to send welcome email:", err);
+  }
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
@@ -123,6 +230,13 @@ module.exports = async function handler(req, res) {
             stripeSubscriptionId: session.subscription,
           }, accessToken);
           console.log(`User ${uid} upgraded to paid`);
+
+          // Send welcome email
+          const customerEmail = session.customer_email || session.customer_details?.email;
+          const customerName = session.customer_details?.name || "";
+          if (customerEmail) {
+            await sendWelcomeEmail(customerEmail, customerName);
+          }
         }
         break;
       }
