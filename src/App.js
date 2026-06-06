@@ -4725,13 +4725,13 @@ function LandingPage({ onGoToLogin }) {
       <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} @keyframes lpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}`}</style>
 
       {/* ── HERO ──────────────────────────────────────── */}
-      <div style={{ padding: "60px 24px 40px", textAlign: "center", maxWidth: "700px", margin: "0 auto", animation: "lpFadeIn 0.6s ease" }}>
-        <img src="/hsj-logo.png" alt="ChemMastery" style={{ height: "80px", objectFit: "contain", display: "block", margin: "0 auto 20px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
-        <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.15, margin: "0 0 16px", letterSpacing: "-0.5px" }}>
-          <span style={{ color: "#29ABE2" }}>Ace</span> Your A-Level Chemistry Exams
+      <div style={{ padding: "clamp(60px, 10vh, 120px) 24px clamp(40px, 6vh, 80px)", textAlign: "center", maxWidth: "960px", margin: "0 auto", animation: "lpFadeIn 0.6s ease" }}>
+        <img src="/hsj-logo.png" alt="ChemMastery" style={{ height: "clamp(70px, 10vw, 110px)", objectFit: "contain", display: "block", margin: "0 auto 28px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
+        <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-1px" }}>
+          <span style={{ color: "#29ABE2" }}>Ace</span> Your A-Level Chemistry
         </h1>
-        <p style={{ fontSize: "clamp(15px, 2.5vw, 18px)", color: "#94a3b8", lineHeight: 1.6, margin: "0 0 24px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
-          Step-by-step curly arrow mechanisms, exam-style MCQs, flashcards, calculations and more. Everything you need to smash Papers 1 & 2.
+        <p style={{ fontSize: "clamp(16px, 2.5vw, 20px)", color: "#94a3b8", lineHeight: 1.6, margin: "0 0 32px", maxWidth: "620px", marginLeft: "auto", marginRight: "auto" }}>
+          Step-by-step curly arrow mechanisms, exam-style MCQs, flashcards, calculations and more. Everything you need to smash A-Level Chemistry.
         </p>
 
         {/* Exam countdown pills */}
@@ -4752,35 +4752,35 @@ function LandingPage({ onGoToLogin }) {
 
         {/* CTA buttons */}
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)", animation: "lpPulse 2s infinite", letterSpacing: "0.3px" }}>
+          <button onClick={onGoToLogin} style={{ padding: "16px 40px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "clamp(16px, 2vw, 18px)", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)", animation: "lpPulse 2s infinite", letterSpacing: "0.3px" }}>
             Get Full Access — £27.99/mo
           </button>
-          <button onClick={() => { document.getElementById("lp-preview")?.scrollIntoView({ behavior: "smooth" }); }} style={{ padding: "14px 24px", borderRadius: "14px", border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.05)", color: "#fff", fontSize: "15px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={() => { document.getElementById("lp-preview")?.scrollIntoView({ behavior: "smooth" }); }} style={{ padding: "16px 32px", borderRadius: "14px", border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.05)", color: "#fff", fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
             Try Free Preview ↓
           </button>
         </div>
       </div>
 
       {/* ── WHAT'S INCLUDED STRIP ─────────────────────── */}
-      <div style={{ background: "rgba(255,255,255,0.03)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "28px 24px", margin: "0 0 40px" }}>
-        <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap", maxWidth: "800px", margin: "0 auto" }}>
+      <div style={{ background: "rgba(255,255,255,0.03)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "36px 24px", margin: "0 0 50px" }}>
+        <div style={{ display: "flex", gap: "clamp(24px, 4vw, 60px)", justifyContent: "center", flexWrap: "wrap", maxWidth: "960px", margin: "0 auto" }}>
           {[
             { icon: "🧪", label: "11 Mechanisms", sub: "Handdrawn curly arrows" },
             { icon: "🎯", label: "566+ MCQs", sub: "AQA & OCR A" },
             { icon: "📚", label: "1400+ Flashcards", sub: "Every topic covered" },
             { icon: "🧮", label: "Calculations", sub: "Step-by-step worked" },
           ].map((item, i) => (
-            <div key={i} style={{ textAlign: "center", minWidth: "140px" }}>
-              <div style={{ fontSize: "28px", marginBottom: "6px" }}>{item.icon}</div>
-              <div style={{ fontSize: "14px", fontWeight: 800, color: "#fff" }}>{item.label}</div>
-              <div style={{ fontSize: "11px", color: "#64748b", fontWeight: 500 }}>{item.sub}</div>
+            <div key={i} style={{ textAlign: "center", minWidth: "160px" }}>
+              <div style={{ fontSize: "36px", marginBottom: "8px" }}>{item.icon}</div>
+              <div style={{ fontSize: "16px", fontWeight: 800, color: "#fff" }}>{item.label}</div>
+              <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 500 }}>{item.sub}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── FREE PREVIEW SECTION ────────────────────── */}
-      <div id="lp-preview" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px 60px" }}>
+      <div id="lp-preview" style={{ maxWidth: "1060px", margin: "0 auto", padding: "0 clamp(24px, 4vw, 60px) 60px" }}>
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", margin: "0 0 8px" }}>Try It Free</h2>
           <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>Explore real content from the app. No sign-up needed.</p>
