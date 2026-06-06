@@ -8462,9 +8462,11 @@ export default function App() {
 
       {/* ── MCQ TAB ────────────────────────────────────────── */}
       {topicsTab === "mcq" && (() => {
-        const mcqTopics = Object.entries(mcqData.topics).map(([id, t]) => ({ id, ...t }));
-        const topicQuestions = mcqTopic ? [...mcqData.questions.filter(q => q.topic === mcqTopic)].sort(() => Math.random() - 0.5) : [];
-        const shuffledAll = mcqMode === "random" && mcqQuizSize ? [...mcqData.questions].sort(() => Math.random() - 0.5).slice(0, mcqQuizSize) : [];
+        const mcqBoard = board === "ocr" ? "OCR_A" : "AQA";
+        const mcqTopics = Object.entries(mcqData.topics).map(([id, t]) => ({ id, ...t })).filter(t => t.board === mcqBoard);
+        const boardQuestions = mcqData.questions.filter(q => { const t = mcqData.topics[q.topic]; return t && t.board === mcqBoard; });
+        const topicQuestions = mcqTopic ? [...boardQuestions.filter(q => q.topic === mcqTopic)].sort(() => Math.random() - 0.5) : [];
+        const shuffledAll = mcqMode === "random" && mcqQuizSize ? [...boardQuestions].sort(() => Math.random() - 0.5).slice(0, mcqQuizSize) : [];
         const activeQuestions = mcqMode === "random" ? shuffledAll : topicQuestions;
         const currentQ = activeQuestions[mcqIdx];
 
@@ -8476,11 +8478,13 @@ export default function App() {
             "Organic": "#d97706",
           };
           const getCategory = (id) => {
+            if (id.startsWith("OCR-P")) return "Past Paper MCQs";
             if (id.startsWith("3.1")) return "Physical Chemistry";
             if (id.startsWith("3.2")) return "Inorganic Chemistry";
             return "Organic Chemistry";
           };
           const getCatColor = (id) => {
+            if (id.startsWith("OCR-P")) return "#7c3aed";
             if (id.startsWith("3.1")) return mcqCategoryColors["Physical"];
             if (id.startsWith("3.2")) return mcqCategoryColors["Inorganic"];
             return mcqCategoryColors["Organic"];

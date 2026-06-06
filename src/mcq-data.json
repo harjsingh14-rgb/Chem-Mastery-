@@ -192,113 +192,17 @@
       "level": "A2",
       "questionCount": 4
     },
-    "OCR-P1-2017": {
-      "name": "OCR A Paper 1 2017",
+    "OCR-P1": {
+      "name": "Paper 1 MCQs (2017-2025)",
       "board": "OCR_A",
       "level": "A2",
-      "questionCount": 6
+      "questionCount": 65
     },
-    "OCR-P1-2018": {
-      "name": "OCR A Paper 1 2018",
+    "OCR-P2": {
+      "name": "Paper 2 MCQs (2017-2025)",
       "board": "OCR_A",
       "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P1-2019": {
-      "name": "OCR A Paper 1 2019",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 7
-    },
-    "OCR-P1-2020": {
-      "name": "OCR A Paper 1 2020",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 7
-    },
-    "OCR-P1-2021": {
-      "name": "OCR A Paper 1 2021",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P1-2022": {
-      "name": "OCR A Paper 1 2022",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 9
-    },
-    "OCR-P1-2023": {
-      "name": "OCR A Paper 1 2023",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 10
-    },
-    "OCR-P1-2024": {
-      "name": "OCR A Paper 1 2024",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P1-2025": {
-      "name": "OCR A Paper 1 2025",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 8
-    },
-    "OCR-P2-2017": {
-      "name": "OCR A Paper 2 2017",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P2-2018": {
-      "name": "OCR A Paper 2 2018",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P2-2019": {
-      "name": "OCR A Paper 2 2019",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P2-2020": {
-      "name": "OCR A Paper 2 2020",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P2-2021": {
-      "name": "OCR A Paper 2 2021",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 6
-    },
-    "OCR-P2-2022": {
-      "name": "OCR A Paper 2 2022",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 7
-    },
-    "OCR-P2-2023": {
-      "name": "OCR A Paper 2 2023",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 7
-    },
-    "OCR-P2-2024": {
-      "name": "OCR A Paper 2 2024",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 5
-    },
-    "OCR-P2-2025": {
-      "name": "OCR A Paper 2 2025",
-      "board": "OCR_A",
-      "level": "A2",
-      "questionCount": 7
+      "questionCount": 56
     }
   },
   "questions": [
@@ -8269,7 +8173,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2017",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q10.png"
     },
@@ -8284,7 +8188,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2017",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q11.png"
     },
@@ -8299,7 +8203,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2017",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q12.png"
     },
@@ -8314,7 +8218,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2017",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q13.png"
     },
@@ -8329,7 +8233,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2017",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q14.png"
     },
@@ -8344,7 +8248,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2017",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q15.png"
     },
@@ -8359,7 +8263,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2018",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q10.png"
     },
@@ -8374,7 +8278,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2018",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q11.png"
     },
@@ -8389,7 +8293,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2018",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q12.png"
     },
@@ -8404,7 +8308,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2018",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q13.png"
     },
@@ -8419,7 +8323,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2018",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q14.png"
     },
@@ -8434,7 +8338,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2018",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q15.png"
     },
@@ -8449,7 +8353,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1
     },
     {
@@ -8463,7 +8367,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q10.png"
     },
@@ -8478,7 +8382,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q11.png"
     },
@@ -8493,7 +8397,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q12.png"
     },
@@ -8508,7 +8412,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q13.png"
     },
@@ -8523,7 +8427,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q14.png"
     },
@@ -8538,7 +8442,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2019",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q15.png"
     },
@@ -8553,7 +8457,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1
     },
     {
@@ -8567,7 +8471,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q10.png"
     },
@@ -8582,7 +8486,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q11.png"
     },
@@ -8597,7 +8501,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q12.png"
     },
@@ -8612,7 +8516,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q13.png"
     },
@@ -8627,7 +8531,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q14.png"
     },
@@ -8642,7 +8546,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2020",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q15.png"
     },
@@ -8657,7 +8561,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2021",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q10.png"
     },
@@ -8672,7 +8576,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2021",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q11.png"
     },
@@ -8687,7 +8591,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2021",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q12.png"
     },
@@ -8702,7 +8606,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2021",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q13.png"
     },
@@ -8717,7 +8621,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2021",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q14.png"
     },
@@ -8732,7 +8636,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2021",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q15.png"
     },
@@ -8747,7 +8651,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q2.png"
     },
@@ -8762,7 +8666,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q3.png"
     },
@@ -8777,7 +8681,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q4.png"
     },
@@ -8792,7 +8696,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q5.png"
     },
@@ -8807,7 +8711,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q10.png"
     },
@@ -8822,7 +8726,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q11.png"
     },
@@ -8837,7 +8741,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q12.png"
     },
@@ -8852,7 +8756,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q14.png"
     },
@@ -8867,7 +8771,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2022",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q15.png"
     },
@@ -8882,7 +8786,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q2.png"
     },
@@ -8897,7 +8801,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q4.png"
     },
@@ -8912,7 +8816,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1
     },
     {
@@ -8926,7 +8830,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q8.png"
     },
@@ -8941,7 +8845,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q10.png"
     },
@@ -8956,7 +8860,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q11.png"
     },
@@ -8971,7 +8875,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q12.png"
     },
@@ -8986,7 +8890,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q13.png"
     },
@@ -9001,7 +8905,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q14.png"
     },
@@ -9016,7 +8920,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2023",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q15.png"
     },
@@ -9031,7 +8935,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2024",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q10.png"
     },
@@ -9046,7 +8950,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2024",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q11.png"
     },
@@ -9061,7 +8965,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P1-2024",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q12.png"
     },
@@ -9076,7 +8980,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2024",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q13.png"
     },
@@ -9091,7 +8995,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2024",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q14.png"
     },
@@ -9106,7 +9010,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2024",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q15.png"
     },
@@ -9121,7 +9025,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1
     },
     {
@@ -9134,7 +9038,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1
     },
     {
@@ -9148,7 +9052,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q10.png"
     },
@@ -9163,7 +9067,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q11.png"
     },
@@ -9178,7 +9082,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q12.png"
     },
@@ -9193,7 +9097,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q13.png"
     },
@@ -9208,7 +9112,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q14.png"
     },
@@ -9223,7 +9127,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P1-2025",
+      "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q15.png"
     },
@@ -9238,7 +9142,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2017",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q10.png"
     },
@@ -9253,7 +9157,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2017",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q11.png"
     },
@@ -9268,7 +9172,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2017",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q12.png"
     },
@@ -9283,7 +9187,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2017",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q13.png"
     },
@@ -9298,7 +9202,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2017",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q14.png"
     },
@@ -9313,7 +9217,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2017",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q15.png"
     },
@@ -9328,7 +9232,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2018",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q10.png"
     },
@@ -9343,7 +9247,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2018",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q11.png"
     },
@@ -9358,7 +9262,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2018",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q12.png"
     },
@@ -9373,7 +9277,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2018",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q13.png"
     },
@@ -9388,7 +9292,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2018",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q14.png"
     },
@@ -9403,7 +9307,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2018",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q15.png"
     },
@@ -9418,7 +9322,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2019",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q10.png"
     },
@@ -9433,7 +9337,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2019",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q11.png"
     },
@@ -9448,7 +9352,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2019",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q12.png"
     },
@@ -9463,7 +9367,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2019",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q13.png"
     },
@@ -9478,7 +9382,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2019",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q14.png"
     },
@@ -9493,7 +9397,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2019",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q15.png"
     },
@@ -9508,7 +9412,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2020",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q10.png"
     },
@@ -9523,7 +9427,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2020",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q11.png"
     },
@@ -9538,7 +9442,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2020",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q12.png"
     },
@@ -9553,7 +9457,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2020",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q13.png"
     },
@@ -9568,7 +9472,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2020",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q14.png"
     },
@@ -9583,7 +9487,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2020",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q15.png"
     },
@@ -9598,7 +9502,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2021",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q10.png"
     },
@@ -9613,7 +9517,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2021",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q11.png"
     },
@@ -9628,7 +9532,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2021",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q12.png"
     },
@@ -9643,7 +9547,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2021",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q13.png"
     },
@@ -9658,7 +9562,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2021",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q14.png"
     },
@@ -9673,7 +9577,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2021",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q15.png"
     },
@@ -9688,7 +9592,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q1.png"
     },
@@ -9703,7 +9607,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q10.png"
     },
@@ -9718,7 +9622,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q11.png"
     },
@@ -9733,7 +9637,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q12.png"
     },
@@ -9748,7 +9652,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q13.png"
     },
@@ -9763,7 +9667,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q14.png"
     },
@@ -9778,7 +9682,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2022",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q15.png"
     },
@@ -9793,7 +9697,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1
     },
     {
@@ -9807,7 +9711,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q10.png"
     },
@@ -9822,7 +9726,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q11.png"
     },
@@ -9837,7 +9741,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q12.png"
     },
@@ -9852,7 +9756,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q13.png"
     },
@@ -9867,7 +9771,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q14.png"
     },
@@ -9882,7 +9786,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2023",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q15.png"
     },
@@ -9897,7 +9801,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2024",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q10.png"
     },
@@ -9912,7 +9816,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2024",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q11.png"
     },
@@ -9927,7 +9831,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2024",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q12.png"
     },
@@ -9942,7 +9846,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2024",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q13.png"
     },
@@ -9957,7 +9861,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2024",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q14.png"
     },
@@ -9972,7 +9876,7 @@
       },
       "answer": "C",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1
     },
     {
@@ -9986,7 +9890,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q10.png"
     },
@@ -10001,7 +9905,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q11.png"
     },
@@ -10016,7 +9920,7 @@
       },
       "answer": "A",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q12.png"
     },
@@ -10031,7 +9935,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q13.png"
     },
@@ -10046,7 +9950,7 @@
       },
       "answer": "B",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q14.png"
     },
@@ -10061,7 +9965,7 @@
       },
       "answer": "D",
       "explanation": "",
-      "topic": "OCR-P2-2025",
+      "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q15.png"
     }
