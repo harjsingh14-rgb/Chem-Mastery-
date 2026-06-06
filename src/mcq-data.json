@@ -191,6 +191,114 @@
       "board": "AQA",
       "level": "A2",
       "questionCount": 4
+    },
+    "OCR-P1-2017": {
+      "name": "OCR A Paper 1 2017",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P1-2018": {
+      "name": "OCR A Paper 1 2018",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P1-2019": {
+      "name": "OCR A Paper 1 2019",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 7
+    },
+    "OCR-P1-2020": {
+      "name": "OCR A Paper 1 2020",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 7
+    },
+    "OCR-P1-2021": {
+      "name": "OCR A Paper 1 2021",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P1-2022": {
+      "name": "OCR A Paper 1 2022",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 9
+    },
+    "OCR-P1-2023": {
+      "name": "OCR A Paper 1 2023",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 10
+    },
+    "OCR-P1-2024": {
+      "name": "OCR A Paper 1 2024",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P1-2025": {
+      "name": "OCR A Paper 1 2025",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 8
+    },
+    "OCR-P2-2017": {
+      "name": "OCR A Paper 2 2017",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P2-2018": {
+      "name": "OCR A Paper 2 2018",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P2-2019": {
+      "name": "OCR A Paper 2 2019",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P2-2020": {
+      "name": "OCR A Paper 2 2020",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P2-2021": {
+      "name": "OCR A Paper 2 2021",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 6
+    },
+    "OCR-P2-2022": {
+      "name": "OCR A Paper 2 2022",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 7
+    },
+    "OCR-P2-2023": {
+      "name": "OCR A Paper 2 2023",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 7
+    },
+    "OCR-P2-2024": {
+      "name": "OCR A Paper 2 2024",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 5
+    },
+    "OCR-P2-2025": {
+      "name": "OCR A Paper 2 2025",
+      "board": "OCR_A",
+      "level": "A2",
+      "questionCount": 7
     }
   },
   "questions": [
@@ -8149,6 +8257,1813 @@
       "topic": "3.3.9",
       "set": 3,
       "image": "/mcq-images/3.3.9-s3-q18.png"
+    },
+    {
+      "id": "OCR-P1-2017-q10",
+      "q": "17 This question is about Group 2 and Group 17 (7). (a) Barium chloride can be prepared from barium hydroxide in a neutralisation reaction. Write the equation for this reaction. State symbols are not required. ..............................................................................................................................................[1] (b) The reactivity of the Group 2 elements Mg–Ba increases down the group. Explain why. ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ..............................................................................................................................................[3] (c) On gently heating, the compound KCl O reacts as shown in the equation.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2017-q10.png"
+    },
+    {
+      "id": "OCR-P1-2017-q11",
+      "q": "(d) Two changes are described below. For each change, • write an equation, including state symbols, • state and explain how the entropy changes. (i) The reaction of aqueous barium nitrate with aqueous sodium sulfate. Full equation with state symbols ........................................................................................................................................... Explanation of entropy change .......................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2] (ii) The change that accompanies the standard enthalpy change of atomisation of iodine. Equation with state symbols ........................................................................................................................................... Explanation of entropy change .......................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2017-q11.png"
+    },
+    {
+      "id": "OCR-P1-2017-q12",
+      "q": "18 This question is about free energy changes, ∆G, enthalpy changes, ∆H, and temperature, T. (a) The Gibbs’ equation is shown below. ∆G = ∆H – T∆S",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2017-q12.png"
+    },
+    {
+      "id": "OCR-P1-2017-q13",
+      "q": "(b) Iron can be extracted from its ore Fe O using carbon.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2017-q13.png"
+    },
+    {
+      "id": "OCR-P1-2017-q14",
+      "q": "(iv) Another equilibrium involved in the extraction of iron from Fe O is shown below.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2017-q14.png"
+    },
+    {
+      "id": "OCR-P1-2017-q15",
+      "q": "BLANK PAGE PLEASE DO NOT WRITE ON THIS PAGE",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2017-q15.png"
+    },
+    {
+      "id": "OCR-P1-2018-q10",
+      "q": "cm3 of dilute sulfuric acid and an excess of KI(aq). The iodate(V) ions are reduced to iodine, as shown below. IO –(aq) + 6H+(aq) + 5I–(aq) 3I (aq) + 3H O(l)",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2018-q10.png"
+    },
+    {
+      "id": "OCR-P1-2018-q11",
+      "q": "(iii) Calculate the enthalpy change of hydration of fluoride ions, F–. enthalpy change of hydration = ............................................ kJ mol–1 [2] (iv) Predict how the enthalpy changes of hydration of F– and Cl– would differ. Explain your answer. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2018-q11.png"
+    },
+    {
+      "id": "OCR-P1-2018-q12",
+      "q": "(b) Fluorine reacts with steam as shown in the equation below. 2F (g) + 2H O(g) O (g) + 4HF(g) ∆H = −598 kJ mol–",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2018-q12.png"
+    },
+    {
+      "id": "OCR-P1-2018-q13",
+      "q": "BLANK PAGE PLEASE DO NOT WRITE ON THIS PAGE",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2018-q13.png"
+    },
+    {
+      "id": "OCR-P1-2018-q14",
+      "q": "17 This question is about reaction rates. Aqueous iron(III) ions, Fe3+(aq), react with aqueous iodide ions, I–(aq), as shown below. 2Fe3+(aq) + 2I–(aq) 2Fe2+(aq) + I (aq)",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2018-q14.png"
+    },
+    {
+      "id": "OCR-P1-2018-q15",
+      "q": "................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ...................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2018-q15.png"
+    },
+    {
+      "id": "OCR-P1-2019-q5",
+      "q": "8 3.528 g of a Group 2 metal, M, is reacted with an excess of chlorine. The reaction forms 9.775 g of a chloride. What is metal M?",
+      "options": {
+        "A": "magnesium",
+        "B": "calcium",
+        "C": "strontium",
+        "D": "barium"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1
+    },
+    {
+      "id": "OCR-P1-2019-q10",
+      "q": "(d) The table below shows enthalpy changes involving potassium, oxygen and potassium oxide, K O.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2019-q10.png"
+    },
+    {
+      "id": "OCR-P1-2019-q11",
+      "q": "(ii) Calculate the lattice enthalpy of potassium oxide. lattice enthalpy = ............................................ kJ mol−1 [2] (e) A similar Born–Haber cycle to potassium oxide in (d) can be constructed for sodium oxide. (i) The first ionisation energy of sodium is more endothermic than that of potassium. Explain why. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2] (ii) The lattice enthalpy of sodium oxide is more exothermic than that of potassium oxide. Explain why. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2019-q11.png"
+    },
+    {
+      "id": "OCR-P1-2019-q12",
+      "q": "22 14",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2019-q12.png"
+    },
+    {
+      "id": "OCR-P1-2019-q13",
+      "q": "(b) Red blood cells contain haemoglobin. Explain using ligand substitutions: • how haemoglobin transports oxygen around the body • why carbon monoxide is toxic. ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ..............................................................................................................................................[3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2019-q13.png"
+    },
+    {
+      "id": "OCR-P1-2019-q14",
+      "q": "pH",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2019-q14.png"
+    },
+    {
+      "id": "OCR-P1-2019-q15",
+      "q": "(b) Vanadium ions have four common oxidation states. Table 18.1 shows the colours of the ions in aqueous solution. Oxidation state of Vanadium ion Colour vanadium +5 VO +(aq) yellow",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2019-q15.png"
+    },
+    {
+      "id": "OCR-P1-2020-q5",
+      "q": "8 A graph is plotted of ln(k) against 1 /T. (k = rate constant, T = temperature in K) The gradient has the numerical value of −55 000. What is the activation energy, in kJ mol−1?",
+      "options": {
+        "A": "+1.5 × 10−7",
+        "B": "+2.22 × 10−6",
+        "C": "+6.62",
+        "D": "+"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1
+    },
+    {
+      "id": "OCR-P1-2020-q10",
+      "q": "(c)* Table 16.1 shows some physical properties of magnesium, bromine and magnesium bromide. Electrical conductivity Substance Melting point / °C Solid Liquid Magnesium 711 Good Good Bromine −7 Poor Poor Magnesium bromide 650 Poor Good Table 16.1 Explain the physical properties shown in Table 16.1 using your knowledge of structure and bonding. [6] ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... Additional answer space if required ................................................................................................................................................... ...................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2020-q10.png"
+    },
+    {
+      "id": "OCR-P1-2020-q11",
+      "q": "................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ...................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2020-q11.png"
+    },
+    {
+      "id": "OCR-P1-2020-q12",
+      "q": "(d) The enthalpy change of hydration of bromide ions can be determined using the enthalpy changes in Table 16.2. Enthalpy change Energy / kJ mol−1 1st ionisation energy of magnesium +736 2nd ionisation energy of magnesium +1450 atomisation of bromine +112 atomisation of magnesium +148 electron affinity of bromine −325 formation of magnesium bromide −525 hydration of bromide ion to be calculated hydration of magnesium ion −1926 solution of magnesium bromide −186 Table 16.2 (i) An incomplete energy cycle based on Table 16.2 is shown below. On the dotted lines, add the species present, including state symbols. ............................................ Mg2+(g)+2Br–(g) Mg+(g)+2Br(g)+e– Mg(g)+2Br(g) Mg(s)+2Br(g) ............................................ Mg2+(aq)+2Br–(g) MgBr (s)",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2020-q12.png"
+    },
+    {
+      "id": "OCR-P1-2020-q13",
+      "q": "(ii) Using your completed energy cycle in 16(d)(i), calculate the enthalpy change of hydration of bromide ions. enthalpy change of hydration = ........................................... kJ mol−1 [2] (iii) Write the equation for the lattice enthalpy of magnesium bromide and calculate the lattice enthalpy of magnesium bromide. Equation ............................................................................................................................ Calculation lattice enthalpy = ............................................kJ mol−1 [3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2020-q13.png"
+    },
+    {
+      "id": "OCR-P1-2020-q14",
+      "q": "17 Methanol, CH OH, can be made industrially by the reaction of carbon monoxide with hydrogen, as",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2020-q14.png"
+    },
+    {
+      "id": "OCR-P1-2020-q15",
+      "q": "(c) Standard entropy values are given below. Substance CO(g) H (g) CH OH(g)",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2020-q15.png"
+    },
+    {
+      "id": "OCR-P1-2021-q10",
+      "q": "35",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2021-q10.png"
+    },
+    {
+      "id": "OCR-P1-2021-q11",
+      "q": "(i) Write an equation to represent the fourth ionisation energy of magnesium. Include state symbols. ......................................................................................................................................[1] (ii) Explain how the successive ionisation energies provide evidence that magnesium is in Group 2 of the periodic table. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[1] (iii) Electrons occupy orbitals. In Table 16.2 below, add a tick (✓) below the ionisation numbers that are responsible for removing an electron from a full orbital in a magnesium atom. Ionisation",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2021-q11.png"
+    },
+    {
+      "id": "OCR-P1-2021-q12",
+      "q": "(c) The enthalpy change of solution for magnesium fluoride, MgF , can be determined indirectly",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2021-q12.png"
+    },
+    {
+      "id": "OCR-P1-2021-q13",
+      "q": "(iv) The enthalpy changes of solution of the magnesium halides show a trend from MgF to",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2021-q13.png"
+    },
+    {
+      "id": "OCR-P1-2021-q14",
+      "q": "17 This question is about d-block elements. (a) Most d-block elements are also classified as transition elements. Explain why scandium and zinc are classified as d-block elements but are not also transition elements. Your explanations should include full electron configurations. ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ..............................................................................................................................................[4] (b) Compound A is a hydrated chromium(III) salt with a molar mass of 608.3 g mol–1 and the following percentage composition by mass: Cr, 17.10%; H, 3.94%; O, 63.13%; S, 15.83%.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2021-q14.png"
+    },
+    {
+      "id": "OCR-P1-2021-q15",
+      "q": "(ii)* Determine the formulae of A and B. Write the ionic equation for the ligand substitution and show 3D structures for the three stereoisomers of B. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[6] Additional answer space if required. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ...........................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2021-q15.png"
+    },
+    {
+      "id": "OCR-P1-2022-q2",
+      "q": "6 complex ions.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q2.png"
+    },
+    {
+      "id": "OCR-P1-2022-q3",
+      "q": "",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q3.png"
+    },
+    {
+      "id": "OCR-P1-2022-q4",
+      "q": "",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q4.png"
+    },
+    {
+      "id": "OCR-P1-2022-q5",
+      "q": "4 3 11 2 r Calculate the mass, in g, of limestone needed to make 1.50 kg of fertiliser Z. Give your answer to 3 significant figures. mass of limestone = ...................................................... g [3] (ii) Huntite is a carbonate mineral with the chemical formula Mg Ca(CO ) .",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q5.png"
+    },
+    {
+      "id": "OCR-P1-2022-q10",
+      "q": "SECTION B Answer all the questions.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q10.png"
+    },
+    {
+      "id": "OCR-P1-2022-q11",
+      "q": "(ii) The rate of Reaction 16.1 is investigated by carrying out three experiments at the same temperature. The results are shown below. [NO(g)] [CO(g)] Initial rate Experiment / mol dm–3 / mol dm–3 / mol dm–3 s–",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q11.png"
+    },
+    {
+      "id": "OCR-P1-2022-q12",
+      "q": "17 This question is about energy changes. (a) Magnesium reacts with aqueous silver nitrate, AgNO (aq) as shown below.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q12.png"
+    },
+    {
+      "id": "OCR-P1-2022-q14",
+      "q": "(b) Nitric acid is manufactured from ammonia in a multi-stage process. The equation for the first stage in this process is shown in Reaction 17.1. 4NH (g) + 5O (g) 4NO(g) + 6H O(l) ∆Hө= –1172 kJ mol–1 Reaction 17.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q14.png"
+    },
+    {
+      "id": "OCR-P1-2022-q15",
+      "q": "(c) Carbon disulfide, CS , reacts with dinitrogen oxide, N O, as shown in Reaction 17.2.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2022-q15.png"
+    },
+    {
+      "id": "OCR-P1-2023-q2",
+      "q": "Construct the overall equation for this reaction. ..............................................................................................................................................[2] END OF QUESTION PAPER",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q2.png"
+    },
+    {
+      "id": "OCR-P1-2023-q4",
+      "q": "2 Use the information in the table above to explain the reasons for Step 1 and Step 2. Reason(s) for Step 1 ................................................................................................................ ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... Reason(s) for Step 2 ................................................................................................................ ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... [4]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q4.png"
+    },
+    {
+      "id": "OCR-P1-2023-q6",
+      "q": "11 A student adds aqueous potassium carbonate to one test tube and aqueous silver nitrate to a second test tube. The student adds dilute hydrochloric acid to each test tube. Which row has the correct observations? Aqueous potassium carbonate Aqueous silver nitrate",
+      "options": {
+        "A": "no change precipitate",
+        "B": "no change no change",
+        "C": "effervescence no change",
+        "D": "effervescence precipitate"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1
+    },
+    {
+      "id": "OCR-P1-2023-q8",
+      "q": "15 Chlorine trifluoride can be decomposed into its elements forming the equilibrium mixture below. 2Cl F (g) Cl (g) + 3F (g) ∆H = +318 kJ mol–",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q8.png"
+    },
+    {
+      "id": "OCR-P1-2023-q10",
+      "q": "Section B",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q10.png"
+    },
+    {
+      "id": "OCR-P1-2023-q11",
+      "q": "(ii) Calculate the lattice enthalpy of barium iodide. lattice enthalpy = ............................................ kJ mol–1 [2] (b) The first and second ionisation energies of magnesium, Mg, and strontium, Sr, in Group 2 are given in the table below. First ionisation energy Second ionisation energy Element / kJ mol–1 / kJ mol–1 Mg +738 +1451 Sr +550 +1064 • Explain why the first ionisation energy of Mg is greater than the first ionisation energy of Sr. • Explain why the second ionisation energy of Sr is greater than the first ionisation energy of Sr. ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ................................................................................................................................................... ..............................................................................................................................................[4]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q11.png"
+    },
+    {
+      "id": "OCR-P1-2023-q12",
+      "q": "17* Bromine, Br , can be produced by the reaction:",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q12.png"
+    },
+    {
+      "id": "OCR-P1-2023-q13",
+      "q": "Additional answer space if required. .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... ..........................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q13.png"
+    },
+    {
+      "id": "OCR-P1-2023-q14",
+      "q": "18 This question is about enthalpy changes of reactions involving hydrocarbons. (a) A student determines the enthalpy change of combustion, ∆ H, of heptane, C H , using the c 7 16 method outlined below. • Add 150 g of water to a beaker and measure its temperature. • Weigh a spirit burner containing heptane and use it to heat the water. • Extinguish the flame and record the maximum temperature reached by the water. • Reweigh the spirit burner. The temperature of the water increased by 10.5 °C. The spirit burner decreased in mass by 0.133 g. Use the student’s results to determine the enthalpy change of combustion of heptane, ∆ H (C H ), in kJ mol–1. c 7 16 ∆ H (C H ) = ........................................... kJ mol–1 [3] c 7 16",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q14.png"
+    },
+    {
+      "id": "OCR-P1-2023-q15",
+      "q": "(b) Nonane, C H , can be broken down by heat to form pentane, C H , and ethene, C H .",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2023-q15.png"
+    },
+    {
+      "id": "OCR-P1-2024-q10",
+      "q": "",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2024-q10.png"
+    },
+    {
+      "id": "OCR-P1-2024-q11",
+      "q": "(b) The rate of decomposition of hydrogen peroxide shown in Reaction 16.1 can be increased by adding a small amount of powdered manganese(IV) oxide, MnO .",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2024-q11.png"
+    },
+    {
+      "id": "OCR-P1-2024-q12",
+      "q": "",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P1-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2024-q12.png"
+    },
+    {
+      "id": "OCR-P1-2024-q13",
+      "q": "(ii) The diagram shows an incomplete Born-Haber cycle that can be used to determine the lattice enthalpy of MnO. Mn2+(g) + O(g) + 2e– Mn2+(g) + O2–(g) Mn2+(g) + 1 O (g) + 2e–",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2024-q13.png"
+    },
+    {
+      "id": "OCR-P1-2024-q14",
+      "q": "17 Crystal violet (CV) is a purple dye. In the presence of an alkali, CV reacts to form a colourless product.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2024-q14.png"
+    },
+    {
+      "id": "OCR-P1-2024-q15",
+      "q": "(b)* Use the graph to determine the order of reaction with respect to CV, the rate of the reaction at three minutes and the rate constant, k. Your answer must show full working on the graph and on the lines below. [6] .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... Extra answer space if required. .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... ..........................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2024-q15.png"
+    },
+    {
+      "id": "OCR-P1-2025-q6",
+      "q": "8 The burette readings from an experiment are shown: Final reading / cm3 29.35 Initial reading / cm3 2.60 The burette has an uncertainty of ±0.05 cm3. What is the percentage uncertainty of the titre?",
+      "options": {
+        "A": "0.17%",
+        "B": "0.19%",
+        "C": "0.34%",
+        "D": "0.37%"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1
+    },
+    {
+      "id": "OCR-P1-2025-q8",
+      "q": "12 The rate constant, k, for a first order reaction is 6.19 × 10–3 s–1. What is the half-life, in s, for the reaction?",
+      "options": {
+        "A": "4.29 × 10–3",
+        "B": "49",
+        "C": "112 D"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1
+    },
+    {
+      "id": "OCR-P1-2025-q10",
+      "q": "Section B",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2025-q10.png"
+    },
+    {
+      "id": "OCR-P1-2025-q11",
+      "q": "",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2025-q11.png"
+    },
+    {
+      "id": "OCR-P1-2025-q12",
+      "q": "In k",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2025-q12.png"
+    },
+    {
+      "id": "OCR-P1-2025-q13",
+      "q": "(d)* The hydrides of silicon, phosphorus and sulfur have simple molecular structures, but their molecules have different shapes. Explain why molecules of SiH , PH and H S have different shapes.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2025-q13.png"
+    },
+    {
+      "id": "OCR-P1-2025-q14",
+      "q": "",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2025-q14.png"
+    },
+    {
+      "id": "OCR-P1-2025-q15",
+      "q": "(iv) The standard entropy change, ΔSɵ, for the forward reaction in Equilibrium 17.1 has a value of +15 J K–1 mol–1. Use data from the table to calculate the standard entropy, S ɵ, of Fe. Sɵ = ....................................... J K–1 mol–1 [2] (b) Carbon can also reduce Fe O (s) to iron as shown in Equilibrium 17.2.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P1-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P1-2025-q15.png"
+    },
+    {
+      "id": "OCR-P2-2017-q10",
+      "q": "16 carbon-carbon double bond. myrcene (i) Reaction of 204 mg of myrcene with hydrogen gas produces a saturated alkane. Calculate the volume of hydrogen gas, in cm3 and measured at RTP, needed for this reaction. Show your working. volume = .................................................. cm3 [2] (ii) β-Carotene is a naturally occurring unsaturated hydrocarbon found in carrots.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2017-q10.png"
+    },
+    {
+      "id": "OCR-P2-2017-q11",
+      "q": "(iii) Outline the mechanism of the reaction between compound D and hydrogen bromide to form either compound E or compound F. Include curly arrows and relevant dipoles. [3] (iv) Which of E or F is the major organic product? Explain your answer. Major organic product ....................................................................................................... Explanation ....................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ..................................................................................................................................... [1]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2017-q11.png"
+    },
+    {
+      "id": "OCR-P2-2017-q12",
+      "q": "(e) Myrcene, C H , is a naturally occurring hydrocarbon containing more than one",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2017-q12.png"
+    },
+    {
+      "id": "OCR-P2-2017-q13",
+      "q": "BLANK PAGE PLEASE DO NOT WRITE ON THIS PAGE",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2017-q13.png"
+    },
+    {
+      "id": "OCR-P2-2017-q14",
+      "q": "17 This question is about the chemistry of aromatic compounds. (a) Benzoic acid can be nitrated by concentrated nitric acid in the presence of concentrated sulfuric acid as a catalyst, as shown in Equation 17.1. The organic product of this reaction is 3-nitrobenzoic acid. COOH COOH H SO",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2017-q14.png"
+    },
+    {
+      "id": "OCR-P2-2017-q15",
+      "q": "(ii)* A chemist carries out the reaction in Equation 17.1 using 4.97 g of benzoic acid. The chemist obtains 3-nitrobenzoic acid as an impure solid. The chemist purifies the solid to obtain 4.85 g of 3-nitrobenzoic acid. Describe a method to obtain a pure sample of 3-nitrobenzoic acid from the impure solid, determine the percentage yield and check its purity. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ..................................................................................................................................... [6]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2017",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2017-q15.png"
+    },
+    {
+      "id": "OCR-P2-2018-q10",
+      "q": "SECTION B Answer all the questions.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2018-q10.png"
+    },
+    {
+      "id": "OCR-P2-2018-q11",
+      "q": "(b) Compound B, shown below, is refluxed with excess acidified potassium dichromate(VI) to form a single organic product. Complete the equation for this reaction. CH H H",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2018-q11.png"
+    },
+    {
+      "id": "OCR-P2-2018-q12",
+      "q": "17 The general formula of an α-amino acid is RCH(NH )COOH.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2018-q12.png"
+    },
+    {
+      "id": "OCR-P2-2018-q13",
+      "q": "(c) α-Amino acids can react to form proteins.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2018-q13.png"
+    },
+    {
+      "id": "OCR-P2-2018-q14",
+      "q": "18 This question is about aromatic compounds. (a) Phenol undergoes nitration more readily than benzene. (i) A student carries out the nitration of phenol with dilute nitric acid to produce 2-nitrophenol and 4-nitrophenol.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2018-q14.png"
+    },
+    {
+      "id": "OCR-P2-2018-q15",
+      "q": "(ii) Explain why phenol is nitrated more readily than benzene. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2018",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2018-q15.png"
+    },
+    {
+      "id": "OCR-P2-2019-q10",
+      "q": "20 30 40 50 60 70 80 90 100 m / z Suggest possible structures for the species responsible for peaks Y and Z in the mass spectrum. Y Z [2]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2019-q10.png"
+    },
+    {
+      "id": "OCR-P2-2019-q11",
+      "q": "14 Which chemical(s) can react with phenol?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2019-q11.png"
+    },
+    {
+      "id": "OCR-P2-2019-q12",
+      "q": "15 The structure of a compound used to treat influenza is shown below. O O O HN NH",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2019-q12.png"
+    },
+    {
+      "id": "OCR-P2-2019-q13",
+      "q": "SECTION B Answer all the questions.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2019-q13.png"
+    },
+    {
+      "id": "OCR-P2-2019-q14",
+      "q": "(b) Geraniol and citronellal, shown below, are isomers present in ‘citronella oil’, used as an insect repellent. OH O Geraniol Citronellal • Geraniol and citronellal are structural isomers of each other. • They also show stereoisomerism. (i) Describe how the observations from a chemical test would distinguish between geraniol and citronellal. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2] (ii) What is the molecular formula of geraniol? ......................................................................................................................................[1] (iii) Explain why geraniol and citronellal are structural isomers of each other. ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[1] (iv) Explain the term stereoisomerism. ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[1]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2019-q14.png"
+    },
+    {
+      "id": "OCR-P2-2019-q15",
+      "q": "(v) The structures of geraniol and citronellal are repeated below with the carbon atoms numbered.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2019",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2019-q15.png"
+    },
+    {
+      "id": "OCR-P2-2020-q10",
+      "q": "SECTION B Answer all the questions.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2020-q10.png"
+    },
+    {
+      "id": "OCR-P2-2020-q11",
+      "q": "(c) Complete the table to show the mechanism for the reaction of hydrocarbon A with Br to form",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2020-q11.png"
+    },
+    {
+      "id": "OCR-P2-2020-q12",
+      "q": "17 Compounds B and C, shown below, are unsaturated hydrocarbons containing nine carbon atoms.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2020-q12.png"
+    },
+    {
+      "id": "OCR-P2-2020-q13",
+      "q": "(iii) Outline the mechanism for the reaction of compound C with chlorine. Show the role of the halogen carrier. [5] (b) Compound C can be prepared by ‘trimerisation’ of propanone using concentrated sulfuric acid as a catalyst. Suggest an equation for this reaction, using molecular formulae. ..............................................................................................................................................[3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2020-q13.png"
+    },
+    {
+      "id": "OCR-P2-2020-q14",
+      "q": "18 2 5 effects. Research shows that the safe maximum daily intake of aspartame is 1.7 × 10−4 mol kg−1. • A typical UK adult has a mass of 75 kg. • A can of a diet drink contains 167 mg of aspartame. How many cans of this diet drink is it safe for a typical adult to drink in one day? Number of cans = ..........................................................[3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2020-q14.png"
+    },
+    {
+      "id": "OCR-P2-2020-q15",
+      "q": "(ii) The chemist develops a three-stage synthesis of compound D from compound C. Complete the flowchart. Show structures for organic compounds. reagent: ...................................... catalyst: ...................................... compound C 1. Sn + HCl 2. Neutralise O HN reagent: ...................................... compound D [5]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2020",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2020-q15.png"
+    },
+    {
+      "id": "OCR-P2-2021-q10",
+      "q": "SECTION B Answer all the questions.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2021-q10.png"
+    },
+    {
+      "id": "OCR-P2-2021-q11",
+      "q": "(ii) Explain why one organic product is formed in a much greater quantity than the other organic product. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[2] (iii) Buta-1,3-diene is reacted with an excess of hydrogen bromide, forming a mixture of saturated organic products. How many saturated organic products could be present in this mixture? ......................................................................................................................................[1] (c) A student thought that buta-1,3-diene can show stereoisomerism. The student drew out skeletal formulae for the stereoisomers of buta-1,3-diene: (i) Explain the term stereoisomerism. ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[1] (ii) Explain, with a reason, whether the student is correct or incorrect. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[1]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2021-q11.png"
+    },
+    {
+      "id": "OCR-P2-2021-q12",
+      "q": "(d) ‘Diels-Alder’ reactions are used in the synthesis of many important organic compounds. The Diels-Alder reaction of buta-1,3-diene with ethene is shown below. + (i) Add curly arrows to the diagram below to complete the mechanism for this Diels-Alder reaction. [2] (ii) Two more Diels-Alder reactions of buta-1,3-diene are shown below. In the boxes, draw the organic product of each reaction. O OCH",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2021-q12.png"
+    },
+    {
+      "id": "OCR-P2-2021-q13",
+      "q": "BLANK PAGE PLEASE DO NOT WRITE ON THIS PAGE",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2021-q13.png"
+    },
+    {
+      "id": "OCR-P2-2021-q14",
+      "q": "8 4 Write the equation for this reaction showing the structures of organic compounds. [3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2021-q14.png"
+    },
+    {
+      "id": "OCR-P2-2021-q15",
+      "q": "(c) A polymer can be made from the monomers: • 1,4-diaminobutane • benzene-1,4-diacyl dichloride. Draw the structures of these monomers and one repeat unit of the polymer. 1,4-diaminobutane benzene-1,4-diacyl dichloride one repeat unit of polymer [4]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2021",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2021-q15.png"
+    },
+    {
+      "id": "OCR-P2-2022-q1",
+      "q": "4 3 2 1 0 chemical shift, δ / ppm The numbers by the peaks are the relative peak areas.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q1.png"
+    },
+    {
+      "id": "OCR-P2-2022-q10",
+      "q": "SECTION B",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q10.png"
+    },
+    {
+      "id": "OCR-P2-2022-q11",
+      "q": "(b) Compounds B and C are branched hydrocarbons that are structural isomers of C H .",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q11.png"
+    },
+    {
+      "id": "OCR-P2-2022-q12",
+      "q": "(v) Compounds D and E are two more structural isomers of C H .",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q12.png"
+    },
+    {
+      "id": "OCR-P2-2022-q13",
+      "q": "(c) ‘Ozonolysis’ is used in organic synthesis. Ozone breaks C=C bonds to form carbonyl compounds. For example, the complete ozonolysis of methylbut-2-ene is shown below. H C H H C H",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q13.png"
+    },
+    {
+      "id": "OCR-P2-2022-q14",
+      "q": "17 This question is about an analysis of an unknown organic Compound X. Some properties of Compound X are shown in the table. Molecular formula Functional groups Chirality C–F",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q14.png"
+    },
+    {
+      "id": "OCR-P2-2022-q15",
+      "q": "18 This question is about carbonyl compounds. (a) (i) Describe a chemical test to confirm the presence of a carbonyl group. How could the product of this test be used to identify the carbonyl compound? Your answer should not include spectroscopy. ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[3] (ii) Describe a chemical test that would identify whether a carbonyl compound is an aldehyde. Your answer should include the reagent and observations. ........................................................................................................................................... ........................................................................................................................................... ......................................................................................................................................[1]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2022",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2022-q15.png"
+    },
+    {
+      "id": "OCR-P2-2023-q8",
+      "q": "12 Which compound reacts with ethanoyl chloride? O",
+      "options": {
+        "A": "O",
+        "B": "O Cl",
+        "C": "O",
+        "D": "NH"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1
+    },
+    {
+      "id": "OCR-P2-2023-q10",
+      "q": "14 Which compound(s) is/are hydrolysed by HCl (aq) to produce butanoic acid?",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2023-q10.png"
+    },
+    {
+      "id": "OCR-P2-2023-q11",
+      "q": "Section B",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2023-q11.png"
+    },
+    {
+      "id": "OCR-P2-2023-q12",
+      "q": "(b) 2-methylpentane reacts with bromine by radical substitution. 2-methylpentane",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2023-q12.png"
+    },
+    {
+      "id": "OCR-P2-2023-q13",
+      "q": "(ii) Organic compound A is formed by the substitution of all 14 H atoms in 2-methylpentane by Br atoms. Write the equation, using molecular formulae, for the formation of compound A from 2-methylpentane. ......................................................................................................................................[2] (iii) Organic compound B is formed by the substitution of some of the 14 H atoms in 2-methylpentane by Br atoms. 0.8649 g of compound B is heated until it is vaporised. Under the conditions used: • compound B has a volume of 72.0 cm3 • the molar gas volume is 40.0 dm3 mol–1. Determine a possible molecular formula of compound B. molecular formula = ..........................................................[3]",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2023-q13.png"
+    },
+    {
+      "id": "OCR-P2-2023-q14",
+      "q": "17 This question is about alcohols. (a) An unsaturated alcohol has 6 carbon atoms and contains one C=C bond. Construct an equation for the complete combustion of this alcohol. ..............................................................................................................................................[2] (b) Compound C, shown below, is refluxed with excess acidified potassium dichromate(VI) to form a single organic product and one other product. Complete the equation for this reaction. OH OH + ............ [O] OH Compound C [3] (c) Compound D, shown below, is refluxed with H SO , as an acid catalyst, to form a mixture of",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2023-q14.png"
+    },
+    {
+      "id": "OCR-P2-2023-q15",
+      "q": "(d) There are 4 structural isomers of C H O that are alcohols.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2023",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2023-q15.png"
+    },
+    {
+      "id": "OCR-P2-2024-q10",
+      "q": "8 6 4 2 0 Chemical shift, δ / ppm The numbers by the peaks are the relative peak areas. Determine the structure of compound J, showing all your reasoning. [6] .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... ..........................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2024-q10.png"
+    },
+    {
+      "id": "OCR-P2-2024-q11",
+      "q": "Section B",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2024-q11.png"
+    },
+    {
+      "id": "OCR-P2-2024-q12",
+      "q": "17 This question is about reactions of alcohols. There are 4 structural isomers of C H O that are alcohols:",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2024-q12.png"
+    },
+    {
+      "id": "OCR-P2-2024-q13",
+      "q": "(c) Substitution reaction of (CH ) CHCH OH",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2024-q13.png"
+    },
+    {
+      "id": "OCR-P2-2024-q14",
+      "q": "18 This question is about haloalkanes. (a) Haloalkanes can be synthesised by reacting alkanes with halogens in the presence of ultraviolet radiation. An alkane reacts with bromine to form 2-bromo-2-methylpropane. (i) Write the equation for this reaction, showing the structures of the organic compounds. Name the reaction mechanism and the type of bond fission that occurs. Equation Name of reaction mechanism .......................................................................................................... Type of bond fission ......................................................................................................................... [3] (ii) Describe two limitations of the synthesis of 2-bromo-2-methylpropane from an alkane and bromine.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2024",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2024-q14.png"
+    },
+    {
+      "id": "OCR-P2-2025-q8",
+      "q": "12 Which process does not involve infrared radiation?",
+      "options": {
+        "A": "Catalytic ozone depletion",
+        "B": "Monitoring toxic gases in the air",
+        "C": "Measuring ethanol in breathalyser tests",
+        "D": "Global warming Your answer [1]"
+      },
+      "answer": "C",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1
+    },
+    {
+      "id": "OCR-P2-2025-q10",
+      "q": "15 Which compound(s) has/have three peaks in their 13C NMR spectrum? OH OH OH",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2025-q10.png"
+    },
+    {
+      "id": "OCR-P2-2025-q11",
+      "q": "Section B",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2025-q11.png"
+    },
+    {
+      "id": "OCR-P2-2025-q12",
+      "q": "(c) Compound B, CH CH=C(CH )CH CH , exists as E and Z stereoisomers.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "A",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2025-q12.png"
+    },
+    {
+      "id": "OCR-P2-2025-q13",
+      "q": "(e) The flowchart below shows some reactions of compound C. Complete the flowchart to show the missing reagent, catalyst and the structures of the organic products. Br",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2025-q13.png"
+    },
+    {
+      "id": "OCR-P2-2025-q14",
+      "q": "17* This question is about an organic synthesis.",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "B",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2025-q14.png"
+    },
+    {
+      "id": "OCR-P2-2025-q15",
+      "q": ".......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... Extra answer space if required. .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... .......................................................................................................................................................... ..........................................................................................................................................................",
+      "options": {
+        "A": "See diagram",
+        "B": "See diagram",
+        "C": "See diagram",
+        "D": "See diagram"
+      },
+      "answer": "D",
+      "explanation": "",
+      "topic": "OCR-P2-2025",
+      "set": 1,
+      "image": "/mcq-images/OCR-P2-2025-q15.png"
     }
   ]
 }
