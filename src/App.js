@@ -4866,6 +4866,52 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
       </div>
 
       {/* ══════════════════════════════════════════════════
+          FREE GUIDE DOWNLOAD — the lead magnet
+          ══════════════════════════════════════════════════ */}
+      <div style={{ background: "#0a1628", borderTop: "3px solid #29ABE2", padding: "clamp(40px, 6vh, 70px) 24px" }}>
+        <div style={{ ...wrap, textAlign: "center" }}>
+          <div style={{ ...labelStyle, color: "#29ABE2" }}>FREE PAPER 2 GUIDE</div>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 12px" }}>
+            Your free predictions & advice guide
+          </h2>
+          <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.6, margin: "0 0 32px", maxWidth: "560px", marginLeft: "auto", marginRight: "auto" }}>
+            Based on past paper analysis and examiner reports. Download your exam board's guide — no sign-up needed.
+          </p>
+
+          <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
+            {/* AQA */}
+            <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "18px", padding: "28px 24px", width: "280px", textAlign: "center" }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>📘</div>
+              <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>AQA Paper 2</div>
+              <div style={{ fontSize: "13px", color: mutedText, marginBottom: "16px" }}>Predictions + Student Advice</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <a href="/guides/AQA-7405-2-Predicted-Paper-2026.pdf" download style={{ display: "block", padding: "11px 20px", borderRadius: "10px", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+                  Download Predictions
+                </a>
+                <a href="/guides/AQA-7405-2-Student-Advice.pdf" download style={{ display: "block", padding: "11px 20px", borderRadius: "10px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "14px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+                  Download Advice Guide
+                </a>
+              </div>
+            </div>
+
+            {/* OCR A — coming soon placeholder */}
+            <div style={{ background: "rgba(255,255,255,0.03)", border: "1.5px solid rgba(255,255,255,0.08)", borderRadius: "18px", padding: "28px 24px", width: "280px", textAlign: "center", opacity: 0.6 }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>📗</div>
+              <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>OCR A Paper 2</div>
+              <div style={{ fontSize: "13px", color: mutedText, marginBottom: "16px" }}>Predictions + Student Advice</div>
+              <div style={{ padding: "11px 20px", borderRadius: "10px", background: "rgba(255,255,255,0.06)", color: mutedText, fontSize: "14px", fontWeight: 700 }}>
+                Coming tomorrow
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: "24px", fontSize: "14px", color: dimText }}>
+            Want more than just predictions? 👇 Try the full app below.
+          </div>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════
           SECTION 2: STAKES — why it matters in chemistry
           ══════════════════════════════════════════════════ */}
       <div style={{ ...darkBg, padding: "clamp(60px, 8vh, 100px) 24px" }}>
@@ -5607,7 +5653,17 @@ export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
-  const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms" | "mcq"
+  const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms" | "mcq" | "nmr"
+  // NMR Practice state
+  const [nmrSubTab, setNmrSubTab] = useState("challenges"); // "challenges" | "flashcards" | "mcqs"
+  const [nmrChallengeIdx, setNmrChallengeIdx] = useState(0);
+  const [nmrRevealed, setNmrRevealed] = useState(false);
+  const [nmrFlashIdx, setNmrFlashIdx] = useState(0);
+  const [nmrFlashFlipped, setNmrFlashFlipped] = useState(false);
+  const [nmrMcqIdx, setNmrMcqIdx] = useState(0);
+  const [nmrMcqSelected, setNmrMcqSelected] = useState(null);
+  const [nmrMcqRevealed, setNmrMcqRevealed] = useState(false);
+  const [nmrMcqScore, setNmrMcqScore] = useState({ correct: 0, total: 0 });
   const [extCategory, setExtCategory] = useState(null);
   const [extIndex, setExtIndex] = useState(0);
   const [extQPicker, setExtQPicker] = useState(false); // true = show question list, false = show question
@@ -6625,6 +6681,7 @@ export default function App() {
     { id: "extended",   label: "AI Examiner",           labelBig: "AI",       labelSmall: "Examiner",desc: "ChemMastery AI marks your extended answers.",    color: "#7c3aed", grad: "linear-gradient(145deg,#a855f7,#7c3aed,#5b21b6)", stat: "AI powered" },
     { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Handdrawn curly arrow mechanisms with explanations.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Handdrawn" },
     { id: "mcq",        label: "MCQs",                  labelBig: "MC",       labelSmall: "Qs",      desc: "Multiple choice questions with solutions by topic.", color: "#dc2626", grad: "linear-gradient(145deg,#f87171,#dc2626,#991b1b)", stat: `${mcqData.questions.length} Qs` },
+    { id: "nmr",        label: "NMR Practice",          labelBig: "NMR",      labelSmall: "Practice",desc: "Interpret spectra, learn chemical shifts, and deduce structures.", color: "#8b5cf6", grad: "linear-gradient(145deg,#a78bfa,#8b5cf6,#6d28d9)", stat: "Spectra" },
   ];
 
   const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechOpenCards({}); };
