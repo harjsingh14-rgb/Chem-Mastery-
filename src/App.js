@@ -4676,7 +4676,7 @@ function track(event, params = {}) {
 }
 
 // --- Landing Page Component (unauthenticated visitors — sales page) ---
-function LandingPage({ onGoToLogin }) {
+function LandingPage({ onGoToLogin, onGoToCheckout }) {
   const [activeSection, setActiveSection] = useState("mechanisms"); // "mechanisms" | "mcqs"
   const [activeMechIdx, setActiveMechIdx] = useState(null); // null = list, 0 = first mech, 1 = second
   const [mechOpenCards, setMechOpenCards] = useState({});
@@ -4781,7 +4781,7 @@ function LandingPage({ onGoToLogin }) {
         </div>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
           <button onClick={onGoToLogin} style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
-          <button onClick={onGoToLogin} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
+          <button onClick={onGoToCheckout} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
         </div>
       </div>
 
@@ -4820,7 +4820,7 @@ function LandingPage({ onGoToLogin }) {
               )}
             </div>
 
-            <button onClick={onGoToLogin} style={{ padding: "16px 36px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <button onClick={onGoToCheckout} style={{ padding: "16px 36px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "8px" }}>
               Get full access <span style={{ fontSize: "18px" }}>→</span>
             </button>
             <div style={{ fontSize: "12px", color: dimText, marginTop: "10px" }}>Cancel anytime. Instant access.</div>
@@ -4858,7 +4858,7 @@ function LandingPage({ onGoToLogin }) {
             <div style={{ fontSize: "clamp(15px, 2vw, 18px)", fontWeight: 700, color: "#fff" }}>
               Open the app free and find your first gap in 60 seconds.
             </div>
-            <button onClick={onGoToLogin} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+            <button onClick={onGoToCheckout} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
               Get access →
             </button>
           </div>
@@ -5044,7 +5044,7 @@ function LandingPage({ onGoToLogin }) {
                   </div>
                   <div style={{ textAlign: "center", marginTop: "24px", padding: "20px", background: "rgba(41,171,226,0.08)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "14px" }}>
                     <div style={{ fontSize: "15px", fontWeight: 800, color: "#fff", marginBottom: "10px" }}>Want all 11 mechanisms?</div>
-                    <button onClick={onGoToLogin} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                    <button onClick={onGoToCheckout} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
                       Get Full Access →
                     </button>
                   </div>
@@ -5119,7 +5119,7 @@ function LandingPage({ onGoToLogin }) {
                     <div style={{ fontSize: "14px", color: mutedText, marginBottom: "24px" }}>
                       {mcqScore === 3 ? "Perfect. Imagine 566+ more questions like these." : "There are 566+ more exam-style MCQs waiting for you."}
                     </div>
-                    <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)" }}>
+                    <button onClick={onGoToCheckout} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)" }}>
                       Unlock All MCQs →
                     </button>
                     <div><button onClick={() => { setMcqIdx(0); setMcqSelected(null); setMcqShowExplanation(false); setMcqScore(0); setMcqAnswered(0); }}
@@ -5220,7 +5220,7 @@ function LandingPage({ onGoToLogin }) {
             One of those changes your grade. You already know which.
           </div>
 
-          <button onClick={onGoToLogin} style={{ padding: "18px 44px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 24px rgba(41,171,226,0.4)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+          <button onClick={onGoToCheckout} style={{ padding: "18px 44px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 24px rgba(41,171,226,0.4)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
             Get full access <span style={{ fontSize: "20px" }}>→</span>
           </button>
           <div style={{ fontSize: "12px", color: dimText, marginTop: "10px" }}>£27.99/mo. Cancel anytime.</div>
@@ -5243,7 +5243,7 @@ function LandingPage({ onGoToLogin }) {
           </div>
           <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
             <button onClick={onGoToLogin} style={{ background: "none", border: "none", color: mutedText, fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
-            <button onClick={onGoToLogin} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
+            <button onClick={onGoToCheckout} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
           </div>
         </div>
         <div style={{ ...wrap, marginTop: "20px" }}>
@@ -5395,6 +5395,7 @@ export default function App() {
   const [accessKeyMsg, setAccessKeyMsg] = useState(null);
   const [accessKeyLoading, setAccessKeyLoading] = useState(false);
   const [showLogin, setShowLogin] = useState(false); // false = landing page, true = login screen
+  const [pendingCheckout, setPendingCheckout] = useState(null); // null | "monthly" — auto-checkout after auth
 
   useEffect(() => {
     const unsub = onAuthChange(async (user) => {
@@ -5455,6 +5456,17 @@ export default function App() {
       </div>
     </div>
   );
+
+  // Auto-trigger checkout after sign-up if they clicked "Get full access" on landing page
+  useEffect(() => {
+    if (authUser && pendingCheckout && !authLoading) {
+      const plan = pendingCheckout;
+      setPendingCheckout(null);
+      setShowLogin(false);
+      // Small delay to let profile load
+      setTimeout(() => handleCheckout(plan), 500);
+    }
+  }, [authUser, pendingCheckout, authLoading]); // eslint-disable-line
 
   // --- Stripe checkout ---
   const [checkoutLoading, setCheckoutLoading] = useState(null); // "monthly" | "yearly" | null
@@ -6291,7 +6303,7 @@ export default function App() {
   // LANDING PAGE / LOGIN SCREEN
   if (!authUser) {
     if (showLogin) return <LoginScreen onBack={() => setShowLogin(false)} />;
-    return <LandingPage onGoToLogin={() => setShowLogin(true)} />;
+    return <LandingPage onGoToLogin={() => setShowLogin(true)} onGoToCheckout={() => { setPendingCheckout("monthly"); setShowLogin(true); }} />;
   }
 
   // ACCOUNT SETTINGS MODAL (buried - only for paid users managing subscription)
