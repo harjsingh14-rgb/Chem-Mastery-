@@ -4761,9 +4761,9 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
   const wrap = { maxWidth: "1200px", margin: "0 auto", padding: "0 clamp(24px, 4vw, 60px)" };
   const labelStyle = { fontSize: "12px", fontWeight: 700, letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: "16px" };
   // Brighter text colors
-  const bodyText = "#c8d0db"; // was #94a3b8
-  const mutedText = "#8a96a8"; // was #64748b
-  const dimText = "#6b7a8d"; // was #475569
+  const bodyText = "#dce3ec"; // bright body text
+  const mutedText = "#9ca8b8"; // readable muted text
+  const dimText = "#8393a4"; // visible dim text
 
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'DM Sans','Outfit',system-ui,sans-serif", color: "#fff", overflowX: "hidden" }}>
@@ -4797,10 +4797,10 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
               You understand the Chemistry.<br />
               You're <span style={{ color: "#e2a03f" }}>still losing marks.</span>
             </h1>
-            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.7, margin: "0 0 12px" }}>
+            <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: bodyText, lineHeight: 1.7, margin: "0 0 12px" }}>
               It's almost never that you don't understand it. It's that the exact answer the examiner gives marks for never made it into your memory.
             </p>
-            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.7, margin: "0 0 32px" }}>
+            <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: bodyText, lineHeight: 1.7, margin: "0 0 32px" }}>
               This app fixes that. Mechanisms you can step through. MCQs that drill the gaps. Flashcards written to match the real mark scheme.
             </p>
 
@@ -4875,7 +4875,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             This isn't a knowledge problem.<br />
             It's a <span style={{ color: "#e2a03f" }}>marks</span> problem. And marks are grades.
           </h2>
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: bodyText, lineHeight: 1.7, margin: "0 0 36px", maxWidth: "680px" }}>
+          <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: bodyText, lineHeight: 1.7, margin: "0 0 36px", maxWidth: "680px" }}>
             Two marks here, three there, a loose definition, the wrong keyword on a six-marker. It stacks up fast. And Chemistry punishes it harder than most subjects, because it builds on itself. Physical, inorganic, organic, all cumulative. Fall behind on one topic and it drags the next three down with it.
           </p>
 
@@ -4888,12 +4888,12 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             ].map((card, i) => (
               <div key={i} style={{ flex: "1 1 260px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "24px" }}>
                 <div style={{ fontSize: "14px", color: mutedText, marginBottom: "4px" }}>{card.from} → <span style={{ color: card.color, fontWeight: 800, fontSize: "16px" }}>{card.to}</span></div>
-                <div style={{ fontSize: "14px", color: bodyText, lineHeight: 1.6 }}>{card.text}</div>
+                <div style={{ fontSize: "15px", color: bodyText, lineHeight: 1.6 }}>{card.text}</div>
               </div>
             ))}
           </div>
 
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: mutedText, textAlign: "center", fontStyle: "italic", maxWidth: "680px", margin: "0 auto" }}>
+          <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: mutedText, textAlign: "center", fontStyle: "italic", maxWidth: "680px", margin: "0 auto" }}>
             Every week before the exam you spend rereading instead of testing yourself is a week you don't get back.
           </p>
         </div>
@@ -4905,10 +4905,10 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
       <div style={{ ...creamBg, color: "#1a2d45", padding: "clamp(60px, 8vh, 100px) 24px" }}>
         <div style={{ ...wrap }}>
           <div style={{ ...labelStyle, color: "#059669" }}>WHAT'S INSIDE</div>
-          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 16px", color: "#1a2d45" }}>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 4.5vw, 44px)", lineHeight: 1.12, margin: "0 0 16px", color: "#1a2d45" }}>
             Everything the examiner is looking for, in one place.
           </h2>
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: mutedText, lineHeight: 1.7, margin: "0 0 40px", maxWidth: "620px" }}>
+          <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: mutedText, lineHeight: 1.7, margin: "0 0 40px", maxWidth: "620px" }}>
             Not just content. The exact phrasing, the right keywords, the mechanism arrows drawn how the mark scheme expects. Try it below.
           </p>
 
@@ -4923,7 +4923,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
               <div key={i} style={{ flex: "1 1 200px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "20px" }}>
                 <div style={{ fontSize: "28px", marginBottom: "8px" }}>{item.icon}</div>
                 <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{item.label}</div>
-                <div style={{ fontSize: "13px", color: mutedText, lineHeight: 1.5 }}>{item.sub}</div>
+                <div style={{ fontSize: "14px", color: mutedText, lineHeight: 1.6 }}>{item.sub}</div>
               </div>
             ))}
           </div>
@@ -5138,7 +5138,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
       <div style={{ ...creamBg, color: "#1a2d45", padding: "clamp(60px, 8vh, 100px) 24px", borderTop: "4px solid #29ABE2" }}>
         <div style={{ ...wrap, textAlign: "center" }}>
           <div style={{ ...labelStyle, color: "#059669" }}>WHY IT WORKS</div>
-          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(24px, 4vw, 38px)", lineHeight: 1.15, margin: "0 0 12px", color: "#1a2d45", maxWidth: "700px", marginLeft: "auto", marginRight: "auto" }}>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 42px)", lineHeight: 1.15, margin: "0 0 12px", color: "#1a2d45", maxWidth: "700px", marginLeft: "auto", marginRight: "auto" }}>
             Three things that actually move your grade.<br />This app is built on all three.
           </h2>
           <p style={{ fontSize: "14px", color: mutedText, margin: "0 0 44px" }}>Not theory. Not motivation. Just what the evidence says works.</p>
@@ -5153,7 +5153,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
                 <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "36px", fontWeight: 900, color: "#e8e3db" }}>{item.num}</div>
                 <div style={{ fontSize: "28px", marginBottom: "12px" }}>{item.icon}</div>
                 <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px" }}>{item.title}</div>
-                <div style={{ fontSize: "14px", color: mutedText, lineHeight: 1.7 }}>{item.text}</div>
+                <div style={{ fontSize: "15px", color: "#5a6a7d", lineHeight: 1.7 }}>{item.text}</div>
               </div>
             ))}
           </div>
@@ -5166,21 +5166,20 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
       <div style={{ ...creamBg, color: "#1a2d45", padding: "0 24px clamp(60px, 8vh, 100px)" }}>
         <div style={{ ...wrap }}>
           <div style={{ ...labelStyle, color: "#e2a03f" }}>STRAIGHT ANSWERS</div>
-          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 32px", color: "#1a2d45" }}>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 4.5vw, 44px)", lineHeight: 1.12, margin: "0 0 32px", color: "#1a2d45" }}>
             What you're probably thinking.
           </h2>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "720px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px", maxWidth: "780px", margin: "0 auto" }}>
             {[
               { q: "\"I'll just use free resources online.\"", a: "Free resources are scattered, often wrong, and never written to match the mark scheme. You end up spending more time finding and checking them than actually revising. This is one place, already done, already accurate." },
               { q: "\"I don't have time.\"", a: "That's the reason to use it. Ten minutes on your phone on the bus or between lessons does more for your grade than an hour rereading notes at your desk. It fits the gaps you already have." },
               { q: "\"Will it actually move my grade?\"", a: "It moves the one thing grades are made of: the exact answers that score marks. Not a vague sense that you 'get' the topic. The words on the page." },
               { q: "\"I'm already behind.\"", a: "Then it's built for you. It shows you precisely what you don't know yet, so you stop spending time on the topics you've already got and put it where the marks are hiding." },
-              { q: "\"£27.99 is a lot.\"", a: "One month covers both papers. That's the cost of a single textbook, except this actually tests you instead of just sitting on your shelf. And you can cancel the moment the exams are over." },
             ].map((item, i) => (
-              <div key={i} className="lp-faq-card" style={{ background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "22px 24px" }}>
-                <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px", fontStyle: "italic" }}>{item.q}</div>
-                <div style={{ fontSize: "14px", color: mutedText, lineHeight: 1.7 }}>{item.a}</div>
+              <div key={i} className="lp-faq-card" style={{ background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "24px 28px" }}>
+                <div style={{ fontSize: "19px", fontWeight: 800, color: "#1a2d45", marginBottom: "10px", fontStyle: "italic" }}>{item.q}</div>
+                <div style={{ fontSize: "15px", color: "#4a5568", lineHeight: 1.7 }}>{item.a}</div>
               </div>
             ))}
           </div>
@@ -5196,7 +5195,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.1, margin: "0 0 12px" }}>
             You can start right now.
           </h2>
-          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: bodyText, margin: "0 0 36px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
+          <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: bodyText, margin: "0 0 36px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
             Set up takes under a minute on your phone.
           </p>
 
@@ -5204,7 +5203,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
             <div style={{ flex: "1 1 280px", maxWidth: "360px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", padding: "28px 24px", textAlign: "left" }}>
               <div style={{ ...labelStyle, color: mutedText, fontSize: "11px" }}>OPTION 1</div>
-              <div style={{ fontSize: "14px", color: bodyText, lineHeight: 1.7 }}>
+              <div style={{ fontSize: "15px", color: bodyText, lineHeight: 1.7 }}>
                 Reread Chapter 7 a third time, feel like you know it, and write "speeds it up" again in the exam.
               </div>
             </div>
@@ -5216,7 +5215,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             </div>
           </div>
 
-          <div style={{ fontSize: "clamp(16px, 2.5vw, 20px)", fontWeight: 700, color: "#fff", marginBottom: "28px", maxWidth: "580px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.5 }}>
+          <div style={{ fontSize: "clamp(17px, 2.5vw, 22px)", fontWeight: 700, color: "#fff", marginBottom: "28px", maxWidth: "580px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.5 }}>
             One of those changes your grade. You already know which.
           </div>
 
@@ -5227,7 +5226,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
 
           {/* P.S. */}
           <div style={{ marginTop: "48px", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "28px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto" }}>
-            <p style={{ fontSize: "14px", color: mutedText, lineHeight: 1.7, textAlign: "left" }}>
+            <p style={{ fontSize: "15px", color: "#5a6a7d", lineHeight: 1.7, textAlign: "left" }}>
               <strong style={{ color: bodyText }}>P.S.</strong>&nbsp;&nbsp;The exam doesn't reward the student who understands the most. It rewards the one who can write the mark-scheme answer under pressure. You build that by testing yourself, not by reading.
             </p>
           </div>
