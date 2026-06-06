@@ -4640,7 +4640,7 @@ function track(event, params = {}) {
   }
 }
 
-// --- Landing Page Component (unauthenticated visitors) ---
+// --- Landing Page Component (unauthenticated visitors — sales page) ---
 function LandingPage({ onGoToLogin }) {
   const [activeSection, setActiveSection] = useState("mechanisms"); // "mechanisms" | "mcqs"
   const [activeMechIdx, setActiveMechIdx] = useState(null); // null = list, 0 = first mech, 1 = second
@@ -4650,6 +4650,7 @@ function LandingPage({ onGoToLogin }) {
   const [mcqShowExplanation, setMcqShowExplanation] = useState(false);
   const [mcqScore, setMcqScore] = useState(0);
   const [mcqAnswered, setMcqAnswered] = useState(0);
+  const [flippedCard, setFlippedCard] = useState(false);
 
   // Preview mechanisms data (subset of real content)
   const previewMechs = [
@@ -4717,367 +4718,488 @@ function LandingPage({ onGoToLogin }) {
   const daysTo1 = Math.max(0, Math.ceil((paper1 - now) / 86400000));
   const daysTo2 = Math.max(0, Math.ceil((paper2 - now) / 86400000));
 
-  const sectionBg = { background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)" };
+  // Shared styles
+  const darkBg = { background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)" };
+  const creamBg = { background: "#f5f0e8" };
+  const wrap = { maxWidth: "960px", margin: "0 auto", padding: "0 clamp(24px, 4vw, 60px)" };
+  const labelStyle = { fontSize: "12px", fontWeight: 700, letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: "16px" };
 
   return (
-    <div style={{ minHeight: "100vh", ...sectionBg, fontFamily: "'DM Sans','Outfit',system-ui,sans-serif", color: "#fff", overflowX: "hidden" }}>
+    <div style={{ minHeight: "100vh", fontFamily: "'DM Sans','Outfit',system-ui,sans-serif", color: "#fff", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} @keyframes lpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}`}</style>
+      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} .lp-faq-card{transition:all 0.2s} .lp-faq-card:hover{border-color:rgba(255,255,255,0.2)!important}`}</style>
 
-      {/* ── HERO ──────────────────────────────────────── */}
-      <div style={{ padding: "clamp(60px, 10vh, 120px) 24px clamp(40px, 6vh, 80px)", textAlign: "center", maxWidth: "960px", margin: "0 auto", animation: "lpFadeIn 0.6s ease" }}>
-        <img src="/hsj-logo.png" alt="ChemMastery" style={{ height: "clamp(70px, 10vw, 110px)", objectFit: "contain", display: "block", margin: "0 auto 28px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
-        <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-1px" }}>
-          <span style={{ color: "#29ABE2" }}>Ace</span> Your A-Level Chemistry
-        </h1>
-        <p style={{ fontSize: "clamp(16px, 2.5vw, 20px)", color: "#94a3b8", lineHeight: 1.6, margin: "0 0 32px", maxWidth: "620px", marginLeft: "auto", marginRight: "auto" }}>
-          Step-by-step curly arrow mechanisms, exam-style MCQs, flashcards, calculations and more. Everything you need to smash A-Level Chemistry.
-        </p>
-
-        {/* Exam countdown pills */}
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", marginBottom: "32px" }}>
-          {daysTo1 > 0 && (
-            <div style={{ background: "rgba(41,171,226,0.15)", border: "1px solid rgba(41,171,226,0.3)", borderRadius: "12px", padding: "10px 18px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "20px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
-              <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 1 (June 9th)</span>
-            </div>
-          )}
-          {daysTo2 > 0 && (
-            <div style={{ background: "rgba(5,150,105,0.15)", border: "1px solid rgba(5,150,105,0.3)", borderRadius: "12px", padding: "10px 18px", display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "20px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
-              <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 2 (June 15th)</span>
-            </div>
-          )}
+      {/* ── STICKY HEADER ─────────────────────────────── */}
+      <div style={{ position: "sticky", top: 0, zIndex: 100, ...darkBg, borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", backdropFilter: "blur(12px)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <img src="/hsj-logo.png" alt="" style={{ height: "32px", objectFit: "contain" }} />
+          <div>
+            <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "15px", color: "#fff", lineHeight: 1 }}>ChemMastery</div>
+            <div style={{ fontSize: "10px", color: "#64748b", fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
+          </div>
         </div>
-
-        {/* CTA buttons */}
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onGoToLogin} style={{ padding: "16px 40px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "clamp(16px, 2vw, 18px)", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)", animation: "lpPulse 2s infinite", letterSpacing: "0.3px" }}>
-            Get Full Access — £27.99/mo
-          </button>
-          <button onClick={() => { document.getElementById("lp-preview")?.scrollIntoView({ behavior: "smooth" }); }} style={{ padding: "16px 32px", borderRadius: "14px", border: "1.5px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.05)", color: "#fff", fontSize: "clamp(15px, 2vw, 17px)", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-            Try Free Preview ↓
-          </button>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <button onClick={onGoToLogin} style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
+          <button onClick={onGoToLogin} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
         </div>
       </div>
 
-      {/* ── WHAT'S INCLUDED STRIP ─────────────────────── */}
-      <div style={{ background: "rgba(255,255,255,0.03)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "36px 24px", margin: "0 0 50px" }}>
-        <div style={{ display: "flex", gap: "clamp(24px, 4vw, 60px)", justifyContent: "center", flexWrap: "wrap", maxWidth: "960px", margin: "0 auto" }}>
-          {[
-            { icon: "🧪", label: "11 Mechanisms", sub: "Handdrawn curly arrows" },
-            { icon: "🎯", label: "566+ MCQs", sub: "AQA & OCR A" },
-            { icon: "📚", label: "1400+ Flashcards", sub: "Every topic covered" },
-            { icon: "🧮", label: "Calculations", sub: "Step-by-step worked" },
-          ].map((item, i) => (
-            <div key={i} style={{ textAlign: "center", minWidth: "160px" }}>
-              <div style={{ fontSize: "36px", marginBottom: "8px" }}>{item.icon}</div>
-              <div style={{ fontSize: "16px", fontWeight: 800, color: "#fff" }}>{item.label}</div>
-              <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 500 }}>{item.sub}</div>
+      {/* ══════════════════════════════════════════════════
+          SECTION 1: HERO — emotional hook
+          ══════════════════════════════════════════════════ */}
+      <div style={{ ...darkBg }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(40px, 6vw, 80px)", flexWrap: "wrap", ...wrap, padding: "clamp(60px, 10vh, 100px) clamp(24px, 4vw, 60px) clamp(50px, 8vh, 80px)" }}>
+          {/* Left: copy */}
+          <div style={{ flex: "1 1 420px", maxWidth: "540px", animation: "lpFadeIn 0.6s ease" }}>
+            <div style={{ ...labelStyle, color: "#29ABE2" }}>A-LEVEL CHEMISTRY</div>
+            <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(32px, 5.5vw, 52px)", lineHeight: 1.08, margin: "0 0 24px", letterSpacing: "-1px", color: "#fff" }}>
+              You understand the Chemistry.<br />
+              You're <span style={{ color: "#e2a03f" }}>still losing marks.</span>
+            </h1>
+            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 12px" }}>
+              It's almost never that you don't understand it. It's that the exact answer the examiner gives marks for never made it into your memory.
+            </p>
+            <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 32px" }}>
+              This app fixes that. Mechanisms you can step through. MCQs that drill the gaps. Flashcards written to match the real mark scheme.
+            </p>
+
+            {/* Exam countdown pills */}
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "28px" }}>
+              {daysTo1 > 0 && (
+                <div style={{ background: "rgba(41,171,226,0.12)", border: "1px solid rgba(41,171,226,0.25)", borderRadius: "10px", padding: "8px 14px", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ fontSize: "18px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
+                  <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 1</span>
+                </div>
+              )}
+              {daysTo2 > 0 && (
+                <div style={{ background: "rgba(5,150,105,0.12)", border: "1px solid rgba(5,150,105,0.25)", borderRadius: "10px", padding: "8px 14px", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ fontSize: "18px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
+                  <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 600 }}>days to Paper 2</span>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── FREE PREVIEW SECTION ────────────────────── */}
-      <div id="lp-preview" style={{ maxWidth: "1060px", margin: "0 auto", padding: "0 clamp(24px, 4vw, 60px) 60px" }}>
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", margin: "0 0 8px" }}>Try It Free</h2>
-          <p style={{ fontSize: "14px", color: "#64748b", margin: 0 }}>Explore real content from the app. No sign-up needed.</p>
-        </div>
-
-        {/* Tab switcher */}
-        <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "24px" }}>
-          {[{ id: "mechanisms", label: "🧪 Mechanisms" }, { id: "mcqs", label: "🎯 MCQs" }].map(tab => (
-            <button key={tab.id} onClick={() => setActiveSection(tab.id)}
-              style={{ padding: "10px 24px", borderRadius: "12px", border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: "14px", fontWeight: 700,
-                background: activeSection === tab.id ? "#29ABE2" : "rgba(255,255,255,0.08)",
-                color: activeSection === tab.id ? "#fff" : "#94a3b8",
-                transition: "all 0.2s" }}>
-              {tab.label}
+            <button onClick={onGoToLogin} style={{ padding: "16px 36px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              Get full access <span style={{ fontSize: "18px" }}>→</span>
             </button>
-          ))}
+            <div style={{ fontSize: "12px", color: "#475569", marginTop: "10px" }}>Cancel anytime. Instant access.</div>
+          </div>
+
+          {/* Right: interactive flashcard demo */}
+          <div style={{ flex: "0 1 360px", minWidth: "280px" }}>
+            <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "20px", textAlign: "center" }}>
+              <div style={{ ...labelStyle, color: "#059669", fontSize: "11px", marginBottom: "10px" }}>TAP TO TEST YOURSELF</div>
+              <div style={{ fontSize: "10px", color: "#475569", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>PHYSICAL • RATES</div>
+              <div onClick={() => setFlippedCard(!flippedCard)} style={{ cursor: "pointer", background: flippedCard ? "linear-gradient(145deg, #059669, #047857)" : "linear-gradient(145deg, #162d3d, #0f1f30)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "32px 24px", minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s", marginBottom: "10px" }}>
+                <div style={{ fontSize: "clamp(16px, 2.5vw, 19px)", fontWeight: 600, color: "#fff", lineHeight: 1.5 }}>
+                  {flippedCard
+                    ? "A catalyst provides an alternative reaction pathway with a lower activation energy, so more particles have energy ≥ Ea."
+                    : "How does a catalyst increase the rate of a reaction?"}
+                </div>
+              </div>
+              <div style={{ fontSize: "12px", color: flippedCard ? "#059669" : "#475569", fontWeight: 600 }}>
+                {flippedCard ? "← tap to flip back" : "tap the card →"}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* ── MECHANISMS PREVIEW ─────────────────── */}
-        {activeSection === "mechanisms" && activeMechIdx === null && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", animation: "lpFadeIn 0.4s ease" }}>
-            {previewMechs.map((m, idx) => (
-              <button key={m.id} onClick={() => { if (!m.locked) { setActiveMechIdx(idx); setMechOpenCards({}); } }}
-                style={{ background: "rgba(255,255,255,0.06)", border: `2px solid ${m.locked ? "rgba(255,255,255,0.08)" : m.color + "40"}`, borderRadius: "16px",
-                  padding: "20px 22px", textAlign: "left", cursor: m.locked ? "default" : "pointer", fontFamily: "inherit",
-                  position: "relative", overflow: "hidden", transition: "border-color 0.2s" }}>
-                {m.locked && (
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(13,27,42,0.95) 70%)",
-                    display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: "20px", zIndex: 2, borderRadius: "inherit" }}>
-                    <div style={{ textAlign: "center" }}>
-                      <div style={{ fontSize: "24px", marginBottom: "6px" }}>🔒</div>
-                      <div style={{ fontSize: "13px", fontWeight: 800, color: "#fff" }}>Unlock with ChemMastery Pro</div>
-                      <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>£27.99/mo • Full access to all mechanisms</div>
-                    </div>
-                  </div>
-                )}
-                <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                  <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: m.color, flexShrink: 0 }} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "17px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>{m.title}</div>
-                    <div style={{ fontSize: "14px", color: "#94a3b8", fontWeight: 500 }}>{m.subtitle}</div>
-                  </div>
-                  {!m.locked && <div style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 700 }}>Try it →</div>}
-                  {m.locked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "4px 10px", borderRadius: "8px" }}>PRO</div>}
-                </div>
-              </button>
-            ))}
-            {/* Locked placeholder cards */}
+        {/* CTA banner strip */}
+        <div style={{ background: "rgba(0,0,0,0.3)", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "20px 24px" }}>
+          <div style={{ ...wrap, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
+            <div style={{ fontSize: "clamp(15px, 2vw, 18px)", fontWeight: 700, color: "#fff" }}>
+              Open the app free and find your first gap in 60 seconds.
+            </div>
+            <button onClick={onGoToLogin} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+              Get access →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════
+          SECTION 2: STAKES — why it matters in chemistry
+          ══════════════════════════════════════════════════ */}
+      <div style={{ ...darkBg, padding: "clamp(60px, 8vh, 100px) 24px" }}>
+        <div style={{ ...wrap }}>
+          <div style={{ ...labelStyle, color: "#e2a03f" }}>WHY IT MATTERS MORE IN CHEMISTRY</div>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 42px)", lineHeight: 1.12, margin: "0 0 20px", maxWidth: "700px" }}>
+            This isn't a knowledge problem.<br />
+            It's a <span style={{ color: "#e2a03f" }}>marks</span> problem. And marks are grades.
+          </h2>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#94a3b8", lineHeight: 1.7, margin: "0 0 36px", maxWidth: "680px" }}>
+            Two marks here, three there, a loose definition, the wrong keyword on a six-marker. It stacks up fast. And Chemistry punishes it harder than most subjects, because it builds on itself. Physical, inorganic, organic, all cumulative. Fall behind on one topic and it drags the next three down with it.
+          </p>
+
+          {/* Stakes cards */}
+          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "32px" }}>
             {[
-              { title: "Electrophilic Addition: HBr", sub: "Markovnikov's Rule" },
-              { title: "Elimination", sub: "E1 & E2 pathways" },
-              { title: "Electrophilic Aromatic Substitution", sub: "Nitration, Friedel-Crafts" },
-            ].map((m, i) => (
-              <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "18px 22px", position: "relative", overflow: "hidden" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "14px", opacity: 0.4 }}>
-                  <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#475569", flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff" }}>{m.title}</div>
-                    <div style={{ fontSize: "13px", color: "#64748b" }}>{m.sub}</div>
-                  </div>
-                </div>
-                <div style={{ position: "absolute", top: "10px", right: "14px", fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "3px 10px", borderRadius: "8px" }}>PRO</div>
+              { from: "A", to: "B", color: "#29ABE2", text: "The difference a handful of lost keywords makes across three papers." },
+              { from: "Firm", to: "Insurance", color: "#e2a03f", text: "One grade can be the gap between the offer you wanted and the one you settled for." },
+              { from: "Near miss", to: "A*", color: "#059669", text: "What medicine, dentistry and the top courses actually ask for." },
+            ].map((card, i) => (
+              <div key={i} style={{ flex: "1 1 260px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px", padding: "24px" }}>
+                <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "4px" }}>{card.from} → <span style={{ color: card.color, fontWeight: 800, fontSize: "16px" }}>{card.to}</span></div>
+                <div style={{ fontSize: "14px", color: "#94a3b8", lineHeight: 1.6 }}>{card.text}</div>
               </div>
             ))}
           </div>
-        )}
 
-        {/* ── ACTIVE MECHANISM VIEWER ───────────── */}
-        {activeSection === "mechanisms" && activeMechIdx !== null && (() => {
-          const mech = previewMechs[activeMechIdx];
-          return (
-            <div style={{ animation: "lpFadeIn 0.4s ease" }}>
-              {/* Header */}
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                <button onClick={() => { setActiveMechIdx(null); setMechOpenCards({}); }}
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 14px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>
-                  ← Back
-                </button>
-                <div>
-                  <div style={{ fontSize: "22px", fontWeight: 800, color: "#fff" }}>{mech.title}</div>
-                  <div style={{ fontSize: "14px", color: "#94a3b8" }}>{mech.subtitle}</div>
-                </div>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#64748b", textAlign: "center", fontStyle: "italic", maxWidth: "680px", margin: "0 auto" }}>
+            Every week before the exam you spend rereading instead of testing yourself is a week you don't get back.
+          </p>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════
+          SECTION 3: THE FIX — what this app does + previews
+          ══════════════════════════════════════════════════ */}
+      <div style={{ ...creamBg, color: "#1a2d45", padding: "clamp(60px, 8vh, 100px) 24px" }}>
+        <div style={{ ...wrap }}>
+          <div style={{ ...labelStyle, color: "#059669" }}>WHAT'S INSIDE</div>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 16px", color: "#1a2d45" }}>
+            Everything the examiner is looking for, in one place.
+          </h2>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#64748b", lineHeight: 1.7, margin: "0 0 40px", maxWidth: "620px" }}>
+            Not just content. The exact phrasing, the right keywords, the mechanism arrows drawn how the mark scheme expects. Try it below.
+          </p>
+
+          {/* Feature cards row */}
+          <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "40px" }}>
+            {[
+              { icon: "🧪", label: "11 Mechanisms", sub: "Handdrawn curly arrow diagrams with step-by-step interactive explainers" },
+              { icon: "🎯", label: "566+ MCQs", sub: "AQA & OCR A exam-style questions with detailed explanations" },
+              { icon: "📚", label: "1400+ Flashcards", sub: "Written to match the mark scheme, not just the textbook" },
+              { icon: "🧮", label: "Calculations", sub: "Step-by-step worked problems with hints and tolerance checking" },
+            ].map((item, i) => (
+              <div key={i} style={{ flex: "1 1 200px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "20px" }}>
+                <div style={{ fontSize: "28px", marginBottom: "8px" }}>{item.icon}</div>
+                <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{item.label}</div>
+                <div style={{ fontSize: "13px", color: "#64748b", lineHeight: 1.5 }}>{item.sub}</div>
               </div>
+            ))}
+          </div>
 
-              {/* Side-by-side: image + explainers */}
-              <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-                {/* Image */}
-                <div style={{ flex: "1 1 50%", minWidth: "280px", background: "#fff", borderRadius: "16px", padding: "12px", overflow: "hidden" }}>
-                  <img src={process.env.PUBLIC_URL + mech.image} alt={mech.title} style={{ width: "100%", height: "auto", display: "block", borderRadius: "10px" }} />
-                </div>
-
-                {/* Explainer cards */}
-                <div style={{ flex: "1 1 40%", minWidth: "260px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <div style={{ fontSize: "12px", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
-                    Tap to learn each part
-                  </div>
-                  {mech.explainers.map((ex, idx) => {
-                    const isOpen = mechOpenCards[idx];
-                    const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed"];
-                    const c = stepColors[idx % stepColors.length];
-                    return (
-                      <button key={idx} onClick={() => setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                        style={{ background: isOpen ? `${c}15` : "rgba(255,255,255,0.06)", border: isOpen ? `2px solid ${c}50` : "1.5px solid rgba(255,255,255,0.1)",
-                          borderRadius: "12px", padding: "10px 14px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: c, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800 }}>
-                            {idx + 1}
-                          </div>
-                          <div style={{ flex: 1, fontSize: "13px", fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>{ex.title}</div>
-                          <div style={{ fontSize: "14px", color: "#64748b", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>▼</div>
-                        </div>
-                        {isOpen && (
-                          <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${c}30`, fontSize: "13px", color: "#94a3b8", lineHeight: 1.65, fontWeight: 400 }}>
-                            {ex.text}
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* CTA after viewing */}
-              <div style={{ textAlign: "center", marginTop: "28px", padding: "24px", background: "rgba(41,171,226,0.08)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "16px" }}>
-                <div style={{ fontSize: "16px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>Want all 11 mechanisms?</div>
-                <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "14px" }}>Unlock every mechanism with handdrawn diagrams and interactive explanations.</div>
-                <button onClick={onGoToLogin} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 16px rgba(41,171,226,0.3)" }}>
-                  Get Full Access — £27.99/mo
-                </button>
-              </div>
+          {/* Interactive preview */}
+          <div id="lp-preview" style={{ background: "#1a2d45", borderRadius: "20px", padding: "clamp(20px, 3vw, 32px)", color: "#fff" }}>
+            <div style={{ textAlign: "center", marginBottom: "20px" }}>
+              <div style={{ ...labelStyle, color: "#29ABE2", fontSize: "11px" }}>TRY IT FREE</div>
+              <div style={{ fontSize: "18px", fontWeight: 800 }}>Explore real content from the app</div>
             </div>
-          );
-        })()}
 
-        {/* ── MCQ PREVIEW ───────────────────────── */}
-        {activeSection === "mcqs" && (
-          <div style={{ animation: "lpFadeIn 0.4s ease" }}>
-            {/* Progress bar */}
-            <div style={{ display: "flex", gap: "6px", marginBottom: "20px" }}>
-              {previewMCQs.map((_, i) => (
-                <div key={i} style={{ flex: 1, height: "4px", borderRadius: "2px", background: i < mcqAnswered ? "#059669" : i === mcqIdx ? "#29ABE2" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
-              ))}
-              {/* Locked indicators */}
-              {[0,1,2].map(i => (
-                <div key={`locked-${i}`} style={{ flex: 1, height: "4px", borderRadius: "2px", background: "rgba(255,255,255,0.04)" }} />
+            {/* Tab switcher */}
+            <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "24px" }}>
+              {[{ id: "mechanisms", label: "🧪 Mechanisms" }, { id: "mcqs", label: "🎯 MCQs" }].map(tab => (
+                <button key={tab.id} onClick={() => setActiveSection(tab.id)}
+                  style={{ padding: "10px 24px", borderRadius: "12px", border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: "14px", fontWeight: 700,
+                    background: activeSection === tab.id ? "#29ABE2" : "rgba(255,255,255,0.08)",
+                    color: activeSection === tab.id ? "#fff" : "#94a3b8",
+                    transition: "all 0.2s" }}>
+                  {tab.label}
+                </button>
               ))}
             </div>
 
-            {mcqIdx < previewMCQs.length ? (
-              <div style={{ background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: "18px", padding: "28px 24px" }}>
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>
-                  Question {mcqIdx + 1} of {previewMCQs.length} (free preview)
-                </div>
-                <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff", lineHeight: 1.5, marginBottom: "20px" }}>{currentQ.q}</div>
-
-                {/* Options */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {Object.entries(currentQ.options).map(([letter, text]) => {
-                    const isSelected = mcqSelected === letter;
-                    const isCorrect = letter === currentQ.answer;
-                    const showResult = mcqShowExplanation;
-                    let bg = "rgba(255,255,255,0.04)";
-                    let borderC = "rgba(255,255,255,0.1)";
-                    if (showResult && isCorrect) { bg = "rgba(5,150,105,0.15)"; borderC = "#059669"; }
-                    else if (showResult && isSelected && !isCorrect) { bg = "rgba(220,38,38,0.15)"; borderC = "#dc2626"; }
-                    else if (isSelected && !showResult) { bg = "rgba(41,171,226,0.15)"; borderC = "#29ABE2"; }
-
-                    return (
-                      <button key={letter} onClick={() => { if (!mcqShowExplanation) setMcqSelected(letter); }}
-                        style={{ padding: "14px 16px", borderRadius: "12px", border: `2px solid ${borderC}`, background: bg,
-                          cursor: mcqShowExplanation ? "default" : "pointer", fontFamily: "inherit", textAlign: "left", transition: "all 0.2s", display: "flex", alignItems: "center", gap: "12px" }}>
-                        <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: isSelected ? "#29ABE2" : "rgba(255,255,255,0.08)", color: isSelected ? "#fff" : "#94a3b8",
-                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, flexShrink: 0 }}>
-                          {letter}
+            {/* ── MECHANISMS PREVIEW ─────────────────── */}
+            {activeSection === "mechanisms" && activeMechIdx === null && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px", animation: "lpFadeIn 0.4s ease" }}>
+                {previewMechs.map((m, idx) => (
+                  <button key={m.id} onClick={() => { if (!m.locked) { setActiveMechIdx(idx); setMechOpenCards({}); } }}
+                    style={{ background: "rgba(255,255,255,0.06)", border: `2px solid ${m.locked ? "rgba(255,255,255,0.08)" : m.color + "40"}`, borderRadius: "16px",
+                      padding: "20px 22px", textAlign: "left", cursor: m.locked ? "default" : "pointer", fontFamily: "inherit",
+                      position: "relative", overflow: "hidden", transition: "border-color 0.2s" }}>
+                    {m.locked && (
+                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(13,27,42,0.95) 70%)",
+                        display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: "20px", zIndex: 2, borderRadius: "inherit" }}>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ fontSize: "24px", marginBottom: "6px" }}>🔒</div>
+                          <div style={{ fontSize: "13px", fontWeight: 800, color: "#fff" }}>Unlock with ChemMastery Pro</div>
                         </div>
-                        <div style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 500, lineHeight: 1.4 }}>{text}</div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Check / Explanation */}
-                {mcqSelected && !mcqShowExplanation && (
-                  <button onClick={() => { setMcqShowExplanation(true); setMcqAnswered(prev => prev + 1); if (mcqSelected === currentQ.answer) setMcqScore(prev => prev + 1); }}
-                    style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", marginTop: "16px" }}>
-                    Check Answer
-                  </button>
-                )}
-                {mcqShowExplanation && (
-                  <div style={{ marginTop: "16px" }}>
-                    <div style={{ padding: "14px 16px", borderRadius: "12px", background: mcqSelected === currentQ.answer ? "rgba(5,150,105,0.12)" : "rgba(220,38,38,0.12)", border: `1px solid ${mcqSelected === currentQ.answer ? "#059669" : "#dc2626"}40`, marginBottom: "12px" }}>
-                      <div style={{ fontSize: "14px", fontWeight: 800, color: mcqSelected === currentQ.answer ? "#059669" : "#dc2626", marginBottom: "4px" }}>
-                        {mcqSelected === currentQ.answer ? "✓ Correct!" : `✗ Incorrect — answer is ${currentQ.answer}`}
                       </div>
-                      <div style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.5 }}>{currentQ.explanation}</div>
+                    )}
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                      <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: m.color, flexShrink: 0 }} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: "17px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>{m.title}</div>
+                        <div style={{ fontSize: "14px", color: "#94a3b8", fontWeight: 500 }}>{m.subtitle}</div>
+                      </div>
+                      {!m.locked && <div style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 700 }}>Try it →</div>}
+                      {m.locked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "4px 10px", borderRadius: "8px" }}>PRO</div>}
                     </div>
-                    <button onClick={() => { setMcqIdx(prev => prev + 1); setMcqSelected(null); setMcqShowExplanation(false); }}
-                      style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
-                      {mcqIdx < previewMCQs.length - 1 ? "Next Question →" : "See Results"}
+                  </button>
+                ))}
+                {[
+                  { title: "Electrophilic Addition: HBr", sub: "Markovnikov's Rule" },
+                  { title: "Elimination", sub: "E1 & E2 pathways" },
+                  { title: "Electrophilic Aromatic Substitution", sub: "Nitration, Friedel-Crafts" },
+                ].map((m, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "18px 22px", position: "relative", overflow: "hidden" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px", opacity: 0.4 }}>
+                      <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#475569", flexShrink: 0 }} />
+                      <div>
+                        <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff" }}>{m.title}</div>
+                        <div style={{ fontSize: "13px", color: "#64748b" }}>{m.sub}</div>
+                      </div>
+                    </div>
+                    <div style={{ position: "absolute", top: "10px", right: "14px", fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "3px 10px", borderRadius: "8px" }}>PRO</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* ── ACTIVE MECHANISM VIEWER ───────────── */}
+            {activeSection === "mechanisms" && activeMechIdx !== null && (() => {
+              const mech = previewMechs[activeMechIdx];
+              return (
+                <div style={{ animation: "lpFadeIn 0.4s ease" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                    <button onClick={() => { setActiveMechIdx(null); setMechOpenCards({}); }}
+                      style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 14px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>
+                      ← Back
+                    </button>
+                    <div>
+                      <div style={{ fontSize: "22px", fontWeight: 800, color: "#fff" }}>{mech.title}</div>
+                      <div style={{ fontSize: "14px", color: "#94a3b8" }}>{mech.subtitle}</div>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+                    <div style={{ flex: "1 1 50%", minWidth: "280px", background: "#fff", borderRadius: "16px", padding: "12px", overflow: "hidden" }}>
+                      <img src={process.env.PUBLIC_URL + mech.image} alt={mech.title} style={{ width: "100%", height: "auto", display: "block", borderRadius: "10px" }} />
+                    </div>
+                    <div style={{ flex: "1 1 40%", minWidth: "260px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                      <div style={{ fontSize: "12px", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
+                        Tap to learn each part
+                      </div>
+                      {mech.explainers.map((ex, idx) => {
+                        const isOpen = mechOpenCards[idx];
+                        const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed"];
+                        const c = stepColors[idx % stepColors.length];
+                        return (
+                          <button key={idx} onClick={() => setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
+                            style={{ background: isOpen ? `${c}15` : "rgba(255,255,255,0.06)", border: isOpen ? `2px solid ${c}50` : "1.5px solid rgba(255,255,255,0.1)",
+                              borderRadius: "12px", padding: "10px 14px", textAlign: "left", cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: c, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800 }}>{idx + 1}</div>
+                              <div style={{ flex: 1, fontSize: "13px", fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>{ex.title}</div>
+                              <div style={{ fontSize: "14px", color: "#64748b", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>▼</div>
+                            </div>
+                            {isOpen && (
+                              <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${c}30`, fontSize: "13px", color: "#94a3b8", lineHeight: 1.65, fontWeight: 400 }}>{ex.text}</div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "center", marginTop: "24px", padding: "20px", background: "rgba(41,171,226,0.08)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "14px" }}>
+                    <div style={{ fontSize: "15px", fontWeight: 800, color: "#fff", marginBottom: "10px" }}>Want all 11 mechanisms?</div>
+                    <button onClick={onGoToLogin} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                      Get Full Access →
                     </button>
                   </div>
+                </div>
+              );
+            })()}
+
+            {/* ── MCQ PREVIEW ───────────────────────── */}
+            {activeSection === "mcqs" && (
+              <div style={{ animation: "lpFadeIn 0.4s ease" }}>
+                <div style={{ display: "flex", gap: "6px", marginBottom: "20px" }}>
+                  {previewMCQs.map((_, i) => (
+                    <div key={i} style={{ flex: 1, height: "4px", borderRadius: "2px", background: i < mcqAnswered ? "#059669" : i === mcqIdx ? "#29ABE2" : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+                  ))}
+                  {[0,1,2].map(i => (
+                    <div key={`locked-${i}`} style={{ flex: 1, height: "4px", borderRadius: "2px", background: "rgba(255,255,255,0.04)" }} />
+                  ))}
+                </div>
+
+                {mcqIdx < previewMCQs.length ? (
+                  <div style={{ background: "rgba(255,255,255,0.06)", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: "18px", padding: "28px 24px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>
+                      Question {mcqIdx + 1} of {previewMCQs.length} (free preview)
+                    </div>
+                    <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff", lineHeight: 1.5, marginBottom: "20px" }}>{currentQ.q}</div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {Object.entries(currentQ.options).map(([letter, text]) => {
+                        const isSelected = mcqSelected === letter;
+                        const isCorrect = letter === currentQ.answer;
+                        const showResult = mcqShowExplanation;
+                        let bg = "rgba(255,255,255,0.04)";
+                        let borderC = "rgba(255,255,255,0.1)";
+                        if (showResult && isCorrect) { bg = "rgba(5,150,105,0.15)"; borderC = "#059669"; }
+                        else if (showResult && isSelected && !isCorrect) { bg = "rgba(220,38,38,0.15)"; borderC = "#dc2626"; }
+                        else if (isSelected && !showResult) { bg = "rgba(41,171,226,0.15)"; borderC = "#29ABE2"; }
+                        return (
+                          <button key={letter} onClick={() => { if (!mcqShowExplanation) setMcqSelected(letter); }}
+                            style={{ padding: "14px 16px", borderRadius: "12px", border: `2px solid ${borderC}`, background: bg,
+                              cursor: mcqShowExplanation ? "default" : "pointer", fontFamily: "inherit", textAlign: "left", transition: "all 0.2s", display: "flex", alignItems: "center", gap: "12px" }}>
+                            <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: isSelected ? "#29ABE2" : "rgba(255,255,255,0.08)", color: isSelected ? "#fff" : "#94a3b8",
+                              display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, flexShrink: 0 }}>{letter}</div>
+                            <div style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 500, lineHeight: 1.4 }}>{text}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {mcqSelected && !mcqShowExplanation && (
+                      <button onClick={() => { setMcqShowExplanation(true); setMcqAnswered(prev => prev + 1); if (mcqSelected === currentQ.answer) setMcqScore(prev => prev + 1); }}
+                        style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", marginTop: "16px" }}>
+                        Check Answer
+                      </button>
+                    )}
+                    {mcqShowExplanation && (
+                      <div style={{ marginTop: "16px" }}>
+                        <div style={{ padding: "14px 16px", borderRadius: "12px", background: mcqSelected === currentQ.answer ? "rgba(5,150,105,0.12)" : "rgba(220,38,38,0.12)", border: `1px solid ${mcqSelected === currentQ.answer ? "#059669" : "#dc2626"}40`, marginBottom: "12px" }}>
+                          <div style={{ fontSize: "14px", fontWeight: 800, color: mcqSelected === currentQ.answer ? "#059669" : "#dc2626", marginBottom: "4px" }}>
+                            {mcqSelected === currentQ.answer ? "Correct!" : `Incorrect. Answer: ${currentQ.answer}`}
+                          </div>
+                          <div style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.5 }}>{currentQ.explanation}</div>
+                        </div>
+                        <button onClick={() => { setMcqIdx(prev => prev + 1); setMcqSelected(null); setMcqShowExplanation(false); }}
+                          style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                          {mcqIdx < previewMCQs.length - 1 ? "Next Question →" : "See Results"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: "center", padding: "40px 24px", background: "rgba(255,255,255,0.06)", borderRadius: "18px", border: "1.5px solid rgba(255,255,255,0.1)" }}>
+                    <div style={{ fontSize: "48px", marginBottom: "12px" }}>{mcqScore === 3 ? "🎉" : mcqScore >= 2 ? "💪" : "📚"}</div>
+                    <div style={{ fontSize: "24px", fontWeight: 900, color: "#fff", marginBottom: "4px" }}>{mcqScore}/{previewMCQs.length}</div>
+                    <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "24px" }}>
+                      {mcqScore === 3 ? "Perfect. Imagine 566+ more questions like these." : "There are 566+ more exam-style MCQs waiting for you."}
+                    </div>
+                    <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)" }}>
+                      Unlock All MCQs →
+                    </button>
+                    <div><button onClick={() => { setMcqIdx(0); setMcqSelected(null); setMcqShowExplanation(false); setMcqScore(0); setMcqAnswered(0); }}
+                      style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: "8px", marginTop: "8px" }}>Retry free questions</button></div>
+                  </div>
                 )}
               </div>
-            ) : (
-              /* Results + Upsell */
-              <div style={{ textAlign: "center", padding: "40px 24px", background: "rgba(255,255,255,0.06)", borderRadius: "18px", border: "1.5px solid rgba(255,255,255,0.1)" }}>
-                <div style={{ fontSize: "48px", marginBottom: "12px" }}>{mcqScore === 3 ? "🎉" : mcqScore >= 2 ? "💪" : "📚"}</div>
-                <div style={{ fontSize: "24px", fontWeight: 900, color: "#fff", marginBottom: "4px" }}>{mcqScore}/{previewMCQs.length}</div>
-                <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "24px" }}>
-                  {mcqScore === 3 ? "Perfect score! Imagine having 566+ more questions like these." : "There are 566+ more exam-style MCQs waiting for you."}
-                </div>
-                <button onClick={onGoToLogin} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #29ABE2, #0284c7)", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)", marginBottom: "12px" }}>
-                  Unlock All MCQs — £27.99/mo
-                </button>
-                <div>
-                  <button onClick={() => { setMcqIdx(0); setMcqSelected(null); setMcqShowExplanation(false); setMcqScore(0); setMcqAnswered(0); }}
-                    style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: "8px" }}>
-                    Retry free questions
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Locked MCQ placeholders */}
-            {mcqIdx < previewMCQs.length && (
-              <div style={{ marginTop: "16px", opacity: 0.4 }}>
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", textAlign: "center" }}>
-                  🔒 563+ more questions with Pro
-                </div>
-              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
 
-      {/* ── PRICING SECTION ────────────────────────── */}
-      <div style={{ background: "rgba(255,255,255,0.03)", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "60px 24px" }}>
-        <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "28px", margin: "0 0 8px" }}>Unlock Everything</h2>
-          <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 28px" }}>One subscription. Full access. Cancel anytime.</p>
+      {/* ══════════════════════════════════════════════════
+          SECTION 4: WHY IT WORKS — 3 pillars
+          ══════════════════════════════════════════════════ */}
+      <div style={{ ...creamBg, color: "#1a2d45", padding: "clamp(60px, 8vh, 100px) 24px", borderTop: "4px solid #29ABE2" }}>
+        <div style={{ ...wrap, textAlign: "center" }}>
+          <div style={{ ...labelStyle, color: "#059669" }}>WHY IT WORKS</div>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(24px, 4vw, 38px)", lineHeight: 1.15, margin: "0 0 12px", color: "#1a2d45", maxWidth: "700px", marginLeft: "auto", marginRight: "auto" }}>
+            Three things that actually move your grade.<br />This app is built on all three.
+          </h2>
+          <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 44px" }}>Not theory. Not motivation. Just what the evidence says works.</p>
 
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            {/* Monthly */}
-            <div style={{ background: "rgba(255,255,255,0.06)", border: "2px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "28px 24px", width: "220px", textAlign: "center" }}>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Monthly</div>
-              <div style={{ fontSize: "40px", fontWeight: 900, color: "#fff" }}>£27.99</div>
-              <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "20px" }}>per month</div>
-              <button onClick={onGoToLogin}
-                style={{ width: "100%", padding: "13px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
-                Get Started
-              </button>
-              <div style={{ fontSize: "11px", color: "#475569", marginTop: "10px" }}>Cancel anytime</div>
-            </div>
-            {/* Yearly */}
-            <div style={{ background: "rgba(41,171,226,0.08)", border: "2px solid rgba(41,171,226,0.3)", borderRadius: "20px", padding: "28px 24px", width: "220px", textAlign: "center", position: "relative" }}>
-              <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#29ABE2", color: "#fff", fontSize: "11px", fontWeight: 800, padding: "4px 14px", borderRadius: "8px", letterSpacing: "0.5px" }}>SAVE 26%</div>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Yearly</div>
-              <div style={{ fontSize: "40px", fontWeight: 900, color: "#fff" }}>£249.99</div>
-              <div style={{ fontSize: "13px", color: "#64748b", marginBottom: "20px" }}>per year (£20.83/mo)</div>
-              <button onClick={onGoToLogin}
-                style={{ width: "100%", padding: "13px", borderRadius: "12px", border: "1.5px solid rgba(41,171,226,0.3)", background: "#1a2d45", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
-                Get Started
-              </button>
-              <div style={{ fontSize: "11px", color: "#29ABE2", marginTop: "10px", fontWeight: 600 }}>Best value</div>
-            </div>
-          </div>
-
-          {/* What's included list */}
-          <div style={{ marginTop: "32px", textAlign: "left", maxWidth: "360px", margin: "32px auto 0" }}>
+          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "center" }}>
             {[
-              "All 11 curly arrow mechanisms",
-              "566+ exam-style MCQs",
-              "1400+ topic flashcards",
-              "Step-by-step calculations",
-              "Synthesis pathways map",
-              "AI-marked extended questions",
-              "AQA & OCR A exam boards",
+              { num: "01", title: "Active recall", icon: "🧠", text: "Pulling an answer out of your own head is what burns it in. Looking at the answer barely does anything. Every card, every MCQ, every mechanism step forces the pull. That's the exact move the exam demands." },
+              { num: "02", title: "Mark scheme language", icon: "✍️", text: "A card that says 'lowers the activation energy by providing an alternative pathway' trains your memory to produce those exact words. In the exam, the phrasing the examiner wants is already there waiting." },
+              { num: "03", title: "Full coverage", icon: "📋", text: "Every topic in the spec. Physical, inorganic and organic, so nothing slips through. The app finds the gap you didn't know you had, before the exam finds it for you." },
             ].map((item, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                <span style={{ color: "#059669", fontSize: "16px", fontWeight: 800 }}>✓</span>
-                <span style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 500 }}>{item}</span>
+              <div key={i} style={{ flex: "1 1 260px", maxWidth: "320px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "16px", padding: "28px 24px", textAlign: "left", position: "relative" }}>
+                <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "36px", fontWeight: 900, color: "#e8e3db" }}>{item.num}</div>
+                <div style={{ fontSize: "28px", marginBottom: "12px" }}>{item.icon}</div>
+                <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px" }}>{item.title}</div>
+                <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.7 }}>{item.text}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── FOOTER / SIGN IN ───────────────────────── */}
-      <div style={{ padding: "40px 24px", textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "12px" }}>Already have an account?</div>
-        <button onClick={onGoToLogin}
-          style={{ padding: "12px 28px", borderRadius: "12px", border: "1.5px solid rgba(255,255,255,0.2)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-          Log In
-        </button>
-        <div style={{ marginTop: "24px", fontSize: "11px", color: "#334155", lineHeight: 1.6 }}>
-          This platform is an independent revision tool and is not affiliated with, endorsed by, or connected to AQA, OCR, or any exam board.
-          <br />© {new Date().getFullYear()} HSJ Tuition. All rights reserved.
+      {/* ══════════════════════════════════════════════════
+          SECTION 5: OBJECTION HANDLING — FAQ
+          ══════════════════════════════════════════════════ */}
+      <div style={{ ...creamBg, color: "#1a2d45", padding: "0 24px clamp(60px, 8vh, 100px)" }}>
+        <div style={{ ...wrap }}>
+          <div style={{ ...labelStyle, color: "#e2a03f" }}>STRAIGHT ANSWERS</div>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 32px", color: "#1a2d45" }}>
+            What you're probably thinking.
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "720px" }}>
+            {[
+              { q: "\"I'll just use free resources online.\"", a: "Free resources are scattered, often wrong, and never written to match the mark scheme. You end up spending more time finding and checking them than actually revising. This is one place, already done, already accurate." },
+              { q: "\"I don't have time.\"", a: "That's the reason to use it. Ten minutes on your phone on the bus or between lessons does more for your grade than an hour rereading notes at your desk. It fits the gaps you already have." },
+              { q: "\"Will it actually move my grade?\"", a: "It moves the one thing grades are made of: the exact answers that score marks. Not a vague sense that you 'get' the topic. The words on the page." },
+              { q: "\"I'm already behind.\"", a: "Then it's built for you. It shows you precisely what you don't know yet, so you stop spending time on the topics you've already got and put it where the marks are hiding." },
+              { q: "\"£27.99 is a lot.\"", a: "One month covers both papers. That's the cost of a single textbook, except this actually tests you instead of just sitting on your shelf. And you can cancel the moment the exams are over." },
+            ].map((item, i) => (
+              <div key={i} className="lp-faq-card" style={{ background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "22px 24px" }}>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px", fontStyle: "italic" }}>{item.q}</div>
+                <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.7 }}>{item.a}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════
+          SECTION 6: FINAL CTA — your move
+          ══════════════════════════════════════════════════ */}
+      <div style={{ ...darkBg, padding: "clamp(60px, 8vh, 100px) 24px", textAlign: "center" }}>
+        <div style={{ ...wrap }}>
+          <div style={{ ...labelStyle, color: "#059669" }}>YOUR MOVE</div>
+          <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.1, margin: "0 0 12px" }}>
+            You can start right now.
+          </h2>
+          <p style={{ fontSize: "clamp(14px, 2vw, 16px)", color: "#94a3b8", margin: "0 0 36px", maxWidth: "520px", marginLeft: "auto", marginRight: "auto" }}>
+            Set up takes under a minute on your phone.
+          </p>
+
+          {/* Option 1 vs Option 2 */}
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap", marginBottom: "36px" }}>
+            <div style={{ flex: "1 1 280px", maxWidth: "360px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px", padding: "28px 24px", textAlign: "left" }}>
+              <div style={{ ...labelStyle, color: "#64748b", fontSize: "11px" }}>OPTION 1</div>
+              <div style={{ fontSize: "14px", color: "#94a3b8", lineHeight: 1.7 }}>
+                Reread Chapter 7 a third time, feel like you know it, and write "speeds it up" again in the exam.
+              </div>
+            </div>
+            <div style={{ flex: "1 1 280px", maxWidth: "360px", background: "rgba(41,171,226,0.08)", border: "1.5px solid rgba(41,171,226,0.3)", borderRadius: "16px", padding: "28px 24px", textAlign: "left" }}>
+              <div style={{ ...labelStyle, color: "#29ABE2", fontSize: "11px" }}>OPTION 2</div>
+              <div style={{ fontSize: "14px", color: "#e2e8f0", lineHeight: 1.7 }}>
+                Spend ten minutes testing yourself on the answer that actually scores, and keep doing that until it's automatic.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ fontSize: "clamp(16px, 2.5vw, 20px)", fontWeight: 700, color: "#fff", marginBottom: "28px", maxWidth: "580px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.5 }}>
+            One of those changes your grade. You already know which.
+          </div>
+
+          <button onClick={onGoToLogin} style={{ padding: "18px 44px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 24px rgba(41,171,226,0.4)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+            Get full access <span style={{ fontSize: "20px" }}>→</span>
+          </button>
+          <div style={{ fontSize: "12px", color: "#475569", marginTop: "10px" }}>£27.99/mo. Cancel anytime.</div>
+
+          {/* P.S. */}
+          <div style={{ marginTop: "48px", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "28px", maxWidth: "600px", marginLeft: "auto", marginRight: "auto" }}>
+            <p style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.7, textAlign: "left" }}>
+              <strong style={{ color: "#94a3b8" }}>P.S.</strong>&nbsp;&nbsp;The exam doesn't reward the student who understands the most. It rewards the one who can write the mark-scheme answer under pressure. You build that by testing yourself, not by reading.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── FOOTER ────────────────────────────────────── */}
+      <div style={{ ...darkBg, borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px" }}>
+        <div style={{ ...wrap, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
+          <div>
+            <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "14px", color: "#fff" }}>ChemMastery</div>
+            <div style={{ fontSize: "10px", color: "#475569", letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
+          </div>
+          <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+            <button onClick={onGoToLogin} style={{ background: "none", border: "none", color: "#64748b", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
+            <button onClick={onGoToLogin} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
+          </div>
+        </div>
+        <div style={{ ...wrap, marginTop: "20px" }}>
+          <div style={{ fontSize: "11px", color: "#334155", lineHeight: 1.6 }}>
+            This platform is an independent revision tool and is not affiliated with, endorsed by, or connected to AQA, OCR, or any exam board.
+            &nbsp;© {new Date().getFullYear()} HSJ Tuition. All rights reserved.
+          </div>
         </div>
       </div>
     </div>
