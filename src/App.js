@@ -4927,8 +4927,8 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           <div style={{ flex: "1 1 420px", maxWidth: "540px", animation: "lpFadeIn 0.6s ease" }}>
             <div style={{ ...labelStyle, color: "#29ABE2" }}>A-LEVEL CHEMISTRY</div>
             <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(32px, 5.5vw, 52px)", lineHeight: 1.08, margin: "0 0 24px", letterSpacing: "-1px", color: "#fff" }}>
-              You understand the Chemistry.<br />
-              You're <span style={{ color: "#e2a03f" }}>still losing marks.</span>
+              Stop losing marks.<br />
+              <span style={{ color: "#29ABE2" }}>Start gaining grades.</span>
             </h1>
             <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: bodyText, lineHeight: 1.7, margin: "0 0 12px" }}>
               It's almost never that you don't understand it. It's that the exact answer the examiner gives marks for never made it into your memory.
