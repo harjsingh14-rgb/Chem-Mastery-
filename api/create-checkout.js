@@ -18,18 +18,17 @@ module.exports = async function handler(req, res) {
     }
 
     const { plan, uid, email } = req.body || {};
-    if (!plan || !uid || !email) {
-      return res.status(400).json({ error: "Missing required fields: plan, uid, email" });
+    if (!plan) {
+      return res.status(400).json({ error: "Missing required field: plan" });
     }
 
     const priceConfig = plan === "yearly"
       ? { "line_items[0][price_data][unit_amount]": "24999", "line_items[0][price_data][recurring][interval]": "year" }
       : { "line_items[0][price_data][unit_amount]": "2799", "line_items[0][price_data][recurring][interval]": "month" };
 
+    // Build params - uid/email optional for guest checkout from landing page
     const params = new URLSearchParams({
       "mode": "subscription",
-      "client_reference_id": uid,
-      "customer_email": email,
       "line_items[0][price_data][currency]": "gbp",
       "line_items[0][price_data][product_data][name]": "ChemMastery Pro",
       "line_items[0][price_data][product_data][description]": plan === "yearly"
@@ -38,10 +37,22 @@ module.exports = async function handler(req, res) {
       "line_items[0][quantity]": "1",
       "success_url": "https://fc.hsjtuition.co.uk/?payment=success",
       "cancel_url": "https://fc.hsjtuition.co.uk/?payment=cancel",
-      "metadata[firebaseUid]": uid,
-      "subscription_data[metadata][firebaseUid]": uid,
       ...priceConfig,
     });
+
+    // If user is already logged in, attach their uid
+    if (uid) {
+      params.set("client_reference_id", uid);
+      params.set("metadata[firebaseUid]", uid);
+      params.set("subscription_data[metadata][firebaseUid]", uid);
+    } else {
+      // Guest checkout - mark it so webhook knows to create account
+      params.set("metadata[guestCheckout]", "true");
+      params.set("subscription_data[metadata][guestCheckout]", "true");
+    }
+    if (email) {
+      params.set("customer_email", email);
+    }
 
     const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",

@@ -89,8 +89,62 @@ async function updateFirestoreUser(uid, fields, accessToken) {
   });
 }
 
+// Create a Firebase Auth user (for guest checkout)
+async function createFirebaseUser(email, password, accessToken) {
+  const projectId = "chemmastery-3adb0";
+  const url = `https://identitytoolkit.googleapis.com/v1/projects/${projectId}/accounts`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+      emailVerified: false,
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    // User might already exist - try to find them
+    if (data.error?.message?.includes("EMAIL_EXISTS") || data.error?.status === "ALREADY_EXISTS") {
+      console.log(`User ${email} already exists, looking up uid`);
+      // Look up existing user
+      const lookupRes = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${projectId}/accounts:lookup`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: [email] }),
+      });
+      const lookupData = await lookupRes.json();
+      if (lookupData.users && lookupData.users[0]) {
+        return { uid: lookupData.users[0].localId, existing: true };
+      }
+    }
+    console.error("Firebase create user error:", data);
+    return null;
+  }
+
+  return { uid: data.localId, existing: false };
+}
+
+// Generate a random temporary password
+function generateTempPassword() {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  let pw = "";
+  for (let i = 0; i < 10; i++) {
+    pw += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return pw;
+}
+
 // Send welcome email via Resend
-async function sendWelcomeEmail(email, name) {
+async function sendWelcomeEmail(email, name, tempPassword) {
   const resendKey = (process.env.RESEND_API_KEY || "").trim();
   if (!resendKey) {
     console.log("RESEND_API_KEY not set, skipping welcome email");
@@ -130,13 +184,25 @@ async function sendWelcomeEmail(email, name) {
         <div style="font-size:12px;color:#047857;margin-top:4px;">All premium content is now unlocked</div>
       </div>
 
+      <!-- Login details -->
+      ${tempPassword ? `
+      <div style="background:#eff6ff;border:1.5px solid #29ABE2;border-radius:12px;padding:18px;margin-bottom:24px;">
+        <div style="font-size:14px;font-weight:800;color:#1a2d45;margin-bottom:10px;">Your login details:</div>
+        <div style="font-size:14px;color:#1a2d45;line-height:2;">
+          <strong>Email:</strong> ${email}<br>
+          <strong>Temporary password:</strong> <code style="background:#e0e8f0;padding:2px 8px;border-radius:4px;font-size:15px;font-weight:700;">${tempPassword}</code>
+        </div>
+        <div style="font-size:12px;color:#64748b;margin-top:8px;">Please change your password after your first login.</div>
+      </div>
+      ` : ''}
+
       <!-- How to access -->
       <div style="margin-bottom:24px;">
         <div style="font-size:14px;font-weight:800;color:#1a2d45;margin-bottom:12px;">How to access:</div>
         <div style="font-size:14px;color:#475569;line-height:1.8;">
           1. Go to <a href="https://fc.hsjtuition.co.uk" style="color:#29ABE2;font-weight:700;text-decoration:none;">fc.hsjtuition.co.uk</a><br>
-          2. Log in with the email you signed up with<br>
-          3. Everything is unlocked — start revising!
+          2. Log in with ${tempPassword ? 'the details above' : 'your email and password'}<br>
+          3. Everything is unlocked. Start revising!
         </div>
       </div>
 
@@ -222,7 +288,42 @@ module.exports = async function handler(req, res) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
-        const uid = session.client_reference_id || session.metadata?.firebaseUid;
+        let uid = session.client_reference_id || session.metadata?.firebaseUid;
+        const customerEmail = session.customer_email || session.customer_details?.email;
+        const customerName = session.customer_details?.name || "";
+        const isGuestCheckout = !uid || session.metadata?.guestCheckout === "true";
+        let tempPassword = null;
+
+        // Guest checkout: create Firebase account automatically
+        if (isGuestCheckout && customerEmail) {
+          tempPassword = generateTempPassword();
+          const result = await createFirebaseUser(customerEmail, tempPassword, accessToken);
+          if (result) {
+            uid = result.uid;
+            if (result.existing) {
+              // User already exists, don't send temp password
+              tempPassword = null;
+              console.log(`Guest checkout: existing user ${customerEmail} (${uid})`);
+            } else {
+              console.log(`Guest checkout: created user ${customerEmail} (${uid})`);
+            }
+
+            // Update subscription metadata with the new uid
+            if (session.subscription) {
+              await fetch(`https://api.stripe.com/v1/subscriptions/${session.subscription}`, {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${stripeKey}`,
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `metadata[firebaseUid]=${uid}`,
+              });
+            }
+          } else {
+            console.error(`Failed to create Firebase user for ${customerEmail}`);
+          }
+        }
+
         if (uid) {
           await updateFirestoreUser(uid, {
             role: "paid",
@@ -231,11 +332,9 @@ module.exports = async function handler(req, res) {
           }, accessToken);
           console.log(`User ${uid} upgraded to paid`);
 
-          // Send welcome email
-          const customerEmail = session.customer_email || session.customer_details?.email;
-          const customerName = session.customer_details?.name || "";
+          // Send welcome email (with temp password for guest checkouts)
           if (customerEmail) {
-            await sendWelcomeEmail(customerEmail, customerName);
+            await sendWelcomeEmail(customerEmail, customerName, tempPassword);
           }
         }
         break;

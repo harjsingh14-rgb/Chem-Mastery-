@@ -6353,7 +6353,18 @@ export default function App() {
   // LANDING PAGE / LOGIN SCREEN
   if (!authUser) {
     if (showLogin) return <LoginScreen onBack={() => { setShowLogin(false); setPendingCheckout(null); }} />;
-    return <LandingPage onGoToLogin={() => setShowLogin(true)} onGoToCheckout={() => { setPendingCheckout("monthly"); setShowLogin(true); }} />;
+    return <LandingPage onGoToLogin={() => setShowLogin(true)} onGoToCheckout={async () => {
+      try {
+        const resp = await fetch("/api/create-checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plan: "monthly" }),
+        });
+        const data = await resp.json();
+        if (data.url) window.location.href = data.url;
+        else alert(data.error || "Could not start checkout");
+      } catch (err) { alert("Network error. Please try again."); }
+    }} />;
   }
 
   // ACCOUNT SETTINGS MODAL (buried - only for paid users managing subscription)
@@ -8910,7 +8921,10 @@ export default function App() {
       })()}
 
       {/* ── NMR PRACTICE TAB ──────────────────────────────────────────────────── */}
-      {topicsTab === "nmr" && (() => {
+      {topicsTab === "nmr" && !hasFullAccess && (
+        <UpgradeCard section="NMR Practice" />
+      )}
+      {topicsTab === "nmr" && hasFullAccess && (() => {
         const challenge = NMR_CHALLENGES[nmrChallengeIdx];
         const accentColor = "#8b5cf6";
 
