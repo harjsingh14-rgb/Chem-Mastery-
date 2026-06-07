@@ -5814,6 +5814,12 @@ export default function App() {
   const [calcShowSteps, setCalcShowSteps] = useState(false);
   const [calcShowHint, setCalcShowHint] = useState(false);
   const [calcScore, setCalcScore] = useState({}); // { topicId: { correct, attempted } }
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [passwordChangeError, setPasswordChangeError] = useState("");
+  const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
 
   // --- Study streak & activity tracking ---
   const [studyLog, setStudyLog] = useState(() => {
@@ -6120,7 +6126,6 @@ export default function App() {
     </svg>
   );
 
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const Header = ({ sub, back }) => (
     <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", position: "relative", zIndex: 10, flexShrink: 0 }}>
       {back && <button onClick={back} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
@@ -6501,12 +6506,6 @@ export default function App() {
   }
 
   // CHANGE PASSWORD PROMPT (for guest checkout users with temp password)
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [passwordChangeError, setPasswordChangeError] = useState("");
-  const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
-  const [passwordChanged, setPasswordChanged] = useState(false);
-
   if (userProfile?.needsPasswordChange && !passwordChanged) {
     const handleChangePassword = async (e) => {
       e.preventDefault();
