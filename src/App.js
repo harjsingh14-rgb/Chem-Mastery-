@@ -4883,10 +4883,10 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
 
   // Days until exams
   const now = new Date();
-  const paper1 = new Date("2026-06-09");
-  const paper2 = new Date("2026-06-15");
-  const daysTo1 = Math.max(0, Math.ceil((paper1 - now) / 86400000));
+  const paper2 = new Date("2026-06-09");
+  const paper3 = new Date("2026-06-15");
   const daysTo2 = Math.max(0, Math.ceil((paper2 - now) / 86400000));
+  const daysTo3 = Math.max(0, Math.ceil((paper3 - now) / 86400000));
 
   // Shared styles
   const darkBg = { background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)" };
@@ -4939,16 +4939,16 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
 
             {/* Exam countdown pills */}
             <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "32px" }}>
-              {daysTo1 > 0 && (
+              {daysTo2 > 0 && (
                 <div style={{ background: "rgba(41,171,226,0.12)", border: "1.5px solid rgba(41,171,226,0.3)", borderRadius: "14px", padding: "14px 22px", display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
-                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 1</span>
+                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#29ABE2" }}>{daysTo2}</span>
+                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 2</span>
                 </div>
               )}
-              {daysTo2 > 0 && (
+              {daysTo3 > 0 && (
                 <div style={{ background: "rgba(5,150,105,0.12)", border: "1.5px solid rgba(5,150,105,0.3)", borderRadius: "14px", padding: "14px 22px", display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
-                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 2</span>
+                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#059669" }}>{daysTo3}</span>
+                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 3</span>
                 </div>
               )}
             </div>
@@ -7752,6 +7752,13 @@ export default function App() {
           if (outMap[r[1]]) outMap[r[1]].push(r);
           if (inMap[r[2]])  inMap[r[2]].push(r);
         });
+        const mAbbr = (mt, rt) => {
+          const ms = {"Nucleophilic":"Nu","Electrophilic":"E","Free radical":"FR"};
+          const rs = {"Substitution":"Sub","Addition":"Add","Elimination":"Elim","Oxidation":"Ox","Reduction":"Red","Acid-base":"A-B","Esterification":"Ester","Hydrolysis":"Hydrol","Hydration":"Hydra","Dehydration":"Dehydra","Acylation":"Acyl","Friedel-Crafts Acylation":"FC Acyl","Friedel-Crafts Alkylation":"FC Alkyl","Nitration":"Nitration","Diazotisation":"Diaz","Azo Coupling":"Azo"};
+          const m = ms[mt] || ""; const r = rs[rt] || rt || "";
+          return m ? `${m} ${r}` : r;
+        };
+        const rxnTypeColors = {"Substitution":"#2563eb","Addition":"#16a34a","Elimination":"#ea580c","Oxidation":"#dc2626","Reduction":"#7c3aed","Acid-base":"#0891b2","Esterification":"#0891b2","Hydrolysis":"#0284c7","Hydration":"#0284c7","Dehydration":"#ea580c","Acylation":"#6366f1","Friedel-Crafts Acylation":"#6366f1","Friedel-Crafts Alkylation":"#6366f1","Nitration":"#dc2626","Diazotisation":"#be185d","Azo Coupling":"#7c3aed"};
         return (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
             {/* Sub-tabs + quiz */}
@@ -7886,33 +7893,61 @@ export default function App() {
                     </g>
                   );
                 })}
-                {/* Reaction number badges */}
+                {/* Reaction labels — reagents & mechanism along edges */}
                 {sRxns.map(r => {
-                  const [n, fromId, toId, bx, by] = r;
+                  const [n, fromId, toId, bx, by, , , reagents, conditions, mechType, rxnType] = r;
                   const isAct = selectedRxn === n;
                   const isOut = selId && fromId === selId;
                   const isIn  = selId && toId === selId;
                   const isDim = connRxnIds && !connRxnIds.has(n);
-                  const badgeColor = isAct ? "#1a2d45" : isOut ? "#059669" : isIn ? "#2563eb" : "#fff";
-                  const textColor = isAct || isOut || isIn ? "#fff" : isDim ? "#bbb" : "#1a2d45";
+                  const mech = mAbbr(mechType, rxnType);
+                  const tCol = rxnTypeColors[rxnType] || "#475569";
+                  const shortReagent = reagents.length > 24 ? reagents.slice(0, 21) + "…" : reagents;
+                  const reagentFill = isOut ? "#059669" : isIn ? "#2563eb" : "#1a2d45";
+                  const mechFill = isOut ? "#047857" : isIn ? "#1d4ed8" : tCol;
+                  const quizHide = synthQuiz;
                   return (
-                    <g key={"b"+n} onClick={e => { e.stopPropagation(); setSelectedRxn(isAct ? null : n); }} style={{ cursor:"pointer" }}>
-                      <circle cx={bx} cy={by} r={16} fill="transparent" />
-                      <circle cx={bx} cy={by} r={12}
-                        fill={badgeColor}
-                        stroke={isDim ? "#dde3ea" : isOut ? "#059669" : isIn ? "#2563eb" : "#1a2d45"}
-                        strokeWidth={1.8} opacity={isDim ? 0.2 : 1}
-                        filter={isAct || isOut || isIn ? "url(#nodeShadow)" : "none"}
-                      />
-                      <text x={bx} y={by+0.5} textAnchor="middle" dominantBaseline="middle"
-                        fontSize="10" fontWeight="800"
-                        fill={textColor}
-                        opacity={isDim ? 0.2 : 1}
-                        style={{ userSelect:"none", pointerEvents:"none" }}>{n}</text>
+                    <g key={"b"+n} onClick={e => { e.stopPropagation(); setSelectedRxn(isAct ? null : n); }} style={{ cursor:"pointer" }}
+                      opacity={isDim ? 0.12 : 1}>
+                      <rect x={bx - 58} y={by - 14} width={116} height={28} fill="transparent" />
+                      {quizHide ? (
+                        <>
+                          <text x={bx} y={by + 3} textAnchor="middle" fontSize="7.5" fontWeight="700"
+                            fill="none" stroke="white" strokeWidth="3" strokeLinejoin="round"
+                            style={{ userSelect:"none", pointerEvents:"none" }}>{mech}</text>
+                          <text x={bx} y={by + 3} textAnchor="middle" fontSize="7.5" fontWeight="700"
+                            fill={mechFill}
+                            style={{ userSelect:"none", pointerEvents:"none" }}>{mech}</text>
+                        </>
+                      ) : (
+                        <>
+                          <text x={bx} y={by - 2} textAnchor="middle" fontSize="8" fontWeight="700"
+                            fill="none" stroke="white" strokeWidth="3.5" strokeLinejoin="round"
+                            style={{ userSelect:"none", pointerEvents:"none" }}>{shortReagent}</text>
+                          <text x={bx} y={by - 2} textAnchor="middle" fontSize="8" fontWeight="700"
+                            fill={reagentFill}
+                            style={{ userSelect:"none", pointerEvents:"none" }}>{shortReagent}</text>
+                          <text x={bx} y={by + 9} textAnchor="middle" fontSize="7" fontWeight="700"
+                            fill="none" stroke="white" strokeWidth="3" strokeLinejoin="round"
+                            style={{ userSelect:"none", pointerEvents:"none" }}>{mech}</text>
+                          <text x={bx} y={by + 9} textAnchor="middle" fontSize="7" fontWeight="700"
+                            fill={mechFill}
+                            style={{ userSelect:"none", pointerEvents:"none" }}>{mech}</text>
+                        </>
+                      )}
                     </g>
                   );
                 })}
               </svg>
+              {/* Colour legend for reaction types */}
+              <div style={{ display:"flex", flexWrap:"wrap", gap:"6px 12px", padding:"8px 14px 10px", justifyContent:"center" }}>
+                {[["Sub","Substitution","#2563eb"],["Add","Addition","#16a34a"],["Elim","Elimination","#ea580c"],["Ox","Oxidation","#dc2626"],["Red","Reduction","#7c3aed"],["A-B","Acid-base","#0891b2"],["Ester","Esterification","#0891b2"],["Acyl","Acylation","#6366f1"]].map(([lbl,,col]) => (
+                  <div key={lbl} style={{ display:"flex", alignItems:"center", gap:"4px" }}>
+                    <div style={{ width:"8px", height:"8px", borderRadius:"50%", background:col, flexShrink:0 }} />
+                    <span style={{ fontSize:"10px", fontWeight:600, color:"#4a6070" }}>{lbl}</span>
+                  </div>
+                ))}
+              </div>
             </div>
             {/* ═══ POPUP MODALS (overlay on top of map) ═══ */}
             {/* Compound connections popup */}
