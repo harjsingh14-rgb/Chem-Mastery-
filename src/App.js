@@ -7094,7 +7094,7 @@ export default function App() {
   if (screen === "topics") return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      <style>{`@media(max-width:500px){.lp-topic-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}.lp-topic-grid img{height:100px!important}.lp-topic-grid .card-body-text{font-size:11px!important}}`}</style>
+      <style>{`@media(max-width:640px){.lp-topic-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}.lp-topic-grid img{height:100px!important}.lp-topic-grid .card-body-text{font-size:11px!important}}`}</style>
       {/* Header -always visible */}
       <div style={{ padding: "0 20px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0f1d35", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -7174,7 +7174,7 @@ export default function App() {
               )}
             </div>
           )}
-          <div className="lp-topic-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "14px", width: "100%", maxWidth: "900px" }}>
+          <div className="lp-topic-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => {
               const mechComingSoon = (card.id === "mechanisms" || card.id === "nmr") && !isAdmin;
               const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
