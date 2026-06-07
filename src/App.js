@@ -4884,19 +4884,19 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
               <div style={{ fontSize: "32px", marginBottom: "12px" }}>📘</div>
               <div style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>AQA Paper 2</div>
               <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Predictions + Student Advice</div>
-              <a href="/guides/AQA-7405-2-Predicted-Paper-2026.pdf" download style={{ display: "block", padding: "14px 24px", borderRadius: "12px", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+              <a href="/guides/AQA-7405-2-Student-Advice.pdf" download style={{ display: "block", padding: "14px 24px", borderRadius: "12px", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
                 Download Free Guide
               </a>
             </div>
 
-            {/* OCR A — coming soon placeholder */}
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1.5px solid rgba(255,255,255,0.08)", borderRadius: "18px", padding: "32px 28px", width: "300px", textAlign: "center", opacity: 0.6 }}>
+            {/* OCR A */}
+            <div style={{ background: "rgba(5,150,105,0.06)", border: "1.5px solid rgba(5,150,105,0.2)", borderRadius: "18px", padding: "32px 28px", width: "300px", textAlign: "center" }}>
               <div style={{ fontSize: "32px", marginBottom: "12px" }}>📗</div>
               <div style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>OCR A Paper 2</div>
-              <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Predictions + Student Advice</div>
-              <div style={{ padding: "14px 24px", borderRadius: "12px", background: "rgba(255,255,255,0.06)", color: mutedText, fontSize: "16px", fontWeight: 700 }}>
-                Coming tomorrow
-              </div>
+              <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Student Advice Guide</div>
+              <a href="/guides/OCR-H43202-Student-Advice.pdf" download style={{ display: "block", padding: "14px 24px", borderRadius: "12px", background: "#059669", color: "#fff", fontSize: "16px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+                Download Free Guide
+              </a>
             </div>
           </div>
 
