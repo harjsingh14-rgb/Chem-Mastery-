@@ -7140,7 +7140,7 @@ export default function App() {
               )}
             </div>
           )}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "14px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => {
               const mechComingSoon = (card.id === "mechanisms" || card.id === "nmr") && !isAdmin;
               const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
