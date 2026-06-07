@@ -6655,21 +6655,55 @@ export default function App() {
         <h2 style={{ textAlign: "center", fontSize: "30px", fontWeight: 800, color: "#1a2d45", margin: "0 0 36px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
           {[
-            { id: "aqa", label: "AQA", sub: "Chemistry", count: TOPIC_ORDER.length, desc: "Year 1 and Year 2. Full spec coverage.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["Organic","Physical","Inorganic","Req. Practicals"] },
-            { id: "ocr", label: "OCR A", sub: "Chemistry", count: OCR_TOPIC_ORDER.length, desc: "Modules 2-6 fully covered. Module 1 is PAG practical skills only.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","Organic","Physical","PAG Skills"] },
+            { id: "aqa", label: "AQA", sub: "Chemistry", desc: "Year 1 and Year 2. Full spec coverage.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["Organic","Physical","Inorganic","Req. Practicals"] },
+            { id: "ocr", label: "OCR A", sub: "Chemistry", desc: "Modules 2-6 fully covered. Module 1 is PAG practical skills only.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","Organic","Physical","PAG Skills"] },
           ].map(b => (
             <button key={b.id} onClick={() => selectBoard(b.id)} style={{
               border: "none", cursor: "pointer", fontFamily: "inherit", padding: 0,
-              background: "none", borderRadius: "24px", overflow: "hidden",
+              background: "#fff", borderRadius: "24px", overflow: "hidden",
               boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
               transition: "transform 0.18s, box-shadow 0.18s",
+              textAlign: "left", width: "100%",
             }}
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.16)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.1)"; }}
             >
-              <img src={process.env.PUBLIC_URL + `/card-${b.id === "ocr" ? "ocra" : b.id}.png`}
-                alt={b.label}
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "24px" }} />
+              {/* Header gradient with chemistry icons */}
+              <div style={{ background: b.grad, padding: "clamp(28px, 5vw, 44px) 28px", position: "relative", overflow: "hidden" }}>
+                {/* Decorative chemistry SVGs */}
+                <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0.12 }} viewBox="0 0 400 250">
+                  <circle cx="50" cy="40" r="25" stroke="#fff" strokeWidth="1.5" fill="none" />
+                  <circle cx="50" cy="40" r="12" stroke="#fff" strokeWidth="1" fill="none" />
+                  <line x1="350" y1="30" x2="380" y2="60" stroke="#fff" strokeWidth="1.5" />
+                  <line x1="380" y1="30" x2="350" y2="60" stroke="#fff" strokeWidth="1.5" />
+                  <circle cx="200" cy="180" r="20" stroke="#fff" strokeWidth="1" fill="none" />
+                  <line x1="200" y1="160" x2="200" y2="200" stroke="#fff" strokeWidth="1" />
+                  <line x1="180" y1="180" x2="220" y2="180" stroke="#fff" strokeWidth="1" />
+                  <path d="M 300 140 L 320 180 L 280 180 Z" stroke="#fff" strokeWidth="1.2" fill="none" />
+                  <circle cx="120" cy="120" r="6" fill="#fff" />
+                  <line x1="126" y1="120" x2="160" y2="100" stroke="#fff" strokeWidth="1" />
+                  <circle cx="160" cy="100" r="6" fill="#fff" />
+                  <line x1="160" y1="100" x2="194" y2="120" stroke="#fff" strokeWidth="1" />
+                  <circle cx="340" cy="200" r="15" stroke="#fff" strokeWidth="1" fill="none" />
+                </svg>
+                <div style={{ position: "relative", zIndex: 1 }}>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "8px" }}>EXAM BOARD</div>
+                  <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(36px, 8vw, 48px)", fontWeight: 900, color: "#fff", lineHeight: 1, marginBottom: "4px" }}>{b.label}</div>
+                  <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(18px, 4vw, 22px)", fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>{b.sub}</div>
+                </div>
+              </div>
+              {/* Card body */}
+              <div style={{ padding: "20px 24px 24px" }}>
+                <div style={{ fontSize: "15px", color: "#4a6080", lineHeight: 1.5, marginBottom: "16px" }}>{b.desc}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
+                  {b.features.map(f => (
+                    <span key={f} style={{ fontSize: "12px", fontWeight: 600, color: b.accent, background: `${b.accent}12`, border: `1px solid ${b.accent}30`, borderRadius: "8px", padding: "5px 12px" }}>{f}</span>
+                  ))}
+                </div>
+                <div style={{ background: b.accent, color: "#fff", borderRadius: "14px", padding: "14px", textAlign: "center", fontSize: "16px", fontWeight: 700, fontFamily: "inherit" }}>
+                  Let's Go →
+                </div>
+              </div>
             </button>
           ))}
         </div>
