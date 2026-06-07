@@ -7060,6 +7060,7 @@ export default function App() {
   if (screen === "topics") return (
     <div style={base}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <style>{`@media(max-width:500px){.lp-topic-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}.lp-topic-grid img{height:100px!important}.lp-topic-grid .card-body-text{font-size:11px!important}}`}</style>
       {/* Header -always visible */}
       <div style={{ padding: "0 20px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0f1d35", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -7139,7 +7140,7 @@ export default function App() {
               )}
             </div>
           )}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "14px", width: "100%", maxWidth: "900px" }}>
+          <div className="lp-topic-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "14px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => {
               const mechComingSoon = (card.id === "mechanisms" || card.id === "nmr") && !isAdmin;
               const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
@@ -7185,9 +7186,9 @@ export default function App() {
                   )}
                 </div>
                 {/* Card body */}
-                <div style={{ padding: "16px 18px 22px", flex: 1 }}>
-                  <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a2d45", marginBottom: "6px" }}>{card.label}</div>
-                  <div style={{ fontSize: "13px", color: "#7a95b0", lineHeight: 1.55 }}>{card.desc}</div>
+                <div style={{ padding: "12px 14px 16px", flex: 1 }}>
+                  <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{card.label}</div>
+                  <div className="card-body-text" style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.5 }}>{card.desc}</div>
                 </div>
               </button>
               );
