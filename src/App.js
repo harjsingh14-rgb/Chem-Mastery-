@@ -4901,7 +4901,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
   return (
     <div style={{ minHeight: "100vh", fontFamily: "'DM Sans','Outfit',system-ui,sans-serif", color: "#fff", overflowX: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} .lp-faq-card{transition:all 0.2s} .lp-faq-card:hover{border-color:rgba(255,255,255,0.2)!important} .lp-flip{perspective:800px;cursor:pointer} .lp-flip-inner{position:relative;width:100%;min-height:160px;transition:transform 0.6s;transform-style:preserve-3d} .lp-flip-inner.flipped{transform:rotateY(180deg)} .lp-flip-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:28px 24px;display:flex;align-items:center;justify-content:center;text-align:center} .lp-flip-front{background:linear-gradient(145deg,#162d3d,#0f1f30);border:1px solid rgba(255,255,255,0.1)} .lp-flip-back{transform:rotateY(180deg);background:linear-gradient(145deg,#059669,#047857);border:1px solid rgba(255,255,255,0.15)}`}</style>
+      <style>{`@keyframes lpFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}} @keyframes lpPulse{0%,100%{box-shadow:0 0 0 0 rgba(41,171,226,0.4)}50%{box-shadow:0 0 0 12px rgba(41,171,226,0)}} .lp-faq-card{transition:all 0.2s} .lp-faq-card:hover{border-color:rgba(255,255,255,0.2)!important} .lp-flip{perspective:800px;cursor:pointer} .lp-flip-inner{position:relative;width:100%;min-height:160px;transition:transform 0.6s;transform-style:preserve-3d} .lp-flip-inner.flipped{transform:rotateY(180deg)} .lp-flip-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:28px 24px;display:flex;align-items:center;justify-content:center;text-align:center} .lp-flip-front{background:linear-gradient(145deg,#162d3d,#0f1f30);border:1px solid rgba(255,255,255,0.1)} .lp-flip-back{transform:rotateY(180deg);background:linear-gradient(145deg,#059669,#047857);border:1px solid rgba(255,255,255,0.15)} @media(max-width:640px){.lp-hero-wrap{flex-direction:column!important;text-align:center}.lp-hero-copy{max-width:100%!important;align-items:center}.lp-hero-copy>div{justify-content:center!important}.lp-hero-flip{min-width:0!important;width:100%!important}.lp-stakes-row,.lp-why-row,.lp-features-row{flex-direction:column!important}.lp-stakes-row>div,.lp-why-row>div{max-width:100%!important;flex-basis:100%!important}.lp-guide-row{flex-direction:column!important;align-items:center!important}.lp-guide-row>div{width:100%!important;max-width:100%!important}}`}</style>
 
       {/* ── STICKY HEADER ─────────────────────────────── */}
       <div style={{ position: "sticky", top: 0, zIndex: 100, ...darkBg, borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", backdropFilter: "blur(12px)" }}>
@@ -4922,9 +4922,9 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           SECTION 1: HERO — emotional hook
           ══════════════════════════════════════════════════ */}
       <div style={{ ...darkBg }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(40px, 6vw, 80px)", flexWrap: "wrap", ...wrap, padding: "clamp(60px, 10vh, 100px) clamp(24px, 4vw, 60px) clamp(50px, 8vh, 80px)" }}>
+        <div className="lp-hero-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(40px, 6vw, 80px)", flexWrap: "wrap", ...wrap, padding: "clamp(60px, 10vh, 100px) clamp(24px, 4vw, 60px) clamp(50px, 8vh, 80px)" }}>
           {/* Left: copy */}
-          <div style={{ flex: "1 1 420px", maxWidth: "540px", animation: "lpFadeIn 0.6s ease" }}>
+          <div className="lp-hero-copy" style={{ flex: "1 1 300px", maxWidth: "540px", animation: "lpFadeIn 0.6s ease" }}>
             <div style={{ ...labelStyle, color: "#29ABE2" }}>A-LEVEL CHEMISTRY</div>
             <h1 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(32px, 5.5vw, 52px)", lineHeight: 1.08, margin: "0 0 24px", letterSpacing: "-1px", color: "#fff" }}>
               Stop losing marks.<br />
@@ -4960,7 +4960,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           </div>
 
           {/* Right: interactive flashcard demo with 3D flip */}
-          <div style={{ flex: "0 1 400px", minWidth: "300px" }}>
+          <div className="lp-hero-flip" style={{ flex: "0 1 400px", minWidth: "260px", width: "100%" }}>
             <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "24px", textAlign: "center" }}>
               <div style={{ ...labelStyle, color: "#059669", fontSize: "11px", marginBottom: "10px" }}>TAP TO TEST YOURSELF</div>
               <div style={{ fontSize: "10px", color: dimText, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>PHYSICAL • RATES</div>
@@ -5011,7 +5011,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             Based on past paper analysis and examiner reports. Download your exam board's guide. No sign-up needed.
           </p>
 
-          <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap" }}>
+          <div className="lp-guide-row" style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap" }}>
             {/* AQA */}
             <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "20px", padding: "40px 36px", flex: "1 1 340px", maxWidth: "420px", textAlign: "center" }}>
               <div style={{ fontSize: "40px", marginBottom: "14px" }}>📘</div>
@@ -5054,7 +5054,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           </p>
 
           {/* Stakes cards */}
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "32px" }}>
+          <div className="lp-stakes-row" style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "32px" }}>
             {[
               { from: "A", to: "B", color: "#29ABE2", text: "The difference a handful of lost keywords makes across three papers." },
               { from: "Firm", to: "Insurance", color: "#e2a03f", text: "One grade can be the gap between the offer you wanted and the one you settled for." },
@@ -5087,14 +5087,14 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           </p>
 
           {/* Feature cards row */}
-          <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "40px" }}>
+          <div className="lp-features-row" style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "40px" }}>
             {[
               { icon: "🧪", label: "11 Mechanisms", sub: "Handdrawn curly arrow diagrams with step-by-step interactive explainers" },
               { icon: "🎯", label: "566+ MCQs", sub: "AQA & OCR A exam-style questions with detailed explanations" },
               { icon: "📚", label: "1400+ Flashcards", sub: "Written to match the mark scheme, not just the textbook" },
               { icon: "🧮", label: "Calculations", sub: "Step-by-step worked problems with hints and tolerance checking" },
             ].map((item, i) => (
-              <div key={i} style={{ flex: "1 1 200px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "20px" }}>
+              <div key={i} style={{ flex: "1 1 140px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "14px", padding: "20px" }}>
                 <div style={{ fontSize: "28px", marginBottom: "8px" }}>{item.icon}</div>
                 <div style={{ fontSize: "15px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{item.label}</div>
                 <div style={{ fontSize: "14px", color: mutedText, lineHeight: 1.6 }}>{item.sub}</div>
@@ -5317,7 +5317,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           </h2>
           <p style={{ fontSize: "14px", color: mutedText, margin: "0 0 44px" }}>Not theory. Not motivation. Just what the evidence says works.</p>
 
-          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "center" }}>
+          <div className="lp-why-row" style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "center" }}>
             {[
               { num: "01", title: "Active recall", icon: "🧠", text: "Pulling an answer out of your own head is what burns it in. Looking at the answer barely does anything. Every card, every MCQ, every mechanism step forces the pull. That's the exact move the exam demands." },
               { num: "02", title: "Mark scheme language", icon: "✍️", text: "A card that says 'lowers the activation energy by providing an alternative pathway' trains your memory to produce those exact words. In the exam, the phrasing the examiner wants is already there waiting." },
