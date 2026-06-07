@@ -339,11 +339,16 @@ module.exports = async function handler(req, res) {
         }
 
         if (uid) {
-          await updateFirestoreUser(uid, {
+          const profileData = {
             role: "paid",
             stripeCustomerId: session.customer,
             stripeSubscriptionId: session.subscription,
-          }, accessToken);
+          };
+          // Flag new guest users to change their temp password
+          if (isGuestCheckout && tempPassword) {
+            profileData.needsPasswordChange = true;
+          }
+          await updateFirestoreUser(uid, profileData, accessToken);
           console.log(`User ${uid} upgraded to paid`);
 
           // Send welcome email (with temp password for guest checkouts)

@@ -6367,6 +6367,76 @@ export default function App() {
     }} />;
   }
 
+  // CHANGE PASSWORD PROMPT (for guest checkout users with temp password)
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [passwordChangeError, setPasswordChangeError] = useState("");
+  const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
+
+  if (userProfile?.needsPasswordChange && !passwordChanged) {
+    const handleChangePassword = async (e) => {
+      e.preventDefault();
+      setPasswordChangeError("");
+      if (newPassword.length < 6) { setPasswordChangeError("Password must be at least 6 characters"); return; }
+      if (newPassword !== confirmNewPassword) { setPasswordChangeError("Passwords do not match"); return; }
+      setPasswordChangeLoading(true);
+      try {
+        const { updatePassword } = await import("firebase/auth");
+        const { getAuth } = await import("firebase/auth");
+        await updatePassword(getAuth().currentUser, newPassword);
+        // Clear the flag in Firestore
+        const { getFirestore, doc, updateDoc } = await import("firebase/firestore");
+        await updateDoc(doc(getFirestore(), "users", authUser.uid), { needsPasswordChange: false });
+        setUserProfile(prev => ({ ...prev, needsPasswordChange: false }));
+        setPasswordChanged(true);
+      } catch (err) {
+        setPasswordChangeError(err.message || "Failed to change password. Please try again.");
+      }
+      setPasswordChangeLoading(false);
+    };
+
+    return (
+      <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'DM Sans', sans-serif" }}>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <div style={{ width: "100%", maxWidth: "420px" }}>
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <div style={{ fontSize: "48px", marginBottom: "12px" }}>🔐</div>
+            <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "26px", color: "#fff", marginBottom: "8px" }}>Set Your Password</div>
+            <div style={{ fontSize: "14px", color: "#94a3b8", lineHeight: 1.6 }}>
+              You signed up with a temporary password. Please choose a new one to keep your account secure.
+            </div>
+          </div>
+
+          <div style={{ background: "#ffffff", borderRadius: "20px", padding: "32px", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
+            <form onSubmit={handleChangePassword}>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>New password</label>
+              <input type="password" placeholder="At least 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} required
+                style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
+                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+              />
+              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Confirm new password</label>
+              <input type="password" placeholder="Type it again" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} required
+                style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
+                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+              />
+              {passwordChangeError && <div style={{ color: "#dc2626", fontSize: "13px", fontWeight: 600, marginBottom: "12px", padding: "8px 12px", background: "#fef2f2", borderRadius: "8px" }}>{passwordChangeError}</div>}
+              <button type="submit" disabled={passwordChangeLoading} style={{
+                width: "100%", padding: "14px", borderRadius: "12px", border: "none",
+                background: "#29ABE2", color: "#ffffff", fontSize: "15px", fontWeight: 700,
+                cursor: "pointer", fontFamily: "inherit", opacity: passwordChangeLoading ? 0.6 : 1
+              }}>
+                {passwordChangeLoading ? "Updating..." : "Set New Password"}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ACCOUNT SETTINGS MODAL (buried - only for paid users managing subscription)
   if (showAccountSettings) return (
     <div style={base}>
@@ -6939,8 +7009,8 @@ export default function App() {
           )}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => {
-              const mechComingSoon = card.id === "mechanisms" && !isAdmin;
-              const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways" || card.id === "nmr");
+              const mechComingSoon = (card.id === "mechanisms" || card.id === "nmr") && !isAdmin;
+              const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
               const partiallyLocked = !hasFullAccess && !fullyLocked && !mechComingSoon;
               return (
               <button key={card.id} onClick={() => { if (mechComingSoon) return; setTopicsTab(card.id); track("open_section", { section: card.id, board }); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechOpenCards({}); } }}
@@ -8921,10 +8991,10 @@ export default function App() {
       })()}
 
       {/* ── NMR PRACTICE TAB ──────────────────────────────────────────────────── */}
-      {topicsTab === "nmr" && !hasFullAccess && (
+      {topicsTab === "nmr" && !isAdmin && (
         <UpgradeCard section="NMR Practice" />
       )}
-      {topicsTab === "nmr" && hasFullAccess && (() => {
+      {topicsTab === "nmr" && isAdmin && (() => {
         const challenge = NMR_CHALLENGES[nmrChallengeIdx];
         const accentColor = "#8b5cf6";
 
