@@ -4878,23 +4878,23 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             Based on past paper analysis and examiner reports. Download your exam board's guide. No sign-up needed.
           </p>
 
-          <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap" }}>
             {/* AQA */}
-            <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "18px", padding: "32px 28px", width: "300px", textAlign: "center" }}>
-              <div style={{ fontSize: "32px", marginBottom: "12px" }}>📘</div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>AQA Paper 2</div>
-              <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Predictions + Student Advice</div>
-              <a href="/guides/AQA-7405-2-Student-Advice.pdf" download style={{ display: "block", padding: "14px 24px", borderRadius: "12px", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+            <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "20px", padding: "40px 36px", flex: "1 1 340px", maxWidth: "420px", textAlign: "center" }}>
+              <div style={{ fontSize: "40px", marginBottom: "14px" }}>📘</div>
+              <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>AQA Paper 2</div>
+              <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Predictions + Student Advice</div>
+              <a href="/guides/AQA-7405-2-Student-Advice.pdf" download style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
                 Download Free Guide
               </a>
             </div>
 
             {/* OCR A */}
-            <div style={{ background: "rgba(5,150,105,0.06)", border: "1.5px solid rgba(5,150,105,0.2)", borderRadius: "18px", padding: "32px 28px", width: "300px", textAlign: "center" }}>
-              <div style={{ fontSize: "32px", marginBottom: "12px" }}>📗</div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>OCR A Paper 2</div>
-              <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Student Advice Guide</div>
-              <a href="/guides/OCR-H43202-Student-Advice.pdf" download style={{ display: "block", padding: "14px 24px", borderRadius: "12px", background: "#059669", color: "#fff", fontSize: "16px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+            <div style={{ background: "rgba(5,150,105,0.06)", border: "1.5px solid rgba(5,150,105,0.2)", borderRadius: "20px", padding: "40px 36px", flex: "1 1 340px", maxWidth: "420px", textAlign: "center" }}>
+              <div style={{ fontSize: "40px", marginBottom: "14px" }}>📗</div>
+              <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>OCR A Paper 2</div>
+              <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Predictions + Student Advice</div>
+              <a href="/guides/OCR-H43202-Student-Advice.pdf" download style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#059669", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
                 Download Free Guide
               </a>
             </div>
