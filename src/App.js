@@ -4719,7 +4719,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
         { title: "Arrow 2: Br–Br bond breaks", text: "Simultaneously, the Br–Br bonding pair shifts entirely to the far Br atom, which leaves as Br⁻. The π bond is now completely used up." },
         { title: "Carbocation intermediate", text: "A carbocation (C⁺) forms on the carbon that didn't bond to Br. This is a reactive intermediate." },
         { title: "Arrow 3: Br⁻ attacks C⁺", text: "The Br⁻ ion uses a lone pair to attack the positive carbon, forming the second C–Br bond." },
-        { title: "Test for alkenes", text: "This reaction decolourises orange bromine water — the standard test for a C=C double bond." },
+        { title: "Test for alkenes", text: "This reaction decolourises orange bromine water. This is the standard test for a C=C double bond." },
       ],
     },
   ];
@@ -4875,7 +4875,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             Your free predictions & advice guide
           </h2>
           <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.6, margin: "0 0 32px", maxWidth: "560px", marginLeft: "auto", marginRight: "auto" }}>
-            Based on past paper analysis and examiner reports. Download your exam board's guide — no sign-up needed.
+            Based on past paper analysis and examiner reports. Download your exam board's guide. No sign-up needed.
           </p>
 
           <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -6929,7 +6929,7 @@ export default function App() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
             {ACTIVITY_CARDS.map(card => {
               const mechComingSoon = card.id === "mechanisms" && !isAdmin;
-              const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
+              const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways" || card.id === "nmr");
               const partiallyLocked = !hasFullAccess && !fullyLocked && !mechComingSoon;
               return (
               <button key={card.id} onClick={() => { if (mechComingSoon) return; setTopicsTab(card.id); track("open_section", { section: card.id, board }); if (card.id === "mechanisms") { setMechId(null); setMechStep(0); setMechOpenCards({}); } }}
@@ -6939,9 +6939,24 @@ export default function App() {
               >
                 {/* Thumbnail — FigureLabs card image */}
                 <div style={{ position: "relative", overflow: "hidden" }}>
+                  {card.id === "nmr" ? (
+                    <div style={{ width: "100%", height: "140px", background: card.grad, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <svg width="200" height="80" viewBox="0 0 200 80" style={{ opacity: 0.35 }}>
+                        <line x1="10" y1="70" x2="190" y2="70" stroke="#fff" strokeWidth="1.5" />
+                        <line x1="40" y1="70" x2="40" y2="20" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+                        <line x1="37" y1="70" x2="37" y2="30" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                        <line x1="43" y1="70" x2="43" y2="30" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                        <line x1="100" y1="70" x2="100" y2="35" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+                        <line x1="150" y1="70" x2="150" y2="15" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+                        <line x1="147" y1="70" x2="147" y2="25" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                        <text x="180" y="67" fill="#fff" fontSize="8" fontFamily="'Outfit',sans-serif">TMS</text>
+                      </svg>
+                    </div>
+                  ) : (
                   <img src={process.env.PUBLIC_URL + `/card-${card.id === "extended" ? "ai-examiner" : card.id === "mcq" ? "mcqs" : card.id === "calc" ? "calculations" : card.id}.png`}
                     alt={card.label}
                     style={{ width: "100%", height: "140px", objectFit: "cover", objectPosition: "top", display: "block" }} />
+                  )}
                   {/* Coming Soon badge for mechanisms */}
                   {mechComingSoon && (
                     <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(217,119,6,0.9)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
