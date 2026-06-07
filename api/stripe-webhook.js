@@ -36,7 +36,7 @@ async function getAccessToken(serviceAccount) {
   const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
   const payload = Buffer.from(JSON.stringify({
     iss: serviceAccount.client_email,
-    scope: "https://www.googleapis.com/auth/datastore",
+    scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/firebase https://www.googleapis.com/auth/identitytoolkit https://www.googleapis.com/auth/cloud-platform",
     aud: "https://oauth2.googleapis.com/token",
     iat: now,
     exp: now + 3600,
@@ -108,9 +108,10 @@ async function createFirebaseUser(email, password, accessToken) {
   });
 
   const data = await res.json();
+  console.log("Firebase create user response:", res.status, JSON.stringify(data).slice(0, 500));
   if (!res.ok) {
     // User might already exist - try to find them
-    if (data.error?.message?.includes("EMAIL_EXISTS") || data.error?.status === "ALREADY_EXISTS") {
+    if (data.error?.message?.includes("EMAIL_EXISTS") || data.error?.status === "ALREADY_EXISTS" || data.error?.message?.includes("DUPLICATE_EMAIL")) {
       console.log(`User ${email} already exists, looking up uid`);
       // Look up existing user
       const lookupRes = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${projectId}/accounts:lookup`, {
