@@ -89,43 +89,66 @@ async function updateFirestoreUser(uid, fields, accessToken) {
   });
 }
 
-// Create a Firebase Auth user (for guest checkout)
-async function createFirebaseUser(email, password, accessToken) {
+// Create a Firebase Auth user (for guest checkout) using Firebase Auth REST API
+async function createFirebaseUser(email, password, serviceAccount) {
+  // Get a separate access token with the right scopes for Identity Toolkit
+  const now = Math.floor(Date.now() / 1000);
+  const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
+  const payload = Buffer.from(JSON.stringify({
+    iss: serviceAccount.client_email,
+    sub: serviceAccount.client_email,
+    aud: "https://identitytoolkit.googleapis.com/",
+    iat: now,
+    exp: now + 3600,
+  })).toString("base64url");
+
+  const sign = crypto.createSign("RSA-SHA256");
+  sign.update(`${header}.${payload}`);
+  const signature = sign.sign(serviceAccount.private_key, "base64url");
+  const jwt = `${header}.${payload}.${signature}`;
+
   const projectId = "chemmastery-3adb0";
-  const url = `https://identitytoolkit.googleapis.com/v1/projects/${projectId}/accounts`;
+
+  // Use the signUp endpoint with the service account JWT as a bearer token
+  // First try: use Google OAuth token with cloud-platform scope
+  const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
+  });
+
+  // Fallback: use the Firebase Web API key to create user (simpler approach)
+  const apiKey = (process.env.FIREBASE_API_KEY || "AIzaSyCtSbGHVvDJinQ2NnbZUAMp2YHU2aNtkTM").trim();
+  const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
 
   const res = await fetch(url, {
     method: "POST",
-    headers: {
-      "Authorization": `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       email,
       password,
-      emailVerified: false,
+      returnSecureToken: false,
     }),
   });
 
   const data = await res.json();
   console.log("Firebase create user response:", res.status, JSON.stringify(data).slice(0, 500));
-  if (!res.ok) {
-    // User might already exist - try to find them
-    if (data.error?.message?.includes("EMAIL_EXISTS") || data.error?.status === "ALREADY_EXISTS" || data.error?.message?.includes("DUPLICATE_EMAIL")) {
+
+  if (!res.ok || data.error) {
+    const errMsg = data.error?.message || "";
+    // User might already exist - look them up
+    if (errMsg.includes("EMAIL_EXISTS")) {
       console.log(`User ${email} already exists, looking up uid`);
-      // Look up existing user
-      const lookupRes = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${projectId}/accounts:lookup`, {
+      const lookupRes = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: [email] }),
       });
       const lookupData = await lookupRes.json();
       if (lookupData.users && lookupData.users[0]) {
         return { uid: lookupData.users[0].localId, existing: true };
       }
+      return { uid: null, existing: true };
     }
     console.error("Firebase create user error:", data);
     return null;
@@ -298,7 +321,7 @@ module.exports = async function handler(req, res) {
         // Guest checkout: create Firebase account automatically
         if (isGuestCheckout && customerEmail) {
           tempPassword = generateTempPassword();
-          const result = await createFirebaseUser(customerEmail, tempPassword, accessToken);
+          const result = await createFirebaseUser(customerEmail, tempPassword, serviceAccount);
           if (result) {
             uid = result.uid;
             if (result.existing) {
