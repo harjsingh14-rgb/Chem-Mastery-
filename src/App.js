@@ -4805,25 +4805,25 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             </p>
 
             {/* Exam countdown pills */}
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "28px" }}>
+            <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "32px" }}>
               {daysTo1 > 0 && (
-                <div style={{ background: "rgba(41,171,226,0.12)", border: "1px solid rgba(41,171,226,0.25)", borderRadius: "10px", padding: "8px 14px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ fontSize: "18px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
-                  <span style={{ fontSize: "11px", color: bodyText, fontWeight: 600 }}>days to Paper 1</span>
+                <div style={{ background: "rgba(41,171,226,0.12)", border: "1.5px solid rgba(41,171,226,0.3)", borderRadius: "14px", padding: "14px 22px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#29ABE2" }}>{daysTo1}</span>
+                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 1</span>
                 </div>
               )}
               {daysTo2 > 0 && (
-                <div style={{ background: "rgba(5,150,105,0.12)", border: "1px solid rgba(5,150,105,0.25)", borderRadius: "10px", padding: "8px 14px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ fontSize: "18px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
-                  <span style={{ fontSize: "11px", color: bodyText, fontWeight: 600 }}>days to Paper 2</span>
+                <div style={{ background: "rgba(5,150,105,0.12)", border: "1.5px solid rgba(5,150,105,0.3)", borderRadius: "14px", padding: "14px 22px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#059669" }}>{daysTo2}</span>
+                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 2</span>
                 </div>
               )}
             </div>
 
-            <button onClick={onGoToCheckout} style={{ padding: "16px 36px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "8px" }}>
-              Get full access <span style={{ fontSize: "18px" }}>→</span>
+            <button onClick={onGoToCheckout} style={{ padding: "20px 48px", borderRadius: "16px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "clamp(18px, 2.5vw, 21px)", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+              Get full access <span style={{ fontSize: "22px" }}>→</span>
             </button>
-            <div style={{ fontSize: "12px", color: dimText, marginTop: "10px" }}>Cancel anytime. Instant access.</div>
+            <div style={{ fontSize: "14px", color: dimText, marginTop: "12px" }}>Cancel anytime. Instant access.</div>
           </div>
 
           {/* Right: interactive flashcard demo with 3D flip */}
@@ -4880,26 +4880,21 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
 
           <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
             {/* AQA */}
-            <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "18px", padding: "28px 24px", width: "280px", textAlign: "center" }}>
-              <div style={{ fontSize: "28px", marginBottom: "10px" }}>📘</div>
-              <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>AQA Paper 2</div>
-              <div style={{ fontSize: "13px", color: mutedText, marginBottom: "16px" }}>Predictions + Student Advice</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <a href="/guides/AQA-7405-2-Predicted-Paper-2026.pdf" download style={{ display: "block", padding: "11px 20px", borderRadius: "10px", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
-                  Download Predictions
-                </a>
-                <a href="/guides/AQA-7405-2-Student-Advice.pdf" download style={{ display: "block", padding: "11px 20px", borderRadius: "10px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "14px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
-                  Download Advice Guide
-                </a>
-              </div>
+            <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "18px", padding: "32px 28px", width: "300px", textAlign: "center" }}>
+              <div style={{ fontSize: "32px", marginBottom: "12px" }}>📘</div>
+              <div style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>AQA Paper 2</div>
+              <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Predictions + Student Advice</div>
+              <a href="/guides/AQA-7405-2-Predicted-Paper-2026.pdf" download style={{ display: "block", padding: "14px 24px", borderRadius: "12px", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+                Download Free Guide
+              </a>
             </div>
 
             {/* OCR A — coming soon placeholder */}
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1.5px solid rgba(255,255,255,0.08)", borderRadius: "18px", padding: "28px 24px", width: "280px", textAlign: "center", opacity: 0.6 }}>
-              <div style={{ fontSize: "28px", marginBottom: "10px" }}>📗</div>
-              <div style={{ fontSize: "18px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>OCR A Paper 2</div>
-              <div style={{ fontSize: "13px", color: mutedText, marginBottom: "16px" }}>Predictions + Student Advice</div>
-              <div style={{ padding: "11px 20px", borderRadius: "10px", background: "rgba(255,255,255,0.06)", color: mutedText, fontSize: "14px", fontWeight: 700 }}>
+            <div style={{ background: "rgba(255,255,255,0.03)", border: "1.5px solid rgba(255,255,255,0.08)", borderRadius: "18px", padding: "32px 28px", width: "300px", textAlign: "center", opacity: 0.6 }}>
+              <div style={{ fontSize: "32px", marginBottom: "12px" }}>📗</div>
+              <div style={{ fontSize: "20px", fontWeight: 800, color: "#fff", marginBottom: "6px" }}>OCR A Paper 2</div>
+              <div style={{ fontSize: "14px", color: mutedText, marginBottom: "20px" }}>Predictions + Student Advice</div>
+              <div style={{ padding: "14px 24px", borderRadius: "12px", background: "rgba(255,255,255,0.06)", color: mutedText, fontSize: "16px", fontWeight: 700 }}>
                 Coming tomorrow
               </div>
             </div>
@@ -6847,7 +6842,7 @@ export default function App() {
     { id: "nmr",        label: "NMR Practice",          labelBig: "NMR",      labelSmall: "Practice",desc: "Interpret spectra, learn chemical shifts, and deduce structures.", color: "#8b5cf6", grad: "linear-gradient(145deg,#a78bfa,#8b5cf6,#6d28d9)", stat: "Spectra" },
   ];
 
-  const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechOpenCards({}); };
+  const goHome = () => { setTopicsTab("home"); setSelectedRxn(null); setSelectedFrom(null); setMechId(null); setMechStep(0); setMechOpenCards({}); setNmrRevealed(false); setNmrSubTab("challenges"); };
 
   if (screen === "topics") return (
     <div style={base}>
