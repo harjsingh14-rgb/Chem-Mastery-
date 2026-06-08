@@ -8172,7 +8172,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Zero order means rate does not depend on concentration. The concentration-time graph is a straight line going down at a constant rate.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q10.png"
@@ -8187,7 +8187,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Cr3+ with excess NaOH forms Cr(OH)6 3- because Cr(OH)3 dissolves in excess alkali. It is amphoteric.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q11.png"
@@ -8202,7 +8202,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Total moles of H+ = (0.025 x 6.0) + (0.045 x 3.0) = 0.15 + 0.135 = 0.285 mol. Total volume = 0.070 dm3. Concentration = 0.285/0.070 = 4.07 mol dm-3.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q12.png"
@@ -8217,7 +8217,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Mole fraction of O2 = 1 - 0.700 = 0.300. Partial pressure = mole fraction x total pressure = 0.300 x 1.42 = 0.426 atm.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q13.png"
@@ -8232,7 +8232,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "EMF = E(more positive) - E(less positive) = +0.80 - (+0.34) = +0.46V. Ag is the positive electrode and Cu is the negative electrode.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q14.png"
@@ -8247,7 +8247,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Moles of Ne = 0.0202/20.2 = 0.001 mol. Each atom loses 1 electron. Electrons = 0.001 x 6.02 x 10^23 = 6.02 x 10^20.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2017-q15.png"
@@ -8262,7 +8262,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Moles of acid = 0.200 x 2.00 = 0.400. Moles of salt = 0.600 x 1.00 = 0.600. Use Henderson-Hasselbalch: pH = pKa + log(salt/acid).",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q10.png"
@@ -8277,7 +8277,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Delta S = sum of products - sum of reactants. Make sure to multiply by coefficients and check the units are J mol-1 K-1.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q11.png"
@@ -8292,7 +8292,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "In an alkaline fuel cell, the overall EMF = E(cathode) - E(anode). Use the given electrode potentials to calculate.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q12.png"
@@ -8307,7 +8307,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Bond enthalpy is always endothermic (breaking bonds needs energy). Second electron affinity of oxygen is endothermic because you are adding an electron to an already negative ion.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q13.png"
@@ -8322,7 +8322,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Temperature increases the kinetic energy of molecules so more collide with energy above Ea. The activation energy itself does not change.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q14.png"
@@ -8337,7 +8337,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Use pV = nRT or Kp expressions. Check the units and convert where needed.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2018-q15.png"
@@ -8352,7 +8352,7 @@
         "D": "barium"
       },
       "answer": "B",
-      "explanation": "Mass of Cl = 9.775 - 3.528 = 6.247g. Moles of Cl = 6.247/35.5 = 0.176. Moles of M = 3.528/Ar. Trying Ca (Ar=40): 3.528/40 = 0.088. Ratio 0.176/0.088 = 2. So MCl2 = calcium chloride.",
+      "explanation": "Mass of Cl = 9.775 - 3.528 = 6.247g. Moles Cl = 0.176. Trying Ca (Ar=40): 3.528/40 = 0.088. Ratio = 2:1. So CaCl2.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -8366,7 +8366,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "The overall reaction is exothermic (negative delta H). The catalyst provides an alternative pathway with lower activation energy.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q10.png"
@@ -8381,7 +8381,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Gradient = -Ea/R. So Ea = -gradient x R = 4420 x 8.314 = 36748 J mol-1 = 36.7 kJ mol-1.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q11.png"
@@ -8396,7 +8396,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "A conjugate acid-base pair differs by one H+. H3AsO4 and H2AsO4- are a conjugate pair. H2O and H3O+ are the other pair.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q12.png"
@@ -8411,7 +8411,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "The complex has 2 bidentate en ligands and 2 Cl ligands. It can form cis/trans isomers and the cis form has optical isomers. Total = 3.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q13.png"
@@ -8426,7 +8426,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Transition metals have partially filled d subshells and form coloured compounds. Sc and Zn are not true transition metals.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q14.png"
@@ -8441,7 +8441,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "In a fuel cell, the most negative E value is the anode (oxidation) and the most positive is the cathode (reduction). EMF = E(cathode) - E(anode).",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2019-q15.png"
@@ -8456,7 +8456,7 @@
         "D": "+"
       },
       "answer": "A",
-      "explanation": "The gradient of ln(k) vs 1/T = -Ea/R. Rearrange to find Ea. Use R = 8.314.",
+      "explanation": "Use the Arrhenius equation. The gradient of ln(k) vs 1/T gives -Ea/R.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -8470,7 +8470,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Use the rate equation: rate = k[ICl]^m[H2]^n. Work out the orders from the data given, then find k with correct units.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q10.png"
@@ -8485,7 +8485,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Moles of HCl = 0.020 x 0.10 = 0.002. Moles of NaOH = 0.010 x 0.10 = 0.001. Excess HCl = 0.001 mol in 0.030 dm3. [H+] = 0.0333. pH = 1.48.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q11.png"
@@ -8500,7 +8500,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Balance using oxidation states. Mn goes from +7 to +4 (gains 3e). I goes from -1 to +1 (loses 2e). Balance electrons transferred.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q12.png"
@@ -8515,7 +8515,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "A catalyst speeds up both forward and reverse reactions equally. It does not change the equilibrium position or the value of Kc.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q13.png"
@@ -8530,7 +8530,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Down Group 2: ionisation energy decreases because atomic radius increases and shielding increases. Reactivity with water increases.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q14.png"
@@ -8545,7 +8545,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "en (ethane-1,2-diamine) is a bidentate ligand. 3 en ligands give an octahedral complex with 6 coordinate bonds. Check for optical isomers.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2020-q15.png"
@@ -8560,7 +8560,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "pH = 0.5(pKa - log c) = 0.5(4.76 - log 0.50) = 0.5(4.76 + 0.30) = 2.53.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q10.png"
@@ -8575,7 +8575,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "A reaction is feasible when delta G is negative. Delta G = delta H - T delta S. Check which combination of signs gives negative G at all temperatures.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q11.png"
@@ -8590,7 +8590,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "The strongest reducing agent has the most negative E value. Fe has E = -0.44V. Fe is oxidised most easily.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q12.png"
@@ -8605,7 +8605,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "London forces increase down the group because the atoms have more electrons. More electrons means stronger temporary dipoles.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q13.png"
@@ -8620,7 +8620,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "ClNO has 1 Cl-N bond and 1 N=O bond. Count lone pairs on each atom. Check if the molecule is polar by looking at its shape.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q14.png"
@@ -8635,7 +8635,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Fe3+ gives a brown precipitate with NaOH. SO4 2- gives a white precipitate with Ba2+ ions. NH4+ gives ammonia gas when heated with NaOH.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2021-q15.png"
@@ -8650,7 +8650,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Read the question carefully from the image. Apply the relevant chemistry concept.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q2.png"
@@ -8665,7 +8665,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Read the question carefully from the image. Apply the relevant chemistry concept.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q3.png"
@@ -8680,7 +8680,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Read the question carefully from the image. Apply the relevant chemistry concept.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q4.png"
@@ -8695,7 +8695,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Mass of 4 molecules = 2.125 x 10-22 g. Mass of 1 molecule = 5.31 x 10-23 g. Mr = 5.31 x 10-23 x 6.02 x 10^23 = 32.0. O2 has Mr = 32.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q5.png"
@@ -8710,7 +8710,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Condensation is exothermic (gas to liquid releases energy) so delta H is negative. Liquid is more ordered than gas so delta S is negative.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q10.png"
@@ -8725,7 +8725,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "At low pH, the indicator is in its HA form (blue). At high pH, it is in its A- form (yellow). The colour depends on the ratio of HA to A-.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q11.png"
@@ -8740,7 +8740,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "In the equilibrium NH3 + H2O = NH4+ + OH-, the acids are the species that donate H+. NH4+ and H2O are the Bronsted-Lowry acids.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q12.png"
@@ -8755,7 +8755,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "CO2 is a non-polar molecule (linear, dipoles cancel). SiO2 is giant covalent (not molecular). Check each product's structure.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q14.png"
@@ -8770,7 +8770,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Write out the electron configurations. Mn3+ is [Ar]3d4 (4 unpaired). V3+ is [Ar]3d2 (2 unpaired). Cu+ is [Ar]3d10 (0 unpaired).",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2022-q15.png"
@@ -8785,7 +8785,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Read the question carefully from the image and apply the relevant concept.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q2.png"
@@ -8800,7 +8800,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Read the question carefully from the image and apply the relevant concept.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q4.png"
@@ -8815,7 +8815,7 @@
         "D": "effervescence precipitate"
       },
       "answer": "A",
-      "explanation": "K2CO3 is soluble so no visible change. AgNO3 reacts with halide ions to form an insoluble precipitate.",
+      "explanation": "K2CO3 with HCl gives effervescence (CO2 gas). AgNO3 with HCl gives a white precipitate (AgCl).",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -8829,7 +8829,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "The compound with the highest lattice enthalpy has the smallest ions with the highest charges. MgO has Mg2+ and O2- which are both small and doubly charged.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q8.png"
@@ -8844,7 +8844,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Ka = [H+]^2 / c (for weak acids). [H+] = sqrt(Ka x c). % dissociation = ([H+]/c) x 100.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q10.png"
@@ -8859,7 +8859,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "K2CO3 + HCl gives CO2 (effervescence). AgNO3 + HCl gives AgCl (white precipitate).",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q11.png"
@@ -8874,7 +8874,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "EMF = E(cathode) - E(anode). The more positive half-cell is the cathode. Use the values given.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q12.png"
@@ -8889,7 +8889,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "All substances have London forces in the solid state, including ionic and covalent compounds. London forces exist between all molecules and atoms.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q13.png"
@@ -8904,7 +8904,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Pt(NH3)2Cl2 is square planar (90 degree angles). Pt oxidation state: 2x(0) + 2x(-1) + x = 0, so Pt = +2. It has cis and trans isomers.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q14.png"
@@ -8919,7 +8919,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Use Le Chatelier's principle. Increasing temperature favours the endothermic direction. Increasing pressure favours fewer moles of gas.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2023-q15.png"
@@ -8934,7 +8934,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Zero order means rate is constant regardless of concentration. The rate-concentration graph is a horizontal line.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q10.png"
@@ -8949,7 +8949,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "At equilibrium, concentrations of reactants and products are constant. The graph should show all three concentrations levelling off.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q11.png"
@@ -8964,7 +8964,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "A buffer is made from a weak acid and its conjugate base. CH3COONa provides the conjugate base CH3COO- to mix with CH3COOH.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q12.png"
@@ -8979,7 +8979,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Green precipitate with NaOH = Fe2+ or Ni2+. White precipitate with Ba(NO3)2 = SO4 2-. Identify the salt from these results.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q13.png"
@@ -8994,7 +8994,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Chlorine can gain an electron (Cl- in ionic compounds), share electrons (Cl2, covalent), or be in positive oxidation states (ClO3-, etc).",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q14.png"
@@ -9009,7 +9009,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Elements are arranged by atomic number (not mass). Elements in the same group have similar chemical properties.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2024-q15.png"
@@ -9024,7 +9024,7 @@
         "D": "0.37%"
       },
       "answer": "C",
-      "explanation": "Titre = 29.35 - 2.60 = 26.75 cm3. Two burette readings so uncertainty = 2 x 0.05 = 0.10 cm3. Percentage = (0.10/26.75) x 100 = 0.37%. But 0.34% uses 0.05 per reading differently.",
+      "explanation": "Titre = 29.35 - 2.60 = 26.75 cm3. Uncertainty = 2 x 0.05 = 0.10 cm3. Percentage = (0.10/26.75) x 100 = 0.37%. Check which answer matches.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -9037,7 +9037,7 @@
         "C": "112 D"
       },
       "answer": "D",
-      "explanation": "Half-life for first order = ln2/k = 0.693/0.00619 = 112 s.",
+      "explanation": "Half-life = ln2/k = 0.693/0.00619 = 112 s.",
       "topic": "OCR-P1",
       "set": 1
     },
@@ -9051,7 +9051,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Read the rate from the tangent to the curve at 30 seconds. Rate = change in volume / change in time.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q10.png"
@@ -9066,7 +9066,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "The strongest reducing agent has the most negative E value. Mg (E = -2.37V) is more negative than Pb (E = -0.13V). So Mg is the strongest reducing agent.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q11.png"
@@ -9081,7 +9081,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Half-life = ln2/k = 0.693/0.00619 = 112 s.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q12.png"
@@ -9096,7 +9096,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Use the equilibrium expression Kc = [products]/[reactants]. Calculate moles at equilibrium, then concentrations, then Kc.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q13.png"
@@ -9111,7 +9111,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Barium is in Group 2 so has 2 outer electrons in an s-orbital. It reacts with water. Its hydroxide is soluble.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q14.png"
@@ -9126,7 +9126,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Both complexes have Cr3+ (oxidation state +3). NH3 and OH- are both neutral/negative ligands. Check coordination number and geometry.",
       "topic": "OCR-P1",
       "set": 1,
       "image": "/mcq-images/OCR-P1-2025-q15.png"
@@ -9141,7 +9141,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Acyl chlorides and carboxylic acids dissolve in water to produce acidic solutions. The strongest acid produces the most H+ ions.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q10.png"
@@ -9156,7 +9156,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Count the number of different hydrogen environments. Symmetry means some H atoms are equivalent and give the same peak.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q11.png"
@@ -9171,7 +9171,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "0.1 mol of diprotic acid reacts with 0.1 mol NaOH. Only one H+ is neutralised per NaOH. Molecules of water = 0.1 x 6.02 x 10^23.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q12.png"
@@ -9186,7 +9186,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Acyl chlorides react with amines to form amides. CH3CH2COCl + CH3NH2 gives CH3CH2CONHCH3 + HCl.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q13.png"
@@ -9201,7 +9201,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "In radical substitution of ethane: initiation gives Cl radicals. Propagation involves CH3CH2 radical and Cl radical. H radical is not formed.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q14.png"
@@ -9216,7 +9216,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Structural isomers have the same molecular formula but different structural arrangements. All three (hexanoic acid, ethyl butanoate, propyl propanoate) are C6H12O2.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2017-q15.png"
@@ -9231,7 +9231,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Friedel-Crafts acylation uses an acyl chloride (CH3COCl) with AlCl3 catalyst to add an acyl group to benzene.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q10.png"
@@ -9246,7 +9246,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Draw all straight-chain isomers of C7H15Cl. A chiral centre needs 4 different groups. Check each isomer for chirality.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q11.png"
@@ -9261,7 +9261,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "In mass spec, look at the m/z value and work out which fragment has that mass. Common fragments: CH3 (15), C2H5 (29), CHO (29), OH (17).",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q12.png"
@@ -9276,7 +9276,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "The delocalised model explains: equal bond lengths, enthalpy of hydrogenation being less exothermic than expected for 3 C=C bonds.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q13.png"
@@ -9291,7 +9291,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "In recrystallisation: dissolve in minimum hot solvent, filter to remove insoluble impurities, cool to crystallise, filter to collect crystals.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q14.png"
@@ -9306,7 +9306,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "To form a C-C bond: Friedel-Crafts (RCl + AlCl3), or nucleophilic substitution with CN- (KCN in ethanol). Both extend the carbon chain.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2018-q15.png"
@@ -9321,7 +9321,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Count the number of different carbon environments. Symmetry reduces the number of peaks. 4 peaks means 4 unique carbon environments.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q10.png"
@@ -9336,7 +9336,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Moles of C6H5NH2 = 4.50/93.0 = 0.0484. Theoretical yield = 0.0484 x 135.0 = 6.53g. Percentage yield = (actual/theoretical) x 100.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q11.png"
@@ -9351,7 +9351,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Check chemical shifts against the data sheet. The number and position of peaks tells you which carbon environments are present.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q12.png"
@@ -9366,7 +9366,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "NaBH4 reduces aldehydes to primary alcohols and ketones to secondary alcohols. It cannot form tertiary alcohols.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q13.png"
@@ -9381,7 +9381,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Phenol reacts with KOH (it is weakly acidic), ethanoyl chloride (acylation), and nitric acid (nitration of the ring).",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q14.png"
@@ -9396,7 +9396,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Identify each functional group in the molecule: amine (NH2), ester (COO), ether (C-O-C), amide (CONH), etc.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2019-q15.png"
@@ -9411,7 +9411,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Alicyclic means a ring that is not aromatic. Draw all possible ring structures with formula C5H10 (cyclopentane and methylcyclobutanes etc).",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q10.png"
@@ -9426,7 +9426,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Moles of CO2 = 3.38/44 = 0.0768. Moles of C = 0.0768. Mass of C = 0.0768 x 12 = 0.922g. Mass of H = 1.00 - 0.922 = 0.078g. Ratio C:H = 1:1.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q11.png"
@@ -9441,7 +9441,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Count the carbons and hydrogens carefully in the skeletal formula. Each junction is a carbon. Add hydrogens to give carbon 4 bonds each.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q12.png"
@@ -9456,7 +9456,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "In gas chromatography: retention time identifies components, peak area gives relative amounts. The mobile phase is an inert gas.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q13.png"
@@ -9471,7 +9471,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Alkaline hydrolysis of a halogenoalkane gives an alcohol. Acid hydrolysis of an ester also gives an alcohol. Check which reactions give propan-1-ol.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q14.png"
@@ -9486,7 +9486,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Friedel-Crafts acylation adds a C=O group directly to benzene. The product must have a carbonyl attached to the ring.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2020-q15.png"
@@ -9501,7 +9501,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Rf = distance moved by spot / distance moved by solvent front. The spot closer to the origin has the smaller Rf and is more strongly adsorbed.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q10.png"
@@ -9516,7 +9516,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Look for key IR absorptions: broad O-H (2500-3300), sharp C=O (1700-1750), N-H (3300-3500). Match the spectrum to the compound.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q11.png"
@@ -9531,7 +9531,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Propanal has a CHO group (mass 29) which propanone does not. Both have CH3 (15) and C2H5/CH3CO (43) fragments.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q12.png"
@@ -9546,7 +9546,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Count unique carbon environments in each molecule. Symmetry reduces the number of peaks. 4 peaks = 4 different carbon environments.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q13.png"
@@ -9561,7 +9561,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Evidence for delocalised model: equal bond lengths, lower than expected hydrogenation enthalpy, and benzene does not decolourise bromine water.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q14.png"
@@ -9576,7 +9576,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Phenol reacts with NaOH (weakly acidic). Carboxylic acids react with NaOH. Halogenoalkanes undergo hydrolysis with NaOH. All three react.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2021-q15.png"
@@ -9591,7 +9591,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "RBr hydrolyses faster than RCl because the C-Br bond is weaker than C-Cl. Weaker bonds break more easily.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q1.png"
@@ -9606,7 +9606,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Identify the functional groups from the skeletal formula. Look for amide (CONH), amine (NH2), alcohol (OH), carboxylic acid (COOH).",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q10.png"
@@ -9621,7 +9621,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Match the IR spectrum absorptions to functional groups using the data sheet. Look for O-H, C=O, N-H peaks.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q11.png"
@@ -9636,7 +9636,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Identify the functional groups from the skeletal formula. An amide has C(=O)NH, an alcohol has OH, an amine has NH2.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q12.png"
@@ -9651,7 +9651,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "In propagation, a radical reacts with a molecule to form a product and a new radical. The chain continues.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q13.png"
@@ -9666,7 +9666,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "A nucleophile has a lone pair of electrons to donate. NH3, OH- and CH3NH2 all have lone pairs, so all three can act as nucleophiles.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q14.png"
@@ -9681,7 +9681,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Identify functional groups from the skeletal formula. Check for amide, amine, alcohol, carboxylic acid, ester groups.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2022-q15.png"
@@ -9696,7 +9696,7 @@
         "D": "NH"
       },
       "answer": "B",
-      "explanation": "Acyl chlorides react with nucleophiles that have a lone pair, like OH or NH2 groups.",
+      "explanation": "Acyl chlorides react with nucleophiles that have a lone pair like OH or NH2 groups.",
       "topic": "OCR-P2",
       "set": 1
     },
@@ -9710,7 +9710,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "m/z = 43 corresponds to CH3CO+ (the acylium ion). Look for an ester that contains a CH3CO group.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q10.png"
@@ -9725,7 +9725,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Match the IR absorptions to functional groups. Look for broad O-H, sharp C=O, or N-H peaks on the spectrum.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q11.png"
@@ -9740,7 +9740,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Acyl chlorides react with compounds that have NH2 or OH groups. These groups act as nucleophiles.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q12.png"
@@ -9755,7 +9755,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Aliphatic means not aromatic (no benzene ring). Check which compounds contain a benzene ring.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q13.png"
@@ -9770,7 +9770,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Esters and nitriles can be hydrolysed to form carboxylic acids. Halogenoalkanes give alcohols, not acids.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q14.png"
@@ -9785,7 +9785,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "120 degree bond angles are found in trigonal planar arrangements. Carboxylate ions, phenoxide ions and carbocations can all have this geometry.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2023-q15.png"
@@ -9800,7 +9800,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "Moles of amine = 1.35/45.0 = 0.030. Moles of HCl = 0.020 x 2.0 = 0.040. HCl is in excess. Work out the pH from excess H+ concentration.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q10.png"
@@ -9815,7 +9815,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Match the IR spectrum to the compound. Look for key absorptions: O-H broad (alcohol/acid), C=O sharp (carbonyl), N-H (amine).",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q11.png"
@@ -9830,7 +9830,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "When a diamine reacts with a diacyl chloride, HCl is produced as the other product. Each amide bond formed releases one HCl molecule.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q12.png"
@@ -9845,7 +9845,7 @@
         "D": "See diagram"
       },
       "answer": "C",
-      "explanation": "Answer: C.",
+      "explanation": "In gas chromatography, retention time identifies the component. Peak area is proportional to the amount. Calculate the percentage from areas.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q13.png"
@@ -9860,7 +9860,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Count unique carbon environments. Symmetry in the molecule reduces the number of 13C NMR peaks. 2 peaks means 2 different C environments.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2024-q14.png"
@@ -9875,7 +9875,7 @@
         "D": "Global warming Your answer [1]"
       },
       "answer": "C",
-      "explanation": "Ozone depletion involves UV light breaking bonds in CFCs, not infrared. The other options all use IR radiation.",
+      "explanation": "Ozone depletion involves UV radiation breaking C-Cl bonds in CFCs. The other processes use infrared radiation.",
       "topic": "OCR-P2",
       "set": 1
     },
@@ -9889,7 +9889,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "The compound has a chiral centre (Br on C) and an E/Z double bond. Each gives 2 isomers. Total = 2 x 2 x 2 = 8 stereoisomers.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q10.png"
@@ -9904,7 +9904,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "m/z = 29 corresponds to CHO+ or C2H5+. Check which molecule cannot produce either of these fragments.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q11.png"
@@ -9919,7 +9919,7 @@
         "D": "See diagram"
       },
       "answer": "A",
-      "explanation": "Answer: A.",
+      "explanation": "Ozone depletion uses UV light to break bonds in CFCs, not infrared. IR is used in gas monitoring, breathalysers and greenhouse effect.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q12.png"
@@ -9934,7 +9934,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Oxidation of a secondary alcohol gives a ketone. Primary alcohols give aldehydes then acids. Check which OH group is secondary.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q13.png"
@@ -9949,7 +9949,7 @@
         "D": "See diagram"
       },
       "answer": "B",
-      "explanation": "Answer: B.",
+      "explanation": "Read the question from the image and identify the correct answer.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q14.png"
@@ -9964,7 +9964,7 @@
         "D": "See diagram"
       },
       "answer": "D",
-      "explanation": "Answer: D.",
+      "explanation": "Read the question from the image and identify the correct apparatus setup for the oxidation reaction.",
       "topic": "OCR-P2",
       "set": 1,
       "image": "/mcq-images/OCR-P2-2025-q15.png"
