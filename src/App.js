@@ -4810,7 +4810,7 @@ function track(event, params = {}) {
 
 // --- Landing Page Component (unauthenticated visitors — sales page) ---
 function LandingPage({ onGoToLogin, onGoToCheckout }) {
-  const [activeSection, setActiveSection] = useState("mechanisms"); // "mechanisms" | "mcqs"
+  const [activeSection, setActiveSection] = useState("mcqs"); // "mcqs"
   const [activeMechIdx, setActiveMechIdx] = useState(null); // null = list, 0 = first mech, 1 = second
   const [mechOpenCards, setMechOpenCards] = useState({});
   const [mcqIdx, setMcqIdx] = useState(0);
@@ -4819,6 +4819,36 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
   const [mcqScore, setMcqScore] = useState(0);
   const [mcqAnswered, setMcqAnswered] = useState(0);
   const [flippedCard, setFlippedCard] = useState(false);
+
+  // --- Landing page analytics ---
+  const scrollMilestones = useRef(new Set());
+  useEffect(() => {
+    track("landing_page_view");
+
+    // Scroll depth tracking (25%, 50%, 75%, 100%)
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const pct = Math.round((scrollTop / docHeight) * 100);
+      [25, 50, 75, 100].forEach(milestone => {
+        if (pct >= milestone && !scrollMilestones.current.has(milestone)) {
+          scrollMilestones.current.add(milestone);
+          track("landing_scroll_depth", { percent: milestone });
+        }
+      });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Track time on landing page
+  useEffect(() => {
+    const start = Date.now();
+    const intervals = [30, 60, 120, 300]; // seconds
+    const timers = intervals.map(s => setTimeout(() => track("landing_time_spent", { seconds: s }), s * 1000));
+    return () => { timers.forEach(clearTimeout); track("landing_exit", { seconds: Math.round((Date.now() - start) / 1000) }); };
+  }, []);
 
   // Preview mechanisms data (subset of real content)
   const previewMechs = [
@@ -4860,22 +4890,34 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
   // Preview MCQs (3 real questions from organic topics)
   const previewMCQs = [
     {
+      q: "A catalyst increases the rate of a reaction. Which statement correctly explains this?",
+      options: { A: "It increases the kinetic energy of the particles", B: "It provides an alternative pathway with lower activation energy", C: "It increases the concentration of reactants", D: "It increases the frequency of all collisions" },
+      answer: "B",
+      explanation: "A catalyst provides an alternative reaction pathway with a lower activation energy (Ea). More particles then have energy ≥ Ea, so the rate increases without changing temperature or concentration.",
+    },
+    {
+      q: "Which of these molecules has a non-linear shape?",
+      options: { A: "CO₂", B: "BeCl₂", C: "H₂O", D: "HCN" },
+      answer: "C",
+      explanation: "H₂O has two bonding pairs and two lone pairs around oxygen, giving a bent (non-linear) shape with a bond angle of about 104.5°. The others are all linear.",
+    },
+    {
       q: "Which compound can react with ammonia to produce propylamine?",
       options: { A: "CH₃CH=CH₂", B: "CH₃CH₂CH₂OH", C: "CH₃CH₂CH₂Br", D: "CH₃CH₂CH₃" },
       answer: "C",
       explanation: "Halogenoalkanes undergo nucleophilic substitution with NH₃. The lone pair on nitrogen attacks the δ+ carbon, displacing Br⁻. Excess NH₃ in a sealed tube with heat is required.",
     },
     {
-      q: "What is the organic product when 1-bromopropane reacts with KCN in aqueous ethanol?",
-      options: { A: "Propylamine", B: "Butylamine", C: "Propanenitrile", D: "Butanenitrile" },
-      answer: "D",
-      explanation: "CN⁻ replaces Br⁻ by nucleophilic substitution. The carbon chain increases by one: C₃ bromide → C₄ nitrile (butanenitrile). This is a key synthesis step.",
+      q: "An element has the electron configuration 1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁵. Which statement is correct?",
+      options: { A: "It is a Group 5 element", B: "It is a d-block element with oxidation state +5 only", C: "It is a transition metal that can form coloured compounds", D: "It has 5 electrons in total" },
+      answer: "C",
+      explanation: "This is the electron configuration of Mn (or Cr depending on context). Transition metals have partially filled d orbitals and form coloured compounds due to d-d electron transitions.",
     },
     {
-      q: "1-bromopropane reacts faster than 1-chloropropane with KCN. Which row is correct?",
-      options: { A: "1-bromopropane: C–Br bond weaker than C–Cl", B: "1-bromopropane: C–Br bond stronger than C–Cl", C: "1-chloropropane: C–Br bond weaker than C–Cl", D: "1-chloropropane: C–Br bond stronger than C–Cl" },
-      answer: "A",
-      explanation: "The C–Br bond is weaker than C–Cl (lower bond enthalpy), so it breaks more easily. Rate of substitution: C–I > C–Br > C–Cl > C–F.",
+      q: "What is the pH of a 0.01 mol dm⁻³ solution of HCl?",
+      options: { A: "1", B: "2", C: "3", D: "4" },
+      answer: "B",
+      explanation: "HCl is a strong acid that fully dissociates. [H⁺] = 0.01 = 10⁻² mol dm⁻³. pH = -log₁₀[H⁺] = -log₁₀(10⁻²) = 2.",
     },
   ];
 
@@ -4913,8 +4955,8 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           </div>
         </div>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-          <button onClick={onGoToLogin} style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
-          <button onClick={onGoToCheckout} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
+          <button onClick={() => { track("click_login", { location: "header" }); onGoToLogin(); }} style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
+          <button onClick={() => { track("click_get_access", { location: "header" }); onGoToCheckout(); }} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
         </div>
       </div>
 
@@ -4934,17 +4976,11 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
               It's almost never that you don't understand it. It's that the exact answer the examiner gives marks for never made it into your memory.
             </p>
             <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: bodyText, lineHeight: 1.7, margin: "0 0 32px" }}>
-              This app fixes that. Mechanisms you can step through. MCQs that drill the gaps. Flashcards written to match the real mark scheme.
+              This app fixes that. 566+ MCQs that drill the gaps. Flashcards written to match the real mark scheme. Calculations with step-by-step solutions.
             </p>
 
             {/* Exam countdown pills */}
             <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginBottom: "32px" }}>
-              {daysTo2 > 0 && (
-                <div style={{ background: "rgba(41,171,226,0.12)", border: "1.5px solid rgba(41,171,226,0.3)", borderRadius: "14px", padding: "14px 22px", display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{ fontSize: "28px", fontWeight: 900, color: "#29ABE2" }}>{daysTo2}</span>
-                  <span style={{ fontSize: "15px", color: bodyText, fontWeight: 600 }}>days to Paper 2</span>
-                </div>
-              )}
               {daysTo3 > 0 && (
                 <div style={{ background: "rgba(5,150,105,0.12)", border: "1.5px solid rgba(5,150,105,0.3)", borderRadius: "14px", padding: "14px 22px", display: "flex", alignItems: "center", gap: "10px" }}>
                   <span style={{ fontSize: "28px", fontWeight: 900, color: "#059669" }}>{daysTo3}</span>
@@ -4953,7 +4989,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
               )}
             </div>
 
-            <button onClick={onGoToCheckout} style={{ padding: "20px 48px", borderRadius: "16px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "clamp(18px, 2.5vw, 21px)", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+            <button onClick={() => { track("click_get_access", { location: "hero" }); onGoToCheckout(); }} style={{ padding: "20px 48px", borderRadius: "16px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "clamp(18px, 2.5vw, 21px)", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.35)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
               Get full access <span style={{ fontSize: "22px" }}>→</span>
             </button>
             <div style={{ fontSize: "14px", color: dimText, marginTop: "12px" }}>Cancel anytime. Instant access.</div>
@@ -4964,7 +5000,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "24px", textAlign: "center" }}>
               <div style={{ ...labelStyle, color: "#059669", fontSize: "11px", marginBottom: "10px" }}>TAP TO TEST YOURSELF</div>
               <div style={{ fontSize: "10px", color: dimText, letterSpacing: "1px", textTransform: "uppercase", marginBottom: "14px" }}>PHYSICAL • RATES</div>
-              <div className="lp-flip" onClick={() => setFlippedCard(!flippedCard)}>
+              <div className="lp-flip" onClick={() => { setFlippedCard(!flippedCard); track("landing_flip_flashcard", { flipped: !flippedCard }); }}>
                 <div className={`lp-flip-inner${flippedCard ? " flipped" : ""}`}>
                   <div className="lp-flip-face lp-flip-front">
                     <div style={{ fontSize: "clamp(17px, 2.5vw, 21px)", fontWeight: 600, color: "#fff", lineHeight: 1.5 }}>
@@ -4991,7 +5027,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             <div style={{ fontSize: "clamp(15px, 2vw, 18px)", fontWeight: 700, color: "#fff" }}>
               Open the app free and find your first gap in 60 seconds.
             </div>
-            <button onClick={onGoToCheckout} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+            <button onClick={() => { track("click_get_access", { location: "banner_strip" }); onGoToCheckout(); }} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
               Get access →
             </button>
           </div>
@@ -5003,21 +5039,21 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           ══════════════════════════════════════════════════ */}
       <div style={{ background: "#0a1628", borderTop: "3px solid #29ABE2", padding: "clamp(40px, 6vh, 70px) 24px" }}>
         <div style={{ ...wrap, textAlign: "center" }}>
-          <div style={{ ...labelStyle, color: "#29ABE2" }}>FREE PAPER 2 GUIDE</div>
+          <div style={{ ...labelStyle, color: "#29ABE2" }}>FREE PAPER 3 GUIDE</div>
           <h2 style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "clamp(26px, 4.5vw, 40px)", lineHeight: 1.12, margin: "0 0 12px" }}>
             Your free predictions & advice guide
           </h2>
           <p style={{ fontSize: "clamp(15px, 2vw, 17px)", color: bodyText, lineHeight: 1.6, margin: "0 0 32px", maxWidth: "560px", marginLeft: "auto", marginRight: "auto" }}>
-            Based on past paper analysis and examiner reports. Download your exam board's guide. No sign-up needed.
+            Based on 10 years of past papers and examiner reports. Download your exam board's guide. No sign-up needed.
           </p>
 
           <div className="lp-guide-row" style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap" }}>
             {/* AQA */}
             <div style={{ background: "rgba(41,171,226,0.06)", border: "1.5px solid rgba(41,171,226,0.2)", borderRadius: "20px", padding: "40px 36px", flex: "1 1 340px", maxWidth: "420px", textAlign: "center" }}>
               <div style={{ fontSize: "40px", marginBottom: "14px" }}>📘</div>
-              <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>AQA Paper 2</div>
-              <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Predictions + Student Advice</div>
-              <a href="/guides/AQA-7405-2-Student-Advice.pdf" download style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+              <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>AQA Paper 3</div>
+              <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Strategy Guide + 2026 Predictions</div>
+              <a href="/guides/AQA-7405-3-Student-Advice.pdf" download onClick={() => track("download_free_guide", { board: "AQA", paper: "3" })} style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
                 Download Free Guide
               </a>
             </div>
@@ -5027,14 +5063,14 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
               <div style={{ fontSize: "40px", marginBottom: "14px" }}>📗</div>
               <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>OCR A Paper 2</div>
               <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Predictions + Student Advice</div>
-              <a href="/guides/OCR-H43202-Student-Advice.pdf" download style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#059669", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+              <a href="/guides/OCR-H43202-Student-Advice.pdf" download onClick={() => track("download_free_guide", { board: "OCR_A" })} style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#059669", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
                 Download Free Guide
               </a>
             </div>
           </div>
 
           <div style={{ marginTop: "24px", fontSize: "14px", color: dimText }}>
-            Want more than just predictions? 👇 Try the full app below.
+            Want more than just predictions? Try the full app below.
           </div>
         </div>
       </div>
@@ -5083,7 +5119,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             Everything the examiner is looking for, in one place.
           </h2>
           <p style={{ fontSize: "clamp(16px, 2.2vw, 18px)", color: mutedText, lineHeight: 1.7, margin: "0 0 40px", maxWidth: "620px" }}>
-            Not just content. The exact phrasing, the right keywords, the mechanism arrows drawn how the mark scheme expects. Try it below.
+            Not just content. The exact phrasing, the right keywords, the mark scheme wording that gets you the marks. Try the MCQs below.
           </p>
 
           {/* Feature cards row */}
@@ -5106,125 +5142,8 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
           <div id="lp-preview" style={{ background: "#1a2d45", borderRadius: "20px", padding: "clamp(20px, 3vw, 32px)", color: "#fff" }}>
             <div style={{ textAlign: "center", marginBottom: "20px" }}>
               <div style={{ ...labelStyle, color: "#29ABE2", fontSize: "11px" }}>TRY IT FREE</div>
-              <div style={{ fontSize: "18px", fontWeight: 800 }}>Explore real content from the app</div>
+              <div style={{ fontSize: "18px", fontWeight: 800 }}>Test yourself — 566+ MCQs across every topic</div>
             </div>
-
-            {/* Tab switcher */}
-            <div style={{ display: "flex", gap: "6px", justifyContent: "center", marginBottom: "24px" }}>
-              {[{ id: "mechanisms", label: "🧪 Mechanisms" }, { id: "mcqs", label: "🎯 MCQs" }].map(tab => (
-                <button key={tab.id} onClick={() => setActiveSection(tab.id)}
-                  style={{ padding: "10px 24px", borderRadius: "12px", border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: "14px", fontWeight: 700,
-                    background: activeSection === tab.id ? "#29ABE2" : "rgba(255,255,255,0.08)",
-                    color: activeSection === tab.id ? "#fff" : "#94a3b8",
-                    transition: "all 0.2s" }}>
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* ── MECHANISMS PREVIEW ─────────────────── */}
-            {activeSection === "mechanisms" && activeMechIdx === null && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px", animation: "lpFadeIn 0.4s ease" }}>
-                {previewMechs.map((m, idx) => (
-                  <button key={m.id} onClick={() => { if (!m.locked) { setActiveMechIdx(idx); setMechOpenCards({}); } }}
-                    style={{ background: "rgba(255,255,255,0.06)", border: `2px solid ${m.locked ? "rgba(255,255,255,0.08)" : m.color + "40"}`, borderRadius: "16px",
-                      padding: "20px 22px", textAlign: "left", cursor: m.locked ? "default" : "pointer", fontFamily: "inherit",
-                      position: "relative", overflow: "hidden", transition: "border-color 0.2s" }}>
-                    {m.locked && (
-                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(13,27,42,0.95) 70%)",
-                        display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: "20px", zIndex: 2, borderRadius: "inherit" }}>
-                        <div style={{ textAlign: "center" }}>
-                          <div style={{ fontSize: "24px", marginBottom: "6px" }}>🔒</div>
-                          <div style={{ fontSize: "13px", fontWeight: 800, color: "#fff" }}>Unlock with ChemMastery Pro</div>
-                        </div>
-                      </div>
-                    )}
-                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                      <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: m.color, flexShrink: 0 }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: "17px", fontWeight: 800, color: "#fff", marginBottom: "4px" }}>{m.title}</div>
-                        <div style={{ fontSize: "14px", color: bodyText, fontWeight: 500 }}>{m.subtitle}</div>
-                      </div>
-                      {!m.locked && !m.halfLocked && <div style={{ fontSize: "13px", color: "#29ABE2", fontWeight: 700 }}>Try it →</div>}
-                      {!m.locked && m.halfLocked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(226,160,63,0.15)", color: "#e2a03f", padding: "4px 10px", borderRadius: "8px" }}>PREVIEW</div>}
-                      {m.locked && <div style={{ fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "4px 10px", borderRadius: "8px" }}>PRO</div>}
-                    </div>
-                  </button>
-                ))}
-                {[
-                  { title: "Electrophilic Addition: HBr", sub: "Markovnikov's Rule" },
-                  { title: "Elimination", sub: "E1 & E2 pathways" },
-                  { title: "Electrophilic Aromatic Substitution", sub: "Nitration, Friedel-Crafts" },
-                ].map((m, i) => (
-                  <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "18px 22px", position: "relative", overflow: "hidden" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "14px", opacity: 0.4 }}>
-                      <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#475569", flexShrink: 0 }} />
-                      <div>
-                        <div style={{ fontSize: "16px", fontWeight: 700, color: "#fff" }}>{m.title}</div>
-                        <div style={{ fontSize: "13px", color: mutedText }}>{m.sub}</div>
-                      </div>
-                    </div>
-                    <div style={{ position: "absolute", top: "10px", right: "14px", fontSize: "11px", fontWeight: 700, background: "rgba(41,171,226,0.15)", color: "#29ABE2", padding: "3px 10px", borderRadius: "8px" }}>PRO</div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* ── ACTIVE MECHANISM VIEWER ───────────── */}
-            {activeSection === "mechanisms" && activeMechIdx !== null && (() => {
-              const mech = previewMechs[activeMechIdx];
-              return (
-                <div style={{ animation: "lpFadeIn 0.4s ease" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                    <button onClick={() => { setActiveMechIdx(null); setMechOpenCards({}); }}
-                      style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 14px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>
-                      ← Back
-                    </button>
-                    <div>
-                      <div style={{ fontSize: "22px", fontWeight: 800, color: "#fff" }}>{mech.title}</div>
-                      <div style={{ fontSize: "14px", color: bodyText }}>{mech.subtitle}</div>
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-                    <div style={{ flex: "1 1 50%", minWidth: "280px", background: "#fff", borderRadius: "16px", padding: "12px", overflow: "hidden" }}>
-                      <img src={process.env.PUBLIC_URL + mech.image} alt={mech.title} style={{ width: "100%", height: "auto", display: "block", borderRadius: "10px" }} />
-                    </div>
-                    <div style={{ flex: "1 1 40%", minWidth: "260px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <div style={{ fontSize: "12px", fontWeight: 800, color: mutedText, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
-                        Tap to learn each part
-                      </div>
-                      {mech.explainers.map((ex, idx) => {
-                        const isLocked = mech.halfLocked && idx >= (mech.freeExplainers || 3);
-                        const isOpen = !isLocked && mechOpenCards[idx];
-                        const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed"];
-                        const c = stepColors[idx % stepColors.length];
-                        return (
-                          <button key={idx} onClick={() => { if (!isLocked) setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] })); }}
-                            style={{ background: isLocked ? "rgba(255,255,255,0.02)" : isOpen ? `${c}15` : "rgba(255,255,255,0.06)", border: isLocked ? "1.5px solid rgba(255,255,255,0.05)" : isOpen ? `2px solid ${c}50` : "1.5px solid rgba(255,255,255,0.1)",
-                              borderRadius: "12px", padding: "10px 14px", textAlign: "left", cursor: isLocked ? "default" : "pointer", fontFamily: "inherit", transition: "all 0.2s", opacity: isLocked ? 0.45 : 1, position: "relative" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              <div style={{ width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0, background: isLocked ? "#475569" : c, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800 }}>{isLocked ? "🔒" : idx + 1}</div>
-                              <div style={{ flex: 1, fontSize: "13px", fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>{ex.title}</div>
-                              {!isLocked && <div style={{ fontSize: "14px", color: mutedText, transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", flexShrink: 0 }}>▼</div>}
-                              {isLocked && <div style={{ fontSize: "10px", fontWeight: 700, color: "#29ABE2", background: "rgba(41,171,226,0.15)", padding: "2px 8px", borderRadius: "6px" }}>PRO</div>}
-                            </div>
-                            {isOpen && (
-                              <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${c}30`, fontSize: "13px", color: bodyText, lineHeight: 1.65, fontWeight: 400 }}>{ex.text}</div>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: "center", marginTop: "24px", padding: "20px", background: "rgba(41,171,226,0.08)", border: "1px solid rgba(41,171,226,0.2)", borderRadius: "14px" }}>
-                    <div style={{ fontSize: "15px", fontWeight: 800, color: "#fff", marginBottom: "10px" }}>Want all 11 mechanisms?</div>
-                    <button onClick={onGoToCheckout} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
-                      Get Full Access →
-                    </button>
-                  </div>
-                </div>
-              );
-            })()}
 
             {/* ── MCQ PREVIEW ───────────────────────── */}
             {activeSection === "mcqs" && (
@@ -5255,7 +5174,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
                         else if (showResult && isSelected && !isCorrect) { bg = "rgba(220,38,38,0.15)"; borderC = "#dc2626"; }
                         else if (isSelected && !showResult) { bg = "rgba(41,171,226,0.15)"; borderC = "#29ABE2"; }
                         return (
-                          <button key={letter} onClick={() => { if (!mcqShowExplanation) setMcqSelected(letter); }}
+                          <button key={letter} onClick={() => { if (!mcqShowExplanation) { setMcqSelected(letter); track("landing_mcq_select", { question: mcqIdx + 1, selected: letter }); } }}
                             style={{ padding: "14px 16px", borderRadius: "12px", border: `2px solid ${borderC}`, background: bg,
                               cursor: mcqShowExplanation ? "default" : "pointer", fontFamily: "inherit", textAlign: "left", transition: "all 0.2s", display: "flex", alignItems: "center", gap: "12px" }}>
                             <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: isSelected ? "#29ABE2" : "rgba(255,255,255,0.08)", color: isSelected ? "#fff" : "#94a3b8",
@@ -5266,7 +5185,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
                       })}
                     </div>
                     {mcqSelected && !mcqShowExplanation && (
-                      <button onClick={() => { setMcqShowExplanation(true); setMcqAnswered(prev => prev + 1); if (mcqSelected === currentQ.answer) setMcqScore(prev => prev + 1); }}
+                      <button onClick={() => { setMcqShowExplanation(true); setMcqAnswered(prev => prev + 1); const correct = mcqSelected === currentQ.answer; if (correct) setMcqScore(prev => prev + 1); track("landing_mcq_check", { question: mcqIdx + 1, correct, selected: mcqSelected }); }}
                         style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", marginTop: "16px" }}>
                         Check Answer
                       </button>
@@ -5279,7 +5198,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
                           </div>
                           <div style={{ fontSize: "13px", color: bodyText, lineHeight: 1.5 }}>{currentQ.explanation}</div>
                         </div>
-                        <button onClick={() => { setMcqIdx(prev => prev + 1); setMcqSelected(null); setMcqShowExplanation(false); }}
+                        <button onClick={() => { const nextIdx = mcqIdx + 1; if (nextIdx >= previewMCQs.length) { track("landing_mcq_complete", { score: mcqScore + (mcqSelected === currentQ.answer ? 1 : 0), total: previewMCQs.length }); } setMcqIdx(nextIdx); setMcqSelected(null); setMcqShowExplanation(false); }}
                           style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "15px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
                           {mcqIdx < previewMCQs.length - 1 ? "Next Question →" : "See Results"}
                         </button>
@@ -5288,15 +5207,14 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
                   </div>
                 ) : (
                   <div style={{ textAlign: "center", padding: "40px 24px", background: "rgba(255,255,255,0.06)", borderRadius: "18px", border: "1.5px solid rgba(255,255,255,0.1)" }}>
-                    <div style={{ fontSize: "48px", marginBottom: "12px" }}>{mcqScore === 3 ? "🎉" : mcqScore >= 2 ? "💪" : "📚"}</div>
-                    <div style={{ fontSize: "24px", fontWeight: 900, color: "#fff", marginBottom: "4px" }}>{mcqScore}/{previewMCQs.length}</div>
+                    <div style={{ fontSize: "40px", fontWeight: 900, color: "#fff", marginBottom: "4px" }}>{mcqScore}/{previewMCQs.length}</div>
                     <div style={{ fontSize: "14px", color: mutedText, marginBottom: "24px" }}>
-                      {mcqScore === 3 ? "Perfect. Imagine 566+ more questions like these." : "There are 566+ more exam-style MCQs waiting for you."}
+                      {mcqScore === previewMCQs.length ? "Perfect. There are 566+ more questions like these waiting for you." : "There are 566+ more exam-style MCQs covering every AQA and OCR A topic."}
                     </div>
-                    <button onClick={onGoToCheckout} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)" }}>
+                    <button onClick={() => { track("click_get_access", { location: "mcq_results_cta", score: mcqScore, total: previewMCQs.length }); onGoToCheckout(); }} style={{ padding: "14px 32px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 20px rgba(41,171,226,0.4)" }}>
                       Unlock All MCQs →
                     </button>
-                    <div><button onClick={() => { setMcqIdx(0); setMcqSelected(null); setMcqShowExplanation(false); setMcqScore(0); setMcqAnswered(0); }}
+                    <div><button onClick={() => { track("landing_mcq_retry"); setMcqIdx(0); setMcqSelected(null); setMcqShowExplanation(false); setMcqScore(0); setMcqAnswered(0); }}
                       style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", padding: "8px", marginTop: "8px" }}>Retry free questions</button></div>
                   </div>
                 )}
@@ -5319,13 +5237,13 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
 
           <div className="lp-why-row" style={{ display: "flex", gap: "20px", flexWrap: "wrap", justifyContent: "center" }}>
             {[
-              { num: "01", title: "Active recall", icon: "🧠", text: "Pulling an answer out of your own head is what burns it in. Looking at the answer barely does anything. Every card, every MCQ, every mechanism step forces the pull. That's the exact move the exam demands." },
-              { num: "02", title: "Mark scheme language", icon: "✍️", text: "A card that says 'lowers the activation energy by providing an alternative pathway' trains your memory to produce those exact words. In the exam, the phrasing the examiner wants is already there waiting." },
-              { num: "03", title: "Full coverage", icon: "📋", text: "Every topic in the spec. Physical, inorganic and organic, so nothing slips through. The app finds the gap you didn't know you had, before the exam finds it for you." },
+              { num: "01", title: "Active recall", text: "Pulling an answer out of your own head is what burns it in. Looking at the answer barely does anything. Every card, every MCQ, every mechanism step forces the pull. That's the exact move the exam demands." },
+              { num: "02", title: "Mark scheme language", text: "A card that says 'lowers the activation energy by providing an alternative pathway' trains your memory to produce those exact words. In the exam, the phrasing the examiner wants is already there waiting." },
+              { num: "03", title: "Full coverage", text: "Every topic in the spec. Physical, inorganic and organic, so nothing slips through. The app finds the gap you didn't know you had, before the exam finds it for you." },
             ].map((item, i) => (
               <div key={i} style={{ flex: "1 1 260px", maxWidth: "320px", background: "#fff", border: "1.5px solid #e2ddd4", borderRadius: "16px", padding: "28px 24px", textAlign: "left", position: "relative" }}>
                 <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "36px", fontWeight: 900, color: "#e8e3db" }}>{item.num}</div>
-                <div style={{ fontSize: "28px", marginBottom: "12px" }}>{item.icon}</div>
+                <div style={{ fontSize: "22px", fontWeight: 900, color: "#29ABE2", marginBottom: "12px" }}>{item.num}</div>
                 <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px" }}>{item.title}</div>
                 <div style={{ fontSize: "15px", color: "#5a6a7d", lineHeight: 1.7 }}>{item.text}</div>
               </div>
@@ -5393,7 +5311,7 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             One of those changes your grade. You already know which.
           </div>
 
-          <button onClick={onGoToCheckout} style={{ padding: "18px 44px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 24px rgba(41,171,226,0.4)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+          <button onClick={() => { track("click_get_access", { location: "final_cta" }); onGoToCheckout(); }} style={{ padding: "18px 44px", borderRadius: "14px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "17px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 24px rgba(41,171,226,0.4)", display: "inline-flex", alignItems: "center", gap: "10px" }}>
             Get full access <span style={{ fontSize: "20px" }}>→</span>
           </button>
           <div style={{ fontSize: "12px", color: dimText, marginTop: "10px" }}>£27.99/mo. Cancel anytime.</div>
@@ -5415,8 +5333,8 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             <div style={{ fontSize: "10px", color: dimText, letterSpacing: "1px", textTransform: "uppercase" }}>A-Level Chemistry</div>
           </div>
           <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <button onClick={onGoToLogin} style={{ background: "none", border: "none", color: mutedText, fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
-            <button onClick={onGoToCheckout} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
+            <button onClick={() => { track("click_login", { location: "footer" }); onGoToLogin(); }} style={{ background: "none", border: "none", color: mutedText, fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Log in</button>
+            <button onClick={() => { track("click_get_access", { location: "footer" }); onGoToCheckout(); }} style={{ padding: "8px 20px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Get access</button>
           </div>
         </div>
         <div style={{ ...wrap, marginTop: "20px" }}>
@@ -6599,7 +6517,7 @@ export default function App() {
           )}
           {cancelStep === 1 && (
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "40px", marginBottom: "16px" }}>😢</div>
+              <div style={{ fontSize: "20px", marginBottom: "16px", color: "#7a95b0", fontWeight: 700 }}>Before you go...</div>
               <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>We would hate to see you go!</h3>
               <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 24px" }}>
                 You will lose access to all premium content including flashcards, calculations, synthesis routes and AI marking.
@@ -6670,22 +6588,6 @@ export default function App() {
             >
               {/* Header gradient with chemistry icons */}
               <div style={{ background: b.grad, padding: "clamp(28px, 5vw, 44px) 28px", position: "relative", overflow: "hidden" }}>
-                {/* Decorative chemistry SVGs */}
-                <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0.12 }} viewBox="0 0 400 250">
-                  <circle cx="50" cy="40" r="25" stroke="#fff" strokeWidth="1.5" fill="none" />
-                  <circle cx="50" cy="40" r="12" stroke="#fff" strokeWidth="1" fill="none" />
-                  <line x1="350" y1="30" x2="380" y2="60" stroke="#fff" strokeWidth="1.5" />
-                  <line x1="380" y1="30" x2="350" y2="60" stroke="#fff" strokeWidth="1.5" />
-                  <circle cx="200" cy="180" r="20" stroke="#fff" strokeWidth="1" fill="none" />
-                  <line x1="200" y1="160" x2="200" y2="200" stroke="#fff" strokeWidth="1" />
-                  <line x1="180" y1="180" x2="220" y2="180" stroke="#fff" strokeWidth="1" />
-                  <path d="M 300 140 L 320 180 L 280 180 Z" stroke="#fff" strokeWidth="1.2" fill="none" />
-                  <circle cx="120" cy="120" r="6" fill="#fff" />
-                  <line x1="126" y1="120" x2="160" y2="100" stroke="#fff" strokeWidth="1" />
-                  <circle cx="160" cy="100" r="6" fill="#fff" />
-                  <line x1="160" y1="100" x2="194" y2="120" stroke="#fff" strokeWidth="1" />
-                  <circle cx="340" cy="200" r="15" stroke="#fff" strokeWidth="1" fill="none" />
-                </svg>
                 <div style={{ position: "relative", zIndex: 1 }}>
                   <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "8px" }}>EXAM BOARD</div>
                   <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(36px, 8vw, 48px)", fontWeight: 900, color: "#fff", lineHeight: 1, marginBottom: "4px" }}>{b.label}</div>
@@ -6764,7 +6666,7 @@ export default function App() {
             {/* Top row: Streak + Progress + Today */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
               <div style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: "16px", padding: "16px", color: "#fff", textAlign: "center" }}>
-                <div style={{ fontSize: "28px" }}>🔥</div>
+                <div style={{ fontSize: "22px", fontWeight: 900 }}>&#x2731;</div>
                 <div style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1 }}>{currentStreak}</div>
                 <div style={{ fontSize: "11px", fontWeight: 600, opacity: 0.9, marginTop: "2px" }}>day streak</div>
               </div>
@@ -6924,7 +6826,7 @@ export default function App() {
         { shift: 3.7, height: 0.5, splitting: "quartet", integration: 2, label: "CH₂", env: "CH₂ adjacent to CH₃, deshielded by O" },
         { shift: 2.6, height: 0.25, splitting: "singlet", integration: 1, label: "OH", env: "O–H (broad, disappears with D₂O)" },
       ],
-      answer: "Three environments: CH₃ (triplet, 3H, δ 1.2) — split by 2 adjacent H on CH₂. CH₂ (quartet, 2H, δ 3.7) — split by 3 adjacent H on CH₃, shifted downfield by electronegative O. OH (broad singlet, 1H, δ 2.6) — exchangeable, disappears with D₂O shake. Integration ratio 3:2:1.",
+      answer: "Three environments: CH₃ (triplet, 3H, δ 1.2) split by 2 adjacent H on CH₂. CH₂ (quartet, 2H, δ 3.7) split by 3 adjacent H on CH₃, shifted downfield by electronegative O. OH (broad singlet, 1H, δ 2.6) exchangeable, disappears with D₂O shake. Integration ratio 3:2:1.",
       tips: "The quartet + triplet pair is diagnostic for a CH₃CH₂ group. The broad OH confirms an alcohol."
     },
     {
@@ -6932,7 +6834,7 @@ export default function App() {
       peaks: [
         { shift: 2.1, height: 1.0, splitting: "singlet", integration: 6, label: "2×CH₃", env: "Two equivalent CH₃ groups adjacent to C=O" },
       ],
-      answer: "Only one peak — both CH₃ groups are equivalent (mirror symmetry). Singlet (no adjacent H on the carbonyl C). δ 2.1 shifted downfield by the electron-withdrawing C=O. Integration: 6H.",
+      answer: "Only one peak. Both CH₃ groups are equivalent (mirror symmetry). Singlet (no adjacent H on the carbonyl C). δ 2.1 shifted downfield by the electron-withdrawing C=O. Integration: 6H.",
       tips: "A single peak for a C₃H₆O compound immediately rules out propanal (which would show an aldehyde peak at δ 9.8)."
     },
     {
@@ -6942,8 +6844,8 @@ export default function App() {
         { shift: 2.4, height: 0.5, splitting: "multiplet", integration: 2, label: "CH₂", env: "CH₂ between CH₃ and CHO" },
         { shift: 9.8, height: 0.25, splitting: "triplet", integration: 1, label: "CHO", env: "Aldehyde H, very deshielded by C=O" },
       ],
-      answer: "Three environments: CH₃ (triplet, 3H, δ 1.0) — split by 2H on CH₂. CH₂ (multiplet, 2H, δ 2.4) — coupled to both CH₃ and CHO. CHO (triplet, 1H, δ 9.8) — split by 2H on CH₂, very downfield due to C=O. Integration ratio 3:2:1.",
-      tips: "The peak at δ 9.8 is the giveaway — only aldehyde H appear this far downfield. This distinguishes propanal from propanone (same molecular formula C₃H₆O)."
+      answer: "Three environments: CH₃ (triplet, 3H, δ 1.0) split by 2H on CH₂. CH₂ (multiplet, 2H, δ 2.4) coupled to both CH₃ and CHO. CHO (triplet, 1H, δ 9.8) split by 2H on CH₂, very downfield due to C=O. Integration ratio 3:2:1.",
+      tips: "The peak at δ 9.8 is the giveaway. Only aldehyde H appear this far downfield. This distinguishes propanal from propanone (same molecular formula C₃H₆O)."
     },
     {
       id: "ethyl_ethanoate", name: "Ethyl ethanoate", formula: "C₄H₈O₂", molecular: "CH₃COOCH₂CH₃",
@@ -6952,7 +6854,7 @@ export default function App() {
         { shift: 2.0, height: 0.75, splitting: "singlet", integration: 3, label: "CH₃CO", env: "CH₃ adjacent to C=O, no neighbouring H" },
         { shift: 4.1, height: 0.5, splitting: "quartet", integration: 2, label: "OCH₂", env: "CH₂ deshielded by O, adjacent to CH₃" },
       ],
-      answer: "Three environments: CH₃ of ethyl (triplet, 3H, δ 1.3) — split by 2H on OCH₂. CH₃CO (singlet, 3H, δ 2.0) — no adjacent H. OCH₂ (quartet, 2H, δ 4.1) — split by 3H on CH₃, deshielded by O. Integration ratio 3:3:2.",
+      answer: "Three environments: CH₃ of ethyl (triplet, 3H, δ 1.3) split by 2H on OCH₂. CH₃CO (singlet, 3H, δ 2.0) no adjacent H. OCH₂ (quartet, 2H, δ 4.1) split by 3H on CH₃, deshielded by O. Integration ratio 3:3:2.",
       tips: "The singlet at δ 2.0 is characteristic of CH₃ next to C=O. The quartet-triplet pair at δ 4.1 and 1.3 shows the ethyl ester group."
     },
     {
@@ -6961,7 +6863,7 @@ export default function App() {
         { shift: 2.1, height: 0.75, splitting: "singlet", integration: 3, label: "CH₃", env: "CH₃ adjacent to C=O" },
         { shift: 11.4, height: 0.2, splitting: "singlet", integration: 1, label: "COOH", env: "Carboxylic acid H, very deshielded (broad)" },
       ],
-      answer: "Two environments: CH₃ (singlet, 3H, δ 2.1) — no adjacent H to cause splitting. COOH (broad singlet, 1H, δ 11.4) — extremely deshielded, exchangeable with D₂O. Integration ratio 3:1.",
+      answer: "Two environments: CH₃ (singlet, 3H, δ 2.1) no adjacent H to cause splitting. COOH (broad singlet, 1H, δ 11.4) extremely deshielded, exchangeable with D₂O. Integration ratio 3:1.",
       tips: "The very broad peak above δ 10 is diagnostic for COOH. It disappears with D₂O shake, confirming an exchangeable proton."
     },
     {
@@ -6970,7 +6872,7 @@ export default function App() {
         { shift: 1.7, height: 0.75, splitting: "triplet", integration: 3, label: "CH₃", env: "CH₃ adjacent to CH₂" },
         { shift: 3.4, height: 0.5, splitting: "quartet", integration: 2, label: "CH₂Br", env: "CH₂ deshielded by Br, adjacent to CH₃" },
       ],
-      answer: "Two environments: CH₃ (triplet, 3H, δ 1.7) — split by 2H on CH₂. CH₂ (quartet, 2H, δ 3.4) — split by 3H on CH₃, shifted downfield by electronegative Br. Integration ratio 3:2.",
+      answer: "Two environments: CH₃ (triplet, 3H, δ 1.7) split by 2H on CH₂. CH₂ (quartet, 2H, δ 3.4) split by 3H on CH₃, shifted downfield by electronegative Br. Integration ratio 3:2.",
       tips: "The quartet-triplet pair confirms a CH₃CH₂ group. CH₂ at δ 3.4 is deshielded by Br."
     },
     {
@@ -6980,8 +6882,8 @@ export default function App() {
         { shift: 2.3, height: 0.5, splitting: "quartet", integration: 2, label: "CH₂", env: "CH₂ adjacent to CH₃ and C=O" },
         { shift: 3.7, height: 0.75, splitting: "singlet", integration: 3, label: "OCH₃", env: "OCH₃ deshielded by O, no adjacent H" },
       ],
-      answer: "Three environments: CH₃ (triplet, 3H, δ 1.1) — split by 2H on CH₂. CH₂ (quartet, 2H, δ 2.3) — split by 3H on CH₃. OCH₃ (singlet, 3H, δ 3.7) — no adjacent H, deshielded by O. Integration ratio 3:2:3.",
-      tips: "Same molecular formula as ethyl ethanoate (C₄H₈O₂) but different spectrum — the singlet OCH₃ at δ 3.7 and quartet at δ 2.3 distinguish methyl propanoate from ethyl ethanoate."
+      answer: "Three environments: CH₃ (triplet, 3H, δ 1.1) split by 2H on CH₂. CH₂ (quartet, 2H, δ 2.3) split by 3H on CH₃. OCH₃ (singlet, 3H, δ 3.7) no adjacent H, deshielded by O. Integration ratio 3:2:3.",
+      tips: "Same molecular formula as ethyl ethanoate (C₄H₈O₂) but different spectrum. The singlet OCH₃ at δ 3.7 and quartet at δ 2.3 distinguish methyl propanoate from ethyl ethanoate."
     },
     {
       id: "propan_2_ol", name: "Propan-2-ol", formula: "C₃H₈O", molecular: "(CH₃)₂CHOH",
@@ -6990,8 +6892,8 @@ export default function App() {
         { shift: 4.0, height: 0.2, splitting: "septet", integration: 1, label: "CH", env: "CH adjacent to 6H (2×CH₃), deshielded by O" },
         { shift: 2.3, height: 0.15, splitting: "singlet", integration: 1, label: "OH", env: "O–H (broad, disappears with D₂O)" },
       ],
-      answer: "Three environments: 2×CH₃ (doublet, 6H, δ 1.2) — split by 1H on CH. CH (septet, 1H, δ 4.0) — split by 6 adjacent H (n+1 = 7 lines), deshielded by O. OH (broad singlet, 1H, δ 2.3) — exchangeable. Integration ratio 6:1:1.",
-      tips: "The septet is the key — 6 equivalent adjacent H give a 7-line pattern. The large doublet (6H) confirms two equivalent CH₃ groups."
+      answer: "Three environments: 2×CH₃ (doublet, 6H, δ 1.2) split by 1H on CH. CH (septet, 1H, δ 4.0) split by 6 adjacent H (n+1 = 7 lines), deshielded by O. OH (broad singlet, 1H, δ 2.3) exchangeable. Integration ratio 6:1:1.",
+      tips: "The septet is the key. 6 equivalent adjacent H give a 7-line pattern. The large doublet (6H) confirms two equivalent CH₃ groups."
     },
     {
       id: "methylbenzene", name: "Methylbenzene", formula: "C₇H₈", molecular: "C₆H₅CH₃",
@@ -6999,7 +6901,7 @@ export default function App() {
         { shift: 2.3, height: 0.6, splitting: "singlet", integration: 3, label: "CH₃", env: "CH₃ attached to benzene ring" },
         { shift: 7.2, height: 1.0, splitting: "multiplet", integration: 5, label: "ArH", env: "5 aromatic H (complex splitting)" },
       ],
-      answer: "Two main environments: CH₃ (singlet, 3H, δ 2.3) — no adjacent H to split (ring C has no H). ArH (multiplet, 5H, δ 7.2) — aromatic protons in the characteristic δ 6.5–8.0 region. Integration ratio 3:5.",
+      answer: "Two main environments: CH₃ (singlet, 3H, δ 2.3) no adjacent H to split (ring C has no H). ArH (multiplet, 5H, δ 7.2) aromatic protons in the characteristic δ 6.5-8.0 region. Integration ratio 3:5.",
       tips: "Aromatic protons always appear δ 6.5–8.0. The singlet CH₃ tells you it's directly on the ring. At A-level you don't need to interpret detailed aromatic splitting."
     },
     {
@@ -7008,7 +6910,7 @@ export default function App() {
         { shift: 2.2, height: 0.75, splitting: "doublet", integration: 3, label: "CH₃", env: "CH₃ adjacent to CHO (1 neighbouring H)" },
         { shift: 9.8, height: 0.25, splitting: "quartet", integration: 1, label: "CHO", env: "Aldehyde H, very deshielded, adjacent to CH₃" },
       ],
-      answer: "Two environments: CH₃ (doublet, 3H, δ 2.2) — split by 1H on CHO. CHO (quartet, 1H, δ 9.8) — split by 3H on CH₃, very far downfield due to C=O. Integration ratio 3:1.",
+      answer: "Two environments: CH₃ (doublet, 3H, δ 2.2) split by 1H on CHO. CHO (quartet, 1H, δ 9.8) split by 3H on CH₃, very far downfield due to C=O. Integration ratio 3:1.",
       tips: "The aldehyde peak at δ ~9.8 is unmistakable. The doublet CH₃ and quartet CHO confirm the connectivity."
     },
   ];
@@ -7020,18 +6922,18 @@ export default function App() {
   const nmrMcqs = mcqData.questions.filter(q => q.topic === "3.3.15" || q.topic === "3.3.13");
 
   const NmrSpectrum = ({ peaks, revealed }) => {
-    const W = 600, H = 200, padL = 50, padR = 20, padT = 30, padB = 40;
+    const W = 700, H = 280, padL = 50, padR = 25, padT = 50, padB = 45;
     const plotW = W - padL - padR;
     const plotH = H - padT - padB;
     const maxShift = 12;
     const toX = (shift) => padL + plotW * (1 - shift / maxShift);
     const splitOffsets = {
       singlet: [0],
-      doublet: [-3, 3],
-      triplet: [-5, 0, 5],
-      quartet: [-7, -2.3, 2.3, 7],
-      septet: [-12, -8, -4, 0, 4, 8, 12],
-      multiplet: [-6, -3, -1, 1, 3, 6],
+      doublet: [-4, 4],
+      triplet: [-6, 0, 6],
+      quartet: [-9, -3, 3, 9],
+      septet: [-15, -10, -5, 0, 5, 10, 15],
+      multiplet: [-8, -4, -1, 1, 4, 8],
     };
     const splitHeights = {
       singlet: [1],
@@ -7043,31 +6945,36 @@ export default function App() {
     };
     return (
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ background: "#fff", borderRadius: "12px", border: "1.5px solid #e2e8f0" }}>
+        {/* Baseline */}
         <line x1={padL} y1={padT + plotH} x2={padL + plotW} y2={padT + plotH} stroke="#334155" strokeWidth="1.5" />
+        {/* Tick marks */}
         {[0,1,2,3,4,5,6,7,8,9,10,11,12].map(v => (
           <g key={v}>
-            <line x1={toX(v)} y1={padT + plotH} x2={toX(v)} y2={padT + plotH + 5} stroke="#94a3b8" strokeWidth="1" />
-            <text x={toX(v)} y={padT + plotH + 18} textAnchor="middle" fontSize="10" fill="#64748b" fontFamily="'Outfit',sans-serif">{v}</text>
+            <line x1={toX(v)} y1={padT + plotH} x2={toX(v)} y2={padT + plotH + 6} stroke="#94a3b8" strokeWidth="1" />
+            <text x={toX(v)} y={padT + plotH + 20} textAnchor="middle" fontSize="11" fill="#475569" fontWeight="500" fontFamily="'Outfit',sans-serif">{v}</text>
           </g>
         ))}
-        <text x={padL + plotW / 2} y={H - 2} textAnchor="middle" fontSize="11" fill="#64748b" fontFamily="'Outfit',sans-serif">{"δ / ppm"}</text>
-        <text x={toX(0) + 8} y={padT + plotH + 18} textAnchor="start" fontSize="9" fill="#94a3b8" fontFamily="'Outfit',sans-serif">TMS</text>
+        <text x={padL + plotW / 2} y={H - 4} textAnchor="middle" fontSize="12" fill="#475569" fontWeight="600" fontFamily="'Outfit',sans-serif">{"δ / ppm"}</text>
+        <text x={toX(0) + 10} y={padT + plotH + 20} textAnchor="start" fontSize="10" fill="#94a3b8" fontWeight="500" fontFamily="'Outfit',sans-serif">TMS</text>
+        {/* Peaks */}
         {peaks.map((p, i) => {
           const cx = toX(p.shift);
           const offsets = splitOffsets[p.splitting] || [0];
           const heights = splitHeights[p.splitting] || [1];
-          const peakH = plotH * p.height * 0.85;
+          const peakH = plotH * p.height * 0.8;
           return (
             <g key={i}>
               {offsets.map((dx, j) => (
                 <line key={j} x1={cx + dx} y1={padT + plotH} x2={cx + dx} y2={padT + plotH - peakH * (heights[j] || 0.5)}
-                  stroke="#8b5cf6" strokeWidth={p.splitting === "singlet" ? "2.5" : "1.8"} strokeLinecap="round" />
+                  stroke="#8b5cf6" strokeWidth={p.splitting === "singlet" ? "3" : "2"} strokeLinecap="round" />
               ))}
-              <text x={cx} y={padT + 14} textAnchor="middle" fontSize="9" fill="#8b5cf6" fontWeight="700" fontFamily="'Outfit',sans-serif">
+              {/* Integration label - always shown, above the peak top */}
+              <text x={cx} y={padT + plotH - peakH - 14} textAnchor="middle" fontSize="11" fill="#8b5cf6" fontWeight="700" fontFamily="'Outfit',sans-serif">
                 {p.integration}H
               </text>
+              {/* Environment label - shown on reveal, at the very top */}
               {revealed && (
-                <text x={cx} y={padT + plotH - peakH - 8} textAnchor="middle" fontSize="9" fill="#6d28d9" fontWeight="600" fontFamily="'Outfit',sans-serif">
+                <text x={cx} y={16} textAnchor="middle" fontSize="10" fill="#6d28d9" fontWeight="700" fontFamily="'Outfit',sans-serif">
                   {p.label}
                 </text>
               )}
@@ -7116,7 +7023,7 @@ export default function App() {
       {/* Payment success/cancel banner */}
       {paymentBanner === "success" && (
         <div style={{ margin: "12px 16px 0", padding: "14px 16px", background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "20px" }}>🎉</span>
+          <span style={{ fontSize: "16px", fontWeight: 900, color: "#059669" }}>&#10003;</span>
           <div>
             <div style={{ fontSize: "14px", fontWeight: 700, color: "#059669" }}>Payment successful!</div>
             <div style={{ fontSize: "12px", color: "#047857", marginTop: "2px" }}>Welcome to ChemMastery Pro - all content is now unlocked. It may take a moment to activate.</div>
@@ -7126,7 +7033,7 @@ export default function App() {
       )}
       {paymentBanner === "cancel" && (
         <div style={{ margin: "12px 16px 0", padding: "14px 16px", background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "20px" }}>💡</span>
+          <span style={{ fontSize: "16px", fontWeight: 700, color: "#92400e" }}>i</span>
           <div>
             <div style={{ fontSize: "14px", fontWeight: 700, color: "#92400e" }}>Payment cancelled</div>
             <div style={{ fontSize: "12px", color: "#a16207", marginTop: "2px" }}>No worries - you can upgrade anytime from the home screen.</div>
@@ -7454,8 +7361,7 @@ export default function App() {
       {topicsTab === "flashcards" && quizScreen === "done" && (() => {
         const total = quizSessionScore.correct + quizSessionScore.wrong;
         const pct = total > 0 ? Math.round((quizSessionScore.correct / total) * 100) : 0;
-        const emoji = pct >= 90 ? "🏆" : pct >= 70 ? "🎯" : pct >= 50 ? "📚" : "💪";
-        const msg = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep practising!";
+        const msg = pct >= 90 ? "Outstanding" : pct >= 70 ? "Great work" : pct >= 50 ? "Good effort" : "Keep practising";
         // Find weakest topics from this session
         const topicWrong = {};
         quizDeck.forEach((card, i) => {
@@ -7471,7 +7377,6 @@ export default function App() {
             <div style={{ width: "100%", maxWidth: "360px" }}>
               {/* Score card */}
               <div style={{ background: "linear-gradient(135deg,#1a2d45,#29ABE2)", borderRadius: "24px", padding: "32px 24px", textAlign: "center", color: "#fff", marginBottom: "20px", boxShadow: "0 8px 28px rgba(41,171,226,0.3)" }}>
-                <div style={{ fontSize: "48px", marginBottom: "8px" }}>{emoji}</div>
                 <div style={{ fontSize: "22px", fontWeight: 800, marginBottom: "4px" }}>{msg}</div>
                 <div style={{ fontSize: "52px", fontWeight: 800, lineHeight: 1, margin: "12px 0" }}>{pct}%</div>
                 <div style={{ fontSize: "14px", opacity: 0.85 }}>{quizSessionScore.correct} correct · {quizSessionScore.wrong} missed · {total} cards</div>
@@ -7523,7 +7428,7 @@ export default function App() {
             position: "relative", overflow: "hidden",
           }}>
             <div>
-              <div style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.3px" }}>{hasFullAccess ? "🎯" : "🔒"} Random Quiz</div>
+              <div style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.3px" }}>{hasFullAccess ? "" : "🔒 "}Random Quiz</div>
               <div style={{ fontSize: "11px", opacity: 0.85, marginTop: "2px" }}>{hasFullAccess ? "Spaced repetition · 25 cards · adapts to your gaps" : "Unlock with access key for full quiz access"}</div>
             </div>
             <div style={{ fontSize: "20px", opacity: 0.8 }}>{hasFullAccess ? "→" : ""}</div>
@@ -8338,7 +8243,7 @@ export default function App() {
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
                 transition: "all 0.2s",
               }}>
-                <span>🤖</span> Submit to AI Examiner
+                Submit to AI Examiner
               </button>
             )}
             {/* Error state */}
@@ -8416,7 +8321,7 @@ export default function App() {
                     </div>
                     {/* Model answer toggle */}
                     <button onClick={() => setExtShowModel(v => !v)} style={{ width: "100%", padding: "12px 16px", borderRadius: "12px", border: "2px solid #e9d5ff", background: extShowModel ? "#f3f0ff" : "#faf5ff", color: purple, fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <span>📝 Show Model Answer</span>
+                      <span>Show Model Answer</span>
                       <span style={{ transform: extShowModel ? "rotate(180deg)" : "none", transition: "transform 0.2s", display: "inline-block" }}>▾</span>
                     </button>
                     {extShowModel && (
@@ -8972,7 +8877,7 @@ export default function App() {
               {/* Random quiz size picker */}
               <div style={{ marginBottom:"18px" }}>
                 <div style={{ fontSize:"12px", fontWeight:700, color:"#dc2626", textTransform:"uppercase", letterSpacing:"0.8px", marginBottom:"8px" }}>
-                  🎲 Random Quiz
+                  Random Quiz
                 </div>
                 <div style={{ display:"flex", gap:"8px" }}>
                   {[25, 50, 100].map(size => (
@@ -9047,7 +8952,7 @@ export default function App() {
         // Quiz view
         if (!currentQ) return (
           <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
-            <div style={{ fontSize:"48px", marginBottom:"16px" }}>🏆</div>
+            <div style={{ fontSize:"22px", fontWeight:800, color:"#059669", marginBottom:"16px", letterSpacing:"-0.5px" }}>Complete</div>
             <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Quiz Complete!</div>
             <div style={{ fontSize:"18px", color:"#dc2626", fontWeight:700, marginBottom:"4px" }}>{mcqScore.correct} / {mcqScore.total} correct</div>
             <div style={{ fontSize:"15px", color:"#64748b", marginBottom:"20px" }}>
@@ -9234,55 +9139,78 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* Challenge card */}
-                <div style={{ background: "#fff", borderRadius: "16px", border: "1.5px solid #e2e8f0", padding: "20px", boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-                    <div>
-                      <div style={{ fontSize: "10px", fontWeight: 700, color: accentColor, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "4px" }}>
-                        ¹H NMR Spectrum Challenge
+                {/* Side-by-side layout: spectrum left, answer right */}
+                <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
+                  {/* LEFT: Spectrum + question */}
+                  <div style={{ flex: 1, minWidth: 0, background: "#fff", borderRadius: "16px", border: "1.5px solid #e2e8f0", padding: "20px", boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "18px" }}>
+                      <div>
+                        <div style={{ fontSize: "12px", fontWeight: 700, color: accentColor, textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "8px" }}>
+                          Deduce the structure
+                        </div>
+                        <div style={{ fontSize: "38px", fontWeight: 800, color: "#0f172a", lineHeight: 1.1 }}>
+                          {chemFormat(challenge.formula)}
+                        </div>
+                        <div style={{ fontSize: "16px", fontWeight: 600, color: "#0f172a", marginTop: "10px", lineHeight: 1.5 }}>
+                          Identify the compound from the ¹H NMR spectrum below.
+                        </div>
                       </div>
-                      <div style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45" }}>
-                        {chemFormat(challenge.formula)}
+                      <div style={{ fontSize: "13px", color: "#64748b", fontWeight: 700, whiteSpace: "nowrap", background: "#f1f5f9", padding: "6px 12px", borderRadius: "8px" }}>
+                        {nmrChallengeIdx + 1} / {NMR_CHALLENGES.length}
                       </div>
                     </div>
-                    <div style={{ fontSize: "12px", color: "#94a3b8", fontWeight: 600 }}>
-                      {nmrChallengeIdx + 1} / {NMR_CHALLENGES.length}
+
+                    <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "8px" }}>
+                      <NmrSpectrum peaks={challenge.peaks} revealed={nmrRevealed} />
                     </div>
+
+                    {!nmrRevealed && (
+                      <button onClick={() => setNmrRevealed(true)}
+                        style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", cursor: "pointer",
+                          background: accentColor, color: "#fff", fontSize: "14px", fontWeight: 700, fontFamily: "inherit",
+                          boxShadow: `0 4px 14px ${accentColor}50`, marginTop: "16px" }}>
+                        Show Answer
+                      </button>
+                    )}
+
+                    {nmrRevealed && (
+                      <button onClick={() => {
+                        if (nmrChallengeIdx < NMR_CHALLENGES.length - 1) {
+                          setNmrChallengeIdx(i => i + 1);
+                          setNmrRevealed(false);
+                        }
+                      }}
+                        disabled={nmrChallengeIdx >= NMR_CHALLENGES.length - 1}
+                        style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", marginTop: "16px",
+                          cursor: nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? "pointer" : "default",
+                          background: nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? accentColor : "#e2e8f0",
+                          color: nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? "#fff" : "#94a3b8",
+                          fontSize: "14px", fontWeight: 700, fontFamily: "inherit" }}>
+                        {nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? "Next Challenge →" : "All Challenges Complete!"}
+                      </button>
+                    )}
                   </div>
 
-                  <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "6px", marginBottom: "16px" }}>
-                    <div style={{ fontSize: "11px", fontWeight: 600, color: "#64748b", textAlign: "center", marginBottom: "6px" }}>
-                      Given: molecular formula {chemFormat(challenge.formula)} — deduce the structure from this ¹H NMR spectrum
-                    </div>
-                    <NmrSpectrum peaks={challenge.peaks} revealed={nmrRevealed} />
-                  </div>
-
-                  {!nmrRevealed ? (
-                    <button onClick={() => setNmrRevealed(true)}
-                      style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", cursor: "pointer",
-                        background: accentColor, color: "#fff", fontSize: "14px", fontWeight: 700, fontFamily: "inherit",
-                        boxShadow: `0 4px 14px ${accentColor}50` }}>
-                      Show Answer
-                    </button>
-                  ) : (
-                    <div style={{ animation: "mcqFadeIn 0.3s ease" }}>
+                  {/* RIGHT: Answer panel (only when revealed) */}
+                  {nmrRevealed && (
+                    <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "10px", animation: "mcqFadeIn 0.3s ease" }}>
                       {/* Structure */}
-                      <div style={{ background: `${accentColor}08`, border: `1.5px solid ${accentColor}30`, borderRadius: "12px", padding: "16px", marginBottom: "12px" }}>
+                      <div style={{ background: `${accentColor}08`, border: `1.5px solid ${accentColor}30`, borderRadius: "12px", padding: "16px" }}>
                         <div style={{ fontSize: "11px", fontWeight: 700, color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Structure</div>
                         <div style={{ fontSize: "22px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{challenge.name}</div>
                         <div style={{ fontSize: "16px", fontWeight: 600, color: "#475569" }}>{chemFormat(challenge.molecular)}</div>
                       </div>
 
                       {/* Peak-by-peak breakdown */}
-                      <div style={{ background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: "12px", padding: "16px", marginBottom: "12px" }}>
-                        <div style={{ fontSize: "11px", fontWeight: 700, color: "#166534", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" }}>Peak-by-Peak Analysis</div>
+                      <div style={{ background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: "12px", padding: "14px" }}>
+                        <div style={{ fontSize: "11px", fontWeight: 700, color: "#166534", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Peak-by-Peak Analysis</div>
                         {challenge.peaks.map((p, i) => (
-                          <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start", marginBottom: i < challenge.peaks.length - 1 ? "8px" : 0,
-                            padding: "8px 10px", background: "#fff", borderRadius: "8px", border: "1px solid #dcfce7" }}>
-                            <div style={{ minWidth: "50px", fontWeight: 800, color: accentColor, fontSize: "13px" }}>δ {p.shift}</div>
+                          <div key={i} style={{ display: "flex", gap: "10px", alignItems: "flex-start", marginBottom: i < challenge.peaks.length - 1 ? "6px" : 0,
+                            padding: "7px 10px", background: "#fff", borderRadius: "8px", border: "1px solid #dcfce7" }}>
+                            <div style={{ minWidth: "46px", fontWeight: 800, color: accentColor, fontSize: "13px" }}>δ {p.shift}</div>
                             <div style={{ flex: 1 }}>
                               <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>
-                                {p.label} — {p.splitting}, {p.integration}H
+                                {p.label}: {p.splitting}, {p.integration}H
                               </div>
                               <div style={{ fontSize: "12px", color: "#475569", marginTop: "2px" }}>{p.env}</div>
                             </div>
@@ -9291,31 +9219,16 @@ export default function App() {
                       </div>
 
                       {/* Full explanation */}
-                      <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: "12px", padding: "16px", marginBottom: "12px" }}>
+                      <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: "12px", padding: "14px" }}>
                         <div style={{ fontSize: "11px", fontWeight: 700, color: "#1e40af", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>Full Explanation</div>
-                        <div style={{ fontSize: "13px", color: "#1e3a5f", lineHeight: 1.7 }}>{challenge.answer}</div>
+                        <div style={{ fontSize: "13px", color: "#1e3a5f", lineHeight: 1.65 }}>{challenge.answer}</div>
                       </div>
 
                       {/* Exam tip */}
                       <div style={{ background: "#fffbeb", border: "1.5px solid #fde68a", borderRadius: "12px", padding: "14px" }}>
                         <div style={{ fontSize: "11px", fontWeight: 700, color: "#92400e", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Exam Tip</div>
-                        <div style={{ fontSize: "13px", color: "#78350f", lineHeight: 1.6 }}>{challenge.tips}</div>
+                        <div style={{ fontSize: "13px", color: "#78350f", lineHeight: 1.55 }}>{challenge.tips}</div>
                       </div>
-
-                      {/* Next button */}
-                      <button onClick={() => {
-                        if (nmrChallengeIdx < NMR_CHALLENGES.length - 1) {
-                          setNmrChallengeIdx(i => i + 1);
-                          setNmrRevealed(false);
-                        }
-                      }}
-                        disabled={nmrChallengeIdx >= NMR_CHALLENGES.length - 1}
-                        style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", cursor: nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? "pointer" : "default",
-                          background: nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? accentColor : "#e2e8f0",
-                          color: nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? "#fff" : "#94a3b8",
-                          fontSize: "14px", fontWeight: 700, fontFamily: "inherit", marginTop: "14px" }}>
-                        {nmrChallengeIdx < NMR_CHALLENGES.length - 1 ? "Next Challenge →" : "All Challenges Complete!"}
-                      </button>
                     </div>
                   )}
                 </div>
@@ -9383,10 +9296,7 @@ export default function App() {
                 const pct = nmrMcqScore.total > 0 ? Math.round((nmrMcqScore.correct / nmrMcqScore.total) * 100) : 0;
                 return (
                   <div style={{ textAlign: "center", padding: "40px 20px" }}>
-                    <div style={{ fontSize: "48px", marginBottom: "16px" }}>{pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚"}</div>
-                    <div style={{ fontSize: "24px", fontWeight: 800, color: "#1a2d45", marginBottom: "8px" }}>
-                      {nmrMcqScore.correct} / {nmrMcqScore.total}
-                    </div>
+                    <div style={{ fontSize: "36px", fontWeight: 900, marginBottom: "8px", color: pct >= 80 ? "#059669" : pct >= 50 ? "#29ABE2" : "#64748b" }}>{nmrMcqScore.correct}/{nmrMcqScore.total}</div>
                     <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "20px" }}>{pct}% correct</div>
                     <button onClick={() => { setNmrMcqIdx(0); setNmrMcqSelected(null); setNmrMcqRevealed(false); setNmrMcqScore({ correct: 0, total: 0 }); }}
                       style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: accentColor, color: "#fff",
@@ -9560,7 +9470,7 @@ export default function App() {
 
       {knownCount === cards.length && (
         <div style={{ margin: "0 24px 16px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg, #eaf6fd, #d0eefa)", border: "1px solid rgba(41,171,226,0.4)", textAlign: "center", fontSize: "14px", color: "#1a8fc4", fontWeight: 700 }}>
-          🎉 All {cards.length} cards mastered!
+          All {cards.length} cards mastered
         </div>
       )}
     </div>
