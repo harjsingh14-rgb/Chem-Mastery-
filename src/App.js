@@ -5061,9 +5061,9 @@ function LandingPage({ onGoToLogin, onGoToCheckout }) {
             {/* OCR A */}
             <div style={{ background: "rgba(5,150,105,0.06)", border: "1.5px solid rgba(5,150,105,0.2)", borderRadius: "20px", padding: "40px 36px", flex: "1 1 340px", maxWidth: "420px", textAlign: "center" }}>
               <div style={{ fontSize: "40px", marginBottom: "14px" }}>📗</div>
-              <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>OCR A Paper 2</div>
-              <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Predictions + Student Advice</div>
-              <a href="/guides/OCR-H43202-Student-Advice.pdf" download onClick={() => track("download_free_guide", { board: "OCR_A" })} style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#059669", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
+              <div style={{ fontSize: "24px", fontWeight: 800, color: "#fff", marginBottom: "8px" }}>OCR A Paper 3</div>
+              <div style={{ fontSize: "16px", color: mutedText, marginBottom: "24px" }}>Strategy Guide + 2026 Predictions</div>
+              <a href="/guides/OCR-H43203-Student-Advice.pdf" download onClick={() => track("download_free_guide", { board: "OCR_A", paper: "3" })} style={{ display: "block", padding: "16px 28px", borderRadius: "14px", background: "#059669", color: "#fff", fontSize: "17px", fontWeight: 700, textDecoration: "none", fontFamily: "inherit" }}>
                 Download Free Guide
               </a>
             </div>
