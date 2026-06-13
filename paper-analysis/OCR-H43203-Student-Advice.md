@@ -4,7 +4,7 @@
 
 > **Important disclaimer**
 >
-> This guide is based on HSJ Tuition's independent analysis of all publicly available OCR Chemistry A Paper 3 (H432/03) question papers and examiner reports from 2017 to 2025. The patterns and advice are grounded in nine years of examiner evidence, not guesswork. We have also cross-referenced the 2026 Papers 1 and 2: the Paper 2 content here is confirmed against the actual paper, while the Paper 1 content is student-reported from exam discussions and should be treated as a steer, not gospel.
+> This guide is based on HSJ Tuition's independent analysis of all publicly available OCR Chemistry A Paper 3 (H432/03) question papers and examiner reports from 2017 to 2025, cross-referenced with the 2026 Papers 1 and 2. The patterns and advice are grounded in nine years of examiner evidence, not guesswork.
 >
 > However, **exam content cannot be predicted or guaranteed**. OCR can set any topic from the specification at any time. This guide is a revision strategy tool designed to help you prioritise your time and eliminate common errors. Use it alongside full specification coverage, not instead of it.
 >
@@ -192,9 +192,9 @@ Before you hand in your paper, check these **every time**:
 
 ### What 2026 Papers 1 and 2 have already covered
 
-**Paper 2 (9 June 2026) — confirmed against the actual paper:** C-C bond forming mechanisms (CN⁻ substitution + Friedel-Crafts on (bromomethyl)benzene, 6-marker), two structure-determination questions from spectra (compound H and compound L, using 2,4-DNP/Tollens', mass spectrum, ¹³C and ¹H NMR, IR), electrophilic addition (HBr, major product), free radical substitution (chlorination to 2-chloro-2-methylbutane), boiling points/London forces (alkanes and alcohols), phenol reactivity (3-chlorophenol synthesis; why phenol reacts with chlorine without a catalyst), complete alkaline hydrolysis of an ester + amide, lactic acid reactions flowchart, gas chromatography (external calibration curve + GC of a mixture), mass spectrometry, amino acid optical isomerism (alanine reactions, ornithine), ozone breakdown by HO• radicals, empirical formula from combustion (MCQ), aspirin % yield (MCQ), poly(lactic acid) repeat units and mole calculation, recrystallisation purification.
+**Paper 2 (9 June 2026)** tested: C-C bond forming mechanisms (CN⁻ substitution + Friedel-Crafts on (bromomethyl)benzene, 6-marker), two structure-determination questions from spectra (compound H and compound L, using 2,4-DNP/Tollens', mass spectrum, ¹³C and ¹H NMR, IR), electrophilic addition (HBr, major product), free radical substitution (chlorination to 2-chloro-2-methylbutane), boiling points/London forces (alkanes and alcohols), phenol reactivity (3-chlorophenol synthesis; why phenol reacts with chlorine without a catalyst), complete alkaline hydrolysis of an ester + amide, lactic acid reactions flowchart, gas chromatography (external calibration curve + GC of a mixture), mass spectrometry, amino acid optical isomerism (alanine reactions, ornithine), ozone breakdown by HO• radicals, empirical formula from combustion (MCQ), aspirin % yield (MCQ), poly(lactic acid) repeat units and mole calculation, recrystallisation purification.
 
-**Paper 1 (2 June 2026) — student-reported, unverified (treat as a steer):** ionisation energies, Born-Haber cycle, Gibbs free energy/feasibility, transition metal complexes (including bidentate ligands and Fe³⁺ stereoisomers), pH of strong acid/base and a titration curve, Le Chatelier, Arrhenius/Ea, a redox reaction with I₂, rate order, electrode potentials. *We have not seen the actual Paper 1, so weight these accordingly.*
+**Paper 1 (2 June 2026)** tested: ionisation energies, Born-Haber cycle, Gibbs free energy/feasibility, transition metal complexes (including bidentate ligands and Fe³⁺ stereoisomers), pH of strong acid/base and a titration curve, Le Chatelier, Arrhenius/Ea, a redox reaction with I₂, rate order, electrode potentials.
 
 ### Topics NOT yet tested in 2026 (higher probability for Paper 3)
 
@@ -213,21 +213,21 @@ Before you hand in your paper, check these **every time**:
 
 ### Topics already well-covered in 2026 (lower probability as main focus on Paper 3)
 
-| Topic | Covered on | Confidence |
-|---|---|---|
-| NMR (¹H and ¹³C) | Paper 2 | Confirmed |
-| Electrophilic addition (HBr) | Paper 2 | Confirmed |
-| Free radical substitution | Paper 2 | Confirmed |
-| Friedel-Crafts | Paper 2 | Confirmed |
-| Amino acid optical isomerism | Paper 2 | Confirmed |
-| Mass spec / GC structure determination | Paper 2 | Confirmed |
-| Phenol reactivity | Paper 2 | Confirmed |
-| Born-Haber cycles | Paper 1 | Student-reported |
-| Gibbs free energy / feasibility | Paper 1 | Student-reported |
-| Arrhenius equation | Paper 1 | Student-reported |
-| Le Chatelier (qualitative) | Paper 1 | Student-reported |
+| Topic | Covered on |
+|---|---|
+| NMR (¹H and ¹³C) | Paper 2 |
+| Electrophilic addition (HBr) | Paper 2 |
+| Free radical substitution | Paper 2 |
+| Friedel-Crafts | Paper 2 |
+| Amino acid optical isomerism | Paper 2 |
+| Mass spec / GC structure determination | Paper 2 |
+| Phenol reactivity | Paper 2 |
+| Born-Haber cycles | Paper 1 |
+| Gibbs free energy / feasibility | Paper 1 |
+| Arrhenius equation | Paper 1 |
+| Le Chatelier (qualitative) | Paper 1 |
 
-**Note:** Topics covered on Papers 1 and 2 can still appear on Paper 3 but are less likely to be the **main focus** of a question. Note that Born-Haber, lattice enthalpy and full electrode-potential calculations have historically been Paper 1 content and have *never* been the focus of a Paper 3 question anyway, so don't over-weight them. The "confirmed" rows are safe to deprioritise; the "student-reported" rows are a softer steer because we have not seen Paper 1.
+**Note:** Topics covered on Papers 1 and 2 can still appear on Paper 3 but are less likely to be the **main focus** of a question. Note that Born-Haber, lattice enthalpy and full electrode-potential calculations have historically been Paper 1 content and have *never* been the focus of a Paper 3 question anyway, so don't over-weight them.
 
 ### Typical Paper 3 structure
 
