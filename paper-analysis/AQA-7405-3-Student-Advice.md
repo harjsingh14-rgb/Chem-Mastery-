@@ -192,27 +192,37 @@ Before you hand in your paper, check these **every time**:
 
 ### What 2026 Papers 1 and 2 already tested
 
-**Paper 1 (2 June 2026)** tested: Born-Haber cycle, thermodynamic feasibility temperature, complex ion drawing/Mr/charge/geometric isomerism, Period 3 melting points (Al vs Si), Fe back titration, 7-mark KMnO₄ redox titration with oxalate, PV = nRT, acid dissociation equations.
+**Paper 1 (2 June 2026) — confirmed against the actual paper:** ionisation energies (1st IE of aluminium, successive IEs); Born-Haber cycle for strontium bromide + Hess hydration enthalpy; Group 2 (barium + water, hydroxide solubility trend, Mg(OH)₂ use, barium hydroxide + sulfuric acid); magnesium metallic bonding/conductivity/melting point + magnesium in titanium extraction; calorimetry — enthalpy of solution of anhydrous sodium carbonate (extrapolation graph + practical evaluation); autocatalysis kinetics (manganate(VII) + ethanedioate concentration-time curve); transition metal test-tube reactions; hydrated Fe³⁺ acidity (Brønsted-Lowry, pH 3); K₃[M(C₂O₄)₃] identified by KMnO₄/ethanedioate redox titration + optical isomerism of the complex; acids and bases (pH of water and Kw at 30 °C, weak-acid/NaOH titration curve + indicator choice, **6-mark buffer pH calculation** + buffer action); Le Chatelier (SO₂/O₂/SO₃ yield); gas volume from lithium nitrate decomposition; Period 3 oxide reactions (amphoteric behaviour).
 
-**Paper 2 (9 June 2026)** tested: Kc calculation, rate equations (orders, k, rate-determining step), bond enthalpy Hess cycle (C-F), atom economy, elimination mechanism (7-marker), nucleophilic addition (NaBH₄ and epoxide), E-Z isomerism, ¹H and ¹³C NMR, amino acid identification, Rf value, halogenoalkane reactivity (C-I vs C-Br), IF₄⁺ shape, equilibrium constants and temperature.
+**Paper 2 (9 June 2026) — student-reported, unverified (treat as a steer):** Kc calculation, rate equations (orders, k, rate-determining step), bond enthalpy Hess cycle (C-F), atom economy, elimination mechanism (7-marker), nucleophilic addition (NaBH₄ and epoxide), E-Z isomerism, ¹H and ¹³C NMR, amino acid identification, Rf value, halogenoalkane reactivity (C-I vs C-Br), IF₄⁺ shape, equilibrium constants and temperature. *We have not seen the actual AQA Paper 2, so weight these accordingly.*
 
 ### Topics not tested on Papers 1 or 2 yet: ones to watch for Paper 3
 
 | Topic | Status | Why it matters |
 |---|---|---|
-| **Electrode potentials / electrochemical cells** | Not on either paper | Shows up on 7/9 past Paper 3s |
-| **Acids, bases, pH, Ka, buffers** | P1 had acid dissociation equations, but no full pH/Ka/buffer calculation on either paper | The big calculation question shows up on 7/9 past Paper 3s |
-| **Rates practical (iodine clock, initial rates, tangents)** | Orders/k were on P2, but the practical method and graph-work side wasn't | Clock-reaction design and initial-rate analysis are repeat LoR favourites (2018, 2019, 2025) |
-| **Practical: calorimetry method** | Not tested | Repeat LoR favourite |
-| **Practical: recrystallisation** | Not tested | Repeat LoR favourite |
-| **Percentage uncertainty** | Not on either paper | Shows up on 9/9 past Paper 3s |
-| **TM complexes: colour / colorimetry** | Complex ion structure was on P1, but not colour | Shows up on 5/9 past Paper 3s |
-| **TLC / chromatography** | P2 had an Rf value calculation, but no full TLC technique question (justify steps, developing agent, locating agent) | The full technique question was last seen Jun 2023 |
+| **Electrode potentials / electrochemical cells** | Not on Paper 1 (and not reported on Paper 2) | Shows up on 7/9 past Paper 3s. This is the single strongest genuine gap. |
+| **Percentage uncertainty** | Not calculated on Paper 1 | Shows up on 9/9 past Paper 3s. Near-certain. |
+| **Rates practical (iodine clock, initial rates, tangents)** | P1 had an autocatalysis curve, but not a clock-reaction/initial-rates practical | Clock-reaction design and initial-rate analysis are repeat LoR favourites (2018, 2019, 2025) |
+| **Practical: recrystallisation / organic purification** | Not on Paper 1 | Repeat LoR favourite |
+| **TM complexes: colour / colorimetry** | P1 had a complex ion (oxalate) and its isomerism, but not colour / d-orbital splitting | Shows up on 5/9 past Paper 3s |
+| **TLC / chromatography** | P2 (unverified) reportedly had an Rf value, but no full TLC technique question | Full technique question last seen Jun 2023 |
+| **Equilibrium: Kc calculation** | P1 had Le Chatelier (qualitative), not a Kc calculation | Kc is a regular Section A question (and Kp is near-permanent in the MCQs) |
 | **Environmental chemistry (NOx, catalysts)** | Not tested | Last seen Nov 2020, 5-year gap |
 | **DNA / nucleotides** | Not tested | Never been in Paper 3 Section A |
 | **Oils, fats, biodiesel** | Not tested | Only appeared once (Jun 2025) |
 
-**On Arrhenius specifically:** the ln k vs 1/T graph and Ea calculation came up in 2020 and 2024, and both the 2025 Paper 3 and the 2026 Paper 2 have just leaned hard on the orders/rate-equation side of kinetics. So if rates appear again, a clock-reaction practical or initial-rates analysis is the more likely angle than another Arrhenius graph. Know Arrhenius, but don't bet the paper on it.
+### Topics already heavily tested on Paper 1 — lower priority as a *major* Paper 3 question
+
+These still appear on Paper 3 historically, but Paper 1 hit them hard this year, so they are less likely to be the main focus again:
+
+| Topic | Covered on Paper 1 |
+|---|---|
+| **Acids, bases, pH, buffers** | A 6-mark buffer pH calculation, full pH/Kw work, a titration curve and indicator choice. Heavily tested — don't expect another big acids/buffer question. |
+| **Calorimetry (enthalpy of solution)** | Full Na₂CO₃ enthalpy-of-solution experiment with extrapolation graph. A repeat calorimetry LoR is now less likely. |
+| **Born-Haber / Hess cycles** | Born-Haber for SrBr₂ + Hess hydration enthalpy. |
+| **Group 2 / Period 3** | Group 2 reactions and Period 3 oxides both came up. |
+
+**On Arrhenius specifically:** the ln k vs 1/T graph and Ea calculation came up in 2020 and 2024. Paper 1 used an autocatalysis curve and (per reports) Paper 2 leaned on orders/rate equations, so if rates appear on Paper 3 a clock-reaction practical or initial-rates analysis is the likelier angle than another Arrhenius graph. Know Arrhenius, but don't bet the paper on it.
 
 ### Topics with long gaps in Paper 3 history
 

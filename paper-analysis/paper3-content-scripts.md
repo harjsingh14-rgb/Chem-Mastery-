@@ -13,9 +13,11 @@ I've gone through every Paper 3 from 2017 to 2025 and cross-referenced it with w
 
 Electrode potentials haven't been tested yet. They show up on 7 out of 9 past Paper 3s. Revise that.
 
-Acids, bases, pH, Ka, buffers. Paper 1 had a couple of dissociation equations, but the big pH and Ka calculation question hasn't come up. That shows up on 7 out of 9 Paper 3s.
+Quick heads up. Acids and buffers got hammered on Paper 1, there was a six-mark buffer calculation, so don't bank on a big acids question coming back on Paper 3. Same with calorimetry, that was on Paper 1 too.
 
-Rates practical. Orders and rate constants were on Paper 2, but the practical side, iodine clock, initial rates, drawing tangents off a graph, wasn't. Clock reaction design is a repeat favourite for the 6-mark question.
+What's more likely is a rates practical. Iodine clock, initial rates, drawing tangents off a graph. Clock reaction design is a repeat favourite for the six-mark question and it hasn't come up yet.
+
+And recrystallisation. Purifying an organic solid, the full method. It's a classic Paper 3 practical and it wasn't on Paper 1.
 
 Percentage uncertainty. It's been on literally every single Paper 3 since 2017 and it hasn't appeared on either paper this year.
 
