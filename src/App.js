@@ -5,67 +5,54 @@ import mcqData from "./mcq-data.json";
 // Chemistry text formatter — converts plain text to JSX with proper sub/superscripts
 function chemFormat(text) {
   if (!text || typeof text !== "string") return text;
-  // Process in order: electron configs, charges, state symbols, molecular formulas, delta signs
-  const parts = [];
-  let remaining = text;
-  let key = 0;
+  // Renders chemistry notation: electron configs (1s2 -> 1s superscript),
+  // ion charges (Fe3+, Cu2+, OH-, SO4 2-, NH4+), state symbols ((g)/(aq)),
+  // molecular-formula subscripts (H2O, Ca(OH)2) and delta signs.
+  // Lookahead-only (no lookbehind) so it works on older Safari/Chrome too.
+  const sign = (s) => s.replace(/[–-]/g, "−");
+  // Alternatives (first match wins at each position):
+  //  1-3  electron config (adjacent-aware: 3d94s2 -> 3d9 4s2)
+  //  4-7  charge with magnitude after a boundary: Fe3+, Cu2+, Al3+
+  //  8    state symbol
+  //  9-11 subscript formula + optional trailing charge sign: H2O, NH4+, Ca(OH)2
+  //  12-14 separated charge: "SO4 2-"
+  //  15-16 trailing charge sign: Na+, OH-, e-
+  //  17   delta sign
+  const re = /(\d)([spdf])(\d{1,2}?)(?=\d[spdf]|[\s,.;)\]}]|$)|(^|[\s(\[=>\/+\-−\d])([A-Z][a-z]?)(\d+)([+−–\-])(?=[\s,.\]);}?!:(\/→]|$)|\((g|l|s|aq)\)|([A-Z][a-z]?|\))(\d+)([+−–\-]?)(?=[\s,.\]);}?!:(\/→]|[A-Za-z(]|$)|(\s)(\d+)([+−–\-])(?=[\s,.\]);}?!:(\/→]|$)|([A-Za-z)\]}])([+−–\-])(?=[\s,.\]);}?!:(\/→]|$)|δ([+−–\-])/g;
 
-  // Regex patterns (processed left-to-right through the string)
-  const patterns = [
-    // Electron config: 1s2, 2p6, 3d10, 4s1 etc (digit + letter + digit)
-    { re: /\b(\d)([spdf])(\d{1,2})\b/g, render: (m) => <span key={key++}>{m[1]}{m[2]}<sup>{m[3]}</sup></span> },
-    // Ion charges at end: Fe2+, Cu2+, OH-, Br-, SO4 2-, Al3+, MH+ etc
-    { re: /([A-Za-z)])(\d*)([\+\−–-])(?=[\s,.\]);}]|$)/g, render: (m) => <span key={key++}>{m[1]}<sup>{m[2]}{m[3].replace('–','−').replace('-','−')}</sup></span> },
-    // State symbols: (g), (l), (s), (aq)
-    { re: /\((g|l|s|aq)\)/g, render: (m) => <sub key={key++}>({m[1]})</sub> },
-    // Molecular formulas: letter(s) followed by digits (H2O, CO2, CH3, NH3, C2H5OH, SO4, NO3)
-    // Match uppercase letter optionally followed by lowercase, then digit(s)
-    { re: /([A-Z][a-z]?)(\d+)/g, render: (m) => <span key={key++}>{m[1]}<sub>{m[2]}</sub></span> },
-    // Delta signs: δ+, δ-, δ+, δ−
-    { re: /δ([\+\−–-])/g, render: (m) => <span key={key++}>δ<sup>{m[1].replace('–','−').replace('-','−')}</sup></span> },
-  ];
+  let lastIdx = 0, key = 0;
+  const result = [];
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index === re.lastIndex) { re.lastIndex++; continue; } // guard against zero-width
+    if (m.index > lastIdx) result.push(text.slice(lastIdx, m.index));
 
-  // Apply all patterns using a single pass approach
-  // Build a combined regex that captures all patterns
-  const combined = /(\d)([spdf])(\d{1,2})(?=\s|,|$)|([A-Za-z\)])([\d]*)([\+\−–-])(?=[\s,.\]);}]|$)|\((g|l|s|aq)\)|([A-Z][a-z]?)(\d+)|δ([\+\−–-])/g;
-
-  let lastIdx = 0;
-  let result = [];
-  let match;
-
-  while ((match = combined.exec(remaining)) !== null) {
-    // Add text before match
-    if (match.index > lastIdx) {
-      result.push(remaining.slice(lastIdx, match.index));
-    }
-
-    if (match[1] !== undefined && match[2] !== undefined && match[3] !== undefined) {
+    if (m[2] !== undefined) {
       // Electron config: 1s2
-      result.push(<span key={key++}>{match[1]}{match[2]}<sup>{match[3]}</sup></span>);
-    } else if (match[4] !== undefined && match[6] !== undefined) {
-      // Ion charge: Fe2+, OH-
-      const ch = match[6].replace('–','−').replace('-','−');
-      result.push(<span key={key++}>{match[4]}<sup>{match[5]}{ch}</sup></span>);
-    } else if (match[7] !== undefined) {
+      result.push(<span key={key++}>{m[1]}{m[2]}<sup>{m[3]}</sup></span>);
+    } else if (m[5] !== undefined && m[7] !== undefined) {
+      // Charge with magnitude: Fe3+ (m[4] is the captured leading boundary char)
+      result.push(<span key={key++}>{m[4]}{m[5]}<sup>{m[6]}{sign(m[7])}</sup></span>);
+    } else if (m[8] !== undefined) {
       // State symbol: (g), (l), (s), (aq)
-      result.push(<sub key={key++}>({match[7]})</sub>);
-    } else if (match[8] !== undefined && match[9] !== undefined) {
-      // Molecular formula: H2, CO2
-      result.push(<span key={key++}>{match[8]}<sub>{match[9]}</sub></span>);
-    } else if (match[10] !== undefined) {
-      // Delta: δ+
-      const dch = match[10].replace('–','−').replace('-','−');
-      result.push(<span key={key++}>δ<sup>{dch}</sup></span>);
+      result.push(<sub key={key++}>({m[8]})</sub>);
+    } else if (m[9] !== undefined && m[10] !== undefined) {
+      // Subscript formula (+ optional charge sign): H2O, NH4+, Ca(OH)2
+      result.push(<span key={key++}>{m[9]}<sub>{m[10]}</sub>{m[11] ? <sup>{sign(m[11])}</sup> : null}</span>);
+    } else if (m[13] !== undefined && m[14] !== undefined) {
+      // Separated charge: "SO4 2-" (m[12] is the leading space)
+      result.push(<span key={key++}>{m[12]}<sup>{m[13]}{sign(m[14])}</sup></span>);
+    } else if (m[15] !== undefined && m[16] !== undefined) {
+      // Trailing charge sign: Na+, OH-, e-
+      result.push(<span key={key++}>{m[15]}<sup>{sign(m[16])}</sup></span>);
+    } else if (m[17] !== undefined) {
+      // Delta: δ+, δ-
+      result.push(<span key={key++}>δ<sup>{sign(m[17])}</sup></span>);
     }
 
-    lastIdx = match.index + match[0].length;
+    lastIdx = re.lastIndex;
   }
-
-  // Add remaining text
-  if (lastIdx < remaining.length) {
-    result.push(remaining.slice(lastIdx));
-  }
-
+  if (lastIdx < text.length) result.push(text.slice(lastIdx));
   return result.length > 0 ? result : text;
 }
 
@@ -5487,6 +5474,8 @@ export default function App() {
   const [accessKeyLoading, setAccessKeyLoading] = useState(false);
   const [showLogin, setShowLogin] = useState(false); // false = landing page, true = login screen
   const [pendingCheckout, setPendingCheckout] = useState(null); // null | "monthly" — auto-checkout after auth
+  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
 
   useEffect(() => {
     const unsub = onAuthChange(async (user) => {
@@ -6409,18 +6398,49 @@ export default function App() {
   // LANDING PAGE / LOGIN SCREEN
   if (!authUser) {
     if (showLogin) return <LoginScreen onBack={() => { setShowLogin(false); setPendingCheckout(null); }} />;
-    return <LandingPage onGoToLogin={() => setShowLogin(true)} onGoToCheckout={async () => {
-      try {
-        const resp = await fetch("/api/create-checkout", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ plan: "monthly" }),
-        });
-        const data = await resp.json();
-        if (data.url) window.location.href = data.url;
-        else alert(data.error || "Could not start checkout");
-      } catch (err) { alert("Network error. Please try again."); }
-    }} />;
+    return <>
+      <LandingPage onGoToLogin={() => setShowLogin(true)} onGoToCheckout={() => setShowEmailPrompt(true)} />
+      {showEmailPrompt && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'DM Sans',sans-serif" }} onClick={(e) => { if (e.target === e.currentTarget) setShowEmailPrompt(false); }}>
+          <div style={{ background: "#fff", borderRadius: "20px", padding: "32px", maxWidth: "420px", width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
+            <div style={{ textAlign: "center", marginBottom: "24px" }}>
+              <div style={{ fontSize: "32px", marginBottom: "8px" }}>📧</div>
+              <div style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", marginBottom: "6px" }}>Enter your email to continue</div>
+              <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.5 }}>We'll create your account and send login details to this email after payment.</div>
+            </div>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              const email = guestEmail.trim();
+              if (!email || !email.includes("@")) return;
+              try {
+                const resp = await fetch("/api/create-checkout", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ plan: "monthly", email }),
+                });
+                const data = await resp.json();
+                if (data.url) window.location.href = data.url;
+                else alert(data.error || "Could not start checkout");
+              } catch (err) { alert("Network error. Please try again."); }
+            }}>
+              <input type="email" placeholder="your@email.com" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} required autoFocus
+                style={{ width: "100%", padding: "14px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "16px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
+                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+              />
+              <button type="submit" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
+                Continue to payment →
+              </button>
+            </form>
+            <div style={{ textAlign: "center", marginTop: "12px" }}>
+              <button onClick={() => { setShowEmailPrompt(false); setShowLogin(true); }} style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                Already have an account? Log in
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>;
   }
 
   // CHANGE PASSWORD PROMPT (for guest checkout users with temp password)
@@ -8967,6 +8987,14 @@ export default function App() {
         );
 
         const optionLetters = ["A","B","C","D"];
+        // OCR past-paper MCQs are stored as a full-question screenshot (stem +
+        // options live inside the image); their `q` text field is an unrelated
+        // scrape artifact, so suppress it and let the image stand in. NB: AQA
+        // "See diagram" questions are different — there the image holds only the
+        // options and `q` is the real stem, so they must keep their text.
+        const imageIsQuestion = (currentQ.topic || "").startsWith("OCR") &&
+          !!currentQ.image && !!currentQ.options &&
+          Object.values(currentQ.options).every(v => v === "See diagram");
 
         return (
           <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
@@ -8999,9 +9027,11 @@ export default function App() {
 
             {/* Question */}
             <div key={currentQ.id} style={{ padding:"16px", animation:"mcqFadeIn 0.3s ease" }}>
-              <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom: currentQ.image ? "10px" : "16px" }}>
-                {chemFormat(currentQ.q)}
-              </div>
+              {!imageIsQuestion && (
+                <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom: currentQ.image ? "10px" : "16px" }}>
+                  {chemFormat(currentQ.q)}
+                </div>
+              )}
 
               {/* Question image (for diagram-based questions) */}
               {currentQ.image && (
@@ -9062,7 +9092,7 @@ export default function App() {
               {/* Check / Next buttons */}
               <div style={{ marginTop:"16px", display:"flex", gap:"10px" }}>
                 {!mcqRevealed ? (
-                  <button onClick={() => {
+                  <button key="mcq-check-btn" onClick={() => {
                     if (!mcqSelected) return;
                     setMcqRevealed(true);
                     setMcqScore(prev => ({
@@ -9080,7 +9110,7 @@ export default function App() {
                     Check Answer
                   </button>
                 ) : (
-                  <button onClick={() => {
+                  <button key="mcq-next-btn" onClick={() => {
                     setMcqIdx(i => i + 1);
                     setMcqSelected(null);
                     setMcqRevealed(false);
