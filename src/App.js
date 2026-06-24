@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
@@ -215,8 +216,18 @@ export default function App() {
     </div>
   );
 
-  const [screen, setScreen] = useState("board");
-  const [board, setBoard] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathParts = location.pathname.split('/').filter(Boolean);
+  const board = ['aqa', 'ocr'].includes(pathParts[0]) ? pathParts[0] : null;
+  const routeTab = pathParts[1] || null;
+  const routeParam = pathParts[2] || null;
+  const screen = !board ? 'board'
+    : routeTab === 'dashboard' ? 'dashboard'
+    : routeTab === 'cards' ? 'cards'
+    : 'topics';
+  const topicsTab = screen === 'topics' ? (routeTab || 'home') : 'home';
+  const activeSection = topicsTab === 'flashcards' && routeParam ? routeParam : null;
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
   const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : TOPIC_ORDER;
 
@@ -230,8 +241,6 @@ export default function App() {
     known, setKnown, order, shuffled, showMenu, setShowMenu,
     cards, currentCardIndex, card, knownKey, knownSet, knownCount,
     selectTopic: fcSelectTopic, next, prev, toggleKnown, shuffle, reset, studyUnknown } = fc;
-  const [activeSection, setActiveSection] = useState(null);
-  const [topicsTab, setTopicsTab] = useState("home");
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -251,15 +260,21 @@ export default function App() {
     startQuiz, recordQuizAnswer,
     AQA_AS_SECTIONS, AQA_A2_SECTIONS, OCR_AS_SECTIONS, OCR_A2_SECTIONS } = quiz;
 
-  const selectBoard = (b) => { setBoard(b); setScreen("topics"); setTopicsTab("home"); track("select_board", { board: b }); };
-  const selectTopic = (t) => { setScreen(fcSelectTopic(t, board)); };
+  const selectBoard = (b) => { navigate(`/${b}`); track("select_board", { board: b }); };
+  const selectTopic = (t) => { fcSelectTopic(t, board); navigate(`/${board}/cards/${t}`); };
 
   const goBack = () => {
-    if (screen === "cards") { setScreen("topics"); setTopic(null); }
-    else if (screen === "dashboard") { setScreen("topics"); }
-    else if (screen === "topics" && activeSection) { setActiveSection(null); }
-    else if (screen === "topics") { setScreen("board"); setBoard(null); setTopicsTab("home"); }
+    if (screen === "cards") { navigate(`/${board}/flashcards`); setTopic(null); }
+    else if (screen === "dashboard") { navigate(`/${board}`); }
+    else if (activeSection) { navigate(`/${board}/flashcards`); }
+    else { navigate("/"); }
   };
+
+  useEffect(() => {
+    if (screen === "cards" && routeParam && board && topic !== routeParam) {
+      fcSelectTopic(routeParam, board);
+    }
+  }, [screen, routeParam, board]); // eslint-disable-line
 
   useEffect(() => {
     if (screen !== "cards") return;
@@ -630,7 +645,7 @@ export default function App() {
     );
 
     const TopicRow = ({ t, showBar }) => (
-      <div onClick={() => { setActiveSection(null); selectTopic(t.id); }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 14px", background: "#ffffff", borderRadius: "12px", cursor: "pointer", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
+      <div onClick={() => { selectTopic(t.id); }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 14px", background: "#ffffff", borderRadius: "12px", cursor: "pointer", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showBar ? "5px" : 0 }}>
             <div>
@@ -822,7 +837,7 @@ export default function App() {
     { id: "nmr",        label: "NMR Practice",          labelBig: "NMR",      labelSmall: "Practice",desc: "Interpret spectra, learn chemical shifts, and deduce structures.", color: "#8b5cf6", grad: "linear-gradient(145deg,#a78bfa,#8b5cf6,#6d28d9)", stat: "Spectra" },
   ];
 
-  const goHome = () => { setTopicsTab("home"); };
+  const goHome = () => { navigate(`/${board}`); };
 
   if (screen === "topics") return (
     <div style={base}>
@@ -843,7 +858,7 @@ export default function App() {
             <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "10px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>{board === "ocr" ? "OCR A" : "AQA"} · A-Level Chemistry</div>
           </div>
         </div>
-        <button onClick={() => { setScreen("dashboard"); track("view_dashboard", { board }); }} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
+        <button onClick={() => { navigate(`/${board}/dashboard`); track("view_dashboard", { board }); }} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
       </div>
 
       {/* Payment success/cancel banner */}
@@ -913,7 +928,7 @@ export default function App() {
               const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
               const partiallyLocked = !hasFullAccess && !fullyLocked && !mechComingSoon;
               return (
-              <button key={card.id} onClick={() => { if (mechComingSoon) return; setTopicsTab(card.id); track("open_section", { section: card.id, board }); }}
+              <button key={card.id} onClick={() => { if (mechComingSoon) return; navigate(`/${board}/${card.id}`); track("open_section", { section: card.id, board }); }}
                 style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: mechComingSoon ? "default" : "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s", opacity: mechComingSoon ? 0.75 : 1 }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
@@ -1267,7 +1282,7 @@ export default function App() {
               const pct = totalCards > 0 ? Math.round((totalKnown / totalCards) * 100) : 0;
               const sectionLocked = !hasFullAccess && !FREE_FLASHCARD_SECTIONS.includes(section.id);
               return (
-                <button key={section.id} onClick={() => { if (!sectionLocked) setActiveSection(section.id); }} style={{
+                <button key={section.id} onClick={() => { if (!sectionLocked) navigate(`/${board}/flashcards/${section.id}`); }} style={{
                   padding: "16px 14px 14px", borderRadius: "16px",
                   background: fc.bg, border: `2px solid ${fc.border}40`,
                   cursor: sectionLocked ? "default" : "pointer", textAlign: "left", fontFamily: "inherit",
