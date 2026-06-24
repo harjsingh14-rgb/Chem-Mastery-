@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
+import { auth, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER } from "./data/sections";
@@ -112,10 +112,11 @@ export default function App() {
     if (!authUser) return;
     setCheckoutLoading(plan);
     try {
+      const token = await auth.currentUser?.getIdToken();
       const resp = await fetch("/api/create-checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan, uid: authUser.uid, email: authUser.email }),
+        headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
+        body: JSON.stringify({ plan, email: authUser.email }),
       });
       const data = await resp.json();
       if (data.url) {
@@ -132,9 +133,10 @@ export default function App() {
   const handleManageSubscription = async () => {
     if (!userProfile?.stripeCustomerId) return;
     try {
+      const token = await auth.currentUser?.getIdToken();
       const resp = await fetch("/api/customer-portal", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
         body: JSON.stringify({ customerId: userProfile.stripeCustomerId }),
       });
       const data = await resp.json();

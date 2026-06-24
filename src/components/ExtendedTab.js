@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { auth } from "../firebase";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
 import track from "../utils/track";
 
@@ -151,9 +152,10 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, LockedO
     track("submit_ai_examine", { question_id: q.id, category: extCategory, board });
     logActivity("extended");
     try {
+      const token = await auth.currentUser?.getIdToken();
       const res = await fetch('/api/examine.js', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
         body: JSON.stringify({ question: q.question, markScheme: q.markScheme, studentAnswer: extDraft, maxMarks: q.marks, levels: q.levels }),
       });
       const data = await res.json();

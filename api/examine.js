@@ -1,11 +1,17 @@
-// Vercel serverless function — AI Examiner v3
-// Levels-of-response marking using Claude Sonnet
-// Uses raw fetch only — NO @anthropic-ai/sdk dependency
+const { setCors } = require("./_cors");
+const { verifyFirebaseToken } = require("./_auth");
 
 module.exports = async function handler(req, res) {
+  if (setCors(req, res)) return res.status(200).end();
+
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
+    }
+
+    const caller = await verifyFirebaseToken(req);
+    if (!caller) {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     const { question, markScheme, studentAnswer, maxMarks, levels } = req.body || {};
@@ -19,12 +25,6 @@ module.exports = async function handler(req, res) {
     if (!apiKey) {
       return res.status(500).json({
         error: "API key not configured - add ANTHROPIC_API_KEY in Vercel > Settings > Environment Variables then redeploy",
-      });
-    }
-
-    if (typeof fetch === "undefined") {
-      return res.status(500).json({
-        error: "fetch is not available - this function requires Node.js 18+.",
       });
     }
 
@@ -148,9 +148,7 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 
     return res.status(200).json(result);
   } catch (outerErr) {
-    return res.status(500).json({
-      error: `Unexpected function error: ${outerErr.message || String(outerErr)}`,
-      stack: outerErr.stack ? outerErr.stack.split("\n").slice(0, 5).join(" | ") : undefined,
-    });
+    console.error("Examine error:", outerErr);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -1,15 +1,17 @@
-// Vercel serverless function - Stripe Customer Portal
-// Uses raw fetch - no stripe SDK dependency
+const { setCors } = require("./_cors");
+const { verifyFirebaseToken } = require("./_auth");
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  if (req.method === "OPTIONS") return res.status(200).end();
+  if (setCors(req, res)) return res.status(200).end();
 
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
+    }
+
+    const caller = await verifyFirebaseToken(req);
+    if (!caller) {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     const secretKey = (process.env.STRIPE_SECRET_KEY || "").trim();

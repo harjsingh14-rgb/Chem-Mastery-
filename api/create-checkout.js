@@ -1,11 +1,8 @@
-// Vercel serverless function - Create Stripe Checkout session
-// Uses raw fetch - no stripe SDK dependency
+const { setCors } = require("./_cors");
+const { verifyFirebaseToken } = require("./_auth");
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  if (req.method === "OPTIONS") return res.status(200).end();
+  if (setCors(req, res)) return res.status(200).end();
 
   try {
     if (req.method !== "POST") {
@@ -17,10 +14,13 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: "STRIPE_SECRET_KEY not configured" });
     }
 
-    const { plan, uid, email } = req.body || {};
+    const { plan, email } = req.body || {};
     if (!plan) {
       return res.status(400).json({ error: "Missing required field: plan" });
     }
+
+    const caller = await verifyFirebaseToken(req);
+    const uid = caller?.uid || null;
 
     const priceConfig = plan === "yearly"
       ? { "line_items[0][price_data][unit_amount]": "24999", "line_items[0][price_data][recurring][interval]": "year" }
