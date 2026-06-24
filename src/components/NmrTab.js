@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SETS } from "../data/sets";
 import chemFormat from "../utils/chemFormat";
+import McqQuestion from "./McqQuestion";
 
 const NMR_CHALLENGES = [
   {
@@ -373,75 +374,22 @@ export default function NmrTab({ board, mcqData }) {
             </div>
 
             <div style={{ background: "#fff", borderRadius: "16px", border: "1.5px solid #e2e8f0", padding: "20px", boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}>
-              <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.6, marginBottom: "16px" }}>
-                {chemFormat(q.q)}
-              </div>
-              {q.image && (
-                <div style={{ marginBottom: "14px", textAlign: "center" }}>
-                  <img src={q.image} alt="Question diagram" style={{ maxWidth: "100%", borderRadius: "8px" }} />
-                </div>
-              )}
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {Object.entries(q.options).map(([letter, text]) => {
-                  const isSelected = nmrMcqSelected === letter;
-                  const isCorrect = letter === q.answer;
-                  const showResult = nmrMcqRevealed;
-                  let bg = "#fff", border = "#e2e8f0", textColor = "#1a2d45";
-                  if (showResult && isCorrect) { bg = "#f0fdf4"; border = "#22c55e"; textColor = "#166534"; }
-                  else if (showResult && isSelected && !isCorrect) { bg = "#fef2f2"; border = "#ef4444"; textColor = "#991b1b"; }
-                  else if (isSelected) { bg = `${accentColor}10`; border = accentColor; textColor = accentColor; }
-                  return (
-                    <button key={letter} onClick={() => { if (!nmrMcqRevealed) setNmrMcqSelected(letter); }}
-                      style={{ display: "flex", alignItems: "flex-start", gap: "10px", padding: "12px 14px", borderRadius: "10px",
-                        border: `1.5px solid ${border}`, background: bg, cursor: nmrMcqRevealed ? "default" : "pointer",
-                        fontFamily: "inherit", textAlign: "left", transition: "all 0.15s" }}>
-                      <div style={{ minWidth: "24px", height: "24px", borderRadius: "50%", background: isSelected || (showResult && isCorrect) ? (showResult && isCorrect ? "#22c55e" : accentColor) : "#f1f5f9",
-                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700,
-                        color: isSelected || (showResult && isCorrect) ? "#fff" : "#64748b" }}>
-                        {letter}
-                      </div>
-                      <div style={{ fontSize: "13px", color: textColor, lineHeight: 1.5, fontWeight: showResult && isCorrect ? 700 : 400 }}>
-                        {chemFormat(text)}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {nmrMcqRevealed && q.explanation && (
-                <div style={{ marginTop: "14px", padding: "12px 16px", background: "#f0fdf4", border: "1.5px solid #bbf7d0",
-                  borderRadius: "12px", fontSize: "13px", color: "#166534", lineHeight: 1.6 }}>
-                  <span style={{ fontWeight: 700 }}>Answer: {q.answer}</span>
-                  {q.explanation && <span> — {chemFormat(q.explanation)}</span>}
-                </div>
-              )}
-
-              <div style={{ marginTop: "16px", display: "flex", gap: "10px" }}>
-                {!nmrMcqRevealed ? (
-                  <button key="nmr-check-btn" onClick={() => {
-                    if (!nmrMcqSelected) return;
-                    setNmrMcqRevealed(true);
-                    setNmrMcqScore(prev => ({
-                      correct: prev.correct + (nmrMcqSelected === q.answer ? 1 : 0),
-                      total: prev.total + 1
-                    }));
-                  }}
-                    disabled={!nmrMcqSelected}
-                    style={{ flex: 1, padding: "14px", borderRadius: "12px", border: "none",
-                      cursor: nmrMcqSelected ? "pointer" : "default",
-                      background: nmrMcqSelected ? accentColor : "#e8edf3",
-                      color: nmrMcqSelected ? "#fff" : "#b0c4d4",
-                      fontSize: "14px", fontWeight: 700, fontFamily: "inherit" }}>
-                    Check Answer
-                  </button>
-                ) : (
-                  <button key="nmr-next-btn" onClick={() => { setNmrMcqIdx(i => i + 1); setNmrMcqSelected(null); setNmrMcqRevealed(false); }}
-                    style={{ flex: 1, padding: "14px", borderRadius: "12px", border: "none", cursor: "pointer",
-                      background: accentColor, color: "#fff", fontSize: "14px", fontWeight: 700, fontFamily: "inherit" }}>
-                    {nmrMcqIdx < nmrMcqs.length - 1 ? "Next Question →" : "See Results"}
-                  </button>
-                )}
-              </div>
+              <McqQuestion
+                question={q}
+                selected={nmrMcqSelected}
+                revealed={nmrMcqRevealed}
+                accentColor={accentColor}
+                onSelect={setNmrMcqSelected}
+                onCheck={() => {
+                  setNmrMcqRevealed(true);
+                  setNmrMcqScore(prev => ({
+                    correct: prev.correct + (nmrMcqSelected === q.answer ? 1 : 0),
+                    total: prev.total + 1
+                  }));
+                }}
+                onNext={() => { setNmrMcqIdx(i => i + 1); setNmrMcqSelected(null); setNmrMcqRevealed(false); }}
+                isLast={nmrMcqIdx >= nmrMcqs.length - 1}
+              />
             </div>
           </div>
         );

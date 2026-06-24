@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import chemFormat from "../utils/chemFormat";
+import McqQuestion from "./McqQuestion";
 
 export default function McqTab({ board, mcqData }) {
   const [mcqYear, setMcqYear] = useState("as");
@@ -150,11 +150,6 @@ export default function McqTab({ board, mcqData }) {
     </div>
   );
 
-  const optionLetters = ["A","B","C","D"];
-  const imageIsQuestion = (currentQ.topic || "").startsWith("OCR") &&
-    !!currentQ.image && !!currentQ.options &&
-    Object.values(currentQ.options).every(v => v === "See diagram");
-
   return (
     <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
       <style>{`@keyframes mcqFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
@@ -183,97 +178,22 @@ export default function McqTab({ board, mcqData }) {
       </div>
 
       <div key={currentQ.id} style={{ padding:"16px", animation:"mcqFadeIn 0.3s ease" }}>
-        {!imageIsQuestion && (
-          <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", lineHeight:1.5, marginBottom: currentQ.image ? "10px" : "16px" }}>
-            {chemFormat(currentQ.q)}
-          </div>
-        )}
-
-        {currentQ.image && (
-          <div style={{ marginBottom:"14px", background:"#fff", border:"1.5px solid #e2e8f0",
-            borderRadius:"12px", padding:"8px", overflow:"hidden" }}>
-            <img src={process.env.PUBLIC_URL + currentQ.image} alt="Question diagram"
-              style={{ width:"100%", height:"auto", display:"block", borderRadius:"8px" }} />
-          </div>
-        )}
-
-        <div style={{ display:"flex", flexDirection: currentQ.image && Object.values(currentQ.options).every(v => v === "See diagram") ? "row" : "column", gap:"10px", flexWrap:"wrap" }}>
-          {optionLetters.map(letter => {
-            const optText = currentQ.options[letter];
-            if (!optText) return null;
-            const isSelected = mcqSelected === letter;
-            const isCorrect = letter === currentQ.answer;
-            const showResult = mcqRevealed;
-
-            let bg = "#fff";
-            let border = "1.5px solid #e2e8f0";
-            let textColor = "#1a2d45";
-            if (showResult && isCorrect) { bg = "#dcfce7"; border = "2px solid #22c55e"; }
-            else if (showResult && isSelected && !isCorrect) { bg = "#fef2f2"; border = "2px solid #ef4444"; }
-            else if (isSelected && !showResult) { bg = "#dc262610"; border = "2px solid #dc2626"; }
-
-            return (
-              <button key={letter} onClick={() => { if (!mcqRevealed) setMcqSelected(letter); }}
-                style={{ display:"flex", alignItems:"center", gap:"12px", padding:"14px 16px", borderRadius:"12px",
-                  border, background: bg, cursor: mcqRevealed ? "default" : "pointer", fontFamily:"inherit",
-                  textAlign:"left", transition:"all 0.2s" }}>
-                <div style={{ width:"30px", height:"30px", borderRadius:"50%", flexShrink:0,
-                  background: isSelected ? "#dc2626" : "#f0f4f8",
-                  color: isSelected ? "#fff" : "#64748b",
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  fontSize:"13px", fontWeight:800, transition:"all 0.2s" }}>
-                  {showResult && isCorrect ? "✓" : showResult && isSelected && !isCorrect ? "✗" : letter}
-                </div>
-                {optText !== "See diagram" && (
-                  <div style={{ fontSize:"14px", color: textColor, lineHeight:1.4, fontWeight: showResult && isCorrect ? 700 : 400 }}>
-                    {chemFormat(optText)}
-                  </div>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {mcqRevealed && currentQ.explanation && (
-          <div style={{ marginTop:"14px", padding:"12px 16px", background:"#f0fdf4", border:"1.5px solid #bbf7d0",
-            borderRadius:"12px", fontSize:"13px", color:"#166534", lineHeight:1.6, animation:"mcqFadeIn 0.3s ease" }}>
-            <span style={{ fontWeight:700 }}>Answer: {currentQ.answer}</span>
-            {currentQ.explanation && <span> — {chemFormat(currentQ.explanation)}</span>}
-          </div>
-        )}
-
-        <div style={{ marginTop:"16px", display:"flex", gap:"10px" }}>
-          {!mcqRevealed ? (
-            <button key="mcq-check-btn" onClick={() => {
-              if (!mcqSelected) return;
-              setMcqRevealed(true);
-              setMcqScore(prev => ({
-                correct: prev.correct + (mcqSelected === currentQ.answer ? 1 : 0),
-                total: prev.total + 1
-              }));
-            }}
-              disabled={!mcqSelected}
-              style={{ flex:1, padding:"14px", borderRadius:"12px", border:"none",
-                cursor: mcqSelected ? "pointer" : "default",
-                background: mcqSelected ? "#dc2626" : "#e8edf3",
-                color: mcqSelected ? "#fff" : "#b0c4d4",
-                fontSize:"14px", fontWeight:700, fontFamily:"inherit",
-                boxShadow: mcqSelected ? "0 4px 14px rgba(220,38,38,0.3)" : "none" }}>
-              Check Answer
-            </button>
-          ) : (
-            <button key="mcq-next-btn" onClick={() => {
-              setMcqIdx(i => i + 1);
-              setMcqSelected(null);
-              setMcqRevealed(false);
-            }}
-              style={{ flex:1, padding:"14px", borderRadius:"12px", border:"none", cursor:"pointer",
-                background:"#dc2626", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit",
-                boxShadow:"0 4px 14px rgba(220,38,38,0.3)" }}>
-              {mcqIdx < activeQuestions.length - 1 ? "Next Question →" : "See Results"}
-            </button>
-          )}
-        </div>
+        <McqQuestion
+          question={currentQ}
+          selected={mcqSelected}
+          revealed={mcqRevealed}
+          accentColor="#dc2626"
+          onSelect={setMcqSelected}
+          onCheck={() => {
+            setMcqRevealed(true);
+            setMcqScore(prev => ({
+              correct: prev.correct + (mcqSelected === currentQ.answer ? 1 : 0),
+              total: prev.total + 1
+            }));
+          }}
+          onNext={() => { setMcqIdx(i => i + 1); setMcqSelected(null); setMcqRevealed(false); }}
+          isLast={mcqIdx >= activeQuestions.length - 1}
+        />
       </div>
     </div>
   );
