@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
@@ -14,6 +14,9 @@ import LandingPage from "./components/LandingPage";
 import LoginScreen from "./components/LoginScreen";
 import chemFormat from "./utils/chemFormat";
 import track from "./utils/track";
+import useStudyProgress from "./hooks/useStudyProgress";
+import useFlashcards from "./hooks/useFlashcards";
+import useQuiz from "./hooks/useQuiz";
 
 export default function App() {
   // --- Auth state ---
@@ -218,25 +221,17 @@ export default function App() {
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
   const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : TOPIC_ORDER;
 
+  const { studyLog, todayKey, logActivity, currentStreak, scoreHistory, logScore } = useStudyProgress();
   // --- Free tier: first item in each section is free ---
   const FREE_FLASHCARD_SECTIONS = board === "ocr" ? ["ocr_mod2"] : ["physical_as"];
   const FREE_CALC_IDS = ["calc_moles"];
   const FREE_MECH_COUNT = 1; // first mechanism in each category
-  const [topic, setTopic] = useState(null);
+  const fc = useFlashcards(logActivity);
+  const { topic, setTopic, index, setIndex, flipped, setFlipped,
+    known, setKnown, order, shuffled, showMenu, setShowMenu,
+    cards, currentCardIndex, card, knownKey, knownSet, knownCount,
+    selectTopic: fcSelectTopic, next, prev, toggleKnown, shuffle, reset, studyUnknown } = fc;
   const [activeSection, setActiveSection] = useState(null);
-  const [index, setIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
-  const [known, setKnown] = useState(() => {
-    try {
-      const saved = localStorage.getItem('hsj-chem-known');
-      if (!saved) return {};
-      const parsed = JSON.parse(saved);
-      return Object.fromEntries(Object.entries(parsed).map(([k, v]) => [k, new Set(v)]));
-    } catch { return {}; }
-  });
-  const [order, setOrder] = useState([]);
-  const [shuffled, setShuffled] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
   const [topicsTab, setTopicsTab] = useState("home"); // "home" | "flashcards" | "synth" | "calc" | "extended" | "pathways" | "mechanisms" | "mcq" | "nmr"
@@ -279,57 +274,6 @@ export default function App() {
   const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
 
-  // --- Study streak & activity tracking ---
-  const [studyLog, setStudyLog] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("hsj-study-log") || "{}"); } catch { return {}; }
-  });
-  const todayKey = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-  const logActivity = useCallback((type) => {
-    setStudyLog(prev => {
-      const day = prev[todayKey] || { sessions: 0, cards: 0, calcs: 0, extended: 0, mechanisms: 0, firstOpen: Date.now() };
-      if (type === "session") day.sessions = (day.sessions || 0) + 1;
-      if (type === "card") day.cards = (day.cards || 0) + 1;
-      if (type === "calc") day.calcs = (day.calcs || 0) + 1;
-      if (type === "extended") day.extended = (day.extended || 0) + 1;
-      if (type === "mechanism") day.mechanisms = (day.mechanisms || 0) + 1;
-      day.lastActive = Date.now();
-      const next = { ...prev, [todayKey]: day };
-      try { localStorage.setItem("hsj-study-log", JSON.stringify(next)); } catch {}
-      return next;
-    });
-  }, [todayKey]);
-  // Log a session on first load each day
-  useEffect(() => {
-    if (!studyLog[todayKey]?.sessions) logActivity("session");
-  }, [todayKey]); // eslint-disable-line
-
-  // Calculate streak
-  const getStreak = () => {
-    let streak = 0;
-    const d = new Date();
-    // Check if active today, if not start from yesterday
-    if (!studyLog[todayKey]) d.setDate(d.getDate() - 1);
-    while (true) {
-      const key = d.toISOString().slice(0, 10);
-      if (studyLog[key]) { streak++; d.setDate(d.getDate() - 1); }
-      else break;
-    }
-    return streak;
-  };
-  const currentStreak = getStreak();
-
-  // Score history for trends (stored in localStorage)
-  const [scoreHistory, setScoreHistory] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("hsj-score-history") || "[]"); } catch { return []; }
-  });
-  const logScore = useCallback((type, topic, score, total) => {
-    setScoreHistory(prev => {
-      const entry = { date: todayKey, time: Date.now(), type, topic, score, total };
-      const next = [...prev, entry].slice(-200); // keep last 200 entries
-      try { localStorage.setItem("hsj-score-history", JSON.stringify(next)); } catch {}
-      return next;
-    });
-  }, [todayKey]);
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
   const [mechId, setMechId] = useState(null);
@@ -348,148 +292,18 @@ export default function App() {
   const [synthTab, setSynthTab] = useState("ali");
   const [selectedRxn, setSelectedRxn] = useState(null);
   const [synthQuiz, setSynthQuiz] = useState(false);
-  // ── Random Quiz ──────────────────────────────────────────────────────────────
-  const [quizScreen, setQuizScreen] = useState(null); // null | "setup" | "running" | "done"
-  const [quizYear, setQuizYear] = useState("as");      // "as" | "a2" | "all"
-  const [quizMode, setQuizMode] = useState("year");    // "year" | "topics"
-  const [quizCount, setQuizCount] = useState(25);      // 25 | 50 | "custom"
-  const [quizCustomCount, setQuizCustomCount] = useState(25);
-  const [quizSelectedTopics, setQuizSelectedTopics] = useState([]);
-  const [quizDeck, setQuizDeck] = useState([]);        // [{topicId, cardIdx, q, a}]
-  const [quizPos, setQuizPos] = useState(0);
-  const [quizFlipped, setQuizFlipped] = useState(false);
-  const [quizSessionScore, setQuizSessionScore] = useState({ correct: 0, wrong: 0 });
-  const [quizHistory, setQuizHistory] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('hsj-quiz-history') || '{}'); }
-    catch { return {}; }
-  });
-
-  const cards = topic ? SETS[topic].cards : [];
-  const currentCardIndex = order[index];
-  const card = cards[currentCardIndex] || { q: "", a: "" };
-  const knownKey = topic || "";
-  const knownSet = known[knownKey] || new Set();
-  const knownCount = knownSet.size;
+  const quiz = useQuiz(board);
+  const { quizScreen, setQuizScreen, quizYear, setQuizYear,
+    quizMode, setQuizMode, quizCount, setQuizCount,
+    quizCustomCount, setQuizCustomCount,
+    quizSelectedTopics, setQuizSelectedTopics,
+    quizDeck, quizPos, quizFlipped, setQuizFlipped,
+    quizSessionScore, quizHistory,
+    startQuiz, recordQuizAnswer,
+    AQA_AS_SECTIONS, AQA_A2_SECTIONS, OCR_AS_SECTIONS, OCR_A2_SECTIONS } = quiz;
 
   const selectBoard = (b) => { setBoard(b); setScreen("topics"); setTopicsTab("home"); track("select_board", { board: b }); };
-  const selectTopic = (t) => {
-    setTopic(t);
-    const arr = SETS[t].cards.map((_, i) => i);
-    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
-    setOrder(arr);
-    setIndex(0); setFlipped(false); setShuffled(true); setShowMenu(false);
-    setScreen("cards");
-    track("select_flashcard_topic", { topic: t, title: SETS[t]?.title, board });
-  };
-  // Save progress to localStorage whenever it changes
-  useEffect(() => {
-    try {
-      const serialisable = Object.fromEntries(Object.entries(known).map(([k, v]) => [k, [...v]]));
-      localStorage.setItem('hsj-chem-known', JSON.stringify(serialisable));
-    } catch {}
-  }, [known]);
-
-  // Save quiz history to localStorage
-  useEffect(() => {
-    try { localStorage.setItem('hsj-quiz-history', JSON.stringify(quizHistory)); }
-    catch {}
-  }, [quizHistory]);
-
-  // ── Quiz helpers ─────────────────────────────────────────────────────────────
-  const AQA_AS_SECTIONS = ["physical_as", "inorganic_as", "organic", "practicals_as"];
-  const AQA_A2_SECTIONS = ["physical_a2", "inorganic_a2", "organic2", "practicals_a2"];
-  const OCR_AS_SECTIONS = ["ocr_mod2", "ocr_mod3", "ocr_mod4"];
-  const OCR_A2_SECTIONS = ["ocr_mod5", "ocr_mod6"];
-
-  const buildQuizDeck = (year, deckSize = 25, topicIds = null) => {
-    let eligibleTopics;
-    if (topicIds && topicIds.length > 0) {
-      eligibleTopics = topicIds.filter(id => SETS[id]);
-    } else {
-      const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
-      const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
-      const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
-      let sectionFilter;
-      if (year === "as") sectionFilter = asSecs;
-      else if (year === "a2") sectionFilter = a2Secs;
-      else sectionFilter = [...asSecs, ...a2Secs];
-      eligibleTopics = allSections
-        .filter(s => sectionFilter.includes(s.id))
-        .flatMap(s => s.topics)
-        .filter(id => SETS[id]);
-    }
-
-    // Build weighted pool
-    const pool = [];
-    for (const topicId of eligibleTopics) {
-      const cards = SETS[topicId].cards;
-      cards.forEach((card, cardIdx) => {
-        const key = `${topicId}-${cardIdx}`;
-        const h = quizHistory[key];
-        let weight;
-        if (!h) {
-          weight = 3; // never seen
-        } else {
-          const { c = 0, w = 0 } = h;
-          const total = c + w;
-          if (total === 0) { weight = 3; }
-          else if (c >= 3 && c / total >= 0.7) { weight = 0.5; } // mastered
-          else if (w > c) { weight = 4; } // more wrong than correct
-          else { weight = 2; }
-        }
-        pool.push({ topicId, cardIdx, q: card.q, a: card.a, weight });
-      });
-    }
-    if (pool.length === 0) return [];
-
-    // Weighted random sample, capped at available pool
-    const DECK_SIZE = Math.min(deckSize, pool.length);
-    const selected = [];
-    const remaining = [...pool];
-    for (let i = 0; i < DECK_SIZE; i++) {
-      const totalW = remaining.reduce((s, c) => s + c.weight, 0);
-      let r = Math.random() * totalW;
-      let idx = 0;
-      while (idx < remaining.length - 1 && r > remaining[idx].weight) {
-        r -= remaining[idx].weight;
-        idx++;
-      }
-      selected.push(remaining[idx]);
-      remaining.splice(idx, 1);
-    }
-    return selected;
-  };
-
-  const startQuiz = () => {
-    const count = quizCount === "custom" ? Math.min(99, Math.max(25, quizCustomCount || 25)) : quizCount;
-    const topicFilter = quizMode === "topics" && quizSelectedTopics.length > 0 ? quizSelectedTopics : null;
-    const deck = buildQuizDeck(quizYear, count, topicFilter);
-    setQuizDeck(deck);
-    setQuizPos(0);
-    setQuizFlipped(false);
-    setQuizSessionScore({ correct: 0, wrong: 0 });
-    setQuizScreen("running");
-  };
-
-  const recordQuizAnswer = (correct) => {
-    const card = quizDeck[quizPos];
-    const key = `${card.topicId}-${card.cardIdx}`;
-    setQuizHistory(prev => {
-      const h = prev[key] || { c: 0, w: 0 };
-      return { ...prev, [key]: correct ? { c: h.c + 1, w: h.w } : { c: h.c, w: h.w + 1 } };
-    });
-    setQuizSessionScore(prev => correct
-      ? { ...prev, correct: prev.correct + 1 }
-      : { ...prev, wrong: prev.wrong + 1 }
-    );
-    const isLast = quizPos >= quizDeck.length - 1;
-    if (isLast) {
-      setQuizScreen("done");
-    } else {
-      setQuizFlipped(false);
-      setTimeout(() => setQuizPos(p => p + 1), 120);
-    }
-  };
+  const selectTopic = (t) => { setScreen(fcSelectTopic(t, board)); };
 
   const goBack = () => {
     if (screen === "cards") { setScreen("topics"); setTopic(null); }
@@ -497,35 +311,6 @@ export default function App() {
     else if (screen === "topics" && activeSection) { setActiveSection(null); }
     else if (screen === "topics") { setScreen("board"); setBoard(null); setTopicsTab("home"); }
   };
-
-  const next = useCallback(() => { setFlipped(false); setTimeout(() => setIndex(i => Math.min(i + 1, order.length - 1)), 100); }, [order.length]);
-  const prev = useCallback(() => { setFlipped(false); setTimeout(() => setIndex(i => Math.max(i - 1, 0)), 100); }, []);
-  const toggleKnown = useCallback(() => {
-    setKnown(prev => {
-      const s = new Set(prev[knownKey] || []);
-      const wasKnown = s.has(currentCardIndex);
-      wasKnown ? s.delete(currentCardIndex) : s.add(currentCardIndex);
-      track("toggle_known", { topic, card_index: currentCardIndex, marked: !wasKnown });
-      if (!wasKnown) logActivity("card");
-      return { ...prev, [knownKey]: s };
-    });
-  }, [knownKey, currentCardIndex, topic]);
-
-  const shuffle = useCallback(() => {
-    const arr = cards.map((_, i) => i);
-    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; }
-    setOrder(arr); setIndex(0); setFlipped(false); setShuffled(true); setShowMenu(false);
-  }, [cards]);
-
-  const reset = useCallback(() => {
-    setOrder(cards.map((_, i) => i)); setIndex(0); setFlipped(false); setShuffled(false); setShowMenu(false);
-  }, [cards]);
-
-  const studyUnknown = useCallback(() => {
-    const unknown = cards.map((_, i) => i).filter(i => !knownSet.has(i));
-    if (unknown.length === 0) return;
-    setOrder(unknown); setIndex(0); setFlipped(false); setShowMenu(false);
-  }, [cards, knownSet]);
 
   useEffect(() => {
     if (screen !== "cards") return;
