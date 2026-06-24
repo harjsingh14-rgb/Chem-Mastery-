@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
-function track(event, params = {}) {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", event, params);
-  }
-}
+import track from "../utils/track";
 
 export default function LandingPage({ onGoToLogin, onGoToCheckout }) {
   const [activeSection, setActiveSection] = useState("mcqs"); // "mcqs"
