@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      // Users can read only their own profile
+      allow read: if request.auth != null && request.auth.uid == uid;
+
+      // New profiles must start as free — role upgrades come from the
+      // Stripe webhook (Admin SDK, bypasses rules) or key redemption below
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.role == 'free';
+
+      allow update: if request.auth != null && request.auth.uid == uid
+        && (
+          // Normal profile updates may not touch role or billing fields
+          !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['role', 'stripeCustomerId', 'stripeSubscriptionId', 'paidAt'])
+          ||
+          // Redeeming a key: may set role to access_key only, and only
+          // if the named key exists, is enabled, and has not expired
+          (
+            request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['role', 'accessKey', 'accessKeyExpiry'])
+            && request.resource.data.role == 'access_key'
+            && exists(/databases/$(database)/documents/accessKeys/$(request.resource.data.accessKey))
+            && get(/databases/$(database)/documents/accessKeys/$(request.resource.data.accessKey)).data.disabled != true
+          )
+        );
+    }
+
+    match /accessKeys/{key} {
+      // Signed-in users can look up a key by its exact ID, but never
+      // enumerate the collection
+      allow get: if request.auth != null;
+      allow list: if false;
+
+      // Redemption only bumps usage tracking; nothing else is writable
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['usageCount', 'lastUsedAt']);
+
+      // Keys are created/deleted from the Firebase console or Admin SDK only
+      allow create, delete: if false;
+    }
+  }
+}
