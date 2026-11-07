@@ -1,7 +1,7 @@
 import React from "react";
 import chemFormat from "../utils/chemFormat";
 
-export default function McqQuestion({ question, selected, revealed, accentColor, onSelect, onCheck, onNext, isLast, hideNext }) {
+export default function McqQuestion({ question, selected, revealed, accentColor, onSelect, onCheck, onNext, isLast, hideNext, wrongLetters = [], locked = false, hideQuestion = false, checkLabel = "Check Answer" }) {
   const optionLetters = ["A","B","C","D"];
   const imageIsQuestion = (question.topic || "").startsWith("OCR") &&
     !!question.image && !!question.options &&
@@ -9,7 +9,7 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
 
   return (
     <div>
-      {!imageIsQuestion && (
+      {!imageIsQuestion && !hideQuestion && (
         <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.6, marginBottom: question.image ? "10px" : "16px" }}>
           {chemFormat(question.q)}
         </div>
@@ -30,18 +30,20 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
           const isSelected = selected === letter;
           const isCorrect = letter === question.answer;
           const showResult = revealed;
+          const wasWrong = !revealed && wrongLetters.includes(letter);
 
           let bg = "#fff";
           let border = "1.5px solid #e2e8f0";
           let textColor = "#1a2d45";
           if (showResult && isCorrect) { bg = "#f0fdf4"; border = "2px solid #22c55e"; textColor = "#166534"; }
           else if (showResult && isSelected && !isCorrect) { bg = "#fef2f2"; border = "2px solid #ef4444"; textColor = "#991b1b"; }
+          else if (wasWrong) { bg = "#fef2f2"; border = "2px solid #ef4444"; textColor = "#991b1b"; }
           else if (isSelected && !showResult) { bg = `${accentColor}10`; border = `2px solid ${accentColor}`; textColor = accentColor; }
 
           return (
-            <button key={letter} onClick={() => { if (!revealed) onSelect(letter); }}
+            <button key={letter} onClick={() => { if (!revealed && !locked && !wasWrong) onSelect(letter); }} disabled={locked || wasWrong}
               style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px 14px", borderRadius: "12px",
-                border, background: bg, cursor: revealed ? "default" : "pointer", fontFamily: "inherit",
+                border, background: bg, cursor: revealed || locked || wasWrong ? "default" : "pointer", fontFamily: "inherit",
                 textAlign: "left", transition: "all 0.15s" }}>
               <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0,
                 background: isSelected || (showResult && isCorrect)
@@ -49,7 +51,7 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
                 color: isSelected || (showResult && isCorrect) ? "#fff" : "#64748b",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: "12px", fontWeight: 800, transition: "all 0.2s" }}>
-                {showResult && isCorrect ? "✓" : showResult && isSelected && !isCorrect ? "✗" : letter}
+                {showResult && isCorrect ? "✓" : (showResult && isSelected && !isCorrect) || wasWrong ? "✗" : letter}
               </div>
               {optText !== "See diagram" && (
                 <div style={{ fontSize: "13px", color: textColor, lineHeight: 1.5, fontWeight: showResult && isCorrect ? 700 : 400 }}>
@@ -69,7 +71,7 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
         </div>
       )}
 
-      <div style={{ marginTop: "16px", display: "flex", gap: "10px" }}>
+      <div style={{ marginTop: "16px", display: locked && !revealed ? "none" : "flex", gap: "10px" }}>
         {!revealed ? (
           <button key="mcq-check-btn" onClick={onCheck}
             disabled={!selected}
@@ -79,7 +81,7 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
               color: selected ? "#fff" : "#b0c4d4",
               fontSize: "14px", fontWeight: 700, fontFamily: "inherit",
               boxShadow: selected ? `0 4px 14px ${accentColor}50` : "none" }}>
-            Check Answer
+            {checkLabel}
           </button>
         ) : hideNext ? null : (
           <button key="mcq-next-btn" onClick={onNext}

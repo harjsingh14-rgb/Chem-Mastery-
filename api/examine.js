@@ -10,6 +10,14 @@ const CONVENTIONS = `MARKING CONVENTIONS (apply all of these):
 4. Contradictions: if a correct statement is contradicted elsewhere in the answer, award 0 for that point. Use the REJECT list where given.
 5. Never award more than the marks available for a point, and never award a point twice.`;
 
+// Students can attempt a question up to three times, with hints between attempts.
+// Feedback must help them find the missing chemistry themselves, not hand it over.
+const FEEDBACK_RULES = `FEEDBACK RULES (the student may attempt this question again):
+- Do NOT state any missing mark scheme point, the correct value, or the answer.
+- Do NOT quote or paraphrase the mark scheme.
+- Say what was credited in general terms, then describe what is missing or wrong by its kind: which concept, which step of the working, what type of error (sign, units, moles, a condition not stated, a term used loosely).
+- Keep to 2 or 3 sentences in exam language. The model answer is returned separately and is shown to the student only once the mark scheme is unlocked.`;
+
 function levelsPrompt({ question, schemeLines, levelsText, studentAnswer, maxMarks }) {
   return `You are an experienced A-Level Chemistry examiner. You are marking a student's extended response using LEVELS OF RESPONSE marking (not point-by-point).
 
@@ -36,14 +44,16 @@ MARKING INSTRUCTIONS:
 4. Assign the answer to a level first, then decide the mark within that level.
 5. A well-structured answer with minor errors gets the higher mark in a level. A disorganised answer with some correct points gets the lower mark.
 6. Write a model answer as a concise, exam-ready student response (full connected sentences, 4 to 8 sentences).
-7. Keep feedback constructive: 2 to 3 sentences.
+7. Write feedback following the FEEDBACK RULES below.
+
+${FEEDBACK_RULES}
 
 Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 {
   "level": <integer 0 to 3>,
   "score": <integer 0 to ${maxMarks}>,
   "coveredPoints": [<boolean for each indicative content point listed above, in order>],
-  "feedback": "<2 to 3 sentences: acknowledge what they got right, state the level assigned and why, identify the most important thing they missed or could improve>",
+  "feedback": "<2 to 3 sentences: acknowledge what they got right, state the level assigned and why, and describe in general terms the kind of thing missing, without giving it away>",
   "modelAnswer": "<concise model student answer covering all key indicative content in full connected sentences>",
   "confidence": "<high | medium | low: how confident you are in this mark>"
 }`;
@@ -68,14 +78,16 @@ ${CONVENTIONS}
 MARKING INSTRUCTIONS:
 1. For each mark scheme point, decide whether the student's answer earns it. Be as strict as a real examiner: the chemistry must be correct and specific.
 2. Total the marks earned, capped at ${maxMarks}.
-3. Give feedback in exam language: say which points were credited, which were not and why, and the single most important improvement.
+3. Write feedback following the FEEDBACK RULES below.
 4. Write a model answer that would earn full marks, in the concise style of a mark scheme answer.
+
+${FEEDBACK_RULES}
 
 Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 {
   "awarded": [<boolean for each mark scheme point listed above, in order>],
   "score": <integer 0 to ${maxMarks}>,
-  "feedback": "<2 to 3 sentences in examiner language>",
+  "feedback": "<2 to 3 sentences in examiner language, following the FEEDBACK RULES>",
   "modelAnswer": "<full-mark answer>",
   "confidence": "<high | medium | low>"
 }`;

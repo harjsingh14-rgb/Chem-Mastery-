@@ -1,11 +1,44 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { auth, fetchAssignment, startSubmission, saveItemResult, submitSubmission } from "../firebase";
+import { auth, fetchAssignment, startSubmission, saveItemResult, submitSubmission, sendMarkQuery } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
 import McqQuestion from "./McqQuestion";
 import { resolveItem, TYPE_LABEL, fmtDue } from "../utils/homeworkBank";
 
-// ─── Marking helpers ─────────────────────────────────────────────────────
+// ─── Attempt and hint rules, agreed with HSJ Tuition ─────────────────────
+// - A part can be attempted up to MAX_ATTEMPTS times (MCQs twice: four options).
+// - Hints unlock one at a time once the first attempt has been marked. They cost no marks,
+//   but the number used is recorded and shown to the tutor.
+// - The first attempt is the score that counts. The best score is kept alongside it.
+// - The mark scheme, worked solution or model answer is only shown once the part is fully
+//   correct, after every attempt and every hint has been used, or once the homework is submitted.
+export const MAX_ATTEMPTS = { mcq: 2, calc: 3, short: 3, extended: 3 };
+const COUNT_AS_CORRECT = 0.75;
+
+export function hintsFor(q, type) {
+  if (Array.isArray(q.hints) && q.hints.length) return q.hints;
+  if (type === "calc") return [q.hint, q.steps?.length > 1 ? `First line of working: ${q.steps[0]}` : null].filter(Boolean);
+  return [];
+}
+
+export const isRevealed = (r, hints, maxAttempts, submitted) =>
+  submitted || (!!r && ((r.bestScore ?? r.score) >= r.maxScore
+    || ((r.attempts?.length || 0) >= maxAttempts && (r.hintsUsed || 0) >= hints.length)));
+
+/** Fold a newly marked attempt into the stored result for a part. */
+function addAttempt(prev, maxScore, a) {
+  const attempts = [...(prev?.attempts || []), { answer: a.answer, score: a.score, feedback: a.feedback || null, at: Date.now() }];
+  const first = attempts[0].score;
+  return {
+    ...(prev || {}), ...a, maxScore, attempts,
+    hintsUsed: prev?.hintsUsed || 0,
+    score: first,
+    bestScore: Math.max(...attempts.map(x => x.score)),
+    correct: first >= Math.ceil(maxScore * COUNT_AS_CORRECT),
+  };
+}
+
+// ─── Marking ─────────────────────────────────────────────────────────────
 const calcCorrect = (q, input) => q.isText
   ? String(input).trim().toUpperCase().replace(/\s/g, "") === String(q.answer).toUpperCase().replace(/\s/g, "")
   : Math.abs(parseFloat(input) - q.answer) <= (q.tolerance ?? 0);
@@ -22,7 +55,25 @@ async function examine(payload) {
   return data;
 }
 
+/** Mark one answer. Returns { answer, score, markedBy, confidence?, feedback?, detail? } */
+async function mark(type, q, context, answer, maxScore, attemptNumber) {
+  if (type === "mcq") return { answer, score: answer === q.answer ? maxScore : 0, markedBy: "auto" };
+  if (type === "calc") return { answer, score: calcCorrect(q, answer) ? maxScore : 0, markedBy: "auto" };
+  const levels = type === "extended";
+  const ms = q.ms || q.markScheme || [];
+  const data = await examine({
+    mode: levels ? "levels" : "points", question: q.q || q.question, context, markScheme: ms,
+    allow: q.allow, reject: q.reject, studentAnswer: answer, maxMarks: maxScore, levels: q.levels, attempt: attemptNumber,
+  });
+  return {
+    answer, score: data.score, markedBy: "ai", confidence: data.confidence || "medium", feedback: data.feedback || null,
+    detail: { level: data.level ?? null, modelAnswer: data.modelAnswer || null, points: ms.map((t, i) => ({ text: t, got: !!(data.awarded || data.coveredPoints)?.[i] })) },
+  };
+}
+
+// ─── Small pieces ────────────────────────────────────────────────────────
 const sub = (s) => <span style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.8 }}>{s}</span>;
+const serif = { fontSize: 15.5, lineHeight: 1.75, fontFamily: "Georgia, 'Times New Roman', serif", whiteSpace: "pre-line" };
 
 function DataTable({ rows }) {
   if (!rows) return null;
@@ -53,105 +104,188 @@ function Steps({ steps }) {
   );
 }
 
-function ResultBanner({ score, max, feedback, confidence }) {
-  const p = max ? score / max : 0;
-  const tone = p >= 0.75 ? "green" : p >= 0.5 ? "amber" : "red";
+function AttemptBanner({ result, maxAttempts }) {
+  const attempts = result.attempts || [];
+  const last = attempts[attempts.length - 1];
+  if (!last) return null;
+  const p = result.maxScore ? last.score / result.maxScore : 0;
+  const tone = p >= 1 ? "green" : p >= 0.5 ? "amber" : "red";
   return (
     <Notice tone={tone} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 14 }}>
-        <Icon name={p >= 0.75 ? "check" : "x"} size={16} strokeWidth={3} />
-        {score} / {max} mark{max === 1 ? "" : "s"}
-        {confidence === "low" && <Chip tone="amber" style={{ fontSize: 11 }}>Your tutor will check this mark</Chip>}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 14, flexWrap: "wrap" }}>
+        <Icon name={p >= 1 ? "check" : "x"} size={16} strokeWidth={3} />
+        {last.score} / {result.maxScore} mark{result.maxScore === 1 ? "" : "s"}
+        <span style={{ fontWeight: 500, color: T.muted, fontSize: 12 }}>Attempt {attempts.length} of {maxAttempts}</span>
+        {result.markedBy === "ai" && result.confidence === "low" && <Chip tone="amber" style={{ fontSize: 11 }}>Your tutor will check this mark</Chip>}
       </div>
-      {feedback && <div style={{ fontWeight: 400 }}>{feedback}</div>}
+      {last.feedback && <div style={{ fontWeight: 400 }}>{last.feedback}</div>}
+      {attempts.length > 1 && (
+        <div style={{ fontSize: 12, color: T.muted }}>Your first attempt ({attempts[0].score} / {result.maxScore}) is the mark that counts for this homework. Best so far: {result.bestScore} / {result.maxScore}.</div>
+      )}
     </Notice>
   );
 }
 
-// ─── Single-answer parts: calc, short, extended ──────────────────────────
-function CalcPart({ q, result, onCheck, readOnly }) {
-  const [input, setInput] = useState(result?.answer ?? "");
-  const done = !!result;
+function HintLadder({ hints, used, canOpen, onOpen }) {
+  if (!hints.length) return null;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {hints.slice(0, used).map((h, i) => (
+        <div key={i} style={{ display: "flex", gap: 10, padding: "10px 14px", background: T.indigoTint, border: `1px solid #C7D2FE`, borderRadius: T.radiusSm, fontSize: 14, lineHeight: 1.6 }}>
+          <Icon name="help" size={16} color={T.indigo} style={{ flexShrink: 0, marginTop: 3 }} />
+          <span><b style={{ color: T.indigo }}>Hint {i + 1}.</b> {h}</span>
+        </div>
+      ))}
+      {used < hints.length && canOpen && (
+        <div>
+          <Button size="sm" variant="secondary" icon="help" onClick={onOpen}>Show hint {used + 1} of {hints.length}</Button>
+          <span style={{ fontSize: 12, color: T.muted, marginLeft: 10 }}>Hints do not cost marks. Have another go after reading one.</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function QueryBox({ query, onSend, readOnly }) {
+  const [open, setOpen] = useState(false);
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  if (query) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: "10px 14px", background: "#FAFBFC", border: `1px solid ${T.line}`, borderRadius: T.radiusSm, fontSize: 13 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Chip tone={query.status === "resolved" ? "green" : "amber"} style={{ fontSize: 11 }}>{query.status === "resolved" ? "Tutor replied" : "Query sent to your tutor"}</Chip>
+        </div>
+        <div><span style={{ color: T.muted }}>You wrote: </span>{query.note}</div>
+        {query.reply && <div><span style={{ color: T.muted }}>Tutor: </span>{query.reply}</div>}
+      </div>
+    );
+  }
+  if (readOnly) return null;
+  if (!open) return <div><Button size="sm" variant="ghost" icon="message" onClick={() => setOpen(true)} style={{ color: T.muted }}>Query this mark</Button></div>;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "12px 14px", background: "#FAFBFC", border: `1px solid ${T.line}`, borderRadius: T.radiusSm }}>
+      <span style={{ fontSize: 13, fontWeight: 600 }}>Tell your tutor why you think this mark should be different</span>
+      <textarea value={note} onChange={e => setNote(e.target.value)} rows={3} aria-label="Your query" placeholder="e.g. I stated the conditions in my second sentence"
+        style={{ width: "100%", padding: "10px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 13, outline: "none", color: T.ink, resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", fontFamily: "inherit" }} />
+      <div style={{ display: "flex", gap: 8 }}>
+        <Button size="sm" variant="primary" disabled={busy || note.trim().length < 5} onClick={async () => { setBusy(true); try { await onSend(note.trim()); } finally { setBusy(false); } }}>{busy ? "Sending…" : "Send to tutor"}</Button>
+        <Button size="sm" variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── One markable part (an MCQ, a calculation, a short or extended answer) ──
+function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecord, query, onQuery, showQuestion }) {
+  const hints = useMemo(() => hintsFor(q, type), [q, type]);
+  const maxAttempts = MAX_ATTEMPTS[type] || 3;
+  const attempts = result?.attempts || [];
+  const last = attempts[attempts.length - 1];
+  const revealed = isRevealed(result, hints, maxAttempts, submitted);
+  const canAttempt = !readOnly && !revealed && attempts.length < maxAttempts;
+  const exhausted = !revealed && attempts.length >= maxAttempts;
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [input, setInput] = useState(last?.answer ?? "");
+  const [selected, setSelected] = useState(null);
+  const [showModel, setShowModel] = useState(false);
+
+  const attempt = async (answer) => {
+    setBusy(true); setError(null);
+    try {
+      const a = await mark(type, q, context, answer, maxScore, attempts.length + 1);
+      onRecord(addAttempt(result, maxScore, a), "attempt");
+    } catch (e) { setError(e.message); }
+    setBusy(false);
+  };
+  const openHint = () => onRecord({ ...result, hintsUsed: (result.hintsUsed || 0) + 1 }, "hint");
+
+  const written = type === "short" || type === "extended";
+  const label = type === "mcq" ? "Mark" : type === "calc" ? "Mark" : "AI mark";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      {!done && !readOnly && (
+      {type === "mcq" && (
+        <McqQuestion question={q} selected={revealed || !canAttempt ? last?.answer ?? null : selected} revealed={revealed} locked={!canAttempt}
+          wrongLetters={attempts.filter(a => a.score < maxScore).map(a => a.answer)} hideQuestion={!showQuestion}
+          accentColor={T.ink} onSelect={setSelected} onCheck={() => selected && attempt(selected)} onNext={() => {}} isLast hideNext checkLabel={busy ? "Marking…" : `${label}${attempts.length ? " again" : ""}`} />
+      )}
+
+      {type === "calc" && canAttempt && (
         <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-          <input type={q.isText ? "text" : "number"} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && input !== "" && onCheck(input)}
+          <input type={q.isText ? "text" : "number"} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && input !== "" && !busy && attempt(input)}
             placeholder={q.isText ? "e.g. C2H4" : "Your answer"} aria-label="Your answer"
             style={{ width: 200, padding: "11px 14px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 16, outline: "none", color: T.ink }} />
           {q.unit && <span style={{ fontSize: 14, color: T.muted, fontWeight: 600 }}>{q.unit}</span>}
-          <Button variant="primary" onClick={() => onCheck(input)} disabled={input === ""}>Check</Button>
+          <Button variant="primary" onClick={() => attempt(input)} disabled={busy || input === ""}>{label}{attempts.length ? " again" : ""}</Button>
         </div>
       )}
-      {done && (
-        <>
-          <div style={{ fontSize: 13 }}><span style={{ color: T.muted }}>Your answer: </span><b>{String(result.answer)}{q.unit ? ` ${q.unit}` : ""}</b>{!result.correct && <span style={{ color: T.muted }}> · correct answer {q.answer}{q.unit ? ` ${q.unit}` : ""}</span>}</div>
-          <ResultBanner score={result.score} max={result.maxScore} />
-          <Steps steps={q.steps} />
-        </>
-      )}
-      {!done && readOnly && <span style={{ fontSize: 13, color: T.muted }}>Not answered.</span>}
-    </div>
-  );
-}
 
-function WrittenPart({ q, marks, result, onSubmit, readOnly, mode }) {
-  const [draft, setDraft] = useState(result?.answer ?? "");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(null);
-  const [showModel, setShowModel] = useState(false);
-  const done = !!result;
-  const send = async () => {
-    setBusy(true); setError(null);
-    try { await onSubmit(draft); } catch (e) { setError(e.message); }
-    setBusy(false);
-  };
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      {!done && !readOnly && (
+      {written && canAttempt && (
         <>
-          <textarea value={draft} onChange={e => setDraft(e.target.value)} rows={mode === "levels" ? 8 : 4} aria-label="Your answer" placeholder={`Write your answer (${marks} marks)`}
+          <textarea value={input} onChange={e => setInput(e.target.value)} rows={type === "extended" ? 8 : 4} aria-label="Your answer" placeholder={`Write your answer (${maxScore} marks)`}
             style={{ width: "100%", padding: "12px 14px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, outline: "none", color: T.ink, resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", fontFamily: "inherit" }} />
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-            <Button variant="primary" icon="pencil" onClick={send} disabled={busy || draft.trim().length < 10}>{busy ? "Marking…" : "Submit answer"}</Button>
+            <Button variant="primary" icon="pencil" onClick={() => attempt(input)} disabled={busy || String(input).trim().length < 10 || (last && String(input).trim() === String(last.answer).trim())}>{busy ? "Marking…" : `${label}${attempts.length ? " again" : ""}`}</Button>
             {busy && <span style={{ fontSize: 12, color: T.muted }}>Marking against the mark scheme…</span>}
+            {!busy && attempts.length > 0 && <span style={{ fontSize: 12, color: T.muted }}>Edit your answer above, then mark it again.</span>}
           </div>
-          {error && <Notice tone="red">{error} <Button size="sm" variant="danger" onClick={send} style={{ marginLeft: 8 }}>Try again</Button></Notice>}
         </>
       )}
-      {done && (
-        <>
-          <Card padding={14} style={{ background: "#FAFBFC" }}>{sub("Your answer")}<div style={{ fontSize: 13, lineHeight: 1.6, whiteSpace: "pre-wrap", marginTop: 4 }}>{result.answer}</div></Card>
-          <ResultBanner score={result.score} max={result.maxScore} feedback={result.feedback} confidence={result.confidence} />
-          {result.detail?.points && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {sub("Mark scheme")}
-              {result.detail.points.map((pt, i) => (
-                <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: pt.got ? T.green : "#7F1D1D" }}>
-                  <Icon name={pt.got ? "check" : "x"} size={14} strokeWidth={3} style={{ marginTop: 3 }} /><span>{pt.text}</span>
-                </div>
-              ))}
-            </div>
-          )}
-          {result.detail?.modelAnswer && (
-            <div>
-              <Button size="sm" variant="secondary" iconRight="chevronDown" onClick={() => setShowModel(v => !v)}>{showModel ? "Hide model answer" : "Model answer"}</Button>
-              {showModel && <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.7 }}>{result.detail.modelAnswer}</div>}
-            </div>
-          )}
-        </>
-      )}
-      {!done && readOnly && <span style={{ fontSize: 13, color: T.muted }}>Not answered.</span>}
-    </div>
-  );
-}
 
-function McqPart({ q, result, onCheck, readOnly }) {
-  const [selected, setSelected] = useState(result?.answer ?? null);
-  const revealed = !!result || readOnly;
-  return (
-    <McqQuestion question={q} selected={selected} revealed={revealed} accentColor={T.ink}
-      onSelect={setSelected} onCheck={() => onCheck(selected)} onNext={() => {}} isLast={true} hideNext />
+      {type !== "mcq" && last && !canAttempt && (
+        <div style={{ fontSize: 13 }}><span style={{ color: T.muted }}>Your answer: </span><b style={{ whiteSpace: "pre-wrap" }}>{String(last.answer)}{q.unit ? ` ${q.unit}` : ""}</b></div>
+      )}
+      {type !== "mcq" && !last && readOnly && <span style={{ fontSize: 13, color: T.muted }}>Not answered.</span>}
+
+      {error && <Notice tone="red">{error}</Notice>}
+      {result && <AttemptBanner result={result} maxAttempts={maxAttempts} />}
+
+      {last && <HintLadder hints={hints} used={result.hintsUsed || 0} canOpen={!readOnly && !revealed} onOpen={openHint} />}
+      {exhausted && (result.hintsUsed || 0) < hints.length && !readOnly && (
+        <span style={{ fontSize: 12, color: T.muted }}>You have used all {maxAttempts} attempts. Open the remaining hint{hints.length - (result.hintsUsed || 0) === 1 ? "" : "s"} to see the mark scheme.</span>
+      )}
+
+      {revealed && last && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 6 }}>
+          {type === "calc" && (
+            <>
+              <div style={{ fontSize: 13 }}>{sub("Answer")} <b style={{ marginLeft: 8 }}>{q.answer}{q.unit ? ` ${q.unit}` : ""}</b>{q.tolerance ? <span style={{ color: T.muted }}> (accept ±{q.tolerance})</span> : null}</div>
+              <Steps steps={q.steps} />
+            </>
+          )}
+          {written && (
+            <>
+              {result.detail?.points?.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {sub("Mark scheme")}
+                  {result.detail.points.map((pt, i) => (
+                    <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: pt.got ? T.green : "#7F1D1D" }}>
+                      <Icon name={pt.got ? "check" : "x"} size={14} strokeWidth={3} style={{ marginTop: 3 }} /><span>{pt.text}</span>
+                    </div>
+                  ))}
+                  {(q.allow?.length || q.reject?.length) ? (
+                    <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.6 }}>
+                      {q.allow?.length ? <div><b>Allow:</b> {q.allow.join("; ")}</div> : null}
+                      {q.reject?.length ? <div><b>Reject:</b> {q.reject.join("; ")}</div> : null}
+                    </div>
+                  ) : null}
+                </div>
+              )}
+              {result.detail?.modelAnswer && (
+                <div>
+                  <Button size="sm" variant="secondary" iconRight="chevronDown" onClick={() => setShowModel(v => !v)}>{showModel ? "Hide model answer" : "Model answer"}</Button>
+                  {showModel && <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.7 }}>{result.detail.modelAnswer}</div>}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {last && <QueryBox query={query} readOnly={!onQuery} onSend={onQuery} />}
+    </div>
   );
 }
 
@@ -183,19 +317,28 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   }, [authUser, userProfile, assignmentId]);
 
   const answers = subm?.answers || {};
+  const queries = subm?.queries || {};
   const submitted = !!subm?.submittedAt;
   const timeSpent = () => baseTime.current + (Date.now() - openedAt.current);
   const total = (ans) => (a?.items || []).reduce((x, it) => x + (ans[it.key]?.score || 0), 0);
 
-  const record = async (item, result) => {
+  /** kind: "attempt" | "hint" for single parts; "part" | "first" | "hint" for exam items */
+  const record = async (item, result, kind) => {
     const next = { ...answers, [item.key]: { ...result, maxScore: item.marks } };
     const totals = { totalScore: total(next), timeSpentMs: timeSpent() };
     setSubm(s => ({ ...s, answers: next, totalScore: totals.totalScore }));
-    try { await saveItemResult(a.id, authUser.uid, item.key, { ...result, maxScore: item.marks }, totals); } catch (e) { setError("Could not save: " + e.message); }
-    logAttempt && logAttempt({
-      board, type: item.type === "exam" ? "exam" : item.type, questionId: item.questionId, topic: item.topic, topicLabel: item.topicLabel,
-      difficulty: item.difficulty || null, score: result.score, maxScore: item.marks, correct: result.score >= Math.ceil(item.marks * 0.75), mode: "homework", assignmentId: a.id,
+    try { await saveItemResult(a.id, authUser.uid, item.key, next[item.key], totals); } catch (e) { setError("Could not save: " + e.message); }
+    const isFirst = item.type === "exam" ? kind === "first" : (kind === "attempt" && (result.attempts?.length || 0) === 1);
+    if (isFirst && logAttempt) logAttempt({
+      board, type: item.type, questionId: item.questionId, topic: item.topic, topicLabel: item.topicLabel,
+      difficulty: item.difficulty || null, score: result.score, maxScore: item.marks, correct: result.score >= Math.ceil(item.marks * COUNT_AS_CORRECT), mode: "homework", assignmentId: a.id,
     });
+  };
+
+  const query = async (key, note) => {
+    const q = { note, at: Date.now(), status: "open", reply: null };
+    setSubm(s => ({ ...s, queries: { ...(s.queries || {}), [key]: q } }));
+    try { await sendMarkQuery(a.id, authUser.uid, key, note); } catch (e) { setError("Could not send your query: " + e.message); }
   };
 
   const handleSubmit = async () => {
@@ -215,14 +358,17 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   const res = useMemo(() => item ? resolveItem(item) : null, [item]);
   const answeredCount = items.filter(it => answers[it.key]).length;
 
-  if (error) return <Notice tone="red">{error}</Notice>;
+  if (error && !a) return <Notice tone="red">{error}</Notice>;
   if (!a || !subm) return <div style={{ color: T.muted, fontSize: 13, padding: 20 }}>Loading homework…</div>;
 
   const readOnly = submitted;
   const pctScore = subm.maxScore ? Math.round((total(answers) / subm.maxScore) * 100) : 0;
+  const openQueries = Object.values(queries).filter(q => q.status === "open").length;
+  const replies = Object.values(queries).filter(q => q.status === "resolved").length;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {error && <Notice tone="red">{error}</Notice>}
       {/* Progress strip */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 200, display: "flex", alignItems: "center", gap: 10 }}>
@@ -241,10 +387,17 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
         <Card style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
           <div style={{ fontFamily: T.display, fontSize: 40, fontWeight: 800, color: pctColour(pctScore), lineHeight: 1 }}>{pctScore}%</div>
           <div style={{ flex: 1, minWidth: 200 }}>
-            <div style={{ fontWeight: 700 }}>{total(answers)} out of {subm.maxScore} marks</div>
-            <div style={{ fontSize: 13, color: T.muted }}>Tap any question on the left to see the feedback, worked solution or model answer. Your tutor may adjust AI marks.</div>
+            <div style={{ fontWeight: 700 }}>{total(answers)} out of {subm.maxScore} marks (first attempts)</div>
+            <div style={{ fontSize: 13, color: T.muted }}>Every mark scheme, worked solution and model answer is now open. Tap a question on the left to see it. If you think a mark is wrong, use "Query this mark" and your tutor will check it.</div>
           </div>
+          {(openQueries > 0 || replies > 0) && <Chip tone={replies ? "green" : "amber"}>{replies ? `${replies} tutor repl${replies === 1 ? "y" : "ies"}` : ""}{replies && openQueries ? " · " : ""}{openQueries ? `${openQueries} quer${openQueries === 1 ? "y" : "ies"} waiting` : ""}</Chip>}
         </Card>
+      )}
+
+      {!submitted && answeredCount === 0 && (
+        <Notice tone="neutral" style={{ fontSize: 13 }}>
+          <b>How marking works.</b> Press <b>Mark</b> or <b>AI mark</b> to have each answer marked straight away. You get up to three attempts (two for multiple choice), and after your first attempt you can open hints one at a time. Hints are free, but your first attempt is the mark that counts. The mark scheme opens once you get full marks, or once you have used every attempt and hint.
+        </Notice>
       )}
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-start" }}>
@@ -260,8 +413,9 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
                   {group.map(({ it, i }) => {
                     const r = answers[it.key];
                     const current = i === idx;
-                    const bg = current ? T.ink : r ? (r.score >= Math.ceil(it.marks * 0.75) ? T.greenTint : r.score > 0 ? T.amberTint : T.redTint) : T.card;
-                    const fg = current ? "#fff" : r ? (r.score >= Math.ceil(it.marks * 0.75) ? T.green : r.score > 0 ? T.amber : T.red) : T.muted;
+                    const good = r && r.score >= Math.ceil(it.marks * COUNT_AS_CORRECT);
+                    const bg = current ? T.ink : r ? (good ? T.greenTint : r.score > 0 ? T.amberTint : T.redTint) : T.card;
+                    const fg = current ? "#fff" : r ? (good ? T.green : r.score > 0 ? T.amber : T.red) : T.muted;
                     return <button key={it.key} onClick={() => setIdx(i)} aria-label={`Question ${i + 1}`} style={{ height: 34, borderRadius: 8, border: current || r ? "none" : `1px solid ${T.border}`, background: bg, color: fg, fontWeight: 700, fontSize: 12, cursor: "pointer" }}>{i + 1}</button>;
                   })}
                 </div>
@@ -285,8 +439,8 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
               </div>
 
               {item.type === "mcq" && (
-                <McqPart q={res.q} result={answers[item.key]} readOnly={readOnly}
-                  onCheck={(sel) => record(item, { answer: sel, correct: sel === res.q.answer, score: sel === res.q.answer ? 1 : 0, markedBy: "auto" })} />
+                <Part type="mcq" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted} showQuestion
+                  onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
               )}
 
               {item.type === "calc" && (
@@ -294,25 +448,22 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
                   <div style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: T.display }}>{res.q.q}</div>
                   {res.q.dataTable && <DataTable rows={res.q.dataTable} />}
                   {res.q.diagram && <div style={{ maxWidth: 700 }}>{res.q.diagram}</div>}
-                  <CalcPart q={res.q} result={answers[item.key]} readOnly={readOnly}
-                    onCheck={(input) => { const ok = calcCorrect(res.q, input); record(item, { answer: input, correct: ok, score: ok ? item.marks : 0, markedBy: "auto" }); }} />
+                  <Part type="calc" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
+                    onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
                 </>
               )}
 
               {item.type === "extended" && (
                 <>
-                  <div style={{ fontSize: 15.5, lineHeight: 1.75, fontFamily: "Georgia, 'Times New Roman', serif", whiteSpace: "pre-line" }}>{res.q.question}</div>
-                  <WrittenPart q={res.q} marks={item.marks} mode="levels" result={answers[item.key]} readOnly={readOnly}
-                    onSubmit={async (text) => {
-                      const data = await examine({ mode: "levels", question: res.q.question, markScheme: res.q.markScheme, studentAnswer: text, maxMarks: item.marks, levels: res.q.levels });
-                      await record(item, { answer: text, correct: data.score >= Math.ceil(item.marks * 0.75), score: data.score, markedBy: "ai", confidence: data.confidence, feedback: data.feedback,
-                        detail: { level: data.level, modelAnswer: data.modelAnswer, points: res.q.markScheme.map((text2, i) => ({ text: text2, got: !!data.coveredPoints?.[i] })) } });
-                    }} />
+                  <div style={serif}>{res.q.question}</div>
+                  <Part type="extended" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
+                    onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
                 </>
               )}
 
               {item.type === "exam" && (
-                <ExamItem q={res.q} item={item} result={answers[item.key]} readOnly={readOnly} onRecord={(r) => record(item, r)} />
+                <ExamItem q={res.q} item={item} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
+                  onRecord={(r, kind) => record(item, r, kind)} queries={queries} onQuery={query} />
               )}
 
               <div style={{ display: "flex", justifyContent: "space-between", gap: 8, paddingTop: 8, borderTop: `1px solid ${T.line}` }}>
@@ -327,41 +478,43 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   );
 }
 
-// ─── Multi-part exam question: each part marked on its own ───────────────
-function ExamItem({ q, item, result, readOnly, onRecord }) {
+// ─── Multi-part exam question: each part attempted and marked on its own ──
+export const partQueryKey = (itemKey, label) => `${itemKey}__${label}`;
+
+function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQuery }) {
   const parts = result?.detail?.parts || {};
   const partMax = (p) => p.marks || 1;
-  const save = (label, partResult) => {
+  const save = (label, partResult, kind) => {
     const nextParts = { ...parts, [label]: partResult };
-    const score = q.parts.reduce((x, p) => x + (nextParts[p.label]?.score || 0), 0);
-    const allDone = q.parts.every(p => nextParts[p.label]);
-    const anyLow = Object.values(nextParts).some(r => r.confidence === "low");
-    onRecord({ answer: `${Object.keys(nextParts).length}/${q.parts.length} parts`, score, correct: allDone && score >= Math.ceil(item.marks * 0.75), markedBy: Object.values(nextParts).some(r => r.markedBy === "ai") ? "ai" : "auto", confidence: anyLow ? "low" : "high", detail: { parts: nextParts, complete: allDone } });
+    const sum = (f) => q.parts.reduce((x, p) => x + (f(nextParts[p.label]) || 0), 0);
+    const score = sum(r => r?.score);
+    const allDone = q.parts.every(p => nextParts[p.label]?.attempts?.length);
+    const wasDone = !!result?.detail?.complete;
+    const results = Object.values(nextParts);
+    onRecord({
+      answer: `${results.length}/${q.parts.length} parts`, score, bestScore: sum(r => r?.bestScore),
+      hintsUsed: sum(r => r?.hintsUsed),
+      correct: allDone && score >= Math.ceil(item.marks * COUNT_AS_CORRECT),
+      markedBy: results.some(r => r.markedBy === "ai") ? "ai" : "auto",
+      confidence: results.some(r => r.confidence === "low") ? "low" : "high",
+      detail: { parts: nextParts, complete: allDone },
+    }, kind === "attempt" && allDone && !wasDone ? "first" : kind === "hint" ? "hint" : "part");
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      {q.context && <div style={{ fontSize: 15.5, lineHeight: 1.75, fontFamily: "Georgia, 'Times New Roman', serif", whiteSpace: "pre-line" }}>{q.context}</div>}
+      {q.context && <div style={serif}>{q.context}</div>}
       {q.dataTable && <DataTable rows={q.dataTable} />}
       {q.parts.map(p => {
-        const r = parts[p.label];
-        const key = `${item.key}_${p.label}`;
+        const key = partQueryKey(item.key, p.label);
         return (
           <div key={key} style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 14, borderTop: `1px solid ${T.line}` }}>
             <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
               <span style={{ fontWeight: 700, minWidth: 28 }}>({p.label})</span>
-              <div style={{ flex: 1, fontSize: 15.5, lineHeight: 1.7, fontFamily: "Georgia, 'Times New Roman', serif", whiteSpace: "pre-line" }}>{p.q}</div>
+              <div style={{ flex: 1, ...serif, fontSize: 15.5, lineHeight: 1.7 }}>{p.q}</div>
               <Chip tone="neutral">{partMax(p)} mark{partMax(p) === 1 ? "" : "s"}</Chip>
             </div>
-            {p.type === "mcq" && <McqPart q={p} result={r} readOnly={readOnly} onCheck={(sel) => save(p.label, { answer: sel, score: sel === p.answer ? partMax(p) : 0, maxScore: partMax(p), markedBy: "auto" })} />}
-            {p.type === "calc" && <CalcPart q={p} result={r} readOnly={readOnly} onCheck={(input) => { const ok = calcCorrect(p, input); save(p.label, { answer: input, correct: ok, score: ok ? partMax(p) : 0, maxScore: partMax(p), markedBy: "auto" }); }} />}
-            {(p.type === "short" || p.type === "extended") && (
-              <WrittenPart q={p} marks={partMax(p)} mode={p.type === "extended" ? "levels" : "points"} result={r} readOnly={readOnly}
-                onSubmit={async (text) => {
-                  const data = await examine({ mode: p.type === "extended" ? "levels" : "points", question: p.q, context: q.context, markScheme: p.ms, allow: p.allow, reject: p.reject, studentAnswer: text, maxMarks: partMax(p), levels: p.levels });
-                  save(p.label, { answer: text, score: data.score, maxScore: partMax(p), markedBy: "ai", confidence: data.confidence, feedback: data.feedback,
-                    detail: { modelAnswer: data.modelAnswer, points: (p.ms || []).map((t, i) => ({ text: t, got: !!(data.awarded || data.coveredPoints)?.[i] })) } });
-                }} />
-            )}
+            <Part type={p.type} q={p} context={q.context} maxScore={partMax(p)} result={parts[p.label]} readOnly={readOnly} submitted={submitted}
+              onRecord={(r, kind) => save(p.label, r, kind)} query={queries[key]} onQuery={(note) => onQuery(key, note)} />
           </div>
         );
       })}

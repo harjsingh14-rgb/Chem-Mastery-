@@ -279,8 +279,10 @@ export async function startSubmission(user, profile, assignment) {
 
 /** Save one answered item. `result` = { answer, score, maxScore, correct, feedback, markedBy, confidence, detail } */
 export async function saveItemResult(assignmentId, uid, itemKey, result, totals) {
+  // Firestore rejects undefined values; the JSON round trip strips them
+  const clean = JSON.parse(JSON.stringify(result));
   await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), {
-    [`answers.${itemKey}`]: { ...result, answeredAt: Date.now() },
+    [`answers.${itemKey}`]: { ...clean, answeredAt: Date.now() },
     totalScore: totals.totalScore,
     timeSpentMs: totals.timeSpentMs,
     lastSavedAt: serverTimestamp(),
@@ -301,6 +303,23 @@ export async function saveTutorMark(assignmentId, uid, itemKey, score, totalScor
   const patch = { [`tutorMarks.${itemKey}`]: score, totalScore, reviewedAt: serverTimestamp() };
   if (comment !== undefined) patch.tutorComment = comment;
   await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), patch);
+}
+
+/** Student asks the tutor to check a mark. key = item key, or item key + "__" + part label. */
+export async function sendMarkQuery(assignmentId, uid, key, note) {
+  await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), {
+    [`queries.${key}`]: { note, at: Date.now(), status: "open", reply: null },
+  });
+}
+
+/** Tutor replies to a query and closes it. */
+export async function answerMarkQuery(assignmentId, uid, key, reply) {
+  await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), {
+    [`queries.${key}.reply`]: reply,
+    [`queries.${key}.status`]: "resolved",
+    [`queries.${key}.repliedAt`]: Date.now(),
+    reviewedAt: serverTimestamp(),
+  });
 }
 
 export { auth, db };

@@ -103,13 +103,16 @@ service cloud.firestore {
         && id == request.resource.data.assignmentId + '_' + request.auth.uid
         && exists(/databases/$(database)/documents/assignments/$(request.resource.data.assignmentId))
         && get(/databases/$(database)/documents/assignments/$(request.resource.data.assignmentId)).data.classId == myProfile().get('classId', null);
-      // Student saves answers until submitted; the tutor can adjust marks and add comments
+      // Student saves answers until submitted, and may query a mark at any time;
+      // the tutor can adjust marks, add comments and reply to queries
       allow update: if signedIn() && (
         (resource.data.uid == request.auth.uid && resource.data.submittedAt == null
           && !changed().hasAny(['uid', 'tutorId', 'assignmentId', 'classId', 'tutorMarks', 'tutorComment']))
         ||
+        (resource.data.uid == request.auth.uid && changed().hasOnly(['queries']))
+        ||
         (resource.data.tutorId == request.auth.uid
-          && changed().hasOnly(['tutorMarks', 'tutorComment', 'totalScore', 'reviewedAt']))
+          && changed().hasOnly(['tutorMarks', 'tutorComment', 'totalScore', 'reviewedAt', 'queries']))
       );
       allow delete: if false;
     }

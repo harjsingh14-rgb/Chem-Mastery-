@@ -31,6 +31,11 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "short", marks: 2,
+        hints: [
+          "A definition needs the amount, the states and the direction of change. What is being formed, and from what?",
+          "The starting point is ions, not atoms or elements. What state are those ions in before the solid forms?",
+          "Start your sentence with 'The enthalpy change when one mole of ...' and finish with the state of the ions and the conditions.",
+        ],
         q: "Define the term lattice enthalpy of formation.",
         ms: [
           "Enthalpy change when one mole of an ionic solid is formed from its gaseous ions",
@@ -41,18 +46,33 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "calc", marks: 1,
+        hints: [
+          "Two steps are needed: the solid metal becomes gaseous atoms, then each atom loses an electron. Which two values in the table match these steps?",
+          "Write K(s) to K(g) and K(g) to K+(g) + e- as separate equations, then add their enthalpy changes.",
+          "Atomisation comes first, then the first ionisation energy. Both are positive, so the total is positive.",
+        ],
         q: "Calculate the total enthalpy change, in kJ mol-1, for K(s) to K+(g).",
         answer: 508, unit: "kJ mol-1", tolerance: 1,
         steps: ["K(s) to K(g): +89 kJ mol-1 (atomisation)", "K(g) to K+(g) + e-: +419 kJ mol-1 (first ionisation energy)", "Total = 89 + 419 = +508 kJ mol-1"],
       },
       {
         label: "c", type: "calc", marks: 1,
+        hints: [
+          "Chlorine starts as a diatomic molecule. Which step turns 1/2 Cl2(g) into Cl(g), and which step then adds the electron?",
+          "One of the two values is positive and one is negative. Check the sign of each before you add them.",
+          "Atomisation of chlorine is per mole of Cl atoms formed, so the value in the table is already for 1/2 Cl2. Combine it with the first electron affinity.",
+        ],
         q: "Calculate the total enthalpy change, in kJ mol-1, for 1/2 Cl2(g) to Cl-(g).",
         answer: -227, unit: "kJ mol-1", tolerance: 1,
         steps: ["1/2 Cl2(g) to Cl(g): +122 kJ mol-1 (atomisation)", "Cl(g) + e- to Cl-(g): -349 kJ mol-1 (first electron affinity)", "Total = 122 + (-349) = -227 kJ mol-1"],
       },
       {
         label: "d", type: "calc", marks: 2,
+        hints: [
+          "Hess's law: the direct route (formation from the elements) equals the indirect route through the gaseous ions.",
+          "Write dHf = (b) + (c) + dHlatt, then rearrange to make dHlatt the subject before putting any numbers in.",
+          "Substitute -437 for dHf and your answers to (b) and (c). Expect a large negative number.",
+        ],
         q: "Use your answers to parts (b) and (c) to calculate the lattice enthalpy of formation of potassium chloride.",
         answer: -718, unit: "kJ mol-1", tolerance: 2,
         steps: ["dHf = (K steps) + (Cl steps) + dHlatt", "-437 = 508 + (-227) + dHlatt", "dHlatt = -437 - 281 = -718 kJ mol-1"],
@@ -73,6 +93,10 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "mcq", marks: 1,
+        hints: [
+          "Electron affinity starts from one mole of gaseous atoms, not molecules.",
+          "Only one electron is gained per atom, and the product is a gaseous 1- ion.",
+        ],
         q: "Which equation represents the first electron affinity of chlorine?",
         options: { A: "Cl2(g) + 2e- to 2Cl-(g)", B: "Cl(g) + e- to Cl-(g)", C: "1/2 Cl2(g) + e- to Cl-(g)", D: "Cl(g) to Cl+(g) + e-" },
         answer: "B",
@@ -80,6 +104,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "mcq", marks: 1,
+        hints: [
+          "Atomisation forms one mole of gaseous atoms from the element in its standard state.",
+          "Chlorine's standard state is Cl2(g). How much Cl2 gives exactly one mole of Cl atoms?",
+        ],
         q: "Which equation represents the enthalpy of atomisation of chlorine?",
         options: { A: "Cl2(g) to 2Cl(g)", B: "1/2 Cl2(g) to Cl(g)", C: "Cl2(l) to Cl2(g)", D: "Cl(g) to Cl-(g)" },
         answer: "B",
@@ -87,6 +115,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "short", marks: 2,
+        hints: [
+          "Think about the charges involved: what is the incoming electron attracted to as it approaches the chlorine atom?",
+          "When an attraction forms, is energy released or absorbed?",
+          "Mention the positive nucleus and the negative electron, then state what happens to the energy when the attraction forms.",
+        ],
         q: "Explain why the first electron affinity of chlorine is exothermic.",
         ms: [
           "The added electron is attracted to the (positive) nucleus",
@@ -96,6 +129,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "d", type: "calc", marks: 2,
+        hints: [
+          "List the steps from the elements to the gaseous ions: atomisation of Na, ionisation of Na, atomisation of Cl, electron affinity of Cl. Then the lattice forms.",
+          "dHf = (sum of the steps to gaseous ions) + dHlatt. Rearrange for dHlatt.",
+          "Add 108, 496, 121 and -349 for the route to gaseous ions, then use -411 for dHf.",
+        ],
         q: "Calculate the lattice enthalpy of formation of sodium chloride.",
         answer: -787, unit: "kJ mol-1", tolerance: 2,
         steps: ["-411 = 108 + 121 + 496 + (-349) + dHlatt", "-411 = 376 + dHlatt", "dHlatt = -411 - 376 = -787 kJ mol-1"],
@@ -108,6 +146,10 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "mcq", marks: 1,
+        hints: [
+          "Which step forms attractions rather than breaking them?",
+          "Forming an ionic lattice from separate gaseous ions releases energy.",
+        ],
         q: "Which enthalpy change in a Born-Haber cycle is always exothermic?",
         options: { A: "First ionisation energy", B: "Enthalpy of atomisation", C: "Lattice enthalpy of formation", D: "Second electron affinity" },
         answer: "C",
@@ -115,6 +157,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "mcq", marks: 1,
+        hints: [
+          "The potassium is already gaseous atoms, so this is not atomisation.",
+          "Removing one electron from each atom in one mole of gaseous atoms is which definition?",
+        ],
         q: "Which enthalpy change is represented by K(g) to K+(g) + e-?",
         options: { A: "Enthalpy of atomisation", B: "First ionisation energy", C: "First electron affinity", D: "Enthalpy of formation" },
         answer: "B",
@@ -122,6 +168,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "mcq", marks: 1,
+        hints: [
+          "Dissociation is the reverse of formation.",
+          "Reversing a process reverses the sign of the enthalpy change but keeps the same size.",
+        ],
         q: "The lattice enthalpy of formation of NaCl is -787 kJ mol-1. What is the lattice enthalpy of dissociation of NaCl?",
         options: { A: "-787 kJ mol-1", B: "+787 kJ mol-1", C: "0 kJ mol-1", D: "-411 kJ mol-1" },
         answer: "B",
@@ -129,6 +179,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "d", type: "mcq", marks: 1,
+        hints: [
+          "Lattice enthalpy depends on ionic charge and ionic radius. All four have 1+ and 1- ions, so compare sizes.",
+          "Smaller ions get closer together and attract more strongly.",
+        ],
         q: "Which compound has the most exothermic lattice enthalpy of formation?",
         options: { A: "NaCl", B: "KCl", C: "NaBr", D: "KBr" },
         answer: "A",
@@ -154,6 +208,11 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "short", marks: 2,
+        hints: [
+          "In the second electron affinity, what is the electron being added to: an atom or an ion?",
+          "What is the charge on O-, and how does a negative ion interact with an incoming electron?",
+          "A repulsion has to be overcome. Say what repels what, and whether that needs energy or releases it.",
+        ],
         q: "Explain why the second electron affinity of oxygen is endothermic.",
         ms: [
           "The electron is being added to a negative ion (O-)",
@@ -162,6 +221,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "calc", marks: 3,
+        hints: [
+          "List every step: magnesium has two ionisation energies and oxygen has two electron affinities. Check you have used all seven values.",
+          "Work out Mg(s) to Mg2+(g) and 1/2 O2(g) to O2-(g) as two subtotals first, then apply Hess's law.",
+          "Mg subtotal: 148 + 738 + 1451. O subtotal: 249 + (-141) + 798. Then -602 = subtotals + dHlatt.",
+        ],
         q: "Calculate the lattice enthalpy of formation of magnesium oxide.",
         answer: -3845, unit: "kJ mol-1", tolerance: 5,
         steps: [
@@ -173,6 +237,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "short", marks: 2,
+        hints: [
+          "Compare the charges on the ions in MgO with those in NaCl.",
+          "Now compare the sizes: Mg2+ is smaller than Na+. Both factors affect the attraction between the ions.",
+          "Link higher charge (and smaller radius) to stronger electrostatic attraction and more energy released when the lattice forms.",
+        ],
         q: "The lattice enthalpy of formation of sodium chloride is -787 kJ mol-1. Explain why the lattice enthalpy of magnesium oxide is much more exothermic than that of sodium chloride.",
         ms: [
           "Mg2+ and O2- have a higher charge than Na+ and Cl- (and Mg2+ is smaller than Na+)",
@@ -197,12 +266,22 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "short", marks: 1,
+        hints: [
+          "Lattice enthalpy of formation: gaseous ions come together to form one mole of the solid.",
+          "CaCl2 has two chloride ions for every calcium ion. Balance the ions and include state symbols.",
+          "Left-hand side: Ca2+(g) and chloride ions. Right-hand side: CaCl2(s).",
+        ],
         q: "Write an equation, including state symbols, for the process that corresponds to the lattice enthalpy of formation of calcium chloride.",
         ms: ["Ca2+(g) + 2Cl-(g) to CaCl2(s)"],
         reject: ["Missing or incorrect state symbols", "Cl2 or Cl instead of 2Cl-"],
       },
       {
         label: "b", type: "calc", marks: 3,
+        hints: [
+          "Two moles of Cl atoms and two moles of Cl- ions are needed. Which values must be doubled?",
+          "Ca(s) to Ca2+(g) is atomisation + IE1 + IE2. Cl2(g) to 2Cl-(g) is 2 x atomisation + 2 x electron affinity.",
+          "Ca subtotal: 178 + 590 + 1145. Chlorine subtotal: 2(122) + 2(-349). Then -796 = subtotals + dHlatt.",
+        ],
         q: "Calculate the lattice enthalpy of formation of calcium chloride.",
         answer: -2255, unit: "kJ mol-1", tolerance: 5,
         steps: [
@@ -213,6 +292,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "mcq", marks: 1,
+        hints: [
+          "Work out how much the chlorine subtotal changes if one of the -349 values is left out.",
+          "A less negative subtotal means dHlatt has to be more negative for the cycle to still give -796.",
+        ],
         q: "A student forgot to double the first electron affinity of chlorine. What effect does this have on the calculated lattice enthalpy?",
         options: { A: "It is 349 kJ mol-1 more negative than the correct value", B: "It is 349 kJ mol-1 less negative than the correct value", C: "It is 698 kJ mol-1 more negative than the correct value", D: "It is unchanged" },
         answer: "A",
@@ -226,6 +309,11 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "short", marks: 2,
+        hints: [
+          "Three things are needed: how many electrons, removed from what, and in what state.",
+          "The electrons are removed from gaseous atoms, one per atom, to form gaseous 1+ ions.",
+          "Start with 'The enthalpy change when one mole of electrons is removed from one mole of ...'.",
+        ],
         q: "Define the term first ionisation energy.",
         ms: [
           "Enthalpy change when one electron is removed from each atom in one mole of gaseous atoms",
@@ -235,6 +323,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "short", marks: 2,
+        hints: [
+          "Atomisation is about forming gaseous atoms. How many moles of atoms?",
+          "The starting point is the element in its standard state, for example Cl2(g) or Na(s).",
+          "Write 'The enthalpy change when one mole of gaseous atoms is formed from ...'.",
+        ],
         q: "Define the term enthalpy of atomisation of an element.",
         ms: [
           "Enthalpy change when one mole of gaseous atoms is formed",
@@ -243,6 +336,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "short", marks: 2,
+        hints: [
+          "How many moles of Cl atoms are formed when one mole of Cl-Cl bonds is broken?",
+          "Atomisation is defined per mole of gaseous atoms formed, not per mole of bonds broken.",
+          "Breaking 1 mol of Cl2 needs +243 kJ and gives 2 mol of Cl(g). Work out the value per mole of Cl atoms.",
+        ],
         q: "The Cl-Cl bond enthalpy is +243 kJ mol-1. Explain why the enthalpy of atomisation of chlorine is +122 kJ mol-1 and not +243 kJ mol-1.",
         ms: [
           "Enthalpy of atomisation is defined per mole of gaseous atoms formed",
@@ -267,6 +365,11 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "calc", marks: 3,
+        hints: [
+          "Write every step of the cycle, leaving the electron affinity as an unknown x.",
+          "dHf = dHat(K) + IE1(K) + dHat(Br) + x + dHlatt. Rearrange to make x the subject.",
+          "Substitute: -394 = 89 + 419 + 112 + x + (-671). Collect the known numbers on one side.",
+        ],
         q: "Use the data to calculate the first electron affinity of bromine.",
         answer: -343, unit: "kJ mol-1", tolerance: 3,
         steps: [
@@ -277,6 +380,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "short", marks: 2,
+        hints: [
+          "What does the perfectly ionic model assume about the shape of the ions and how their charge is spread?",
+          "If the experimental value is more exothermic than the model predicts, the real bonding is stronger than purely ionic. What extra type of bonding is present?",
+          "Use the terms polarised, distorted electron cloud and covalent character.",
+        ],
         q: "A theoretical lattice enthalpy for potassium bromide, calculated assuming a perfectly ionic model, is less exothermic than the experimental value. Explain what this difference suggests about the bonding in potassium bromide.",
         ms: [
           "The perfectly ionic model assumes the ions are point charges / perfect spheres with evenly spread charge",
@@ -285,6 +393,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "short", marks: 2,
+        hints: [
+          "Compare the size of the iodide ion with the fluoride ion.",
+          "Which anion's electron cloud is more easily distorted by the Mg2+ ion?",
+          "More distortion means more covalent character and a bigger gap between the experimental and theoretical values.",
+        ],
         q: "Suggest why the difference between the experimental and theoretical lattice enthalpies is larger for magnesium iodide than for magnesium fluoride.",
         ms: [
           "The iodide ion is larger (than the fluoride ion) so its electron cloud is more easily distorted / it is more polarisable",
@@ -300,6 +413,11 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "short", marks: 3,
+        hints: [
+          "The cation is the same in all three, so focus on what changes about the anion down Group 7.",
+          "Relate the ionic radius to the distance between the ion centres and so the strength of attraction.",
+          "Three ideas for three marks: the radius, the strength of attraction, and the energy released (more or less exothermic).",
+        ],
         q: "Explain the trend in the lattice enthalpies of the sodium halides.",
         ms: [
           "Ionic radius increases from F- to Cl- to Br-",
@@ -309,6 +427,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "mcq", marks: 1,
+        hints: [
+          "Charge matters more than size here. Which compounds have 2+ and 2- ions?",
+          "Of the 2+/2- pair, which has the smaller cation?",
+        ],
         q: "Which compound is predicted to have the most exothermic lattice enthalpy of formation?",
         options: { A: "NaF", B: "KCl", C: "CaO", D: "MgO" },
         answer: "D",
@@ -316,6 +438,10 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "short", marks: 2,
+        hints: [
+          "Continue the trend from NaF to NaBr. What happens to the anion size for iodide?",
+          "State the direction (more or less exothermic) first, then give the reason in terms of attraction between the ions.",
+        ],
         q: "Predict, with a reason, whether the lattice enthalpy of formation of sodium iodide is more or less exothermic than that of sodium bromide.",
         ms: [
           "Less exothermic",
@@ -331,6 +457,11 @@ export const DRAFT_EXAM_QUESTIONS = [
     parts: [
       {
         label: "a", type: "short", marks: 2,
+        hints: [
+          "Hydration is about gaseous ions becoming aqueous ions. How many moles?",
+          "Include the state change from (g) to (aq) and the standard conditions.",
+          "Write 'The enthalpy change when one mole of gaseous ions ...'.",
+        ],
         q: "Define the term enthalpy of hydration.",
         ms: [
           "Enthalpy change when one mole of gaseous ions",
@@ -339,6 +470,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "b", type: "calc", marks: 3,
+        hints: [
+          "Dissolving can be treated as two stages: breaking the lattice into gaseous ions, then hydrating those ions.",
+          "Breaking the lattice is the reverse of the lattice enthalpy of formation. What happens to the sign?",
+          "dHsol = -(dHlatt) + dHhyd(Na+) + dHhyd(Cl-). Substitute -787, -406 and -364 with the correct signs.",
+        ],
         q: "Calculate the enthalpy of solution of sodium chloride.",
         answer: 17, unit: "kJ mol-1", tolerance: 2,
         steps: [
@@ -349,6 +485,11 @@ export const DRAFT_EXAM_QUESTIONS = [
       },
       {
         label: "c", type: "short", marks: 2,
+        hints: [
+          "Enthalpy is not the only factor that decides whether a process is feasible. What else changes when an ordered solid becomes dissolved ions?",
+          "Think about disorder: compare the ordered lattice with ions free to move through the solution.",
+          "Use dG = dH - TdS. What must TdS be, compared with dH, for dG to be negative?",
+        ],
         q: "Sodium chloride dissolves readily in water at room temperature even though the enthalpy of solution is endothermic. Explain why.",
         ms: [
           "The entropy change is positive / entropy increases because the ions become free to move in solution",

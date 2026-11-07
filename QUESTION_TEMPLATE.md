@@ -77,3 +77,16 @@ its own `answer`, `unit` and `tolerance`.
 - `short` parts have exactly as many `ms` points as marks, or a note in `ms` where a point is worth 2.
 - No em dashes in question text. Use hyphens or commas.
 - Units written as in the exam, for example `kJ mol-1`, `mol dm-3`.
+
+## Hints (every part should have them)
+
+Each part takes `hints: ["...", "...", "..."]`, up to three, in this order:
+
+1. Orient: what the question is really asking for, as a question back to the student.
+2. Method: the route to the answer with no numbers or mark scheme wording.
+3. First step: the first line of working or the first mark point rephrased as a prompt.
+
+Hints never give the answer. Students unlock them one at a time after their first
+marked attempt; they cost no marks but the number used is shown to the tutor.
+The mark scheme is only shown once the part is fully correct, after every attempt
+and hint has been used, or once the homework is submitted.

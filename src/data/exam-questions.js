@@ -14,6 +14,7 @@
  *   dataTable: [["ΔHf", -554], ...],  // optional: [label, value] rows, shown as a table
  *   parts: [
  *     { label: "a", type: "short", marks: 2, q: "Define ...",
+ *       hints: ["orient", "method", "first step"],                       // up to 3, never the answer
  *       ms: ["point 1", "point 2"], allow: ["..."], reject: ["..."] },   // allow/reject optional
  *     { label: "b", type: "calc", marks: 3, q: "Calculate ...",
  *       answer: -744, unit: "kJ mol-1", tolerance: 3, steps: ["...", "..."] },

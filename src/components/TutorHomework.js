@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment } from "../firebase";
+import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Bar, Avatar, Table, th, td, EmptyState, Notice, Icon, Input, chipToneForPct, StatTile } from "../ui/components";
 import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBank";
@@ -97,6 +97,16 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
   const submitted = rows.filter(r => r.status === "submitted");
   const avg = submitted.length ? Math.round(submitted.reduce((x, r) => x + pct(r.sub.totalScore, r.sub.maxScore), 0) / submitted.length) : null;
   const lowConfidence = subs.flatMap(sub => Object.entries(sub.answers || {}).filter(([, r]) => r.markedBy === "ai" && r.confidence === "low").map(([key]) => ({ sub, key })));
+  const openQueries = subs.flatMap(sub => Object.entries(sub.queries || {}).filter(([, q]) => q.status === "open").map(([key, q]) => ({ sub, key, itemKey: key.split("__")[0], q })));
+  const [replies, setReplies] = useState({});
+
+  const reply = async (sub, key) => {
+    const text = (replies[sub.id + key] || "").trim();
+    if (!text) return;
+    const nextQ = { ...sub.queries[key], reply: text, status: "resolved", repliedAt: Date.now() };
+    setSubs(prev => prev.map(x => x.id === sub.id ? { ...x, queries: { ...x.queries, [key]: nextQ } } : x));
+    try { await answerMarkQuery(a.id, sub.uid, key, text); } catch (e) { setError(e.message); }
+  };
 
   // Which items were missed most across submitted work
   const missed = useMemo(() => {
@@ -147,7 +157,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
       <div className="cm-grid-4">
         <StatTile label="Submitted" value={<>{submitted.length}<span style={{ fontSize: 16, color: T.muted, fontWeight: 600 }}> / {rows.length}</span></>} sub={`${rows.filter(r => r.status === "in-progress").length} in progress`} />
         <StatTile label="Class average" value={avg === null ? "–" : `${avg}%`} sub={submitted.length ? "of submitted work" : "Nothing submitted yet"} />
-        <StatTile label="Needs your check" value={lowConfidence.length} sub="AI marks with low confidence" subTone={lowConfidence.length ? "amber" : undefined} />
+        <StatTile label="Needs your check" value={lowConfidence.length + openQueries.length} sub={`${openQueries.length} mark quer${openQueries.length === 1 ? "y" : "ies"} · ${lowConfidence.length} low-confidence AI mark${lowConfidence.length === 1 ? "" : "s"}`} subTone={lowConfidence.length + openQueries.length ? "amber" : undefined} />
         <StatTile label="Status" value={a.status === "closed" ? "Closed" : isOverdue(a.dueAt) ? "Past due" : "Open"} sub={a.status === "closed" ? "Students can still view feedback" : "Students can still submit"} />
       </div>
 
@@ -198,11 +208,15 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                   </div>
                                   {r && (
                                     <div style={{ marginLeft: 28, display: "flex", flexDirection: "column", gap: 4, fontSize: 12 }}>
+                                      <AttemptSummary r={r} />
                                       {it.type !== "exam" && r.answer !== undefined && <div><span style={{ color: T.muted }}>Answer: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(r.answer)}</span>{res?.q?.answer !== undefined && it.type !== "extended" && <span style={{ color: T.muted }}> · correct: {String(res.q.answer)}{res.q.unit ? ` ${res.q.unit}` : ""}</span>}</div>}
                                       {it.type === "exam" && r.detail?.parts && Object.entries(r.detail.parts).map(([lbl, pr]) => (
-                                        <div key={lbl}><span style={{ color: T.muted }}>({lbl}) {pr.score}/{pr.maxScore}: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(pr.answer ?? "")}</span>{pr.feedback && <div style={{ color: T.body, marginLeft: 12 }}>{pr.feedback}</div>}</div>
+                                        <div key={lbl}><span style={{ color: T.muted }}>({lbl}) {pr.score}/{pr.maxScore}: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(pr.answer ?? "")}</span> <AttemptSummary r={pr} inline />{pr.feedback && <div style={{ color: T.body, marginLeft: 12 }}>{pr.feedback}</div>}
+                                          <QueryThread q={sub.queries?.[`${it.key}__${lbl}`]} draft={replies[sub.id + `${it.key}__${lbl}`]} onDraft={v => setReplies(d => ({ ...d, [sub.id + `${it.key}__${lbl}`]: v }))} onReply={() => reply(sub, `${it.key}__${lbl}`)} />
+                                        </div>
                                       ))}
                                       {r.feedback && <div style={{ color: T.body }}><span style={{ color: T.muted }}>Feedback: </span>{r.feedback}</div>}
+                                      <QueryThread q={sub.queries?.[it.key]} draft={replies[sub.id + it.key]} onDraft={v => setReplies(d => ({ ...d, [sub.id + it.key]: v }))} onReply={() => reply(sub, it.key)} />
                                     </div>
                                   )}
                                 </div>
@@ -230,7 +244,17 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
             ))}
           </Card>
           <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <CardHeader title="Needs your check" sub="Low-confidence AI marks" />
+            <CardHeader title="Mark queries" sub="Students asking you to check a mark" />
+            {openQueries.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>None open.</span>}
+            {openQueries.slice(0, 8).map(({ sub, key, itemKey, q }) => (
+              <button key={sub.id + key} onClick={() => setOpen(sub.uid)} style={{ textAlign: "left", border: "none", background: "transparent", cursor: "pointer", padding: "4px 0", fontSize: 13, color: T.ink }}>
+                <span style={{ fontWeight: 600 }}>{sub.studentName || sub.uid}</span> <span style={{ color: T.muted }}>· {a.items.find(it => it.key === itemKey)?.topicLabel || key}</span>
+                <div style={{ fontSize: 12, color: T.body, marginTop: 2 }}>{q.note}</div>
+              </button>
+            ))}
+          </Card>
+          <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <CardHeader title="Low-confidence AI marks" sub="Worth a quick look" />
             {lowConfidence.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>None so far.</span>}
             {lowConfidence.slice(0, 8).map(({ sub, key }) => (
               <button key={sub.id + key} onClick={() => setOpen(sub.uid)} style={{ textAlign: "left", border: "none", background: "transparent", cursor: "pointer", padding: "4px 0", fontSize: 13, color: T.ink }}>
@@ -247,6 +271,36 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
         </aside>
       </div>
     </>
+  );
+}
+
+/** "2 attempts · 1 hint · best 3/3" for a stored result or part result. */
+function AttemptSummary({ r, inline }) {
+  const n = r.attempts?.length || 0;
+  if (!n && !r.hintsUsed) return null;
+  const bits = [];
+  if (n) bits.push(`${n} attempt${n === 1 ? "" : "s"}`);
+  if (r.hintsUsed) bits.push(`${r.hintsUsed} hint${r.hintsUsed === 1 ? "" : "s"}`);
+  if (n > 1 && r.bestScore !== undefined && r.bestScore !== r.score) bits.push(`best ${r.bestScore}/${r.maxScore}`);
+  return <span style={{ color: T.muted, fontSize: 11, display: inline ? "inline" : "block" }}>{inline ? "· " : ""}{bits.join(" · ")}</span>;
+}
+
+/** A student's query on one mark, with the tutor's reply box. */
+function QueryThread({ q, draft, onDraft, onReply }) {
+  if (!q) return null;
+  return (
+    <div style={{ margin: "6px 0 4px 12px", padding: "8px 12px", background: q.status === "open" ? T.amberTint : "#FAFBFC", border: `1px solid ${q.status === "open" ? "#FDE68A" : T.line}`, borderRadius: 8, display: "flex", flexDirection: "column", gap: 6 }} onClick={e => e.stopPropagation()}>
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}><Chip tone={q.status === "open" ? "amber" : "green"} style={{ fontSize: 11 }}>{q.status === "open" ? "Mark query" : "Query answered"}</Chip><span style={{ color: T.muted }}>{relativeTime(q.at)}</span></div>
+      <div><span style={{ color: T.muted }}>Student: </span>{q.note}</div>
+      {q.status === "resolved" && <div><span style={{ color: T.muted }}>You: </span>{q.reply}</div>}
+      {q.status === "open" && (
+        <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+          <textarea value={draft || ""} onChange={e => onDraft(e.target.value)} rows={2} placeholder="Reply to the student. Adjust the mark above if it should change." aria-label="Reply"
+            style={{ flex: 1, padding: "8px 10px", borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 12, fontFamily: "inherit", resize: "vertical", lineHeight: 1.5 }} />
+          <Button size="sm" variant="primary" onClick={onReply} disabled={!(draft || "").trim()}>Reply</Button>
+        </div>
+      )}
+    </div>
   );
 }
 
