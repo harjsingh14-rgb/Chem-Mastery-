@@ -36,6 +36,13 @@ import { EQUILIBRIA } from "./exam/equilibria";
 import { KINETICS } from "./exam/kinetics";
 import { ELECTROCHEMISTRY } from "./exam/electrochemistry";
 import { TRANSITION_METALS } from "./exam/transition-metals";
+import { ENTROPY_GIBBS } from "./exam/entropy-gibbs";
+import { CARBOXYLIC_ACIDS } from "./exam/carboxylic-acids";
+import { ALCOHOLS } from "./exam/alcohols";
+import { CARBONYLS } from "./exam/carbonyls";
+import { ELECTROPHILIC_ADDITION } from "./exam/electrophilic-addition";
+import { NUCLEOPHILIC_SUBSTITUTION } from "./exam/nucleophilic-substitution";
+import { BORN_HABER_EDEXCEL } from "./exam/born-haber-edexcel";
 
 // One file per topic in src/data/exam/. `board` is an array of board ids
 // (["aqa", "ocr", "edexcel"]) or the string "both" for all boards.
@@ -46,6 +53,13 @@ export const EXAM_QUESTIONS = [
   ...KINETICS,
   ...ELECTROCHEMISTRY,
   ...TRANSITION_METALS,
+  ...ENTROPY_GIBBS,
+  ...CARBOXYLIC_ACIDS,
+  ...ALCOHOLS,
+  ...CARBONYLS,
+  ...ELECTROPHILIC_ADDITION,
+  ...NUCLEOPHILIC_SUBSTITUTION,
+  ...BORN_HABER_EDEXCEL,
 ];
 
 /** Marks available for a question (sum of its parts). */

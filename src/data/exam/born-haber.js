@@ -2,7 +2,7 @@
  * Born-Haber cycles, lattice enthalpy, enthalpy of solution. Written from the
  * AQA 7405 and OCR H432 mark schemes (resources/) and standard data-book
  * values. Edexcel uses the term "lattice energy" with the same definition, so
- * an Edexcel-worded copy is still to be written; these are tagged AQA and OCR.
+ * the Edexcel-worded copy is born-haber-edexcel.js; these are tagged AQA and OCR.
  *
  * Data used (kJ mol-1, data-book values, rounded):
  *   KCl:   dHf -437, dHat(K) +89, dHat(1/2 Cl2) +122, IE1(K) +419, EA1(Cl) -349
