@@ -383,8 +383,11 @@ export default function App() {
   // Remember the board so "/" goes straight back to it next time
   useEffect(() => { if (board) { try { localStorage.setItem("hsj-board", board); } catch {} } }, [board]);
   useEffect(() => {
-    if (screen === "board" && authUser && savedBoard) navigate(`/${savedBoard}`, { replace: true });
-  }, [screen, authUser, savedBoard, navigate]);
+    if (screen !== "board" || !authUser) return;
+    // Tutors land on their dashboard; students on their board's dashboard
+    if (isTutor) navigate("/tutor", { replace: true });
+    else if (savedBoard) navigate(`/${savedBoard}`, { replace: true });
+  }, [screen, authUser, savedBoard, isTutor, navigate]);
 
   // ─── App shell: nav + account menu shared by every signed-in screen ───
   const navBoard = board || savedBoard || "aqa";
