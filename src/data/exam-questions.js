@@ -6,7 +6,7 @@
  * Shape (every field below the comment is required unless marked optional):
  * {
  *   id: "bh-001",                 // unique, lowercase, hyphenated
- *   board: "aqa" | "ocr" | "edexcel" | "both",
+ *   board: ["aqa", "ocr", "edexcel"],   // array of boards, or "both" for all
  *   tags: ["born-haber"],         // sub-topic tags used by the homework builder
  *   tier: 1 | 2 | 3,              // 1 scaffolded, 2 exam standard, 3 unseen or stretch
  *   title: "Lattice enthalpy of caesium fluoride",   // shown in the builder
@@ -30,7 +30,23 @@
  * more marks) use levels-of-response marking.
  */
 
-export const EXAM_QUESTIONS = [];
+import { BORN_HABER } from "./exam/born-haber";
+import { ACIDS_BASES } from "./exam/acids-bases";
+import { EQUILIBRIA } from "./exam/equilibria";
+import { KINETICS } from "./exam/kinetics";
+import { ELECTROCHEMISTRY } from "./exam/electrochemistry";
+import { TRANSITION_METALS } from "./exam/transition-metals";
+
+// One file per topic in src/data/exam/. `board` is an array of board ids
+// (["aqa", "ocr", "edexcel"]) or the string "both" for all boards.
+export const EXAM_QUESTIONS = [
+  ...BORN_HABER,
+  ...ACIDS_BASES,
+  ...EQUILIBRIA,
+  ...KINETICS,
+  ...ELECTROCHEMISTRY,
+  ...TRANSITION_METALS,
+];
 
 /** Marks available for a question (sum of its parts). */
 export const questionMarks = (q) => q.parts.reduce((a, p) => a + (p.marks || 0), 0);

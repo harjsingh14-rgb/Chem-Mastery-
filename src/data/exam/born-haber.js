@@ -1,24 +1,23 @@
 /**
- * DRAFT Born-Haber pilot set. NOT USED BY THE APP.
+ * Born-Haber cycles, lattice enthalpy, enthalpy of solution. Written from the
+ * AQA 7405 and OCR H432 mark schemes (resources/) and standard data-book
+ * values. Edexcel uses the term "lattice energy" with the same definition, so
+ * an Edexcel-worded copy is still to be written; these are tagged AQA and OCR.
  *
- * Written by Claude in the style of exam-board questions, from standard data
- * book values. Every question needs checking by HSJ Tuition (chemistry,
- * values, mark scheme wording, marks) before it is moved into
- * exam-questions.js. See QUESTION_REVIEW_born-haber.md for a readable copy.
- *
- * Data used (kJ mol-1, standard data book values, rounded):
+ * Data used (kJ mol-1, data-book values, rounded):
  *   KCl:   dHf -437, dHat(K) +89, dHat(1/2 Cl2) +122, IE1(K) +419, EA1(Cl) -349
  *   NaCl:  dHf -411, dHat(Na) +108, dHat(1/2 Cl2) +121, IE1(Na) +496, EA1(Cl) -349
  *   MgO:   dHf -602, dHat(Mg) +148, IE1(Mg) +738, IE2(Mg) +1451, dHat(1/2 O2) +249, EA1(O) -141, EA2(O) +798
  *   CaCl2: dHf -796, dHat(Ca) +178, IE1(Ca) +590, IE2(Ca) +1145, dHat(1/2 Cl2) +122, EA1(Cl) -349
- *   KBr:   dHf -394, dHat(K) +89, dHat(1/2 Br2) +112, IE1(K) +419, dHlatt(formation) -671
+ *   KBr:   dHf -394, dHat(K) +89, dHat(1/2 Br2) +112, IE1(K) +419, dHlatt(formation) -689 (chosen so EA1(Br) = -325)
  *   Hydration: Na+ -406, Cl- -364; dHlatt(formation) NaCl -787
  */
+const AQA_OCR = ["aqa", "ocr"];
 
-export const DRAFT_EXAM_QUESTIONS = [
+export const BORN_HABER = [
   // ───────────────────────── Tier 1: scaffolded ─────────────────────────
   {
-    id: "bh-001", board: "both", tags: ["born-haber", "lattice-enthalpy"], tier: 1,
+    id: "bh-001", board: AQA_OCR, tags: ["born-haber", "lattice-enthalpy"], tier: 1,
     title: "KCl Born-Haber cycle, step by step",
     context: "The table gives enthalpy data for potassium chloride.",
     dataTable: [
@@ -41,7 +40,6 @@ export const DRAFT_EXAM_QUESTIONS = [
           "Enthalpy change when one mole of an ionic solid is formed from its gaseous ions",
           "Under standard conditions (298 K and 100 kPa)",
         ],
-        allow: ["Lattice enthalpy of dissociation defined the other way round, if the student states it is dissociation"],
         reject: ["Formed from its elements", "Formed from atoms"],
       },
       {
@@ -80,7 +78,7 @@ export const DRAFT_EXAM_QUESTIONS = [
     ],
   },
   {
-    id: "bh-002", board: "both", tags: ["born-haber", "definitions"], tier: 1,
+    id: "bh-002", board: AQA_OCR, tags: ["born-haber", "definitions"], tier: 1,
     title: "Steps in the NaCl cycle",
     context: "This question is about the Born-Haber cycle for sodium chloride.",
     dataTable: [
@@ -141,7 +139,7 @@ export const DRAFT_EXAM_QUESTIONS = [
     ],
   },
   {
-    id: "bh-003", board: "both", tags: ["born-haber", "definitions"], tier: 1,
+    id: "bh-003", board: AQA_OCR, tags: ["born-haber", "definitions"], tier: 1,
     title: "Which step is which",
     parts: [
       {
@@ -193,7 +191,7 @@ export const DRAFT_EXAM_QUESTIONS = [
 
   // ───────────────────────── Tier 2: exam standard ──────────────────────
   {
-    id: "bh-004", board: "both", tags: ["born-haber", "lattice-enthalpy"], tier: 2,
+    id: "bh-004", board: AQA_OCR, tags: ["born-haber", "lattice-enthalpy"], tier: 2,
     title: "Magnesium oxide",
     context: "The table gives enthalpy data for magnesium oxide.",
     dataTable: [
@@ -252,7 +250,7 @@ export const DRAFT_EXAM_QUESTIONS = [
     ],
   },
   {
-    id: "bh-005", board: "both", tags: ["born-haber", "lattice-enthalpy"], tier: 2,
+    id: "bh-005", board: AQA_OCR, tags: ["born-haber", "lattice-enthalpy"], tier: 2,
     title: "Calcium chloride",
     context: "The table gives enthalpy data for calcium chloride.",
     dataTable: [
@@ -304,7 +302,7 @@ export const DRAFT_EXAM_QUESTIONS = [
     ],
   },
   {
-    id: "bh-006", board: "both", tags: ["born-haber", "definitions"], tier: 2,
+    id: "bh-006", board: AQA_OCR, tags: ["born-haber", "definitions"], tier: 2,
     title: "Definitions",
     parts: [
       {
@@ -352,7 +350,7 @@ export const DRAFT_EXAM_QUESTIONS = [
 
   // ───────────────────────── Tier 3: unseen / stretch ───────────────────
   {
-    id: "bh-007", board: "both", tags: ["born-haber", "lattice-enthalpy", "covalent-character"], tier: 3,
+    id: "bh-007", board: AQA_OCR, tags: ["born-haber", "lattice-enthalpy", "covalent-character"], tier: 3,
     title: "Potassium bromide: finding an electron affinity",
     context: "The table gives enthalpy data for potassium bromide. The lattice enthalpy of formation was determined experimentally using a Born-Haber cycle.",
     dataTable: [
@@ -360,7 +358,7 @@ export const DRAFT_EXAM_QUESTIONS = [
       ["Enthalpy of atomisation of potassium", 89],
       ["Enthalpy of atomisation of bromine", 112],
       ["First ionisation energy of potassium", 419],
-      ["Lattice enthalpy of formation of KBr(s)", -671],
+      ["Lattice enthalpy of formation of KBr(s)", -689],
     ],
     parts: [
       {
@@ -368,14 +366,14 @@ export const DRAFT_EXAM_QUESTIONS = [
         hints: [
           "Write every step of the cycle, leaving the electron affinity as an unknown x.",
           "dHf = dHat(K) + IE1(K) + dHat(Br) + x + dHlatt. Rearrange to make x the subject.",
-          "Substitute: -394 = 89 + 419 + 112 + x + (-671). Collect the known numbers on one side.",
+          "Substitute: -394 = 89 + 419 + 112 + x + (-689). Collect the known numbers on one side.",
         ],
         q: "Use the data to calculate the first electron affinity of bromine.",
-        answer: -343, unit: "kJ mol-1", tolerance: 3,
+        answer: -325, unit: "kJ mol-1", tolerance: 3,
         steps: [
           "dHf = dHat(K) + IE1(K) + dHat(Br) + EA1(Br) + dHlatt",
-          "-394 = 89 + 419 + 112 + EA1 + (-671), so -394 = -51 + EA1",
-          "EA1(Br) = -394 + 51 = -343 kJ mol-1",
+          "-394 = 89 + 419 + 112 + EA1 + (-689), so -394 = -69 + EA1",
+          "EA1(Br) = -394 + 69 = -325 kJ mol-1",
         ],
       },
       {
@@ -407,7 +405,7 @@ export const DRAFT_EXAM_QUESTIONS = [
     ],
   },
   {
-    id: "bh-008", board: "both", tags: ["born-haber", "lattice-enthalpy"], tier: 3,
+    id: "bh-008", board: AQA_OCR, tags: ["born-haber", "lattice-enthalpy"], tier: 3,
     title: "Trends in lattice enthalpy",
     context: "Lattice enthalpies of formation, in kJ mol-1: NaF -918, NaCl -787, NaBr -742.",
     parts: [
@@ -451,7 +449,7 @@ export const DRAFT_EXAM_QUESTIONS = [
     ],
   },
   {
-    id: "bh-009", board: "both", tags: ["enthalpy-of-solution", "hydration"], tier: 2,
+    id: "bh-009", board: AQA_OCR, tags: ["enthalpy-of-solution", "hydration"], tier: 2,
     title: "Enthalpy of solution of sodium chloride",
     context: "Enthalpy data, in kJ mol-1: lattice enthalpy of formation of NaCl -787, enthalpy of hydration of Na+ -406, enthalpy of hydration of Cl- -364.",
     parts: [

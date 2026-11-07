@@ -20,7 +20,7 @@ export const DEFAULT_WEIGHTS = { mcq: 35, calc: 35, extended: 15, exam: 15 };
 export const TYPE_LABEL = { mcq: "MCQ", calc: "Calculation", extended: "Extended answer", exam: "Exam question" };
 
 const mcqBoardKey = (board) => board === "ocr" ? "OCR_A" : board === "edexcel" ? "EDEXCEL" : "AQA";
-const boardOk = (b, board) => b === "both" || b === board;
+const boardOk = (b, board) => b === "both" || b === board || (Array.isArray(b) && b.includes(board));
 export const itemKey = (type, questionId) => `${type}_${String(questionId).replace(/[^A-Za-z0-9]/g, "_")}`;
 
 /** Everything a tutor can pick from for one exam board. */
