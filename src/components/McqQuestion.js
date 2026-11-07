@@ -1,7 +1,7 @@
 import React from "react";
 import chemFormat from "../utils/chemFormat";
 
-export default function McqQuestion({ question, selected, revealed, accentColor, onSelect, onCheck, onNext, isLast }) {
+export default function McqQuestion({ question, selected, revealed, accentColor, onSelect, onCheck, onNext, isLast, hideNext }) {
   const optionLetters = ["A","B","C","D"];
   const imageIsQuestion = (question.topic || "").startsWith("OCR") &&
     !!question.image && !!question.options &&
@@ -81,7 +81,7 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
               boxShadow: selected ? `0 4px 14px ${accentColor}50` : "none" }}>
             Check Answer
           </button>
-        ) : (
+        ) : hideNext ? null : (
           <button key="mcq-next-btn" onClick={onNext}
             style={{ flex: 1, padding: "14px", borderRadius: "12px", border: "none", cursor: "pointer",
               background: accentColor, color: "#fff", fontSize: "14px", fontWeight: 700, fontFamily: "inherit",

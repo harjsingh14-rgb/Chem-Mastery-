@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, limit, getDocs, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, limit, getDocs, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCtSbGHVvDJinQ2NnbZUAMp2YHU2aNtkTM",
@@ -184,6 +184,123 @@ export async function joinClass(uid, rawCode) {
 
 export async function leaveClass(uid) {
   await setDoc(doc(db, "users", uid), { classId: null, tutorId: null, joinedClassAt: null }, { merge: true });
+}
+
+// =====================================================================
+//  Assignments (homework set for a class) and submissions (one per student)
+// =====================================================================
+
+/**
+ * assignment: { title, classId, board, minutes, dueAt (ms), note,
+ *               items: [{ key, type, questionId, marks, minutes, topic, topicLabel }] }
+ */
+export async function createAssignment(tutorUid, assignment) {
+  const ref = await addDoc(collection(db, "assignments"), {
+    ...assignment,
+    tutorId: tutorUid,
+    status: "open",
+    createdAt: serverTimestamp(),
+    clientTime: Date.now(),
+  });
+  return { id: ref.id, ...assignment, tutorId: tutorUid, status: "open", clientTime: Date.now() };
+}
+
+export async function updateAssignment(id, patch) {
+  await updateDoc(doc(db, "assignments", id), patch);
+}
+
+export async function deleteAssignment(id) {
+  await deleteDoc(doc(db, "assignments", id));
+}
+
+const byNewest = (a, b) => (b.clientTime || 0) - (a.clientTime || 0);
+
+export async function fetchTutorAssignments(tutorUid) {
+  const snap = await getDocs(query(collection(db, "assignments"), where("tutorId", "==", tutorUid)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+}
+
+export async function fetchClassAssignments(classId) {
+  if (!classId) return [];
+  const snap = await getDocs(query(collection(db, "assignments"), where("classId", "==", classId)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+}
+
+export async function fetchAssignment(id) {
+  const snap = await getDoc(doc(db, "assignments", id));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+
+export const submissionId = (assignmentId, uid) => `${assignmentId}_${uid}`;
+
+export async function fetchSubmission(assignmentId, uid) {
+  const snap = await getDoc(doc(db, "submissions", submissionId(assignmentId, uid)));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+
+export async function fetchMySubmissions(uid) {
+  const snap = await getDocs(query(collection(db, "submissions"), where("uid", "==", uid)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function fetchSubmissionsForAssignment(assignmentId, tutorUid) {
+  const snap = await getDocs(query(collection(db, "submissions"), where("tutorId", "==", tutorUid), where("assignmentId", "==", assignmentId)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function fetchTutorSubmissions(tutorUid) {
+  const snap = await getDocs(query(collection(db, "submissions"), where("tutorId", "==", tutorUid)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+/** Create the student's submission doc the first time they open an assignment. */
+export async function startSubmission(user, profile, assignment) {
+  const id = submissionId(assignment.id, user.uid);
+  const existing = await getDoc(doc(db, "submissions", id));
+  if (existing.exists()) return { id, ...existing.data() };
+  const sub = {
+    assignmentId: assignment.id,
+    uid: user.uid,
+    tutorId: profile?.tutorId || null,
+    classId: profile?.classId || null,
+    studentName: user.displayName || user.email || "",
+    answers: {},
+    maxScore: (assignment.items || []).reduce((a, it) => a + (it.marks || 0), 0),
+    totalScore: 0,
+    startedAt: serverTimestamp(),
+    submittedAt: null,
+    timeSpentMs: 0,
+    tutorMarks: {},
+    tutorComment: null,
+  };
+  await setDoc(doc(db, "submissions", id), sub);
+  return { id, ...sub };
+}
+
+/** Save one answered item. `result` = { answer, score, maxScore, correct, feedback, markedBy, confidence, detail } */
+export async function saveItemResult(assignmentId, uid, itemKey, result, totals) {
+  await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), {
+    [`answers.${itemKey}`]: { ...result, answeredAt: Date.now() },
+    totalScore: totals.totalScore,
+    timeSpentMs: totals.timeSpentMs,
+    lastSavedAt: serverTimestamp(),
+  });
+}
+
+export async function submitSubmission(assignmentId, uid, totals) {
+  await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), {
+    submittedAt: serverTimestamp(),
+    submittedClientTime: Date.now(),
+    totalScore: totals.totalScore,
+    timeSpentMs: totals.timeSpentMs,
+  });
+}
+
+/** Tutor adjusts a mark on one item. tutorMarks: { [itemKey]: score } */
+export async function saveTutorMark(assignmentId, uid, itemKey, score, totalScore, comment) {
+  const patch = { [`tutorMarks.${itemKey}`]: score, totalScore, reviewedAt: serverTimestamp() };
+  if (comment !== undefined) patch.tutorComment = comment;
+  await updateDoc(doc(db, "submissions", submissionId(assignmentId, uid)), patch);
 }
 
 export { auth, db };

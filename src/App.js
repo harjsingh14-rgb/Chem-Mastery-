@@ -5,7 +5,11 @@ import TutorPage from "./components/TutorPage";
 import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
 import PracticeGrid from "./components/PracticeGrid";
-import { HomeworkPage, VideosPage } from "./components/Placeholders";
+import { VideosPage } from "./components/Placeholders";
+import HomeworkBuilder from "./components/HomeworkBuilder";
+import { TutorHomeworkList, TutorHomeworkReview } from "./components/TutorHomework";
+import StudentHomework from "./components/StudentHomework";
+import HomeworkPlayer from "./components/HomeworkPlayer";
 import AppShell, { ShellBody } from "./ui/AppShell";
 import { T, BOARDS, BOARD_IDS, boardLabel } from "./ui/theme";
 import { Button, Card, Chip, Input, Notice, PageHeader, EmptyState, Icon, IconTile } from "./ui/components";
@@ -38,7 +42,7 @@ export default function App() {
   const [accessKeyMsg, setAccessKeyMsg] = useState(null);
   const [accessKeyLoading, setAccessKeyLoading] = useState(false);
   const [showLogin, setShowLogin] = useState(false); // false = landing page, true = login screen
-  const [pendingCheckout, setPendingCheckout] = useState(null); // null | "monthly" — auto-checkout after auth
+  const [pendingCheckout, setPendingCheckout] = useState(null); // null or "monthly": auto-checkout after auth
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
   const [classCodeInput, setClassCodeInput] = useState("");
@@ -278,6 +282,8 @@ export default function App() {
   const board = BOARD_IDS.includes(pathParts[0]) ? pathParts[0] : null;
   const routeTab = pathParts[1] || null;
   const routeParam = pathParts[2] || null;
+  const tutorPage = pathParts[0] === 'tutor' ? (pathParts[1] || 'overview') : null;
+  const tutorParam = pathParts[0] === 'tutor' ? (pathParts[2] || null) : null;
   let savedBoard = userProfile?.board || null;
   if (!savedBoard) { try { savedBoard = localStorage.getItem("hsj-board"); } catch {} }
   if (!BOARD_IDS.includes(savedBoard)) savedBoard = null;
@@ -390,7 +396,8 @@ export default function App() {
     { id: "videos", label: "Videos", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
   ];
   const tutorNav = [
-    { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" },
+    { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
+    { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "videos"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
@@ -669,9 +676,15 @@ export default function App() {
 
   // TUTOR DASHBOARD
   if (screen === "tutor") return renderShell(
-    isTutor
-      ? <TutorPage authUser={authUser} userProfile={userProfile} />
-      : <Card padding={0}><EmptyState icon="lock" title="Tutor accounts only" body="Ask HSJ Tuition to upgrade your account to a tutor account." /></Card>
+    !isTutor
+      ? <Card padding={0}><EmptyState icon="lock" title="Tutor accounts only" body="Ask HSJ Tuition to upgrade your account to a tutor account." /></Card>
+      : tutorPage === "homework"
+        ? (tutorParam === "new"
+            ? <HomeworkBuilder authUser={authUser} />
+            : tutorParam
+              ? <TutorHomeworkReview authUser={authUser} assignmentId={tutorParam} />
+              : <TutorHomeworkList authUser={authUser} />)
+        : <TutorPage authUser={authUser} userProfile={userProfile} />
   );
 
   // BOARD SELECT (shown once; afterwards "/" goes straight to the saved board)
@@ -757,9 +770,15 @@ export default function App() {
   const isPage = ["home", "practise", "homework", "videos"].includes(topicsTab);
   const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
 
+  // Homework player: focused mode, no tabs
+  if (screen === "topics" && topicsTab === "homework" && routeParam) return renderShell(
+    <HomeworkPlayer board={board} authUser={authUser} userProfile={userProfile} assignmentId={routeParam} logAttempt={logAttempt} onExit={() => navigate(`/${board}/homework`)} />,
+    { focus: true, back: () => navigate(`/${board}/homework`), backLabel: "Back to homework", title: "Homework", subtitle: boardLabel(board) }
+  );
+
   if (screen === "topics") return renderShell(
     <>
-      {paymentBanner === "success" && <Notice tone="green"><b>Payment successful.</b> All content is unlocked — it may take a moment to activate.</Notice>}
+      {paymentBanner === "success" && <Notice tone="green"><b>Payment successful.</b> All content is unlocked. It may take a moment to activate.</Notice>}
       {paymentBanner === "cancel" && <Notice tone="amber"><b>Payment cancelled.</b> You can upgrade any time from the account menu.</Notice>}
       {topicsTab === "home" && !hasFullAccess && (
         <Notice tone="amber" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
@@ -777,7 +796,7 @@ export default function App() {
           <PracticeGrid board={board} counts={{ mcq: mcqData.questions.length, topics: CURRENT_TOPIC_ORDER.length }} hasFullAccess={hasFullAccess} isAdmin={isAdmin} />
         </>
       )}
-      {topicsTab === "homework" && <HomeworkPage inClass={!!userProfile?.classId} />}
+      {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}
       {topicsTab === "videos" && <VideosPage />}
       {!isPage && (
         <>

@@ -12,7 +12,7 @@ service cloud.firestore {
       // Users can read their own profile; tutors can read their own students
       allow read: if signedIn() && (request.auth.uid == uid || resource.data.tutorId == request.auth.uid);
 
-      // New profiles must start as free — role upgrades come from the
+      // New profiles must start as free; role upgrades come from the
       // Stripe webhook (Admin SDK, bypasses rules) or key redemption below
       allow create: if signedIn() && request.auth.uid == uid
         && request.resource.data.role == 'free'
@@ -52,48 +52,66 @@ service cloud.firestore {
     }
 
     match /accessKeys/{key} {
-      // Signed-in users can look up a key by its exact ID, but never
-      // enumerate the collection
       allow get: if signedIn();
       allow list: if false;
-
-      // Redemption only bumps usage tracking; nothing else is writable
-      allow update: if signedIn()
-        && changed().hasOnly(['usageCount', 'lastUsedAt']);
-
-      // Keys are created/deleted from the Firebase console or Admin SDK only
+      allow update: if signedIn() && changed().hasOnly(['usageCount', 'lastUsedAt']);
       allow create, delete: if false;
     }
 
     match /classes/{code} {
-      // Anyone signed in can look up a class by its exact code (to join it);
-      // only the owning tutor can list their classes
       allow get: if signedIn();
       allow list: if signedIn() && resource.data.tutorId == request.auth.uid;
-
       allow create: if isTutor()
         && request.resource.data.tutorId == request.auth.uid
         && request.resource.data.code == code
         && request.resource.data.name is string;
-
       allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid;
     }
 
     match /attempts/{id} {
-      // A student can read their own attempts; their tutor can read them too
       allow read: if signedIn()
         && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid);
-
-      // Attempts are written by the student, for themselves, and the tutorId
-      // must match the tutor they are actually linked to
       allow create: if signedIn()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.tutorId == myProfile().get('tutorId', null)
         && request.resource.data.type is string
         && request.resource.data.questionId is string;
-
-      // Immutable once written
       allow update, delete: if false;
+    }
+
+    // Homework set by a tutor for one class
+    match /assignments/{id} {
+      // The tutor who set it, or a student in that class, can read it
+      allow read: if signedIn()
+        && (resource.data.tutorId == request.auth.uid || resource.data.classId == myProfile().get('classId', null));
+      allow create: if isTutor()
+        && request.resource.data.tutorId == request.auth.uid
+        && request.resource.data.classId is string
+        && request.resource.data.title is string
+        && request.resource.data.items is list;
+      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+    }
+
+    // One submission per student per assignment (doc id: assignmentId_uid)
+    match /submissions/{id} {
+      allow read: if signedIn()
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid);
+      // Student creates their own, for an assignment set to their class
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.tutorId == myProfile().get('tutorId', null)
+        && id == request.resource.data.assignmentId + '_' + request.auth.uid
+        && exists(/databases/$(database)/documents/assignments/$(request.resource.data.assignmentId))
+        && get(/databases/$(database)/documents/assignments/$(request.resource.data.assignmentId)).data.classId == myProfile().get('classId', null);
+      // Student saves answers until submitted; the tutor can adjust marks and add comments
+      allow update: if signedIn() && (
+        (resource.data.uid == request.auth.uid && resource.data.submittedAt == null
+          && !changed().hasAny(['uid', 'tutorId', 'assignmentId', 'classId', 'tutorMarks', 'tutorComment']))
+        ||
+        (resource.data.tutorId == request.auth.uid
+          && changed().hasOnly(['tutorMarks', 'tutorComment', 'totalScore', 'reviewedAt']))
+      );
+      allow delete: if false;
     }
   }
 }

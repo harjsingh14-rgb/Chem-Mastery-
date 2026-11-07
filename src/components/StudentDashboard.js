@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { T, pctColour, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, EmptyState, Button, IconTile, Table, th, td, chipToneForPct } from "../ui/components";
 import PracticeGrid from "./PracticeGrid";
+import { useHomework, HomeworkRow } from "./StudentHomework";
 import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection } from "../utils/analytics";
 
@@ -83,24 +84,33 @@ export default function StudentDashboard({ board, authUser, userProfile, current
   const firstName = (authUser?.displayName || "").split(" ")[0];
 
   const inClass = !!userProfile?.classId;
+  const hw = useHomework(authUser?.uid, userProfile?.classId);
+  const todo = (hw.rows || []).filter(r => r.status !== "done");
+  const overdue = todo.filter(r => r.overdue).length;
+  const nextUp = todo[0];
 
   return (
     <>
       <PageHeader
         eyebrow={longDate()}
         title={`${greeting()}${firstName ? `, ${firstName}` : ""}`}
-        sub={inClass ? `${userProfile.className || "Your class"} · ${boardLabel(board)} Chemistry` : "Independent revision · join your tutor's class from the account menu to receive homework"}
-        right={<Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/mcq`)}>Practise now</Button>}
+        sub={inClass
+          ? (todo.length ? `${todo.length} homework to do${overdue ? `, ${overdue} overdue` : ""} · ${userProfile.className || "Your class"}` : `${userProfile.className || "Your class"} · ${boardLabel(board)} Chemistry · nothing due`)
+          : "Independent revision · join your tutor's class from the account menu to receive homework"}
+        right={nextUp
+          ? <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/homework/${nextUp.a.id}`)}>{nextUp.status === "progress" ? "Continue homework" : "Start homework"}</Button>
+          : <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/mcq`)}>Practise now</Button>}
       />
 
       <div className="cm-two-col">
         <div className="cm-main-col">
           <Card padding={0}>
-            <CardHeader title="Homework" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }}
-              right={<Chip tone="neutral">0 open</Chip>} />
-            {inClass
-              ? <EmptyState icon="checkSquare" title="Nothing set yet" body="When your tutor sets homework it appears here with a due date, and your marks and feedback come back on the same page." />
-              : <EmptyState icon="users" title="Join your class to get homework" body="Your tutor gives you a class code like HSJ-7K3P. Enter it from the account menu (top right) and homework, feedback and progress reports will show up here." />}
+            <CardHeader title="Homework" style={{ padding: "16px 20px" }}
+              right={<><Chip tone={overdue ? "red" : todo.length ? "accent" : "neutral"}>{todo.length} to do</Chip><Button size="sm" variant="ghost" iconRight="arrowRight" onClick={() => navigate(`/${board}/homework`)}>All homework</Button></>} />
+            {!inClass && <EmptyState icon="users" title="Join your class to get homework" body="Your tutor gives you a class code like HSJ-7K3P. Enter it from the account menu (top right) and homework, feedback and progress reports will show up here." />}
+            {inClass && hw.loading && <div style={{ padding: 20, fontSize: 13, color: T.muted }}>Loading…</div>}
+            {inClass && !hw.loading && todo.length === 0 && <EmptyState icon="check" title="Nothing to do" body="When your tutor sets homework it appears here with a due date, and your marks and feedback come back on the same page." />}
+            {todo.slice(0, 3).map(r => <HomeworkRow key={r.a.id} row={r} board={board} />)}
           </Card>
 
           <section style={{ display: "flex", flexDirection: "column", gap: 12 }}>
