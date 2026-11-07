@@ -33,7 +33,7 @@ export default function useQuiz(board, logAttempt) {
     if (topicIds && topicIds.length > 0) {
       eligibleTopics = topicIds.filter(id => SETS[id]);
     } else {
-      const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
+      const allSections = board === "ocr" ? OCR_SECTIONS : board === "edexcel" ? [] : SECTIONS;
       const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
       const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
       let sectionFilter;

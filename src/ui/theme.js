@@ -26,7 +26,15 @@ export const T = {
   shadow: "0 1px 2px rgba(15,29,53,0.04)",
 };
 
-export const FONT_LINK = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap";
+export const FONT_LINK = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Caveat:wght@600&display=swap";
+
+export const BOARDS = [
+  { id: "aqa", label: "AQA", desc: "Year 1 and Year 2. Full spec coverage.", tags: ["Physical", "Inorganic", "Organic", "Required practicals"] },
+  { id: "ocr", label: "OCR A", desc: "Modules 2–6 fully covered. Module 1 is PAG practical skills only.", tags: ["Modules 2–6", "Physical", "Organic", "PAG skills"] },
+  { id: "edexcel", label: "Edexcel", desc: "Calculations and extended answers now; Edexcel topic banks are being added.", tags: ["Calculations", "AI Examiner", "Topics coming"] },
+];
+export const BOARD_IDS = BOARDS.map(b => b.id);
+export const boardLabel = (id) => (BOARDS.find(b => b.id === id) || BOARDS[0]).label;
 
 // Colour for an accuracy percentage (null = no data)
 export const pctColour = (p) => p === null || p === undefined ? T.faint : p >= 75 ? T.green : p >= 50 ? T.amber : T.red;

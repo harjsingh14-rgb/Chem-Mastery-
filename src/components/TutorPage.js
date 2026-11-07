@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { createClass, fetchTutorClasses, fetchClassStudents, fetchAttemptsForTutor } from "../firebase";
-import { T, pctColour } from "../ui/theme";
+import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
 import { summarise, pct, relativeTime, attemptTime, DAY, TYPE_LABEL } from "../utils/analytics";
 
@@ -92,7 +92,7 @@ export default function TutorPage({ authUser }) {
       <PageHeader
         eyebrow="Overview"
         title={cls ? cls.name : "Your classes"}
-        sub={cls ? `${cls.board === "ocr" ? "OCR A" : "AQA"} · ${students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"}` : "Create a class and share its code with your students."}
+        sub={cls ? `${boardLabel(cls.board)} ·${students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"}` : "Create a class and share its code with your students."}
         right={<>
           {classes && classes.length > 1 && (
             <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Switch class"
@@ -115,7 +115,7 @@ export default function TutorPage({ authUser }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Exam board</span>
             <div style={{ display: "flex", gap: 6 }}>
-              {[{ id: "aqa", label: "AQA" }, { id: "ocr", label: "OCR A" }].map(b => (
+              {BOARDS.map(b => (
                 <Button key={b.id} variant={newBoard === b.id ? "primary" : "secondary"} onClick={() => setNewBoard(b.id)}>{b.label}</Button>
               ))}
             </div>

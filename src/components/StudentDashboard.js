@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { T, pctColour } from "../ui/theme";
+import { T, pctColour, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, EmptyState, Button, IconTile, Table, th, td, chipToneForPct } from "../ui/components";
 import PracticeGrid from "./PracticeGrid";
 import useAttempts from "../hooks/useAttempts";
@@ -89,7 +89,7 @@ export default function StudentDashboard({ board, authUser, userProfile, current
       <PageHeader
         eyebrow={longDate()}
         title={`${greeting()}${firstName ? `, ${firstName}` : ""}`}
-        sub={inClass ? `${userProfile.className || "Your class"} · ${board === "ocr" ? "OCR A" : "AQA"} Chemistry` : "Independent revision · join your tutor's class from the account menu to receive homework"}
+        sub={inClass ? `${userProfile.className || "Your class"} · ${boardLabel(board)} Chemistry` : "Independent revision · join your tutor's class from the account menu to receive homework"}
         right={<Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/mcq`)}>Practise now</Button>}
       />
 

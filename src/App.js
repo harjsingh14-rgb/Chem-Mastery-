@@ -7,8 +7,8 @@ import ProgressPage from "./components/ProgressPage";
 import PracticeGrid from "./components/PracticeGrid";
 import { HomeworkPage, VideosPage } from "./components/Placeholders";
 import AppShell, { ShellBody } from "./ui/AppShell";
-import { T } from "./ui/theme";
-import { Button, Card, Chip, Input, Notice, PageHeader, EmptyState } from "./ui/components";
+import { T, BOARDS, BOARD_IDS, boardLabel } from "./ui/theme";
+import { Button, Card, Chip, Input, Notice, PageHeader, EmptyState, Icon, IconTile } from "./ui/components";
 import { invalidateAttempts } from "./hooks/useAttempts";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
@@ -26,6 +26,8 @@ import track from "./utils/track";
 import useStudyProgress from "./hooks/useStudyProgress";
 import useFlashcards from "./hooks/useFlashcards";
 import useQuiz from "./hooks/useQuiz";
+
+const EMPTY_SECTIONS = [];
 
 export default function App() {
   // --- Auth state ---
@@ -273,12 +275,12 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathParts = location.pathname.split('/').filter(Boolean);
-  const board = ['aqa', 'ocr'].includes(pathParts[0]) ? pathParts[0] : null;
+  const board = BOARD_IDS.includes(pathParts[0]) ? pathParts[0] : null;
   const routeTab = pathParts[1] || null;
   const routeParam = pathParts[2] || null;
   let savedBoard = userProfile?.board || null;
   if (!savedBoard) { try { savedBoard = localStorage.getItem("hsj-board"); } catch {} }
-  if (!['aqa', 'ocr'].includes(savedBoard)) savedBoard = null;
+  if (!BOARD_IDS.includes(savedBoard)) savedBoard = null;
   const screen = pathParts[0] === 'tutor' ? 'tutor'
     : !board ? 'board'
     : (routeTab === 'dashboard' || routeTab === 'progress') ? 'dashboard'
@@ -286,8 +288,9 @@ export default function App() {
     : 'topics';
   const topicsTab = screen === 'topics' ? (routeTab || 'home') : 'home';
   const activeSection = topicsTab === 'flashcards' && routeParam ? routeParam : null;
-  const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
-  const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : TOPIC_ORDER;
+  // Edexcel has no flashcard/MCQ banks yet: empty sections, shared calcs + extended answers still work
+  const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : board === "edexcel" ? EMPTY_SECTIONS : SECTIONS;
+  const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : board === "edexcel" ? EMPTY_SECTIONS : TOPIC_ORDER;
 
   // Maps an attempt's topic to a section label for the progress tables
   const sectionOf = useCallback((t) => {
@@ -445,9 +448,12 @@ export default function App() {
         </div>
       )}
       <div style={menuSection}>
-        <Button variant="secondary" size="sm" data-close-menu icon="book" onClick={() => selectBoard((board || savedBoard) === "ocr" ? "aqa" : "ocr")}>
-          Switch to {(board || savedBoard) === "ocr" ? "AQA" : "OCR A"}
-        </Button>
+        <span style={menuLabel}>Exam board</span>
+        <div style={{ display: "flex", gap: 4 }}>
+          {BOARDS.map(bd => (
+            <Button key={bd.id} size="sm" data-close-menu variant={(board || savedBoard) === bd.id ? "primary" : "secondary"} style={{ flex: 1 }} onClick={() => selectBoard(bd.id)}>{bd.label}</Button>
+          ))}
+        </div>
         {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
           <Button variant="secondary" size="sm" data-close-menu icon="settings" onClick={() => setShowAccountSettings(true)}>Account settings</Button>
         )}
@@ -458,7 +464,7 @@ export default function App() {
 
   const renderShell = (children, opts = {}) => (
     <AppShell user={authUser} menu={accountMenu} nav={isTutor ? tutorNav : studentNav}
-      brandSub={board ? (board === "ocr" ? "OCR A" : "AQA") : (isTutor ? "Tutor" : undefined)} {...opts}>
+      brandSub={board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
       {children}
     </AppShell>
   );
@@ -672,11 +678,8 @@ export default function App() {
   if (screen === "board") return renderShell(
     <>
       <PageHeader eyebrow="Welcome" title="Choose your exam board" sub="You can switch at any time from the account menu." />
-      <div className="cm-grid-2" style={{ maxWidth: 760 }}>
-        {[
-          { id: "aqa", label: "AQA", desc: "Year 1 and Year 2. Full spec coverage.", tags: ["Physical", "Inorganic", "Organic", "Required practicals"] },
-          { id: "ocr", label: "OCR A", desc: "Modules 2–6 fully covered. Module 1 is PAG practical skills only.", tags: ["Modules 2–6", "Physical", "Organic", "PAG skills"] },
-        ].map(bd => (
+      <div className="cm-grid-3" style={{ maxWidth: 1000 }}>
+        {BOARDS.map(bd => (
           <button key={bd.id} className="cm-card-link" onClick={() => selectBoard(bd.id)} style={{ textAlign: "left", padding: 22, borderRadius: T.radius, background: T.card, border: `1px solid ${T.border}`, cursor: "pointer", display: "flex", flexDirection: "column", gap: 10, color: T.ink, fontFamily: "inherit" }}>
             <span style={{ fontFamily: T.display, fontSize: 28, fontWeight: 800 }}>{bd.label}</span>
             <span style={{ fontSize: 13, color: T.muted }}>{bd.desc}</span>
@@ -782,7 +785,7 @@ export default function App() {
             right={<Button variant="secondary" icon="arrowLeft" onClick={goHome}>Dashboard</Button>} />
           <ShellBody>
       {topicsTab === "flashcards" && quizScreen === "setup" && (() => {
-        const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
+        const allSections = CURRENT_SECTIONS;
         const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
         const a2Secs = board === "ocr" ? OCR_A2_SECTIONS : AQA_A2_SECTIONS;
         const effectiveCount = quizCount === "custom" ? Math.min(99, Math.max(25, quizCustomCount || 25)) : quizCount;
@@ -1061,23 +1064,20 @@ export default function App() {
         );
       })()}
       {topicsTab === "flashcards" && !quizScreen && (
-        <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
-          {/* Random Quiz launch card */}
-          <button onClick={() => { if (hasFullAccess) setQuizScreen("setup"); }} style={{
-            width: "100%", padding: "14px 16px", borderRadius: "16px", border: "none",
-            background: hasFullAccess ? "linear-gradient(135deg,#29ABE2 0%,#0090cc 100%)" : "linear-gradient(135deg,#94a3b8 0%,#64748b 100%)", color: "#ffffff",
-            cursor: hasFullAccess ? "pointer" : "default", textAlign: "left", fontFamily: "inherit",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            boxShadow: hasFullAccess ? "0 4px 16px rgba(41,171,226,0.35)" : "none", marginBottom: "12px", marginTop: "4px",
-            position: "relative", overflow: "hidden",
-          }}>
-            <div>
-              <div style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.3px" }}>{hasFullAccess ? "" : "🔒 "}Random Quiz</div>
-              <div style={{ fontSize: "11px", opacity: 0.85, marginTop: "2px" }}>{hasFullAccess ? "Spaced repetition · 25 cards · adapts to your gaps" : "Unlock with access key for full quiz access"}</div>
+        <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+          <button className={hasFullAccess ? "cm-card-link" : ""} disabled={!hasFullAccess} onClick={() => { if (hasFullAccess) setQuizScreen("setup"); }}
+            style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", textAlign: "left", borderRadius: T.radius, background: T.card, border: `1px solid ${T.border}`, cursor: hasFullAccess ? "pointer" : "default", opacity: hasFullAccess ? 1 : 0.6, color: T.ink }}>
+            <IconTile name="bolt" tone="accent" size={40} />
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+              <span style={{ fontWeight: 700, fontSize: 15 }}>Random quiz</span>
+              <span style={{ fontSize: 12, color: T.muted }}>{hasFullAccess ? "Spaced repetition · 25+ cards · shows your weak cards more often" : "Pro feature · unlock from the account menu"}</span>
             </div>
-            <div style={{ fontSize: "20px", opacity: 0.8 }}>{hasFullAccess ? "→" : ""}</div>
+            {hasFullAccess ? <Icon name="arrowRight" color={T.faint} /> : <Chip tone="neutral">Pro</Chip>}
           </button>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
+          {CURRENT_SECTIONS.length === 0 && (
+            <Card padding={0}><EmptyState icon="cards" title={`${boardLabel(board)} flashcards are being written`} body="Calculations and the AI Examiner already work for every board. Flashcards and MCQs for this board will appear here as they're added." /></Card>
+          )}
+          <div className="cm-grid-3">
             {CURRENT_SECTIONS.map(section => {
               const fc = FOLDER_COLORS[section.id] || FOLDER_COLORS.physical_as;
               const totalCards = section.topics.reduce((sum, id) => sum + SETS[id].cards.length, 0);
@@ -1085,32 +1085,26 @@ export default function App() {
               const pct = totalCards > 0 ? Math.round((totalKnown / totalCards) * 100) : 0;
               const sectionLocked = !hasFullAccess && !FREE_FLASHCARD_SECTIONS.includes(section.id);
               return (
-                <button key={section.id} onClick={() => { if (!sectionLocked) navigate(`/${board}/flashcards/${section.id}`); }} style={{
-                  padding: "16px 14px 14px", borderRadius: "16px",
-                  background: fc.bg, border: `2px solid ${fc.border}40`,
-                  cursor: sectionLocked ? "default" : "pointer", textAlign: "left", fontFamily: "inherit",
-                  position: "relative", overflow: "hidden", minHeight: "110px",
-                  display: "flex", flexDirection: "column", justifyContent: "space-between",
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-                }}>
-                  {sectionLocked && <LockedOverlay />}
-                  <div style={{ borderLeft: `4px solid ${fc.accent}`, paddingLeft: "10px" }}>
-                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", lineHeight: 1.3 }}>{section.label}</div>
-                    <div style={{ fontSize: "11px", color: fc.accent, marginTop: "3px", fontWeight: 600 }}>{section.topics.length} topics · {totalCards} cards</div>
+                <button key={section.id} className={sectionLocked ? "" : "cm-card-link"} disabled={sectionLocked} onClick={() => { if (!sectionLocked) navigate(`/${board}/flashcards/${section.id}`); }}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8, padding: 16, textAlign: "left", borderRadius: T.radius, background: T.card, border: `1px solid ${T.border}`, cursor: sectionLocked ? "default" : "pointer", opacity: sectionLocked ? 0.6 : 1, color: T.ink }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                    <span style={{ width: 10, height: 10, borderRadius: "50%", background: fc.accent }} />
+                    {sectionLocked ? <Chip tone="neutral">Pro</Chip> : pct > 0 && <Chip tone={pct === 100 ? "green" : "accent"}>{pct}%</Chip>}
                   </div>
-                  <div style={{ marginTop: "10px" }}>
-                    <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
-                    </div>
-                    {pct > 0 && <div style={{ fontSize: "10px", color: fc.accent, marginTop: "4px", fontWeight: 600 }}>{pct}% mastered</div>}
+                  <span style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.3 }}>{section.label}</span>
+                  <span style={{ fontSize: 12, color: T.muted }}>{section.topics.length} topics · {totalCards} cards</span>
+                  <div style={{ width: "100%", height: 5, background: T.line, borderRadius: 3, overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: 3 }} />
                   </div>
                 </button>
               );
             })}
           </div>
-          <div style={{ textAlign: "center", marginTop: "16px", fontSize: "12px", color: "#4a6070" }}>
-            {CURRENT_TOPIC_ORDER.map(id => SETS[id]?.cards.length || 0).reduce((a,b)=>a+b,0)} cards · {CURRENT_TOPIC_ORDER.length} topics
-          </div>
+          {CURRENT_SECTIONS.length > 0 && (
+            <div style={{ textAlign: "center", fontSize: 12, color: T.muted }}>
+              {CURRENT_TOPIC_ORDER.map(id => SETS[id]?.cards.length || 0).reduce((a, b) => a + b, 0)} cards · {CURRENT_TOPIC_ORDER.length} topics
+            </div>
+          )}
         </div>
       )}
       {topicsTab === "synth" && !hasFullAccess && (

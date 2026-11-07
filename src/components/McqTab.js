@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import McqQuestion from "./McqQuestion";
+import { T, boardLabel } from "../ui/theme";
+import { Card, CardHeader, Chip, Button, Bar, Icon, EmptyState } from "../ui/components";
+
+const CATEGORY_COLOUR = { Physical: T.accentText, Inorganic: T.green, Organic: T.amber, Past: T.indigo };
 
 export default function McqTab({ board, mcqData, logAttempt }) {
   const [mcqYear, setMcqYear] = useState("as");
@@ -12,7 +16,7 @@ export default function McqTab({ board, mcqData, logAttempt }) {
   const [mcqQuizSize, setMcqQuizSize] = useState(null);
   const [mcqOpenCats, setMcqOpenCats] = useState({});
 
-  const mcqBoard = board === "ocr" ? "OCR_A" : "AQA";
+  const mcqBoard = board === "ocr" ? "OCR_A" : board === "edexcel" ? "EDEXCEL" : "AQA";
   const mcqTopics = Object.entries(mcqData.topics).map(([id, t]) => ({ id, ...t })).filter(t => t.board === mcqBoard);
   const boardQuestions = mcqData.questions.filter(q => { const t = mcqData.topics[q.topic]; return t && t.board === mcqBoard; });
   const topicQuestions = mcqTopic ? [...boardQuestions.filter(q => q.topic === mcqTopic)].sort(() => Math.random() - 0.5) : [];
@@ -20,177 +24,129 @@ export default function McqTab({ board, mcqData, logAttempt }) {
   const activeQuestions = mcqMode === "random" ? shuffledAll : topicQuestions;
   const currentQ = activeQuestions[mcqIdx];
 
+  const reset = () => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); setMcqQuizSize(null); };
+  const startRandom = (size) => { setMcqMode("random"); setMcqTopic("_random"); setMcqQuizSize(size); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); };
+
+  // ── Topic picker ──
   if (!mcqTopic && mcqMode === "topic") {
-    const mcqCategoryColors = {
-      "Physical": "#0284c7",
-      "Inorganic": "#059669",
-      "Organic": "#d97706",
-    };
-    const getCategory = (id) => {
-      if (id.startsWith("OCR-P")) return "Past Paper MCQs";
-      if (id.startsWith("3.1")) return "Physical Chemistry";
-      if (id.startsWith("3.2")) return "Inorganic Chemistry";
-      return "Organic Chemistry";
-    };
-    const getCatColor = (id) => {
-      if (id.startsWith("OCR-P")) return "#7c3aed";
-      if (id.startsWith("3.1")) return mcqCategoryColors["Physical"];
-      if (id.startsWith("3.2")) return mcqCategoryColors["Inorganic"];
-      return mcqCategoryColors["Organic"];
-    };
+    const getCategory = (id) => id.startsWith("OCR-P") ? "Past paper MCQs" : id.startsWith("3.1") ? "Physical chemistry" : id.startsWith("3.2") ? "Inorganic chemistry" : "Organic chemistry";
+    const getCatColour = (id) => id.startsWith("OCR-P") ? CATEGORY_COLOUR.Past : id.startsWith("3.1") ? CATEGORY_COLOUR.Physical : id.startsWith("3.2") ? CATEGORY_COLOUR.Inorganic : CATEGORY_COLOUR.Organic;
     const filteredTopics = mcqTopics.filter(t => mcqYear === "as" ? t.level === "AS" : true);
     const grouped = {};
-    filteredTopics.forEach(t => {
-      const cat = getCategory(t.id);
-      if (!grouped[cat]) grouped[cat] = [];
-      grouped[cat].push(t);
-    });
+    filteredTopics.forEach(t => { const cat = getCategory(t.id); (grouped[cat] = grouped[cat] || []).push(t); });
+
+    if (boardQuestions.length === 0) return (
+      <div style={{ padding: 20 }}>
+        <Card padding={0}><EmptyState icon="checkSquare" title={`${boardLabel(board)} MCQs are being written`} body="Calculations and the AI Examiner already work for every board. The MCQ bank for this board will appear here as it's added." /></Card>
+      </div>
+    );
 
     return (
-      <div style={{ padding:"16px", flex:1, overflowY:"auto" }}>
-        <p style={{ color:"#4a6080", fontSize:"14px", marginBottom:"12px", lineHeight:1.5 }}>
-          Multiple choice questions with solutions. Pick a topic or try a random quiz.
-        </p>
-        <div style={{ display:"flex", gap:"0", marginBottom:"16px", borderRadius:"10px", overflow:"hidden", border:"2px solid #dc2626" }}>
-          {[{key:"as",label:"AS (Year 1)"},{key:"a2",label:"A2 (Year 2)"}].map(tab => (
-            <button key={tab.key} onClick={() => setMcqYear(tab.key)} style={{
-              flex:1, padding:"10px", border:"none", fontSize:"13px", fontWeight:700,
-              fontFamily:"inherit", cursor:"pointer",
-              background: mcqYear === tab.key ? "#dc2626" : "#ffffff",
-              color: mcqYear === tab.key ? "#ffffff" : "#dc2626",
-            }}>{tab.label}</button>
-          ))}
+      <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <span style={{ color: T.muted, fontSize: 13, flex: 1, minWidth: 220 }}>Multiple choice with worked explanations. Pick a topic, or take a random quiz across the year.</span>
+          <YearToggle value={mcqYear} onChange={setMcqYear} />
         </div>
-        <div style={{ marginBottom:"18px" }}>
-          <div style={{ fontSize:"12px", fontWeight:700, color:"#dc2626", textTransform:"uppercase", letterSpacing:"0.8px", marginBottom:"8px" }}>
-            Random Quiz
-          </div>
-          <div style={{ display:"flex", gap:"8px" }}>
+
+        <Card padding={16} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <CardHeader title="Random quiz" sub={`${boardQuestions.length} questions in the ${boardLabel(board)} bank`} />
+          <div className="cm-grid-4" style={{ gap: 10 }}>
             {[25, 50, 100].map(size => (
-              <button key={size} onClick={() => { setMcqMode("random"); setMcqTopic("_random"); setMcqQuizSize(size); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
-                style={{ flex:1, padding:"12px 8px", borderRadius:"12px", border:"2px solid #dc262630", cursor:"pointer",
-                  background:"#fff", fontFamily:"inherit", textAlign:"center",
-                  boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
-                <div style={{ fontSize:"18px", fontWeight:800, color:"#dc2626" }}>{size}</div>
-                <div style={{ fontSize:"10px", color:"#64748b", fontWeight:600, marginTop:"2px" }}>questions</div>
+              <button key={size} onClick={() => startRandom(size)} className="cm-card-link" style={optionCard}>
+                <span style={{ fontFamily: T.display, fontSize: 22, fontWeight: 800, color: T.ink }}>{size}</span>
+                <span style={{ fontSize: 12, color: T.muted }}>questions</span>
               </button>
             ))}
             <button onClick={() => {
-              const custom = prompt("How many questions? (1-" + mcqData.questions.length + ")");
-              const num = parseInt(custom);
-              if (num && num > 0 && num <= mcqData.questions.length) {
-                setMcqMode("random"); setMcqTopic("_random"); setMcqQuizSize(num); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 });
-              }
-            }}
-              style={{ flex:1, padding:"12px 8px", borderRadius:"12px", border:"2px solid #dc262630", cursor:"pointer",
-                background:"#fff", fontFamily:"inherit", textAlign:"center",
-                boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
-              <div style={{ fontSize:"18px", fontWeight:800, color:"#dc2626" }}>?</div>
-              <div style={{ fontSize:"10px", color:"#64748b", fontWeight:600, marginTop:"2px" }}>custom</div>
+              const custom = prompt(`How many questions? (1-${boardQuestions.length})`);
+              const num = parseInt(custom, 10);
+              if (num && num > 0 && num <= boardQuestions.length) startRandom(num);
+            }} className="cm-card-link" style={optionCard}>
+              <span style={{ fontFamily: T.display, fontSize: 22, fontWeight: 800, color: T.ink }}>?</span>
+              <span style={{ fontSize: 12, color: T.muted }}>custom</span>
             </button>
           </div>
-        </div>
+        </Card>
+
         {Object.entries(grouped).map(([cat, topics]) => {
-          const color = getCatColor(topics[0].id);
-          const isOpen = mcqOpenCats[cat];
+          const colour = getCatColour(topics[0].id);
+          const isOpen = !!mcqOpenCats[cat];
           const totalQs = topics.reduce((sum, t) => sum + t.questionCount, 0);
           return (
-            <div key={cat} style={{ marginBottom:"10px" }}>
-              <button onClick={() => setMcqOpenCats(prev => ({ ...prev, [cat]: !prev[cat] }))}
-                style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between",
-                  padding:"12px 14px", borderRadius:"12px", border:`2px solid ${color}25`,
-                  background: isOpen ? `${color}08` : "#fff", cursor:"pointer", fontFamily:"inherit",
-                  boxShadow:"0 2px 8px rgba(0,0,0,0.04)", transition:"all 0.2s" }}>
-                <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
-                  <div style={{ width:"10px", height:"10px", borderRadius:"50%", background: color }} />
-                  <div style={{ fontSize:"14px", fontWeight:800, color: color, letterSpacing:"0.3px" }}>{cat}</div>
-                </div>
-                <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
-                  <span style={{ fontSize:"11px", fontWeight:600, color:"#64748b" }}>{topics.length} topics · {totalQs} Qs</span>
-                  <span style={{ fontSize:"14px", color:"#94a3b8", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                    transition:"transform 0.2s" }}>▼</span>
-                </div>
+            <Card key={cat} padding={0}>
+              <button onClick={() => setMcqOpenCats(prev => ({ ...prev, [cat]: !prev[cat] }))} style={{
+                width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", border: "none", background: "transparent", cursor: "pointer", textAlign: "left",
+              }}>
+                <span style={{ width: 10, height: 10, borderRadius: "50%", background: colour, flexShrink: 0 }} />
+                <span style={{ fontFamily: T.display, fontSize: 16, fontWeight: 700, color: T.ink, flex: 1 }}>{cat}</span>
+                <span style={{ fontSize: 12, color: T.muted }}>{topics.length} topics · {totalQs} Qs</span>
+                <Icon name="chevronDown" size={16} color={T.faint} style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
               </button>
               {isOpen && (
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px", marginTop:"10px", paddingLeft:"4px", paddingRight:"4px" }}>
+                <div className="cm-grid-3" style={{ padding: "0 16px 16px", gap: 10 }}>
                   {topics.map(t => (
-                    <button key={t.id} onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
-                      style={{ background:"#fff", border:`2px solid ${color}30`, borderRadius:"14px", padding:"14px 12px",
-                        textAlign:"left", cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:"6px", marginBottom:"8px" }}>
-                        <div style={{ width:"8px", height:"8px", borderRadius:"50%", background: color }} />
-                        {t.level === "A2" && mcqYear === "a2" && <span style={{ fontSize:"9px", fontWeight:700, color:"#fff", background:"#7c3aed", borderRadius:"4px", padding:"1px 5px" }}>A2</span>}
+                    <button key={t.id} className="cm-card-link" onClick={() => { setMcqTopic(t.id); setMcqMode("topic"); setMcqIdx(0); setMcqSelected(null); setMcqRevealed(false); setMcqScore({ correct: 0, total: 0 }); }}
+                      style={{ ...optionCard, alignItems: "flex-start", textAlign: "left", gap: 6 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 11, fontWeight: 800, color: colour }}>{t.id.startsWith("OCR-P") ? "" : t.id}</span>
+                        {t.level === "A2" && <Chip tone="indigo" style={{ padding: "1px 7px", fontSize: 10 }}>A2</Chip>}
                       </div>
-                      <div style={{ fontSize:"13px", fontWeight:700, color:"#1a2d45", lineHeight:1.3, marginBottom:"4px" }}>{t.name}</div>
-                      <div style={{ fontSize:"11px", color: color, fontWeight:600 }}>{t.questionCount} questions</div>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: T.ink, lineHeight: 1.3 }}>{t.name}</span>
+                      <span style={{ fontSize: 12, color: T.muted }}>{t.questionCount} questions</span>
                     </button>
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
           );
         })}
       </div>
     );
   }
 
-  if (!currentQ) return (
-    <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
-      <div style={{ fontSize:"22px", fontWeight:800, color:"#059669", marginBottom:"16px", letterSpacing:"-0.5px" }}>Complete</div>
-      <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Quiz Complete!</div>
-      <div style={{ fontSize:"18px", color:"#dc2626", fontWeight:700, marginBottom:"4px" }}>{mcqScore.correct} / {mcqScore.total} correct</div>
-      <div style={{ fontSize:"15px", color:"#64748b", marginBottom:"20px" }}>
-        {mcqScore.total > 0 ? `${Math.round((mcqScore.correct / mcqScore.total) * 100)}%` : ""}
-      </div>
-      <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); setMcqQuizSize(null); }}
-        style={{ padding:"12px 28px", borderRadius:"12px", border:"none", cursor:"pointer",
-          background:"#dc2626", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
-        ← Back to Topics
-      </button>
-    </div>
-  );
-
-  return (
-    <div style={{ padding:"0", flex:1, overflowY:"auto", display:"flex", flexDirection:"column" }}>
-      <style>{`@keyframes mcqFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
-
-      <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
-        <button onClick={() => { setMcqTopic(null); setMcqMode("topic"); setMcqIdx(0); setMcqScore({ correct: 0, total: 0 }); setMcqQuizSize(null); }}
-          style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
-            color:"#dc2626", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
-          ← Back
-        </button>
-        <div style={{ flex:1 }}>
-          <div style={{ fontSize:"14px", fontWeight:700, color:"#1a2d45" }}>
-            {mcqMode === "random" ? "Random Quiz" : `${mcqTopic} — ${mcqData.topics[mcqTopic]?.name || ""}`}
+  // ── Finished ──
+  if (!currentQ) {
+    const p = mcqScore.total > 0 ? Math.round((mcqScore.correct / mcqScore.total) * 100) : 0;
+    return (
+      <div style={{ padding: 20, display: "flex", justifyContent: "center" }}>
+        <Card style={{ maxWidth: 420, width: "100%", textAlign: "center", display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+          <Chip tone={p >= 75 ? "green" : p >= 50 ? "amber" : "red"}>{p >= 90 ? "Outstanding" : p >= 70 ? "Great work" : p >= 50 ? "Good effort" : "Keep practising"}</Chip>
+          <div style={{ fontFamily: T.display, fontSize: 48, fontWeight: 800, lineHeight: 1 }}>{p}%</div>
+          <div style={{ color: T.muted }}>{mcqScore.correct} of {mcqScore.total} correct</div>
+          <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+            <Button variant="primary" onClick={reset}>Back to topics</Button>
+            {mcqMode === "random" && <Button onClick={() => startRandom(mcqQuizSize)}>Play again</Button>}
           </div>
-        </div>
-        <div style={{ fontSize:"13px", fontWeight:700, color:"#dc2626", background:"#dc262612", padding:"4px 10px", borderRadius:"8px" }}>
-          {mcqScore.correct}/{mcqScore.total} · Q{mcqIdx + 1}/{activeQuestions.length}
-        </div>
+        </Card>
       </div>
+    );
+  }
 
-      <div style={{ padding:"8px 16px 0" }}>
-        <div style={{ height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
-          <div style={{ height:"100%", width:`${((mcqIdx + 1) / activeQuestions.length) * 100}%`,
-            background:"#dc2626", borderRadius:"2px", transition:"width 0.3s ease" }}/>
+  // ── Question ──
+  return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <style>{`@keyframes mcqFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}`}</style>
+      <div style={{ padding: "14px 20px 10px", display: "flex", alignItems: "center", gap: 12, borderBottom: `1px solid ${T.line}`, flexWrap: "wrap" }}>
+        <Button size="sm" icon="arrowLeft" onClick={reset}>Topics</Button>
+        <div style={{ flex: 1, minWidth: 160, fontWeight: 600, fontSize: 14, color: T.ink }}>
+          {mcqMode === "random" ? "Random quiz" : `${mcqTopic} · ${mcqData.topics[mcqTopic]?.name || ""}`}
         </div>
+        <Chip tone="accent">Q{mcqIdx + 1} / {activeQuestions.length}</Chip>
+        <Chip tone={mcqScore.total === 0 ? "neutral" : mcqScore.correct / mcqScore.total >= 0.75 ? "green" : mcqScore.correct / mcqScore.total >= 0.5 ? "amber" : "red"}>{mcqScore.correct} / {mcqScore.total} right</Chip>
       </div>
+      <div style={{ padding: "10px 20px 0" }}><Bar value={((mcqIdx + 1) / activeQuestions.length) * 100} colour={T.accent} height={5} /></div>
 
-      <div key={currentQ.id} style={{ padding:"16px", animation:"mcqFadeIn 0.3s ease" }}>
+      <div key={currentQ.id} style={{ padding: 20, animation: "mcqFadeIn 0.25s ease", maxWidth: 820 }}>
         <McqQuestion
           question={currentQ}
           selected={mcqSelected}
           revealed={mcqRevealed}
-          accentColor="#dc2626"
+          accentColor={T.ink}
           onSelect={setMcqSelected}
           onCheck={() => {
             const correct = mcqSelected === currentQ.answer;
             setMcqRevealed(true);
-            setMcqScore(prev => ({
-              correct: prev.correct + (correct ? 1 : 0),
-              total: prev.total + 1
-            }));
+            setMcqScore(prev => ({ correct: prev.correct + (correct ? 1 : 0), total: prev.total + 1 }));
             logAttempt && logAttempt({
               board, type: "mcq", questionId: currentQ.id, topic: currentQ.topic,
               topicLabel: mcqData.topics[currentQ.topic]?.name || null, correct,
@@ -200,6 +156,25 @@ export default function McqTab({ board, mcqData, logAttempt }) {
           isLast={mcqIdx >= activeQuestions.length - 1}
         />
       </div>
+    </div>
+  );
+}
+
+const optionCard = {
+  display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "14px 12px", borderRadius: T.radiusSm,
+  background: T.card, border: `1px solid ${T.border}`, cursor: "pointer", color: T.ink,
+};
+
+export function YearToggle({ value, onChange, options = [{ key: "as", label: "AS · Year 1" }, { key: "a2", label: "A2 · Year 2" }] }) {
+  return (
+    <div style={{ display: "inline-flex", padding: 3, borderRadius: 10, background: T.soft, gap: 2 }}>
+      {options.map(o => (
+        <button key={o.key} onClick={() => onChange(o.key)} style={{
+          padding: "6px 12px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600,
+          background: value === o.key ? T.card : "transparent", color: value === o.key ? T.ink : T.muted,
+          boxShadow: value === o.key ? "0 1px 2px rgba(15,29,53,0.08)" : "none",
+        }}>{o.label}</button>
+      ))}
     </div>
   );
 }
