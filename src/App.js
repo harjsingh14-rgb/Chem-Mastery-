@@ -2,6 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { auth, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey, recordAttempt, joinClass, leaveClass } from "./firebase";
 import TutorPage from "./components/TutorPage";
+import StudentDashboard from "./components/StudentDashboard";
+import ProgressPage from "./components/ProgressPage";
+import PracticeGrid from "./components/PracticeGrid";
+import { HomeworkPage, VideosPage } from "./components/Placeholders";
+import AppShell, { ShellBody } from "./ui/AppShell";
+import { T } from "./ui/theme";
+import { Button, Card, Chip, Input, Notice, PageHeader, EmptyState } from "./ui/components";
+import { invalidateAttempts } from "./hooks/useAttempts";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER } from "./data/sections";
@@ -86,6 +94,7 @@ export default function App() {
   const logAttempt = useCallback((data) => {
     if (!authUser) return;
     recordAttempt(authUser, userProfile, data);
+    invalidateAttempts();
   }, [authUser, userProfile]);
 
   const handleJoinClass = async () => {
@@ -267,15 +276,32 @@ export default function App() {
   const board = ['aqa', 'ocr'].includes(pathParts[0]) ? pathParts[0] : null;
   const routeTab = pathParts[1] || null;
   const routeParam = pathParts[2] || null;
+  let savedBoard = userProfile?.board || null;
+  if (!savedBoard) { try { savedBoard = localStorage.getItem("hsj-board"); } catch {} }
+  if (!['aqa', 'ocr'].includes(savedBoard)) savedBoard = null;
   const screen = pathParts[0] === 'tutor' ? 'tutor'
     : !board ? 'board'
-    : routeTab === 'dashboard' ? 'dashboard'
+    : (routeTab === 'dashboard' || routeTab === 'progress') ? 'dashboard'
     : routeTab === 'cards' ? 'cards'
     : 'topics';
   const topicsTab = screen === 'topics' ? (routeTab || 'home') : 'home';
   const activeSection = topicsTab === 'flashcards' && routeParam ? routeParam : null;
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : SECTIONS;
   const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : TOPIC_ORDER;
+
+  // Maps an attempt's topic to a section label for the progress tables
+  const sectionOf = useCallback((t) => {
+    if (t.type === "calc") return "Calculations";
+    if (t.type === "extended") return "Extended answers";
+    const sec = CURRENT_SECTIONS.find(s => s.topics.includes(t.key));
+    if (sec) return sec.label;
+    const k = String(t.key || "");
+    if (k.startsWith("3.1")) return "Physical chemistry";
+    if (k.startsWith("3.2")) return "Inorganic chemistry";
+    if (k.startsWith("3.3")) return "Organic chemistry";
+    if (k.startsWith("OCR")) return "OCR past papers";
+    return "Other";
+  }, [CURRENT_SECTIONS]);
 
   const { studyLog, todayKey, logActivity, currentStreak, scoreHistory, logScore } = useStudyProgress();
   // --- Free tier: first item in each section is free ---
@@ -306,7 +332,7 @@ export default function App() {
     startQuiz, recordQuizAnswer,
     AQA_AS_SECTIONS, AQA_A2_SECTIONS, OCR_AS_SECTIONS, OCR_A2_SECTIONS } = quiz;
 
-  const selectBoard = (b) => { navigate(`/${b}`); track("select_board", { board: b }); };
+  const selectBoard = (b) => { try { localStorage.setItem("hsj-board", b); } catch {} navigate(`/${b}`); track("select_board", { board: b }); };
   const selectTopic = (t) => { fcSelectTopic(t, board); navigate(`/${board}/cards/${t}`); };
 
   const goBack = () => {
@@ -345,114 +371,96 @@ export default function App() {
   const bg = "#f0f4f8";
   const base = { minHeight: "100vh", background: bg, fontFamily: "'Outfit', 'DM Sans', 'Segoe UI', sans-serif", color: "#1a2d45", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
 
-  const Header = ({ sub, back }) => (
-    <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", position: "relative", zIndex: 10, flexShrink: 0 }}>
-      {back && <button onClick={back} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>}
-      <div style={{ background: "#fff", borderRadius: "10px", padding: "4px 8px", display: "flex", alignItems: "center", flexShrink: 0 }}>
-        <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "52px", objectFit: "contain", display: "block" }} />
+  // Remember the board so "/" goes straight back to it next time
+  useEffect(() => { if (board) { try { localStorage.setItem("hsj-board", board); } catch {} } }, [board]);
+  useEffect(() => {
+    if (screen === "board" && authUser && savedBoard) navigate(`/${savedBoard}`, { replace: true });
+  }, [screen, authUser, savedBoard, navigate]);
+
+  // ─── App shell: nav + account menu shared by every signed-in screen ───
+  const navBoard = board || savedBoard || "aqa";
+  const studentNav = [
+    { id: "home", label: "Dashboard", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
+    { id: "homework", label: "Homework", icon: "checkSquare", to: `/${navBoard}/homework`, active: screen === "topics" && topicsTab === "homework" },
+    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "videos"].includes(topicsTab)) },
+    { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
+    { id: "videos", label: "Videos", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
+  ];
+  const tutorNav = [
+    { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" },
+    { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
+    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "videos"].includes(topicsTab)) },
+    { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
+  ];
+
+  const menuSection = { borderTop: `1px solid ${T.line}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 6 };
+  const menuLabel = { fontSize: 12, fontWeight: 600, color: T.muted };
+  const accountMenu = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: T.ink }}>{authUser?.displayName || "Student"}</div>
+        <div style={{ fontSize: 12, color: T.muted, wordBreak: "break-all" }}>{authUser?.email}</div>
       </div>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "18px", color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.1 }}>HSJ TUITION</div>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "11px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>A-Level Chemistry. Mastered.</div>
-      </div>
-      {/* User avatar */}
-      <div style={{ position: "relative" }}>
-        <button onClick={() => setShowUserMenu(v => !v)} style={{
-          width: "38px", height: "38px", borderRadius: "50%", border: "2px solid #29ABE2",
-          background: authUser?.photoURL ? `url(${authUser.photoURL}) center/cover` : "#29ABE2",
-          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-          color: "#fff", fontSize: "15px", fontWeight: 700, fontFamily: "inherit", padding: 0
-        }}>
-          {!authUser?.photoURL && (authUser?.displayName?.[0] || authUser?.email?.[0] || "?").toUpperCase()}
-        </button>
-        {showUserMenu && (
-          <>
-            <div onClick={() => setShowUserMenu(false)} style={{ position: "fixed", inset: 0, zIndex: 99 }} />
-            <div style={{ position: "absolute", right: 0, top: "48px", background: "#ffffff", borderRadius: "14px", boxShadow: "0 8px 32px rgba(0,0,0,0.18)", padding: "16px", minWidth: "240px", zIndex: 100 }}>
-              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", marginBottom: "2px" }}>{authUser?.displayName || "Student"}</div>
-              <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px" }}>{authUser?.email}</div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: hasFullAccess ? "#059669" : "#d97706", background: hasFullAccess ? "#ecfdf5" : "#fffbeb", borderRadius: "6px", padding: "4px 10px", display: "inline-block", marginBottom: "14px" }}>
-                {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "access_key" ? "Full Access (Key)" : userProfile?.role === "paid" ? "Full Access (Paid)" : userProfile?.classId ? "Full Access (Class)" : "Free Plan"}
+      <Chip tone={hasFullAccess ? "green" : "amber"} style={{ alignSelf: "flex-start" }}>
+        {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "access_key" ? "Full access · key" : userProfile?.role === "paid" ? "Full access · paid" : userProfile?.classId ? "Full access · class" : "Free plan"}
+      </Chip>
+      {isTutor && <Button variant="primary" data-close-menu onClick={() => navigate("/tutor")} iconRight="arrowRight">Tutor dashboard</Button>}
+      {!isTutor && (
+        <div style={menuSection}>
+          {userProfile?.classId ? (
+            <>
+              <span style={menuLabel}>Your class</span>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                <span style={{ fontSize: 13, fontWeight: 700 }}>{userProfile.className || userProfile.classId}</span>
+                <Button size="sm" variant="ghost" onClick={handleLeaveClass}>Leave</Button>
               </div>
-              {isTutor && (
-                <button onClick={() => { setShowUserMenu(false); navigate("/tutor"); }} style={{
-                  width: "100%", padding: "10px", borderRadius: "10px", border: "none", marginBottom: "12px",
-                  background: "#1a2d45", color: "#fff", fontSize: "13px", fontWeight: 700,
-                  cursor: "pointer", fontFamily: "inherit"
-                }}>Tutor dashboard →</button>
-              )}
-              {!isTutor && (
-                <div style={{ marginBottom: "14px", paddingBottom: "12px", borderBottom: "1px solid #e0e8f0" }}>
-                  {userProfile?.classId ? (
-                    <div>
-                      <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "4px" }}>Your class</div>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-                        <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>{userProfile.className || userProfile.classId}</span>
-                        <button onClick={handleLeaveClass} style={{ background: "none", border: "none", color: "#94a3b8", fontSize: "11px", cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>Leave</button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Got a class code from your tutor?</div>
-                      <div style={{ display: "flex", gap: "6px" }}>
-                        <input value={classCodeInput} onChange={e => setClassCodeInput(e.target.value)} placeholder="e.g. HSJ-7K3P"
-                          style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1.5px solid #e0e8f0", fontSize: "13px", fontFamily: "inherit", outline: "none", textTransform: "uppercase" }}
-                          onFocus={e => e.target.style.borderColor = "#29ABE2"}
-                          onBlur={e => e.target.style.borderColor = "#e0e8f0"}
-                          onKeyDown={e => e.key === "Enter" && handleJoinClass()}
-                        />
-                        <button onClick={handleJoinClass} disabled={classLoading} style={{ padding: "8px 12px", borderRadius: "8px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: classLoading ? 0.6 : 1 }}>
-                          {classLoading ? "..." : "Join"}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  {classMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: classMsg.type === "success" ? "#059669" : "#dc2626" }}>{classMsg.text}</div>}
-                </div>
-              )}
-              {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
-                <button onClick={() => { setShowUserMenu(false); setShowAccountSettings(true); }} style={{
-                  background: "none", border: "none", color: "#7a95b0", fontSize: "11px",
-                  cursor: "pointer", fontFamily: "inherit", marginBottom: "8px", textDecoration: "underline"
-                }}>Account settings</button>
-              )}
-              {!hasFullAccess && (
-                <div style={{ marginBottom: "14px" }}>
-                  <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Have an access key?</div>
-                  <div style={{ display: "flex", gap: "6px" }}>
-                    <input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="e.g. HSJ-2026-ABCD"
-                      style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1.5px solid #e0e8f0", fontSize: "13px", fontFamily: "inherit", outline: "none" }}
-                      onFocus={e => e.target.style.borderColor = "#29ABE2"}
-                      onBlur={e => e.target.style.borderColor = "#e0e8f0"}
-                    />
-                    <button onClick={handleRedeemKey} disabled={accessKeyLoading} style={{ padding: "8px 12px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: accessKeyLoading ? 0.6 : 1 }}>
-                      {accessKeyLoading ? "..." : "Redeem"}
-                    </button>
-                  </div>
-                  {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
-                  <div style={{ borderTop: "1px solid #e0e8f0", marginTop: "12px", paddingTop: "12px" }}>
-                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "8px" }}>Or upgrade to Pro</div>
-                    <div style={{ display: "flex", gap: "6px" }}>
-                      <button onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        {checkoutLoading === "monthly" ? "..." : "£27.99/mo"}
-                      </button>
-                      <button onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading} style={{ flex: 1, padding: "8px", borderRadius: "8px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "11px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        {checkoutLoading === "yearly" ? "..." : "£249.99/yr"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <button onClick={() => { logOut(); setShowUserMenu(false); }} style={{
-                width: "100%", padding: "10px", borderRadius: "10px", border: "1.5px solid #e0e8f0",
-                background: "#ffffff", color: "#dc2626", fontSize: "13px", fontWeight: 600,
-                cursor: "pointer", fontFamily: "inherit"
-              }}>Log out</button>
-            </div>
-          </>
+            </>
+          ) : (
+            <>
+              <span style={menuLabel}>Got a class code from your tutor?</span>
+              <div style={{ display: "flex", gap: 6 }}>
+                <Input value={classCodeInput} onChange={e => setClassCodeInput(e.target.value)} placeholder="HSJ-7K3P" aria-label="Class code"
+                  style={{ flex: 1, minWidth: 0, textTransform: "uppercase", padding: "8px 10px", fontSize: 13 }} onKeyDown={e => e.key === "Enter" && handleJoinClass()} />
+                <Button variant="primary" size="sm" onClick={handleJoinClass} disabled={classLoading}>{classLoading ? "…" : "Join"}</Button>
+              </div>
+            </>
+          )}
+          {classMsg && <span style={{ fontSize: 11, fontWeight: 600, color: classMsg.type === "success" ? T.green : T.red }}>{classMsg.text}</span>}
+        </div>
+      )}
+      {!hasFullAccess && (
+        <div style={menuSection}>
+          <span style={menuLabel}>Have an access key?</span>
+          <div style={{ display: "flex", gap: 6 }}>
+            <Input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="HSJ-2026-ABCD" aria-label="Access key"
+              style={{ flex: 1, minWidth: 0, padding: "8px 10px", fontSize: 13 }} onKeyDown={e => e.key === "Enter" && handleRedeemKey()} />
+            <Button variant="accent" size="sm" onClick={handleRedeemKey} disabled={accessKeyLoading}>{accessKeyLoading ? "…" : "Redeem"}</Button>
+          </div>
+          {accessKeyMsg && <span style={{ fontSize: 11, fontWeight: 600, color: accessKeyMsg.type === "success" ? T.green : T.red }}>{accessKeyMsg.text}</span>}
+          <span style={{ ...menuLabel, marginTop: 4 }}>Or upgrade to Pro</span>
+          <div style={{ display: "flex", gap: 6 }}>
+            <Button variant="accent" size="sm" style={{ flex: 1 }} onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}>{checkoutLoading === "monthly" ? "…" : "£27.99/mo"}</Button>
+            <Button variant="primary" size="sm" style={{ flex: 1 }} onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}>{checkoutLoading === "yearly" ? "…" : "£249.99/yr"}</Button>
+          </div>
+        </div>
+      )}
+      <div style={menuSection}>
+        <Button variant="secondary" size="sm" data-close-menu icon="book" onClick={() => selectBoard((board || savedBoard) === "ocr" ? "aqa" : "ocr")}>
+          Switch to {(board || savedBoard) === "ocr" ? "AQA" : "OCR A"}
+        </Button>
+        {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
+          <Button variant="secondary" size="sm" data-close-menu icon="settings" onClick={() => setShowAccountSettings(true)}>Account settings</Button>
         )}
+        <Button variant="danger" size="sm" icon="logout" onClick={() => logOut()}>Log out</Button>
       </div>
     </div>
+  );
+
+  const renderShell = (children, opts = {}) => (
+    <AppShell user={authUser} menu={accountMenu} nav={isTutor ? tutorNav : studentNav}
+      brandSub={board ? (board === "ocr" ? "OCR A" : "AQA") : (isTutor ? "Tutor" : undefined)} {...opts}>
+      {children}
+    </AppShell>
   );
 
   // AUTH LOADING
@@ -654,221 +662,37 @@ export default function App() {
   );
 
   // TUTOR DASHBOARD
-  if (screen === "tutor") return (
-    <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-      <Header back={() => navigate("/")} />
-      {isTutor
-        ? <TutorPage authUser={authUser} userProfile={userProfile} />
-        : (
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
-            <div>
-              <div style={{ fontSize: "40px", marginBottom: "12px" }}>🔒</div>
-              <div style={{ fontSize: "18px", fontWeight: 800, color: "#1a2d45", marginBottom: "6px" }}>Tutor accounts only</div>
-              <div style={{ fontSize: "13px", color: "#7a95b0" }}>Ask HSJ Tuition to upgrade your account to a tutor account.</div>
-            </div>
-          </div>
-        )}
-    </div>
+  if (screen === "tutor") return renderShell(
+    isTutor
+      ? <TutorPage authUser={authUser} userProfile={userProfile} />
+      : <Card padding={0}><EmptyState icon="lock" title="Tutor accounts only" body="Ask HSJ Tuition to upgrade your account to a tutor account." /></Card>
   );
 
-  // BOARD SELECT
-  if (screen === "board") return (
-    <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      <Header />
-      <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#29ABE2", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>ChemMastery</p>
-        <h2 style={{ textAlign: "center", fontSize: "30px", fontWeight: 800, color: "#1a2d45", margin: "0 0 36px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
-        {isTutor && (
-          <button onClick={() => navigate("/tutor")} style={{ marginBottom: "24px", padding: "12px 22px", borderRadius: "12px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 14px rgba(26,45,69,0.3)" }}>
-            Tutor dashboard → classes &amp; student progress
+  // BOARD SELECT (shown once; afterwards "/" goes straight to the saved board)
+  if (screen === "board") return renderShell(
+    <>
+      <PageHeader eyebrow="Welcome" title="Choose your exam board" sub="You can switch at any time from the account menu." />
+      <div className="cm-grid-2" style={{ maxWidth: 760 }}>
+        {[
+          { id: "aqa", label: "AQA", desc: "Year 1 and Year 2. Full spec coverage.", tags: ["Physical", "Inorganic", "Organic", "Required practicals"] },
+          { id: "ocr", label: "OCR A", desc: "Modules 2–6 fully covered. Module 1 is PAG practical skills only.", tags: ["Modules 2–6", "Physical", "Organic", "PAG skills"] },
+        ].map(bd => (
+          <button key={bd.id} className="cm-card-link" onClick={() => selectBoard(bd.id)} style={{ textAlign: "left", padding: 22, borderRadius: T.radius, background: T.card, border: `1px solid ${T.border}`, cursor: "pointer", display: "flex", flexDirection: "column", gap: 10, color: T.ink, fontFamily: "inherit" }}>
+            <span style={{ fontFamily: T.display, fontSize: 28, fontWeight: 800 }}>{bd.label}</span>
+            <span style={{ fontSize: 13, color: T.muted }}>{bd.desc}</span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{bd.tags.map(t => <Chip key={t} tone="accent">{t}</Chip>)}</div>
+            <span className="cm-link" style={{ marginTop: 4 }}>Continue →</span>
           </button>
-        )}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
-          {[
-            { id: "aqa", label: "AQA", sub: "Chemistry", desc: "Year 1 and Year 2. Full spec coverage.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["Organic","Physical","Inorganic","Req. Practicals"] },
-            { id: "ocr", label: "OCR A", sub: "Chemistry", desc: "Modules 2-6 fully covered. Module 1 is PAG practical skills only.", accent: "#7c3aed", grad: "linear-gradient(145deg,#a855f7 0%,#7c3aed 55%,#5b21b6 100%)", features: ["Modules 2-6","Organic","Physical","PAG Skills"] },
-          ].map(b => (
-            <button key={b.id} onClick={() => selectBoard(b.id)} style={{
-              border: "none", cursor: "pointer", fontFamily: "inherit", padding: 0,
-              background: "#fff", borderRadius: "24px", overflow: "hidden",
-              boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
-              transition: "transform 0.18s, box-shadow 0.18s",
-              textAlign: "left", width: "100%",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.16)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.1)"; }}
-            >
-              {/* Header gradient with chemistry icons */}
-              <div style={{ background: b.grad, padding: "clamp(28px, 5vw, 44px) 28px", position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "relative", zIndex: 1 }}>
-                  <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "8px" }}>EXAM BOARD</div>
-                  <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(36px, 8vw, 48px)", fontWeight: 900, color: "#fff", lineHeight: 1, marginBottom: "4px" }}>{b.label}</div>
-                  <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "clamp(18px, 4vw, 22px)", fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>{b.sub}</div>
-                </div>
-              </div>
-              {/* Card body */}
-              <div style={{ padding: "20px 24px 24px" }}>
-                <div style={{ fontSize: "15px", color: "#4a6080", lineHeight: 1.5, marginBottom: "16px" }}>{b.desc}</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
-                  {b.features.map(f => (
-                    <span key={f} style={{ fontSize: "12px", fontWeight: 600, color: b.accent, background: `${b.accent}12`, border: `1px solid ${b.accent}30`, borderRadius: "8px", padding: "5px 12px" }}>{f}</span>
-                  ))}
-                </div>
-                <div style={{ background: b.accent, color: "#fff", borderRadius: "14px", padding: "14px", textAlign: "center", fontSize: "16px", fontWeight: 700, fontFamily: "inherit" }}>
-                  Let's Go →
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
-    </div>
+    </>
   );
 
-  // DASHBOARD
-  if (screen === "dashboard") {
-    const allTopics = CURRENT_TOPIC_ORDER.map(id => {
-      const s = SETS[id];
-      const k = (known[id] || new Set()).size;
-      const pct = Math.round((k / s.cards.length) * 100);
-      return { id, title: s.title, total: s.cards.length, mastered: k, pct };
-    });
-    const totalCards = allTopics.reduce((a, t) => a + t.total, 0);
-    const totalMastered = allTopics.reduce((a, t) => a + t.mastered, 0);
-    const overallPct = Math.round((totalMastered / totalCards) * 100);
-    const started = allTopics.filter(t => t.mastered > 0);
-    const needsWork = [...allTopics].filter(t => t.pct < 70).sort((a, b) => a.pct - b.pct).slice(0, 5);
-    const goingWell = [...allTopics].filter(t => t.pct >= 70).sort((a, b) => b.pct - a.pct);
-
-    const StatCard = ({ label, value, sub, color }) => (
-      <div style={{ background: "#ffffff", borderRadius: "16px", padding: "16px", flex: 1, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderTop: `4px solid ${color}` }}>
-        <div style={{ fontSize: "28px", fontWeight: 800, color }}>{value}</div>
-        <div style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45", marginTop: "2px" }}>{label}</div>
-        {sub && <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "2px" }}>{sub}</div>}
-      </div>
-    );
-
-    const TopicRow = ({ t, showBar }) => (
-      <div onClick={() => { selectTopic(t.id); }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 14px", background: "#ffffff", borderRadius: "12px", cursor: "pointer", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showBar ? "5px" : 0 }}>
-            <div>
-              <span style={{ fontSize: "11px", fontWeight: 800, color: "#29ABE2", marginRight: "6px" }}>{t.id}</span>
-              <span style={{ fontSize: "13px", fontWeight: 600, color: "#1a2d45" }}>{t.title}</span>
-            </div>
-            <span style={{ fontSize: "12px", fontWeight: 700, color: t.pct === 0 ? "#b0c4d4" : t.pct === 100 ? "#29ABE2" : "#1a8fc4", flexShrink: 0, marginLeft: "8px" }}>{t.pct}%</span>
-          </div>
-          {showBar && <div style={{ height: "4px", background: "#e8edf3", borderRadius: "2px", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${t.pct}%`, background: "linear-gradient(90deg, #29ABE2, #1a8fc4)", borderRadius: "2px" }} />
-          </div>}
-        </div>
-        <div style={{ fontSize: "11px", color: "#7a95b0", flexShrink: 0 }}>{t.mastered}/{t.total}</div>
-      </div>
-    );
-
-    return (
-      <div style={base}>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-        <Header sub="Progress Dashboard" back={goBack} />
-        {(() => {
-          const td = studyLog[todayKey] || {};
-          const tdTotal = (td.cards||0) + (td.calcs||0) + (td.extended||0) + (td.mechanisms||0);
-          return (
-          <div style={{ padding: "16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "12px" }}>
-            {/* Top row: Streak + Progress + Today */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
-              <div style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", borderRadius: "16px", padding: "16px", color: "#fff", textAlign: "center" }}>
-                <div style={{ fontSize: "22px", fontWeight: 900 }}>&#x2731;</div>
-                <div style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1 }}>{currentStreak}</div>
-                <div style={{ fontSize: "11px", fontWeight: 600, opacity: 0.9, marginTop: "2px" }}>day streak</div>
-              </div>
-              <div style={{ background: "linear-gradient(135deg, #29ABE2, #1a8fc4)", borderRadius: "16px", padding: "16px", color: "#fff", textAlign: "center" }}>
-                <div style={{ fontSize: "11px", fontWeight: 600, opacity: 0.8 }}>Mastered</div>
-                <div style={{ fontSize: "28px", fontWeight: 800, lineHeight: 1.2 }}>{overallPct}%</div>
-                <div style={{ fontSize: "10px", opacity: 0.8 }}>{totalMastered}/{totalCards}</div>
-              </div>
-              <div style={{ background: "#fff", borderRadius: "16px", padding: "16px", textAlign: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
-                <div style={{ fontSize: "11px", fontWeight: 600, color: "#7a95b0" }}>Today</div>
-                <div style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", lineHeight: 1.2 }}>{tdTotal}</div>
-                <div style={{ fontSize: "10px", color: "#7a95b0" }}>actions</div>
-              </div>
-            </div>
-
-            {/* Today breakdown */}
-            <div style={{ display: "flex", gap: "6px" }}>
-              {[{l:"Cards",v:td.cards||0,c:"#29ABE2",b:"#f0f9ff"},{l:"Calcs",v:td.calcs||0,c:"#0284c7",b:"#f0f9ff"},{l:"Extended",v:td.extended||0,c:"#7c3aed",b:"#f5f3ff"},{l:"Mechs",v:td.mechanisms||0,c:"#d97706",b:"#fff7ed"}].map(s=>(
-                <div key={s.l} style={{ flex:1, textAlign:"center", padding:"8px 4px", background:s.b, borderRadius:"10px" }}>
-                  <div style={{ fontSize:"16px", fontWeight:800, color:s.c }}>{s.v}</div>
-                  <div style={{ fontSize:"9px", color:"#7a95b0", fontWeight:600 }}>{s.l}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Activity heatmap */}
-            <div style={{ background:"#fff", borderRadius:"14px", padding:"12px", boxShadow:"0 2px 8px rgba(0,0,0,0.05)" }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"8px" }}>
-                <span style={{ fontSize:"12px", fontWeight:700, color:"#1a2d45" }}>Last 28 Days</span>
-                <div style={{ display:"flex", alignItems:"center", gap:"3px" }}>
-                  <span style={{ fontSize:"9px", color:"#94a3b8" }}>Less</span>
-                  {["#edf2f7","#bae6fd","#38bdf8","#0284c7","#0c4a6e"].map(c=><div key={c} style={{ width:"8px", height:"8px", borderRadius:"2px", background:c }}/>)}
-                  <span style={{ fontSize:"9px", color:"#94a3b8" }}>More</span>
-                </div>
-              </div>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(7, 1fr)", gap:"3px" }}>
-                {["M","T","W","T","F","S","S"].map((d,i)=><div key={i} style={{ fontSize:"9px", color:"#94a3b8", textAlign:"center", fontWeight:600 }}>{d}</div>)}
-                {(()=>{
-                  const cells=[]; const now=new Date(); const st=new Date(now);
-                  st.setDate(st.getDate()-27-((st.getDay()+6)%7));
-                  for(let i=0;i<28;i++){const d=new Date(st);d.setDate(d.getDate()+i);const k=d.toISOString().slice(0,10);const dd=studyLog[k];
-                  const tot=dd?(dd.cards||0)+(dd.calcs||0)+(dd.extended||0)+(dd.mechanisms||0):0;
-                  const int=tot===0?0:tot<5?1:tot<15?2:tot<30?3:4;
-                  cells.push(<div key={k} title={`${k}: ${tot}`} style={{aspectRatio:"1",borderRadius:"3px",background:["#edf2f7","#bae6fd","#38bdf8","#0284c7","#0c4a6e"][int],border:k===todayKey?"2px solid #f59e0b":"none"}}/>);}
-                  return cells;
-                })()}
-              </div>
-            </div>
-
-            {/* Section progress */}
-            <div style={{ background:"#fff", borderRadius:"14px", padding:"12px", boxShadow:"0 2px 8px rgba(0,0,0,0.05)" }}>
-              <div style={{ fontSize:"12px", fontWeight:700, color:"#1a2d45", marginBottom:"10px" }}>Progress by Section</div>
-              {CURRENT_SECTIONS.map(sec=>{
-                const sT=sec.topics.reduce((a,id)=>a+SETS[id].cards.length,0);
-                const sM=sec.topics.reduce((a,id)=>a+(known[id]||new Set()).size,0);
-                const sP=Math.round((sM/sT)*100);
-                return(<div key={sec.id} style={{ marginBottom:"8px" }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"4px" }}>
-                    <span style={{ fontSize:"12px", fontWeight:600, color:"#1a2d45" }}>{sec.label}</span>
-                    <span style={{ fontSize:"11px", fontWeight:700, color:sP===0?"#94a3b8":"#29ABE2" }}>{sP}% · {sM}/{sT}</span>
-                  </div>
-                  <div style={{ height:"4px", background:"#e8edf3", borderRadius:"2px", overflow:"hidden" }}>
-                    <div style={{ height:"100%", width:`${sP}%`, background:"linear-gradient(90deg,#29ABE2,#1a8fc4)", borderRadius:"2px" }}/>
-                  </div>
-                </div>);
-              })}
-            </div>
-
-            {/* Quick stats */}
-            <div style={{ display:"flex", gap:"8px" }}>
-              <div style={{ flex:1, background:"#fff", borderRadius:"12px", padding:"12px", textAlign:"center", boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
-                <div style={{ fontSize:"22px", fontWeight:800, color:"#29ABE2" }}>{started.length}</div>
-                <div style={{ fontSize:"10px", color:"#7a95b0", fontWeight:600 }}>Started</div>
-              </div>
-              <div style={{ flex:1, background:"#fff", borderRadius:"12px", padding:"12px", textAlign:"center", boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
-                <div style={{ fontSize:"22px", fontWeight:800, color:"#059669" }}>{allTopics.filter(t=>t.pct===100).length}</div>
-                <div style={{ fontSize:"10px", color:"#7a95b0", fontWeight:600 }}>Mastered</div>
-              </div>
-              <div style={{ flex:1, background:"#fff", borderRadius:"12px", padding:"12px", textAlign:"center", boxShadow:"0 1px 6px rgba(0,0,0,0.05)" }}>
-                <div style={{ fontSize:"22px", fontWeight:800, color:"#94a3b8" }}>{allTopics.filter(t=>t.mastered===0).length}</div>
-                <div style={{ fontSize:"10px", color:"#7a95b0", fontWeight:600 }}>Not Started</div>
-              </div>
-            </div>
-          </div>);
-        })()}
-      </div>
-    );
-  }
+  // PROGRESS
+  if (screen === "dashboard") return renderShell(
+    <ProgressPage board={board} authUser={authUser} currentStreak={currentStreak} studyLog={studyLog} todayKey={todayKey}
+      known={known} sets={SETS} sections={CURRENT_SECTIONS} sectionOf={sectionOf} />
+  );
 
   // TOPIC SELECT
   const FOLDER_COLORS = {
@@ -890,200 +714,73 @@ export default function App() {
   if (screen === "topics" && activeSection) {
     const section = CURRENT_SECTIONS.find(s => s.id === activeSection);
     const fc = FOLDER_COLORS[activeSection] || FOLDER_COLORS.physical_as;
-    return (
-      <div style={base}>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-        <Header sub={section.label} back={goBack} />
-        <div style={{ padding: "8px 16px 24px", flex: 1, overflowY: "auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
-            {section.topics.map(id => {
-              const s = SETS[id];
-              const k = (known[id] || new Set()).size;
-              const pct = Math.round((k / s.cards.length) * 100);
-              return (
-                <button key={id} onClick={() => selectTopic(id)} style={{
-                  padding: "14px 12px 12px", borderRadius: "16px",
-                  background: "#ffffff", border: `2px solid ${fc.accent}40`,
-                  color: "#1a2d45", cursor: "pointer", textAlign: "left",
-                  fontFamily: "inherit", position: "relative", overflow: "hidden",
-                  minHeight: "100px", display: "flex", flexDirection: "column", justifyContent: "space-between",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
-                }}>
-                  <div style={{ borderLeft: `3px solid ${fc.accent}`, paddingLeft: "8px" }}>
-                    <div style={{ fontSize: "11px", color: fc.accent, fontWeight: 800, letterSpacing: "0.3px", marginBottom: "4px" }}>{id}</div>
-                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a2d45", lineHeight: 1.3 }}>{s.title}</div>
+    return renderShell(
+      <>
+        <PageHeader eyebrow="Flashcards" title={section ? section.label : "Section"} sub={section ? `${section.topics.length} topics` : ""}
+          right={<Button variant="secondary" icon="arrowLeft" onClick={goBack}>All sections</Button>} />
+        <div className="cm-grid-3">
+          {(section ? section.topics : []).map(id => {
+            const s = SETS[id];
+            const k = (known[id] || new Set()).size;
+            const pct = Math.round((k / s.cards.length) * 100);
+            return (
+              <button key={id} className="cm-card-link" onClick={() => selectTopic(id)} style={{
+                padding: 16, borderRadius: T.radius, background: T.card, border: `1px solid ${T.border}`, color: T.ink,
+                cursor: "pointer", textAlign: "left", fontFamily: "inherit", display: "flex", flexDirection: "column", gap: 10,
+              }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                  <span style={{ fontSize: 11, color: fc.accent, fontWeight: 800, letterSpacing: 0.3 }}>{id}</span>
+                  {k > 0 && <Chip tone={pct === 100 ? "green" : "accent"}>{pct}%</Chip>}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.3, flex: 1 }}>{s.title}</div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: T.muted, marginBottom: 5 }}>
+                    <span>{s.cards.length} cards</span><span>{k} known</span>
                   </div>
-                  <div style={{ marginTop: "10px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
-                      <span style={{ fontSize: "11px", color: "#7a95b0" }}>{s.cards.length} cards</span>
-                      {k > 0 && <span style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700 }}>{k} known</span>}
-                    </div>
-                    <div style={{ height: "4px", background: "rgba(0,0,0,0.07)", borderRadius: "2px", overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: "2px", transition: "width 0.3s" }} />
-                    </div>
+                  <div style={{ height: 5, background: T.line, borderRadius: 3, overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${pct}%`, background: fc.accent, borderRadius: 3, transition: "width 0.3s" }} />
                   </div>
-                </button>
-              );
-            })}
-          </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </>
     );
   }
 
 
-  // Activity card data used by both the home grid and the back-to-home helper
-  const ACTIVITY_CARDS = [
-    { id: "flashcards", label: "Flashcards",            labelBig: "Flash",    labelSmall: "cards",   desc: "Master every topic with smart revision cards.", color: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2,#0e7ab5,#085f8f)", stat: `${CURRENT_TOPIC_ORDER.length} topics` },
-    { id: "pathways",   label: "Pathways",              labelBig: "Path",     labelSmall: "ways",    desc: "Explore all synthesis routes between functional groups.",  color: "#059669", grad: "linear-gradient(145deg,#10b981,#059669,#047857)", stat: "Reaction map" },
-    { id: "calc",       label: "Calculations",          labelBig: "Worked",   labelSmall: "Calcs",   desc: "Practise every calculation type with worked steps.", color: "#0284c7", grad: "linear-gradient(145deg,#0ea5e9,#0284c7,#075985)", stat: "Step-by-step" },
-    { id: "extended",   label: "AI Examiner",           labelBig: "AI",       labelSmall: "Examiner",desc: "ChemMastery AI marks your extended answers.",    color: "#7c3aed", grad: "linear-gradient(145deg,#a855f7,#7c3aed,#5b21b6)", stat: "AI powered" },
-    { id: "mechanisms", label: "Mechanisms",            labelBig: "Mech",     labelSmall: "anisms",  desc: "Handdrawn curly arrow mechanisms with explanations.",  color: "#d97706", grad: "linear-gradient(145deg,#f59e0b,#d97706,#b45309)", stat: "Handdrawn" },
-    { id: "mcq",        label: "MCQs",                  labelBig: "MC",       labelSmall: "Qs",      desc: "Multiple choice questions with solutions by topic.", color: "#dc2626", grad: "linear-gradient(145deg,#f87171,#dc2626,#991b1b)", stat: `${mcqData.questions.length} Qs` },
-    { id: "nmr",        label: "NMR Practice",          labelBig: "NMR",      labelSmall: "Practice",desc: "Interpret spectra, learn chemical shifts, and deduce structures.", color: "#8b5cf6", grad: "linear-gradient(145deg,#a78bfa,#8b5cf6,#6d28d9)", stat: "Spectra" },
-  ];
-
   const goHome = () => { navigate(`/${board}`); };
+  const isPage = ["home", "practise", "homework", "videos"].includes(topicsTab);
+  const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
 
-  if (screen === "topics") return (
-    <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      <style>{`@media(max-width:640px){.lp-topic-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important}.lp-topic-grid img{height:100px!important}.lp-topic-grid .card-body-text{font-size:11px!important}}`}</style>
-      {/* Header -always visible */}
-      <div style={{ padding: "0 20px", height: "72px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#0f1d35", flexShrink: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {topicsTab !== "home"
-            ? <button onClick={goHome} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Home</button>
-            : <button onClick={goBack} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
-          }
-          <div style={{ background: "#fff", borderRadius: "10px", padding: "4px 8px", display: "flex", alignItems: "center" }}>
-            <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "48px", objectFit: "contain", display: "block" }} />
-          </div>
-          <div>
-            <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "17px", color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.1 }}>HSJ TUITION</div>
-            <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "10px", color: "#29ABE2", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "2px" }}>{board === "ocr" ? "OCR A" : "AQA"} · A-Level Chemistry</div>
-          </div>
-        </div>
-        <button onClick={() => { navigate(`/${board}/dashboard`); track("view_dashboard", { board }); }} style={{ background: "#29ABE2", border: "none", borderRadius: "10px", padding: "9px 16px", color: "#ffffff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 700, boxShadow: "0 2px 8px rgba(41,171,226,0.4)" }}>My Progress</button>
-      </div>
-
-      {/* Payment success/cancel banner */}
-      {paymentBanner === "success" && (
-        <div style={{ margin: "12px 16px 0", padding: "14px 16px", background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "16px", fontWeight: 900, color: "#059669" }}>&#10003;</span>
-          <div>
-            <div style={{ fontSize: "14px", fontWeight: 700, color: "#059669" }}>Payment successful!</div>
-            <div style={{ fontSize: "12px", color: "#047857", marginTop: "2px" }}>Welcome to ChemMastery Pro - all content is now unlocked. It may take a moment to activate.</div>
-          </div>
-          <button onClick={() => setPaymentBanner(null)} style={{ background: "none", border: "none", color: "#059669", fontSize: "18px", cursor: "pointer", marginLeft: "auto" }}>x</button>
-        </div>
+  if (screen === "topics") return renderShell(
+    <>
+      {paymentBanner === "success" && <Notice tone="green"><b>Payment successful.</b> All content is unlocked — it may take a moment to activate.</Notice>}
+      {paymentBanner === "cancel" && <Notice tone="amber"><b>Payment cancelled.</b> You can upgrade any time from the account menu.</Notice>}
+      {topicsTab === "home" && !hasFullAccess && (
+        <Notice tone="amber" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <span style={{ flex: 1 }}><b>Free plan.</b> Upgrade, enter an access key or join your tutor's class from the account menu to unlock everything.</span>
+          <Button size="sm" variant="primary" onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}>{checkoutLoading === "monthly" ? "…" : "Upgrade · £27.99/mo"}</Button>
+        </Notice>
       )}
-      {paymentBanner === "cancel" && (
-        <div style={{ margin: "12px 16px 0", padding: "14px 16px", background: "#fffbeb", border: "1.5px solid #d97706", borderRadius: "12px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "16px", fontWeight: 700, color: "#92400e" }}>i</span>
-          <div>
-            <div style={{ fontSize: "14px", fontWeight: 700, color: "#92400e" }}>Payment cancelled</div>
-            <div style={{ fontSize: "12px", color: "#a16207", marginTop: "2px" }}>No worries - you can upgrade anytime from the home screen.</div>
-          </div>
-          <button onClick={() => setPaymentBanner(null)} style={{ background: "none", border: "none", color: "#92400e", fontSize: "18px", cursor: "pointer", marginLeft: "auto" }}>x</button>
-        </div>
-      )}
-
-      {/* HOME card grid */}
       {topicsTab === "home" && (
-        <div style={{ flex: 1, overflowY: "auto", padding: "32px 24px 56px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <p style={{ fontSize: "11px", fontWeight: 700, color: "#7a95b0", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 6px", alignSelf: "flex-start" }}>ChemMastery</p>
-          <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#1a2d45", margin: "0 0 12px", letterSpacing: "-0.5px", alignSelf: "flex-start" }}>What would you like to practise?</h2>
-          {!hasFullAccess && (
-            <div style={{ alignSelf: "stretch", background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "1.5px solid #fbbf2440", borderRadius: "12px", padding: "14px 16px", marginBottom: "20px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: showPricing ? "12px" : "0" }}>
-                <span style={{ fontSize: "18px" }}>🔑</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#92400e" }}>Free plan - limited content</div>
-                  <div style={{ fontSize: "11px", color: "#a16207", marginTop: "2px" }}>Upgrade to unlock all flashcards, calcs, synthesis and more</div>
-                </div>
-                <button onClick={() => setShowPricing(!showPricing)} style={{ background: "#29ABE2", border: "none", borderRadius: "8px", padding: "8px 14px", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
-                  {showPricing ? "Hide" : "Upgrade"}
-                </button>
-              </div>
-              {showPricing && (
-                <div>
-                  <PricingCards />
-                  <div style={{ marginTop: "12px", padding: "12px", background: "#fffbeb", borderRadius: "8px", border: "1px solid #fbbf24" }}>
-                    <div style={{ fontSize: "12px", fontWeight: 600, color: "#92400e", marginBottom: "6px" }}>Have an access key? Enter it here:</div>
-                    <div style={{ display: "flex", gap: "6px" }}>
-                      <input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="e.g. HSJ-2026-ABCD"
-                        style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1.5px solid #fbbf24", fontSize: "12px", fontFamily: "inherit", outline: "none", background: "#fff" }}
-                        onFocus={e => e.target.style.borderColor = "#29ABE2"}
-                        onBlur={e => e.target.style.borderColor = "#fbbf24"}
-                        onKeyDown={e => e.key === "Enter" && handleRedeemKey()}
-                      />
-                      <button onClick={handleRedeemKey} disabled={accessKeyLoading} style={{ padding: "8px 12px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: accessKeyLoading ? 0.6 : 1 }}>
-                        {accessKeyLoading ? "..." : "Redeem"}
-                      </button>
-                    </div>
-                    {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-          <div className="lp-topic-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", width: "100%", maxWidth: "900px" }}>
-            {ACTIVITY_CARDS.map(card => {
-              const mechComingSoon = (card.id === "mechanisms" || card.id === "nmr") && !isAdmin;
-              const fullyLocked = !hasFullAccess && (card.id === "synth" || card.id === "pathways");
-              const partiallyLocked = !hasFullAccess && !fullyLocked && !mechComingSoon;
-              return (
-              <button key={card.id} onClick={() => { if (mechComingSoon) return; navigate(`/${board}/${card.id}`); track("open_section", { section: card.id, board }); }}
-                style={{ display: "flex", flexDirection: "column", borderRadius: "22px", border: "none", cursor: mechComingSoon ? "default" : "pointer", fontFamily: "inherit", background: "#ffffff", boxShadow: "0 4px 24px rgba(0,0,0,0.09)", overflow: "hidden", textAlign: "left", transition: "transform 0.18s, box-shadow 0.18s", opacity: mechComingSoon ? 0.75 : 1 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 16px 44px rgba(0,0,0,0.16)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)"; }}
-              >
-                {/* Thumbnail — FigureLabs card image */}
-                <div style={{ position: "relative", overflow: "hidden" }}>
-                  {card.id === "nmr" ? (
-                    <div style={{ width: "100%", height: "140px", background: card.grad, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <svg width="200" height="80" viewBox="0 0 200 80" style={{ opacity: 0.35 }}>
-                        <line x1="10" y1="70" x2="190" y2="70" stroke="#fff" strokeWidth="1.5" />
-                        <line x1="40" y1="70" x2="40" y2="20" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
-                        <line x1="37" y1="70" x2="37" y2="30" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                        <line x1="43" y1="70" x2="43" y2="30" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                        <line x1="100" y1="70" x2="100" y2="35" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
-                        <line x1="150" y1="70" x2="150" y2="15" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
-                        <line x1="147" y1="70" x2="147" y2="25" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                        <text x="180" y="67" fill="#fff" fontSize="8" fontFamily="'Outfit',sans-serif">TMS</text>
-                      </svg>
-                    </div>
-                  ) : (
-                  <img src={process.env.PUBLIC_URL + `/card-${card.id === "extended" ? "ai-examiner" : card.id === "mcq" ? "mcqs" : card.id === "calc" ? "calculations" : card.id}.png`}
-                    alt={card.label}
-                    style={{ width: "100%", height: "140px", objectFit: "cover", objectPosition: "top", display: "block" }} />
-                  )}
-                  {/* Coming Soon badge for mechanisms */}
-                  {mechComingSoon && (
-                    <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(217,119,6,0.9)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>COMING SOON</span>
-                    </div>
-                  )}
-                  {/* Lock badge for free users */}
-                  {!mechComingSoon && (fullyLocked || partiallyLocked) && (
-                    <div style={{ position: "absolute", top: "14px", right: "16px", background: "rgba(0,0,0,0.5)", borderRadius: "6px", padding: "4px 10px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      <span style={{ fontSize: "10px" }}>🔒</span>
-                      <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>{fullyLocked ? "PRO" : "PREVIEW"}</span>
-                    </div>
-                  )}
-                </div>
-                {/* Card body */}
-                <div style={{ padding: "12px 14px 16px", flex: 1 }}>
-                  <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a2d45", marginBottom: "4px" }}>{card.label}</div>
-                  <div className="card-body-text" style={{ fontSize: "12px", color: "#7a95b0", lineHeight: 1.5 }}>{card.desc}</div>
-                </div>
-              </button>
-              );
-            })}
-          </div>
-        </div>
+        <StudentDashboard board={board} authUser={authUser} userProfile={userProfile} currentStreak={currentStreak} known={known}
+          sets={SETS} topicOrder={CURRENT_TOPIC_ORDER} sectionOf={sectionOf} hasFullAccess={hasFullAccess} isAdmin={isAdmin} mcqCount={mcqData.questions.length} />
       )}
+      {topicsTab === "practise" && (
+        <>
+          <PageHeader eyebrow="Practise" title="What would you like to practise?" sub="Every answer is recorded and counts towards your mastery." />
+          <PracticeGrid board={board} counts={{ mcq: mcqData.questions.length, topics: CURRENT_TOPIC_ORDER.length }} hasFullAccess={hasFullAccess} isAdmin={isAdmin} />
+        </>
+      )}
+      {topicsTab === "homework" && <HomeworkPage inClass={!!userProfile?.classId} />}
+      {topicsTab === "videos" && <VideosPage />}
+      {!isPage && (
+        <>
+          <PageHeader eyebrow="Practise" title={legacyTitles[topicsTab] || "Practise"}
+            right={<Button variant="secondary" icon="arrowLeft" onClick={goHome}>Dashboard</Button>} />
+          <ShellBody>
       {topicsTab === "flashcards" && quizScreen === "setup" && (() => {
         const allSections = board === "ocr" ? OCR_SECTIONS : SECTIONS;
         const asSecs = board === "ocr" ? OCR_AS_SECTIONS : AQA_AS_SECTIONS;
@@ -1462,34 +1159,21 @@ export default function App() {
         <NmrTab board={board} mcqData={mcqData} />
       )}
 
-    </div>
+          </ShellBody>
+        </>
+      )}
+    </>
   );
 
   // FLASHCARD VIEW
   const progress = ((index + 1) / order.length) * 100;
-  return (
-    <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
-      <div style={{ padding: "12px 20px 10px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ffffff", borderBottom: "1px solid #dde4ed", position: "relative", zIndex: 2 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <button onClick={goBack} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Topics</button>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: "15px", color: "#29ABE2" }}>HSJ TUITION</div>
-        </div>
-        <button onClick={() => setShowMenu(!showMenu)} style={{ background: "#f0f4f8", border: "1px solid #dde4ed", borderRadius: "8px", padding: "8px 12px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "inherit" }}>⚙</button>
-      </div>
-
+  return renderShell(
+    <ShellBody style={{ minHeight: "calc(100vh - 150px)" }}>
       {showMenu && (
-        <div style={{ position: "absolute", top: "56px", right: "20px", zIndex: 10, background: "#ffffff", border: "1px solid #dde4ed", borderRadius: "12px", padding: "8px", minWidth: "200px", boxShadow: "0 8px 30px rgba(0,0,0,0.12)" }}>
-          {[
-            { label: shuffled ? "⟲ Reset order" : "🔀 Shuffle cards", action: shuffled ? reset : shuffle },
-            { label: `Unknown only (${cards.length - knownCount})`, action: studyUnknown },
-            { label: "✕ Clear progress", action: () => { setKnown(p => ({ ...p, [knownKey]: new Set() })); setShowMenu(false); } },
-          ].map((item, i) => (
-            <button key={i} onClick={item.action} style={{ display: "block", width: "100%", padding: "10px 14px", background: "none", border: "none", color: "#1a2d45", fontSize: "13px", textAlign: "left", cursor: "pointer", borderRadius: "8px", fontFamily: "inherit" }}
-              onMouseEnter={e => e.target.style.background = "#f0f4f8"}
-              onMouseLeave={e => e.target.style.background = "none"}
-            >{item.label}</button>
-          ))}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", padding: "12px 20px 0" }}>
+          <Button size="sm" onClick={shuffled ? reset : shuffle}>{shuffled ? "Reset order" : "Shuffle cards"}</Button>
+          <Button size="sm" onClick={studyUnknown}>Unknown only ({cards.length - knownCount})</Button>
+          <Button size="sm" variant="danger" onClick={() => { setKnown(p => ({ ...p, [knownKey]: new Set() })); setShowMenu(false); }}>Clear progress</Button>
         </div>
       )}
 
@@ -1538,6 +1222,8 @@ export default function App() {
           All {cards.length} cards mastered
         </div>
       )}
-    </div>
+    </ShellBody>,
+    { focus: true, back: goBack, backLabel: "Back to topics", title: SETS[topic]?.title || "Flashcards", subtitle: `${topic} · ${order.length} cards`,
+      right: <Button size="sm" icon="settings" onClick={() => setShowMenu(!showMenu)}>Options</Button> }
   );
 }
