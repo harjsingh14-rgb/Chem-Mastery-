@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey } from "./firebase";
+import { auth, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey, recordAttempt, joinClass, leaveClass } from "./firebase";
+import TutorPage from "./components/TutorPage";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER } from "./data/sections";
@@ -30,6 +31,9 @@ export default function App() {
   const [pendingCheckout, setPendingCheckout] = useState(null); // null | "monthly" — auto-checkout after auth
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
+  const [classCodeInput, setClassCodeInput] = useState("");
+  const [classMsg, setClassMsg] = useState(null);
+  const [classLoading, setClassLoading] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthChange(async (user) => {
@@ -72,8 +76,47 @@ export default function App() {
     setAccessKeyLoading(false);
   };
 
-  const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin");
+  // Students linked to a tutor's class get full access for as long as they are in it
+  const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin" || userProfile.role === "tutor" || !!userProfile.classId);
   const isAdmin = userProfile && userProfile.role === "admin";
+  const isTutor = userProfile && (userProfile.role === "tutor" || userProfile.role === "admin");
+
+  // Every answered question is written to Firestore so progress survives
+  // across devices and tutors can see it. Safe to call when logged out (no-op).
+  const logAttempt = useCallback((data) => {
+    if (!authUser) return;
+    recordAttempt(authUser, userProfile, data);
+  }, [authUser, userProfile]);
+
+  const handleJoinClass = async () => {
+    if (!classCodeInput.trim() || !authUser) return;
+    setClassLoading(true); setClassMsg(null);
+    try {
+      const result = await joinClass(authUser.uid, classCodeInput);
+      if (result.success) {
+        setUserProfile(prev => ({ ...prev, classId: result.cls.code, tutorId: result.cls.tutorId, className: result.cls.name }));
+        setClassMsg({ type: "success", text: `Joined ${result.cls.name}` });
+        setClassCodeInput("");
+        track("join_class", { code: result.cls.code });
+      } else {
+        setClassMsg({ type: "error", text: result.error });
+      }
+    } catch (e) {
+      setClassMsg({ type: "error", text: "Could not join that class. Check the code and try again." });
+    }
+    setClassLoading(false);
+  };
+
+  const handleLeaveClass = async () => {
+    if (!authUser || !window.confirm("Leave your tutor's class? Your tutor will no longer see your progress.")) return;
+    try {
+      await leaveClass(authUser.uid);
+      setUserProfile(prev => ({ ...prev, classId: null, tutorId: null, className: null }));
+      setClassMsg(null);
+    } catch (e) {
+      setClassMsg({ type: "error", text: "Could not leave the class right now." });
+    }
+  };
 
   const LockedBadge = () => (
     <div style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", borderRadius: "6px", padding: "3px 8px", display: "flex", alignItems: "center", gap: "4px", zIndex: 2 }}>
@@ -224,7 +267,8 @@ export default function App() {
   const board = ['aqa', 'ocr'].includes(pathParts[0]) ? pathParts[0] : null;
   const routeTab = pathParts[1] || null;
   const routeParam = pathParts[2] || null;
-  const screen = !board ? 'board'
+  const screen = pathParts[0] === 'tutor' ? 'tutor'
+    : !board ? 'board'
     : routeTab === 'dashboard' ? 'dashboard'
     : routeTab === 'cards' ? 'cards'
     : 'topics';
@@ -252,7 +296,7 @@ export default function App() {
 
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
-  const quiz = useQuiz(board);
+  const quiz = useQuiz(board, logAttempt);
   const { quizScreen, setQuizScreen, quizYear, setQuizYear,
     quizMode, setQuizMode, quizCount, setQuizCount,
     quizCustomCount, setQuizCustomCount,
@@ -328,8 +372,44 @@ export default function App() {
               <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", marginBottom: "2px" }}>{authUser?.displayName || "Student"}</div>
               <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px" }}>{authUser?.email}</div>
               <div style={{ fontSize: "11px", fontWeight: 600, color: hasFullAccess ? "#059669" : "#d97706", background: hasFullAccess ? "#ecfdf5" : "#fffbeb", borderRadius: "6px", padding: "4px 10px", display: "inline-block", marginBottom: "14px" }}>
-                {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "access_key" ? "Full Access (Key)" : userProfile?.role === "paid" ? "Full Access (Paid)" : "Free Plan"}
+                {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "access_key" ? "Full Access (Key)" : userProfile?.role === "paid" ? "Full Access (Paid)" : userProfile?.classId ? "Full Access (Class)" : "Free Plan"}
               </div>
+              {isTutor && (
+                <button onClick={() => { setShowUserMenu(false); navigate("/tutor"); }} style={{
+                  width: "100%", padding: "10px", borderRadius: "10px", border: "none", marginBottom: "12px",
+                  background: "#1a2d45", color: "#fff", fontSize: "13px", fontWeight: 700,
+                  cursor: "pointer", fontFamily: "inherit"
+                }}>Tutor dashboard →</button>
+              )}
+              {!isTutor && (
+                <div style={{ marginBottom: "14px", paddingBottom: "12px", borderBottom: "1px solid #e0e8f0" }}>
+                  {userProfile?.classId ? (
+                    <div>
+                      <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "4px" }}>Your class</div>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                        <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>{userProfile.className || userProfile.classId}</span>
+                        <button onClick={handleLeaveClass} style={{ background: "none", border: "none", color: "#94a3b8", fontSize: "11px", cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" }}>Leave</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Got a class code from your tutor?</div>
+                      <div style={{ display: "flex", gap: "6px" }}>
+                        <input value={classCodeInput} onChange={e => setClassCodeInput(e.target.value)} placeholder="e.g. HSJ-7K3P"
+                          style={{ flex: 1, padding: "8px 10px", borderRadius: "8px", border: "1.5px solid #e0e8f0", fontSize: "13px", fontFamily: "inherit", outline: "none", textTransform: "uppercase" }}
+                          onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                          onBlur={e => e.target.style.borderColor = "#e0e8f0"}
+                          onKeyDown={e => e.key === "Enter" && handleJoinClass()}
+                        />
+                        <button onClick={handleJoinClass} disabled={classLoading} style={{ padding: "8px 12px", borderRadius: "8px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: classLoading ? 0.6 : 1 }}>
+                          {classLoading ? "..." : "Join"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {classMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "6px", color: classMsg.type === "success" ? "#059669" : "#dc2626" }}>{classMsg.text}</div>}
+                </div>
+              )}
               {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
                 <button onClick={() => { setShowUserMenu(false); setShowAccountSettings(true); }} style={{
                   background: "none", border: "none", color: "#7a95b0", fontSize: "11px",
@@ -573,6 +653,25 @@ export default function App() {
     </div>
   );
 
+  // TUTOR DASHBOARD
+  if (screen === "tutor") return (
+    <div style={base}>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+      <Header back={() => navigate("/")} />
+      {isTutor
+        ? <TutorPage authUser={authUser} userProfile={userProfile} />
+        : (
+          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
+            <div>
+              <div style={{ fontSize: "40px", marginBottom: "12px" }}>🔒</div>
+              <div style={{ fontSize: "18px", fontWeight: 800, color: "#1a2d45", marginBottom: "6px" }}>Tutor accounts only</div>
+              <div style={{ fontSize: "13px", color: "#7a95b0" }}>Ask HSJ Tuition to upgrade your account to a tutor account.</div>
+            </div>
+          </div>
+        )}
+    </div>
+  );
+
   // BOARD SELECT
   if (screen === "board") return (
     <div style={base}>
@@ -581,6 +680,11 @@ export default function App() {
       <div style={{ flex: 1, overflowY: "auto", padding: "40px 24px 60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, color: "#29ABE2", letterSpacing: "2.5px", textTransform: "uppercase", margin: "0 0 8px" }}>ChemMastery</p>
         <h2 style={{ textAlign: "center", fontSize: "30px", fontWeight: 800, color: "#1a2d45", margin: "0 0 36px", letterSpacing: "-0.5px" }}>Choose your exam board</h2>
+        {isTutor && (
+          <button onClick={() => navigate("/tutor")} style={{ marginBottom: "24px", padding: "12px 22px", borderRadius: "12px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 14px rgba(26,45,69,0.3)" }}>
+            Tutor dashboard → classes &amp; student progress
+          </button>
+        )}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", width: "100%", maxWidth: "720px" }}>
           {[
             { id: "aqa", label: "AQA", sub: "Chemistry", desc: "Year 1 and Year 2. Full spec coverage.", accent: "#29ABE2", grad: "linear-gradient(145deg,#29ABE2 0%,#0e7ab5 60%,#085f8f 100%)", features: ["Organic","Physical","Inorganic","Req. Practicals"] },
@@ -1325,10 +1429,10 @@ export default function App() {
         <PathwaysTab board={board} />
       )}
       {topicsTab === "extended" && (
-        <ExtendedTab board={board} hasFullAccess={hasFullAccess} logActivity={logActivity} LockedOverlay={LockedOverlay} />
+        <ExtendedTab board={board} hasFullAccess={hasFullAccess} logActivity={logActivity} logAttempt={logAttempt} LockedOverlay={LockedOverlay} />
       )}
       {topicsTab === "calc" && (
-        <CalcTab board={board} hasFullAccess={hasFullAccess} FREE_CALC_IDS={FREE_CALC_IDS} logActivity={logActivity} logScore={logScore} LockedOverlay={LockedOverlay} />
+        <CalcTab board={board} hasFullAccess={hasFullAccess} FREE_CALC_IDS={FREE_CALC_IDS} logActivity={logActivity} logScore={logScore} logAttempt={logAttempt} LockedOverlay={LockedOverlay} />
       )}
 
       {/* ── MECHANISMS TAB ────────────────────────────────── */}
@@ -1347,7 +1451,7 @@ export default function App() {
 
       {/* ── MCQ TAB ────────────────────────────────────────── */}
       {topicsTab === "mcq" && (
-        <McqTab board={board} mcqData={mcqData} />
+        <McqTab board={board} mcqData={mcqData} logAttempt={logAttempt} />
       )}
 
       {/* ── NMR PRACTICE TAB ──────────────────────────────────────────────────── */}

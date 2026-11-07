@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, limit, getDocs, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCtSbGHVvDJinQ2NnbZUAMp2YHU2aNtkTM",
@@ -80,6 +80,110 @@ export async function redeemAccessKey(uid, key) {
   }, { merge: true });
 
   return { success: true, expiresAt: keyData.expiresAt ? keyData.expiresAt.toDate() : null };
+}
+
+// =====================================================================
+//  Attempts — one document per answered question (revision or homework)
+//  Everything in the progress/tutor dashboards is computed from these.
+// =====================================================================
+
+/**
+ * data: { board, type, questionId, topic, difficulty, correct, score, maxScore,
+ *         mode ("revision" | "homework"), assignmentId }
+ */
+export async function recordAttempt(user, profile, data) {
+  if (!user?.uid) return;
+  const attempt = {
+    uid: user.uid,
+    tutorId: profile?.tutorId || null,
+    classId: profile?.classId || null,
+    board: data.board || null,
+    type: data.type,                       // "mcq" | "calc" | "extended" | "flashcard" | "quiz"
+    questionId: String(data.questionId),
+    topic: data.topic || null,             // spec code / calc set id / category
+    topicLabel: data.topicLabel || null,   // human-readable name for dashboards
+    difficulty: data.difficulty || null,
+    correct: data.correct === undefined ? data.score >= data.maxScore : !!data.correct,
+    score: data.score ?? (data.correct ? 1 : 0),
+    maxScore: data.maxScore ?? 1,
+    mode: data.mode || "revision",
+    assignmentId: data.assignmentId || null,
+    createdAt: serverTimestamp(),
+    clientTime: Date.now(),
+  };
+  try {
+    await addDoc(collection(db, "attempts"), attempt);
+  } catch (e) {
+    // Never block the UI on analytics-style writes
+    console.warn("recordAttempt failed:", e.message);
+  }
+}
+
+const tsToMs = (a) => a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.clientTime || 0);
+
+export async function fetchAttemptsForUser(uid, max = 1000) {
+  const q = query(collection(db, "attempts"), where("uid", "==", uid), limit(max));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => tsToMs(b) - tsToMs(a));
+}
+
+export async function fetchAttemptsForTutor(tutorId, max = 5000) {
+  const q = query(collection(db, "attempts"), where("tutorId", "==", tutorId), limit(max));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => tsToMs(b) - tsToMs(a));
+}
+
+// =====================================================================
+//  Classes — a tutor creates a class, students join with its code
+// =====================================================================
+
+const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I
+const makeClassCode = () => "HSJ-" + Array.from({ length: 4 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join("");
+
+export async function createClass(tutorUid, { name, board }) {
+  // Retry a few times in the (unlikely) event of a code collision
+  for (let i = 0; i < 5; i++) {
+    const code = makeClassCode();
+    const ref = doc(db, "classes", code);
+    const existing = await getDoc(ref);
+    if (existing.exists()) continue;
+    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorUid, createdAt: serverTimestamp() };
+    await setDoc(ref, cls);
+    return cls;
+  }
+  throw new Error("Could not generate a unique class code, please try again");
+}
+
+export async function fetchTutorClasses(tutorUid) {
+  const q = query(collection(db, "classes"), where("tutorId", "==", tutorUid));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => d.data()).sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+}
+
+// Both filters are needed: the security rule only lets a tutor list users
+// whose tutorId is their own uid, so the query must say so explicitly.
+export async function fetchClassStudents(code, tutorUid) {
+  const q = query(collection(db, "users"), where("tutorId", "==", tutorUid), where("classId", "==", code));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+}
+
+export async function joinClass(uid, rawCode) {
+  const code = rawCode.trim().toUpperCase();
+  const snap = await getDoc(doc(db, "classes", code));
+  if (!snap.exists()) return { success: false, error: "No class found with that code" };
+  const cls = snap.data();
+  if (cls.tutorId === uid) return { success: false, error: "You can't join your own class" };
+  await setDoc(doc(db, "users", uid), {
+    classId: code,
+    tutorId: cls.tutorId,
+    joinedClassAt: serverTimestamp(),
+  }, { merge: true });
+  return { success: true, cls };
+}
+
+export async function leaveClass(uid) {
+  await setDoc(doc(db, "users", uid), { classId: null, tutorId: null, joinedClassAt: null }, { merge: true });
 }
 
 export { auth, db };

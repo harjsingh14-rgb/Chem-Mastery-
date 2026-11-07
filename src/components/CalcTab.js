@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CALC_SETS } from "../data/calc-sets";
 import track from "../utils/track";
 
-export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivity, logScore, LockedOverlay }) {
+export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivity, logScore, logAttempt, LockedOverlay }) {
   const [calcTopic, setCalcTopic] = useState(null);
   const [calcYear, setCalcYear] = useState("as");
   const [calcDifficulty, setCalcDifficulty] = useState(null);
@@ -141,6 +141,10 @@ export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivi
             track("attempt_question", { topic: calcTopic, difficulty: q.difficulty, correct, question_index: currentIdx });
             logActivity("calc");
             logScore("calc", calcTopic, correct ? 1 : 0, 1);
+            logAttempt && logAttempt({
+              board, type: "calc", questionId: q.id, topic: calcTopic,
+              topicLabel: set.title, difficulty: q.difficulty, correct,
+            });
             try {
               const srData = JSON.parse(localStorage.getItem("hsj-calc-sr") || "{}");
               const topicSR = srData[calcTopic] || {};

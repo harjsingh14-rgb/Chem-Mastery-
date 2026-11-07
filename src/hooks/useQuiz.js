@@ -7,7 +7,7 @@ const AQA_A2_SECTIONS = ["physical_a2", "inorganic_a2", "organic2", "practicals_
 const OCR_AS_SECTIONS = ["ocr_mod2", "ocr_mod3", "ocr_mod4"];
 const OCR_A2_SECTIONS = ["ocr_mod5", "ocr_mod6"];
 
-export default function useQuiz(board) {
+export default function useQuiz(board, logAttempt) {
   const [quizScreen, setQuizScreen] = useState(null);
   const [quizYear, setQuizYear] = useState("as");
   const [quizMode, setQuizMode] = useState("year");
@@ -99,6 +99,10 @@ export default function useQuiz(board) {
   const recordQuizAnswer = (correct) => {
     const card = quizDeck[quizPos];
     const key = `${card.topicId}-${card.cardIdx}`;
+    logAttempt && logAttempt({
+      board, type: "quiz", questionId: key, topic: card.topicId,
+      topicLabel: SETS[card.topicId]?.title || null, correct,
+    });
     setQuizHistory(prev => {
       const h = prev[key] || { c: 0, w: 0 };
       return { ...prev, [key]: correct ? { c: h.c + 1, w: h.w } : { c: h.c, w: h.w + 1 } };

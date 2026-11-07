@@ -3,7 +3,7 @@ import { auth } from "../firebase";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
 import track from "../utils/track";
 
-export default function ExtendedTab({ board, hasFullAccess, logActivity, LockedOverlay }) {
+export default function ExtendedTab({ board, hasFullAccess, logActivity, logAttempt, LockedOverlay }) {
   const [extCategory, setExtCategory] = useState(null);
   const [extIndex, setExtIndex] = useState(0);
   const [extQPicker, setExtQPicker] = useState(false);
@@ -165,6 +165,10 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, LockedO
       setExtMarked(covered);
       setExtScore(s => ({ ...s, [q.id]: data.score }));
       setExtRevealed(true);
+      logAttempt && logAttempt({
+        board, type: "extended", questionId: q.id, topic: q.category, topicLabel: q.category,
+        score: data.score, maxScore: q.marks, correct: data.score >= Math.ceil(q.marks * 0.75),
+      });
     } catch (err) {
       setExtAiError(err.message || 'Could not reach AI Examiner');
     } finally {

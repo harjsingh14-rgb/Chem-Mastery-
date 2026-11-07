@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import McqQuestion from "./McqQuestion";
 
-export default function McqTab({ board, mcqData }) {
+export default function McqTab({ board, mcqData, logAttempt }) {
   const [mcqYear, setMcqYear] = useState("as");
   const [mcqTopic, setMcqTopic] = useState(null);
   const [mcqIdx, setMcqIdx] = useState(0);
@@ -185,11 +185,16 @@ export default function McqTab({ board, mcqData }) {
           accentColor="#dc2626"
           onSelect={setMcqSelected}
           onCheck={() => {
+            const correct = mcqSelected === currentQ.answer;
             setMcqRevealed(true);
             setMcqScore(prev => ({
-              correct: prev.correct + (mcqSelected === currentQ.answer ? 1 : 0),
+              correct: prev.correct + (correct ? 1 : 0),
               total: prev.total + 1
             }));
+            logAttempt && logAttempt({
+              board, type: "mcq", questionId: currentQ.id, topic: currentQ.topic,
+              topicLabel: mcqData.topics[currentQ.topic]?.name || null, correct,
+            });
           }}
           onNext={() => { setMcqIdx(i => i + 1); setMcqSelected(null); setMcqRevealed(false); }}
           isLast={mcqIdx >= activeQuestions.length - 1}
