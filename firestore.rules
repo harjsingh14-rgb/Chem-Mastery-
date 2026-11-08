@@ -28,7 +28,7 @@ service cloud.firestore {
         ||
         // Own profile: may not touch role, group links or onboarding records
         (request.auth.uid == uid
-          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'applicantId', 'placedAt']))
+          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt']))
       );
     }
 
@@ -36,6 +36,13 @@ service cloud.firestore {
     // api/onboarding.js); admins read it in the Students tab.
     match /applicants/{id} {
       allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Invoices and payments mirrored from Stripe by api/stripe-webhook.js.
+    // The student (and later their parent), their tutor and admins can read them.
+    match /payments/{id} {
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isAdmin());
       allow write: if false;
     }
 

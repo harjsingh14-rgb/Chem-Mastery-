@@ -5,7 +5,7 @@ import { fetchApplicants, fetchAllClasses, studentsApi } from "../firebase";
 import { T, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { SELF_EVALUATION, ragCounts } from "../data/self-evaluation";
-import { PAYMENT_PLANS, paymentPlanLabel } from "../data/terms";
+import { PAYMENT_PLANS, paymentPlanLabel, GRADES, DEFAULT_PROGRAMME_END, DEFAULT_GROUP_SIZE, money } from "../data/terms";
 
 const STATUS = {
   invited: { tone: "amber", label: "Self-evaluation sent" },
@@ -18,7 +18,10 @@ const fmtDateTime = (ms) => ms ? new Date(ms).toLocaleString("en-GB", { day: "nu
 const label = { fontSize: 12, fontWeight: 600, color: T.muted };
 const field = { display: "flex", flexDirection: "column", gap: 6 };
 const selectStyle = { padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink };
-const EMPTY_FORM = { studentName: "", studentEmail: "", parentName: "", parentEmail: "", parentPhone: "", board: "aqa", year: 12, paymentPlan: "pif", paymentAmount: "", notes: "" };
+const today = () => new Date().toISOString().slice(0, 10);
+const EMPTY_FORM = () => ({ studentName: "", studentEmail: "", parentName: "", parentEmail: "", parentPhone: "", board: "aqa", year: 12,
+  paymentPlan: "instalments", paymentAmount: "", schedule: [{ amount: "", due: "" }], programmeStart: today(), programmeEnd: DEFAULT_PROGRAMME_END,
+  initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "" });
 
 export default function TutorStudents({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
@@ -28,6 +31,7 @@ export default function TutorStudents({ authUser, userProfile }) {
   const [notice, setNotice] = useState(null);
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
+  const setRow = (i, k, v) => setForm(f => ({ ...f, schedule: f.schedule.map((r, j) => j === i ? { ...r, [k]: v } : r) }));
   const [saving, setSaving] = useState(false);
   const [openId, setOpenId] = useState(null);
   const [filter, setFilter] = useState("open");
@@ -48,9 +52,9 @@ export default function TutorStudents({ authUser, userProfile }) {
     e.preventDefault();
     setSaving(true); setError(null); setNotice(null);
     try {
-      const { applicant, emailError } = await studentsApi("create", form);
+      const { applicant, emailError } = await studentsApi("create", { ...form, schedule: form.schedule.filter(r => r.amount || r.due) });
       setApplicants(prev => [applicant, ...(prev || [])]);
-      setForm(EMPTY_FORM); setShowNew(false); setOpenId(applicant.id); setFilter("open");
+      setForm(EMPTY_FORM()); setShowNew(false); setOpenId(applicant.id); setFilter("open");
       setNotice(emailError ? { tone: "amber", text: `${applicant.studentName} added, but the self-evaluation email failed: ${emailError}. Use Resend.` }
         : { tone: "green", text: `${applicant.studentName} added. Self-evaluation link emailed to ${applicant.studentEmail}.` });
     } catch (err) { setError(err.message); }
@@ -85,16 +89,33 @@ export default function TutorStudents({ authUser, userProfile }) {
                 <div style={{ display: "flex", gap: 6 }}>{BOARDS.map(b => <Button key={b.id} type="button" variant={form.board === b.id ? "primary" : "secondary"} onClick={() => setF("board", b.id)}>{b.label}</Button>)}</div></div>
               <div style={field}><span style={label}>Year group</span>
                 <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setF("year", y)}>Year {y}</Button>)}</div></div>
-              <div style={field}><label style={label} htmlFor="ns-plan">Payment plan</label>
-                <div style={{ display: "flex", gap: 6 }}>
-                  <select id="ns-plan" value={form.paymentPlan} onChange={e => setF("paymentPlan", e.target.value)} style={{ ...selectStyle, flex: 1 }}>{PAYMENT_PLANS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}</select>
-                  <Input type="number" min="0" step="1" placeholder="£" aria-label="Amount in pounds" value={form.paymentAmount} onChange={e => setF("paymentAmount", e.target.value)} style={{ width: 110 }} />
-                </div></div>
+              <div style={field}><label style={label} htmlFor="ns-start">Programme start date</label><Input id="ns-start" type="date" required value={form.programmeStart} onChange={e => setF("programmeStart", e.target.value)} /></div>
+              <div style={field}><label style={label} htmlFor="ns-end">Programme runs until</label><Input id="ns-end" value={form.programmeEnd} onChange={e => setF("programmeEnd", e.target.value)} placeholder={DEFAULT_PROGRAMME_END} /></div>
+              <div style={field}><label style={label} htmlFor="ns-grade">Initial assessed grade</label>
+                <select id="ns-grade" value={form.initialGrade} onChange={e => setF("initialGrade", e.target.value)} style={selectStyle}>{GRADES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
+              <div style={field}><label style={label} htmlFor="ns-size">Group size (up to)</label><Input id="ns-size" type="number" min="2" max="12" value={form.groupSize} onChange={e => setF("groupSize", e.target.value)} style={{ width: 90 }} /></div>
+              <div style={field}><label style={label} htmlFor="ns-plan">Payment option</label>
+                <select id="ns-plan" value={form.paymentPlan} onChange={e => setF("paymentPlan", e.target.value)} style={selectStyle}>{PAYMENT_PLANS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}</select></div>
+              <div style={field}><label style={label} htmlFor="ns-fee">Total programme fee (£)</label><Input id="ns-fee" type="number" min="1" step="1" required value={form.paymentAmount} onChange={e => setF("paymentAmount", e.target.value)} style={{ width: 140 }} /></div>
             </div>
+            <div style={{ ...field, marginTop: 12 }}>
+              <span style={label}>Payment schedule (goes into clause 5.4 of the agreement)</span>
+              {form.schedule.map((r, i) => (
+                <div key={i} style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                  <Input type="number" min="1" step="1" placeholder="£ amount" aria-label="Amount" value={r.amount} onChange={e => setRow(i, "amount", e.target.value)} style={{ width: 130 }} />
+                  <Input placeholder="Due, e.g. On signing, or 26 November 2026" aria-label="When due" value={r.due} onChange={e => setRow(i, "due", e.target.value)} style={{ flex: 1 }} />
+                  {form.schedule.length > 1 && <Button type="button" variant="ghost" size="sm" onClick={() => setForm(f => ({ ...f, schedule: f.schedule.filter((_, j) => j !== i) }))} aria-label="Remove line">×</Button>}
+                </div>
+              ))}
+              <div><Button type="button" size="sm" onClick={() => setForm(f => ({ ...f, schedule: [...f.schedule, { amount: "", due: "" }] }))}>Add a payment line</Button></div>
+            </div>
+            <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ns-extra">Additional or replacement terms (optional, e.g. results-based payment clauses). One clause per line.</label>
+              <textarea id="ns-extra" rows={3} value={form.extraTerms} onChange={e => setF("extraTerms", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
             <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ns-notes">Notes from the call (optional)</label>
               <textarea id="ns-notes" rows={2} value={form.notes} onChange={e => setF("notes", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
             <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
               <Button type="submit" variant="accent" disabled={saving}>{saving ? "Adding…" : "Add and send self-evaluation"}</Button>
+              <span style={{ fontSize: 12, color: T.muted, alignSelf: "center" }}>The agreement goes to the parent automatically once the self-evaluation is in.</span>
               <Button type="button" variant="ghost" onClick={() => setShowNew(false)}>Cancel</Button>
             </div>
           </form>
@@ -124,7 +145,7 @@ export default function TutorStudents({ authUser, userProfile }) {
                       <td style={{ ...td, paddingLeft: 20 }}><div style={{ fontWeight: 600 }}>{a.studentName}</div><div style={{ fontSize: 11, color: T.muted }}>{a.studentEmail}</div></td>
                       <td style={td}><div>{a.parentName}</div><div style={{ fontSize: 11, color: T.muted }}>{a.parentEmail}{a.parentPhone ? ` · ${a.parentPhone}` : ""}</div></td>
                       <td style={td}>{boardLabel(a.board)} · Year {a.year}</td>
-                      <td style={td}>{paymentPlanLabel(a.paymentPlan)}{a.paymentAmount ? <span style={{ color: T.muted }}> · £{a.paymentAmount}</span> : null}</td>
+                      <td style={td}>{paymentPlanLabel(a.paymentPlan)}{a.paymentAmount ? <span style={{ color: T.muted }}> · {money(a.paymentAmount)}</span> : null}</td>
                       <td style={td}><Chip tone={st.tone}>{st.label}</Chip></td>
                       <td style={{ ...td, paddingRight: 20, color: T.muted }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between" }}>{fmtDate(a.createdAt)}<Icon name="chevronDown" size={14} style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", color: T.faint }} /></div>
@@ -258,6 +279,12 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
         </div>
       )}
 
+      <div style={{ fontSize: 13, color: T.body, display: "flex", gap: "4px 18px", flexWrap: "wrap" }}>
+        <span><strong>Fee:</strong> {money(a.paymentAmount) || "not set"} · {paymentPlanLabel(a.paymentPlan)}</span>
+        {(a.schedule || []).length > 0 && <span><strong>Schedule:</strong> {a.schedule.map(r => `${money(r.amount)} ${r.due}`).join("; ")}</span>}
+        {a.programmeStart && <span><strong>Starts:</strong> {a.programmeStart}{a.programmeEnd ? ` until ${a.programmeEnd}` : ""}</span>}
+        {a.initialGrade && <span><strong>Initial grade:</strong> {a.initialGrade}</span>}
+      </div>
       {a.notes && <div style={{ fontSize: 13, color: T.body }}><strong>Call notes:</strong> {a.notes}</div>}
 
       {a.status !== "placed" && (

@@ -2,6 +2,8 @@
 // for HSJ notifications can be changed with env vars without a code change.
 const FROM = process.env.ONBOARDING_FROM || "Harj at HSJ Tuition <harj@hsjtuition.co.uk>";
 const NOTIFY = process.env.ONBOARDING_NOTIFY || "info@hsjtuition.co.uk";
+// Replies to every onboarding email go to the HSJ inbox, whoever it was sent as.
+const REPLY_TO = process.env.ONBOARDING_REPLY_TO || "info@hsjtuition.co.uk";
 const SITE = "https://fc.hsjtuition.co.uk";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -31,7 +33,7 @@ async function sendEmail({ to, cc, subject, html, replyTo }) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: FROM, to: Array.isArray(to) ? to : [to], cc: cc ? (Array.isArray(cc) ? cc : [cc]) : undefined, reply_to: replyTo, subject, html }),
+    body: JSON.stringify({ from: FROM, to: Array.isArray(to) ? to : [to], cc: cc ? (Array.isArray(cc) ? cc : [cc]) : undefined, reply_to: replyTo || REPLY_TO, subject, html }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) { console.error("Resend error:", data); throw new Error(data.message || "Email could not be sent"); }
@@ -54,10 +56,10 @@ function termsInvite(a, link, ragCounts) {
   const html = layout("One last step before lessons start", `
     <p>Hi ${esc(firstName(a.parentName))},</p>
     <p>${esc(firstName(a.studentName))} has completed the self-evaluation (${ragCounts.red} topics rated Red, ${ragCounts.amber} Amber, ${ragCounts.green} Green). I will use it to place ${esc(firstName(a.studentName))} in the right group and plan the first lessons.</p>
-    <p>Please read and accept the HSJ Tuition terms for group lessons. It takes a minute and once done I will confirm the group and lesson time by email.</p>
-    ${button(link, "Read and accept the terms")}
+    <p>Please read and accept the HSJ Tuition Tutoring Programme Agreement. It sets out the programme, attendance, fees and payment dates we agreed on the call. It takes a few minutes and once done I will confirm the group and lesson time by email.</p>
+    ${button(link, "Read and accept the agreement")}
     <p style="margin-top:22px;">Thank you,<br>Harj</p>`);
-  return { subject: `HSJ Tuition terms for ${a.studentName}`, html };
+  return { subject: `HSJ Tuition Tutoring Programme Agreement for ${a.studentName}`, html };
 }
 
 /** To the student, parent copied: your account and group. */

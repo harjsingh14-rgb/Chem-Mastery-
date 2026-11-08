@@ -28,6 +28,8 @@ function publicView(kind, a) {
   return {
     ...base,
     parentName: a.parentName, paymentPlan: a.paymentPlan, paymentAmount: a.paymentAmount ?? null,
+    schedule: a.schedule || [], programmeStart: a.programmeStart || null, programmeEnd: a.programmeEnd || null,
+    initialGrade: a.initialGrade || null, groupSize: a.groupSize || 6, extraTerms: a.extraTerms || "", agreementDate: a.createdAt || null,
     evaluationDone: !!a.evaluation, terms: a.terms ? { acceptedAt: a.terms.acceptedAt, acceptedName: a.terms.acceptedName, version: a.terms.version } : null,
   };
 }

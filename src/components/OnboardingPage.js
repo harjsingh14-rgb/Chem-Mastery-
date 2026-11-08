@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { T, FONT_LINK, GLOBAL_CSS } from "../ui/theme";
 import { Button, Input, Notice, Chip } from "../ui/components";
 import { SELF_EVALUATION, RAG, COVERED } from "../data/self-evaluation";
-import { TERMS_SECTIONS, TERMS_VERSION, fillTerms, paymentPlanLabel } from "../data/terms";
+import { TERMS_VERSION, buildAgreement, agreementPreamble, paymentPlanLabel, money, fmtLongDate, SCHEDULE_TOKEN } from "../data/terms";
 
 async function api(method, token, body) {
   const res = await fetch(method === "GET" ? `/api/onboarding?token=${encodeURIComponent(token)}` : "/api/onboarding", {
@@ -239,10 +239,14 @@ function TermsForm({ token, data }) {
   const [accepted, setAccepted] = useState(data.terms || null);
 
   const vars = {
-    studentName: data.studentName, parentName: data.parentName,
-    course: `A-level Chemistry (${data.boardLabel}, Year ${data.year})`,
-    paymentPlan: `${paymentPlanLabel(data.paymentPlan)}${data.paymentAmount ? `, £${Number(data.paymentAmount).toLocaleString("en-GB")}` : ""}`,
+    parentName: data.parentName, studentName: data.studentName,
+    agreementDate: data.agreementDate ? new Date(data.agreementDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "",
+    subject: "Chemistry", level: `A Level (${data.boardLabel}, Year ${data.year})`,
+    startDate: data.programmeStart, programmeEnd: data.programmeEnd, groupSize: data.groupSize,
+    totalFee: data.paymentAmount, paymentPlan: data.paymentPlan, schedule: data.schedule || [],
+    initialGrade: data.initialGrade, extraTerms: data.extraTerms,
   };
+  const sections = buildAgreement(vars);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -253,35 +257,53 @@ function TermsForm({ token, data }) {
     setSaving(false);
   };
 
+  const clauseStyle = { margin: "0 0 8px", fontSize: 14, lineHeight: 1.65, color: T.body };
+
   return (
     <>
       <div style={{ marginBottom: 18 }}>
-        <div style={label}>Terms for group lessons</div>
-        <h1 style={{ fontFamily: T.display, fontSize: 26, margin: "6px 0 6px" }}>HSJ Tuition and {data.studentName}</h1>
-        <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>Please read these terms. At the bottom, type your name and accept. HSJ Tuition then confirms the group and lesson time by email.</p>
+        <div style={label}>A Level Chemistry Tutoring Agreement</div>
+        <h1 style={{ fontFamily: T.display, fontSize: 26, margin: "6px 0 6px" }}>Tutoring Programme Agreement</h1>
+        <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>Prepared for {data.parentName} by Harjinder Singh, HSJ Tuition. Please read it through. At the bottom, type your name and accept. HSJ Tuition then confirms the group and lesson time by email.</p>
       </div>
-      {!data.evaluationDone && <Notice tone="amber" style={{ marginBottom: 12 }}>{data.studentName.split(" ")[0]} has not completed the self-evaluation yet. You can still accept the terms now.</Notice>}
+      {!data.evaluationDone && <Notice tone="amber" style={{ marginBottom: 12 }}>{data.studentName.split(" ")[0]} has not completed the self-evaluation yet. You can still accept the agreement now.</Notice>}
       <div style={cardStyle}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 6 }}>
-          {[["Student", data.studentName], ["Parent or guardian", data.parentName], ["Course", vars.course], ["Payment plan", vars.paymentPlan]].map(([k, v]) => (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12 }}>
+          {[["Student", data.studentName], ["Parent or guardian", data.parentName], ["Programme", vars.level], ["Start date", fmtLongDate(data.programmeStart) || "To be confirmed"],
+            ["Total programme fee", money(data.paymentAmount) || "See below"], ["Payment option", paymentPlanLabel(data.paymentPlan)]].map(([k, v]) => (
             <div key={k}><div style={label}>{k}</div><div style={{ fontWeight: 600, fontSize: 14, marginTop: 2 }}>{v}</div></div>
           ))}
         </div>
       </div>
       <div style={cardStyle}>
-        {TERMS_SECTIONS.map(sec => (
-          <div key={sec.title} style={{ marginBottom: 16 }}>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>{sec.title}</div>
-            {sec.body.map((p, i) => <p key={i} style={{ margin: "0 0 8px", fontSize: 14, lineHeight: 1.65, color: T.body }}>{fillTerms(p, vars)}</p>)}
+        {agreementPreamble(vars).map((p, i) => <p key={i} style={clauseStyle}>{p}</p>)}
+        {sections.map(sec => (
+          <div key={sec.n} style={{ marginTop: 16 }}>
+            <div style={{ fontWeight: 700, marginBottom: 6 }}>{sec.n}. {sec.title}</div>
+            {sec.clauses.map((c, i) => c === SCHEDULE_TOKEN ? (
+              <table key={i} style={{ borderCollapse: "collapse", margin: "4px 0 10px", fontSize: 14, minWidth: 260 }}>
+                <tbody>
+                  {(vars.schedule || []).map((r, j) => (
+                    <tr key={j}><td style={{ padding: "4px 14px 4px 0", fontWeight: 600 }}>{money(r.amount)}</td><td style={{ padding: "4px 0", color: T.body }}>{r.due}</td></tr>
+                  ))}
+                  {(vars.schedule || []).length === 0 && <tr><td style={{ color: T.muted, padding: "4px 0" }}>Payment dates as agreed at enrolment.</td></tr>}
+                </tbody>
+              </table>
+            ) : c.startsWith("- ") ? (
+              <div key={i} style={{ ...clauseStyle, paddingLeft: 22, position: "relative" }}><span style={{ position: "absolute", left: 8 }}>•</span>{c.slice(2)}</div>
+            ) : (
+              <p key={i} style={clauseStyle}>{c}</p>
+            ))}
           </div>
         ))}
-        <div style={{ fontSize: 11, color: T.faint }}>Version {TERMS_VERSION}</div>
+        <div style={{ fontSize: 11, color: T.faint, marginTop: 10 }}>Version {TERMS_VERSION}</div>
       </div>
       {accepted ? (
         <Notice tone="green">Accepted by {accepted.acceptedName} on {new Date(accepted.acceptedAt).toLocaleString("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}. Thank you. Nothing else to do: HSJ Tuition will email the group and lesson time.</Notice>
       ) : (
         <form onSubmit={submit} style={cardStyle}>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>Accept the terms</div>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>Accept the agreement</div>
+          <div style={{ fontSize: 13, color: T.muted, marginBottom: 10 }}>Typing your name and clicking Accept has the same effect as signing the agreement. Your name, the date and time are recorded.</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 13, fontWeight: 600, color: T.muted }}>
               Your full name
@@ -289,10 +311,10 @@ function TermsForm({ token, data }) {
             </label>
             <label style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 14, cursor: "pointer" }}>
               <input type="checkbox" checked={agree} onChange={e => setAgree(e.target.checked)} style={{ marginTop: 3 }} />
-              <span>I am the parent or guardian of {data.studentName} and I agree to these terms on behalf of us both.</span>
+              <span>I am the parent or guardian of {data.studentName}. I have read this Agreement and I confirm the Client Confirmations in Section 13.</span>
             </label>
             {error && <Notice tone="red">{error}</Notice>}
-            <div><Button type="submit" variant="accent" disabled={saving || !agree || name.trim().length < 2}>{saving ? "Saving…" : "Accept the terms"}</Button></div>
+            <div><Button type="submit" variant="accent" disabled={saving || !agree || name.trim().length < 2}>{saving ? "Saving…" : "Accept the agreement"}</Button></div>
           </div>
         </form>
       )}

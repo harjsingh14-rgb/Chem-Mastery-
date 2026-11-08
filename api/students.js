@@ -6,7 +6,8 @@ const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
 
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
-const PLANS = ["pif", "x2", "quarterly", "monthly"];
+const PLANS = ["pif", "instalments", "results"];
+const GRADES = ["A*", "A", "B", "C", "D", "E", "U", "Not yet assessed"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const str = (v, max = 120) => String(v ?? "").trim().slice(0, max);
@@ -22,8 +23,18 @@ function validateDetails(b, { partial = false } = {}) {
   if (has("parentPhone")) out.parentPhone = str(b.parentPhone, 40);
   if (has("board")) { out.board = str(b.board, 10); if (!BOARDS[out.board]) throw bad("Exam board must be AQA, OCR A or Edexcel"); }
   if (has("year")) { out.year = Number(b.year); if (![12, 13].includes(out.year)) throw bad("Year group must be 12 or 13"); }
-  if (has("paymentPlan")) { out.paymentPlan = str(b.paymentPlan, 20); if (!PLANS.includes(out.paymentPlan)) throw bad("Payment plan must be PIF, two instalments, quarterly or monthly"); }
-  if (has("paymentAmount")) { const n = b.paymentAmount === "" || b.paymentAmount === null ? null : Number(b.paymentAmount); if (n !== null && (!Number.isFinite(n) || n < 0)) throw bad("Payment amount must be a number"); out.paymentAmount = n; }
+  if (has("paymentPlan")) { out.paymentPlan = str(b.paymentPlan, 20); if (!PLANS.includes(out.paymentPlan)) throw bad("Payment option must be paid in full, instalments or results-based"); }
+  if (has("paymentAmount")) { const n = b.paymentAmount === "" || b.paymentAmount === null ? null : Number(b.paymentAmount); if (n === null || !Number.isFinite(n) || n <= 0) throw bad("Total programme fee is required"); out.paymentAmount = n; }
+  if (has("schedule")) {
+    const rows = Array.isArray(b.schedule) ? b.schedule.slice(0, 12) : [];
+    out.schedule = rows.map(r => ({ amount: Number(r?.amount), due: str(r?.due, 80) })).filter(r => Number.isFinite(r.amount) && r.amount > 0 && r.due);
+    if (out.schedule.length === 0) throw bad("Add at least one payment line (amount and when it is due)");
+  }
+  if (has("programmeStart")) { out.programmeStart = str(b.programmeStart, 10); if (!/^\d{4}-\d{2}-\d{2}$/.test(out.programmeStart)) throw bad("Programme start date is required"); }
+  if (has("programmeEnd")) { out.programmeEnd = str(b.programmeEnd, 60) || "17 June 2027"; }
+  if (has("initialGrade")) { out.initialGrade = str(b.initialGrade, 20); if (out.initialGrade && !GRADES.includes(out.initialGrade)) throw bad("Initial assessed grade is not valid"); }
+  if (has("groupSize")) { const g = Number(b.groupSize); out.groupSize = Number.isInteger(g) && g >= 2 && g <= 12 ? g : 6; }
+  if (has("extraTerms")) out.extraTerms = str(b.extraTerms, 4000);
   if (has("notes")) out.notes = str(b.notes, 2000);
   return out;
 }
@@ -134,6 +145,12 @@ module.exports = async function handler(req, res) {
         joinedClassAt: new Date(now),
         parentName: a.parentName, parentEmail: a.parentEmail, parentPhone: a.parentPhone || "",
         paymentPlan: a.paymentPlan, paymentAmount: a.paymentAmount ?? null,
+        agreement: {
+          totalFee: a.paymentAmount ?? null, paymentPlan: a.paymentPlan, schedule: a.schedule || [],
+          programmeStart: a.programmeStart || null, programmeEnd: a.programmeEnd || null,
+          initialGrade: a.initialGrade || null, groupSize: a.groupSize || 6, extraTerms: a.extraTerms || "",
+          acceptedAt: a.terms?.acceptedAt || null, acceptedName: a.terms?.acceptedName || null, version: a.terms?.version || null,
+        },
         selfEvaluation: a.evaluation || null,
         termsAccepted: a.terms || null,
         applicantId: id,
