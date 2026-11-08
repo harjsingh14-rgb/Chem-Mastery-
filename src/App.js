@@ -20,6 +20,8 @@ import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER } from "./data/sec
 import LoginScreen from "./components/LoginScreen";
 import OnboardingPage from "./components/OnboardingPage";
 import TutorStudents from "./components/TutorStudents";
+import { TutorLessonsList, TutorLessonEditor } from "./components/TutorLessons";
+import StudentLessons from "./components/StudentLessons";
 import CalcTab from "./components/CalcTab";
 import ExtendedTab from "./components/ExtendedTab";
 import McqTab from "./components/McqTab";
@@ -213,16 +215,18 @@ export default function App() {
   const studentNav = [
     { id: "home", label: "Dashboard", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "homework", label: "Homework", icon: "checkSquare", to: `/${navBoard}/homework`, active: screen === "topics" && topicsTab === "homework" },
-    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "videos"].includes(topicsTab)) },
+    { id: "lessons", label: "Lessons", icon: "calendar", to: `/${navBoard}/lessons`, active: screen === "topics" && topicsTab === "lessons" },
+    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
     { id: "videos", label: "Videos", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
   ];
   const tutorNav = [
     { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
     { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
+    { id: "tlessons", label: "Lessons", icon: "calendar", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" },
     ...(isAdmin ? [{ id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" }] : []),
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
-    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "videos"].includes(topicsTab)) },
+    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
   ];
 
@@ -352,6 +356,8 @@ export default function App() {
             : tutorParam
               ? <TutorHomeworkReview authUser={authUser} assignmentId={tutorParam} />
               : <TutorHomeworkList authUser={authUser} />)
+        : tutorPage === "lessons"
+          ? (tutorParam ? <TutorLessonEditor authUser={authUser} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
         : tutorPage === "students"
           ? <TutorStudents authUser={authUser} userProfile={userProfile} />
           : <TutorPage authUser={authUser} userProfile={userProfile} />
@@ -462,6 +468,7 @@ export default function App() {
         </>
       )}
       {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}
+      {topicsTab === "lessons" && <StudentLessons authUser={authUser} />}
       {topicsTab === "videos" && <VideosPage />}
       {!isPage && (
         <>

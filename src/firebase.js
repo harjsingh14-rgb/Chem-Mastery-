@@ -321,4 +321,66 @@ export async function answerMarkQuery(assignmentId, uid, key, reply) {
   });
 }
 
+// =====================================================================
+//  Lessons (one per group per date) and lesson notes (one per student)
+// =====================================================================
+
+export async function createLesson(tutorUid, { classId, className, board, date, topics }) {
+  const data = { classId, className: className || null, board: board || null, date, topics: topics || [], tutorId: tutorUid, createdAt: serverTimestamp(), clientTime: Date.now() };
+  const ref = await addDoc(collection(db, "lessons"), data);
+  return { id: ref.id, ...data };
+}
+
+export async function updateLesson(id, patch) {
+  await updateDoc(doc(db, "lessons", id), patch);
+}
+
+export async function deleteLesson(id) {
+  await deleteDoc(doc(db, "lessons", id));
+}
+
+export async function fetchTutorLessons(tutorUid) {
+  const snap = await getDocs(query(collection(db, "lessons"), where("tutorId", "==", tutorUid)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.clientTime || 0) - (a.clientTime || 0));
+}
+
+export async function fetchLesson(id) {
+  const snap = await getDoc(doc(db, "lessons", id));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+
+export const lessonNoteId = (lessonId, uid) => `${lessonId}_${uid}`;
+
+/** Create or update a student's note for a lesson. data carries the whole note (attendance, text, homework snapshot, ...). */
+export async function saveLessonNote(lessonId, uid, data) {
+  const id = lessonNoteId(lessonId, uid);
+  await setDoc(doc(db, "lessonNotes", id), { ...data, lessonId, uid, updatedAt: Date.now() }, { merge: true });
+  return id;
+}
+
+export async function fetchLessonNotes(lessonId, tutorUid) {
+  const snap = await getDocs(query(collection(db, "lessonNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function fetchMyLessonNotes(uid) {
+  const snap = await getDocs(query(collection(db, "lessonNotes"), where("uid", "==", uid)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(n => n.sentAt).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+}
+
+/** Email a saved lesson note to the parent (student copied). Runs server-side. */
+export async function sendLessonNote(noteId) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Please sign in again");
+  const idToken = await user.getIdToken();
+  const res = await fetch("/api/lesson-note", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ noteId }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "The note could not be sent");
+  return data;
+}
+
 export { auth, db };

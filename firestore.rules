@@ -68,6 +68,30 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Lessons: one per group per date, written by the tutor
+    match /lessons/{id} {
+      allow read: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+      allow create: if isTutor()
+        && request.resource.data.tutorId == request.auth.uid
+        && request.resource.data.classId is string
+        && request.resource.data.date is string;
+      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+    }
+
+    // Lesson notes: one per student per lesson (doc id lessonId_uid). The
+    // tutor writes them; the student reads their own; the send endpoint
+    // stamps sentAt server-side.
+    match /lessonNotes/{id} {
+      allow read: if signedIn()
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isAdmin());
+      allow create: if isTutor()
+        && request.resource.data.tutorId == request.auth.uid
+        && id == request.resource.data.lessonId + '_' + request.resource.data.uid;
+      allow update: if signedIn() && resource.data.tutorId == request.auth.uid
+        && !changed().hasAny(['uid', 'tutorId', 'lessonId']);
+      allow delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+    }
+
     // Homework set by a tutor for one group
     match /assignments/{id} {
       // The tutor who set it, or a student in that group, can read it

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, boardLabel } from "../ui/theme";
+import { LessonNotesCard } from "./StudentLessons";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, EmptyState, Button, IconTile, Table, th, td, chipToneForPct } from "../ui/components";
 import PracticeGrid from "./PracticeGrid";
 import { useHomework, HomeworkRow } from "./StudentHomework";
@@ -134,6 +135,8 @@ export default function StudentDashboard({ board, authUser, userProfile, current
             <StatTile label="This week" value={s.week} sub={s.weekPct === null ? "questions" : `questions · ${s.weekPct}% right`} />
             <StatTile label="Flashcards known" value={`${cardPct}%`} sub={`${knownCards} of ${totalCards} cards`} />
           </div>
+
+          {inClass && <LessonNotesCard authUser={authUser} board={board} />}
 
           <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <CardHeader title="Needs work" sub="Topics under 75% with 3+ answers" />

@@ -88,4 +88,29 @@ function notify(a, what, link) {
   return { subject: `${what}: ${a.studentName}`, html };
 }
 
-module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, notify, NOTIFY };
+const ATTENDANCE = { present: "was in the lesson", late: "arrived late to the lesson", absent: "missed the lesson" };
+const fmtLessonDate = (iso) => {
+  const d = new Date(`${iso}T00:00:00`);
+  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+};
+const nl2br = (t) => esc(t).replace(/\n/g, "<br>");
+
+/** To the parent, student copied: what happened in one lesson. */
+function lessonNote(note, { studentName, parentName, tutorName, groupName }) {
+  const sf = firstName(studentName);
+  const hw = note.homework;
+  const hwStatus = !hw ? "" : hw.status === "submitted"
+    ? `Submitted${hw.maxScore ? `, scored ${hw.score} out of ${hw.maxScore} (${hw.pct}%)` : ""}.`
+    : hw.status === "in-progress" ? "Started but not finished." : "Not started.";
+  const html = layout(`Lesson note for ${sf}`, `
+    <p>Hi ${esc(firstName(parentName) || "there")},</p>
+    <p>${esc(sf)} ${ATTENDANCE[note.attendance] || "was expected in the lesson"} on ${esc(fmtLessonDate(note.date))}${groupName ? ` (${esc(groupName)})` : ""}.</p>
+    ${(note.topics || []).length ? `<p><strong>Covered this lesson</strong><br>${note.topics.map(esc).join("<br>")}</p>` : ""}
+    ${note.text ? `<div style="background:#F4F6F9;border-radius:10px;padding:14px 16px;margin:14px 0;"><strong>From ${esc(tutorName)}</strong><br>${nl2br(note.text)}</div>` : ""}
+    ${hw ? `<p><strong>Homework: ${esc(hw.title)}</strong><br>${esc(hwStatus)}${hw.weak && hw.weak.length ? `<br>Needs more work: ${hw.weak.map(esc).join(", ")}.` : ""}</p>` : ""}
+    ${note.nextHomework ? `<p><strong>Next homework</strong><br>${esc(note.nextHomework.title)}${note.nextHomework.dueAt ? `, due ${esc(new Date(note.nextHomework.dueAt).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }))}` : ""}. ${esc(sf)} finds it in the HSJ Tuition account.</p>` : ""}
+    <p style="margin-top:20px;">Any questions, just reply to this email.<br>${esc(tutorName)}, HSJ Tuition</p>`);
+  return { subject: `Lesson note for ${sf}, ${fmtLessonDate(note.date)}`, html };
+}
+
+module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, notify, lessonNote, NOTIFY };
