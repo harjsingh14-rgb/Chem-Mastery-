@@ -56,6 +56,12 @@ import { AMOUNT_OF_SUBSTANCE } from "./exam/amount-of-substance";
 import { REDOX } from "./exam/redox";
 import { ORGANIC_ANALYSIS } from "./exam/organic-analysis";
 import { ALKANES } from "./exam/alkanes";
+import { REACTION_RATES } from "./exam/reaction-rates";
+import { AQUEOUS_IONS } from "./exam/aqueous-ions";
+import { TM_OXIDATION_STATES } from "./exam/tm-oxidation-states";
+import { POLYMERS } from "./exam/polymers";
+import { AMINO_ACIDS_PROTEINS } from "./exam/amino-acids-proteins";
+import { ORGANIC_SYNTHESIS } from "./exam/organic-synthesis";
 
 // One file per topic in src/data/exam/. `board` is an array of board ids
 // (["aqa", "ocr", "edexcel"]) or the string "both" for all boards.
@@ -86,6 +92,12 @@ export const EXAM_QUESTIONS = [
   ...REDOX,
   ...ORGANIC_ANALYSIS,
   ...ALKANES,
+  ...REACTION_RATES,
+  ...AQUEOUS_IONS,
+  ...TM_OXIDATION_STATES,
+  ...POLYMERS,
+  ...AMINO_ACIDS_PROTEINS,
+  ...ORGANIC_SYNTHESIS,
 ];
 
 /** Marks available for a question (sum of its parts). */
