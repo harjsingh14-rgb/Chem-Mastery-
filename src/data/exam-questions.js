@@ -43,6 +43,13 @@ import { CARBONYLS } from "./exam/carbonyls";
 import { ELECTROPHILIC_ADDITION } from "./exam/electrophilic-addition";
 import { NUCLEOPHILIC_SUBSTITUTION } from "./exam/nucleophilic-substitution";
 import { BORN_HABER_EDEXCEL } from "./exam/born-haber-edexcel";
+import { AROMATIC } from "./exam/aromatic";
+import { AMINES } from "./exam/amines";
+import { ENERGETICS } from "./exam/energetics";
+import { GROUP_2 } from "./exam/group-2";
+import { HALOGENS } from "./exam/halogens";
+import { PERIOD_3 } from "./exam/period-3";
+import { SPECTROSCOPY } from "./exam/spectroscopy";
 
 // One file per topic in src/data/exam/. `board` is an array of board ids
 // (["aqa", "ocr", "edexcel"]) or the string "both" for all boards.
@@ -60,6 +67,13 @@ export const EXAM_QUESTIONS = [
   ...ELECTROPHILIC_ADDITION,
   ...NUCLEOPHILIC_SUBSTITUTION,
   ...BORN_HABER_EDEXCEL,
+  ...AROMATIC,
+  ...AMINES,
+  ...ENERGETICS,
+  ...GROUP_2,
+  ...HALOGENS,
+  ...PERIOD_3,
+  ...SPECTROSCOPY,
 ];
 
 /** Marks available for a question (sum of its parts). */
