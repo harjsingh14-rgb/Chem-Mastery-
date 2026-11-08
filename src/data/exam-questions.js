@@ -50,6 +50,12 @@ import { GROUP_2 } from "./exam/group-2";
 import { HALOGENS } from "./exam/halogens";
 import { PERIOD_3 } from "./exam/period-3";
 import { SPECTROSCOPY } from "./exam/spectroscopy";
+import { ATOMIC_STRUCTURE } from "./exam/atomic-structure";
+import { BONDING } from "./exam/bonding";
+import { AMOUNT_OF_SUBSTANCE } from "./exam/amount-of-substance";
+import { REDOX } from "./exam/redox";
+import { ORGANIC_ANALYSIS } from "./exam/organic-analysis";
+import { ALKANES } from "./exam/alkanes";
 
 // One file per topic in src/data/exam/. `board` is an array of board ids
 // (["aqa", "ocr", "edexcel"]) or the string "both" for all boards.
@@ -74,6 +80,12 @@ export const EXAM_QUESTIONS = [
   ...HALOGENS,
   ...PERIOD_3,
   ...SPECTROSCOPY,
+  ...ATOMIC_STRUCTURE,
+  ...BONDING,
+  ...AMOUNT_OF_SUBSTANCE,
+  ...REDOX,
+  ...ORGANIC_ANALYSIS,
+  ...ALKANES,
 ];
 
 /** Marks available for a question (sum of its parts). */
