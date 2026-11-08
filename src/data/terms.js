@@ -18,7 +18,11 @@ export const PAYMENT_PLANS = [
 export const paymentPlanLabel = (id) => (PAYMENT_PLANS.find(p => p.id === id) || {}).label || id;
 
 export const GRADES = ["A*", "A", "B", "C", "D", "E", "U", "Not yet assessed"];
-export const DEFAULT_PROGRAMME_END = "17 June 2027";
+// A programme runs to the student's final A Level exam series: Year 13 sits in
+// June 2027, Year 12 in June 2028. The exact last exam date is filled in once
+// the boards publish the timetable, so the default names the series.
+export const programmeEndFor = (year) => `the end of the June ${Number(year) === 12 ? 2028 : 2027} A Level examination series`;
+export const DEFAULT_PROGRAMME_END = programmeEndFor(13);
 export const DEFAULT_GROUP_SIZE = 6;
 
 export const money = (n) => (n === null || n === undefined || n === "" || Number.isNaN(Number(n))) ? "" : `£${Number(n).toLocaleString("en-GB")}`;

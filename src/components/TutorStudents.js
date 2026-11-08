@@ -5,7 +5,7 @@ import { fetchApplicants, fetchAllClasses, studentsApi } from "../firebase";
 import { T, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { SELF_EVALUATION, ragCounts } from "../data/self-evaluation";
-import { PAYMENT_PLANS, paymentPlanLabel, GRADES, DEFAULT_PROGRAMME_END, DEFAULT_GROUP_SIZE, money } from "../data/terms";
+import { PAYMENT_PLANS, paymentPlanLabel, GRADES, programmeEndFor, DEFAULT_GROUP_SIZE, money } from "../data/terms";
 
 const STATUS = {
   invited: { tone: "amber", label: "Self-evaluation sent" },
@@ -20,7 +20,7 @@ const field = { display: "flex", flexDirection: "column", gap: 6 };
 const selectStyle = { padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink };
 const today = () => new Date().toISOString().slice(0, 10);
 const EMPTY_FORM = () => ({ studentName: "", studentEmail: "", parentName: "", parentEmail: "", parentPhone: "", board: "aqa", year: 12,
-  paymentPlan: "instalments", paymentAmount: "", schedule: [{ amount: "", due: "" }], programmeStart: today(), programmeEnd: DEFAULT_PROGRAMME_END,
+  paymentPlan: "instalments", paymentAmount: "", schedule: [{ amount: "", due: "" }], programmeStart: today(), programmeEnd: programmeEndFor(12),
   initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "" });
 
 export default function TutorStudents({ authUser, userProfile }) {
@@ -47,6 +47,8 @@ export default function TutorStudents({ authUser, userProfile }) {
 
   const patchApplicant = (id, patch) => setApplicants(prev => (prev || []).map(a => a.id === id ? { ...a, ...patch } : a));
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  // Changing the year group moves the default end date with it, unless the end was typed by hand
+  const setYear = (y) => setForm(f => ({ ...f, year: y, programmeEnd: f.programmeEnd === programmeEndFor(f.year) ? programmeEndFor(y) : f.programmeEnd }));
 
   const create = async (e) => {
     e.preventDefault();
@@ -88,9 +90,9 @@ export default function TutorStudents({ authUser, userProfile }) {
               <div style={field}><span style={label}>Exam board</span>
                 <div style={{ display: "flex", gap: 6 }}>{BOARDS.map(b => <Button key={b.id} type="button" variant={form.board === b.id ? "primary" : "secondary"} onClick={() => setF("board", b.id)}>{b.label}</Button>)}</div></div>
               <div style={field}><span style={label}>Year group</span>
-                <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setF("year", y)}>Year {y}</Button>)}</div></div>
+                <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setYear(y)}>Year {y}</Button>)}</div></div>
               <div style={field}><label style={label} htmlFor="ns-start">Programme start date</label><Input id="ns-start" type="date" required value={form.programmeStart} onChange={e => setF("programmeStart", e.target.value)} /></div>
-              <div style={field}><label style={label} htmlFor="ns-end">Programme runs until</label><Input id="ns-end" value={form.programmeEnd} onChange={e => setF("programmeEnd", e.target.value)} placeholder={DEFAULT_PROGRAMME_END} /></div>
+              <div style={field}><label style={label} htmlFor="ns-end">Programme runs until</label><Input id="ns-end" value={form.programmeEnd} onChange={e => setF("programmeEnd", e.target.value)} placeholder={programmeEndFor(form.year)} /></div>
               <div style={field}><label style={label} htmlFor="ns-grade">Initial assessed grade</label>
                 <select id="ns-grade" value={form.initialGrade} onChange={e => setF("initialGrade", e.target.value)} style={selectStyle}>{GRADES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
               <div style={field}><label style={label} htmlFor="ns-size">Group size (up to)</label><Input id="ns-size" type="number" min="2" max="12" value={form.groupSize} onChange={e => setF("groupSize", e.target.value)} style={{ width: 90 }} /></div>

@@ -31,7 +31,7 @@ function validateDetails(b, { partial = false } = {}) {
     if (out.schedule.length === 0) throw bad("Add at least one payment line (amount and when it is due)");
   }
   if (has("programmeStart")) { out.programmeStart = str(b.programmeStart, 10); if (!/^\d{4}-\d{2}-\d{2}$/.test(out.programmeStart)) throw bad("Programme start date is required"); }
-  if (has("programmeEnd")) { out.programmeEnd = str(b.programmeEnd, 60) || "17 June 2027"; }
+  if (has("programmeEnd")) { out.programmeEnd = str(b.programmeEnd, 80) || `the end of the June ${Number(b.year) === 12 ? 2028 : 2027} A Level examination series`; }
   if (has("initialGrade")) { out.initialGrade = str(b.initialGrade, 20); if (out.initialGrade && !GRADES.includes(out.initialGrade)) throw bad("Initial assessed grade is not valid"); }
   if (has("groupSize")) { const g = Number(b.groupSize); out.groupSize = Number.isInteger(g) && g >= 2 && g <= 12 ? g : 6; }
   if (has("extraTerms")) out.extraTerms = str(b.extraTerms, 4000);
