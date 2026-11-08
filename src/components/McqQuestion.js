@@ -67,7 +67,7 @@ export default function McqQuestion({ question, selected, revealed, accentColor,
         <div style={{ marginTop: "14px", padding: "12px 16px", background: "#f0fdf4", border: "1.5px solid #bbf7d0",
           borderRadius: "12px", fontSize: "13px", color: "#166534", lineHeight: 1.6 }}>
           <span style={{ fontWeight: 700 }}>Answer: {question.answer}</span>
-          {question.explanation && <span> — {chemFormat(question.explanation)}</span>}
+          {question.explanation && <span>. {chemFormat(question.explanation)}</span>}
         </div>
       )}
 

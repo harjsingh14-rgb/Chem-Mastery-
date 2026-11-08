@@ -4,6 +4,7 @@ import { T, pctColour } from "../ui/theme";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
 import McqQuestion from "./McqQuestion";
 import { resolveItem, TYPE_LABEL, fmtDue } from "../utils/homeworkBank";
+import chemFormat from "../utils/chemFormat";
 
 // ─── Attempt and hint rules, agreed with HSJ Tuition ─────────────────────
 // - A part can be attempted up to MAX_ATTEMPTS times (MCQs twice: four options).
@@ -81,7 +82,7 @@ function DataTable({ rows }) {
     <table style={{ borderCollapse: "collapse", fontSize: 14, margin: "4px 0" }}>
       <tbody>{rows.map((row, ri) => (
         <tr key={ri} style={{ background: ri % 2 === 0 ? "#FAFBFC" : T.card }}>
-          <td style={{ padding: "8px 18px 8px 10px", fontWeight: 600, borderBottom: `1px solid ${T.line}` }}>{row[0]}</td>
+          <td style={{ padding: "8px 18px 8px 10px", fontWeight: 600, borderBottom: `1px solid ${T.line}` }}>{chemFormat(row[0])}</td>
           <td style={{ padding: "8px 10px", fontWeight: 700, color: T.accentText, borderBottom: `1px solid ${T.line}`, whiteSpace: "nowrap" }}>{row[1]}{typeof row[1] === "number" ? " kJ mol⁻¹" : ""}</td>
         </tr>
       ))}</tbody>
@@ -97,7 +98,7 @@ function Steps({ steps }) {
       {steps.map((s, i) => (
         <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: T.accentText, background: T.accentTint, borderRadius: "50%", width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>{i + 1}</span>
-          <span style={{ fontSize: 18, lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{s}</span>
+          <span style={{ fontSize: 18, lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{chemFormat(s)}</span>
         </div>
       ))}
     </div>
@@ -110,17 +111,27 @@ function AttemptBanner({ result, maxAttempts }) {
   if (!last) return null;
   const p = result.maxScore ? last.score / result.maxScore : 0;
   const tone = p >= 1 ? "green" : p >= 0.5 ? "amber" : "red";
+  const outOf = (n) => `${n} / ${result.maxScore}`;
   return (
-    <Notice tone={tone} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <Notice tone={tone} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 14, flexWrap: "wrap" }}>
         <Icon name={p >= 1 ? "check" : "x"} size={16} strokeWidth={3} />
-        {last.score} / {result.maxScore} mark{result.maxScore === 1 ? "" : "s"}
+        {outOf(last.score)} mark{result.maxScore === 1 ? "" : "s"}
         <span style={{ fontWeight: 500, color: T.muted, fontSize: 12 }}>Attempt {attempts.length} of {maxAttempts}</span>
         {result.markedBy === "ai" && result.confidence === "low" && <Chip tone="amber" style={{ fontSize: 11 }}>Your tutor will check this mark</Chip>}
       </div>
       {last.feedback && <div style={{ fontWeight: 400 }}>{last.feedback}</div>}
       {attempts.length > 1 && (
-        <div style={{ fontSize: 12, color: T.muted }}>Your first attempt ({attempts[0].score} / {result.maxScore}) is the mark that counts for this homework. Best so far: {result.bestScore} / {result.maxScore}.</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12, borderTop: "1px solid rgba(0,0,0,0.08)", paddingTop: 6, marginTop: 2 }}>
+          {attempts.map((at, i) => (
+            <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+              <span style={{ fontWeight: 700, whiteSpace: "nowrap", minWidth: 68 }}>Attempt {i + 1}</span>
+              <span style={{ flex: 1, whiteSpace: "pre-wrap", color: T.body, minWidth: 0 }}>{String(at.answer)}</span>
+              <span style={{ fontWeight: 700, whiteSpace: "nowrap" }}>{outOf(at.score)}</span>
+            </div>
+          ))}
+          <div style={{ color: T.muted }}>Your first attempt ({outOf(attempts[0].score)}) is the mark that counts for this homework. Best so far: {outOf(result.bestScore)}.</div>
+        </div>
       )}
     </Notice>
   );
@@ -133,7 +144,7 @@ function HintLadder({ hints, used, canOpen, onOpen }) {
       {hints.slice(0, used).map((h, i) => (
         <div key={i} style={{ display: "flex", gap: 10, padding: "10px 14px", background: T.indigoTint, border: `1px solid #C7D2FE`, borderRadius: T.radiusSm, fontSize: 14, lineHeight: 1.6 }}>
           <Icon name="help" size={16} color={T.indigo} style={{ flexShrink: 0, marginTop: 3 }} />
-          <span><b style={{ color: T.indigo }}>Hint {i + 1}.</b> {h}</span>
+          <span><b style={{ color: T.indigo }}>Hint {i + 1}.</b> {chemFormat(h)}</span>
         </div>
       ))}
       {used < hints.length && canOpen && (
@@ -217,7 +228,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
           <input type={q.isText ? "text" : "number"} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && input !== "" && !busy && attempt(input)}
             placeholder={q.isText ? "e.g. C2H4" : "Your answer"} aria-label="Your answer"
             style={{ width: 200, padding: "11px 14px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 16, outline: "none", color: T.ink }} />
-          {q.unit && <span style={{ fontSize: 14, color: T.muted, fontWeight: 600 }}>{q.unit}</span>}
+          {q.unit && <span style={{ fontSize: 14, color: T.muted, fontWeight: 600 }}>{chemFormat(q.unit)}</span>}
           <Button variant="primary" onClick={() => attempt(input)} disabled={busy || input === ""}>{label}{attempts.length ? " again" : ""}</Button>
         </div>
       )}
@@ -235,7 +246,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
       )}
 
       {type !== "mcq" && last && !canAttempt && (
-        <div style={{ fontSize: 13 }}><span style={{ color: T.muted }}>Your answer: </span><b style={{ whiteSpace: "pre-wrap" }}>{String(last.answer)}{q.unit ? ` ${q.unit}` : ""}</b></div>
+        <div style={{ fontSize: 13 }}><span style={{ color: T.muted }}>Your answer: </span><b style={{ whiteSpace: "pre-wrap" }}>{String(last.answer)}{q.unit ? <> {chemFormat(q.unit)}</> : null}</b></div>
       )}
       {type !== "mcq" && !last && readOnly && <span style={{ fontSize: 13, color: T.muted }}>Not answered.</span>}
 
@@ -251,7 +262,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
         <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 6 }}>
           {type === "calc" && (
             <>
-              <div style={{ fontSize: 13 }}>{sub("Answer")} <b style={{ marginLeft: 8 }}>{q.answer}{q.unit ? ` ${q.unit}` : ""}</b>{q.tolerance ? <span style={{ color: T.muted }}> (accept ±{q.tolerance})</span> : null}</div>
+              <div style={{ fontSize: 13 }}>{sub("Answer")} <b style={{ marginLeft: 8 }}>{q.answer}{q.unit ? <> {chemFormat(q.unit)}</> : null}</b>{q.tolerance ? <span style={{ color: T.muted }}> (accept ±{q.tolerance})</span> : null}</div>
               <Steps steps={q.steps} />
             </>
           )}
@@ -262,13 +273,13 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
                   {sub("Mark scheme")}
                   {result.detail.points.map((pt, i) => (
                     <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13, color: pt.got ? T.green : "#7F1D1D" }}>
-                      <Icon name={pt.got ? "check" : "x"} size={14} strokeWidth={3} style={{ marginTop: 3 }} /><span>{pt.text}</span>
+                      <Icon name={pt.got ? "check" : "x"} size={14} strokeWidth={3} style={{ marginTop: 3 }} /><span>{chemFormat(pt.text)}</span>
                     </div>
                   ))}
                   {(q.allow?.length || q.reject?.length) ? (
                     <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.6 }}>
-                      {q.allow?.length ? <div><b>Allow:</b> {q.allow.join("; ")}</div> : null}
-                      {q.reject?.length ? <div><b>Reject:</b> {q.reject.join("; ")}</div> : null}
+                      {q.allow?.length ? <div><b>Allow:</b> {chemFormat(q.allow.join("; "))}</div> : null}
+                      {q.reject?.length ? <div><b>Reject:</b> {chemFormat(q.reject.join("; "))}</div> : null}
                     </div>
                   ) : null}
                 </div>
@@ -276,7 +287,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
               {result.detail?.modelAnswer && (
                 <div>
                   <Button size="sm" variant="secondary" iconRight="chevronDown" onClick={() => setShowModel(v => !v)}>{showModel ? "Hide model answer" : "Model answer"}</Button>
-                  {showModel && <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.7 }}>{result.detail.modelAnswer}</div>}
+                  {showModel && <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.7 }}>{chemFormat(result.detail.modelAnswer)}</div>}
                 </div>
               )}
             </>
@@ -342,8 +353,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   };
 
   const handleSubmit = async () => {
-    const unanswered = a.items.filter(it => !answers[it.key]).length;
-    if (unanswered > 0 && !window.confirm(`${unanswered} question${unanswered === 1 ? "" : "s"} not answered. Submit anyway?`)) return;
+    if (!window.confirm("Submit your homework? You will not be able to change your answers afterwards.")) return;
     setSubmitting(true);
     try {
       await submitSubmission(a.id, authUser.uid, { totalScore: total(answers), timeSpentMs: timeSpent() });
@@ -357,6 +367,12 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   const item = items[idx];
   const res = useMemo(() => item ? resolveItem(item) : null, [item]);
   const answeredCount = items.filter(it => answers[it.key]).length;
+  // A question is complete once every part has been attempted at least once.
+  // Students work through the homework in order and cannot skip ahead.
+  const isComplete = (it) => { const r = answers[it.key]; return !!r && (it.type === "exam" ? !!r.detail?.complete : (r.attempts?.length || 0) > 0); };
+  const completeCount = items.filter(isComplete).length;
+  const firstIncomplete = items.findIndex(it => !isComplete(it));
+  const allComplete = firstIncomplete === -1;
 
   if (error && !a) return <Notice tone="red">{error}</Notice>;
   if (!a || !subm) return <div style={{ color: T.muted, fontSize: 13, padding: 20 }}>Loading homework…</div>;
@@ -372,14 +388,14 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
       {/* Progress strip */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 200, display: "flex", alignItems: "center", gap: 10 }}>
-          <Bar value={(answeredCount / Math.max(1, items.length)) * 100} colour={T.accent} style={{ flex: 1 }} />
-          <span style={{ fontSize: 12, fontWeight: 600, color: T.body, whiteSpace: "nowrap" }}>{answeredCount} of {items.length} answered</span>
+          <Bar value={(completeCount / Math.max(1, items.length)) * 100} colour={T.accent} style={{ flex: 1 }} />
+          <span style={{ fontSize: 12, fontWeight: 600, color: T.body, whiteSpace: "nowrap" }}>{completeCount} of {items.length} complete</span>
         </div>
         <Chip tone="neutral"><Icon name="clock" size={13} />{Math.round(timeSpent() / 60000)} min · {a.minutes} min guide</Chip>
         {submitted
           ? <Chip tone={pctScore >= 75 ? "green" : pctScore >= 50 ? "amber" : "red"}>Marked · {total(answers)} / {subm.maxScore} · {pctScore}%</Chip>
           : <Chip tone="amber">Due {fmtDue(a.dueAt)}</Chip>}
-        {!submitted && <Button variant="primary" onClick={handleSubmit} disabled={submitting || answeredCount === 0}>{submitting ? "Submitting…" : "Submit homework"}</Button>}
+        {!submitted && <Button variant="primary" onClick={handleSubmit} disabled={submitting || !allComplete} title={allComplete ? undefined : "Finish every question before submitting"}>{submitting ? "Submitting…" : "Submit homework"}</Button>}
         <Button variant="secondary" onClick={onExit}>{submitted ? "Back to homework" : "Save and exit"}</Button>
       </div>
 
@@ -416,7 +432,8 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
                     const good = r && r.score >= Math.ceil(it.marks * COUNT_AS_CORRECT);
                     const bg = current ? T.ink : r ? (good ? T.greenTint : r.score > 0 ? T.amberTint : T.redTint) : T.card;
                     const fg = current ? "#fff" : r ? (good ? T.green : r.score > 0 ? T.amber : T.red) : T.muted;
-                    return <button key={it.key} onClick={() => setIdx(i)} aria-label={`Question ${i + 1}`} style={{ height: 34, borderRadius: 8, border: current || r ? "none" : `1px solid ${T.border}`, background: bg, color: fg, fontWeight: 700, fontSize: 12, cursor: "pointer" }}>{i + 1}</button>;
+                    const locked = !readOnly && firstIncomplete !== -1 && i > firstIncomplete;
+                    return <button key={it.key} onClick={() => setIdx(i)} disabled={locked} aria-label={`Question ${i + 1}${locked ? " (locked until earlier questions are complete)" : ""}`} style={{ height: 34, borderRadius: 8, border: current || r ? "none" : `1px solid ${T.border}`, background: bg, color: fg, fontWeight: 700, fontSize: 12, cursor: locked ? "not-allowed" : "pointer", opacity: locked ? 0.45 : 1 }}>{i + 1}</button>;
                   })}
                 </div>
               </div>
@@ -445,7 +462,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 
               {item.type === "calc" && (
                 <>
-                  <div style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: T.display }}>{res.q.q}</div>
+                  <div style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: T.display }}>{chemFormat(res.q.q)}</div>
                   {res.q.dataTable && <DataTable rows={res.q.dataTable} />}
                   {res.q.diagram && <div style={{ maxWidth: 700 }}>{res.q.diagram}</div>}
                   <Part type="calc" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
@@ -455,7 +472,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 
               {item.type === "extended" && (
                 <>
-                  <div style={serif}>{res.q.question}</div>
+                  <div style={serif}>{chemFormat(res.q.question)}</div>
                   <Part type="extended" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
                     onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
                 </>
@@ -466,9 +483,10 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
                   onRecord={(r, kind) => record(item, r, kind)} queries={queries} onQuery={query} />
               )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 8, paddingTop: 8, borderTop: `1px solid ${T.line}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, paddingTop: 8, borderTop: `1px solid ${T.line}`, flexWrap: "wrap" }}>
                 <Button variant="secondary" icon="arrowLeft" onClick={() => setIdx(i => Math.max(0, i - 1))} disabled={idx === 0}>Previous</Button>
-                <Button variant="secondary" iconRight="arrowRight" onClick={() => setIdx(i => Math.min(items.length - 1, i + 1))} disabled={idx >= items.length - 1}>Next</Button>
+                {!readOnly && !isComplete(item) && <span style={{ fontSize: 12, color: T.muted }}>{idx >= items.length - 1 ? "Answer every part, then submit at the top." : "Answer every part of this question to move on."}</span>}
+                <Button variant="secondary" iconRight="arrowRight" onClick={() => setIdx(i => Math.min(items.length - 1, i + 1))} disabled={idx >= items.length - 1 || (!readOnly && !isComplete(item))}>Next</Button>
               </div>
             </Card>
           )}
@@ -502,7 +520,7 @@ function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQ
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      {q.context && <div style={serif}>{q.context}</div>}
+      {q.context && <div style={serif}>{chemFormat(q.context)}</div>}
       {q.dataTable && <DataTable rows={q.dataTable} />}
       {q.parts.map(p => {
         const key = partQueryKey(item.key, p.label);
@@ -510,7 +528,7 @@ function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQ
           <div key={key} style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 14, borderTop: `1px solid ${T.line}` }}>
             <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
               <span style={{ fontWeight: 700, minWidth: 28 }}>({p.label})</span>
-              <div style={{ flex: 1, ...serif, fontSize: 15.5, lineHeight: 1.7 }}>{p.q}</div>
+              <div style={{ flex: 1, ...serif, fontSize: 15.5, lineHeight: 1.7 }}>{chemFormat(p.q)}</div>
               <Chip tone="neutral">{partMax(p)} mark{partMax(p) === 1 ? "" : "s"}</Chip>
             </div>
             <Part type={p.type} q={p} context={q.context} maxScore={partMax(p)} result={parts[p.label]} readOnly={readOnly} submitted={submitted}
