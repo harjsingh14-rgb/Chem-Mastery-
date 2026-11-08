@@ -19,8 +19,11 @@ service cloud.firestore {
         && !('classId' in request.resource.data)
         && !('tutorId' in request.resource.data);
 
-      allow update: if signedIn() && request.auth.uid == uid
-        && (
+      allow update: if signedIn() && (
+        // The student's own tutor may set their display name and nothing else
+        (resource.data.tutorId == request.auth.uid && changed().hasOnly(['displayName']))
+        ||
+        (request.auth.uid == uid && (
           // Normal profile updates may not touch role, billing or class links
           !changed().hasAny(['role', 'stripeCustomerId', 'stripeSubscriptionId', 'paidAt', 'classId', 'tutorId'])
           ||
@@ -48,7 +51,8 @@ service cloud.firestore {
             && request.resource.data.classId == null
             && request.resource.data.tutorId == null
           )
-        );
+        ))
+      );
     }
 
     match /accessKeys/{key} {
@@ -94,7 +98,11 @@ service cloud.firestore {
 
     // One submission per student per assignment (doc id: assignmentId_uid)
     match /submissions/{id} {
-      allow read: if signedIn()
+      // A student's first visit reads a submission that does not exist yet,
+      // so a get on a missing doc is allowed when the id ends in their uid
+      allow get: if signedIn()
+        && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid);
+      allow list: if signedIn()
         && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid);
       // Student creates their own, for an assignment set to their class
       allow create: if signedIn()

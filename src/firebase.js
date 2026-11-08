@@ -182,6 +182,12 @@ export async function joinClass(uid, rawCode) {
   return { success: true, cls };
 }
 
+// A tutor may set the display name of one of their own students (students
+// signing up by email often have no name on their account).
+export async function setStudentName(uid, name) {
+  await updateDoc(doc(db, "users", uid), { displayName: name.trim() });
+}
+
 export async function leaveClass(uid) {
   await setDoc(doc(db, "users", uid), { classId: null, tutorId: null, joinedClassAt: null }, { merge: true });
 }

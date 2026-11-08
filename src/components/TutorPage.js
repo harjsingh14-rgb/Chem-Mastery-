@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { createClass, fetchTutorClasses, fetchClassStudents, fetchAttemptsForTutor } from "../firebase";
+import { createClass, fetchTutorClasses, fetchClassStudents, fetchAttemptsForTutor, setStudentName } from "../firebase";
 import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
 import { summarise, pct, relativeTime, attemptTime, DAY, TYPE_LABEL } from "../utils/analytics";
@@ -17,6 +17,7 @@ export default function TutorPage({ authUser }) {
   const [copied, setCopied] = useState(false);
   const [openStudent, setOpenStudent] = useState(null);
   const [search, setSearch] = useState("");
+  const [nameEdit, setNameEdit] = useState(null); // { uid, value, saving }
 
   const tutorUid = authUser?.uid;
 
@@ -55,6 +56,15 @@ export default function TutorPage({ authUser }) {
     setCreating(false);
   };
 
+  const saveName = async () => {
+    if (!nameEdit || !nameEdit.value.trim()) return;
+    setNameEdit({ ...nameEdit, saving: true });
+    try {
+      await setStudentName(nameEdit.uid, nameEdit.value);
+      setStudents(prev => (prev || []).map(x => x.uid === nameEdit.uid ? { ...x, displayName: nameEdit.value.trim() } : x));
+      setNameEdit(null);
+    } catch (e) { setError(e.message || "Could not save the name"); setNameEdit({ ...nameEdit, saving: false }); }
+  };
   const copyCode = () => { try { navigator.clipboard.writeText(selected); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch {} };
 
   const cls = classes?.find(c => c.code === selected);
@@ -80,7 +90,7 @@ export default function TutorPage({ authUser }) {
     else if (inactiveDays >= 7) flags.push({ tone: "red", text: `Inactive ${inactiveDays} days` });
     if (sum && sum.week >= 5 && weekPct !== null && weekPct < 50) flags.push({ tone: "red", text: `${weekPct}% this week` });
     const weakest = sum?.weak?.find(t => t.pct < 75) || null;
-    return { s, sum, weekPct, flags, weakest, name: s.displayName || s.email || "Student" };
+    return { s, sum, weekPct, flags, weakest, name: s.displayName || (s.email ? s.email.split("@")[0] : "Student") };
   }).filter(r => !search || r.name.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => (b.flags.length - a.flags.length) || a.name.localeCompare(b.name)), [students, perStudent, search]);
 
@@ -172,8 +182,22 @@ export default function TutorPage({ authUser }) {
                               <td style={{ ...td, paddingLeft: 20 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                   <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={32} />
-                                  <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-                                    <span style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</span>
+                                  <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }} onClick={e => e.stopPropagation()}>
+                                    {nameEdit?.uid === s.uid ? (
+                                      <form style={{ display: "flex", gap: 6, alignItems: "center" }} onSubmit={e => { e.preventDefault(); saveName(); }}>
+                                        <Input autoFocus value={nameEdit.value} onChange={e => setNameEdit({ ...nameEdit, value: e.target.value })} placeholder="Student's name" style={{ padding: "4px 8px", fontSize: 13, width: 180 }} />
+                                        <Button type="submit" variant="accent" disabled={nameEdit.saving || !nameEdit.value.trim()} style={{ padding: "4px 10px", fontSize: 12 }}>Save</Button>
+                                        <Button type="button" variant="ghost" onClick={() => setNameEdit(null)} style={{ padding: "4px 8px", fontSize: 12 }}>Cancel</Button>
+                                      </form>
+                                    ) : (
+                                      <span style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+                                        <span style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: s.displayName ? T.ink : T.muted }}>{name}</span>
+                                        <button type="button" title={s.displayName ? "Edit name" : "Add name"} onClick={() => setNameEdit({ uid: s.uid, value: s.displayName || "", saving: false })}
+                                          style={{ border: "none", background: "none", cursor: "pointer", color: T.faint, padding: 2, display: "inline-flex" }}>
+                                          <Icon name="pencil" size={13} />
+                                        </button>
+                                      </span>
+                                    )}
                                     <span style={{ fontSize: 11, color: T.muted }}>{s.email}</span>
                                   </div>
                                 </div>
