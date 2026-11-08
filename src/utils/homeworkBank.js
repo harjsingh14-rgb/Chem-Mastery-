@@ -2,7 +2,7 @@
 // full questions. Pure functions, no React.
 import { CALC_SETS } from "../data/calc-sets";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
-import { EXAM_QUESTIONS, questionMarks } from "../data/exam-questions";
+import { EXAM_QUESTIONS, EXAM_TOPICS, questionMarks } from "../data/exam-questions";
 import mcqData from "../mcq-data.json";
 
 // Agreed with HSJ Tuition: homework is budgeted at 1.5 minutes per mark.
@@ -30,9 +30,16 @@ export function sourcesFor(board) {
   const calcSets = CALC_SETS.filter(s => boardOk(s.board, board)).map(s => ({ id: s.id, title: s.title, year: s.year, count: s.questions.length }));
   const extCategories = [...new Set(EXTENDED_QUESTIONS.filter(q => boardOk(q.board, board)).map(q => q.category))]
     .map(c => ({ id: c, count: EXTENDED_QUESTIONS.filter(q => boardOk(q.board, board) && q.category === c).length }));
-  const examTags = [...new Set(EXAM_QUESTIONS.filter(q => boardOk(q.board, board)).flatMap(q => q.tags || []))]
-    .map(t => ({ id: t, count: EXAM_QUESTIONS.filter(q => boardOk(q.board, board) && (q.tags || []).includes(t)).length }));
-  return { mcqTopics, calcSets, extCategories, examTags };
+  // Exam questions are grouped by topic (one per file), each with the tags
+  // used inside it so a tutor can narrow a topic down to a sub-topic.
+  const examQs = EXAM_QUESTIONS.filter(q => boardOk(q.board, board));
+  const examTopics = EXAM_TOPICS.map(topic => {
+    const qs = examQs.filter(q => q.topic === topic);
+    const tags = [...new Set(qs.flatMap(q => q.tags || []))].sort()
+      .map(t => ({ id: t, count: qs.filter(q => (q.tags || []).includes(t)).length }));
+    return { id: topic, count: qs.length, tags };
+  }).filter(t => t.count > 0);
+  return { mcqTopics, calcSets, extCategories, examTopics };
 }
 
 /** Full question for an assignment item. Returns null if the bank no longer has it. */
@@ -71,7 +78,8 @@ function toItem(type, q, extra = {}) {
 
 /**
  * Fill a time budget from the chosen sources.
- * opts: { board, minutes, mcqTopics: [ids], calcSets: [ids], calcDifficulties: [keys], extCategories: [names], examTags: [tags], weights }
+ * opts: { board, minutes, mcqTopics: [ids], calcSets: [ids], calcDifficulties: [keys], extCategories: [names],
+ *         examTopics: [topic labels], examTags: [tags] (optional: narrows a topic to the chosen tags), weights }
  */
 export function buildItems(opts) {
   const { board, minutes } = opts;
@@ -97,10 +105,19 @@ export function buildItems(opts) {
     pools.extended = shuffle(EXTENDED_QUESTIONS.filter(q => boardOk(q.board, board) && opts.extCategories.includes(q.category)))
       .map(q => toItem("extended", q, { topic: q.category, topicLabel: q.category }));
   }
-  if (opts.examTags?.length) {
-    pools.exam = shuffle(EXAM_QUESTIONS.filter(q => boardOk(q.board, board) && (q.tags || []).some(t => opts.examTags.includes(t))))
+  if (opts.examTopics?.length) {
+    // A topic is taken whole unless the tutor has picked tags inside it,
+    // in which case only questions carrying one of those tags are used.
+    const chosenTags = opts.examTags || [];
+    const inTopic = EXAM_QUESTIONS.filter(q => boardOk(q.board, board) && opts.examTopics.includes(q.topic));
+    const narrowed = {};
+    for (const topic of opts.examTopics) {
+      const topicTags = new Set(inTopic.filter(q => q.topic === topic).flatMap(q => q.tags || []));
+      narrowed[topic] = chosenTags.filter(t => topicTags.has(t));
+    }
+    pools.exam = shuffle(inTopic.filter(q => narrowed[q.topic].length === 0 || (q.tags || []).some(t => narrowed[q.topic].includes(t))))
       .sort((a, b) => (a.tier || 2) - (b.tier || 2))
-      .map(q => toItem("exam", q, { topic: (q.tags || [])[0] || "exam", topicLabel: q.title, tier: q.tier }));
+      .map(q => toItem("exam", q, { topic: q.topic, topicLabel: q.title, tier: q.tier }));
   }
 
   const present = Object.keys(pools).filter(k => pools[k].length > 0);

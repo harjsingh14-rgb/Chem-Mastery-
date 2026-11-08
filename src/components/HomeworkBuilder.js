@@ -32,6 +32,7 @@ export default function HomeworkBuilder({ authUser }) {
   const [calcSets, setCalcSets] = useState([]);
   const [calcDiffs, setCalcDiffs] = useState(["easy", "medium", "hard"]);
   const [extCats, setExtCats] = useState([]);
+  const [examTopics, setExamTopics] = useState([]);
   const [examTags, setExamTags] = useState([]);
   const [items, setItems] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -49,10 +50,10 @@ export default function HomeworkBuilder({ authUser }) {
   const calcSetsShown = src.calcSets.filter(s => year === "a2" || s.year !== "a2");
 
   const flip = (set, id) => set(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  const anySource = mcqTopics.length + calcSets.length + extCats.length + examTags.length > 0;
+  const anySource = mcqTopics.length + calcSets.length + extCats.length + examTopics.length > 0;
 
   const fill = () => {
-    setItems(buildItems({ board, minutes: Number(minutes) || 60, mcqTopics, calcSets, calcDifficulties: calcDiffs, extCategories: extCats, examTags }));
+    setItems(buildItems({ board, minutes: Number(minutes) || 60, mcqTopics, calcSets, calcDifficulties: calcDiffs, extCategories: extCats, examTopics, examTags }));
   };
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
   const tot = totals(items);
@@ -116,9 +117,17 @@ export default function HomeworkBuilder({ authUser }) {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{src.extCategories.map(c => <Toggle key={c.id} on={extCats.includes(c.id)} onClick={() => flip(setExtCats, c.id)} count={c.count}>{c.id}</Toggle>)}</div></div>
               <div style={field}><span style={label}>Exam-style questions (parts a, b, c)</span>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {src.examTags.length === 0 && <span style={{ fontSize: 12, color: T.muted }}>None written yet. Add questions in src/data/exam-questions.js using QUESTION_TEMPLATE.md.</span>}
-                  {src.examTags.map(t => <Toggle key={t.id} on={examTags.includes(t.id)} onClick={() => flip(setExamTags, t.id)} count={t.count}>{t.id}</Toggle>)}
-                </div></div>
+                  {src.examTopics.length === 0 && <span style={{ fontSize: 12, color: T.muted }}>None written yet. Add questions in src/data/exam-questions.js using QUESTION_TEMPLATE.md.</span>}
+                  {src.examTopics.map(t => <Toggle key={t.id} on={examTopics.includes(t.id)} onClick={() => flip(setExamTopics, t.id)} count={t.count}>{t.id}</Toggle>)}
+                </div>
+                {src.examTopics.filter(t => examTopics.includes(t.id) && t.tags.length > 1).map(t => (
+                  <div key={t.id} style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center", marginTop: 6 }}>
+                    <span style={{ fontSize: 12, color: T.muted, marginRight: 4 }}>{t.id}: narrow to</span>
+                    {t.tags.map(tag => <Toggle key={tag.id} on={examTags.includes(tag.id)} onClick={() => flip(setExamTags, tag.id)} count={tag.count}>{tag.id}</Toggle>)}
+                  </div>
+                ))}
+                {examTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>A topic is used whole unless you pick tags inside it.</span>}
+              </div>
               <div><Button variant="accent" icon="bolt" onClick={fill} disabled={!anySource}>{items.length ? "Refill" : "Fill"} {minutes} minutes</Button></div>
             </Card>
           </div>
