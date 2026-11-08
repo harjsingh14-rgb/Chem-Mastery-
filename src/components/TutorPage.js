@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { createClass, fetchTutorClasses, fetchClassStudents, fetchAttemptsForTutor, setStudentName } from "../firebase";
+import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName } from "../firebase";
+import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
 import { summarise, pct, relativeTime, attemptTime, DAY, TYPE_LABEL } from "../utils/analytics";
 
-export default function TutorPage({ authUser }) {
+export default function TutorPage({ authUser, userProfile }) {
+  const isAdmin = userProfile?.role === "admin";
+  const navigate = useNavigate();
   const [classes, setClasses] = useState(null);
+  const [tutors, setTutors] = useState([]);
+  const [newTutor, setNewTutor] = useState("");
+  const [newSlot, setNewSlot] = useState("");
   const [selected, setSelected] = useState(null);
   const [students, setStudents] = useState(null);
   const [attempts, setAttempts] = useState([]);
@@ -14,7 +20,6 @@ export default function TutorPage({ authUser }) {
   const [newBoard, setNewBoard] = useState("aqa");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
-  const [copied, setCopied] = useState(false);
   const [openStudent, setOpenStudent] = useState(null);
   const [search, setSearch] = useState("");
   const [nameEdit, setNameEdit] = useState(null); // { uid, value, saving }
@@ -26,33 +31,38 @@ export default function TutorPage({ authUser }) {
     let cancelled = false;
     (async () => {
       try {
-        const [cls, att] = await Promise.all([fetchTutorClasses(tutorUid), fetchAttemptsForTutor(tutorUid)]);
+        // Admins see every group; tutors see their own
+        const [cls, att, tut] = await Promise.all([
+          isAdmin ? fetchAllClasses() : fetchTutorClasses(tutorUid),
+          fetchAttemptsForTutor(tutorUid),
+          isAdmin ? fetchTutors() : Promise.resolve([]),
+        ]);
         if (cancelled) return;
-        setClasses(cls); setAttempts(att);
+        setClasses(cls); setAttempts(att); setTutors(tut); setNewTutor(tutorUid);
         if (cls.length > 0) setSelected(cls[0].code); else setShowNew(true);
       } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); } }
     })();
     return () => { cancelled = true; };
-  }, [tutorUid]);
+  }, [tutorUid, isAdmin]);
 
   useEffect(() => {
     if (!selected) { setStudents(null); return; }
     let cancelled = false;
     setStudents(null);
-    fetchClassStudents(selected, tutorUid)
+    fetchClassStudents(selected, isAdmin ? null : tutorUid)
       .then(s => { if (!cancelled) setStudents(s); })
       .catch(e => { if (!cancelled) { setError(e.message); setStudents([]); } });
     return () => { cancelled = true; };
-  }, [selected, tutorUid]);
+  }, [selected, tutorUid, isAdmin]);
 
   const handleCreate = async () => {
     if (!newName.trim()) return;
     setCreating(true); setError(null);
     try {
-      const cls = await createClass(tutorUid, { name: newName, board: newBoard });
+      const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: newSlot });
       setClasses(prev => [...(prev || []), cls].sort((a, b) => a.name.localeCompare(b.name)));
-      setSelected(cls.code); setNewName(""); setShowNew(false);
-    } catch (e) { setError(e.message || "Could not create class"); }
+      setSelected(cls.code); setNewName(""); setNewSlot(""); setShowNew(false);
+    } catch (e) { setError(e.message || "Could not create the group"); }
     setCreating(false);
   };
 
@@ -65,9 +75,8 @@ export default function TutorPage({ authUser }) {
       setNameEdit(null);
     } catch (e) { setError(e.message || "Could not save the name"); setNameEdit({ ...nameEdit, saving: false }); }
   };
-  const copyCode = () => { try { navigator.clipboard.writeText(selected); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch {} };
-
   const cls = classes?.find(c => c.code === selected);
+  const tutorName = (uid) => { const t = tutors.find(x => x.uid === uid); return t ? (t.displayName || t.email) : null; };
   const classUids = useMemo(() => new Set((students || []).map(s => s.uid)), [students]);
   const classAttempts = useMemo(() => attempts.filter(a => classUids.has(a.uid)), [attempts, classUids]);
 
@@ -101,16 +110,16 @@ export default function TutorPage({ authUser }) {
     <>
       <PageHeader
         eyebrow="Overview"
-        title={cls ? cls.name : "Your classes"}
-        sub={cls ? `${boardLabel(cls.board)} ·${students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"}` : "Create a class and share its code with your students."}
+        title={cls ? cls.name : "Your groups"}
+        sub={cls ? [boardLabel(cls.board), cls.lessonSlot, isAdmin && tutorName(cls.tutorId), students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"].filter(Boolean).join(" · ") : "Create a group, then place students into it from the Students tab."}
         right={<>
           {classes && classes.length > 1 && (
-            <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Switch class"
+            <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Switch group"
               style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, fontWeight: 600, color: T.ink }}>
               {classes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
             </select>
           )}
-          <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New class</Button>
+          <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>
         </>}
       />
 
@@ -119,9 +128,22 @@ export default function TutorPage({ authUser }) {
       {showNew && (
         <Card style={{ display: "flex", gap: 10, alignItems: "flex-end", flexWrap: "wrap" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "1 1 220px" }}>
-            <label htmlFor="new-class-name" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Class name</label>
-            <Input id="new-class-name" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Year 13 Tuesday" onKeyDown={e => e.key === "Enter" && handleCreate()} />
+            <label htmlFor="new-class-name" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Group name</label>
+            <Input id="new-class-name" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Year 13 OCR Tuesday" onKeyDown={e => e.key === "Enter" && handleCreate()} />
           </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "1 1 160px" }}>
+            <label htmlFor="new-class-slot" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Lesson slot (optional)</label>
+            <Input id="new-class-slot" value={newSlot} onChange={e => setNewSlot(e.target.value)} placeholder="e.g. Tue 6 to 7.30pm" />
+          </div>
+          {isAdmin && tutors.length > 0 && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label htmlFor="new-class-tutor" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Tutor</label>
+              <select id="new-class-tutor" value={newTutor} onChange={e => setNewTutor(e.target.value)}
+                style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink }}>
+                {tutors.map(t => <option key={t.uid} value={t.uid}>{t.displayName || t.email}{t.uid === tutorUid ? " (you)" : ""}</option>)}
+              </select>
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Exam board</span>
             <div style={{ display: "flex", gap: 6 }}>
@@ -130,7 +152,7 @@ export default function TutorPage({ authUser }) {
               ))}
             </div>
           </div>
-          <Button variant="accent" onClick={handleCreate} disabled={creating || !newName.trim()}>{creating ? "Creating…" : "Create class"}</Button>
+          <Button variant="accent" onClick={handleCreate} disabled={creating || !newName.trim()}>{creating ? "Creating…" : "Create group"}</Button>
           {classes && classes.length > 0 && <Button variant="ghost" onClick={() => setShowNew(false)}>Cancel</Button>}
         </Card>
       )}
@@ -138,9 +160,9 @@ export default function TutorPage({ authUser }) {
       {cls && (
         <>
           <div className="cm-grid-4">
-            <StatTile label="Students" value={students ? students.length : "–"} sub={students && students.length === 0 ? "Share the class code to get started" : `${activeThisWeek} active this week`} />
+            <StatTile label="Students" value={students ? students.length : "–"} sub={students && students.length === 0 ? "Place students from the Students tab" : `${activeThisWeek} active this week`} />
             <StatTile label="Answers · 7 days" value={classSum.week} sub={`${classSum.month} in the last 30 days`} />
-            <StatTile label="Class accuracy · 7 days" value={classSum.weekPct === null ? "–" : `${classSum.weekPct}%`}
+            <StatTile label="Group accuracy · 7 days" value={classSum.weekPct === null ? "–" : `${classSum.weekPct}%`}
               sub={classSum.trend === null ? "Needs a few answers each week" : `${classSum.trend >= 0 ? "▲" : "▼"} ${Math.abs(classSum.trend)} pts on last week`}
               subTone={classSum.trend === null ? undefined : classSum.trend >= 0 ? "green" : "red"} />
             <StatTile label="Needs attention" value={<span style={{ color: attention.length ? T.red : T.ink }}>{attention.length}</span>} sub="Inactive 7+ days or under 50%" />
@@ -151,15 +173,11 @@ export default function TutorPage({ authUser }) {
               <Card padding={0}>
                 <CardHeader title="Students" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }}
                   right={<>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 10, background: T.soft }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6 }}>Code</span>
-                      <span style={{ fontFamily: "'SF Mono', Menlo, monospace", fontWeight: 700, fontSize: 15, color: T.accentText, letterSpacing: 1 }}>{cls.code}</span>
-                      <Button size="sm" icon="copy" onClick={copyCode}>{copied ? "Copied" : "Copy"}</Button>
-                    </div>
+                    {isAdmin && <Button size="sm" icon="plus" onClick={() => navigate("/tutor/students")}>Add student</Button>}
                     <Input placeholder="Search" value={search} onChange={e => setSearch(e.target.value)} style={{ width: 150, padding: "7px 12px", fontSize: 13 }} aria-label="Search students" />
                   </>} />
                 {students && students.length === 0 && (
-                  <EmptyState icon="users" title="No students yet" body={`Students enter ${cls.code} under their avatar → Join. They appear here as soon as they do, and their work shows up as they practise.`} />
+                  <EmptyState icon="users" title="No students yet" body="Students appear here once they are placed into this group from the Students tab. Their work shows up as they practise." />
                 )}
                 {students && students.length > 0 && (
                   <Table minWidth={760}>
@@ -263,7 +281,7 @@ export default function TutorPage({ authUser }) {
               </Card>
 
               <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <CardHeader title="Class weak spots" sub="Topics the class scores lowest on (8+ answers)" />
+                <CardHeader title="Group weak spots" sub="Topics the group scores lowest on (8+ answers)" />
                 {classSum.weak.filter(t => t.pct < 75).length === 0
                   ? <span style={{ fontSize: 13, color: T.muted }}>Nothing flagged yet. This fills in as students practise.</span>
                   : classSum.weak.filter(t => t.pct < 75).map(t => (

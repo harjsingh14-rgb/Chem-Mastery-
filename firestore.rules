@@ -6,70 +6,48 @@ service cloud.firestore {
     function signedIn() { return request.auth != null; }
     function myProfile() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
     function isTutor() { return signedIn() && myProfile().role in ['tutor', 'admin']; }
+    function isAdmin() { return signedIn() && myProfile().role == 'admin'; }
     function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
 
     match /users/{uid} {
-      // Users can read their own profile; tutors can read their own students
-      allow read: if signedIn() && (request.auth.uid == uid || resource.data.tutorId == request.auth.uid);
+      // Users read their own profile; tutors read their own students; admins read everyone
+      allow read: if signedIn() && (request.auth.uid == uid || resource.data.tutorId == request.auth.uid || isAdmin());
 
-      // New profiles must start as free; role upgrades come from the
-      // Stripe webhook (Admin SDK, bypasses rules) or key redemption below
+      // Student accounts are created server-side when HSJ places an applicant
+      // into a group (api/students.js, service account, bypasses rules). A
+      // profile created from the client (someone signing in who has not been
+      // placed) starts as free with no group.
       allow create: if signedIn() && request.auth.uid == uid
         && request.resource.data.role == 'free'
         && !('classId' in request.resource.data)
         && !('tutorId' in request.resource.data);
 
       allow update: if signedIn() && (
-        // The student's own tutor may set their display name and nothing else
-        (resource.data.tutorId == request.auth.uid && changed().hasOnly(['displayName']))
+        // The student's own tutor, or an admin, may set their display name and nothing else
+        ((resource.data.tutorId == request.auth.uid || isAdmin()) && changed().hasOnly(['displayName']))
         ||
-        (request.auth.uid == uid && (
-          // Normal profile updates may not touch role, billing or class links
-          !changed().hasAny(['role', 'stripeCustomerId', 'stripeSubscriptionId', 'paidAt', 'classId', 'tutorId'])
-          ||
-          // Redeeming a key: may set role to access_key only, and only
-          // if the named key exists, is enabled, and has not expired
-          (
-            changed().hasOnly(['role', 'accessKey', 'accessKeyExpiry'])
-            && request.resource.data.role == 'access_key'
-            && exists(/databases/$(database)/documents/accessKeys/$(request.resource.data.accessKey))
-            && get(/databases/$(database)/documents/accessKeys/$(request.resource.data.accessKey)).data.disabled != true
-          )
-          ||
-          // Joining a class: classId must be a real class and tutorId must be its tutor
-          (
-            changed().hasOnly(['classId', 'tutorId', 'joinedClassAt'])
-            && request.resource.data.classId is string
-            && exists(/databases/$(database)/documents/classes/$(request.resource.data.classId))
-            && get(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.tutorId == request.resource.data.tutorId
-            && request.resource.data.tutorId != request.auth.uid
-          )
-          ||
-          // Leaving a class
-          (
-            changed().hasOnly(['classId', 'tutorId', 'joinedClassAt'])
-            && request.resource.data.classId == null
-            && request.resource.data.tutorId == null
-          )
-        ))
+        // Own profile: may not touch role, group links or onboarding records
+        (request.auth.uid == uid
+          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'applicantId', 'placedAt']))
       );
     }
 
-    match /accessKeys/{key} {
-      allow get: if signedIn();
-      allow list: if false;
-      allow update: if signedIn() && changed().hasOnly(['usageCount', 'lastUsedAt']);
-      allow create, delete: if false;
+    // Onboarding queue. Written only by the server (api/students.js and
+    // api/onboarding.js); admins read it in the Students tab.
+    match /applicants/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
     }
 
+    // Groups (one tutor each). Tutors see their own; admins see and manage all.
     match /classes/{code} {
       allow get: if signedIn();
-      allow list: if signedIn() && resource.data.tutorId == request.auth.uid;
+      allow list: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
       allow create: if isTutor()
-        && request.resource.data.tutorId == request.auth.uid
+        && (request.resource.data.tutorId == request.auth.uid || isAdmin())
         && request.resource.data.code == code
         && request.resource.data.name is string;
-      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
     }
 
     match /attempts/{id} {
@@ -83,9 +61,9 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
-    // Homework set by a tutor for one class
+    // Homework set by a tutor for one group
     match /assignments/{id} {
-      // The tutor who set it, or a student in that class, can read it
+      // The tutor who set it, or a student in that group, can read it
       allow read: if signedIn()
         && (resource.data.tutorId == request.auth.uid || resource.data.classId == myProfile().get('classId', null));
       allow create: if isTutor()
@@ -104,7 +82,7 @@ service cloud.firestore {
         && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid);
       allow list: if signedIn()
         && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid);
-      // Student creates their own, for an assignment set to their class
+      // Student creates their own, for an assignment set to their group
       allow create: if signedIn()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.tutorId == myProfile().get('tutorId', null)

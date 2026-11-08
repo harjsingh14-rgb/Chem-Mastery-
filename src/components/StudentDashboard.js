@@ -95,8 +95,8 @@ export default function StudentDashboard({ board, authUser, userProfile, current
         eyebrow={longDate()}
         title={`${greeting()}${firstName ? `, ${firstName}` : ""}`}
         sub={inClass
-          ? (todo.length ? `${todo.length} homework to do${overdue ? `, ${overdue} overdue` : ""} · ${userProfile.className || "Your class"}` : `${userProfile.className || "Your class"} · ${boardLabel(board)} Chemistry · nothing due`)
-          : "Independent revision · join your tutor's class from the account menu to receive homework"}
+          ? (todo.length ? `${todo.length} homework to do${overdue ? `, ${overdue} overdue` : ""} · ${userProfile.className || "Your group"}` : `${userProfile.className || "Your group"} · ${boardLabel(board)} Chemistry · nothing due`)
+          : "Your tutor has not placed you in a group yet"}
         right={nextUp
           ? <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/homework/${nextUp.a.id}`)}>{nextUp.status === "progress" ? "Continue homework" : "Start homework"}</Button>
           : <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/mcq`)}>Practise now</Button>}
@@ -107,7 +107,7 @@ export default function StudentDashboard({ board, authUser, userProfile, current
           <Card padding={0}>
             <CardHeader title="Homework" style={{ padding: "16px 20px" }}
               right={<><Chip tone={overdue ? "red" : todo.length ? "accent" : "neutral"}>{todo.length} to do</Chip><Button size="sm" variant="ghost" iconRight="arrowRight" onClick={() => navigate(`/${board}/homework`)}>All homework</Button></>} />
-            {!inClass && <EmptyState icon="users" title="Join your class to get homework" body="Your tutor gives you a class code like HSJ-7K3P. Enter it from the account menu (top right) and homework, feedback and progress reports will show up here." />}
+            {!inClass && <EmptyState icon="users" title="No group yet" body="HSJ Tuition places you in a group once your onboarding is complete. Homework, feedback and progress reports then appear here." />}
             {inClass && hw.loading && <div style={{ padding: 20, fontSize: 13, color: T.muted }}>Loading…</div>}
             {inClass && !hw.loading && todo.length === 0 && <EmptyState icon="check" title="Nothing to do" body="When your tutor sets homework it appears here with a due date, and your marks and feedback come back on the same page." />}
             {todo.slice(0, 3).map(r => <HomeworkRow key={r.a.id} row={r} board={board} />)}

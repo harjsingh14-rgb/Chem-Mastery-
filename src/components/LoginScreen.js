@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { signInGoogle, signInEmail, signUpEmail } from "../firebase";
+import { signInGoogle, signInEmail, resetPassword } from "../firebase";
 
 export default function LoginScreen({ onLogin, onBack }) {
-  const [mode, setMode] = useState("login"); // "login" | "signup"
+  const [mode, setMode] = useState("login"); // "login" | "reset"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [resetSent, setResetSent] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -18,17 +18,15 @@ export default function LoginScreen({ onLogin, onBack }) {
   const handleEmail = async (e) => {
     e.preventDefault();
     setError(""); setLoading(true);
-    if (mode === "signup" && password !== confirmPassword) { setError("Passwords do not match"); setLoading(false); return; }
-    if (password.length < 6) { setError("Password must be at least 6 characters"); setLoading(false); return; }
     try {
-      if (mode === "signup") await signUpEmail(email, password);
-      else await signInEmail(email, password);
+      if (mode === "reset") { await resetPassword(email); setResetSent(true); setLoading(false); return; }
+      await signInEmail(email, password);
     } catch (e) {
-      const msg = e.code === "auth/user-not-found" ? "No account found with this email"
+      const msg = e.code === "auth/user-not-found" ? "No account found with this email. HSJ students: use the email your welcome email was sent to."
         : e.code === "auth/wrong-password" ? "Incorrect password"
         : e.code === "auth/invalid-credential" ? "Incorrect email or password"
-        : e.code === "auth/email-already-in-use" ? "An account with this email already exists"
         : e.code === "auth/invalid-email" ? "Please enter a valid email"
+        : e.code === "auth/too-many-requests" ? "Too many attempts. Wait a few minutes or reset your password."
         : e.message;
       setError(msg); setLoading(false);
     }
@@ -54,7 +52,7 @@ export default function LoginScreen({ onLogin, onBack }) {
         {/* Card */}
         <div style={{ background: "#ffffff", borderRadius: "20px", padding: "32px", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
           <h2 style={{ fontSize: "22px", fontWeight: 700, color: "#1a2d45", margin: "0 0 24px", textAlign: "center" }}>
-            {mode === "login" ? "Welcome back" : "Create your account"}
+            {mode === "login" ? "Log in" : "Reset your password"}
           </h2>
 
           {/* Google button */}
@@ -86,18 +84,14 @@ export default function LoginScreen({ onLogin, onBack }) {
               onFocus={e => e.target.style.borderColor = "#29ABE2"}
               onBlur={e => e.target.style.borderColor = "#e0e8f0"}
             />
-            <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
-              style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: mode === "signup" ? "12px" : "16px", boxSizing: "border-box", transition: "border 0.15s" }}
-              onFocus={e => e.target.style.borderColor = "#29ABE2"}
-              onBlur={e => e.target.style.borderColor = "#e0e8f0"}
-            />
-            {mode === "signup" && (
-              <input type="password" placeholder="Confirm password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required
+            {mode === "login" && (
+              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box", transition: "border 0.15s" }}
                 onFocus={e => e.target.style.borderColor = "#29ABE2"}
                 onBlur={e => e.target.style.borderColor = "#e0e8f0"}
               />
             )}
+            {mode === "reset" && resetSent && <div style={{ color: "#059669", fontSize: "13px", fontWeight: 600, marginBottom: "12px", padding: "8px 12px", background: "#f0fdf4", borderRadius: "8px" }}>If that email has an account, a reset link is on its way. Check your spam folder too.</div>}
             {error && <div style={{ color: "#dc2626", fontSize: "13px", fontWeight: 600, marginBottom: "12px", padding: "8px 12px", background: "#fef2f2", borderRadius: "8px" }}>{error}</div>}
             <button type="submit" disabled={loading} style={{
               width: "100%", padding: "14px", borderRadius: "12px", border: "none",
@@ -105,17 +99,19 @@ export default function LoginScreen({ onLogin, onBack }) {
               cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s",
               opacity: loading ? 0.6 : 1
             }}>
-              {loading ? "Please wait..." : mode === "login" ? "Log in" : "Sign up"}
+              {loading ? "Please wait..." : mode === "login" ? "Log in" : "Send reset link"}
             </button>
           </form>
 
-          {/* Toggle mode */}
+          {/* Forgot password / back */}
           <div style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "#7a95b0" }}>
-            {mode === "login" ? "Don't have an account? " : "Already have an account? "}
-            <button onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); }}
+            <button onClick={() => { setMode(mode === "login" ? "reset" : "login"); setError(""); setResetSent(false); }}
               style={{ background: "none", border: "none", color: "#29ABE2", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", fontSize: "14px", padding: 0 }}>
-              {mode === "login" ? "Sign up" : "Log in"}
+              {mode === "login" ? "Forgotten your password?" : "Back to log in"}
             </button>
+          </div>
+          <div style={{ textAlign: "center", marginTop: "14px", fontSize: "12px", color: "#7a95b0", lineHeight: 1.5 }}>
+            Accounts are set up by HSJ Tuition when you join a group. Not with HSJ yet? Visit <a href="https://hsjtuition.co.uk" style={{ color: "#29ABE2", fontWeight: 600 }}>hsjtuition.co.uk</a>.
           </div>
         </div>
 

@@ -63,7 +63,7 @@ export default function StudentHomework({ board, authUser, userProfile }) {
   return (
     <>
       <PageHeader eyebrow="Homework" title="Homework" sub="Work your tutor has set you. Answers save as you go, and marks and feedback come back on the same page." />
-      {!inClass && <Card padding={0}><EmptyState icon="users" title="Join your class first" body="Enter your tutor's class code from the account menu (top right). Homework will show up here." /></Card>}
+      {!inClass && <Card padding={0}><EmptyState icon="users" title="No group yet" body="HSJ Tuition places you in a group once your onboarding is complete. Homework then appears here." /></Card>}
       {inClass && (
         <>
           <Card padding={0}>

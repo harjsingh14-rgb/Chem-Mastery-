@@ -80,7 +80,7 @@ export default function HomeworkBuilder({ authUser }) {
       <PageHeader eyebrow="Homework" title="Set homework" sub={`Pick the topics, give it a time budget and the builder fills it at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
         right={<Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>} />
       {error && <Notice tone="red">{error}</Notice>}
-      {classes && classes.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a class first" body="Homework is set for a class. Create one on the Overview tab, then come back here." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
+      {classes && classes.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Homework is set for a group. Create one on the Overview tab, then come back here." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
 
       {cls && (
         <div className="cm-two-col">
@@ -88,7 +88,7 @@ export default function HomeworkBuilder({ authUser }) {
             <Card style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <CardHeader title="Details" />
               <div className="cm-grid-2" style={{ gap: 14 }}>
-                <div style={field}><label htmlFor="hw-class" style={label}>Class</label>
+                <div style={field}><label htmlFor="hw-class" style={label}>Group</label>
                   <select id="hw-class" value={classId} onChange={e => { setClassId(e.target.value); setMcqTopics([]); setCalcSets([]); setExtCats([]); setExamTags([]); setItems([]); }}
                     style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 14, color: T.ink }}>
                     {classes.map(c => <option key={c.code} value={c.code}>{c.name} ({boardLabel(c.board)})</option>)}

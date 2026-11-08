@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth, logOut, onAuthChange, getOrCreateUserProfile, redeemAccessKey, recordAttempt, joinClass, leaveClass } from "./firebase";
+import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt } from "./firebase";
 import TutorPage from "./components/TutorPage";
 import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
@@ -12,13 +12,14 @@ import StudentHomework from "./components/StudentHomework";
 import HomeworkPlayer from "./components/HomeworkPlayer";
 import AppShell, { ShellBody } from "./ui/AppShell";
 import { T, BOARDS, BOARD_IDS, boardLabel } from "./ui/theme";
-import { Button, Card, Chip, Input, Notice, PageHeader, EmptyState, Icon, IconTile } from "./ui/components";
+import { Button, Card, Chip, Notice, PageHeader, EmptyState, Icon, IconTile } from "./ui/components";
 import { invalidateAttempts } from "./hooks/useAttempts";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER } from "./data/sections";
-import LandingPage from "./components/LandingPage";
 import LoginScreen from "./components/LoginScreen";
+import OnboardingPage from "./components/OnboardingPage";
+import TutorStudents from "./components/TutorStudents";
 import CalcTab from "./components/CalcTab";
 import ExtendedTab from "./components/ExtendedTab";
 import McqTab from "./components/McqTab";
@@ -38,16 +39,6 @@ export default function App() {
   const [authUser, setAuthUser] = useState(undefined); // undefined=loading, null=not logged in, object=logged in
   const [userProfile, setUserProfile] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [accessKeyInput, setAccessKeyInput] = useState("");
-  const [accessKeyMsg, setAccessKeyMsg] = useState(null);
-  const [accessKeyLoading, setAccessKeyLoading] = useState(false);
-  const [showLogin, setShowLogin] = useState(false); // false = landing page, true = login screen
-  const [pendingCheckout, setPendingCheckout] = useState(null); // null or "monthly": auto-checkout after auth
-  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
-  const [guestEmail, setGuestEmail] = useState("");
-  const [classCodeInput, setClassCodeInput] = useState("");
-  const [classMsg, setClassMsg] = useState(null);
-  const [classLoading, setClassLoading] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthChange(async (user) => {
@@ -70,28 +61,10 @@ export default function App() {
     return unsub;
   }, []);
 
-  const handleRedeemKey = async () => {
-    if (!accessKeyInput.trim() || !authUser) return;
-    setAccessKeyLoading(true); setAccessKeyMsg(null);
-    try {
-      const result = await redeemAccessKey(authUser.uid, accessKeyInput.trim().toUpperCase());
-      if (result.success) {
-        setAccessKeyMsg({ type: "success", text: "Access key activated! You now have full access." });
-        setUserProfile(prev => ({ ...prev, role: "access_key", accessKey: accessKeyInput.trim().toUpperCase(), accessKeyExpiry: result.expiresAt }));
-        setAccessKeyInput("");
-        track("redeem_access_key", { success: true });
-      } else {
-        setAccessKeyMsg({ type: "error", text: result.error });
-        track("redeem_access_key", { success: false, error: result.error });
-      }
-    } catch (e) {
-      setAccessKeyMsg({ type: "error", text: "Something went wrong. Please try again." });
-    }
-    setAccessKeyLoading(false);
-  };
-
   // Students linked to a tutor's class get full access for as long as they are in it
-  const hasFullAccess = userProfile && (userProfile.role === "paid" || userProfile.role === "access_key" || userProfile.role === "admin" || userProfile.role === "tutor" || !!userProfile.classId);
+  // Full access: HSJ students placed into a group (role "student" or a classId), tutors and admins.
+  // "paid" and "access_key" are legacy roles from before the platform became HSJ-only.
+  const hasFullAccess = userProfile && (["student", "tutor", "admin", "paid", "access_key"].includes(userProfile.role) || !!userProfile.classId);
   const isAdmin = userProfile && userProfile.role === "admin";
   const isTutor = userProfile && (userProfile.role === "tutor" || userProfile.role === "admin");
 
@@ -103,147 +76,11 @@ export default function App() {
     invalidateAttempts();
   }, [authUser, userProfile]);
 
-  const handleJoinClass = async () => {
-    if (!classCodeInput.trim() || !authUser) return;
-    setClassLoading(true); setClassMsg(null);
-    try {
-      const result = await joinClass(authUser.uid, classCodeInput);
-      if (result.success) {
-        setUserProfile(prev => ({ ...prev, classId: result.cls.code, tutorId: result.cls.tutorId, className: result.cls.name }));
-        setClassMsg({ type: "success", text: `Joined ${result.cls.name}` });
-        setClassCodeInput("");
-        track("join_class", { code: result.cls.code });
-      } else {
-        setClassMsg({ type: "error", text: result.error });
-      }
-    } catch (e) {
-      setClassMsg({ type: "error", text: "Could not join that class. Check the code and try again." });
-    }
-    setClassLoading(false);
-  };
-
-  const handleLeaveClass = async () => {
-    if (!authUser || !window.confirm("Leave your tutor's class? Your tutor will no longer see your progress.")) return;
-    try {
-      await leaveClass(authUser.uid);
-      setUserProfile(prev => ({ ...prev, classId: null, tutorId: null, className: null }));
-      setClassMsg(null);
-    } catch (e) {
-      setClassMsg({ type: "error", text: "Could not leave the class right now." });
-    }
-  };
-
-  const LockedBadge = () => (
-    <div style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", borderRadius: "6px", padding: "3px 8px", display: "flex", alignItems: "center", gap: "4px", zIndex: 2 }}>
-      <span style={{ fontSize: "11px" }}>🔒</span>
-      <span style={{ fontSize: "10px", fontWeight: 700, color: "#fff", letterSpacing: "0.3px" }}>PRO</span>
-    </div>
-  );
-
   const LockedOverlay = ({ style }) => (
     <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.6)", backdropFilter: "blur(1px)", borderRadius: "inherit", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, ...style }}>
       <div style={{ textAlign: "center" }}>
         <div style={{ fontSize: "22px", marginBottom: "4px" }}>🔒</div>
-        <div style={{ fontSize: "11px", fontWeight: 700, color: "#1a2d45" }}>Unlock with access key</div>
-      </div>
-    </div>
-  );
-
-  // Auto-trigger checkout after sign-up if they clicked "Get full access" on landing page
-  useEffect(() => {
-    if (authUser && pendingCheckout && !authLoading) {
-      const plan = pendingCheckout;
-      setPendingCheckout(null);
-      setShowLogin(false);
-      // Small delay to let profile load
-      setTimeout(() => handleCheckout(plan), 500);
-    }
-  }, [authUser, pendingCheckout, authLoading]); // eslint-disable-line
-
-  // --- Stripe checkout ---
-  const [checkoutLoading, setCheckoutLoading] = useState(null); // "monthly" | "yearly" | null
-  const [showPricing, setShowPricing] = useState(false);
-  const [showAccountSettings, setShowAccountSettings] = useState(false);
-  const [cancelStep, setCancelStep] = useState(0); // 0=settings, 1=win-back, 2=confirm
-
-  const handleCheckout = async (plan) => {
-    if (!authUser) return;
-    setCheckoutLoading(plan);
-    try {
-      const token = await auth.currentUser?.getIdToken();
-      const resp = await fetch("/api/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
-        body: JSON.stringify({ plan, email: authUser.email }),
-      });
-      const data = await resp.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Could not start checkout");
-      }
-    } catch (err) {
-      alert("Network error - please try again");
-    }
-    setCheckoutLoading(null);
-  };
-
-  const handleManageSubscription = async () => {
-    if (!userProfile?.stripeCustomerId) return;
-    try {
-      const token = await auth.currentUser?.getIdToken();
-      const resp = await fetch("/api/customer-portal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
-        body: JSON.stringify({ customerId: userProfile.stripeCustomerId }),
-      });
-      const data = await resp.json();
-      if (data.url) window.location.href = data.url;
-    } catch (err) {
-      alert("Could not open subscription manager");
-    }
-  };
-
-  // Check for payment success/cancel URL params
-  const [paymentBanner, setPaymentBanner] = useState(null);
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const payment = params.get("payment");
-    if (payment === "success") {
-      setPaymentBanner("success");
-      window.history.replaceState({}, "", window.location.pathname);
-      setTimeout(() => setPaymentBanner(null), 8000);
-    } else if (payment === "cancel") {
-      setPaymentBanner("cancel");
-      window.history.replaceState({}, "", window.location.pathname);
-      setTimeout(() => setPaymentBanner(null), 5000);
-    }
-  }, []);
-
-  const PricingCards = () => (
-    <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap", marginTop: "16px" }}>
-      {/* Monthly */}
-      <div style={{ background: "#fff", border: "2px solid #e0e8f0", borderRadius: "16px", padding: "20px", width: "180px", textAlign: "center" }}>
-        <div style={{ fontSize: "12px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Monthly</div>
-        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£27.99</div>
-        <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per month</div>
-        <button onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}
-          style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: checkoutLoading ? "wait" : "pointer", fontFamily: "inherit", opacity: checkoutLoading === "yearly" ? 0.5 : 1 }}>
-          {checkoutLoading === "monthly" ? "Loading..." : "Subscribe"}
-        </button>
-        <div style={{ fontSize: "11px", color: "#7a95b0", marginTop: "8px" }}>Cancel anytime</div>
-      </div>
-      {/* Yearly */}
-      <div style={{ background: "#fff", border: "2px solid #29ABE2", borderRadius: "16px", padding: "20px", width: "180px", textAlign: "center", position: "relative" }}>
-        <div style={{ position: "absolute", top: "-10px", left: "50%", transform: "translateX(-50%)", background: "#29ABE2", color: "#fff", fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "6px", letterSpacing: "0.5px" }}>SAVE 26%</div>
-        <div style={{ fontSize: "12px", fontWeight: 700, color: "#29ABE2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Yearly</div>
-        <div style={{ fontSize: "32px", fontWeight: 800, color: "#1a2d45" }}>£249.99</div>
-        <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "16px" }}>per year (£20.83/mo)</div>
-        <button onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}
-          style={{ width: "100%", padding: "10px", borderRadius: "10px", border: "none", background: "#1a2d45", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: checkoutLoading ? "wait" : "pointer", fontFamily: "inherit", opacity: checkoutLoading === "monthly" ? 0.5 : 1 }}>
-          {checkoutLoading === "yearly" ? "Loading..." : "Subscribe"}
-        </button>
-        <div style={{ fontSize: "11px", color: "#29ABE2", marginTop: "8px", fontWeight: 600 }}>Best value</div>
+        <div style={{ fontSize: "11px", fontWeight: 700, color: "#1a2d45" }}>HSJ students only</div>
       </div>
     </div>
   );
@@ -254,24 +91,8 @@ export default function App() {
         <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔒</div>
         <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>{section} is locked</h3>
         <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 8px" }}>
-          Upgrade to ChemMastery Pro to unlock all content.
+          This is for HSJ Tuition students. If you are one, log in with the email your welcome email was sent to.
         </p>
-        <PricingCards />
-        <div style={{ marginTop: "20px", padding: "16px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e0e8f0" }}>
-          <div style={{ fontSize: "12px", fontWeight: 600, color: "#4a6080", marginBottom: "8px" }}>HSJ Tuition student? Enter your free access key:</div>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="e.g. HSJ-2026-ABCD"
-              style={{ flex: 1, padding: "9px 10px", borderRadius: "8px", border: "1.5px solid #e0e8f0", fontSize: "13px", fontFamily: "inherit", outline: "none" }}
-              onFocus={e => e.target.style.borderColor = "#29ABE2"}
-              onBlur={e => e.target.style.borderColor = "#e0e8f0"}
-              onKeyDown={e => e.key === "Enter" && handleRedeemKey()}
-            />
-            <button onClick={handleRedeemKey} disabled={accessKeyLoading} style={{ padding: "9px 14px", borderRadius: "8px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: accessKeyLoading ? 0.6 : 1 }}>
-              {accessKeyLoading ? "..." : "Redeem"}
-            </button>
-          </div>
-          {accessKeyMsg && <div style={{ fontSize: "11px", fontWeight: 600, marginTop: "8px", color: accessKeyMsg.type === "success" ? "#059669" : "#dc2626" }}>{accessKeyMsg.text}</div>}
-        </div>
       </div>
     </div>
   );
@@ -294,6 +115,7 @@ export default function App() {
     : 'topics';
   const topicsTab = screen === 'topics' ? (routeTab || 'home') : 'home';
   const activeSection = topicsTab === 'flashcards' && routeParam ? routeParam : null;
+
   // Edexcel has no flashcard/MCQ banks yet: empty sections, shared calcs + extended answers still work
   const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : board === "edexcel" ? EMPTY_SECTIONS : SECTIONS;
   const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : board === "edexcel" ? EMPTY_SECTIONS : TOPIC_ORDER;
@@ -377,9 +199,6 @@ export default function App() {
     touchStart.current = null; touchEnd.current = null;
   };
 
-  const bg = "#f0f4f8";
-  const base = { minHeight: "100vh", background: bg, fontFamily: "'Outfit', 'DM Sans', 'Segoe UI', sans-serif", color: "#1a2d45", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" };
-
   // Remember the board so "/" goes straight back to it next time
   useEffect(() => { if (board) { try { localStorage.setItem("hsj-board", board); } catch {} } }, [board]);
   useEffect(() => {
@@ -401,6 +220,7 @@ export default function App() {
   const tutorNav = [
     { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
     { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
+    ...(isAdmin ? [{ id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" }] : []),
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "videos"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
@@ -415,46 +235,12 @@ export default function App() {
         <div style={{ fontSize: 12, color: T.muted, wordBreak: "break-all" }}>{authUser?.email}</div>
       </div>
       <Chip tone={hasFullAccess ? "green" : "amber"} style={{ alignSelf: "flex-start" }}>
-        {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "access_key" ? "Full access · key" : userProfile?.role === "paid" ? "Full access · paid" : userProfile?.classId ? "Full access · class" : "Free plan"}
+        {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.classId ? `Student · ${userProfile.className || userProfile.classId}` : hasFullAccess ? "Full access" : "Not in a group yet"}
       </Chip>
       {isTutor && <Button variant="primary" data-close-menu onClick={() => navigate("/tutor")} iconRight="arrowRight">Tutor dashboard</Button>}
-      {!isTutor && (
+      {!isTutor && !userProfile?.classId && (
         <div style={menuSection}>
-          {userProfile?.classId ? (
-            <>
-              <span style={menuLabel}>Your class</span>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                <span style={{ fontSize: 13, fontWeight: 700 }}>{userProfile.className || userProfile.classId}</span>
-                <Button size="sm" variant="ghost" onClick={handleLeaveClass}>Leave</Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <span style={menuLabel}>Got a class code from your tutor?</span>
-              <div style={{ display: "flex", gap: 6 }}>
-                <Input value={classCodeInput} onChange={e => setClassCodeInput(e.target.value)} placeholder="HSJ-7K3P" aria-label="Class code"
-                  style={{ flex: 1, minWidth: 0, textTransform: "uppercase", padding: "8px 10px", fontSize: 13 }} onKeyDown={e => e.key === "Enter" && handleJoinClass()} />
-                <Button variant="primary" size="sm" onClick={handleJoinClass} disabled={classLoading}>{classLoading ? "…" : "Join"}</Button>
-              </div>
-            </>
-          )}
-          {classMsg && <span style={{ fontSize: 11, fontWeight: 600, color: classMsg.type === "success" ? T.green : T.red }}>{classMsg.text}</span>}
-        </div>
-      )}
-      {!hasFullAccess && (
-        <div style={menuSection}>
-          <span style={menuLabel}>Have an access key?</span>
-          <div style={{ display: "flex", gap: 6 }}>
-            <Input value={accessKeyInput} onChange={e => setAccessKeyInput(e.target.value)} placeholder="HSJ-2026-ABCD" aria-label="Access key"
-              style={{ flex: 1, minWidth: 0, padding: "8px 10px", fontSize: 13 }} onKeyDown={e => e.key === "Enter" && handleRedeemKey()} />
-            <Button variant="accent" size="sm" onClick={handleRedeemKey} disabled={accessKeyLoading}>{accessKeyLoading ? "…" : "Redeem"}</Button>
-          </div>
-          {accessKeyMsg && <span style={{ fontSize: 11, fontWeight: 600, color: accessKeyMsg.type === "success" ? T.green : T.red }}>{accessKeyMsg.text}</span>}
-          <span style={{ ...menuLabel, marginTop: 4 }}>Or upgrade to Pro</span>
-          <div style={{ display: "flex", gap: 6 }}>
-            <Button variant="accent" size="sm" style={{ flex: 1 }} onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}>{checkoutLoading === "monthly" ? "…" : "£27.99/mo"}</Button>
-            <Button variant="primary" size="sm" style={{ flex: 1 }} onClick={() => handleCheckout("yearly")} disabled={!!checkoutLoading}>{checkoutLoading === "yearly" ? "…" : "£249.99/yr"}</Button>
-          </div>
+          <span style={{ fontSize: 12, color: T.muted, lineHeight: 1.5 }}>HSJ Tuition places you in a group once your onboarding is complete. If you are already an HSJ student, log in with the email your welcome email was sent to.</span>
         </div>
       )}
       <div style={menuSection}>
@@ -464,9 +250,6 @@ export default function App() {
             <Button key={bd.id} size="sm" data-close-menu variant={(board || savedBoard) === bd.id ? "primary" : "secondary"} style={{ flex: 1 }} onClick={() => selectBoard(bd.id)}>{bd.label}</Button>
           ))}
         </div>
-        {userProfile?.role === "paid" && userProfile?.stripeCustomerId && (
-          <Button variant="secondary" size="sm" data-close-menu icon="settings" onClick={() => setShowAccountSettings(true)}>Account settings</Button>
-        )}
         <Button variant="danger" size="sm" icon="logout" onClick={() => logOut()}>Log out</Button>
       </div>
     </div>
@@ -479,6 +262,9 @@ export default function App() {
     </AppShell>
   );
 
+  // PUBLIC ONBOARDING LINKS (self-evaluation, parent terms): no login needed
+  if (pathParts[0] === 'onboarding' && pathParts[1]) return <OnboardingPage token={pathParts[1]} />;
+
   // AUTH LOADING
   if (authLoading) return (
     <div style={{ minHeight: "100vh", background: "#0d1b2a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
@@ -489,55 +275,10 @@ export default function App() {
     </div>
   );
 
-  // LANDING PAGE / LOGIN SCREEN
-  if (!authUser) {
-    if (showLogin) return <LoginScreen onBack={() => { setShowLogin(false); setPendingCheckout(null); }} />;
-    return <>
-      <LandingPage onGoToLogin={() => setShowLogin(true)} onGoToCheckout={() => setShowEmailPrompt(true)} />
-      {showEmailPrompt && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'DM Sans',sans-serif" }} onClick={(e) => { if (e.target === e.currentTarget) setShowEmailPrompt(false); }}>
-          <div style={{ background: "#fff", borderRadius: "20px", padding: "32px", maxWidth: "420px", width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
-            <div style={{ textAlign: "center", marginBottom: "24px" }}>
-              <div style={{ fontSize: "32px", marginBottom: "8px" }}>📧</div>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", marginBottom: "6px" }}>Enter your email to continue</div>
-              <div style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.5 }}>We'll create your account and send login details to this email after payment.</div>
-            </div>
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              const email = guestEmail.trim();
-              if (!email || !email.includes("@")) return;
-              try {
-                const resp = await fetch("/api/create-checkout", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ plan: "monthly", email }),
-                });
-                const data = await resp.json();
-                if (data.url) window.location.href = data.url;
-                else alert(data.error || "Could not start checkout");
-              } catch (err) { alert("Network error. Please try again."); }
-            }}>
-              <input type="email" placeholder="your@email.com" value={guestEmail} onChange={e => setGuestEmail(e.target.value)} required autoFocus
-                style={{ width: "100%", padding: "14px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "16px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
-                onFocus={e => e.target.style.borderColor = "#29ABE2"}
-                onBlur={e => e.target.style.borderColor = "#e0e8f0"}
-              />
-              <button type="submit" style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "#29ABE2", color: "#fff", fontSize: "16px", fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}>
-                Continue to payment →
-              </button>
-            </form>
-            <div style={{ textAlign: "center", marginTop: "12px" }}>
-              <button onClick={() => { setShowEmailPrompt(false); setShowLogin(true); }} style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-                Already have an account? Log in
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>;
-  }
+  // LOGIN SCREEN (accounts are created by HSJ when a student is placed, so there is no sign-up)
+  if (!authUser) return <LoginScreen />;
 
-  // CHANGE PASSWORD PROMPT (for guest checkout users with temp password)
+  // CHANGE PASSWORD PROMPT (new students log in with a temporary password)
   if (userProfile?.needsPasswordChange && !passwordChanged) {
     const handleChangePassword = async (e) => {
       e.preventDefault();
@@ -601,82 +342,6 @@ export default function App() {
     );
   }
 
-  // ACCOUNT SETTINGS MODAL (buried - only for paid users managing subscription)
-  if (showAccountSettings) return (
-    <div style={base}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-      <div style={{ padding: "0 24px", display: "flex", alignItems: "center", gap: "14px", height: "72px", background: "#0f1d35", flexShrink: 0 }}>
-        <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 12px", color: "#fff", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600 }}>← Back</button>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 800, fontSize: "17px", color: "#ffffff" }}>Account Settings</div>
-      </div>
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
-        <div style={{ maxWidth: "400px", width: "100%" }}>
-          {cancelStep === 0 && (
-            <div>
-              <div style={{ background: "#ecfdf5", border: "1.5px solid #059669", borderRadius: "14px", padding: "20px", marginBottom: "24px", textAlign: "center" }}>
-                <div style={{ fontSize: "14px", fontWeight: 700, color: "#059669", marginBottom: "4px" }}>ChemMastery Pro - Active</div>
-                <div style={{ fontSize: "12px", color: "#047857" }}>You have full access to all content</div>
-              </div>
-              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a2d45", marginBottom: "16px" }}>Account</div>
-              <div style={{ fontSize: "13px", color: "#7a95b0", marginBottom: "6px" }}>{authUser?.email}</div>
-              <div style={{ fontSize: "13px", color: "#7a95b0", marginBottom: "24px" }}>{authUser?.displayName || "Student"}</div>
-              <div style={{ borderTop: "1px solid #e0e8f0", paddingTop: "20px" }}>
-                <div style={{ fontSize: "12px", color: "#7a95b0", marginBottom: "12px" }}>Subscription</div>
-                <button onClick={() => setCancelStep(1)} style={{
-                  background: "none", border: "none", color: "#94a3b8", fontSize: "12px",
-                  cursor: "pointer", fontFamily: "inherit", textDecoration: "underline"
-                }}>Cancel subscription</button>
-              </div>
-            </div>
-          )}
-          {cancelStep === 1 && (
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "20px", marginBottom: "16px", color: "#7a95b0", fontWeight: 700 }}>Before you go...</div>
-              <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>We would hate to see you go!</h3>
-              <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 24px" }}>
-                You will lose access to all premium content including flashcards, calculations, synthesis routes and AI marking.
-              </p>
-              <div style={{ background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "2px solid #f59e0b", borderRadius: "14px", padding: "20px", marginBottom: "20px" }}>
-                <div style={{ fontSize: "16px", fontWeight: 800, color: "#92400e", marginBottom: "4px" }}>Stay for 50% off!</div>
-                <div style={{ fontSize: "13px", color: "#a16207", marginBottom: "12px" }}>Get your next month for just £14.99 instead of £27.99</div>
-                <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{
-                  padding: "10px 24px", borderRadius: "10px", border: "none",
-                  background: "#f59e0b", color: "#fff", fontSize: "14px", fontWeight: 700,
-                  cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 16px rgba(245,158,11,0.35)"
-                }}>Keep my subscription</button>
-              </div>
-              <button onClick={() => setCancelStep(2)} style={{
-                background: "none", border: "none", color: "#94a3b8", fontSize: "12px",
-                cursor: "pointer", fontFamily: "inherit", textDecoration: "underline"
-              }}>I still want to cancel</button>
-            </div>
-          )}
-          {cancelStep === 2 && (
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "40px", marginBottom: "16px" }}>⚠️</div>
-              <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>Are you sure?</h3>
-              <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 24px" }}>
-                Your access will continue until the end of your current billing period. After that, your account will be downgraded to the free plan.
-              </p>
-              <button onClick={handleManageSubscription} style={{
-                padding: "10px 24px", borderRadius: "10px", border: "1.5px solid #dc2626",
-                background: "#fff", color: "#dc2626", fontSize: "13px", fontWeight: 600,
-                cursor: "pointer", fontFamily: "inherit", marginBottom: "12px", width: "100%"
-              }}>Proceed to cancellation</button>
-              <br />
-              <button onClick={() => { setShowAccountSettings(false); setCancelStep(0); }} style={{
-                padding: "10px 24px", borderRadius: "10px", border: "none",
-                background: "#29ABE2", color: "#fff", fontSize: "14px", fontWeight: 700,
-                cursor: "pointer", fontFamily: "inherit", width: "100%",
-                boxShadow: "0 4px 16px rgba(41,171,226,0.35)"
-              }}>Never mind, keep my subscription</button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
   // TUTOR DASHBOARD
   if (screen === "tutor") return renderShell(
     !isTutor
@@ -687,7 +352,9 @@ export default function App() {
             : tutorParam
               ? <TutorHomeworkReview authUser={authUser} assignmentId={tutorParam} />
               : <TutorHomeworkList authUser={authUser} />)
-        : <TutorPage authUser={authUser} userProfile={userProfile} />
+        : tutorPage === "students"
+          ? <TutorStudents authUser={authUser} userProfile={userProfile} />
+          : <TutorPage authUser={authUser} userProfile={userProfile} />
   );
 
   // BOARD SELECT (shown once; afterwards "/" goes straight to the saved board)
@@ -781,13 +448,8 @@ export default function App() {
 
   if (screen === "topics") return renderShell(
     <>
-      {paymentBanner === "success" && <Notice tone="green"><b>Payment successful.</b> All content is unlocked. It may take a moment to activate.</Notice>}
-      {paymentBanner === "cancel" && <Notice tone="amber"><b>Payment cancelled.</b> You can upgrade any time from the account menu.</Notice>}
       {topicsTab === "home" && !hasFullAccess && (
-        <Notice tone="amber" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-          <span style={{ flex: 1 }}><b>Free plan.</b> Upgrade, enter an access key or join your tutor's class from the account menu to unlock everything.</span>
-          <Button size="sm" variant="primary" onClick={() => handleCheckout("monthly")} disabled={!!checkoutLoading}>{checkoutLoading === "monthly" ? "…" : "Upgrade · £27.99/mo"}</Button>
-        </Notice>
+        <Notice tone="amber"><b>Not in a group yet.</b> HSJ Tuition places you in a group once your onboarding is complete. Until then only the free samples are open.</Notice>
       )}
       {topicsTab === "home" && (
         <StudentDashboard board={board} authUser={authUser} userProfile={userProfile} currentStreak={currentStreak} known={known}

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, limit, getDocs, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -21,7 +21,9 @@ export const signInGoogle = () => signInWithPopup(auth, googleProvider);
 
 export const signInEmail = (email, password) => signInWithEmailAndPassword(auth, email, password);
 
-export const signUpEmail = (email, password) => createUserWithEmailAndPassword(auth, email, password);
+// Accounts are created by HSJ when a student is placed into a group (see api/students.js),
+// so there is no self sign-up. Students who forget their password reset it by email.
+export const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
 export const logOut = () => signOut(auth);
 
@@ -49,37 +51,6 @@ export async function getOrCreateUserProfile(user) {
   };
   await setDoc(ref, profile);
   return profile;
-}
-
-// --- Access key redemption ---
-export async function redeemAccessKey(uid, key) {
-  const keyRef = doc(db, "accessKeys", key);
-  const keySnap = await getDoc(keyRef);
-  if (!keySnap.exists()) return { success: false, error: "Invalid access key" };
-  const keyData = keySnap.data();
-
-  // Check if key is disabled
-  if (keyData.disabled) return { success: false, error: "This access key has been disabled" };
-
-  // Check expiry
-  if (keyData.expiresAt && keyData.expiresAt.toDate() < new Date()) return { success: false, error: "This access key has expired" };
-
-  // For single-use keys, check if already used
-  if (keyData.type === "single" && keyData.used) return { success: false, error: "This key has already been used" };
-
-  // Track usage (for shared keys, keep a count)
-  const usageCount = (keyData.usageCount || 0) + 1;
-  await setDoc(keyRef, { usageCount, lastUsedAt: serverTimestamp() }, { merge: true });
-
-  // Update user profile
-  const userRef = doc(db, "users", uid);
-  await setDoc(userRef, {
-    role: "access_key",
-    accessKey: key,
-    accessKeyExpiry: keyData.expiresAt || null,
-  }, { merge: true });
-
-  return { success: true, expiresAt: keyData.expiresAt ? keyData.expiresAt.toDate() : null };
 }
 
 // =====================================================================
@@ -140,14 +111,16 @@ export async function fetchAttemptsForTutor(tutorId, max = 5000) {
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I
 const makeClassCode = () => "HSJ-" + Array.from({ length: 4 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join("");
 
-export async function createClass(tutorUid, { name, board }) {
+// A group (stored in the `classes` collection) has one tutor. An admin may
+// create a group for another tutor by passing tutorId.
+export async function createClass(tutorUid, { name, board, tutorId, lessonSlot }) {
   // Retry a few times in the (unlikely) event of a code collision
   for (let i = 0; i < 5; i++) {
     const code = makeClassCode();
     const ref = doc(db, "classes", code);
     const existing = await getDoc(ref);
     if (existing.exists()) continue;
-    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorUid, createdAt: serverTimestamp() };
+    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorId || tutorUid, lessonSlot: (lessonSlot || "").trim() || null, createdBy: tutorUid, createdAt: serverTimestamp() };
     await setDoc(ref, cls);
     return cls;
   }
@@ -162,34 +135,54 @@ export async function fetchTutorClasses(tutorUid) {
 
 // Both filters are needed: the security rule only lets a tutor list users
 // whose tutorId is their own uid, so the query must say so explicitly.
+// Admins may list any user, so they pass no tutorUid.
 export async function fetchClassStudents(code, tutorUid) {
-  const q = query(collection(db, "users"), where("tutorId", "==", tutorUid), where("classId", "==", code));
+  const q = tutorUid
+    ? query(collection(db, "users"), where("tutorId", "==", tutorUid), where("classId", "==", code))
+    : query(collection(db, "users"), where("classId", "==", code));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
 }
 
-export async function joinClass(uid, rawCode) {
-  const code = rawCode.trim().toUpperCase();
-  const snap = await getDoc(doc(db, "classes", code));
-  if (!snap.exists()) return { success: false, error: "No class found with that code" };
-  const cls = snap.data();
-  if (cls.tutorId === uid) return { success: false, error: "You can't join your own class" };
-  await setDoc(doc(db, "users", uid), {
-    classId: code,
-    tutorId: cls.tutorId,
-    joinedClassAt: serverTimestamp(),
-  }, { merge: true });
-  return { success: true, cls };
+// ---- Admin: every group, every tutor, the onboarding queue ----
+export async function fetchAllClasses() {
+  const snap = await getDocs(collection(db, "classes"));
+  return snap.docs.map(d => d.data()).sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+}
+
+export async function updateClass(code, patch) {
+  await updateDoc(doc(db, "classes", code), patch);
+}
+
+export async function fetchTutors() {
+  const snap = await getDocs(query(collection(db, "users"), where("role", "in", ["tutor", "admin"])));
+  return snap.docs.map(d => ({ uid: d.id, ...d.data() })).sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""));
+}
+
+export async function fetchApplicants() {
+  const snap = await getDocs(collection(db, "applicants"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+}
+
+/** Admin onboarding actions run server-side (account creation, emails). */
+export async function studentsApi(action, payload = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Please sign in again");
+  const idToken = await user.getIdToken();
+  const res = await fetch("/api/students", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Something went wrong");
+  return data;
 }
 
 // A tutor may set the display name of one of their own students (students
 // signing up by email often have no name on their account).
 export async function setStudentName(uid, name) {
   await updateDoc(doc(db, "users", uid), { displayName: name.trim() });
-}
-
-export async function leaveClass(uid) {
-  await setDoc(doc(db, "users", uid), { classId: null, tutorId: null, joinedClassAt: null }, { merge: true });
 }
 
 // =====================================================================

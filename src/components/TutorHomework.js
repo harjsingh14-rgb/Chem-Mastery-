@@ -156,7 +156,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
 
       <div className="cm-grid-4">
         <StatTile label="Submitted" value={<>{submitted.length}<span style={{ fontSize: 16, color: T.muted, fontWeight: 600 }}> / {rows.length}</span></>} sub={`${rows.filter(r => r.status === "in-progress").length} in progress`} />
-        <StatTile label="Class average" value={avg === null ? "–" : `${avg}%`} sub={submitted.length ? "of submitted work" : "Nothing submitted yet"} />
+        <StatTile label="Group average" value={avg === null ? "–" : `${avg}%`} sub={submitted.length ? "of submitted work" : "Nothing submitted yet"} />
         <StatTile label="Needs your check" value={lowConfidence.length + openQueries.length} sub={`${openQueries.length} mark quer${openQueries.length === 1 ? "y" : "ies"} · ${lowConfidence.length} low-confidence AI mark${lowConfidence.length === 1 ? "" : "s"}`} subTone={lowConfidence.length + openQueries.length ? "amber" : undefined} />
         <StatTile label="Status" value={a.status === "closed" ? "Closed" : isOverdue(a.dueAt) ? "Past due" : "Open"} sub={a.status === "closed" ? "Students can still view feedback" : "Students can still submit"} />
       </div>
@@ -165,7 +165,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
         <div className="cm-main-col">
           <Card padding={0}>
             <CardHeader title="Students" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
-            {students && students.length === 0 && <EmptyState icon="users" title="No students in this class yet" />}
+            {students && students.length === 0 && <EmptyState icon="users" title="No students in this group yet" />}
             {students && students.length > 0 && (
               <Table minWidth={640}>
                 <thead><tr><th style={{ ...th, paddingLeft: 20 }}>Student</th><th style={th}>Status</th><th style={th}>Score</th><th style={{ ...th, width: 180 }}>Marks</th><th style={th}>Time</th><th style={{ ...th, paddingRight: 20 }}>Submitted</th></tr></thead>
@@ -234,7 +234,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
         </div>
         <aside className="cm-side-col">
           <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <CardHeader title="Most missed" sub="Questions the class scored lowest on (2+ submissions)" />
+            <CardHeader title="Most missed" sub="Questions the group scored lowest on (2+ submissions)" />
             {missed.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Shows once two or more students have submitted.</span>}
             {missed.map(({ it, pct: p, n }) => (
               <div key={it.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
