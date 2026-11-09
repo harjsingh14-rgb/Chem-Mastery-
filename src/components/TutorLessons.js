@@ -67,7 +67,7 @@ export function TutorLessonsList({ authUser }) {
     const last = g?.schedule ? lastOccurrence(g.schedule) : null;
     if (last) setDate(last);
   };
-  useEffect(() => { if (group?.schedule) { const last = lastOccurrence(group.schedule); if (last) setDate(last); } }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (group?.schedule) { const last = lastOccurrence(group.schedule); if (last) setDate(last); } }, [group]);
   const create = async () => {
     if (!group || !date) return;
     setCreating(true); setError(null);
@@ -207,7 +207,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
     const pending = (students || []).filter(s => !notes[s.uid]?.sentAt && (drafts[s.uid]?.text || "").trim());
     if (pending.length === 0) { setError("No written, unsent notes to send."); return; }
     if (!window.confirm(`Send ${pending.length} note${pending.length === 1 ? "" : "s"} now?`)) return;
-    for (const s of pending) await send(s); // eslint-disable-line no-await-in-loop
+    for (const s of pending) await send(s);
   };
   const saveTopics = async (topics) => {
     setLesson(l => ({ ...l, topics }));
