@@ -83,7 +83,7 @@ export default function TutorPage({ authUser, userProfile }) {
     try {
       const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: describeSchedule(newSchedule), schedule: newSchedule });
       setClasses(prev => [...(prev || []), cls].sort((a, b) => a.name.localeCompare(b.name)));
-      setSelected(cls.code); setNewName(""); setNewSlot(""); setShowNew(false);
+      setSelected(cls.code); setNewName(""); setShowNew(false);
     } catch (e) { setError(e.message || "Could not create the group"); }
     setCreating(false);
   };
