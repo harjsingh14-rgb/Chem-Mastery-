@@ -65,6 +65,8 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
     epath = os.path.join(pdir, "enriched", f"{key}.json")
     if os.path.exists(epath):
         enr = json.load(open(epath))
+    elif opts.get("no_enrich"):
+        return qid, ["not indexed yet"], None
     else:
         question = {k: rec[k] for k in ("board", "level", "paper", "series")}
         question.update(q=qd["q"], total=qd["total"], text=qd["text"][:9000])
@@ -92,7 +94,7 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
 
 def main():
     args = sys.argv[1:]
-    opts = {"no_upsert": "--no-upsert" in args, "no_upload": "--no-upload" in args, "reindex": "--reindex" in args, "all": "--all" in args, "only": None, "workers": 4}
+    opts = {"no_upsert": "--no-upsert" in args, "no_upload": "--no-upload" in args, "reindex": "--reindex" in args, "all": "--all" in args, "no_enrich": "--no-enrich" in args, "only": None, "workers": 4}
     if "--only" in args: opts["only"] = args[args.index("--only") + 1]
     if "--workers" in args: opts["workers"] = int(args[args.index("--workers") + 1])
     if "--base" in args:
