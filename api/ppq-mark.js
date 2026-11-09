@@ -97,9 +97,16 @@ async function callClaude({ model, content, maxTokens }) {
   if (!res.ok) throw fb.httpError(502, `Marking service returned ${res.status}: ${(await res.text()).slice(0, 300)}`);
   const data = await res.json();
   if (data.stop_reason === "refusal") throw fb.httpError(502, "The marking service declined this answer. " + (data.stop_details?.explanation || ""));
-  const raw = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("").trim().replace(/^```json?\s*/i, "").replace(/\s*```$/i, "");
+  if (data.stop_reason === "max_tokens") throw fb.httpError(502, "The marking service ran out of room. Please try again.");
+  const text = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("").trim();
+  // The model occasionally wraps the JSON in fences or a sentence; take the outermost object.
+  const start = text.indexOf("{"), end = text.lastIndexOf("}");
+  const raw = start >= 0 && end > start ? text.slice(start, end + 1) : text;
   let out;
-  try { out = JSON.parse(raw); } catch { throw fb.httpError(502, "The marking service did not return valid JSON."); }
+  try { out = JSON.parse(raw); } catch {
+    console.error("ppq-mark: unparseable response", { model: data.model, stop: data.stop_reason, text: text.slice(0, 1500) });
+    throw fb.httpError(502, "The marking service did not return valid JSON. Please try again.");
+  }
   out.usage = data.usage;
   out.model = data.model || model;
   return out;
@@ -115,8 +122,10 @@ function tidy(result, doc) {
     let awarded = Array.isArray(r.awarded) ? r.awarded.slice(0, n).map(Boolean) : [];
     while (awarded.length < n) awarded.push(false);
     let score = Math.max(0, Math.min(p.marks, parseInt(r.score, 10) || 0));
-    // For point-marked parts never give more marks than points credited
-    if (n > 0 && n <= p.marks) score = Math.min(score, awarded.filter(Boolean).length);
+    // Where there is one mark per scheme point (or more points than marks, "any 2 from"),
+    // never give more marks than points credited. A part with fewer points than marks
+    // has points worth several marks each, so the examiner's total stands.
+    if (n >= p.marks) score = Math.min(score, awarded.filter(Boolean).length);
     const attempted = r.attempted === undefined ? score > 0 || awarded.some(Boolean) : !!r.attempted;
     total += score;
     return { label: p.label, marks: p.marks, score, awarded, attempted, feedback: typeof r.feedback === "string" ? r.feedback : "" };
@@ -154,7 +163,7 @@ module.exports = async function handler(req, res) {
     for (const im of images) content.push({ type: "image", source: { type: "base64", media_type: im.mediaType, data: im.dataBase64 } });
     content.push({ type: "text", text: markPrompt({ doc, answers, hasImages, mode, inkOnly: !!inkOnly }) });
 
-    const raw = await callClaude({ model: hasImages ? VISION_MODEL : TEXT_MODEL, content, maxTokens: 3000 });
+    const raw = await callClaude({ model: hasImages ? VISION_MODEL : TEXT_MODEL, content, maxTokens: 4000 });
     const result = tidy(raw, doc);
 
     // Persist: one document per student per question
