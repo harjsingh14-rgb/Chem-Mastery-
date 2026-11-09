@@ -12,7 +12,7 @@ const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
 
 const BUCKET = "chemmastery-3adb0.firebasestorage.app";
-const MODEL = "claude-sonnet-5-5";
+const MODEL = "claude-opus-5-5";   // one-off indexing: quality of the mark scheme breakdown and hints matters most
 
 async function authorise(req, token) {
   const bearer = (req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
@@ -110,7 +110,7 @@ async function enrich(payload) {
     headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-beta": "server-side-fallback-2026-07-01" },
     body: JSON.stringify({
       model: MODEL, max_tokens: 8000,
-      output_config: { effort: "low" },          // fast enough for the 60 s function limit; the task is extraction, not reasoning
+      output_config: { effort: "medium" },       // Opus default; keeps a long question inside the function time limit
       fallbacks: "default",                        // if a safety classifier declines, the API retries on a fallback model
       messages: [{ role: "user", content: enrichPrompt(payload) }],
     }),

@@ -13,7 +13,7 @@
   ],
   "functions": {
     "api/ppq-admin.js": {
-      "maxDuration": 60
+      "maxDuration": 300
     }
   }
 }
