@@ -1,8 +1,19 @@
 {
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
   ],
   "crons": [
-    { "path": "/api/cron-reminders", "schedule": "0 8 * * *" }
-  ]
+    {
+      "path": "/api/cron-reminders",
+      "schedule": "0 8 * * *"
+    }
+  ],
+  "functions": {
+    "api/ppq-admin.js": {
+      "maxDuration": 60
+    }
+  }
 }

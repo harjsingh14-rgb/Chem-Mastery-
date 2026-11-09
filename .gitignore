@@ -10,3 +10,6 @@ resources/*
 
 # Local Claude Code settings (machine-specific permissions, may contain tokens)
 .claude/settings.local.json
+
+# Past-paper pipeline output: page images and extracted text, uploaded to Firebase Storage
+ppq-build/
