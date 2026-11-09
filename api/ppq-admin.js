@@ -6,6 +6,7 @@
 //   upsert   { id, doc }                           -> merge a ppq/{id} document
 //   get      { id }                                -> the ppq/{id} document
 //   reindex  { board, level }                      -> rebuild ppqIndex/{board}_{level}
+//   cors     {}                                    -> allow the web app to read images into a canvas
 const crypto = require("crypto");
 const fb = require("./_firebaseAdmin");
 const { setCors } = require("./_cors");
@@ -152,6 +153,16 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, id: payload.id });
     }
     if (action === "get") return res.status(200).json({ doc: await fb.getDocument(`ppq/${payload.id}`, token) });
+    if (action === "cors") {
+      // Let the web app read question images into a canvas (whiteboard export)
+      const r = await fetch(`https://storage.googleapis.com/storage/v1/b/${BUCKET}?fields=cors`, {
+        method: "PATCH", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ cors: [{ origin: ["*"], method: ["GET", "HEAD"], responseHeader: ["Content-Type"], maxAgeSeconds: 3600 }] }),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw fb.httpError(502, `Bucket update failed (${r.status}): ${JSON.stringify(data).slice(0, 300)}`);
+      return res.status(200).json({ ok: true, cors: data.cors });
+    }
     if (action === "reindex") return res.status(200).json(await reindex(payload, token));
     throw fb.httpError(400, "Unknown action");
   } catch (e) {

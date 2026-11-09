@@ -4,7 +4,8 @@ import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt } from "./f
 import TutorPage from "./components/TutorPage";
 import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
-import PracticeGrid from "./components/PracticeGrid";
+import PastPaperBrowser from "./components/ppq/PastPaperBrowser";
+import PastPaperQuestion from "./components/ppq/PastPaperQuestion";
 import { VideosPage } from "./components/Placeholders";
 import HomeworkBuilder from "./components/HomeworkBuilder";
 import { TutorHomeworkList, TutorHomeworkReview } from "./components/TutorHomework";
@@ -458,6 +459,12 @@ export default function App() {
     { focus: true, back: () => navigate(`/${board}/homework`), backLabel: "Back to homework", title: "Homework", subtitle: boardLabel(board) }
   );
 
+  // Past-paper question: focused mode, no tabs
+  if (screen === "topics" && topicsTab === "practise" && routeParam) return renderShell(
+    <PastPaperQuestion board={board} qid={routeParam} authUser={authUser} logAttempt={logAttempt} onExit={() => navigate(`/${board}/practise`)} />,
+    { focus: true, back: () => navigate(`/${board}/practise`), backLabel: "Back to past papers", title: "Past papers", subtitle: boardLabel(board) }
+  );
+
   if (screen === "topics") return renderShell(
     <>
       {topicsTab === "home" && !hasFullAccess && (
@@ -469,8 +476,8 @@ export default function App() {
       )}
       {topicsTab === "practise" && (
         <>
-          <PageHeader eyebrow="Practise" title="What would you like to practise?" sub="Every answer is recorded and counts towards your mastery." />
-          <PracticeGrid board={board} counts={{ mcq: mcqData.questions.length, topics: CURRENT_TOPIC_ORDER.length }} hasFullAccess={hasFullAccess} isAdmin={isAdmin} />
+          <PageHeader eyebrow="Practise" title="Past papers" sub="Every question from every past paper, marked by the AI examiner against the real mark scheme." />
+          <PastPaperBrowser board={board} authUser={authUser} hasFullAccess={hasFullAccess} />
         </>
       )}
       {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}

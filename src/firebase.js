@@ -426,4 +426,21 @@ export async function sendLessonNote(noteId) {
   return data;
 }
 
+// ─── Past-paper questions (written by api/ppq-admin.js and api/ppq-mark.js) ───
+/** The compact list of every question for a board and level: ppqIndex/{board}_{level}. */
+export async function fetchPpqIndex(board, level) {
+  const snap = await getDoc(doc(db, "ppqIndex", `${board}_${level}`));
+  return snap.exists() ? (snap.data().items || []) : [];
+}
+export async function fetchPpqQuestion(id) {
+  const snap = await getDoc(doc(db, "ppq", id));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+/** One document per question the student has had marked: attempts, best, latest. */
+export async function fetchMyPpqAttempts(uid) {
+  const q = query(collection(db, "ppqAttempts"), where("uid", "==", uid), limit(3000));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
 export { auth, db };
