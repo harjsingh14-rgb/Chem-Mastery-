@@ -123,12 +123,16 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
   };
   const undo = () => { strokes.current.pop(); redraw(); bump(n => n + 1); onChange && onChange(strokes.current.length); };
 
-  const tool = (on, onClick, label, children) => (
-    <button type="button" onClick={onClick} aria-label={label} title={label}
+  const tool = (on, onClick, label, children, key) => (
+    <button key={key} type="button" onClick={onClick} aria-label={label} title={label}
       style={{ width: 32, height: 32, borderRadius: 8, border: `1px solid ${on ? T.ink : T.border}`, background: on ? T.ink : T.card, color: on ? "#fff" : T.ink, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0 }}>
       {children}
     </button>
   );
+
+  const sizeButtons = [2, 3, 5].map(s => tool(!eraser && size === s, () => { setSize(s); setEraser(false); }, `Pen size ${s}`,
+    <span style={{ width: s * 2 + 2, height: s * 2 + 2, borderRadius: "50%", background: "currentColor" }} />, `size${s}`));
+  const eraserButton = tool(eraser, () => setEraser(e => !e), "Eraser", <span style={{ fontSize: 11, fontWeight: 700 }}>Er</span>, "eraser");
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -140,9 +144,8 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
               style={{ width: 24, height: 24, borderRadius: "50%", background: c, border: `3px solid ${!eraser && colour === c ? "#fff" : "transparent"}`, boxShadow: !eraser && colour === c ? `0 0 0 2px ${c}` : "none", cursor: "pointer", padding: 0 }} />
           ))}
           <span style={{ width: 1, height: 22, background: T.border, margin: "0 4px" }} />
-          {[2, 3, 5].map(s => tool(!eraser && size === s, () => { setSize(s); setEraser(false); }, `Pen size ${s}`,
-            <span style={{ width: s * 2 + 2, height: s * 2 + 2, borderRadius: "50%", background: "currentColor" }} />)}
-          {tool(eraser, () => setEraser(e => !e), "Eraser", <span style={{ fontSize: 11, fontWeight: 700 }}>Er</span>)}
+          {sizeButtons}
+          {eraserButton}
           <span style={{ width: 1, height: 22, background: T.border, margin: "0 4px" }} />
           <Button size="sm" onClick={undo} disabled={strokes.current.length === 0}>Undo</Button>
           <Button size="sm" variant="ghost" onClick={() => { strokes.current = []; redraw(); bump(n => n + 1); onChange && onChange(0); }} disabled={strokes.current.length === 0}>Clear</Button>
