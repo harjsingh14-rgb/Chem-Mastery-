@@ -61,12 +61,7 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
     key = qd["image"][:-4] if qd.get("image") else f"q{qd['q']:02d}"
     s = st.setdefault(key, {})
     qid = f"{rec['id']}-{key}"
-    # 1. image
-    if not s.get("imageUrl"):
-        data = base64.b64encode(open(os.path.join(pdir, qd["image"]), "rb").read()).decode()
-        r = call("upload", {"path": f"ppq/{rec['id']}/{qd['image']}", "contentType": "image/jpeg", "dataBase64": data})
-        s["imageUrl"] = r["url"]
-    # 2. enrich
+    # 1. enrich (cached locally so a failed upload never repeats the AI call)
     epath = os.path.join(pdir, "enriched", f"{key}.json")
     if os.path.exists(epath):
         enr = json.load(open(epath))
@@ -78,12 +73,17 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
         json.dump(enr, open(epath, "w"), indent=1, ensure_ascii=False)
     problems = validate(enr, qd, rec["board"])
     s["problems"] = problems
+    # 2. image
+    if not s.get("imageUrl") and not opts.get("no_upload"):
+        data = base64.b64encode(open(os.path.join(pdir, qd["image"]), "rb").read()).decode()
+        r = call("upload", {"path": f"ppq/{rec['id']}/{qd['image']}", "contentType": "image/jpeg", "dataBase64": data})
+        s["imageUrl"] = r["url"]
     # 3. upsert
     if not opts["no_upsert"]:
         doc = dict(id=qid, board=rec["board"], level=rec["level"], paper=rec["paper"], series=rec["series"], year=year_of(rec["series"]),
                    q=qd["q"], totalMarks=qd["total"] or int(enr.get("totalMarks") or 0), title=enr.get("title") or f"Question {qd['q']}",
                    topics=enr.get("topics") or [], keywords=enr.get("keywords") or [], kind=enr.get("kind") or "structured",
-                   parts=enr.get("parts") or [], imageUrl=s["imageUrl"], imageW=qd.get("width"), imageH=qd.get("height"),
+                   parts=enr.get("parts") or [], imageUrl=s.get("imageUrl"), imageW=qd.get("width"), imageH=qd.get("height"),
                    qText=qd["text"][:6000], msText=ms_text[:8000], source={"qp": rec.get("qp"), "ms": rec.get("ms")},
                    status="live" if not problems else "review", problems=problems)
         call("upsert", {"id": qid, "doc": doc})
@@ -92,7 +92,7 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
 
 def main():
     args = sys.argv[1:]
-    opts = {"no_upsert": "--no-upsert" in args, "reindex": "--reindex" in args, "all": "--all" in args, "only": None, "workers": 4}
+    opts = {"no_upsert": "--no-upsert" in args, "no_upload": "--no-upload" in args, "reindex": "--reindex" in args, "all": "--all" in args, "only": None, "workers": 4}
     if "--only" in args: opts["only"] = args[args.index("--only") + 1]
     if "--workers" in args: opts["workers"] = int(args[args.index("--workers") + 1])
     if "--base" in args:
