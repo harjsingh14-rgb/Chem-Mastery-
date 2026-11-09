@@ -12,7 +12,7 @@ const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
 
 const BUCKET = "chemmastery-3adb0.firebasestorage.app";
-const MODEL = "claude-sonnet-4-6";
+const MODEL = "claude-sonnet-5-5";
 
 async function authorise(req, token) {
   const bearer = (req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
@@ -107,12 +107,18 @@ async function enrich(payload) {
   if (!payload.question || !payload.msText) throw fb.httpError(400, "question and msText required");
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: MODEL, max_tokens: 6000, messages: [{ role: "user", content: enrichPrompt(payload) }] }),
+    headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-beta": "server-side-fallback-2026-07-01" },
+    body: JSON.stringify({
+      model: MODEL, max_tokens: 8000,
+      output_config: { effort: "low" },          // fast enough for the 60 s function limit; the task is extraction, not reasoning
+      fallbacks: "default",                        // if a safety classifier declines, the API retries on a fallback model
+      messages: [{ role: "user", content: enrichPrompt(payload) }],
+    }),
   });
   if (!res.ok) throw fb.httpError(502, `AI service returned ${res.status}: ${(await res.text()).slice(0, 300)}`);
   const data = await res.json();
-  const raw = (data.content?.[0]?.text || "").trim().replace(/^```json?\s*/i, "").replace(/\s*```$/i, "");
+  if (data.stop_reason === "refusal") throw fb.httpError(502, "AI service declined this question: " + (data.stop_details?.explanation || ""));
+  const raw = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("").trim().replace(/^```json?\s*/i, "").replace(/\s*```$/i, "");
   let out;
   try { out = JSON.parse(raw); } catch { throw fb.httpError(502, "AI response was not valid JSON: " + raw.slice(0, 200)); }
   out.usage = data.usage;

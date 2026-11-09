@@ -15,7 +15,7 @@ def marker(board, block):
     x0, y0, x1, y1, text = block[0], block[1], block[2], block[3], block[4].strip()
     first = text.split("\n")[0].strip()
     if board == "aqa":
-        if x0 > 80: return None
+        if x0 > 95: return None
         if re.fullmatch(r"\d{1,2}", first) and y0 > 500: return None   # page number
         m = re.fullmatch(r"(\d{1,2})(?:\.\d{1,2})?", first)
         return int(m.group(1)) if m else None
@@ -26,11 +26,11 @@ def marker(board, block):
         if m and int(m.group(1)) <= 40 and (len(text.split("\n")) > 1 or x0 < 100): return int(m.group(1))
         return None
     if board == "edexcel":
-        if x0 > 115: return None
+        if x0 > 135: return None
         m = re.match(r"^\*?(\d{1,2})(?=\s*$|\s*\(|\*)", first)
         return int(m.group(1)) if m else None
 
-HEADER = re.compile(r"^Question\s*\n(Answers?|Marking guidance)", re.I)
+HEADER = re.compile(r"^(Question|Qu)\s*\n(Answers?|Marking guidance)", re.I)
 
 def slice_aqa(rec):
     doc = fitz.open(os.path.join(ROOT, rec["ms"]))

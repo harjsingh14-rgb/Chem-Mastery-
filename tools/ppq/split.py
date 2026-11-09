@@ -26,11 +26,12 @@ def content_bands(page, g, y0, y1):
     """y-ranges inside [y0, y1] that hold real content: text that is not answer lines, images, drawings
     other than thin horizontal rules and page frames."""
     bands = []
+    sc = page_scale(page)
     for b in page.get_text("dict")["blocks"]:
         bx0, by0, bx1, by1 = b["bbox"]
         if bx1 < g["x0"] or bx0 > g["x1"] or by1 < y0 or by0 > y1: continue
         if b["type"] == 1:
-            if bx1 - bx0 < 80 and by1 - by0 > 25: continue   # barcodes
+            if bx1 - bx0 < 80 * sc and by1 - by0 > 25 * sc: continue   # barcodes
             bands.append((by0, by1)); continue
         txt = " ".join(sp["text"] for ln in b["lines"] for sp in ln["spans"]).strip()
         if not txt or NOISE_RE.match(txt): continue
@@ -41,9 +42,9 @@ def content_bands(page, g, y0, y1):
     for d in page.get_drawings():
         r = d["rect"]
         if r.x1 < g["x0"] or r.x0 > g["x1"] or r.y1 < y0 or r.y0 > y1: continue
-        if r.height <= 4: continue                                # ruled answer lines, underlines
-        if r.width > 470 and r.height > 450: continue            # page frames (Edexcel)
-        if r.width < 3 and r.height > 300: continue              # margin bars
+        if r.height <= 4 * sc: continue                           # ruled answer lines, underlines
+        if r.width > 470 * sc and r.height > 450 * sc: continue  # page frames (Edexcel)
+        if r.width < 3 * sc and r.height > 300 * sc: continue    # margin bars
         bands.append((max(r.y0, y0), min(r.y1, y1)))
     bands.sort()
     merged = []
@@ -60,19 +61,23 @@ def clips_for_segment(page, g, y0, y1):
     if not bands: return []
     out = []; cur_a = max(y0, bands[0][0] - 8); cur_b = bands[0][1]
     for a, b in bands[1:]:
-        if a - cur_b > GAP:
+        if a - cur_b > GAP * page_scale(page):
             out.append((cur_a, min(cur_b + 8, y1))); out.append(("gap",)); cur_a = a - 6
         cur_b = b
     out.append((cur_a, min(cur_b + 8, y1)))
     return out
 
+def page_scale(page):
+    return page.rect.width / 595.0   # some PMT re-exports are larger than A4 points
+
 def blocks(page):
     out = []
+    s = page_scale(page)
     for b in page.get_text("blocks"):
         if b[6] != 0: continue  # images
         txt = b[4].strip()
         if not txt: continue
-        out.append(dict(x0=b[0], y0=b[1], x1=b[2], y1=b[3], text=txt))
+        out.append(dict(x0=b[0] / s, y0=b[1] / s, x1=b[2] / s, y1=b[3] / s, text=txt))
     return sorted(out, key=lambda b: (round(b["y0"]), b["x0"]))
 
 def qnum_at(block, board):
@@ -94,7 +99,7 @@ def qnum_at(block, board):
         if m and not re.match(r"\d+\s*\(", first): return int(m.group(1))
         return None
     if board == "edexcel":
-        if not (34 <= block["x0"] <= 50): return None
+        if not (34 <= block["x0"] <= 70): return None
         first = first.lstrip("* ")
         m = re.match(r"(\d{1,2})\s+(?=[A-Za-z(“\"'])", first)
         if m: return int(m.group(1))
@@ -149,7 +154,8 @@ def split_paper(rec, verbose=True):
             segs.append(dict(page=p, y0=round(top, 1), y1=round(bot, 1)))
         text_parts, marks = [], []
         for s in segs:
-            clip = fitz.Rect(g["x0"], s["y0"], g["x1"], s["y1"])
+            sc = page_scale(doc[s["page"]])
+            clip = fitz.Rect(g["x0"] * sc, s["y0"] * sc, g["x1"] * sc, s["y1"] * sc)
             t = doc[s["page"]].get_text("text", clip=clip)
             lines = [ln for ln in t.split("\n") if ln.strip() and not NOISE_RE.match(ln.strip())]
             text_parts.append("\n".join(lines))
@@ -165,10 +171,12 @@ def render(rec, questions, doc):
         pieces = []  # PIL images or int spacer heights
         for s in qd["segments"]:
             page = doc[s["page"]]
-            for c in clips_for_segment(page, g, s["y0"], s["y1"]):
+            sc = page_scale(page); z = ZOOM / sc
+            gs = {k: v * sc for k, v in g.items()}
+            for c in clips_for_segment(page, gs, s["y0"] * sc, s["y1"] * sc):
                 if c[0] == "gap": pieces.append(int(SPACER * ZOOM)); continue
-                clip = fitz.Rect(g["x0"], c[0], g["x1"], c[1])
-                p = page.get_pixmap(matrix=fitz.Matrix(ZOOM, ZOOM), clip=clip, alpha=False)
+                clip = fitz.Rect(gs["x0"], c[0], gs["x1"], c[1])
+                p = page.get_pixmap(matrix=fitz.Matrix(z, z), clip=clip, alpha=False)
                 pieces.append(Image.frombytes("RGB", (p.width, p.height), p.samples))
         # drop spacers at the ends and doubled spacers
         while pieces and isinstance(pieces[-1], int): pieces.pop()
