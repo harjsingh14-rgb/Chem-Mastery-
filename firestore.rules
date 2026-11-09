@@ -74,6 +74,21 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Past-paper questions and their per-board index, written only by the admin pipeline
+    match /ppq/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /ppqIndex/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    // A student's attempts at past-paper questions (marked server-side)
+    match /ppqAttempts/{id} {
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isTutor());
+      allow write: if false;
+    }
+
     // Lessons: one per group per date, written by the tutor
     match /lessons/{id} {
       allow read: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
