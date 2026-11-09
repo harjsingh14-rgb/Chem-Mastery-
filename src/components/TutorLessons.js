@@ -8,6 +8,7 @@ import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesso
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
+import { lastOccurrence, describeSchedule } from "../utils/schedule";
 
 const today = () => new Date().toISOString().slice(0, 10);
 export const fmtLessonDate = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }); };
@@ -60,6 +61,13 @@ export function TutorLessonsList({ authUser }) {
   }, [uid]);
 
   const group = groups?.find(g => g.code === classId);
+  const pickGroup = (code) => {
+    setClassId(code);
+    const g = groups?.find(x => x.code === code);
+    const last = g?.schedule ? lastOccurrence(g.schedule) : null;
+    if (last) setDate(last);
+  };
+  useEffect(() => { if (group?.schedule) { const last = lastOccurrence(group.schedule); if (last) setDate(last); } }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
   const create = async () => {
     if (!group || !date) return;
     setCreating(true); setError(null);
@@ -80,8 +88,8 @@ export function TutorLessonsList({ authUser }) {
           <CardHeader title="New lesson" sub="Which group, when, and what you covered. You can change the topics afterwards." />
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><label style={label} htmlFor="ls-group">Group</label>
-              <select id="ls-group" value={classId} onChange={e => setClassId(e.target.value)} style={selectStyle}>{groups.map(g => <option key={g.code} value={g.code}>{g.name} ({boardLabel(g.board)})</option>)}</select></div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><label style={label} htmlFor="ls-date">Lesson date</label><Input id="ls-date" type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
+              <select id="ls-group" value={classId} onChange={e => pickGroup(e.target.value)} style={selectStyle}>{groups.map(g => <option key={g.code} value={g.code}>{g.name} ({boardLabel(g.board)}{g.schedule ? `, ${describeSchedule(g.schedule)}` : ""})</option>)}</select></div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><label style={label} htmlFor="ls-date">Lesson date</label><Input id="ls-date" type="date" value={date} onChange={e => setDate(e.target.value)} />{group?.schedule && <span style={{ fontSize: 11, color: T.muted }}>Defaults to the latest {describeSchedule(group.schedule).split(" ")[0].replace(/s$/, "")} lesson</span>}</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><span style={label}>Topics covered</span><TopicPicker board={group?.board} value={topics} onChange={setTopics} /></div>
           <div style={{ display: "flex", gap: 8 }}>

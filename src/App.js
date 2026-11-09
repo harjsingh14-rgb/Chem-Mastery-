@@ -22,6 +22,7 @@ import OnboardingPage from "./components/OnboardingPage";
 import TutorStudents from "./components/TutorStudents";
 import { TutorLessonsList, TutorLessonEditor } from "./components/TutorLessons";
 import StudentLessons from "./components/StudentLessons";
+import TutorPayments from "./components/TutorPayments";
 import CalcTab from "./components/CalcTab";
 import ExtendedTab from "./components/ExtendedTab";
 import McqTab from "./components/McqTab";
@@ -224,7 +225,10 @@ export default function App() {
     { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
     { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
     { id: "tlessons", label: "Lessons", icon: "calendar", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" },
-    ...(isAdmin ? [{ id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" }] : []),
+    ...(isAdmin ? [
+      { id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" },
+      { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
+    ] : []),
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
@@ -358,6 +362,8 @@ export default function App() {
               : <TutorHomeworkList authUser={authUser} />)
         : tutorPage === "lessons"
           ? (tutorParam ? <TutorLessonEditor authUser={authUser} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
+        : tutorPage === "payments"
+          ? <TutorPayments />
         : tutorPage === "students"
           ? <TutorStudents authUser={authUser} userProfile={userProfile} />
           : <TutorPage authUser={authUser} userProfile={userProfile} />

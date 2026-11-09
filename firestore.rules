@@ -68,6 +68,12 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Reminder de-duplication keys, written only by the cron endpoint
+    match /reminders/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
     // Lessons: one per group per date, written by the tutor
     match /lessons/{id} {
       allow read: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());

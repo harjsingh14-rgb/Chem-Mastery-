@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName } from "../firebase";
+import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName, updateClass, fetchClassLessonNotes } from "../firebase";
+import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, nextOccurrences, fmtLessonDay } from "../utils/schedule";
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
@@ -11,7 +12,9 @@ export default function TutorPage({ authUser, userProfile }) {
   const [classes, setClasses] = useState(null);
   const [tutors, setTutors] = useState([]);
   const [newTutor, setNewTutor] = useState("");
-  const [newSlot, setNewSlot] = useState("");
+  const [newSchedule, setNewSchedule] = useState({ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES });
+  const [editSchedule, setEditSchedule] = useState(null); // schedule being edited for the selected group
+  const [attendance, setAttendance] = useState({}); // uid -> { present, late, absent }
   const [selected, setSelected] = useState(null);
   const [students, setStudents] = useState(null);
   const [attempts, setAttempts] = useState([]);
@@ -49,17 +52,36 @@ export default function TutorPage({ authUser, userProfile }) {
     if (!selected) { setStudents(null); return; }
     let cancelled = false;
     setStudents(null);
+    setAttendance({});
     fetchClassStudents(selected, isAdmin ? null : tutorUid)
       .then(s => { if (!cancelled) setStudents(s); })
       .catch(e => { if (!cancelled) { setError(e.message); setStudents([]); } });
+    fetchClassLessonNotes(selected, isAdmin ? null : tutorUid)
+      .then(notes => {
+        if (cancelled) return;
+        const byUid = {};
+        for (const n of notes) { const a = byUid[n.uid] || (byUid[n.uid] = { present: 0, late: 0, absent: 0 }); if (a[n.attendance] !== undefined) a[n.attendance]++; }
+        setAttendance(byUid);
+      })
+      .catch(() => {});
     return () => { cancelled = true; };
   }, [selected, tutorUid, isAdmin]);
+
+  const saveSchedule = async () => {
+    if (!cls || !editSchedule) return;
+    try {
+      const schedule = { weekday: Number(editSchedule.weekday), time: editSchedule.time, minutes: Number(editSchedule.minutes) || DEFAULT_MINUTES };
+      await updateClass(cls.code, { schedule, lessonSlot: describeSchedule(schedule) });
+      setClasses(list => list.map(c => c.code === cls.code ? { ...c, schedule, lessonSlot: describeSchedule(schedule) } : c));
+      setEditSchedule(null);
+    } catch (e) { setError(e.message); }
+  };
 
   const handleCreate = async () => {
     if (!newName.trim()) return;
     setCreating(true); setError(null);
     try {
-      const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: newSlot });
+      const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: describeSchedule(newSchedule), schedule: newSchedule });
       setClasses(prev => [...(prev || []), cls].sort((a, b) => a.name.localeCompare(b.name)));
       setSelected(cls.code); setNewName(""); setNewSlot(""); setShowNew(false);
     } catch (e) { setError(e.message || "Could not create the group"); }
@@ -76,6 +98,7 @@ export default function TutorPage({ authUser, userProfile }) {
     } catch (e) { setError(e.message || "Could not save the name"); setNameEdit({ ...nameEdit, saving: false }); }
   };
   const cls = classes?.find(c => c.code === selected);
+  const nextLesson = cls?.schedule ? nextOccurrences(cls.schedule, 1)[0] : null;
   const tutorName = (uid) => { const t = tutors.find(x => x.uid === uid); return t ? (t.displayName || t.email) : null; };
   const classUids = useMemo(() => new Set((students || []).map(s => s.uid)), [students]);
   const classAttempts = useMemo(() => attempts.filter(a => classUids.has(a.uid)), [attempts, classUids]);
@@ -111,7 +134,7 @@ export default function TutorPage({ authUser, userProfile }) {
       <PageHeader
         eyebrow="Overview"
         title={cls ? cls.name : "Your groups"}
-        sub={cls ? [boardLabel(cls.board), cls.lessonSlot, isAdmin && tutorName(cls.tutorId), students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"].filter(Boolean).join(" · ") : "Create a group, then place students into it from the Students tab."}
+        sub={cls ? [boardLabel(cls.board), describeSchedule(cls.schedule) || cls.lessonSlot, nextLesson && `next ${fmtLessonDay(nextLesson)}`, isAdmin && tutorName(cls.tutorId), students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"].filter(Boolean).join(" · ") : "Create a group, then place students into it from the Students tab."}
         right={<>
           {classes && classes.length > 1 && (
             <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Switch group"
@@ -119,11 +142,23 @@ export default function TutorPage({ authUser, userProfile }) {
               {classes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
             </select>
           )}
+          {cls && <Button icon="calendar" onClick={() => setEditSchedule(editSchedule ? null : (cls.schedule || { weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }))}>{cls.schedule ? "Lesson time" : "Set lesson time"}</Button>}
           <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>
         </>}
       />
 
       {error && <Notice tone="red">{error}</Notice>}
+
+      {cls && editSchedule && (
+        <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <CardHeader title={`Weekly lesson for ${cls.name}`} sub="Drives the next-lesson card, the day-before reminder emails and the default date for lesson notes." />
+          <ScheduleFields value={editSchedule} onChange={setEditSchedule} />
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button variant="accent" onClick={saveSchedule}>Save</Button>
+            <Button variant="ghost" onClick={() => setEditSchedule(null)}>Cancel</Button>
+          </div>
+        </Card>
+      )}
 
       {showNew && (
         <Card style={{ display: "flex", gap: 10, alignItems: "flex-end", flexWrap: "wrap" }}>
@@ -132,8 +167,8 @@ export default function TutorPage({ authUser, userProfile }) {
             <Input id="new-class-name" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Year 13 OCR Tuesday" onKeyDown={e => e.key === "Enter" && handleCreate()} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "1 1 160px" }}>
-            <label htmlFor="new-class-slot" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Lesson slot (optional)</label>
-            <Input id="new-class-slot" value={newSlot} onChange={e => setNewSlot(e.target.value)} placeholder="e.g. Tue 6 to 7.30pm" />
+            <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Weekly lesson</span>
+            <ScheduleFields value={newSchedule} onChange={setNewSchedule} />
           </div>
           {isAdmin && tutors.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -188,6 +223,7 @@ export default function TutorPage({ authUser, userProfile }) {
                         <th style={th}>This week</th>
                         <th style={{ ...th, width: 190 }}>Accuracy · 7d</th>
                         <th style={th}>Weakest topic</th>
+                        <th style={th}>Attendance</th>
                         <th style={{ ...th, paddingRight: 20 }}>Last active</th>
                       </tr>
                     </thead>
@@ -226,6 +262,7 @@ export default function TutorPage({ authUser, userProfile }) {
                               <td style={{ ...td, fontWeight: 600 }}>{sum?.week || 0} <span style={{ color: T.muted, fontWeight: 400 }}>Qs</span></td>
                               <td style={td}><AccuracyBar pct={weekPct} width={170} /></td>
                               <td style={td}>{weakest ? <Chip tone={chipToneForPct(weakest.pct)}>{weakest.label} · {weakest.pct}%</Chip> : <span style={{ color: T.muted }}>{sum ? "None under 75%" : "No data yet"}</span>}</td>
+                              <td style={td}><AttendanceChips a={attendance[s.uid]} /></td>
                               <td style={{ ...td, paddingRight: 20, color: T.muted }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between" }}>
                                   {relativeTime(sum?.last)}
@@ -326,3 +363,31 @@ function TopicList({ title, topics, empty }) {
 }
 
 export { pct };
+
+function ScheduleFields({ value, onChange }) {
+  const sel = { padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink };
+  const set = (k, v) => onChange({ ...value, [k]: v });
+  return (
+    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+      <select value={value.weekday} onChange={e => set("weekday", Number(e.target.value))} style={sel} aria-label="Lesson day">
+        {WEEKDAYS.map((d, i) => <option key={d} value={i}>{d}s</option>)}
+      </select>
+      <Input type="time" value={value.time} onChange={e => set("time", e.target.value)} aria-label="Start time" style={{ width: 120 }} />
+      <select value={value.minutes} onChange={e => set("minutes", Number(e.target.value))} style={sel} aria-label="Length">
+        {[60, 90, 120, 150, 180].map(m => <option key={m} value={m}>{m === 60 ? "1 hour" : m === 120 ? "2 hours" : m === 180 ? "3 hours" : `${m / 60} hours`}</option>)}
+      </select>
+      <span style={{ fontSize: 12, color: T.muted }}>{describeSchedule(value)}</span>
+    </div>
+  );
+}
+
+function AttendanceChips({ a }) {
+  if (!a) return <span style={{ fontSize: 12, color: T.muted }}>No lessons noted</span>;
+  const total = a.present + a.late + a.absent;
+  return (
+    <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }} title={`${a.present} present, ${a.late} late, ${a.absent} absent of ${total}`}>
+      <Chip tone={a.absent === 0 ? "green" : a.absent / total > 0.25 ? "red" : "amber"}>{a.present + a.late}/{total} attended</Chip>
+      {a.late > 0 && <Chip tone="amber">{a.late} late</Chip>}
+    </div>
+  );
+}

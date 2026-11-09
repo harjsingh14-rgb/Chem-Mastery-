@@ -113,4 +113,41 @@ function lessonNote(note, { studentName, parentName, tutorName, groupName }) {
   return { subject: `Lesson note for ${sf}, ${fmtLessonDate(note.date)}`, html };
 }
 
-module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, notify, lessonNote, NOTIFY };
+const fmtMoney = (n) => `£${Number(n || 0).toLocaleString("en-GB", { minimumFractionDigits: Number.isInteger(Number(n)) ? 0 : 2, maximumFractionDigits: 2 })}`;
+const fmtShortDate = (ms) => ms ? new Date(ms).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }) : "";
+
+/** To the student, parent copied: lesson tomorrow, with any homework still due. */
+function lessonReminder({ studentName, groupName, when, zoomNote, homework }) {
+  const sf = firstName(studentName);
+  const html = layout("Lesson tomorrow", `
+    <p>Hi ${esc(sf)},</p>
+    <p>Your ${groupName ? `<strong>${esc(groupName)}</strong> ` : ""}lesson is <strong>${esc(when)}</strong>.${zoomNote ? ` ${esc(zoomNote)}` : ""}</p>
+    ${homework.length ? `<p><strong>Homework still to finish before the lesson</strong><br>${homework.map(h => `${esc(h.title)}${h.dueAt ? ` (due ${esc(fmtShortDate(h.dueAt))})` : ""}`).join("<br>")}</p>${button(`${SITE}/`, "Open my homework")}` : "<p>Your homework is all in. Bring any questions from the week.</p>"}
+    <p>See you tomorrow,<br>HSJ Tuition</p>`);
+  return { subject: `Lesson tomorrow: ${when}`, html };
+}
+
+/** To the student: homework due within a day and not yet submitted. */
+function homeworkReminder({ studentName, title, dueAt, started }) {
+  const sf = firstName(studentName);
+  const html = layout("Homework due soon", `
+    <p>Hi ${esc(sf)},</p>
+    <p><strong>${esc(title)}</strong> is due <strong>${esc(fmtShortDate(dueAt))}</strong> and is ${started ? "started but not yet submitted" : "not started yet"}.</p>
+    ${button(`${SITE}/`, started ? "Finish my homework" : "Start my homework")}
+    <p>Your tutor reviews it before the lesson, so submit it even if some questions are unfinished.</p>`);
+  return { subject: `${title} is due ${fmtShortDate(dueAt)}`, html };
+}
+
+/** To the parent: an invoice is due soon or overdue, with the Stripe payment link. */
+function paymentReminder({ parentName, studentName, amount, description, dueAt, overdue, url }) {
+  const html = layout(overdue ? "Payment overdue" : "Payment due soon", `
+    <p>Hi ${esc(firstName(parentName))},</p>
+    <p>${overdue ? "A payment for" : "A payment is coming up for"} ${esc(firstName(studentName))}'s tutoring programme${overdue ? " is overdue" : ""}:</p>
+    <p><strong>${fmtMoney(amount)}</strong> · ${esc(description || "Tutoring programme")}<br>Due ${esc(fmtShortDate(dueAt))}</p>
+    ${url ? button(url, "Pay online") : ""}
+    <p>If you have already paid by bank transfer, please ignore this and we will mark it as received. Any questions, reply to this email.</p>
+    <p>HSJ Tuition</p>`);
+  return { subject: `${overdue ? "Overdue: " : ""}${fmtMoney(amount)} for ${firstName(studentName)}'s tutoring, due ${fmtShortDate(dueAt)}`, html };
+}
+
+module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY };

@@ -113,14 +113,14 @@ const makeClassCode = () => "HSJ-" + Array.from({ length: 4 }, () => CODE_CHARS[
 
 // A group (stored in the `classes` collection) has one tutor. An admin may
 // create a group for another tutor by passing tutorId.
-export async function createClass(tutorUid, { name, board, tutorId, lessonSlot }) {
+export async function createClass(tutorUid, { name, board, tutorId, lessonSlot, schedule }) {
   // Retry a few times in the (unlikely) event of a code collision
   for (let i = 0; i < 5; i++) {
     const code = makeClassCode();
     const ref = doc(db, "classes", code);
     const existing = await getDoc(ref);
     if (existing.exists()) continue;
-    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorId || tutorUid, lessonSlot: (lessonSlot || "").trim() || null, createdBy: tutorUid, createdAt: serverTimestamp() };
+    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorId || tutorUid, lessonSlot: (lessonSlot || "").trim() || null, schedule: schedule || null, createdBy: tutorUid, createdAt: serverTimestamp() };
     await setDoc(ref, cls);
     return cls;
   }
@@ -150,6 +150,11 @@ export async function fetchAllClasses() {
   return snap.docs.map(d => d.data()).sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 }
 
+export async function fetchClass(code) {
+  if (!code) return null;
+  const snap = await getDoc(doc(db, "classes", code));
+  return snap.exists() ? { code: snap.id, ...snap.data() } : null;
+}
 export async function updateClass(code, patch) {
   await updateDoc(doc(db, "classes", code), patch);
 }
@@ -157,6 +162,35 @@ export async function updateClass(code, patch) {
 export async function fetchTutors() {
   const snap = await getDocs(query(collection(db, "users"), where("role", "in", ["tutor", "admin"])));
   return snap.docs.map(d => ({ uid: d.id, ...d.data() })).sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""));
+}
+
+/** Every placed student (admin). */
+export async function fetchAllStudents() {
+  const snap = await getDocs(query(collection(db, "users"), where("role", "==", "student")));
+  return snap.docs.map(d => ({ uid: d.id, ...d.data() })).sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""));
+}
+
+/** Stripe invoices mirrored into `payments`. scope: { uid } for a student, { tutorId } for a tutor, {} for admin. */
+export async function fetchPayments(scope = {}) {
+  const col = collection(db, "payments");
+  const q = scope.uid ? query(col, where("uid", "==", scope.uid)) : scope.tutorId ? query(col, where("tutorId", "==", scope.tutorId)) : col;
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt || b.updatedAt || 0) - (a.createdAt || a.updatedAt || 0));
+}
+
+/** Admin: raise, void, mark paid or resend a Stripe invoice. */
+export async function invoicesApi(action, payload = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Please sign in again");
+  const idToken = await user.getIdToken();
+  const res = await fetch("/api/invoices", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Something went wrong");
+  return data;
 }
 
 export async function fetchApplicants() {
@@ -360,6 +394,15 @@ export async function saveLessonNote(lessonId, uid, data) {
 
 export async function fetchLessonNotes(lessonId, tutorUid) {
   const snap = await getDocs(query(collection(db, "lessonNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+/** All notes for one group (attendance record). */
+export async function fetchClassLessonNotes(classId, tutorUid) {
+  const q = tutorUid
+    ? query(collection(db, "lessonNotes"), where("tutorId", "==", tutorUid), where("classId", "==", classId))
+    : query(collection(db, "lessonNotes"), where("classId", "==", classId));
+  const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
