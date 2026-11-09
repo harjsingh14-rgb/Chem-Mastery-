@@ -7,3 +7,6 @@ build/
 # Exam board PDFs: reference material only, not deployed
 resources/*
 !resources/INDEX.md
+
+# Local Claude Code settings (machine-specific permissions, may contain tokens)
+.claude/settings.local.json
