@@ -11,8 +11,8 @@ const boardOk = (b, board) => b === "both" || b === board || (Array.isArray(b) &
 
 /**
  * Revision: the HSJ-written question banks and tools, tiered by topic and
- * difficulty, for learning a topic before tackling the real exam questions
- * under Practise. One card per tool with the size of the bank for this board.
+ * difficulty, for students' own study. Real past-paper questions are set as
+ * homework by the tutor. One card per tool with the size of the bank.
  */
 export default function RevisionPage({ board, isAdmin, hasFullAccess }) {
   const navigate = useNavigate();
@@ -44,8 +44,8 @@ export default function RevisionPage({ board, isAdmin, hasFullAccess }) {
   return (
     <>
       <PageHeader eyebrow="Revision" title="Learn a topic"
-        sub={`${boardLabel(board)} Chemistry. Build each topic up with HSJ's tiered question banks, then test it on real exam questions under Practise.`} />
-      {board === "edexcel" && <Notice tone="amber"><b>Edexcel banks are still being written.</b> The calculation sets below cover Edexcel; the MCQ and extended-answer banks do not yet. Past papers under Practise cover every Edexcel paper.</Notice>}
+        sub={`${boardLabel(board)} Chemistry. Build each topic up with HSJ's tiered question banks. Your homework tests it on real past-paper questions.`} />
+      {board === "edexcel" && <Notice tone="amber"><b>Edexcel banks are still being written.</b> The calculation sets below cover Edexcel; the MCQ and extended-answer banks do not yet. Your homework uses real Edexcel past-paper questions.</Notice>}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
         {tools.map(t => (
           <Card key={t.id} role="button" tabIndex={0} onClick={() => navigate(`/${board}/${t.to}`)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/${board}/${t.to}`); } }}

@@ -4,7 +4,6 @@ import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyNa
 import TutorPage from "./components/TutorPage";
 import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
-import PastPaperBrowser from "./components/ppq/PastPaperBrowser";
 import PastPaperQuestion from "./components/ppq/PastPaperQuestion";
 import RevisionPage from "./components/RevisionPage";
 import ParentPage from "./components/ParentPage";
@@ -182,6 +181,12 @@ export default function App() {
     else { navigate("/"); }
   };
 
+  // Past papers are homework only (HSJ decision, 10 Nov 2026): the old
+  // Practise browser sends students to Revision.
+  useEffect(() => {
+    if (screen === "topics" && topicsTab === "practise" && !routeParam && board) navigate(`/${board}/revision`, { replace: true });
+  }, [screen, topicsTab, routeParam, board]); // eslint-disable-line
+
   useEffect(() => {
     if (screen === "cards" && routeParam && board && topic !== routeParam) {
       fcSelectTopic(routeParam, board);
@@ -228,7 +233,6 @@ export default function App() {
     { id: "home", label: "Dashboard", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "homework", label: "Homework", icon: "checkSquare", to: `/${navBoard}/homework`, active: screen === "topics" && topicsTab === "homework" },
     { id: "lessons", label: "Lessons", icon: "calendar", to: `/${navBoard}/lessons`, active: screen === "topics" && topicsTab === "lessons" },
-    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "topics" && topicsTab === "practise" },
     { id: "revision", label: "Revision", icon: "book", to: `/${navBoard}/revision`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos", "practise"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
     { id: "videos", label: "Learn", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
@@ -242,7 +246,6 @@ export default function App() {
       { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
     ] : []),
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
-    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "topics" && topicsTab === "practise" },
     { id: "revision", label: "Revision", icon: "book", to: `/${navBoard}/revision`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos", "practise"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
   ];
@@ -490,7 +493,7 @@ export default function App() {
   }
 
 
-  const isPage = ["home", "practise", "revision", "homework", "videos"].includes(topicsTab);
+  const isPage = ["home", "practise", "revision", "homework", "videos"].includes(topicsTab);   // "practise" with no question id redirects to Revision
   const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
 
   // Homework player: focused mode, no tabs
@@ -501,8 +504,8 @@ export default function App() {
 
   // Past-paper question: focused mode, no tabs
   if (screen === "topics" && topicsTab === "practise" && routeParam) return renderShell(
-    <PastPaperQuestion board={board} qid={routeParam} authUser={authUser} logAttempt={logAttempt} onExit={() => navigate(`/${board}/practise`)} />,
-    { focus: true, back: () => navigate(`/${board}/practise`), backLabel: "Back to past papers", title: "Past papers", subtitle: boardLabel(board) }
+    <PastPaperQuestion board={board} qid={routeParam} authUser={authUser} logAttempt={logAttempt} onExit={() => navigate(`/${board}/homework`)} />,
+    { focus: true, back: () => navigate(`/${board}/homework`), backLabel: "Back to homework", title: "Past-paper question", subtitle: boardLabel(board) }
   );
 
   if (screen === "topics") return renderShell(
@@ -513,12 +516,6 @@ export default function App() {
       {topicsTab === "home" && (
         <StudentDashboard board={board} authUser={authUser} userProfile={userProfile} currentStreak={currentStreak} known={known}
           sets={SETS} topicOrder={CURRENT_TOPIC_ORDER} sectionOf={sectionOf} hasFullAccess={hasFullAccess} isAdmin={isAdmin} mcqCount={mcqData.questions.length} />
-      )}
-      {topicsTab === "practise" && (
-        <>
-          <PageHeader eyebrow="Practise" title="Past papers" sub="Every question from every past paper, marked by the AI examiner against the real mark scheme." />
-          <PastPaperBrowser board={board} authUser={authUser} hasFullAccess={hasFullAccess} />
-        </>
       )}
       {topicsTab === "revision" && <RevisionPage board={board} isAdmin={isAdmin} hasFullAccess={hasFullAccess} />}
       {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}

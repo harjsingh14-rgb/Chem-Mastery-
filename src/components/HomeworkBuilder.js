@@ -3,15 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { createAssignment, fetchTutorClasses } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, Icon } from "../ui/components";
-import { sourcesFor, buildItems, totals, describeItems, TYPE_LABEL, MIN_PER_MARK } from "../utils/homeworkBank";
+import { buildItems, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
 import { YearToggle } from "./McqTab";
 import usePpq from "../hooks/usePpq";
 import { topicsFor, seriesLabel, LEVEL_LABEL, KIND_LABEL } from "./ppq/ppqUtils";
 
+// Homework is set from real past-paper questions only (HSJ decision, 10 Nov
+// 2026). The HSJ-written tiered banks are for students' own revision.
 const PPQ_KINDS = ["mcq", "structured", "extended", "calculation", "practical"];
-const TYPE_TONE = { mcq: "red", calc: "accent", exam: "amber", extended: "indigo", ppq: "green" };
-
-const DIFFS = [{ id: "easy", label: "Easy" }, { id: "medium", label: "Medium" }, { id: "hard", label: "Hard" }, { id: "exam", label: "Exam style" }];
 
 function Toggle({ on, onClick, children, count }) {
   return (
@@ -33,12 +32,6 @@ export default function HomeworkBuilder({ authUser }) {
   const [due, setDue] = useState(() => { const d = new Date(); d.setDate(d.getDate() + 7); return d.toISOString().slice(0, 10); });
   const [note, setNote] = useState("");
   const [year, setYear] = useState("as");
-  const [mcqTopics, setMcqTopics] = useState([]);
-  const [calcSets, setCalcSets] = useState([]);
-  const [calcDiffs, setCalcDiffs] = useState(["easy", "medium", "hard"]);
-  const [extCats, setExtCats] = useState([]);
-  const [examTopics, setExamTopics] = useState([]);
-  const [examTags, setExamTags] = useState([]);
   const [ppqTopics, setPpqTopics] = useState([]);
   const [ppqKinds, setPpqKinds] = useState(["structured", "extended", "calculation", "practical"]);
   const [items, setItems] = useState([]);
@@ -52,10 +45,6 @@ export default function HomeworkBuilder({ authUser }) {
 
   const cls = classes?.find(c => c.code === classId);
   const board = cls?.board || "aqa";
-  const src = useMemo(() => sourcesFor(board), [board]);
-  const mcqTopicsShown = src.mcqTopics.filter(t => year === "a2" || t.level === "AS");
-  const calcSetsShown = src.calcSets.filter(s => year === "a2" || s.year !== "a2");
-
   // Past-paper questions: the index for this board, narrowed to the chosen
   // level, spec topics and question kinds. AS homework uses AS papers only;
   // A2 homework can draw on both levels.
@@ -79,10 +68,10 @@ export default function HomeworkBuilder({ authUser }) {
   const ppqPool = useMemo(() => ppqCandidates.filter(it => (it.topics || []).some(t => ppqTopics.includes(t))), [ppqCandidates, ppqTopics]);
 
   const flip = (set, id) => set(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  const anySource = mcqTopics.length + calcSets.length + extCats.length + examTopics.length + ppqPool.length > 0;
+  const anySource = ppqPool.length > 0;
 
   const fill = () => {
-    setItems(buildItems({ board, minutes: Number(minutes) || 60, mcqTopics, calcSets, calcDifficulties: calcDiffs, extCategories: extCats, examTopics, examTags, ppqPool }));
+    setItems(buildItems({ board, minutes: Number(minutes) || 60, ppqPool }));
   };
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
   const tot = totals(items);
@@ -106,7 +95,7 @@ export default function HomeworkBuilder({ authUser }) {
 
   return (
     <>
-      <PageHeader eyebrow="Homework" title="Set homework" sub={`Pick the topics, give it a time budget and the builder fills it at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
+      <PageHeader eyebrow="Homework" title="Set homework" sub={`Pick the spec topics, give it a time budget and the builder fills it with real past-paper questions at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
         right={<Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>} />
       {error && <Notice tone="red">{error}</Notice>}
       {classes && classes.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Homework is set for a group. Create one on the Overview tab, then come back here." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
@@ -118,7 +107,7 @@ export default function HomeworkBuilder({ authUser }) {
               <CardHeader title="Details" />
               <div className="cm-grid-2" style={{ gap: 14 }}>
                 <div style={field}><label htmlFor="hw-class" style={label}>Group</label>
-                  <select id="hw-class" value={classId} onChange={e => { setClassId(e.target.value); setMcqTopics([]); setCalcSets([]); setExtCats([]); setExamTags([]); setPpqTopics([]); setItems([]); }}
+                  <select id="hw-class" value={classId} onChange={e => { setClassId(e.target.value); setPpqTopics([]); setItems([]); }}
                     style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 14, color: T.ink }}>
                     {classes.map(c => <option key={c.code} value={c.code}>{c.name} ({boardLabel(c.board)})</option>)}
                   </select></div>
@@ -132,32 +121,8 @@ export default function HomeworkBuilder({ authUser }) {
             </Card>
 
             <Card style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <CardHeader title="Sources" sub={`${boardLabel(board)} banks`} right={<YearToggle value={year} onChange={setYear} />} />
-              <div style={field}><span style={label}>MCQ topics</span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {mcqTopicsShown.length === 0 && <span style={{ fontSize: 12, color: T.muted }}>No MCQ bank for this board yet.</span>}
-                  {mcqTopicsShown.map(t => <Toggle key={t.id} on={mcqTopics.includes(t.id)} onClick={() => flip(setMcqTopics, t.id)} count={t.questionCount}>{t.id.startsWith("OCR-P") ? t.name : `${t.id} ${t.name}`}</Toggle>)}
-                </div></div>
-              <div style={field}><span style={label}>Calculation sets</span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{calcSetsShown.map(s => <Toggle key={s.id} on={calcSets.includes(s.id)} onClick={() => flip(setCalcSets, s.id)} count={s.count}>{s.title}</Toggle>)}</div>
-                {calcSets.length > 0 && <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}><span style={{ ...label, alignSelf: "center" }}>Difficulty:</span>{DIFFS.map(d => <Toggle key={d.id} on={calcDiffs.includes(d.id)} onClick={() => flip(setCalcDiffs, d.id)}>{d.label}</Toggle>)}</div>}
-              </div>
-              <div style={field}><span style={label}>Extended answers (AI marked, levels of response)</span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{src.extCategories.map(c => <Toggle key={c.id} on={extCats.includes(c.id)} onClick={() => flip(setExtCats, c.id)} count={c.count}>{c.id}</Toggle>)}</div></div>
-              <div style={field}><span style={label}>Exam-style questions (parts a, b, c)</span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {src.examTopics.length === 0 && <span style={{ fontSize: 12, color: T.muted }}>None written yet. Add questions in src/data/exam-questions.js using QUESTION_TEMPLATE.md.</span>}
-                  {src.examTopics.map(t => <Toggle key={t.id} on={examTopics.includes(t.id)} onClick={() => flip(setExamTopics, t.id)} count={t.count}>{t.id}</Toggle>)}
-                </div>
-                {src.examTopics.filter(t => examTopics.includes(t.id) && t.tags.length > 1).map(t => (
-                  <div key={t.id} style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center", marginTop: 6 }}>
-                    <span style={{ fontSize: 12, color: T.muted, marginRight: 4 }}>{t.id}: narrow to</span>
-                    {t.tags.map(tag => <Toggle key={tag.id} on={examTags.includes(tag.id)} onClick={() => flip(setExamTags, tag.id)} count={tag.count}>{tag.id}</Toggle>)}
-                  </div>
-                ))}
-                {examTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>A topic is used whole unless you pick tags inside it.</span>}
-              </div>
-              <div style={field}><span style={label}>Past-paper questions (real exam questions, AI marked against the mark scheme)</span>
+              <CardHeader title="Past-paper questions" sub={`${boardLabel(board)} papers, marked by the AI examiner against the real mark scheme`} right={<YearToggle value={year} onChange={setYear} />} />
+              <div style={field}>
                 {ppq.loading && <span style={{ fontSize: 12, color: T.muted }}>Loading the past-paper index…</span>}
                 {ppq.error && <span style={{ fontSize: 12, color: T.red }}>{ppq.error}</span>}
                 {!ppq.loading && !ppq.error && (
@@ -179,6 +144,7 @@ export default function HomeworkBuilder({ authUser }) {
                       );
                     })}
                     {ppqTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>{ppqPool.length} question{ppqPool.length === 1 ? "" : "s"} to draw from. Students answer by typing, drawing on the paper or photographing their work; their first marked attempt counts.</span>}
+                    {ppqTopics.length === 0 && ppqModules.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>Pick one or more topics. {year === "as" ? "AS homework draws on AS papers only." : "A2 homework draws on AS and A-level papers."}</span>}
                   </>
                 )}
               </div>
@@ -198,8 +164,8 @@ export default function HomeworkBuilder({ authUser }) {
                 {items.map((it, i) => (
                   <div key={it.key} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px 8px 20px", borderBottom: `1px solid ${T.line}`, fontSize: 12 }}>
                     <span style={{ color: T.faint, width: 18 }}>{i + 1}</span>
-                    <Chip tone={TYPE_TONE[it.type] || "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{TYPE_LABEL[it.type]}</Chip>
-                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={it.type === "ppq" ? `${LEVEL_LABEL[it.level] || ""} Paper ${it.paper} · ${seriesLabel(it.series, it.year)} · Q${it.q}` : undefined}>{it.topicLabel}{it.type === "ppq" ? ` · ${seriesLabel(it.series, it.year)} P${it.paper} Q${it.q}` : ""}{it.difficulty ? ` · ${it.difficulty}` : ""}{it.tier ? ` · tier ${it.tier}` : ""}</span>
+                    <Chip tone="green" style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[it.kind] || "Structured"}</Chip>
+                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={`${LEVEL_LABEL[it.level] || ""} Paper ${it.paper} · ${seriesLabel(it.series, it.year)} · Q${it.q}`}>{it.topicLabel} · {seriesLabel(it.series, it.year)} P{it.paper} Q{it.q}</span>
                     <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{it.marks} mk</span>
                     <button onClick={() => remove(it.key)} aria-label="Remove" style={{ border: "none", background: "transparent", color: T.faint, cursor: "pointer", padding: 2 }}><Icon name="x" size={14} /></button>
                   </div>

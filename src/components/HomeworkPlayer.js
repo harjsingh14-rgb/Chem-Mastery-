@@ -431,7 +431,12 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
         </Card>
       )}
 
-      {!submitted && answeredCount === 0 && (
+      {!submitted && answeredCount === 0 && items.length > 0 && items.every(it => it.type === "ppq") && (
+        <Notice tone="neutral" style={{ fontSize: 13 }}>
+          <b>How marking works.</b> These are real exam questions. Answer every part by typing, drawing on the paper or photographing your work, then press <b>Mark my answer</b> and the AI examiner marks it against the real mark scheme. You can be marked twice on each question; your first mark is the one that counts. If you think a mark is wrong, query it and your tutor will check.
+        </Notice>
+      )}
+      {!submitted && answeredCount === 0 && items.some(it => it.type !== "ppq") && (
         <Notice tone="neutral" style={{ fontSize: 13 }}>
           <b>How marking works.</b> Press <b>Mark</b> or <b>AI mark</b> to have each answer marked straight away. You get up to three attempts (two for multiple choice), and after your first attempt you can open hints one at a time. Hints are free, but your first attempt is the mark that counts. The mark scheme opens once you get full marks, or once you have used every attempt and hint.
         </Notice>

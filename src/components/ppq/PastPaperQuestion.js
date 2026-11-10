@@ -189,7 +189,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                   <Button onClick={tryAgain}>Try again</Button>
                   {!embedded && (nextId
                     ? <Button variant="primary" iconRight="arrowRight" onClick={() => navigate(`/${board}/practise/${nextId}`)}>Next question</Button>
-                    : <Button variant="primary" onClick={onExit}>Back to past papers</Button>)}
+                    : <Button variant="primary" onClick={onExit}>Back</Button>)}
                 </div>
               )}
             </Card>

@@ -101,7 +101,7 @@ export default function StudentDashboard({ board, authUser, userProfile, current
           : "Your tutor has not placed you in a group yet"}
         right={nextUp
           ? <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/homework/${nextUp.a.id}`)}>{nextUp.status === "progress" ? "Continue homework" : "Start homework"}</Button>
-          : <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/practise`)}>Practise now</Button>}
+          : <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate(`/${board}/revision`)}>Revise now</Button>}
       />
 
       <div className="cm-two-col">
