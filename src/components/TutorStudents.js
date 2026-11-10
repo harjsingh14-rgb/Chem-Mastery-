@@ -169,10 +169,10 @@ export default function TutorStudents({ authUser, userProfile }) {
   );
 }
 
-const ragChip = { red: "red", amber: "amber", green: "green" };
 
 function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
   const [busy, setBusy] = useState(null);
+  const [showAll, setShowAll] = useState(false);
   const [err, setErr] = useState(null);
   const matching = groups.filter(g => g.board === a.board);
   const [groupCode, setGroupCode] = useState(() => (matching[0] || groups[0] || {}).code || "");
@@ -255,31 +255,43 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
         </div>
       </div>
 
-      {ev && tree && (
-        <div>
-          <div style={{ ...label, textTransform: "uppercase", letterSpacing: 0.8, fontSize: 11, marginBottom: 8 }}>Topic ratings</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {tree.modules.filter(m => (ev.taught || []).includes(m.id)).map(m => (
-              <div key={m.id}>
-                <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{m.title}</div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {m.subtopics.map(s => {
-                    const r = ev.ratings?.[s.ref];
-                    const notTaught = r && r.covered === "no";
-                    const tone = notTaught ? "neutral" : ragChip[r?.rag] || "neutral";
-                    return <Chip key={s.ref} tone={tone} style={{ whiteSpace: "normal" }} title={r?.note || ""}>{s.title}{notTaught ? " · not taught" : r?.covered === "partly" ? " · partly" : ""}{r?.note ? " *" : ""}</Chip>;
-                  })}
-                </div>
-                {m.subtopics.filter(s => ev.ratings?.[s.ref]?.note).map(s => (
-                  <div key={s.ref} style={{ fontSize: 12, color: T.body, marginTop: 4 }}><strong>{s.title}:</strong> {ev.ratings[s.ref].note}</div>
-                ))}
-              </div>
-            ))}
-            {(ev.taught || []).length === 0 && <div style={{ fontSize: 12, color: T.muted }}>No modules ticked.</div>}
+      {ev && tree && (() => {
+        // Summarise by colour first: a tutor wants to know what needs teaching, not a wall of chips
+        const taughtMods = tree.modules.filter(m => (ev.taught || []).includes(m.id));
+        const rated = taughtMods.flatMap(m => m.subtopics.map(s => ({ ...s, module: m.title, r: ev.ratings?.[s.ref] })));
+        const byRag = (rag) => rated.filter(s => s.r && s.r.covered !== "no" && s.r.rag === rag);
+        const notTaught = rated.filter(s => s.r?.covered === "no");
+        const noted = rated.filter(s => s.r?.note);
+        const row = (title, tone, list) => list.length > 0 && (
+          <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flexWrap: "wrap" }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: T.muted, minWidth: 128, paddingTop: 3 }}>{title} ({list.length})</span>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", flex: 1 }}>{list.map(s => <Chip key={s.ref} tone={tone} style={{ whiteSpace: "normal" }} title={`${s.module}${s.r?.note ? ` · ${s.r.note}` : ""}`}>{s.title}{s.r?.covered === "partly" ? " · partly" : ""}{s.r?.note ? " *" : ""}</Chip>)}</div>
           </div>
-          {ev.notes && <div style={{ marginTop: 10, fontSize: 13, padding: 12, borderRadius: 10, background: T.card, border: `1px solid ${T.line}` }}><strong>From the student:</strong> {ev.notes}</div>}
-        </div>
-      )}
+        );
+        return (
+          <div>
+            <div style={{ ...label, textTransform: "uppercase", letterSpacing: 0.8, fontSize: 11, marginBottom: 8 }}>What needs teaching</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {row("Needs teaching", "red", byRag("red"))}
+              {row("Has gaps", "amber", byRag("amber"))}
+              {row("Not taught yet", "neutral", notTaught)}
+              {showAll && row("Exam ready", "green", byRag("green"))}
+              {(ev.taught || []).length === 0 && <div style={{ fontSize: 12, color: T.muted }}>No modules ticked.</div>}
+            </div>
+            {byRag("green").length > 0 && (
+              <button type="button" onClick={() => setShowAll(v => !v)} style={{ marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: 12, fontWeight: 600, color: T.accentText }}>
+                {showAll ? "Hide the green topics" : `Show the ${byRag("green").length} green topics`}
+              </button>
+            )}
+            {noted.length > 0 && (
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+                {noted.map(s => <div key={s.ref} style={{ fontSize: 12, color: T.body }}><strong>{s.title}:</strong> {s.r.note}</div>)}
+              </div>
+            )}
+            {ev.notes && <div style={{ marginTop: 10, fontSize: 13, padding: 12, borderRadius: 10, background: T.card, border: `1px solid ${T.line}` }}><strong>From the student:</strong> {ev.notes}</div>}
+          </div>
+        );
+      })()}
 
       <div style={{ fontSize: 13, color: T.body, display: "flex", gap: "4px 18px", flexWrap: "wrap" }}>
         <span><strong>Fee:</strong> {money(a.paymentAmount) || "not set"} · {paymentPlanLabel(a.paymentPlan)}</span>

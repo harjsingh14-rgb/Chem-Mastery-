@@ -26,7 +26,7 @@ function validateDetails(b, { partial = false } = {}) {
   if (has("paymentPlan")) { out.paymentPlan = str(b.paymentPlan, 20); if (!PLANS.includes(out.paymentPlan)) throw bad("Payment option must be paid in full, instalments or results-based"); }
   if (has("paymentAmount")) { const n = b.paymentAmount === "" || b.paymentAmount === null ? null : Number(b.paymentAmount); if (n === null || !Number.isFinite(n) || n <= 0) throw bad("Total programme fee is required"); out.paymentAmount = n; }
   if (has("schedule")) {
-    const rows = Array.isArray(b.schedule) ? b.schedule.slice(0, 12) : [];
+    const rows = Array.isArray(b.schedule) ? b.schedule.slice(0, 24) : [];
     out.schedule = rows.map(r => ({ amount: Number(r?.amount), due: str(r?.due, 80) })).filter(r => Number.isFinite(r.amount) && r.amount > 0 && r.due);
     if (out.schedule.length === 0) throw bad("Add at least one payment line (amount and when it is due)");
   }

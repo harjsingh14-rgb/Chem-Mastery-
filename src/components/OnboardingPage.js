@@ -57,6 +57,13 @@ export default function OnboardingPage({ token, onDone, account, onLogOut }) {
   );
 }
 
+/** "2.1 The programme..." -> bold "2.1"; "(a) All sessions..." -> bold "(a)". */
+function clauseText(c) {
+  const m = c.match(/^(\d{1,2}\.\d{1,2}|\([a-z]\))\s+([\s\S]*)$/);
+  if (!m) return c;
+  return <><strong style={{ color: T.ink }}>{m[1]}</strong> {m[2]}</>;
+}
+
 const label = { fontSize: 12, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6 };
 const cardStyle = { background: T.card, border: `1px solid ${T.border}`, borderRadius: T.radius, padding: 20, marginBottom: 14 };
 
@@ -317,9 +324,9 @@ function TermsForm({ token, data, onDone }) {
                 </tbody>
               </table>
             ) : c.startsWith("- ") ? (
-              <div key={i} style={{ ...clauseStyle, paddingLeft: 22, position: "relative" }}><span style={{ position: "absolute", left: 8 }}>•</span>{c.slice(2)}</div>
+              <div key={i} style={{ ...clauseStyle, paddingLeft: 22, position: "relative" }}><span style={{ position: "absolute", left: 8 }}>•</span>{clauseText(c.slice(2))}</div>
             ) : (
-              <p key={i} style={clauseStyle}>{c}</p>
+              <p key={i} style={clauseStyle}>{clauseText(c)}</p>
             ))}
           </div>
         ))}
