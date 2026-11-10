@@ -87,6 +87,26 @@ async function ensureParentAccount({ parentName, parentEmail, studentUid, studen
   return { uid: auth.uid, existing: auth.existing, emailed, emailError };
 }
 
+// Create parent accounts for students placed before parent logins existed.
+// { dryRun: true } lists who would get one without creating or emailing.
+async function backfillParents(body, token, res) {
+      const dryRun = !!body.dryRun;
+      const students = await fb.queryDocuments("users", { role: "student" }, token, { limit: 2000 });
+      const results = [];
+      for (const st of students) {
+        if (st.parentUid || !st.parentEmail || !EMAIL_RE.test(st.parentEmail)) continue;
+        if (dryRun) { results.push({ student: st.displayName, parentEmail: st.parentEmail, parentName: st.parentName || "" }); continue; }
+        let r;
+        try {
+          const group = st.classId ? await fb.getDocument(`classes/${st.classId}`, token) : null;
+          const tutor = st.tutorId ? await fb.getDocument(`users/${st.tutorId}`, token) : null;
+          r = await ensureParentAccount({ parentName: st.parentName, parentEmail: st.parentEmail, studentUid: st.id, studentEmail: st.email, studentName: st.displayName, groupName: group?.name || st.className || "", tutorName: tutor?.displayName || "" }, token, { sendEmail: true });
+        } catch (e) { r = { error: e.message }; }
+        results.push({ student: st.displayName, parentEmail: st.parentEmail, ...r });
+      }
+      return res.status(200).json({ ok: true, dryRun, count: results.length, results });
+    }
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -118,6 +138,11 @@ module.exports = async function handler(req, res) {
         applicant.evalSentAt = Date.now();
       } catch (e) { emailError = e.message; }
       return res.status(200).json({ applicant: { id, ...applicant }, emailError });
+    }
+
+    if (!["update", "resend", "delete", "place"].includes(action)) {
+      if (action === "backfillParents") return backfillParents(body, token, res);
+      throw bad("Unknown action");
     }
 
     const id = str(body.id, 40);
@@ -205,26 +230,6 @@ module.exports = async function handler(req, res) {
         parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "" }, token, { sendEmail: true });
       } catch (e) { parent = { error: e.message }; }
       return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError, parent });
-    }
-
-    // Create parent accounts for students placed before parent logins existed.
-    // { dryRun: true } lists who would get one without creating or emailing.
-    if (action === "backfillParents") {
-      const dryRun = !!body.dryRun;
-      const students = await fb.queryDocuments("users", { role: "student" }, token, { limit: 2000 });
-      const results = [];
-      for (const st of students) {
-        if (st.parentUid || !st.parentEmail || !EMAIL_RE.test(st.parentEmail)) continue;
-        if (dryRun) { results.push({ student: st.displayName, parentEmail: st.parentEmail, parentName: st.parentName || "" }); continue; }
-        let r;
-        try {
-          const group = st.classId ? await fb.getDocument(`classes/${st.classId}`, token) : null;
-          const tutor = st.tutorId ? await fb.getDocument(`users/${st.tutorId}`, token) : null;
-          r = await ensureParentAccount({ parentName: st.parentName, parentEmail: st.parentEmail, studentUid: st.id, studentEmail: st.email, studentName: st.displayName, groupName: group?.name || st.className || "", tutorName: tutor?.displayName || "" }, token, { sendEmail: true });
-        } catch (e) { r = { error: e.message }; }
-        results.push({ student: st.displayName, parentEmail: st.parentEmail, ...r });
-      }
-      return res.status(200).json({ ok: true, dryRun, count: results.length, results });
     }
 
     throw bad("Unknown action");
