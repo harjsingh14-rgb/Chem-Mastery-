@@ -44,7 +44,9 @@ async function sendEmail({ to, cc, subject, html, replyTo }) {
 function evaluationInvite(a, link) {
   const html = layout("Welcome to HSJ Tuition", `
     <p>Hi ${esc(firstName(a.studentName))},</p>
-    <p>Great to have you joining us for A-level Chemistry (${esc(a.boardLabel)}, Year ${esc(a.year)}). Before your first lesson I need a picture of where you are, so I can put you in the right group and plan what we cover.</p>
+    ${a.currentStudent
+      ? `<p>Your homework, feedback and progress are moving to the new HSJ Tuition platform (A-level Chemistry, ${esc(a.boardLabel)}, Year ${esc(a.year)}). To set it up for you I need an honest picture of where you are right now on each topic.</p>`
+      : `<p>Great to have you joining us for A-level Chemistry (${esc(a.boardLabel)}, Year ${esc(a.year)}). Before your first lesson I need a picture of where you are, so I can put you in the right group and plan what we cover.</p>`}
     <p>Please fill in the short self-evaluation below. Tick the modules you have been taught in school so far, then rate yourself Red, Amber or Green on each topic. Be honest, there are no wrong answers and it takes about 5 minutes.</p>
     ${button(link, "Complete my self-evaluation")}
     <p style="margin-top:22px;">Speak soon,<br>Harj</p>`);

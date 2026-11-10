@@ -82,9 +82,10 @@ module.exports = async function handler(req, res) {
       if (kind !== "evaluation") throw bad("This link is for the parent terms, not the self-evaluation");
       if (a.evaluation) throw bad("This self-evaluation has already been sent. Ask your tutor if something needs changing.");
       const evaluation = validateEvaluation(body);
-      const patch = { evaluation, status: a.status === "agreed" ? "agreed" : "evaluated" };
+      const patch = { evaluation, status: a.status === "agreed" || a.currentStudent ? "agreed" : "evaluated" };
       let emailError = null;
-      if (!a.termsSentAt) {
+      // Current students: the parent agreed terms before the platform, so no agreement goes out
+      if (!a.termsSentAt && !a.currentStudent) {
         try {
           const link = `${origin}/onboarding/${a.termsToken}`;
           const { subject, html } = mail.termsInvite(labelled, link, ragCounts(evaluation.ratings));
@@ -106,6 +107,7 @@ module.exports = async function handler(req, res) {
 
     if (action === "terms") {
       if (kind !== "terms") throw bad("This link is for the self-evaluation, not the terms");
+      if (a.currentStudent) throw bad("Terms for this student were agreed before the platform, so there is nothing to accept here");
       const name = str(body.name);
       if (name.length < 2) throw bad("Please type your full name to accept");
       const terms = {

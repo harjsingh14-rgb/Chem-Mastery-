@@ -36,6 +36,9 @@ function validateDetails(b, { partial = false } = {}) {
   if (has("groupSize")) { const g = Number(b.groupSize); out.groupSize = Number.isInteger(g) && g >= 2 && g <= 12 ? g : 6; }
   if (has("extraTerms")) out.extraTerms = str(b.extraTerms, 4000);
   if (has("notes")) out.notes = str(b.notes, 2000);
+  // Current students joined before the platform: the parent agreed terms
+  // already, so no agreement is emailed and the parent is not gated on one.
+  if (has("currentStudent")) out.currentStudent = b.currentStudent === true || b.currentStudent === "true";
   return out;
 }
 
@@ -122,7 +125,7 @@ async function backfillOnboarding(token, res) {
     const r = { student: a.studentName, evalGate: false, termsGate: false };
     const st = await fb.getDocument(`users/${a.studentUid}`, token);
     if (st && !a.evaluation && !st.selfEvaluation && !st.evalToken) { await fb.updateDocument(`users/${a.studentUid}`, { evalToken: a.evalToken }, token); r.evalGate = true; }
-    if (st?.parentUid && !a.terms) {
+    if (st?.parentUid && !a.terms && !a.currentStudent) {
       const parent = await fb.getDocument(`users/${st.parentUid}`, token);
       if (parent && !parent.childTerms?.[a.studentUid]) {
         await fb.updateDocument(`users/${st.parentUid}`, { childTerms: { ...(parent.childTerms || {}), [a.studentUid]: { token: a.termsToken, acceptedAt: null } } }, token);
@@ -232,6 +235,7 @@ module.exports = async function handler(req, res) {
         await sendEvaluationInvite(a, origin);
         await fb.updateDocument(`applicants/${id}`, { evalSentAt: Date.now() }, token);
       } else if (which === "terms") {
+        if (a.currentStudent) throw bad("Terms for this student were agreed before the platform, so there is no agreement to send");
         await sendTermsInvite(a, origin);
         await fb.updateDocument(`applicants/${id}`, { termsSentAt: Date.now() }, token);
       } else throw bad("Say which email to resend");
@@ -276,6 +280,7 @@ module.exports = async function handler(req, res) {
           programmeStart: a.programmeStart || null, programmeEnd: a.programmeEnd || null,
           initialGrade: a.initialGrade || null, groupSize: a.groupSize || 6, extraTerms: a.extraTerms || "",
           acceptedAt: a.terms?.acceptedAt || null, acceptedName: a.terms?.acceptedName || null, version: a.terms?.version || null,
+          agreedBeforePlatform: !!a.currentStudent,
         },
         selfEvaluation: a.evaluation || null,
         termsAccepted: a.terms || null,
@@ -297,7 +302,7 @@ module.exports = async function handler(req, res) {
       // The parent gets their own account, linked to this student
       let parent = null;
       try {
-        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", termsToken: a.terms ? null : a.termsToken }, token, { sendEmail: true });
+        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: true });
       } catch (e) { parent = { error: e.message }; }
       return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError, parent });
     }

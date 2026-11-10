@@ -21,7 +21,7 @@ const selectStyle = { padding: "9px 12px", borderRadius: 10, border: `1px solid 
 const today = () => new Date().toISOString().slice(0, 10);
 const EMPTY_FORM = () => ({ studentName: "", studentEmail: "", parentName: "", parentEmail: "", parentPhone: "", board: "aqa", year: 12,
   paymentPlan: "instalments", paymentAmount: "", schedule: [{ amount: "", due: "" }], programmeStart: today(), programmeEnd: programmeEndFor(12),
-  initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "" });
+  initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "", currentStudent: false });
 
 export default function TutorStudents({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
@@ -81,6 +81,10 @@ export default function TutorStudents({ authUser, userProfile }) {
         <Card style={{ marginBottom: 14 }}>
           <form onSubmit={create}>
             <CardHeader title="New student" sub="Details from the call. The student is emailed the self-evaluation link straight away." />
+            <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginTop: 12, padding: "10px 14px", borderRadius: 10, background: form.currentStudent ? T.accentTint : T.soft, border: `1px solid ${form.currentStudent ? T.accent : T.line}`, cursor: "pointer" }}>
+              <input type="checkbox" checked={form.currentStudent} onChange={e => setF("currentStudent", e.target.checked)} style={{ marginTop: 3 }} />
+              <span style={{ fontSize: 13, color: T.ink }}><strong>Current student</strong>, already with HSJ before the platform. The self-evaluation still goes out, but no agreement is emailed and the parent is not asked to accept one when they log in. Fill in the fee and schedule so Payments is right.</span>
+            </label>
             <div className="cm-grid-2" style={{ gap: 12, marginTop: 12 }}>
               <div style={field}><label style={label} htmlFor="ns-name">Student name</label><Input id="ns-name" required value={form.studentName} onChange={e => setF("studentName", e.target.value)} /></div>
               <div style={field}><label style={label} htmlFor="ns-email">Student email (their login)</label><Input id="ns-email" type="email" required value={form.studentEmail} onChange={e => setF("studentEmail", e.target.value)} /></div>
@@ -117,7 +121,7 @@ export default function TutorStudents({ authUser, userProfile }) {
               <textarea id="ns-notes" rows={2} value={form.notes} onChange={e => setF("notes", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
             <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
               <Button type="submit" variant="accent" disabled={saving}>{saving ? "Adding…" : "Add and send self-evaluation"}</Button>
-              <span style={{ fontSize: 12, color: T.muted, alignSelf: "center" }}>The agreement goes to the parent automatically once the self-evaluation is in.</span>
+              <span style={{ fontSize: 12, color: T.muted, alignSelf: "center" }}>{form.currentStudent ? "No agreement is sent: the parent agreed terms before the platform." : "The agreement goes to the parent automatically once the self-evaluation is in."}</span>
               <Button type="button" variant="ghost" onClick={() => setShowNew(false)}>Cancel</Button>
             </div>
           </form>
@@ -193,7 +197,7 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
   const place = () => {
     const g = groups.find(x => x.code === groupCode);
     if (!g) return;
-    const warn = [!ev && "the self-evaluation is not done", !a.terms && "the parent has not accepted the terms"].filter(Boolean);
+    const warn = [!ev && "the self-evaluation is not done", !a.terms && !a.currentStudent && "the parent has not accepted the terms"].filter(Boolean);
     if (!window.confirm(`Place ${a.studentName} into ${g.name}?${warn.length ? `\n\nNote: ${warn.join(" and ")}.` : ""}\n\nThis creates their account and emails the login to ${a.studentEmail} (parent copied).`)) return;
     run("place", async () => {
       const r = await studentsApi("place", { id: a.id, groupCode });
@@ -231,6 +235,8 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
           <div style={{ ...label, textTransform: "uppercase", letterSpacing: 0.8, fontSize: 11, marginBottom: 6 }}>Parent terms</div>
           {a.terms ? (
             <div style={{ fontSize: 13 }}>Accepted by <strong>{a.terms.acceptedName}</strong><div style={{ fontSize: 12, color: T.muted }}>{fmtDateTime(a.terms.acceptedAt)} · version {a.terms.version}</div></div>
+          ) : a.currentStudent ? (
+            <div style={{ fontSize: 13 }}>Agreed before the platform<div style={{ fontSize: 12, color: T.muted }}>Current student. No agreement was sent and the parent is not asked to accept one.</div></div>
           ) : (
             <>
               <div style={{ fontSize: 13, color: T.muted, marginBottom: 6 }}>Not accepted yet. {a.termsSentAt ? `Sent ${fmtDateTime(a.termsSentAt)}.` : "Sent automatically once the self-evaluation is in."}</div>
