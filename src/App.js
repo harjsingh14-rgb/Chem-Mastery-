@@ -229,7 +229,7 @@ export default function App() {
     { id: "lessons", label: "Lessons", icon: "calendar", to: `/${navBoard}/lessons`, active: screen === "topics" && topicsTab === "lessons" },
     { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
-    { id: "videos", label: "Videos", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
+    { id: "videos", label: "Learn", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
   ];
   const tutorNav = [
     { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },

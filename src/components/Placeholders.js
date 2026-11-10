@@ -14,12 +14,12 @@ export function HomeworkPage({ inClass }) {
   );
 }
 
-export function VideosPage({ count = 1, total = 84 }) {
+export function VideosPage() {
   return (
     <>
-      <PageHeader eyebrow="Videos" title="Video library" sub="Short explanations by HSJ Tuition, linked to the topics you get wrong." />
+      <PageHeader eyebrow="Learn" title="Video modules" sub="Short HSJ Tuition explanations for every topic, linked to the questions you get wrong." />
       <Card padding={0}>
-        <EmptyState icon="video" title="Being recorded now" body={`${count} of ${total} AS videos are ready. Videos appear here as they're published, and in your feedback for the topics they cover.`} />
+        <EmptyState icon="video" title="Video modules coming soon" body="Being recorded now. Until then, your lessons and the past-paper practise are the place to learn from: every marked answer shows the mark scheme and where the marks were lost." />
       </Card>
     </>
   );
