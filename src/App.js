@@ -19,7 +19,7 @@ import { Button, Card, Chip, Notice, PageHeader, EmptyState, Icon, IconTile } fr
 import { invalidateAttempts } from "./hooks/useAttempts";
 import mcqData from "./mcq-data.json";
 import { SETS } from "./data/sets";
-import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER } from "./data/sections";
+import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER, EDEXCEL_SECTIONS, EDEXCEL_TOPIC_ORDER } from "./data/sections";
 import LoginScreen from "./components/LoginScreen";
 import OnboardingPage from "./components/OnboardingPage";
 import TutorStudents from "./components/TutorStudents";
@@ -38,7 +38,6 @@ import useStudyProgress from "./hooks/useStudyProgress";
 import useFlashcards from "./hooks/useFlashcards";
 import useQuiz from "./hooks/useQuiz";
 
-const EMPTY_SECTIONS = [];
 
 export default function App() {
   // --- Auth state ---
@@ -126,8 +125,8 @@ export default function App() {
   const activeSection = topicsTab === 'flashcards' && routeParam ? routeParam : null;
 
   // Edexcel has no flashcard/MCQ banks yet: empty sections, shared calcs + extended answers still work
-  const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : board === "edexcel" ? EMPTY_SECTIONS : SECTIONS;
-  const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : board === "edexcel" ? EMPTY_SECTIONS : TOPIC_ORDER;
+  const CURRENT_SECTIONS = board === "ocr" ? OCR_SECTIONS : board === "edexcel" ? EDEXCEL_SECTIONS : SECTIONS;
+  const CURRENT_TOPIC_ORDER = board === "ocr" ? OCR_TOPIC_ORDER : board === "edexcel" ? EDEXCEL_TOPIC_ORDER : TOPIC_ORDER;
 
   // Maps an attempt's topic to a section label for the progress tables
   const sectionOf = useCallback((t) => {
@@ -145,7 +144,7 @@ export default function App() {
 
   const { studyLog, todayKey, logActivity, currentStreak, scoreHistory, logScore } = useStudyProgress();
   // --- Free tier: first item in each section is free ---
-  const FREE_FLASHCARD_SECTIONS = board === "ocr" ? ["ocr_mod2"] : ["physical_as"];
+  const FREE_FLASHCARD_SECTIONS = board === "ocr" ? ["ocr_mod2"] : board === "edexcel" ? ["edx_12a"] : ["physical_as"];
   const FREE_CALC_IDS = ["calc_moles"];
   const FREE_MECH_COUNT = 1; // first mechanism in each category
   const fc = useFlashcards(logActivity);
@@ -451,6 +450,11 @@ export default function App() {
     ocr_mod2: { accent: "#e05c00", bg: "#fff3eb", border: "#e05c00" },
     ocr_mod3: { accent: "#c0392b", bg: "#fdecec", border: "#c0392b" },
     ocr_mod4: { accent: "#8e44ad", bg: "#f5eeff", border: "#8e44ad" },
+    edx_12a: { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2" },
+    edx_12b: { accent: "#7c3aed", bg: "#f3eeff", border: "#7c3aed" },
+    edx_12c: { accent: "#16a97d", bg: "#e6f9f3", border: "#16a97d" },
+    edx_13a: { accent: "#0090cc", bg: "#e0f2fa", border: "#0090cc" },
+    edx_13b: { accent: "#6d28d9", bg: "#ede9ff", border: "#6d28d9" },
     ocr_mod5: { accent: "#1a6b9a", bg: "#e8f4fb", border: "#1a6b9a" },
     ocr_mod6: { accent: "#16783a", bg: "#e9f7ef", border: "#16783a" },
   };

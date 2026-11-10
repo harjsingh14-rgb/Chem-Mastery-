@@ -1,4 +1,7 @@
+import { EDEXCEL_SETS } from "./edexcel-sets";
+
 export const SETS = {
+  ...EDEXCEL_SETS,
   "3.1.1": { title: "Atomic Structure", cards: [
     {q:"What are the relative mass and charge of a proton?", a:"Relative mass: 1\nRelative charge: +1"},
     {q:"What are the relative mass and charge of a neutron?", a:"Relative mass: 1\nRelative charge: 0"},

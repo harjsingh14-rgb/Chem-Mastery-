@@ -19,3 +19,12 @@ export const OCR_SECTIONS = [
   { id: "ocr_mod6", label: "Module 6 – Organic & Analysis", sub: "Organic Chemistry and Analysis", topics: ["ocr_6.1.1","ocr_6.1.2","ocr_6.2.1","ocr_6.2.2","ocr_6.3.1","ocr_6.4.1","ocr_6.5.1","ocr_6.5.2"] },
 ];
 export const OCR_TOPIC_ORDER = OCR_SECTIONS.flatMap(s => s.topics);
+
+export const EDEXCEL_SECTIONS = [
+  { id: "edx_12a", label: "Year 12 – Atoms, bonding, redox, periodic table", sub: "Topics 1 to 5", topics: ["edx_1","edx_2","edx_3","edx_4","edx_5"] },
+  { id: "edx_12b", label: "Year 12 – Organic and analysis", sub: "Topics 6 and 7", topics: ["edx_6","edx_7"] },
+  { id: "edx_12c", label: "Year 12 – Energetics, kinetics, equilibrium", sub: "Topics 8 to 10", topics: ["edx_8","edx_9","edx_10"] },
+  { id: "edx_13a", label: "Year 13 – Physical and inorganic", sub: "Topics 11 to 16", topics: ["edx_11","edx_12","edx_13","edx_14","edx_15","edx_16"] },
+  { id: "edx_13b", label: "Year 13 – Organic and analysis", sub: "Topics 17 to 19", topics: ["edx_17","edx_18","edx_19"] },
+];
+export const EDEXCEL_TOPIC_ORDER = EDEXCEL_SECTIONS.flatMap(s => s.topics);
