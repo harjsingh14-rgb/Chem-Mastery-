@@ -11,6 +11,10 @@
 // The result is written to ppqAttempts/{qid}_{uid} (one document per student
 // per question: attempt count, best score and the latest attempt) and returned
 // together with the mark scheme and model answers for the reveal.
+//
+// Two further actions on the same attempt document:
+//   { action: "query", qid, part, note }                      student asks their tutor to check a part's mark
+//   { action: "reply", attemptId, part, reply, score? }       tutor (or admin) answers and may adjust the part's score
 const fb = require("./_firebaseAdmin");
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
@@ -137,12 +141,56 @@ function tidy(result, doc) {
   };
 }
 
+/** Student asks their tutor about one part's mark on their latest attempt. */
+async function query(caller, { qid, part, note }) {
+  if (!qid || !part || typeof note !== "string" || note.trim().length < 5) throw fb.httpError(400, "Write a few words about why you think the mark should be different.");
+  const token = await fb.getAccessToken();
+  const id = `${qid}_${caller.uid}`;
+  const att = await fb.getDocument(`ppqAttempts/${id}`, token);
+  if (!att || att.uid !== caller.uid) throw fb.httpError(404, "Mark this question first, then query a part.");
+  if (!att.latest?.parts?.[part]) throw fb.httpError(400, "Unknown part");
+  const queries = { ...(att.queries || {}) };
+  if (queries[part] && queries[part].status === "open") throw fb.httpError(409, "You have already sent a query for this part. Your tutor will reply soon.");
+  queries[part] = { note: note.trim().slice(0, 1000), at: Date.now(), status: "open", reply: null, attempt: att.attempts || 1, score: att.latest.parts[part].score, answer: att.latest.parts[part].answer || null, feedback: att.latest.parts[part].feedback || null };
+  await fb.updateDocument(`ppqAttempts/${id}`, { queries, hasOpenQuery: true, updatedAt: new Date() }, token);
+  return { ok: true, queries };
+}
+
+/** Tutor or admin replies to a query and may correct the part's score. */
+async function reply(caller, { attemptId, part, reply: text, score }) {
+  if (!attemptId || !part || typeof text !== "string" || !text.trim()) throw fb.httpError(400, "attemptId, part and reply required");
+  const token = await fb.getAccessToken();
+  const [profile, att] = await Promise.all([fb.getDocument(`users/${caller.uid}`, token), fb.getDocument(`ppqAttempts/${attemptId}`, token)]);
+  if (!profile || !["tutor", "admin"].includes(profile.role)) throw fb.httpError(403, "Tutor accounts only");
+  if (!att) throw fb.httpError(404, "Attempt not found");
+  if (profile.role !== "admin" && att.tutorId !== caller.uid) throw fb.httpError(403, "This student is not in one of your groups");
+  const queries = { ...(att.queries || {}) };
+  if (!queries[part]) throw fb.httpError(404, "No query on that part");
+  queries[part] = { ...queries[part], reply: text.trim().slice(0, 2000), status: "resolved", repliedAt: Date.now(), repliedBy: caller.uid };
+  const patch = { queries, hasOpenQuery: Object.values(queries).some(q => q.status === "open"), updatedAt: new Date() };
+  // Optional correction of the part's score on the latest attempt
+  if (score !== undefined && score !== null && score !== "") {
+    const doc = await fb.getDocument(`ppq/${att.qid}`, token);
+    const p = (doc?.parts || []).find(x => String(x.label) === String(part));
+    const n = Math.max(0, Math.min(p ? p.marks : 99, parseInt(score, 10) || 0));
+    const latest = { ...att.latest, parts: { ...att.latest.parts, [part]: { ...att.latest.parts[part], score: n, adjustedBy: caller.uid } } };
+    latest.score = Object.values(latest.parts).reduce((sum, x) => sum + (x.score || 0), 0);
+    patch.latest = latest;
+    patch.best = Math.max(att.best || 0, latest.score);
+    queries[part].newScore = n;
+  }
+  await fb.updateDocument(`ppqAttempts/${attemptId}`, patch, token);
+  return { ok: true, queries, latest: patch.latest || att.latest, best: patch.best ?? att.best };
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const caller = await verifyFirebaseToken(req);
     if (!caller) throw fb.httpError(401, "Unauthorised");
+    if (req.body?.action === "query") return res.status(200).json(await query(caller, req.body));
+    if (req.body?.action === "reply") return res.status(200).json(await reply(caller, req.body));
     const { qid, answers = {}, images = [], mode = "typed", hintsUsed = {}, inkOnly = false } = req.body || {};
     if (!qid || typeof qid !== "string") throw fb.httpError(400, "qid required");
     if (!Array.isArray(images) || images.length > MAX_IMAGES) throw fb.httpError(400, `Up to ${MAX_IMAGES} images`);
@@ -174,7 +222,7 @@ module.exports = async function handler(req, res) {
     const latest = {
       score: result.score, at: now, mode, model: raw.model,
       hintsUsed: Object.fromEntries(Object.entries(hintsUsed).map(([k, v]) => [k, Math.max(0, parseInt(v, 10) || 0)])),
-      parts: Object.fromEntries(result.parts.map(p => [p.label, { answer: answers[p.label] ? String(answers[p.label]).slice(0, 4000) : null, score: p.score, marks: p.marks, feedback: p.feedback }])),
+      parts: Object.fromEntries(result.parts.map(p => [p.label, { answer: answers[p.label] ? String(answers[p.label]).slice(0, 4000) : null, score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted }])),
       overall: result.overall,
     };
     const attemptDoc = {

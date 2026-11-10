@@ -360,7 +360,7 @@ export default function App() {
             ? <HomeworkBuilder authUser={authUser} />
             : tutorParam
               ? <TutorHomeworkReview authUser={authUser} assignmentId={tutorParam} />
-              : <TutorHomeworkList authUser={authUser} />)
+              : <TutorHomeworkList authUser={authUser} userProfile={userProfile} />)
         : tutorPage === "lessons"
           ? (tutorParam ? <TutorLessonEditor authUser={authUser} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
         : tutorPage === "payments"

@@ -436,6 +436,35 @@ export async function fetchPpqQuestion(id) {
   const snap = await getDoc(doc(db, "ppq", id));
   return snap.exists() ? { id: snap.id, ...snap.data() } : null;
 }
+/** The student's own attempt record for one question, or null. */
+export async function fetchPpqAttempt(qid, uid) {
+  const snap = await getDoc(doc(db, "ppqAttempts", `${qid}_${uid}`));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
+/** Attempts with an unanswered mark query: the tutor's own students, or everyone for admins. */
+export async function fetchOpenPpqQueries(tutorUid, isAdmin) {
+  const q = isAdmin
+    ? query(collection(db, "ppqAttempts"), where("hasOpenQuery", "==", true), limit(200))
+    : query(collection(db, "ppqAttempts"), where("hasOpenQuery", "==", true), where("tutorId", "==", tutorUid), limit(200));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+/** Display names for a set of users (a tutor may read their own students; admins anyone). */
+export async function fetchUserNames(uids) {
+  const out = {};
+  await Promise.all([...new Set(uids)].map(async uid => {
+    try { const s = await getDoc(doc(db, "users", uid)); if (s.exists()) out[uid] = s.data().displayName || s.data().email || uid; } catch { out[uid] = uid; }
+  }));
+  return out;
+}
+/** Query and reply actions on api/ppq-mark.js (marking itself is called from the question page). */
+export async function ppqMarkApi(payload) {
+  const token = await auth.currentUser?.getIdToken();
+  const res = await fetch("/api/ppq-mark", { method: "POST", headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) }, body: JSON.stringify(payload) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
 /** One document per question the student has had marked: attempts, best, latest. */
 export async function fetchMyPpqAttempts(uid) {
   const q = query(collection(db, "ppqAttempts"), where("uid", "==", uid), limit(3000));

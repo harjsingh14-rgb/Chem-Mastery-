@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, fetchPpqQuestion } from "../../firebase";
+import { auth, fetchPpqQuestion, fetchPpqAttempt, ppqMarkApi } from "../../firebase";
 import { T } from "../../ui/theme";
 import { Button, Card, Chip, Notice, Icon } from "../../ui/components";
 import track from "../../utils/track";
@@ -28,6 +28,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   const [marking, setMarking] = useState(false);
   const [result, setResult] = useState(null);
   const [showModel, setShowModel] = useState({});
+  const [attempt, setAttempt] = useState(null);      // the student's ppqAttempts record, if any
   const canvasRef = useRef(null);
   const fileRef = useRef(null);
 
@@ -48,6 +49,34 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     }).catch(e => alive && setError(e.message || "Could not load the question"));
     return () => { alive = false; };
   }, [qid]);
+
+  useEffect(() => {
+    let alive = true;
+    setAttempt(null);
+    if (!authUser?.uid) return undefined;
+    fetchPpqAttempt(qid, authUser.uid).then(a => alive && setAttempt(a)).catch(() => {});
+    return () => { alive = false; };
+  }, [qid, authUser]);
+
+  // Rebuild the marked view from the stored latest attempt, so a student who
+  // comes back later can still see their marks, the scheme and query a part.
+  const showLast = () => {
+    if (!doc || !attempt?.latest) return;
+    const lp = attempt.latest.parts || {};
+    setResult({
+      fromRecord: true,
+      score: attempt.latest.score, totalMarks: attempt.totalMarks, overall: attempt.latest.overall || "",
+      attempts: attempt.attempts, best: attempt.best, confidence: "medium",
+      parts: (doc.parts || []).map(p => ({ label: p.label, marks: p.marks, score: lp[p.label]?.score || 0, awarded: lp[p.label]?.awarded || [], attempted: lp[p.label]?.attempted ?? !!(lp[p.label]?.answer || lp[p.label]?.score), feedback: lp[p.label]?.feedback || "" })),
+      scheme: (doc.parts || []).map(p => ({ label: p.label, marks: p.marks, ms: p.ms || [], modelAnswer: p.modelAnswer || null, answer: p.answer || null })),
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const sendQuery = async (part, note) => {
+    const r = await ppqMarkApi({ action: "query", qid, part, note });
+    setAttempt(a => ({ ...(a || {}), qid, queries: r.queries, hasOpenQuery: true }));
+  };
 
   const parts = doc?.parts || [];
   const typedAny = Object.values(answers).some(v => v && v.trim());
@@ -85,6 +114,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
       if (!res.ok) throw new Error(data.error || `Marking failed (${res.status})`);
       setResult(data);
       setDrawing(false);
+      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [p.label, { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
       noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, qid });
       logAttempt && logAttempt({
         board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null,
@@ -150,6 +180,14 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
             </Card>
           )}
 
+          {/* Previous attempt */}
+          {!result && attempt?.latest && (
+            <Notice tone="neutral" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <span style={{ flex: 1, minWidth: 200 }}>You have tried this {attempt.attempts === 1 ? "once" : `${attempt.attempts} times`}. Best {attempt.best}/{attempt.totalMarks}, last {attempt.latest.score}/{attempt.totalMarks}.{attempt.hasOpenQuery ? " A mark query is with your tutor." : ""}</span>
+              <Button size="sm" onClick={showLast}>Show last marking</Button>
+            </Notice>
+          )}
+
           {/* Answer method */}
           {!result && (
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
@@ -186,7 +224,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                 hintsShown={hints[p.label] || 0} onHint={() => { setHints(h => ({ ...h, [p.label]: Math.min((h[p.label] || 0) + 1, (p.hints || []).length) })); track("ppq_hint", { board, qid, part: p.label }); }}
                 result={result?.parts?.find(r => r.label === p.label)} scheme={result?.scheme?.find(s => s.label === p.label)}
                 showModel={!!showModel[p.label]} onToggleModel={() => setShowModel(m => ({ ...m, [p.label]: !m[p.label] }))}
-                locked={!!result} />
+                locked={!!result} query={attempt?.queries?.[p.label]} onQuery={result ? (note) => sendQuery(p.label, note) : null} />
             ))}
           </div>
 
@@ -211,7 +249,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   );
 }
 
-function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, showModel, onToggleModel, locked }) {
+function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, showModel, onToggleModel, locked, query, onQuery }) {
   const hints = part.hints || [];
   const isMcq = part.type === "mcq";
   const tone = result ? (result.score >= part.marks ? "green" : result.score > 0 ? "amber" : result.attempted ? "red" : "neutral") : null;
@@ -283,6 +321,7 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
               })}
             </div>
           )}
+          {(query || onQuery) && <QueryBox query={query} onSend={onQuery} />}
           {scheme && (scheme.modelAnswer || scheme.answer) && (
             <div>
               <button type="button" onClick={onToggleModel} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: T.accentText, fontSize: 12, fontWeight: 600 }}>{showModel ? "Hide model answer" : "Show model answer"}</button>
@@ -297,5 +336,36 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
         </div>
       )}
     </Card>
+  );
+}
+
+/** "Query this mark": the student's note to their tutor on one part, and the reply once it comes. */
+function QueryBox({ query, onSend }) {
+  const [open, setOpen] = useState(false);
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+  if (query) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: "10px 14px", background: "#FAFBFC", border: `1px solid ${T.line}`, borderRadius: T.radiusSm, fontSize: 13 }}>
+        <Chip tone={query.status === "resolved" ? "green" : "amber"} style={{ fontSize: 11, alignSelf: "flex-start" }}>{query.status === "resolved" ? "Tutor replied" : "Query sent to your tutor"}</Chip>
+        <div><span style={{ color: T.muted }}>You wrote: </span>{query.note}</div>
+        {query.reply && <div><span style={{ color: T.muted }}>Tutor: </span>{query.reply}{query.newScore !== undefined && <span style={{ color: T.muted }}> (mark changed to {query.newScore})</span>}</div>}
+      </div>
+    );
+  }
+  if (!onSend) return null;
+  if (!open) return <div><Button size="sm" variant="ghost" icon="message" onClick={() => setOpen(true)} style={{ color: T.muted }}>Query this mark</Button></div>;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "12px 14px", background: "#FAFBFC", border: `1px solid ${T.line}`, borderRadius: T.radiusSm }}>
+      <span style={{ fontSize: 13, fontWeight: 600 }}>Tell your tutor why you think this mark should be different</span>
+      <textarea value={note} onChange={e => setNote(e.target.value)} rows={3} aria-label="Your query" placeholder="e.g. I gave the state symbols in my second line"
+        style={{ width: "100%", padding: "10px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 13, outline: "none", color: T.ink, resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", fontFamily: "inherit" }} />
+      {err && <span style={{ fontSize: 12, color: T.red }}>{err}</span>}
+      <div style={{ display: "flex", gap: 8 }}>
+        <Button size="sm" variant="primary" disabled={busy || note.trim().length < 5} onClick={async () => { setBusy(true); setErr(null); try { await onSend(note.trim()); } catch (e) { setErr(e.message); } finally { setBusy(false); } }}>{busy ? "Sending…" : "Send to tutor"}</Button>
+        <Button size="sm" variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+      </div>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery } from "../firebase";
+import TutorPpqQueries from "./ppq/TutorPpqQueries";
 import { T, pctColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Bar, Avatar, Table, th, td, EmptyState, Notice, Icon, Input, chipToneForPct, StatTile } from "../ui/components";
 import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBank";
@@ -9,7 +10,7 @@ import { relativeTime } from "../utils/analytics";
 const pct = (n, d) => d ? Math.round((n / d) * 100) : null;
 
 // ─── List of all homework set by this tutor ──────────────────────────────
-export function TutorHomeworkList({ authUser }) {
+export function TutorHomeworkList({ authUser, userProfile }) {
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState(null);
   const [subs, setSubs] = useState([]);
@@ -50,6 +51,7 @@ export function TutorHomeworkList({ authUser }) {
       <PageHeader eyebrow="Homework" title="Homework" sub="Everything you've set, with who has done it and how they did."
         right={<Button variant="primary" icon="plus" onClick={() => navigate("/tutor/homework/new")}>Set homework</Button>} />
       {error && <Notice tone="red">{error}</Notice>}
+      <TutorPpqQueries authUser={authUser} isAdmin={userProfile?.role === "admin"} />
       <Card padding={0}>
         <CardHeader title="Open" right={<Chip tone="accent">{open.length}</Chip>} style={{ padding: "16px 20px" }} />
         {assignments === null && <div style={{ padding: 20, color: T.muted, fontSize: 13 }}>Loading…</div>}
