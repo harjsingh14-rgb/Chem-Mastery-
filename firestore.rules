@@ -71,6 +71,25 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Calendar sessions: one document per lesson or extra session. The tutor
+    // (or an admin) writes them. A student reads their group's sessions
+    // (studentIds null) and any they are named on; parents likewise for
+    // their children.
+    match /sessions/{id} {
+      allow read: if signedIn() && (
+        resource.data.tutorId == request.auth.uid || isAdmin()
+        || (resource.data.studentIds == null && resource.data.classId == myProfile().get('classId', null))
+        || (resource.data.studentIds is list && request.auth.uid in resource.data.studentIds)
+        || (isParent() && (resource.data.studentIds == null || myProfile().get('children', []).hasAny(resource.data.studentIds)))
+      );
+      allow create: if isTutor()
+        && (request.resource.data.tutorId == request.auth.uid || isAdmin())
+        && request.resource.data.classId is string
+        && request.resource.data.date is string
+        && request.resource.data.startAt is number;
+      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+    }
+
     // Reminder de-duplication keys, written only by the cron endpoint
     match /reminders/{id} {
       allow read: if isAdmin();

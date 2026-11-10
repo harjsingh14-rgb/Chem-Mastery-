@@ -9,7 +9,7 @@ import { Card, CardHeader, PageHeader, Chip, StatTile, Tabs, EmptyState, Notice,
 import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
 import { TopicTable, AccuracySpark } from "./StudentDashboard";
-import { NoteBody } from "./StudentLessons";
+import { NoteBody, UpcomingLessons } from "./StudentLessons";
 import { describeSlots, slotsOf } from "../utils/schedule";
 import { useHomework } from "./StudentHomework";
 import { fmtDue } from "../utils/homeworkBank";
@@ -142,6 +142,7 @@ function LessonsTab({ child }) {
         <StatTile label="Late" value={counts.late || 0} />
         <StatTile label="Absent" value={counts.absent || 0} />
       </div>
+      <UpcomingLessons uid={child.uid} classId={child.classId} who={(child.displayName || "your child").split(" ")[0]} />
       {notes && notes.length === 0 && <Card padding={0}><EmptyState icon="calendar" title="No lesson notes yet" body="After each lesson the tutor writes a short note: what was covered, attendance, how the homework went and what to work on. You also get it by email." /></Card>}
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {(notes || []).map(n => <Card key={n.id}><NoteBody n={n} /></Card>)}

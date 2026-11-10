@@ -92,3 +92,52 @@ export function lastOccurrence(slots, from = new Date()) {
 }
 
 export const fmtLessonDay = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }); };
+
+// ---------------------------------------------------------------------------
+// Calendar sessions. The slots above are only the group's *usual* times, a
+// template. What actually happens is held in the `sessions` collection, one
+// document per lesson or extra session: { classId, tutorId, date "YYYY-MM-DD",
+// time "18:00", startAt ms, minutes, status scheduled|cancelled, studentIds
+// (null = the whole group, else the named students who see it), ... }.
+// ---------------------------------------------------------------------------
+
+/** Local start time in ms for a date and "HH:MM". */
+export const sessionStartMs = (date, time) => new Date(`${date}T${time || "00:00"}:00`).getTime();
+export const sessionEndMs = (s) => (s.startAt || sessionStartMs(s.date, s.time)) + (s.minutes || DEFAULT_MINUTES) * 60000;
+
+/** "Tue 12 Nov, 6pm to 8pm" */
+export const describeSession = (s) => `${fmtLessonDay(s.date)}, ${fmtTime(s.time)} to ${fmtTime(addMinutes(s.time || "00:00", s.minutes || DEFAULT_MINUTES))}`;
+
+/** Sessions still to come (not yet ended), soonest first. Cancelled ones are left in so they can be shown as such. */
+export function upcomingSessions(sessions, n = 3, from = Date.now()) {
+  return (sessions || []).filter(s => sessionEndMs(s) > from).sort((a, b) => a.startAt - b.startAt).slice(0, n);
+}
+
+/** The latest session on or before today for a group, for defaulting the lesson-note date. */
+export function lastSessionDate(sessions, classId, from = new Date()) {
+  const today = isoDate(from);
+  const past = (sessions || []).filter(s => s.classId === classId && s.status !== "cancelled" && s.date <= today).sort((a, b) => b.startAt - a.startAt);
+  return past[0]?.date || null;
+}
+
+/**
+ * Every occurrence of the group's usual slots between two ISO dates
+ * inclusive, as { date, time, minutes, weekday }. Used to fill a term.
+ */
+export function templateOccurrences(slots, fromIso, toIso) {
+  const list = asList(slots);
+  if (!list.length || !fromIso || !toIso || toIso < fromIso) return [];
+  const out = [];
+  const d = new Date(`${fromIso}T00:00:00`);
+  const end = new Date(`${toIso}T00:00:00`);
+  for (let i = 0; i < 400 && d <= end; i++) {
+    const iso = isoDate(d);
+    for (const s of list.slice().sort((a, b) => a.time.localeCompare(b.time))) {
+      if (d.getDay() === Number(s.weekday)) out.push({ date: iso, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, weekday: Number(s.weekday) });
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  return out;
+}
+
+export const addDays = (iso, n) => { const d = new Date(`${iso}T00:00:00`); d.setDate(d.getDate() + n); return isoDate(d); };

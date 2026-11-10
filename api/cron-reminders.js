@@ -52,31 +52,49 @@ module.exports = async function handler(req, res) {
     const byClass = {};
     for (const s of students) if (s.classId) (byClass[s.classId] = byClass[s.classId] || []).push(s);
 
-    // 1. Lessons tomorrow
+    // 1. Sessions tomorrow. The calendar (`sessions`) is the source of truth:
+    //    one document per lesson, for the whole group or for named students.
+    //    A group with nothing on the calendar at all falls back to its usual
+    //    weekly times, so reminders keep going until the calendar is filled.
     const classes = await fb.queryDocuments("classes", {}, token, { limit: 200 });
     const assignments = await fb.queryDocuments("assignments", {}, token, { limit: 1000 });
-    for (const cls of classes) {
-      // A group may meet more than once a week; `slots` holds every time, `schedule` the old single one
-      const slots = (Array.isArray(cls.slots) && cls.slots.length ? cls.slots : cls.schedule ? [cls.schedule] : []).filter(s => s && s.time);
-      const sch = slots.find(s => Number(s.weekday) === tomorrow.weekday);
-      if (!sch) continue;
-      const when = `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(sch.time)}`;
+    const byUid = Object.fromEntries(students.map(s => [s.id, s]));
+    const remind = async (cls, recipients, { key, when, zoomLink, title }) => {
       const open = assignments.filter(a => a.classId === cls.id && a.status !== "draft" && a.dueAt && a.dueAt > now - DAY && a.dueAt < now + 2 * DAY);
-      for (const s of byClass[cls.id] || []) {
+      for (const s of recipients) {
         if (!s.email) continue;
         try {
-          const sent = await once(`lesson_${cls.id}_${tomorrow.iso}_${s.id}`, token, async () => {
+          const sent = await once(`${key}_${s.id}`, token, async () => {
             const homework = [];
             for (const a of open) {
               const sub = await fb.getDocument(`submissions/${a.id}_${s.id}`, token);
               if (!sub?.submittedAt) homework.push({ title: a.title, dueAt: a.dueAt });
             }
-            const { subject, html } = mail.lessonReminder({ studentName: s.displayName, groupName: cls.name, when, zoomNote: cls.zoomNote || "", zoomLink: cls.zoomLink || "", homework });
+            const { subject, html } = mail.lessonReminder({ studentName: s.displayName, groupName: title ? `${cls.name} (${title})` : cls.name, when, zoomNote: cls.zoomNote || "", zoomLink: zoomLink || cls.zoomLink || "", homework });
             await mail.sendEmail({ to: s.email, cc: s.parentEmail && s.parentEmail !== s.email ? s.parentEmail : undefined, subject, html });
           });
           if (sent) report.lessons++;
         } catch (e) { report.errors.push(`lesson ${s.id}: ${e.message}`); }
       }
+    };
+    const sessionsTomorrow = await fb.queryDocuments("sessions", { date: tomorrow.iso }, token, { limit: 200 });
+    const onCalendar = new Set();
+    for (const ses of sessionsTomorrow) {
+      const cls = classes.find(c => c.id === ses.classId);
+      if (!cls) continue;
+      onCalendar.add(cls.id);
+      if (ses.status === "cancelled") continue;
+      const recipients = Array.isArray(ses.studentIds) && ses.studentIds.length ? ses.studentIds.map(id => byUid[id]).filter(Boolean) : (byClass[cls.id] || []);
+      await remind(cls, recipients, { key: `lesson_${cls.id}_${tomorrow.iso}_${ses.time}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(ses.time)}`, zoomLink: ses.zoomLink, title: ses.title });
+    }
+    for (const cls of classes) {
+      if (onCalendar.has(cls.id)) continue;
+      const any = await fb.queryDocuments("sessions", { classId: cls.id }, token, { limit: 1 });
+      if (any.length) continue; // the group is on the calendar and simply has nothing tomorrow
+      const slots = (Array.isArray(cls.slots) && cls.slots.length ? cls.slots : cls.schedule ? [cls.schedule] : []).filter(s => s && s.time);
+      const sch = slots.find(s => Number(s.weekday) === tomorrow.weekday);
+      if (!sch) continue;
+      await remind(cls, byClass[cls.id] || [], { key: `lesson_${cls.id}_${tomorrow.iso}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(sch.time)}` });
     }
 
     // 2. Homework due within 24h, not submitted
@@ -98,7 +116,6 @@ module.exports = async function handler(req, res) {
 
     // 3. Invoices due within 3 days, or overdue (every 7 days)
     const payments = await fb.queryDocuments("payments", { status: "open" }, token, { limit: 500 });
-    const byUid = Object.fromEntries(students.map(s => [s.id, s]));
     for (const p of payments) {
       if (!p.dueAt || !p.customerEmail) continue;
       const daysToDue = Math.floor((p.dueAt - now) / DAY);

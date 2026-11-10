@@ -26,6 +26,7 @@ import TutorStudents from "./components/TutorStudents";
 import { TutorLessonsList, TutorLessonEditor } from "./components/TutorLessons";
 import StudentLessons from "./components/StudentLessons";
 import TutorPayments from "./components/TutorPayments";
+import TutorCalendar from "./components/TutorCalendar";
 import CalcTab from "./components/CalcTab";
 import ExtendedTab from "./components/ExtendedTab";
 import McqTab from "./components/McqTab";
@@ -240,7 +241,8 @@ export default function App() {
   const tutorNav = [
     { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
     { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
-    { id: "tlessons", label: "Lessons", icon: "calendar", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" },
+    { id: "tcal", label: "Calendar", icon: "calendar", to: "/tutor/calendar", active: screen === "tutor" && tutorPage === "calendar" },
+    { id: "tlessons", label: "Lessons", icon: "pencil", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" },
     ...(isAdmin ? [
       { id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" },
       { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
@@ -407,6 +409,8 @@ export default function App() {
               : <TutorHomeworkList authUser={authUser} userProfile={userProfile} />)
         : tutorPage === "lessons"
           ? (tutorParam ? <TutorLessonEditor authUser={authUser} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
+        : tutorPage === "calendar"
+          ? <TutorCalendar authUser={authUser} userProfile={userProfile} />
         : tutorPage === "payments"
           ? <TutorPayments />
         : tutorPage === "students"
@@ -524,7 +528,7 @@ export default function App() {
       )}
       {topicsTab === "revision" && <RevisionPage board={board} isAdmin={isAdmin} hasFullAccess={hasFullAccess} />}
       {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}
-      {topicsTab === "lessons" && <StudentLessons authUser={authUser} />}
+      {topicsTab === "lessons" && <StudentLessons authUser={authUser} userProfile={userProfile} />}
       {topicsTab === "videos" && <VideosPage />}
       {!isPage && (
         <>

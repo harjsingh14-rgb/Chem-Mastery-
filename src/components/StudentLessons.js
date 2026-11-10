@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { fetchMyLessonNotes } from "../firebase";
 import { T } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, EmptyState } from "../ui/components";
+import { useStudentCalendar, nextLessonRows } from "./StudentPanels";
+import { fmtTime, describeSlots, slotsOf } from "../utils/schedule";
 
 const fmtDate = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }); };
 const ATT = { present: ["green", "Present"], late: ["amber", "Late"], absent: ["red", "Absent"] };
@@ -54,11 +56,38 @@ export function LessonNotesCard({ authUser, board }) {
   );
 }
 
-export default function StudentLessons({ authUser }) {
+/** The next few lessons from the calendar, for the student's and the parent's Lessons pages. */
+export function UpcomingLessons({ uid, classId, who = "you" }) {
+  const { cls, sessions } = useStudentCalendar(uid, classId);
+  const loading = cls === undefined || sessions === null;
+  const rows = loading ? [] : nextLessonRows(cls, sessions, 6);
+  const live = rows.find(r => !r.cancelled);
+  const slots = slotsOf(cls);
+  return (
+    <Card style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
+      <CardHeader title="Coming up" sub={slots.length ? `Usually ${describeSlots(slots)}. Sessions listed only for ${who} are marked.` : "Lessons and sessions on the calendar"}
+        right={live?.zoomLink ? <Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join on Zoom</Button> : null} />
+      {loading && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
+      {!loading && rows.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Nothing is on the calendar yet.</span>}
+      {rows.map((o, i) => (
+        <div key={o.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap", borderTop: i ? `1px solid ${T.line}` : "none", paddingTop: i ? 8 : 0 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <span style={{ fontSize: 13, fontWeight: o === live ? 700 : 500, color: o.cancelled ? T.faint : T.ink, textDecoration: o.cancelled ? "line-through" : "none" }}>{fmtDate(o.date)} · {fmtTime(o.time)}{o.title ? ` · ${o.title}` : ""}</span>
+            {(o.note || o.named) && <span style={{ fontSize: 11, color: T.muted }}>{[o.named ? `Only for ${who}` : null, o.note].filter(Boolean).join(" · ")}</span>}
+          </div>
+          <span>{o.cancelled ? <Chip tone="red">Cancelled</Chip> : o === live ? <Chip tone="accent">Next</Chip> : o.named ? <Chip tone="indigo">Extra session</Chip> : null}</span>
+        </div>
+      ))}
+    </Card>
+  );
+}
+
+export default function StudentLessons({ authUser, userProfile }) {
   const notes = useMyLessonNotes(authUser?.uid);
   return (
     <>
-      <PageHeader eyebrow="Lessons" title="Lesson notes" sub="What your tutor sent after each lesson. Your parent gets the same note by email." />
+      <PageHeader eyebrow="Lessons" title="Lessons" sub="What is coming up, then the notes your tutor sent after each lesson. Your parent gets the same note by email." />
+      {userProfile?.classId && <UpcomingLessons uid={authUser?.uid} classId={userProfile.classId} who="you" />}
       {notes === null && <div style={{ fontSize: 13, color: T.muted }}>Loading…</div>}
       {notes && notes.length === 0 && <Card padding={0}><EmptyState icon="calendar" title="No notes yet" body="After each lesson your tutor writes a short note: what was covered, how you did on the homework, and what to work on." /></Card>}
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>

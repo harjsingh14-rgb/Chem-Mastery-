@@ -1,34 +1,59 @@
-// Side cards on the student dashboard: the next lesson from the group's
-// weekly schedule, and the family's invoices (paid through Stripe).
+// Side cards on the student dashboard: the next lessons from the calendar
+// (the group's sessions plus any the student is named on), and the family's
+// invoices (paid through Stripe).
 import React, { useState, useEffect } from "react";
-import { fetchClass, fetchPayments } from "../firebase";
+import { fetchClass, fetchPayments, fetchStudentSessions } from "../firebase";
 import { T } from "../ui/theme";
 import { Card, CardHeader, Chip, Button } from "../ui/components";
-import { describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime } from "../utils/schedule";
+import { describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime, upcomingSessions, DEFAULT_MINUTES } from "../utils/schedule";
 
-export function NextLessonCard({ userProfile }) {
+/** The student's group and calendar sessions. sessions is null while loading. */
+export function useStudentCalendar(uid, classId) {
   const [cls, setCls] = useState(undefined);
-  const code = userProfile?.classId;
+  const [sessions, setSessions] = useState(null);
   useEffect(() => {
-    if (!code) { setCls(null); return; }
     let cancelled = false;
-    fetchClass(code).then(c => { if (!cancelled) setCls(c); }).catch(() => { if (!cancelled) setCls(null); });
+    if (!classId) setCls(null); else fetchClass(classId).then(c => { if (!cancelled) setCls(c); }).catch(() => { if (!cancelled) setCls(null); });
+    if (!uid && !classId) { setSessions([]); return () => { cancelled = true; }; }
+    fetchStudentSessions(uid, classId).then(list => { if (!cancelled) setSessions(list); }).catch(() => { if (!cancelled) setSessions([]); });
     return () => { cancelled = true; };
-  }, [code]);
+  }, [uid, classId]);
+  return { cls, sessions };
+}
+
+/**
+ * Next lessons as rows { key, date, time, minutes, title, cancelled, zoomLink }.
+ * Comes from the calendar; a group with nothing on the calendar yet falls
+ * back to its usual weekly times.
+ */
+export function nextLessonRows(cls, sessions, n = 3) {
+  if (sessions && sessions.length > 0) {
+    return upcomingSessions(sessions, n).map(s => ({ key: s.id, date: s.date, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, title: s.title || null, named: !!s.studentIds, note: s.note || null, cancelled: s.status === "cancelled", zoomLink: s.zoomLink || cls?.zoomLink || null }));
+  }
+  return nextOccurrences(slotsOf(cls), n).map(o => ({ key: `${o.iso}_${o.time}`, date: o.iso, time: o.time, minutes: o.minutes, title: null, named: false, note: null, cancelled: false, zoomLink: cls?.zoomLink || null }));
+}
+
+export function NextLessonCard({ authUser, userProfile }) {
+  const { cls, sessions } = useStudentCalendar(authUser?.uid, userProfile?.classId);
   const slots = slotsOf(cls);
-  const next = nextOccurrences(slots, 3);
+  const loading = cls === undefined || sessions === null;
+  const rows = loading ? [] : nextLessonRows(cls, sessions, 3);
+  const live = rows.find(r => !r.cancelled);
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      <CardHeader title="Next lesson" sub={slots.length ? describeSlots(slots) : cls?.lessonSlot || "Weekly, on Zoom"} />
-      {cls === undefined && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
-      {cls !== undefined && !slots.length && <span style={{ fontSize: 13, color: T.muted }}>Your tutor will confirm the weekly lesson time.</span>}
-      {next.map((o, i) => (
-        <div key={`${o.iso}_${o.time}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: i ? `1px solid ${T.line}` : "none", paddingTop: i ? 8 : 0 }}>
-          <span style={{ fontSize: 13, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? T.ink : T.body }}>{fmtLessonDay(o.iso)}</span>
-          <span style={{ fontSize: 12, color: T.muted }}>{fmtTime(o.time)}{i === 0 && <Chip tone="accent" style={{ marginLeft: 8 }}>Next</Chip>}</span>
+      <CardHeader title="Next lesson" sub={slots.length ? `Usually ${describeSlots(slots)}` : cls?.lessonSlot || "On Zoom"} />
+      {loading && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
+      {!loading && rows.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Nothing is on the calendar yet. Your tutor will add the next lessons.</span>}
+      {rows.map((o, i) => (
+        <div key={o.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, borderTop: i ? `1px solid ${T.line}` : "none", paddingTop: i ? 8 : 0 }}>
+          <span style={{ fontSize: 13, fontWeight: o === live ? 700 : 500, color: o.cancelled ? T.faint : o === live ? T.ink : T.body, textDecoration: o.cancelled ? "line-through" : "none" }}>
+            {fmtLessonDay(o.date)}{o.title ? <span style={{ fontWeight: 500, color: T.muted }}> · {o.title}</span> : o.named ? <span style={{ fontWeight: 500, color: T.muted }}> · just you</span> : null}
+          </span>
+          <span style={{ fontSize: 12, color: T.muted, whiteSpace: "nowrap" }}>{fmtTime(o.time)}{o.cancelled ? <Chip tone="red" style={{ marginLeft: 8 }}>Cancelled</Chip> : o === live ? <Chip tone="accent" style={{ marginLeft: 8 }}>Next</Chip> : null}</span>
         </div>
       ))}
-      {cls?.zoomLink && <div><Button size="sm" variant="primary" onClick={() => window.open(cls.zoomLink, "_blank", "noopener")}>Join on Zoom</Button></div>}
+      {live?.note && <span style={{ fontSize: 12, color: T.muted }}>{live.note}</span>}
+      {live?.zoomLink && <div><Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join on Zoom</Button></div>}
     </Card>
   );
 }

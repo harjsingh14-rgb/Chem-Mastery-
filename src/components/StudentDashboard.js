@@ -137,7 +137,7 @@ export default function StudentDashboard({ board, authUser, userProfile, current
             <StatTile label="Flashcards known" value={`${cardPct}%`} sub={`${knownCards} of ${totalCards} cards`} />
           </div>
 
-          {inClass && <NextLessonCard userProfile={userProfile} />}
+          {inClass && <NextLessonCard authUser={authUser} userProfile={userProfile} />}
           {inClass && <PaymentsCard authUser={authUser} />}
           {inClass && <LessonNotesCard authUser={authUser} board={board} />}
 

@@ -4,11 +4,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
-  fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment } from "../firebase";
+  fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
-import { lastOccurrence, describeSlots, slotsOf } from "../utils/schedule";
+import { lastOccurrence, lastSessionDate, describeSlots, slotsOf } from "../utils/schedule";
 
 const today = () => new Date().toISOString().slice(0, 10);
 export const fmtLessonDate = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }); };
@@ -43,6 +43,7 @@ export function TutorLessonsList({ authUser }) {
   const navigate = useNavigate();
   const [groups, setGroups] = useState(null);
   const [lessons, setLessons] = useState(null);
+  const [sessions, setSessions] = useState([]);
   const [error, setError] = useState(null);
   const [showNew, setShowNew] = useState(false);
   const [classId, setClassId] = useState("");
@@ -54,25 +55,29 @@ export function TutorLessonsList({ authUser }) {
   useEffect(() => {
     if (!uid) return;
     let cancelled = false;
-    Promise.all([fetchTutorClasses(uid), fetchTutorLessons(uid)])
-      .then(([g, l]) => { if (!cancelled) { setGroups(g); setLessons(l); if (g[0]) setClassId(g[0].code); if (l.length === 0) setShowNew(true); } })
+    Promise.all([fetchTutorClasses(uid), fetchTutorLessons(uid), fetchTutorSessions(uid).catch(() => [])])
+      .then(([g, l, ses]) => { if (!cancelled) { setGroups(g); setLessons(l); setSessions(ses); if (g[0]) setClassId(g[0].code); if (l.length === 0) setShowNew(true); } })
       .catch(e => { if (!cancelled) { setError(e.message); setGroups([]); setLessons([]); } });
     return () => { cancelled = true; };
   }, [uid]);
 
   const group = groups?.find(g => g.code === classId);
+  // Default the date to the group's latest calendar session, else its usual weekly time
+  const defaultDate = (g) => lastSessionDate(sessions, g?.code) || lastOccurrence(slotsOf(g));
   const pickGroup = (code) => {
     setClassId(code);
-    const g = groups?.find(x => x.code === code);
-    const last = lastOccurrence(slotsOf(g));
+    const last = defaultDate(groups?.find(x => x.code === code));
     if (last) setDate(last);
   };
-  useEffect(() => { const last = lastOccurrence(slotsOf(group)); if (last) setDate(last); }, [group]);
+  useEffect(() => { const last = defaultDate(group); if (last) setDate(last); }, [group]); // eslint-disable-line
   const create = async () => {
     if (!group || !date) return;
     setCreating(true); setError(null);
     try {
-      const l = await createLesson(uid, { classId: group.code, className: group.name, board: group.board, date, topics });
+      // Tie the lesson to the calendar session on that day, if there is one without notes yet
+      const session = sessions.find(s => s.classId === group.code && s.date === date && !s.lessonId && !s.studentIds && s.status !== "cancelled") || null;
+      const l = await createLesson(uid, { classId: group.code, className: group.name, board: group.board, date, topics, sessionId: session?.id || null });
+      if (session) await updateSession(session.id, { lessonId: l.id }).catch(() => {});
       navigate(`/tutor/lessons/${l.id}`);
     } catch (e) { setError(e.message); setCreating(false); }
   };
@@ -89,7 +94,7 @@ export function TutorLessonsList({ authUser }) {
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><label style={label} htmlFor="ls-group">Group</label>
               <select id="ls-group" value={classId} onChange={e => pickGroup(e.target.value)} style={selectStyle}>{groups.map(g => <option key={g.code} value={g.code}>{g.name} ({boardLabel(g.board)}{slotsOf(g).length ? `, ${describeSlots(slotsOf(g))}` : ""})</option>)}</select></div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><label style={label} htmlFor="ls-date">Lesson date</label><Input id="ls-date" type="date" value={date} onChange={e => setDate(e.target.value)} />{slotsOf(group).length > 0 && <span style={{ fontSize: 11, color: T.muted }}>Defaults to the group's latest lesson day</span>}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><label style={label} htmlFor="ls-date">Lesson date</label><Input id="ls-date" type="date" value={date} onChange={e => setDate(e.target.value)} />{slotsOf(group).length > 0 && <span style={{ fontSize: 11, color: T.muted }}>Defaults to the group's latest lesson on the calendar</span>}</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}><span style={label}>Topics covered</span><TopicPicker board={group?.board} value={topics} onChange={setTopics} /></div>
           <div style={{ display: "flex", gap: 8 }}>
@@ -155,7 +160,9 @@ export function TutorLessonEditor({ authUser, lessonId }) {
       try {
         const l = await fetchLesson(lessonId);
         if (!l) { setError("This lesson no longer exists."); return; }
-        const [st, ns, asgs] = await Promise.all([fetchClassStudents(l.classId, uid), fetchLessonNotes(lessonId, uid), fetchTutorAssignments(uid)]);
+        const [all, ns, asgs] = await Promise.all([fetchClassStudents(l.classId, uid), fetchLessonNotes(lessonId, uid), fetchTutorAssignments(uid)]);
+        // A lesson made from a session for chosen students only has those students on it
+        const st = Array.isArray(l.studentIds) && l.studentIds.length ? all.filter(s => l.studentIds.includes(s.uid)) : all;
         const dayEnd = new Date(`${l.date}T23:59:59`).getTime();
         const forGroup = asgs.filter(a => a.classId === l.classId);
         const last = forGroup.filter(a => a.dueAt && a.dueAt <= dayEnd).sort((a, b) => b.dueAt - a.dueAt)[0] || null;
@@ -215,7 +222,11 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   };
   const remove = async () => {
     if (!window.confirm("Delete this lesson? Notes already sent stay with the students.")) return;
-    try { await deleteLesson(lessonId); navigate("/tutor/lessons"); } catch (e) { setError(e.message); }
+    try {
+      await deleteLesson(lessonId);
+      if (lesson?.sessionId) await updateSession(lesson.sessionId, { lessonId: null }).catch(() => {}); // the calendar session can be cancelled or deleted again
+      navigate("/tutor/lessons");
+    } catch (e) { setError(e.message); }
   };
 
   if (error && !lesson) return <><PageHeader eyebrow="Lessons" title="Lesson" /><Notice tone="red">{error}</Notice></>;
@@ -224,7 +235,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
 
   return (
     <>
-      <PageHeader eyebrow="Lessons" title={`${lesson.className || lesson.classId} · ${fmtLessonDate(lesson.date)}`}
+      <PageHeader eyebrow="Lessons" title={`${lesson.className || lesson.classId} · ${fmtLessonDate(lesson.date)}${lesson.title ? ` · ${lesson.title}` : ""}`}
         sub={students ? `${students.length} student${students.length === 1 ? "" : "s"} · ${sentCount} note${sentCount === 1 ? "" : "s"} sent${lastHw ? ` · homework reviewed: ${lastHw.title}` : " · no homework was due before this lesson"}` : "Loading students…"}
         right={<>
           <Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/lessons")}>All lessons</Button>

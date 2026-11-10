@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName, updateClass, fetchClassLessonNotes } from "../firebase";
-import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime } from "../utils/schedule";
+import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName, updateClass, fetchClassLessonNotes, fetchTutorSessions, fetchAllSessions } from "../firebase";
+import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, upcomingSessions, fmtLessonDay, fmtTime } from "../utils/schedule";
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
@@ -10,6 +10,7 @@ export default function TutorPage({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
   const navigate = useNavigate();
   const [classes, setClasses] = useState(null);
+  const [sessions, setSessions] = useState([]);
   const [tutors, setTutors] = useState([]);
   const [newTutor, setNewTutor] = useState("");
   const [newSlots, setNewSlots] = useState([{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }]);
@@ -35,13 +36,14 @@ export default function TutorPage({ authUser, userProfile }) {
     (async () => {
       try {
         // Admins see every group; tutors see their own
-        const [cls, att, tut] = await Promise.all([
+        const [cls, att, tut, ses] = await Promise.all([
           isAdmin ? fetchAllClasses() : fetchTutorClasses(tutorUid),
           fetchAttemptsForTutor(tutorUid),
           isAdmin ? fetchTutors() : Promise.resolve([]),
+          (isAdmin ? fetchAllSessions() : fetchTutorSessions(tutorUid)).catch(() => []),
         ]);
         if (cancelled) return;
-        setClasses(cls); setAttempts(att); setTutors(tut); setNewTutor(tutorUid);
+        setClasses(cls); setAttempts(att); setTutors(tut); setSessions(ses); setNewTutor(tutorUid);
         if (cls.length > 0) setSelected(cls[0].code); else setShowNew(true);
       } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); } }
     })();
@@ -102,7 +104,10 @@ export default function TutorPage({ authUser, userProfile }) {
     } catch (e) { setError(e.message || "Could not save the name"); setNameEdit({ ...nameEdit, saving: false }); }
   };
   const cls = classes?.find(c => c.code === selected);
-  const nextLesson = cls ? nextOccurrences(slotsOf(cls), 1)[0] : null;
+  // Next lesson from the calendar; a group with nothing on the calendar yet falls back to its usual time
+  const clsSessions = cls ? sessions.filter(s => s.classId === cls.code && !s.studentIds) : [];
+  const nextSession = upcomingSessions(clsSessions.filter(s => s.status !== "cancelled"), 1)[0];
+  const nextLesson = nextSession ? { iso: nextSession.date, time: nextSession.time } : cls && clsSessions.length === 0 ? nextOccurrences(slotsOf(cls), 1)[0] : null;
   const tutorName = (uid) => { const t = tutors.find(x => x.uid === uid); return t ? (t.displayName || t.email) : null; };
   const classUids = useMemo(() => new Set((students || []).map(s => s.uid)), [students]);
   const classAttempts = useMemo(() => attempts.filter(a => classUids.has(a.uid)), [attempts, classUids]);
@@ -146,7 +151,8 @@ export default function TutorPage({ authUser, userProfile }) {
               {classes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
             </select>
           )}
-          {cls && <Button icon="calendar" onClick={() => setEditSchedule(editSchedule ? null : { slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" })}>{slotsOf(cls).length ? "Lesson times" : "Set lesson times"}</Button>}
+          {cls && <Button icon="calendar" onClick={() => setEditSchedule(editSchedule ? null : { slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" })}>{slotsOf(cls).length ? "Usual times" : "Set usual times"}</Button>}
+          {cls && <Button icon="calendar" onClick={() => navigate("/tutor/calendar")}>Calendar</Button>}
           <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>
         </>}
       />
@@ -155,7 +161,7 @@ export default function TutorPage({ authUser, userProfile }) {
 
       {cls && editSchedule && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <CardHeader title={`Weekly lessons for ${cls.name}`} sub="One row per lesson each week, so a group taught on two days has two rows. Drives the next-lesson card, the reminder emails and the default date for lesson notes." />
+          <CardHeader title={`Usual weekly times for ${cls.name}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them. Students see the calendar." />
           <SlotsFields slots={editSchedule.slots} onChange={slots => setEditSchedule(e => ({ ...e, slots }))} />
           <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 520 }}>
             <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Zoom link (shown to students and parents, and in reminder emails)</label>
@@ -175,7 +181,7 @@ export default function TutorPage({ authUser, userProfile }) {
             <Input id="new-class-name" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Year 13 OCR Tuesday" onKeyDown={e => e.key === "Enter" && handleCreate()} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "1 1 160px" }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Weekly lessons</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Usual weekly times</span>
             <SlotsFields slots={newSlots} onChange={setNewSlots} />
           </div>
           {isAdmin && tutors.length > 0 && (

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, limit, getDocs, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, limit, getDocs, serverTimestamp, writeBatch } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCtSbGHVvDJinQ2NnbZUAMp2YHU2aNtkTM",
@@ -435,6 +435,89 @@ export async function sendLessonNote(noteId) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || "The note could not be sent");
   return data;
+}
+
+// =====================================================================
+//  Calendar sessions (one document per lesson or extra session)
+// =====================================================================
+
+const sessionDoc = (tutorUid, s) => ({
+  classId: s.classId, className: s.className || null, board: s.board || null,
+  tutorId: s.tutorId || tutorUid,
+  date: s.date, time: s.time, startAt: new Date(`${s.date}T${s.time}:00`).getTime(), minutes: Number(s.minutes) || 120,
+  type: s.type || "lesson",                       // "lesson" (usual group lesson) or "session" (drop-in, catch-up, mock...)
+  title: (s.title || "").trim() || null,
+  zoomLink: (s.zoomLink || "").trim() || null,    // null = use the group's link
+  note: (s.note || "").trim() || null,
+  status: s.status || "scheduled",                 // "scheduled" | "cancelled"
+  studentIds: Array.isArray(s.studentIds) && s.studentIds.length ? s.studentIds : null, // null = whole group
+  studentNames: Array.isArray(s.studentNames) && s.studentNames.length ? s.studentNames : null,
+  lessonId: s.lessonId || null,
+  createdBy: tutorUid, createdAt: Date.now(),
+});
+
+export async function createSession(tutorUid, s) {
+  const data = sessionDoc(tutorUid, s);
+  const ref = await addDoc(collection(db, "sessions"), data);
+  return { id: ref.id, ...data };
+}
+
+/** Several at once (repeat weekly, fill a term). Firestore batches take 500 writes. */
+export async function createSessions(tutorUid, list) {
+  const out = [];
+  for (let i = 0; i < list.length; i += 400) {
+    const batch = writeBatch(db);
+    for (const s of list.slice(i, i + 400)) {
+      const ref = doc(collection(db, "sessions"));
+      const data = sessionDoc(tutorUid, s);
+      batch.set(ref, data);
+      out.push({ id: ref.id, ...data });
+    }
+    await batch.commit();
+  }
+  return out;
+}
+
+export async function updateSession(id, patch) {
+  const p = { ...patch, updatedAt: Date.now() };
+  if (p.date || p.time) {
+    const cur = (await getDoc(doc(db, "sessions", id))).data() || {};
+    p.startAt = new Date(`${p.date || cur.date}T${p.time || cur.time}:00`).getTime();
+  }
+  await updateDoc(doc(db, "sessions", id), p);
+  return p;
+}
+
+export async function deleteSession(id) {
+  await deleteDoc(doc(db, "sessions", id));
+}
+
+const sortSessions = (list) => list.sort((a, b) => (a.startAt || 0) - (b.startAt || 0));
+
+export async function fetchTutorSessions(tutorUid) {
+  const snap = await getDocs(query(collection(db, "sessions"), where("tutorId", "==", tutorUid)));
+  return sortSessions(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+}
+
+/** Admin: every tutor's sessions. */
+export async function fetchAllSessions() {
+  const snap = await getDocs(collection(db, "sessions"));
+  return sortSessions(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+}
+
+/** What one student sees: their group's sessions plus any they are named on. Parents pass their child's uid and group. */
+export async function fetchStudentSessions(uid, classId) {
+  const col = collection(db, "sessions");
+  const none = { docs: [] };
+  // Each query on its own, so one being refused never hides the other
+  const [grp, named] = await Promise.all([
+    classId ? getDocs(query(col, where("classId", "==", classId), where("studentIds", "==", null))).catch(() => none) : none,
+    uid ? getDocs(query(col, where("studentIds", "array-contains", uid))).catch(() => none) : none,
+  ]);
+  const seen = new Set();
+  const out = [];
+  for (const d of [...grp.docs, ...named.docs]) { if (!seen.has(d.id)) { seen.add(d.id); out.push({ id: d.id, ...d.data() }); } }
+  return sortSessions(out);
 }
 
 // ─── Past-paper questions (written by api/ppq-admin.js and api/ppq-mark.js) ───
