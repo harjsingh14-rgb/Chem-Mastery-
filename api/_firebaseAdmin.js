@@ -202,7 +202,20 @@ function siteOrigin(req) {
   return "https://fc.hsjtuition.co.uk";
 }
 
+/** Delete an auth user by uid. Resolves quietly if it is already gone. */
+async function deleteAuthUser(uid, token) {
+  const res = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:delete`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ localId: uid }),
+  });
+  if (res.ok) return true;
+  const data = await res.json().catch(() => ({}));
+  if ((data.error?.message || "").includes("USER_NOT_FOUND")) return false;
+  throw httpError(502, `Could not delete the account: ${data.error?.message || res.status}`);
+}
+
 module.exports = {
   getAccessToken, httpError, getDocument, createDocument, updateDocument, deleteDocument, queryDocuments,
-  lookupAuthUser, createAuthUser, generateTempPassword, newToken, requireAdmin, siteOrigin,
+  lookupAuthUser, createAuthUser, deleteAuthUser, generateTempPassword, newToken, requireAdmin, siteOrigin,
 };

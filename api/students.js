@@ -134,6 +134,46 @@ async function backfillOnboarding(token, res) {
   return res.status(200).json({ ok: true, count: results.length, results });
 }
 
+// Remove test accounts completely: auth user, profile, applicant records and
+// the link from a parent's children list. { emails: [...] }, admin only.
+// Refuses accounts that have a group unless { force: true } is passed.
+async function deleteAccounts(body, token, res) {
+  const emails = (Array.isArray(body.emails) ? body.emails : []).map(e => str(e).toLowerCase()).filter(e => EMAIL_RE.test(e)).slice(0, 20);
+  if (!emails.length) throw bad("emails required");
+  const results = [];
+  for (const email of emails) {
+    const r = { email, auth: false, profile: false, applicants: 0, unlinked: 0 };
+    const [profile] = await fb.queryDocuments("users", { email }, token, { limit: 1 });
+    if (profile?.role === "admin" || profile?.role === "tutor") { r.error = "will not delete a tutor or admin"; results.push(r); continue; }
+    if (profile?.classId && !body.force) { r.error = "in a group; pass force to delete anyway"; results.push(r); continue; }
+    const authUser = await fb.lookupAuthUser(email, token);
+    const uid = profile?.id || authUser?.uid;
+    if (uid) {
+      // A parent: drop them from nothing; a student: remove from the parent's children
+      if (profile?.parentUid) {
+        const parent = await fb.getDocument(`users/${profile.parentUid}`, token);
+        if (parent) {
+          const childTerms = { ...(parent.childTerms || {}) }; delete childTerms[uid];
+          await fb.updateDocument(`users/${profile.parentUid}`, { children: (parent.children || []).filter(c => c !== uid), childTerms }, token);
+          r.unlinked++;
+        }
+      }
+      for (const child of profile?.children || []) {
+        const st = await fb.getDocument(`users/${child}`, token);
+        if (st?.parentUid === uid) { await fb.updateDocument(`users/${child}`, { parentUid: null }, token); r.unlinked++; }
+      }
+      if (profile) { await fb.deleteDocument(`users/${uid}`, token); r.profile = true; }
+      if (authUser) r.auth = await fb.deleteAuthUser(authUser.uid, token);
+    }
+    for (const field of ["studentEmail", "parentEmail"]) {
+      const apps = await fb.queryDocuments("applicants", { [field]: email }, token, { limit: 50 });
+      for (const a of apps) { await fb.deleteDocument(`applicants/${a.id}`, token); r.applicants++; }
+    }
+    results.push(r);
+  }
+  return res.status(200).json({ ok: true, results });
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -170,6 +210,7 @@ module.exports = async function handler(req, res) {
     if (!["update", "resend", "delete", "place"].includes(action)) {
       if (action === "backfillParents") return backfillParents(body, token, res);
       if (action === "backfillOnboarding") return backfillOnboarding(token, res);
+      if (action === "deleteAccounts") return deleteAccounts(body, token, res);
       throw bad("Unknown action");
     }
 
