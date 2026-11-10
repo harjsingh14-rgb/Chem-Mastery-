@@ -8,10 +8,13 @@ service cloud.firestore {
     function isTutor() { return signedIn() && myProfile().role in ['tutor', 'admin']; }
     function isAdmin() { return signedIn() && myProfile().role == 'admin'; }
     function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    // Parents: users/{uid} with role 'parent' and children = [student uid, ...]
+    function isParent() { return signedIn() && myProfile().role == 'parent'; }
+    function isParentOf(uid) { return signedIn() && (uid in myProfile().get('children', [])); }
 
     match /users/{uid} {
       // Users read their own profile; tutors read their own students; admins read everyone
-      allow read: if signedIn() && (request.auth.uid == uid || resource.data.tutorId == request.auth.uid || isAdmin());
+      allow read: if signedIn() && (request.auth.uid == uid || resource.data.tutorId == request.auth.uid || resource.data.parentUid == request.auth.uid || isAdmin());
 
       // Student accounts are created server-side when HSJ places an applicant
       // into a group (api/students.js, service account, bypasses rules). A
@@ -28,7 +31,7 @@ service cloud.firestore {
         ||
         // Own profile: may not touch role, group links or onboarding records
         (request.auth.uid == uid
-          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt']))
+          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'parentUid', 'children', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt']))
       );
     }
 
@@ -42,7 +45,7 @@ service cloud.firestore {
     // Invoices and payments mirrored from Stripe by api/stripe-webhook.js.
     // The student (and later their parent), their tutor and admins can read them.
     match /payments/{id} {
-      allow read: if signedIn() && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isAdmin());
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
       allow write: if false;
     }
 
@@ -59,7 +62,7 @@ service cloud.firestore {
 
     match /attempts/{id} {
       allow read: if signedIn()
-        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid);
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
       allow create: if signedIn()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.tutorId == myProfile().get('tutorId', null)
@@ -85,7 +88,7 @@ service cloud.firestore {
     }
     // A student's attempts at past-paper questions (marked server-side)
     match /ppqAttempts/{id} {
-      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isTutor());
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isTutor() || isParentOf(resource.data.uid));
       allow write: if false;
     }
 
@@ -104,7 +107,7 @@ service cloud.firestore {
     // stamps sentAt server-side.
     match /lessonNotes/{id} {
       allow read: if signedIn()
-        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isAdmin());
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
       allow create: if isTutor()
         && request.resource.data.tutorId == request.auth.uid
         && id == request.resource.data.lessonId + '_' + request.resource.data.uid;
@@ -118,6 +121,8 @@ service cloud.firestore {
       // The tutor who set it, or a student in that group, can read it
       allow read: if signedIn()
         && (resource.data.tutorId == request.auth.uid || resource.data.classId == myProfile().get('classId', null));
+      // Parents read the homework set for their child's group (titles, due dates, items)
+      allow get: if isParent();
       allow create: if isTutor()
         && request.resource.data.tutorId == request.auth.uid
         && request.resource.data.classId is string
@@ -131,9 +136,9 @@ service cloud.firestore {
       // A student's first visit reads a submission that does not exist yet,
       // so a get on a missing doc is allowed when the id ends in their uid
       allow get: if signedIn()
-        && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid);
+        && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
       allow list: if signedIn()
-        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid);
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
       // Student creates their own, for an assignment set to their group
       allow create: if signedIn()
         && request.resource.data.uid == request.auth.uid

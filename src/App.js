@@ -6,6 +6,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
 import PastPaperBrowser from "./components/ppq/PastPaperBrowser";
 import PastPaperQuestion from "./components/ppq/PastPaperQuestion";
+import ParentPage from "./components/ParentPage";
 import { VideosPage } from "./components/Placeholders";
 import HomeworkBuilder from "./components/HomeworkBuilder";
 import { TutorHomeworkList, TutorHomeworkReview } from "./components/TutorHomework";
@@ -71,6 +72,7 @@ export default function App() {
   const hasFullAccess = userProfile && (["student", "tutor", "admin", "paid", "access_key"].includes(userProfile.role) || !!userProfile.classId);
   const isAdmin = userProfile && userProfile.role === "admin";
   const isTutor = userProfile && (userProfile.role === "tutor" || userProfile.role === "admin");
+  const isParent = userProfile && userProfile.role === "parent";
 
   // Every answered question is written to Firestore so progress survives
   // across devices and tutors can see it. Safe to call when logged out (no-op).
@@ -113,6 +115,7 @@ export default function App() {
   if (!savedBoard) { try { savedBoard = localStorage.getItem("hsj-board"); } catch {} }
   if (!BOARD_IDS.includes(savedBoard)) savedBoard = null;
   const screen = pathParts[0] === 'tutor' ? 'tutor'
+    : pathParts[0] === 'parent' ? 'parent'
     : !board ? 'board'
     : (routeTab === 'dashboard' || routeTab === 'progress') ? 'dashboard'
     : routeTab === 'cards' ? 'cards'
@@ -207,10 +210,15 @@ export default function App() {
   useEffect(() => { if (board) { try { localStorage.setItem("hsj-board", board); } catch {} } }, [board]);
   useEffect(() => {
     if (screen !== "board" || !authUser) return;
-    // Tutors land on their dashboard; students on their board's dashboard
+    // Tutors land on their dashboard; parents on their child's page; students on their board's dashboard
     if (isTutor) navigate("/tutor", { replace: true });
+    else if (isParent) navigate("/parent", { replace: true });
     else if (savedBoard) navigate(`/${savedBoard}`, { replace: true });
-  }, [screen, authUser, savedBoard, isTutor, navigate]);
+  }, [screen, authUser, savedBoard, isTutor, isParent, navigate]);
+  // Parents have no student screens of their own
+  useEffect(() => {
+    if (isParent && authUser && screen !== "parent" && screen !== "board") navigate("/parent", { replace: true });
+  }, [isParent, authUser, screen, navigate]);
 
   // ─── App shell: nav + account menu shared by every signed-in screen ───
   const navBoard = board || savedBoard || "aqa";
@@ -235,6 +243,9 @@ export default function App() {
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
   ];
 
+  const parentNav = [
+    { id: "parent", label: "My child", icon: "users", to: "/parent", active: screen === "parent" },
+  ];
   const menuSection = { borderTop: `1px solid ${T.line}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 6 };
   const menuLabel = { fontSize: 12, fontWeight: 600, color: T.muted };
   const accountMenu = (
@@ -244,29 +255,33 @@ export default function App() {
         <div style={{ fontSize: 12, color: T.muted, wordBreak: "break-all" }}>{authUser?.email}</div>
       </div>
       <Chip tone={hasFullAccess ? "green" : "amber"} style={{ alignSelf: "flex-start" }}>
-        {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.classId ? `Student · ${userProfile.className || userProfile.classId}` : hasFullAccess ? "Full access" : "Not in a group yet"}
+        {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "parent" ? "Parent" : userProfile?.classId ? `Student · ${userProfile.className || userProfile.classId}` : hasFullAccess ? "Full access" : "Not in a group yet"}
       </Chip>
       {isTutor && <Button variant="primary" data-close-menu onClick={() => navigate("/tutor")} iconRight="arrowRight">Tutor dashboard</Button>}
-      {!isTutor && !userProfile?.classId && (
+      {!isTutor && !isParent && !userProfile?.classId && (
         <div style={menuSection}>
           <span style={{ fontSize: 12, color: T.muted, lineHeight: 1.5 }}>HSJ Tuition places you in a group once your onboarding is complete. If you are already an HSJ student, log in with the email your welcome email was sent to.</span>
         </div>
       )}
       <div style={menuSection}>
-        <span style={menuLabel}>Exam board</span>
-        <div style={{ display: "flex", gap: 4 }}>
-          {BOARDS.map(bd => (
-            <Button key={bd.id} size="sm" data-close-menu variant={(board || savedBoard) === bd.id ? "primary" : "secondary"} style={{ flex: 1 }} onClick={() => selectBoard(bd.id)}>{bd.label}</Button>
-          ))}
-        </div>
+        {!isParent && (
+          <>
+            <span style={menuLabel}>Exam board</span>
+            <div style={{ display: "flex", gap: 4 }}>
+              {BOARDS.map(bd => (
+                <Button key={bd.id} size="sm" data-close-menu variant={(board || savedBoard) === bd.id ? "primary" : "secondary"} style={{ flex: 1 }} onClick={() => selectBoard(bd.id)}>{bd.label}</Button>
+              ))}
+            </div>
+          </>
+        )}
         <Button variant="danger" size="sm" icon="logout" onClick={() => logOut()}>Log out</Button>
       </div>
     </div>
   );
 
   const renderShell = (children, opts = {}) => (
-    <AppShell user={authUser} menu={accountMenu} nav={isTutor ? tutorNav : studentNav}
-      brandSub={board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
+    <AppShell user={authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
+      brandSub={isParent ? "Parent" : board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
       {children}
     </AppShell>
   );
@@ -350,6 +365,13 @@ export default function App() {
       </div>
     );
   }
+
+  // PARENT VIEW
+  if (screen === "parent") return renderShell(
+    isParent || isTutor
+      ? <ParentPage authUser={authUser} userProfile={userProfile} childUid={pathParts[1] || null} />
+      : <Card padding={0}><EmptyState icon="lock" title="Parent accounts only" body="This page is for parents of HSJ students." /></Card>
+  );
 
   // TUTOR DASHBOARD
   if (screen === "tutor") return renderShell(

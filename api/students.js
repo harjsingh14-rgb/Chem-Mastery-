@@ -55,6 +55,38 @@ async function sendTermsInvite(a, origin) {
   await mail.sendEmail({ to: a.parentEmail, subject, html });
 }
 
+/**
+ * Make sure the parent has an account linked to the student. Returns
+ * { uid, existing, emailed } or { skipped } when there is no usable parent
+ * email (or it is the student's own address).
+ */
+async function ensureParentAccount({ parentName, parentEmail, studentUid, studentEmail, studentName, groupName, tutorName }, token, { sendEmail = true } = {}) {
+  const email = str(parentEmail, 160).toLowerCase();
+  if (!EMAIL_RE.test(email) || email === String(studentEmail || "").toLowerCase()) return { skipped: "no separate parent email" };
+  let tempPassword = fb.generateTempPassword();
+  const auth = await fb.createAuthUser({ email, password: tempPassword, displayName: parentName || "Parent" }, token);
+  if (auth.existing) tempPassword = null;
+  const existing = await fb.getDocument(`users/${auth.uid}`, token);
+  const children = Array.from(new Set([...(existing?.children || []), studentUid]));
+  const now = new Date();
+  const profile = { email, children, updatedAt: now };
+  if (!existing) Object.assign(profile, { displayName: parentName || "Parent", role: "parent", photoURL: "", createdAt: now });
+  else if (!existing.role || existing.role === "free") profile.role = "parent";
+  if (!existing?.displayName && parentName) profile.displayName = parentName;
+  if (tempPassword) profile.needsPasswordChange = true;
+  await fb.updateDocument(`users/${auth.uid}`, profile, token);
+  await fb.updateDocument(`users/${studentUid}`, { parentUid: auth.uid }, token);
+  let emailed = false, emailError = null;
+  if (sendEmail) {
+    try {
+      const { subject, html } = mail.parentWelcome({ parentName, studentName, email, tempPassword, groupName, tutorName });
+      await mail.sendEmail({ to: email, subject, html });
+      emailed = true;
+    } catch (e) { emailError = e.message; }
+  }
+  return { uid: auth.uid, existing: auth.existing, emailed, emailError };
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -166,7 +198,33 @@ module.exports = async function handler(req, res) {
         const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail });
         await mail.sendEmail({ to: a.studentEmail, cc: a.parentEmail, subject, html });
       } catch (e) { emailError = e.message; }
-      return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError });
+
+      // The parent gets their own account, linked to this student
+      let parent = null;
+      try {
+        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "" }, token, { sendEmail: true });
+      } catch (e) { parent = { error: e.message }; }
+      return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError, parent });
+    }
+
+    // Create parent accounts for students placed before parent logins existed.
+    // { dryRun: true } lists who would get one without creating or emailing.
+    if (action === "backfillParents") {
+      const dryRun = !!body.dryRun;
+      const students = await fb.queryDocuments("users", { role: "student" }, token, { limit: 2000 });
+      const results = [];
+      for (const st of students) {
+        if (st.parentUid || !st.parentEmail || !EMAIL_RE.test(st.parentEmail)) continue;
+        if (dryRun) { results.push({ student: st.displayName, parentEmail: st.parentEmail, parentName: st.parentName || "" }); continue; }
+        let r;
+        try {
+          const group = st.classId ? await fb.getDocument(`classes/${st.classId}`, token) : null;
+          const tutor = st.tutorId ? await fb.getDocument(`users/${st.tutorId}`, token) : null;
+          r = await ensureParentAccount({ parentName: st.parentName, parentEmail: st.parentEmail, studentUid: st.id, studentEmail: st.email, studentName: st.displayName, groupName: group?.name || st.className || "", tutorName: tutor?.displayName || "" }, token, { sendEmail: true });
+        } catch (e) { r = { error: e.message }; }
+        results.push({ student: st.displayName, parentEmail: st.parentEmail, ...r });
+      }
+      return res.status(200).json({ ok: true, dryRun, count: results.length, results });
     }
 
     throw bad("Unknown action");

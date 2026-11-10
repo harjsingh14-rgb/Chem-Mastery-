@@ -457,6 +457,20 @@ export async function fetchUserNames(uids) {
   }));
   return out;
 }
+/** Full profiles for a set of users (a parent reads their children; rules enforce it). */
+export async function fetchUserProfiles(uids) {
+  const out = [];
+  await Promise.all([...new Set(uids || [])].map(async uid => {
+    try { const s = await getDoc(doc(db, "users", uid)); if (s.exists()) out.push({ uid, ...s.data() }); } catch {}
+  }));
+  return out;
+}
+/** Fire-and-forget: tell the tutor by email about a submission or mark query (api/notify.js). */
+export function notifyTutor(payload) {
+  auth.currentUser?.getIdToken().then(token =>
+    fetch("/api/notify", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) })
+  ).catch(() => {});
+}
 /** Query and reply actions on api/ppq-mark.js (marking itself is called from the question page). */
 export async function ppqMarkApi(payload) {
   const token = await auth.currentUser?.getIdToken();

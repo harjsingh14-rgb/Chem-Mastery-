@@ -18,6 +18,7 @@
 const fb = require("./_firebaseAdmin");
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
+const mail = require("./_email");
 
 const TEXT_MODEL = "claude-sonnet-5-5";
 const VISION_MODEL = "claude-opus-5-5";
@@ -153,6 +154,14 @@ async function query(caller, { qid, part, note }) {
   if (queries[part] && queries[part].status === "open") throw fb.httpError(409, "You have already sent a query for this part. Your tutor will reply soon.");
   queries[part] = { note: note.trim().slice(0, 1000), at: Date.now(), status: "open", reply: null, attempt: att.attempts || 1, score: att.latest.parts[part].score, answer: att.latest.parts[part].answer || null, feedback: att.latest.parts[part].feedback || null };
   await fb.updateDocument(`ppqAttempts/${id}`, { queries, hasOpenQuery: true, updatedAt: new Date() }, token);
+  // Tell the tutor straight away (never fail the query if the email does)
+  try {
+    const [tutor, student] = await Promise.all([att.tutorId ? fb.getDocument(`users/${att.tutorId}`, token) : null, fb.getDocument(`users/${caller.uid}`, token)]);
+    if (tutor?.email) {
+      const { subject, html } = mail.tutorQuery({ tutorName: tutor.displayName, studentName: student?.displayName || student?.email || "A student", where: `${att.title || "past-paper question"} (Q${att.q} part ${part})`, note: note.trim(), link: `${mail.SITE}/tutor/homework` });
+      await mail.sendEmail({ to: tutor.email, subject, html });
+    }
+  } catch (e) { console.warn("ppq query email failed:", e.message); }
   return { ok: true, queries };
 }
 

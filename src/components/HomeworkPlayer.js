@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { auth, fetchAssignment, startSubmission, saveItemResult, submitSubmission, sendMarkQuery } from "../firebase";
+import { auth, fetchAssignment, startSubmission, saveItemResult, submitSubmission, sendMarkQuery, notifyTutor } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
 import McqQuestion from "./McqQuestion";
@@ -349,7 +349,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   const query = async (key, note) => {
     const q = { note, at: Date.now(), status: "open", reply: null };
     setSubm(s => ({ ...s, queries: { ...(s.queries || {}), [key]: q } }));
-    try { await sendMarkQuery(a.id, authUser.uid, key, note); } catch (e) { setError("Could not send your query: " + e.message); }
+    try { await sendMarkQuery(a.id, authUser.uid, key, note); notifyTutor({ type: "query", assignmentId: a.id, key }); } catch (e) { setError("Could not send your query: " + e.message); }
   };
 
   const handleSubmit = async () => {
@@ -357,6 +357,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
     setSubmitting(true);
     try {
       await submitSubmission(a.id, authUser.uid, { totalScore: total(answers), timeSpentMs: timeSpent() });
+      notifyTutor({ type: "submission", assignmentId: a.id });
       setSubm(s => ({ ...s, submittedAt: Date.now(), submittedClientTime: Date.now() }));
       setIdx(0);
     } catch (e) { setError(e.message); }

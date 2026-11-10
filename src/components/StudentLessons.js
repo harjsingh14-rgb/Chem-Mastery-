@@ -20,7 +20,7 @@ export function useMyLessonNotes(uid) {
   return notes;
 }
 
-function NoteBody({ n, compact }) {
+export function NoteBody({ n, compact }) {
   const [tone, attLabel] = ATT[n.attendance] || ["neutral", ""];
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>

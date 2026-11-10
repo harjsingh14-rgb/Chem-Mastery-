@@ -150,4 +150,42 @@ function paymentReminder({ parentName, studentName, amount, description, dueAt, 
   return { subject: `${overdue ? "Overdue: " : ""}${fmtMoney(amount)} for ${firstName(studentName)}'s tutoring, due ${fmtShortDate(dueAt)}`, html };
 }
 
-module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY };
+/** To the parent: your own account, to follow your child's progress, lessons, homework and payments. */
+function parentWelcome({ parentName, studentName, email, tempPassword, groupName, tutorName }) {
+  const sf = firstName(studentName);
+  const html = layout("Your HSJ Tuition parent account", `
+    <p>Hi ${esc(firstName(parentName))},</p>
+    <p>You now have your own login for HSJ Tuition, so you can see how ${esc(sf)} is getting on${groupName ? ` in <strong>${esc(groupName)}</strong>` : ""}${tutorName ? ` with ${esc(tutorName)}` : ""}: topic progress, attendance and the note after each lesson, homework set and marked, and your invoices.</p>
+    ${tempPassword ? `
+    <div style="background:#EEF7FC;border:1px solid #BFE3F5;border-radius:10px;padding:14px 16px;margin:18px 0;">
+      <div style="font-weight:700;margin-bottom:6px;">Your login</div>
+      <div>Email: <strong>${esc(email)}</strong></div>
+      <div>Temporary password: <code style="background:#DCEFFA;padding:2px 8px;border-radius:4px;font-size:15px;font-weight:700;">${esc(tempPassword)}</code></div>
+      <div style="font-size:12px;color:#6b7a8c;margin-top:6px;">You will be asked to choose your own password when you first log in.</div>
+    </div>` : `<p>Log in with your existing account for <strong>${esc(email)}</strong>; ${esc(sf)} has been added to it.</p>`}
+    ${button(SITE, "Log in to HSJ Tuition")}
+    <p style="margin-top:22px;">You will still get the lesson note by email after each lesson. The account is there whenever you want the fuller picture.</p>
+    <p>Harj</p>`);
+  return { subject: `Your HSJ Tuition parent account for ${sf}`, html };
+}
+
+/** To the tutor: a student has submitted homework. */
+function tutorSubmission({ tutorName, studentName, title, score, maxScore, link }) {
+  const html = layout("Homework submitted", `
+    <p>Hi ${esc(firstName(tutorName))},</p>
+    <p><strong>${esc(studentName)}</strong> has submitted <strong>${esc(title)}</strong>${maxScore ? `, scoring ${score} out of ${maxScore} on the auto-marked parts` : ""}.</p>
+    ${button(link, "Review it")}`);
+  return { subject: `${studentName} submitted ${title}`, html };
+}
+
+/** To the tutor: a student is querying a mark (homework or past paper). */
+function tutorQuery({ tutorName, studentName, where, note, link }) {
+  const html = layout("Mark query", `
+    <p>Hi ${esc(firstName(tutorName))},</p>
+    <p><strong>${esc(studentName)}</strong> is querying a mark on <strong>${esc(where)}</strong>:</p>
+    <div style="background:#FFF7E6;border:1px solid #FDE2B5;border-radius:10px;padding:12px 14px;margin:14px 0;">${nl2br(note)}</div>
+    ${button(link, "Reply to the query")}`);
+  return { subject: `Mark query from ${studentName}: ${where}`, html };
+}
+
+module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, parentWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
