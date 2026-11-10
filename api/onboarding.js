@@ -80,7 +80,7 @@ module.exports = async function handler(req, res) {
 
     if (action === "evaluation") {
       if (kind !== "evaluation") throw bad("This link is for the parent terms, not the self-evaluation");
-      if (a.status === "placed") throw bad("This self-evaluation has already been used to place you. Ask your tutor if something needs changing.");
+      if (a.evaluation) throw bad("This self-evaluation has already been sent. Ask your tutor if something needs changing.");
       const evaluation = validateEvaluation(body);
       const patch = { evaluation, status: a.status === "agreed" ? "agreed" : "evaluated" };
       let emailError = null;
@@ -92,7 +92,11 @@ module.exports = async function handler(req, res) {
           patch.termsSentAt = Date.now();
         } catch (e) { emailError = e.message; console.error("terms invite failed:", e); }
       }
+      if (a.status === "placed") delete patch.status;
       await fb.updateDocument(`applicants/${a.id}`, patch, fsToken);
+      // Placed already (the student did this after logging in): record it on
+      // their profile too, which lifts the login gate.
+      if (a.status === "placed" && a.studentUid) await fb.updateDocument(`users/${a.studentUid}`, { selfEvaluation: evaluation, evalToken: null }, fsToken);
       try {
         const { subject, html } = mail.notify(labelled, "Self-evaluation completed", adminLink);
         await mail.sendEmail({ to: mail.NOTIFY, subject, html });
@@ -111,6 +115,18 @@ module.exports = async function handler(req, res) {
       const patch = { terms };
       if (a.status !== "placed") patch.status = "agreed";
       await fb.updateDocument(`applicants/${a.id}`, patch, fsToken);
+      if (a.status === "placed" && a.studentUid) {
+        // Already placed: mark the agreement on the student profile and clear
+        // the parent's login gate for this child.
+        const st = await fb.getDocument(`users/${a.studentUid}`, fsToken);
+        if (st) {
+          await fb.updateDocument(`users/${a.studentUid}`, { termsAccepted: terms, agreement: { ...(st.agreement || {}), acceptedAt: terms.acceptedAt, acceptedName: terms.acceptedName, version: terms.version } }, fsToken);
+          if (st.parentUid) {
+            const parent = await fb.getDocument(`users/${st.parentUid}`, fsToken);
+            if (parent?.childTerms?.[a.studentUid]) await fb.updateDocument(`users/${st.parentUid}`, { childTerms: { ...parent.childTerms, [a.studentUid]: { ...parent.childTerms[a.studentUid], acceptedAt: terms.acceptedAt } } }, fsToken);
+          }
+        }
+      }
       try {
         const { subject, html } = mail.notify(labelled, a.evaluation ? "Terms accepted, ready to place" : "Terms accepted (self-evaluation still to come)", adminLink);
         await mail.sendEmail({ to: mail.NOTIFY, subject, html });

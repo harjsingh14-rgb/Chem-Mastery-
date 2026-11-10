@@ -16,7 +16,14 @@ async function api(method, token, body) {
   return data;
 }
 
-export default function OnboardingPage({ token }) {
+/**
+ * token:   the emailed link's token.
+ * onDone:  set when the page is shown to a signed-in student or parent as a
+ *          gate inside the app; called when they finish (or press Continue).
+ * account: the signed-in email, shown with a log out link so a wrong account
+ *          can escape the gate.
+ */
+export default function OnboardingPage({ token, onDone, account, onLogOut }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -35,10 +42,16 @@ export default function OnboardingPage({ token }) {
           <img src="/hsj-logo.png" alt="" style={{ height: 36, objectFit: "contain" }} />
           <div style={{ fontFamily: T.display, fontWeight: 800, fontSize: 20 }}><span style={{ color: T.accent }}>HSJ</span> Tuition</div>
         </div>
+        {account && (
+          <Notice tone="accent" style={{ marginBottom: 14 }}>
+            Signed in as <b>{account}</b>. Finish this step to open the rest of your account.
+            {onLogOut && <> Not you? <button type="button" className="cm-link" onClick={onLogOut} style={{ background: "none", border: 0, padding: 0, font: "inherit", cursor: "pointer" }}>Log out</button>.</>}
+          </Notice>
+        )}
         {error && <Notice tone="red">{error}</Notice>}
         {!error && !data && <div style={{ color: T.muted, fontSize: 14 }}>Loading…</div>}
-        {data && data.kind === "evaluation" && <EvaluationForm token={token} data={data} />}
-        {data && data.kind === "terms" && <TermsForm token={token} data={data} />}
+        {data && data.kind === "evaluation" && <EvaluationForm token={token} data={data} onDone={onDone} />}
+        {data && data.kind === "terms" && <TermsForm token={token} data={data} onDone={onDone} />}
       </div>
     </div>
   );
@@ -69,7 +82,7 @@ function Seg({ options, value, onChange, tone, disabled }) {
 
 const ragTone = (id) => id === "red" ? { fg: T.red, bg: T.redTint } : id === "amber" ? { fg: T.amber, bg: T.amberTint } : { fg: T.green, bg: T.greenTint };
 
-function EvaluationForm({ token, data }) {
+function EvaluationForm({ token, data, onDone }) {
   const tree = SELF_EVALUATION[data.board];
   const existing = data.evaluation;
   const [step, setStep] = useState(existing ? 2 : 1);
@@ -106,11 +119,25 @@ function EvaluationForm({ token, data }) {
   };
 
   if (!tree) return <Notice tone="red">No self-evaluation exists for this exam board yet. Please reply to the email and HSJ will sort it out.</Notice>;
-  if (data.status === "placed") return <Notice tone="green">Your self-evaluation has already been used to place you in a group. Log in at fc.hsjtuition.co.uk to see your homework.</Notice>;
+  const placed = data.status === "placed";
+  if (placed && existing && !onDone) return <Notice tone="green">Your self-evaluation has already been sent and used to place you in a group. Log in at fc.hsjtuition.co.uk to see your homework.</Notice>;
+  if (placed && existing && onDone) return (
+    <div style={cardStyle}>
+      <p style={{ color: T.body, lineHeight: 1.6, margin: "0 0 12px" }}>Your self-evaluation is already in. Nothing else to do here.</p>
+      <Button variant="accent" onClick={onDone}>Continue to my dashboard</Button>
+    </div>
+  );
   if (done) return (
     <div style={cardStyle}>
       <h1 style={{ fontFamily: T.display, fontSize: 24, margin: "0 0 8px" }}>Thanks, {data.studentName.split(" ")[0]}</h1>
-      <p style={{ color: T.body, lineHeight: 1.6, margin: 0 }}>Your self-evaluation has been sent to HSJ Tuition. Your parent has been emailed the terms to accept, and once they have, you will get a welcome email with your group and your login. Nothing else to do for now.</p>
+      {placed ? (
+        <>
+          <p style={{ color: T.body, lineHeight: 1.6, margin: "0 0 14px" }}>Your self-evaluation has been sent to your tutor, who will use it to plan your first lessons. Your account is now open.</p>
+          {onDone && <Button variant="accent" onClick={onDone}>Continue to my dashboard</Button>}
+        </>
+      ) : (
+        <p style={{ color: T.body, lineHeight: 1.6, margin: 0 }}>Your self-evaluation has been sent to HSJ Tuition. Your parent has been emailed the terms to accept, and once they have, you will get a welcome email with your group and your login. Nothing else to do for now.</p>
+      )}
     </div>
   );
 
@@ -231,7 +258,7 @@ function Summary({ ratings, subtopics }) {
   );
 }
 
-function TermsForm({ token, data }) {
+function TermsForm({ token, data, onDone }) {
   const [name, setName] = useState("");
   const [agree, setAgree] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -299,7 +326,10 @@ function TermsForm({ token, data }) {
         <div style={{ fontSize: 11, color: T.faint, marginTop: 10 }}>Version {TERMS_VERSION}</div>
       </div>
       {accepted ? (
-        <Notice tone="green">Accepted by {accepted.acceptedName} on {new Date(accepted.acceptedAt).toLocaleString("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}. Thank you. Nothing else to do: HSJ Tuition will email the group and lesson time.</Notice>
+        <div style={cardStyle}>
+          <Notice tone="green">Accepted by {accepted.acceptedName} on {new Date(accepted.acceptedAt).toLocaleString("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}. Thank you. {data.status === "placed" ? `${data.studentName.split(" ")[0]} is in their group already, so there is nothing else to do.` : "Nothing else to do: HSJ Tuition will email the group and lesson time."}</Notice>
+          {onDone && <div style={{ marginTop: 12 }}><Button variant="accent" onClick={onDone}>Continue to {data.studentName.split(" ")[0]}'s page</Button></div>}
+        </div>
       ) : (
         <form onSubmit={submit} style={cardStyle}>
           <div style={{ fontWeight: 700, marginBottom: 4 }}>Accept the agreement</div>

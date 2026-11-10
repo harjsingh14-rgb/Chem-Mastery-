@@ -60,7 +60,7 @@ async function sendTermsInvite(a, origin) {
  * { uid, existing, emailed } or { skipped } when there is no usable parent
  * email (or it is the student's own address).
  */
-async function ensureParentAccount({ parentName, parentEmail, studentUid, studentEmail, studentName, groupName, tutorName }, token, { sendEmail = true } = {}) {
+async function ensureParentAccount({ parentName, parentEmail, studentUid, studentEmail, studentName, groupName, tutorName, termsToken }, token, { sendEmail = true } = {}) {
   const email = str(parentEmail, 160).toLowerCase();
   if (!EMAIL_RE.test(email) || email === String(studentEmail || "").toLowerCase()) return { skipped: "no separate parent email" };
   let tempPassword = fb.generateTempPassword();
@@ -68,8 +68,12 @@ async function ensureParentAccount({ parentName, parentEmail, studentUid, studen
   if (auth.existing) tempPassword = null;
   const existing = await fb.getDocument(`users/${auth.uid}`, token);
   const children = Array.from(new Set([...(existing?.children || []), studentUid]));
+  // Terms still to accept, per child: the parent is shown the agreement when
+  // they log in until it is accepted (api/onboarding marks acceptedAt).
+  const childTerms = { ...(existing?.childTerms || {}) };
+  if (termsToken && !childTerms[studentUid]) childTerms[studentUid] = { token: termsToken, acceptedAt: null };
   const now = new Date();
-  const profile = { email, children, updatedAt: now };
+  const profile = { email, children, childTerms, updatedAt: now };
   if (!existing) Object.assign(profile, { displayName: parentName || "Parent", role: "parent", photoURL: "", createdAt: now });
   else if (!existing.role || existing.role === "free") profile.role = "parent";
   if (!existing?.displayName && parentName) profile.displayName = parentName;
@@ -107,6 +111,29 @@ async function backfillParents(body, token, res) {
       return res.status(200).json({ ok: true, dryRun, count: results.length, results });
     }
 
+// Students placed before the login gate existed: copy the outstanding
+// self-evaluation token onto the student profile and the terms token onto the
+// parent profile, so they are asked to finish onboarding when they log in.
+async function backfillOnboarding(token, res) {
+  const placed = await fb.queryDocuments("applicants", { status: "placed" }, token, { limit: 2000 });
+  const results = [];
+  for (const a of placed) {
+    if (!a.studentUid) continue;
+    const r = { student: a.studentName, evalGate: false, termsGate: false };
+    const st = await fb.getDocument(`users/${a.studentUid}`, token);
+    if (st && !a.evaluation && !st.selfEvaluation && !st.evalToken) { await fb.updateDocument(`users/${a.studentUid}`, { evalToken: a.evalToken }, token); r.evalGate = true; }
+    if (st?.parentUid && !a.terms) {
+      const parent = await fb.getDocument(`users/${st.parentUid}`, token);
+      if (parent && !parent.childTerms?.[a.studentUid]) {
+        await fb.updateDocument(`users/${st.parentUid}`, { childTerms: { ...(parent.childTerms || {}), [a.studentUid]: { token: a.termsToken, acceptedAt: null } } }, token);
+        r.termsGate = true;
+      }
+    }
+    results.push(r);
+  }
+  return res.status(200).json({ ok: true, count: results.length, results });
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -142,6 +169,7 @@ module.exports = async function handler(req, res) {
 
     if (!["update", "resend", "delete", "place"].includes(action)) {
       if (action === "backfillParents") return backfillParents(body, token, res);
+      if (action === "backfillOnboarding") return backfillOnboarding(token, res);
       throw bad("Unknown action");
     }
 
@@ -211,6 +239,7 @@ module.exports = async function handler(req, res) {
         selfEvaluation: a.evaluation || null,
         termsAccepted: a.terms || null,
         applicantId: id,
+        evalToken: a.evaluation ? null : a.evalToken,
         placedAt: new Date(now),
       };
       if (!existingProfile) { profile.photoURL = ""; profile.createdAt = new Date(now); }
@@ -227,7 +256,7 @@ module.exports = async function handler(req, res) {
       // The parent gets their own account, linked to this student
       let parent = null;
       try {
-        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "" }, token, { sendEmail: true });
+        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", termsToken: a.terms ? null : a.termsToken }, token, { sendEmail: true });
       } catch (e) { parent = { error: e.message }; }
       return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError, parent });
     }

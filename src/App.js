@@ -116,6 +116,7 @@ export default function App() {
   if (!BOARD_IDS.includes(savedBoard)) savedBoard = null;
   const screen = pathParts[0] === 'tutor' ? 'tutor'
     : pathParts[0] === 'parent' ? 'parent'
+    : pathParts[0] === 'onboarding' ? 'onboarding'
     : !board ? 'board'
     : (routeTab === 'dashboard' || routeTab === 'progress') ? 'dashboard'
     : routeTab === 'cards' ? 'cards'
@@ -217,7 +218,7 @@ export default function App() {
   }, [screen, authUser, savedBoard, isTutor, isParent, navigate]);
   // Parents have no student screens of their own
   useEffect(() => {
-    if (isParent && authUser && screen !== "parent" && screen !== "board") navigate("/parent", { replace: true });
+    if (isParent && authUser && screen !== "parent" && screen !== "board" && screen !== "onboarding") navigate("/parent", { replace: true });
   }, [isParent, authUser, screen, navigate]);
 
   // ─── App shell: nav + account menu shared by every signed-in screen ───
@@ -301,6 +302,23 @@ export default function App() {
 
   // LOGIN SCREEN (accounts are created by HSJ when a student is placed, so there is no sign-up)
   if (!authUser) return <LoginScreen />;
+
+  // ONBOARDING GATE: a placed student must send the self-evaluation, and a
+  // parent must accept the agreement, before the rest of the account opens.
+  // The tokens are copied onto the profile at placement and cleared server-side
+  // when the step is done (api/onboarding).
+  if (userProfile && !userProfile.needsPasswordChange) {
+    if (userProfile.role === "student" && userProfile.evalToken && !userProfile.selfEvaluation) {
+      return <OnboardingPage token={userProfile.evalToken} account={authUser.email} onLogOut={() => logOut()}
+        onDone={() => setUserProfile(prev => ({ ...prev, evalToken: null, selfEvaluation: prev.selfEvaluation || { submittedAt: Date.now() } }))} />;
+    }
+    const pendingTerms = isParent ? Object.entries(userProfile.childTerms || {}).find(([, t]) => t?.token && !t.acceptedAt) : null;
+    if (pendingTerms) {
+      const [childUid, t] = pendingTerms;
+      return <OnboardingPage token={t.token} account={authUser.email} onLogOut={() => logOut()}
+        onDone={() => setUserProfile(prev => ({ ...prev, childTerms: { ...prev.childTerms, [childUid]: { ...t, acceptedAt: Date.now() } } }))} />;
+    }
+  }
 
   // CHANGE PASSWORD PROMPT (new students log in with a temporary password)
   if (userProfile?.needsPasswordChange && !passwordChanged) {
