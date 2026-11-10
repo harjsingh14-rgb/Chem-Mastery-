@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { T, boardLabel } from "../ui/theme";
-import { Card, PageHeader, Chip, Icon, IconTile, Notice } from "../ui/components";
+import { Card, PageHeader, Chip, Icon, IconTile } from "../ui/components";
 import { sourcesFor } from "../utils/homeworkBank";
 import mcqData from "../mcq-data.json";
 import { CALC_SETS } from "../data/calc-sets";
@@ -50,7 +50,6 @@ export default function RevisionPage({ board, isAdmin, hasFullAccess }) {
     <>
       <PageHeader eyebrow="Revision" title="Learn a topic"
         sub={`${boardLabel(board)} Chemistry. Build each topic up with HSJ's tiered question banks. Your homework tests it on real past-paper questions.`} />
-      {board === "edexcel" && <Notice tone="amber"><b>Edexcel banks are still being written.</b> The calculation sets below cover Edexcel; the MCQ and extended-answer banks do not yet. Your homework uses real Edexcel past-paper questions.</Notice>}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
         {tools.map(t => (
           <Card key={t.id} role="button" tabIndex={0} onClick={() => navigate(`/${board}/${t.to}`)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/${board}/${t.to}`); } }}

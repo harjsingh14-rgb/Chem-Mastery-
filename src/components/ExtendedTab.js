@@ -27,7 +27,7 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
   if (!extCategory) return (
     <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
       <span style={{ color: T.muted, fontSize: 13 }}>Extended-response questions marked by the AI Examiner against the real levels-of-response descriptors. Write a full answer and get a level, a mark and feedback in seconds.</span>
-      {categories.length === 0 && <EmptyState icon="pencil" title="No extended questions for this board yet" body="They're being written. The AQA and OCR A banks are available now." />}
+      {categories.length === 0 && <EmptyState icon="pencil" title="No extended questions for this board yet" body="They are being written and will appear here as they are added." />}
       <div className="cm-grid-3">
         {categories.map((cat, catIdx) => {
           const qs = filteredQs.filter(q => q.category === cat);
