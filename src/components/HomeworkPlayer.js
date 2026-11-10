@@ -535,7 +535,8 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 // ─── Multi-part exam question: each part attempted and marked on its own ──
 export const partQueryKey = (itemKey, label) => `${itemKey}__${label}`;
 
-function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQuery }) {
+/** Also used on its own under Revision (ExamStyleTab), with no tutor queries: pass onQuery null. */
+export function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQuery }) {
   const parts = result?.detail?.parts || {};
   const partMax = (p) => p.marks || 1;
   const save = (label, partResult, kind) => {
@@ -568,7 +569,7 @@ function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQ
               <Chip tone="neutral">{partMax(p)} mark{partMax(p) === 1 ? "" : "s"}</Chip>
             </div>
             <Part type={p.type} q={p} context={q.context} maxScore={partMax(p)} result={parts[p.label]} readOnly={readOnly} submitted={submitted}
-              onRecord={(r, kind) => save(p.label, r, kind)} query={queries[key]} onQuery={(note) => onQuery(key, note)} />
+              onRecord={(r, kind) => save(p.label, r, kind)} query={(queries || {})[key]} onQuery={onQuery ? (note) => onQuery(key, note) : null} />
           </div>
         );
       })}

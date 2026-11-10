@@ -6,6 +6,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
 import PastPaperQuestion from "./components/ppq/PastPaperQuestion";
 import RevisionPage from "./components/RevisionPage";
+import ExamStyleTab from "./components/ExamStyleTab";
 import ParentPage from "./components/ParentPage";
 import { VideosPage } from "./components/Placeholders";
 import HomeworkBuilder from "./components/HomeworkBuilder";
@@ -494,7 +495,7 @@ export default function App() {
 
 
   const isPage = ["home", "practise", "revision", "homework", "videos"].includes(topicsTab);   // "practise" with no question id redirects to Revision
-  const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
+  const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", exam: "Exam-style questions", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
 
   // Homework player: focused mode, no tabs
   if (screen === "topics" && topicsTab === "homework" && routeParam) return renderShell(
@@ -860,6 +861,9 @@ export default function App() {
       )}
       {topicsTab === "pathways" && hasFullAccess && (
         <PathwaysTab board={board} />
+      )}
+      {topicsTab === "exam" && (
+        <ExamStyleTab board={board} logAttempt={logAttempt} />
       )}
       {topicsTab === "extended" && (
         <ExtendedTab board={board} hasFullAccess={hasFullAccess} logActivity={logActivity} logAttempt={logAttempt} LockedOverlay={LockedOverlay} />

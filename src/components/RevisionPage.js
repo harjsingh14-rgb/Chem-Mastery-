@@ -6,6 +6,7 @@ import { sourcesFor } from "../utils/homeworkBank";
 import mcqData from "../mcq-data.json";
 import { CALC_SETS } from "../data/calc-sets";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
+import { EXAM_QUESTIONS } from "../data/exam-questions";
 
 const boardOk = (b, board) => b === "both" || b === board || (Array.isArray(b) && b.includes(board));
 
@@ -21,15 +22,19 @@ export default function RevisionPage({ board, isAdmin, hasFullAccess }) {
   const mcqCount = mcqData.questions.filter(q => mcqTopicIds.has(q.topic)).length;
   const calcCount = CALC_SETS.filter(s => boardOk(s.board, board)).reduce((a, s) => a + s.questions.length, 0);
   const extCount = EXTENDED_QUESTIONS.filter(q => boardOk(q.board, board)).length;
+  const examQs = EXAM_QUESTIONS.filter(q => boardOk(q.board, board));
+  const examTopics = new Set(examQs.map(q => q.topic)).size;
 
   const tools = [
     { id: "mcq", title: "MCQs", icon: "target", tone: "red", to: "mcq", body: "Quick-fire multiple choice by topic, with an explanation after every answer.",
       count: mcqCount ? `${mcqCount} questions · ${src.mcqTopics.length} topics` : null, empty: "No MCQ bank for this board yet." },
     { id: "calc", title: "Calculations", icon: "calculator", tone: "accent", to: "calc", body: "Worked calculation sets from easy to exam style. Hints and full working after each attempt.",
       count: calcCount ? `${calcCount} questions · ${src.calcSets.length} sets` : null, empty: "No calculation sets for this board yet." },
+    { id: "exam", title: "Exam-style questions", icon: "bolt", tone: "amber", to: "exam", body: "One scenario with lettered parts, like a real paper. Three tiers: scaffolded, exam standard and stretch. Every part marked, hints along the way.",
+      count: examQs.length ? `${examQs.length} questions · ${examTopics} topics` : null, empty: "No exam-style questions for this board yet." },
     { id: "extended", title: "AI Examiner", icon: "pencil", tone: "indigo", to: "extended", body: "Six-mark extended answers marked by levels of response, with a model answer to compare against.",
       count: extCount ? `${extCount} questions · ${src.extCategories.length} topics` : null, empty: "No extended-answer bank for this board yet." },
-    { id: "flashcards", title: "Flashcards", icon: "cards", tone: "amber", to: "flashcards", body: "Definitions, equations and key facts by topic. Mark each one known or not and the deck adapts.",
+    { id: "flashcards", title: "Flashcards", icon: "cards", tone: "indigo", to: "flashcards", body: "Definitions, equations and key facts by topic. Mark each one known or not and the deck adapts.",
       count: "By topic", empty: null },
     { id: "pathways", title: "Pathways", icon: "nodes", tone: "green", to: "pathways", body: "Organic reaction pathways: reagents, conditions and the products in between.",
       count: hasFullAccess ? "Interactive map" : "HSJ students", empty: null },
