@@ -56,8 +56,10 @@ module.exports = async function handler(req, res) {
     const classes = await fb.queryDocuments("classes", {}, token, { limit: 200 });
     const assignments = await fb.queryDocuments("assignments", {}, token, { limit: 1000 });
     for (const cls of classes) {
-      const sch = cls.schedule;
-      if (!sch || Number(sch.weekday) !== tomorrow.weekday || !sch.time) continue;
+      // A group may meet more than once a week; `slots` holds every time, `schedule` the old single one
+      const slots = (Array.isArray(cls.slots) && cls.slots.length ? cls.slots : cls.schedule ? [cls.schedule] : []).filter(s => s && s.time);
+      const sch = slots.find(s => Number(s.weekday) === tomorrow.weekday);
+      if (!sch) continue;
       const when = `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(sch.time)}`;
       const open = assignments.filter(a => a.classId === cls.id && a.status !== "draft" && a.dueAt && a.dueAt > now - DAY && a.dueAt < now + 2 * DAY);
       for (const s of byClass[cls.id] || []) {
@@ -69,7 +71,7 @@ module.exports = async function handler(req, res) {
               const sub = await fb.getDocument(`submissions/${a.id}_${s.id}`, token);
               if (!sub?.submittedAt) homework.push({ title: a.title, dueAt: a.dueAt });
             }
-            const { subject, html } = mail.lessonReminder({ studentName: s.displayName, groupName: cls.name, when, zoomNote: cls.zoomNote || "", homework });
+            const { subject, html } = mail.lessonReminder({ studentName: s.displayName, groupName: cls.name, when, zoomNote: cls.zoomNote || "", zoomLink: cls.zoomLink || "", homework });
             await mail.sendEmail({ to: s.email, cc: s.parentEmail && s.parentEmail !== s.email ? s.parentEmail : undefined, subject, html });
           });
           if (sent) report.lessons++;

@@ -124,14 +124,14 @@ const makeClassCode = () => "HSJ-" + Array.from({ length: 4 }, () => CODE_CHARS[
 
 // A group (stored in the `classes` collection) has one tutor. An admin may
 // create a group for another tutor by passing tutorId.
-export async function createClass(tutorUid, { name, board, tutorId, lessonSlot, schedule }) {
+export async function createClass(tutorUid, { name, board, tutorId, lessonSlot, schedule, slots, zoomLink }) {
   // Retry a few times in the (unlikely) event of a code collision
   for (let i = 0; i < 5; i++) {
     const code = makeClassCode();
     const ref = doc(db, "classes", code);
     const existing = await getDoc(ref);
     if (existing.exists()) continue;
-    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorId || tutorUid, lessonSlot: (lessonSlot || "").trim() || null, schedule: schedule || null, createdBy: tutorUid, createdAt: serverTimestamp() };
+    const cls = { code, name: name.trim(), board: board || "aqa", tutorId: tutorId || tutorUid, lessonSlot: (lessonSlot || "").trim() || null, schedule: schedule || null, slots: slots || null, zoomLink: (zoomLink || "").trim() || null, createdBy: tutorUid, createdAt: serverTimestamp() };
     await setDoc(ref, cls);
     return cls;
   }

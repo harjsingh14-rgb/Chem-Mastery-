@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName, updateClass, fetchClassLessonNotes } from "../firebase";
-import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, nextOccurrences, fmtLessonDay } from "../utils/schedule";
+import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime } from "../utils/schedule";
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
@@ -12,8 +12,8 @@ export default function TutorPage({ authUser, userProfile }) {
   const [classes, setClasses] = useState(null);
   const [tutors, setTutors] = useState([]);
   const [newTutor, setNewTutor] = useState("");
-  const [newSchedule, setNewSchedule] = useState({ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES });
-  const [editSchedule, setEditSchedule] = useState(null); // schedule being edited for the selected group
+  const [newSlots, setNewSlots] = useState([{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }]);
+  const [editSchedule, setEditSchedule] = useState(null); // { slots, zoomLink } being edited for the selected group
   const [attendance, setAttendance] = useState({}); // uid -> { present, late, absent }
   const [selected, setSelected] = useState(null);
   const [students, setStudents] = useState(null);
@@ -70,9 +70,12 @@ export default function TutorPage({ authUser, userProfile }) {
   const saveSchedule = async () => {
     if (!cls || !editSchedule) return;
     try {
-      const schedule = { weekday: Number(editSchedule.weekday), time: editSchedule.time, minutes: Number(editSchedule.minutes) || DEFAULT_MINUTES };
-      await updateClass(cls.code, { schedule, lessonSlot: describeSchedule(schedule) });
-      setClasses(list => list.map(c => c.code === cls.code ? { ...c, schedule, lessonSlot: describeSchedule(schedule) } : c));
+      const slots = (editSchedule.slots || []).filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES }));
+      if (slots.length === 0) throw new Error("Add at least one lesson time");
+      // `schedule` keeps the first slot for anything that still reads the old single-slot shape
+      const patch = { slots, schedule: slots[0], lessonSlot: describeSlots(slots), zoomLink: (editSchedule.zoomLink || "").trim() || null };
+      await updateClass(cls.code, patch);
+      setClasses(list => list.map(c => c.code === cls.code ? { ...c, ...patch } : c));
       setEditSchedule(null);
     } catch (e) { setError(e.message); }
   };
@@ -81,7 +84,8 @@ export default function TutorPage({ authUser, userProfile }) {
     if (!newName.trim()) return;
     setCreating(true); setError(null);
     try {
-      const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: describeSchedule(newSchedule), schedule: newSchedule });
+      const slots = newSlots.filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES }));
+      const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: describeSlots(slots), schedule: slots[0] || null, slots });
       setClasses(prev => [...(prev || []), cls].sort((a, b) => a.name.localeCompare(b.name)));
       setSelected(cls.code); setNewName(""); setShowNew(false);
     } catch (e) { setError(e.message || "Could not create the group"); }
@@ -98,7 +102,7 @@ export default function TutorPage({ authUser, userProfile }) {
     } catch (e) { setError(e.message || "Could not save the name"); setNameEdit({ ...nameEdit, saving: false }); }
   };
   const cls = classes?.find(c => c.code === selected);
-  const nextLesson = cls?.schedule ? nextOccurrences(cls.schedule, 1)[0] : null;
+  const nextLesson = cls ? nextOccurrences(slotsOf(cls), 1)[0] : null;
   const tutorName = (uid) => { const t = tutors.find(x => x.uid === uid); return t ? (t.displayName || t.email) : null; };
   const classUids = useMemo(() => new Set((students || []).map(s => s.uid)), [students]);
   const classAttempts = useMemo(() => attempts.filter(a => classUids.has(a.uid)), [attempts, classUids]);
@@ -134,7 +138,7 @@ export default function TutorPage({ authUser, userProfile }) {
       <PageHeader
         eyebrow="Overview"
         title={cls ? cls.name : "Your groups"}
-        sub={cls ? [boardLabel(cls.board), describeSchedule(cls.schedule) || cls.lessonSlot, nextLesson && `next ${fmtLessonDay(nextLesson)}`, isAdmin && tutorName(cls.tutorId), students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"].filter(Boolean).join(" · ") : "Create a group, then place students into it from the Students tab."}
+        sub={cls ? [boardLabel(cls.board), describeSlots(slotsOf(cls)) || cls.lessonSlot, nextLesson && `next ${fmtLessonDay(nextLesson.iso)} ${fmtTime(nextLesson.time)}`, isAdmin && tutorName(cls.tutorId), students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"].filter(Boolean).join(" · ") : "Create a group, then place students into it from the Students tab."}
         right={<>
           {classes && classes.length > 1 && (
             <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Switch group"
@@ -142,7 +146,7 @@ export default function TutorPage({ authUser, userProfile }) {
               {classes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
             </select>
           )}
-          {cls && <Button icon="calendar" onClick={() => setEditSchedule(editSchedule ? null : (cls.schedule || { weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }))}>{cls.schedule ? "Lesson time" : "Set lesson time"}</Button>}
+          {cls && <Button icon="calendar" onClick={() => setEditSchedule(editSchedule ? null : { slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" })}>{slotsOf(cls).length ? "Lesson times" : "Set lesson times"}</Button>}
           <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>
         </>}
       />
@@ -151,8 +155,12 @@ export default function TutorPage({ authUser, userProfile }) {
 
       {cls && editSchedule && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <CardHeader title={`Weekly lesson for ${cls.name}`} sub="Drives the next-lesson card, the day-before reminder emails and the default date for lesson notes." />
-          <ScheduleFields value={editSchedule} onChange={setEditSchedule} />
+          <CardHeader title={`Weekly lessons for ${cls.name}`} sub="One row per lesson each week, so a group taught on two days has two rows. Drives the next-lesson card, the reminder emails and the default date for lesson notes." />
+          <SlotsFields slots={editSchedule.slots} onChange={slots => setEditSchedule(e => ({ ...e, slots }))} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 520 }}>
+            <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Zoom link (shown to students and parents, and in reminder emails)</label>
+            <Input id="cls-zoom" type="url" value={editSchedule.zoomLink} onChange={e => setEditSchedule(x => ({ ...x, zoomLink: e.target.value }))} placeholder="https://zoom.us/j/…" />
+          </div>
           <div style={{ display: "flex", gap: 8 }}>
             <Button variant="accent" onClick={saveSchedule}>Save</Button>
             <Button variant="ghost" onClick={() => setEditSchedule(null)}>Cancel</Button>
@@ -167,8 +175,8 @@ export default function TutorPage({ authUser, userProfile }) {
             <Input id="new-class-name" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Year 13 OCR Tuesday" onKeyDown={e => e.key === "Enter" && handleCreate()} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "1 1 160px" }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Weekly lesson</span>
-            <ScheduleFields value={newSchedule} onChange={setNewSchedule} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Weekly lessons</span>
+            <SlotsFields slots={newSlots} onChange={setNewSlots} />
           </div>
           {isAdmin && tutors.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -364,19 +372,27 @@ function TopicList({ title, topics, empty }) {
 
 export { pct };
 
-function ScheduleFields({ value, onChange }) {
+/** One row per weekly lesson: day, start, length. "Add another day" covers groups taught twice a week. */
+function SlotsFields({ slots, onChange }) {
   const sel = { padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink };
-  const set = (k, v) => onChange({ ...value, [k]: v });
+  const set = (i, k, v) => onChange(slots.map((s, j) => j === i ? { ...s, [k]: v } : s));
+  const lengthLabel = (m) => m === 60 ? "1 hour" : m === 120 ? "2 hours" : m === 180 ? "3 hours" : m % 60 === 0 ? `${m / 60} hours` : `${Math.floor(m / 60)}h ${m % 60}m`;
   return (
-    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-      <select value={value.weekday} onChange={e => set("weekday", Number(e.target.value))} style={sel} aria-label="Lesson day">
-        {WEEKDAYS.map((d, i) => <option key={d} value={i}>{d}s</option>)}
-      </select>
-      <Input type="time" value={value.time} onChange={e => set("time", e.target.value)} aria-label="Start time" style={{ width: 120 }} />
-      <select value={value.minutes} onChange={e => set("minutes", Number(e.target.value))} style={sel} aria-label="Length">
-        {[60, 90, 120, 150, 180].map(m => <option key={m} value={m}>{m === 60 ? "1 hour" : m === 120 ? "2 hours" : m === 180 ? "3 hours" : `${m / 60} hours`}</option>)}
-      </select>
-      <span style={{ fontSize: 12, color: T.muted }}>{describeSchedule(value)}</span>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {slots.map((value, i) => (
+        <div key={i} style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <select value={value.weekday} onChange={e => set(i, "weekday", Number(e.target.value))} style={sel} aria-label="Lesson day">
+            {WEEKDAYS.map((d, j) => <option key={d} value={j}>{d}s</option>)}
+          </select>
+          <Input type="time" value={value.time} onChange={e => set(i, "time", e.target.value)} aria-label="Start time" style={{ width: 120 }} />
+          <select value={value.minutes} onChange={e => set(i, "minutes", Number(e.target.value))} style={sel} aria-label="Length">
+            {[30, 45, 60, 90, 120, 150, 180].map(m => <option key={m} value={m}>{lengthLabel(m)}</option>)}
+          </select>
+          <span style={{ fontSize: 12, color: T.muted }}>{describeSchedule(value)}</span>
+          {slots.length > 1 && <Button size="sm" variant="ghost" onClick={() => onChange(slots.filter((_, j) => j !== i))} aria-label="Remove this lesson time">Remove</Button>}
+        </div>
+      ))}
+      <div><Button size="sm" onClick={() => onChange([...slots, { weekday: (Number(slots[slots.length - 1]?.weekday ?? 1) + 2) % 7, time: slots[slots.length - 1]?.time || "18:00", minutes: slots[slots.length - 1]?.minutes || DEFAULT_MINUTES }])}>Add another day</Button></div>
     </div>
   );
 }

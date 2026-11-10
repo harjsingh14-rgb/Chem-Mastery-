@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { fetchClass, fetchPayments } from "../firebase";
 import { T } from "../ui/theme";
 import { Card, CardHeader, Chip, Button } from "../ui/components";
-import { describeSchedule, nextOccurrences, fmtLessonDay, fmtTime } from "../utils/schedule";
+import { describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime } from "../utils/schedule";
 
 export function NextLessonCard({ userProfile }) {
   const [cls, setCls] = useState(undefined);
@@ -15,19 +15,20 @@ export function NextLessonCard({ userProfile }) {
     fetchClass(code).then(c => { if (!cancelled) setCls(c); }).catch(() => { if (!cancelled) setCls(null); });
     return () => { cancelled = true; };
   }, [code]);
-  const sch = cls?.schedule;
-  const next = sch ? nextOccurrences(sch, 3) : [];
+  const slots = slotsOf(cls);
+  const next = nextOccurrences(slots, 3);
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      <CardHeader title="Next lesson" sub={sch ? describeSchedule(sch) : cls?.lessonSlot || "Weekly, 2 hours, on Zoom"} />
+      <CardHeader title="Next lesson" sub={slots.length ? describeSlots(slots) : cls?.lessonSlot || "Weekly, on Zoom"} />
       {cls === undefined && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
-      {cls !== undefined && !sch && <span style={{ fontSize: 13, color: T.muted }}>Your tutor will confirm the weekly lesson time.</span>}
-      {next.map((iso, i) => (
-        <div key={iso} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: i ? `1px solid ${T.line}` : "none", paddingTop: i ? 8 : 0 }}>
-          <span style={{ fontSize: 13, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? T.ink : T.body }}>{fmtLessonDay(iso)}</span>
-          <span style={{ fontSize: 12, color: T.muted }}>{fmtTime(sch.time)}{i === 0 && <Chip tone="accent" style={{ marginLeft: 8 }}>Next</Chip>}</span>
+      {cls !== undefined && !slots.length && <span style={{ fontSize: 13, color: T.muted }}>Your tutor will confirm the weekly lesson time.</span>}
+      {next.map((o, i) => (
+        <div key={`${o.iso}_${o.time}`} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: i ? `1px solid ${T.line}` : "none", paddingTop: i ? 8 : 0 }}>
+          <span style={{ fontSize: 13, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? T.ink : T.body }}>{fmtLessonDay(o.iso)}</span>
+          <span style={{ fontSize: 12, color: T.muted }}>{fmtTime(o.time)}{i === 0 && <Chip tone="accent" style={{ marginLeft: 8 }}>Next</Chip>}</span>
         </div>
       ))}
+      {cls?.zoomLink && <div><Button size="sm" variant="primary" onClick={() => window.open(cls.zoomLink, "_blank", "noopener")}>Join on Zoom</Button></div>}
     </Card>
   );
 }

@@ -10,6 +10,7 @@ import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
 import { TopicTable, AccuracySpark } from "./StudentDashboard";
 import { NoteBody } from "./StudentLessons";
+import { describeSlots, slotsOf } from "../utils/schedule";
 import { useHomework } from "./StudentHomework";
 import { fmtDue } from "../utils/homeworkBank";
 
@@ -136,7 +137,7 @@ function LessonsTab({ child }) {
   return (
     <>
       <div className="cm-grid-4">
-        <StatTile label="Lessons with a note" value={notes === null ? "…" : total} sub={group?.schedule ? describe(group.schedule) : group?.name || ""} />
+        <StatTile label="Lessons with a note" value={notes === null ? "…" : total} sub={describeSlots(slotsOf(group)) || group?.name || ""} />
         <StatTile label="Present" value={counts.present || 0} sub={total ? `${Math.round(((counts.present || 0) / total) * 100)}% of lessons` : ""} />
         <StatTile label="Late" value={counts.late || 0} />
         <StatTile label="Absent" value={counts.absent || 0} />
@@ -147,12 +148,6 @@ function LessonsTab({ child }) {
       </div>
     </>
   );
-}
-
-function describe(schedule) {
-  if (!schedule || schedule.weekday === undefined) return "";
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  return `${days[schedule.weekday] || ""}s${schedule.time ? ` at ${schedule.time}` : ""}`;
 }
 
 // ─── Homework ───────────────────────────────────────────────────────────────
