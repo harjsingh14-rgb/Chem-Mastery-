@@ -462,42 +462,6 @@
       "level": "A2",
       "questionCount": 12
     },
-    "EDX-14": {
-      "name": "Redox II",
-      "board": "EDEXCEL",
-      "level": "A2",
-      "questionCount": 24
-    },
-    "EDX-15": {
-      "name": "Transition metals",
-      "board": "EDEXCEL",
-      "level": "A2",
-      "questionCount": 24
-    },
-    "EDX-16": {
-      "name": "Kinetics II",
-      "board": "EDEXCEL",
-      "level": "A2",
-      "questionCount": 24
-    },
-    "EDX-17": {
-      "name": "Organic chemistry II",
-      "board": "EDEXCEL",
-      "level": "A2",
-      "questionCount": 24
-    },
-    "EDX-18": {
-      "name": "Organic chemistry III",
-      "board": "EDEXCEL",
-      "level": "A2",
-      "questionCount": 24
-    },
-    "EDX-19": {
-      "name": "Modern analytical techniques II",
-      "board": "EDEXCEL",
-      "level": "A2",
-      "questionCount": 24
-    },
     "EDX-1": {
       "name": "Atomic structure and the periodic table",
       "board": "EDEXCEL",
@@ -572,6 +536,42 @@
     },
     "EDX-13": {
       "name": "Energetics II",
+      "board": "EDEXCEL",
+      "level": "A2",
+      "questionCount": 24
+    },
+    "EDX-14": {
+      "name": "Redox II",
+      "board": "EDEXCEL",
+      "level": "A2",
+      "questionCount": 24
+    },
+    "EDX-15": {
+      "name": "Transition metals",
+      "board": "EDEXCEL",
+      "level": "A2",
+      "questionCount": 24
+    },
+    "EDX-16": {
+      "name": "Kinetics II",
+      "board": "EDEXCEL",
+      "level": "A2",
+      "questionCount": 24
+    },
+    "EDX-17": {
+      "name": "Organic chemistry II",
+      "board": "EDEXCEL",
+      "level": "A2",
+      "questionCount": 24
+    },
+    "EDX-18": {
+      "name": "Organic chemistry III",
+      "board": "EDEXCEL",
+      "level": "A2",
+      "questionCount": 24
+    },
+    "EDX-19": {
+      "name": "Modern analytical techniques II",
       "board": "EDEXCEL",
       "level": "A2",
       "questionCount": 24
