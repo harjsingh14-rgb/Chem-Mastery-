@@ -15,8 +15,13 @@ const docCache = {};
  * One past-paper question: the original as an image, the parts underneath
  * with typed answers and progressive hints, a pen layer over the question,
  * photo upload of paper work, and AI marking against the mark scheme.
+ *
+ * Embedded inside a homework (embedded=true): no queue navigation or exit
+ * button, the homework player hears about each marking through onMarked, and
+ * once the homework is submitted (locked=true) the stored marking is shown
+ * read-only.
  */
-export default function PastPaperQuestion({ board, qid, authUser, logAttempt, onExit }) {
+export default function PastPaperQuestion({ board, qid, authUser, logAttempt, onExit, embedded = false, locked = false, onMarked }) {
   const navigate = useNavigate();
   const [doc, setDoc] = useState(docCache[qid] || null);
   const [error, setError] = useState(null);
@@ -29,10 +34,11 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   const [result, setResult] = useState(null);
   const [showModel, setShowModel] = useState({});
   const [attempt, setAttempt] = useState(null);      // the student's ppqAttempts record, if any
+  const [lockedShown, setLockedShown] = useState(false);
   const canvasRef = useRef(null);
   const fileRef = useRef(null);
 
-  const queue = useMemo(() => loadQueue(), []);
+  const queue = useMemo(() => embedded ? [] : loadQueue(), [embedded]);
   const pos = queue.indexOf(qid);
   const nextId = pos >= 0 && pos < queue.length - 1 ? queue[pos + 1] : null;
   const prevId = pos > 0 ? queue[pos - 1] : null;
@@ -62,6 +68,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   // comes back later can still see their marks, the scheme and query a part.
   const showLast = () => {
     if (!doc || !attempt?.latest) return;
+    if (locked) { setLockedShown(true); }
     const lp0 = attempt.latest.parts || {};
     const lp = Object.fromEntries((doc.parts || []).map(p => [p.label, lp0[partKey(p.label)]]));
     setResult({
@@ -73,6 +80,10 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (locked && doc && attempt?.latest && !lockedShown) showLast();
+  }, [locked, doc, attempt, lockedShown]); // eslint-disable-line
 
   const sendQuery = async (part, note) => {
     const r = await ppqMarkApi({ action: "query", qid, part, note });
@@ -117,6 +128,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
       setDrawing(false);
       setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
       noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, qid });
+      onMarked && onMarked(data, doc, { answers, hintsUsed: Object.values(hints).reduce((x, n) => x + (n || 0), 0) });
       logAttempt && logAttempt({
         board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null,
         score: data.score, maxScore: doc.totalMarks, correct: data.score >= Math.ceil(doc.totalMarks * 0.7),
@@ -153,7 +165,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   const toneColour = { green: T.green, accent: T.accentText, amber: T.amber, red: T.red };
 
   return (
-    <div style={{ maxWidth: 980, margin: "0 auto", padding: "20px 20px 60px", display: "flex", flexDirection: "column", gap: 16 }} className="cm-page">
+    <div style={embedded ? { display: "flex", flexDirection: "column", gap: 16 } : { maxWidth: 980, margin: "0 auto", padding: "20px 20px 60px", display: "flex", flexDirection: "column", gap: 16 }} className={embedded ? undefined : "cm-page"}>
       {error && <Notice tone="red">{error}</Notice>}
       {!doc && !error && <div style={{ color: T.muted, padding: 40, textAlign: "center" }}>Loading question…</div>}
       {doc && (
@@ -172,17 +184,21 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                 {result.overall && <div style={{ fontSize: 13, color: T.body, lineHeight: 1.55 }}>{result.overall}</div>}
                 <div style={{ fontSize: 12, color: T.muted }}>Attempt {result.attempts}{result.attempts > 1 && ` · best ${result.best}/${doc.totalMarks}`}{result.confidence === "low" && " · the examiner was unsure about this one, check the scheme"}</div>
               </div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <Button onClick={tryAgain}>Try again</Button>
-                {nextId
-                  ? <Button variant="primary" iconRight="arrowRight" onClick={() => navigate(`/${board}/practise/${nextId}`)}>Next question</Button>
-                  : <Button variant="primary" onClick={onExit}>Back to past papers</Button>}
-              </div>
+              {!locked && (
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <Button onClick={tryAgain}>Try again</Button>
+                  {!embedded && (nextId
+                    ? <Button variant="primary" iconRight="arrowRight" onClick={() => navigate(`/${board}/practise/${nextId}`)}>Next question</Button>
+                    : <Button variant="primary" onClick={onExit}>Back to past papers</Button>)}
+                </div>
+              )}
             </Card>
           )}
 
+          {locked && !result && !attempt?.latest && <Notice tone="neutral">Not attempted.</Notice>}
+
           {/* Previous attempt */}
-          {!result && attempt?.latest && (
+          {!result && !locked && attempt?.latest && (
             <Notice tone="neutral" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <span style={{ flex: 1, minWidth: 200 }}>You have tried this {attempt.attempts === 1 ? "once" : `${attempt.attempts} times`}. Best {attempt.best}/{attempt.totalMarks}, last {attempt.latest.score}/{attempt.totalMarks}.{attempt.hasOpenQuery ? " A mark query is with your tutor." : ""}</span>
               <Button size="sm" onClick={showLast}>Show last marking</Button>
@@ -190,7 +206,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
           )}
 
           {/* Answer method */}
-          {!result && (
+          {!result && !locked && (
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               <span style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>Answer by</span>
               <Button size="sm" variant={!drawing && photos.length === 0 ? "primary" : "secondary"} icon="pencil" onClick={() => setDrawing(false)}>Typing</Button>
@@ -225,12 +241,12 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                 hintsShown={hints[p.label] || 0} onHint={() => { setHints(h => ({ ...h, [p.label]: Math.min((h[p.label] || 0) + 1, (p.hints || []).length) })); track("ppq_hint", { board, qid, part: p.label }); }}
                 result={result?.parts?.find(r => r.label === p.label)} scheme={result?.scheme?.find(s => s.label === p.label)}
                 showModel={!!showModel[p.label]} onToggleModel={() => setShowModel(m => ({ ...m, [p.label]: !m[p.label] }))}
-                locked={!!result} query={attempt?.queries?.[partKey(p.label)]} onQuery={result ? (note) => sendQuery(p.label, note) : null} />
+                locked={!!result || locked} query={attempt?.queries?.[partKey(p.label)]} onQuery={result ? (note) => sendQuery(p.label, note) : null} />
             ))}
           </div>
 
           {/* Mark */}
-          {!result && (
+          {!result && !locked && (
             <Card style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", position: "sticky", bottom: 12, boxShadow: "0 8px 24px rgba(15,29,53,0.10)" }}>
               <div style={{ flex: 1, minWidth: 200, fontSize: 13, color: T.muted }}>
                 {marking ? "Marking against the mark scheme…" : canMark
@@ -238,8 +254,8 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                   : "Type an answer, draw on the question or add a photo of your work."}
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                {prevId && <Button variant="ghost" icon="arrowLeft" onClick={() => navigate(`/${board}/practise/${prevId}`)}>Previous</Button>}
-                {nextId && <Button variant="ghost" onClick={() => navigate(`/${board}/practise/${nextId}`)}>Skip</Button>}
+                {!embedded && prevId && <Button variant="ghost" icon="arrowLeft" onClick={() => navigate(`/${board}/practise/${prevId}`)}>Previous</Button>}
+                {!embedded && nextId && <Button variant="ghost" onClick={() => navigate(`/${board}/practise/${nextId}`)}>Skip</Button>}
                 <Button variant="primary" size="lg" icon="check" onClick={mark} disabled={!canMark}>{marking ? "Marking…" : "Mark my answer"}</Button>
               </div>
             </Card>

@@ -6,6 +6,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
 import PastPaperBrowser from "./components/ppq/PastPaperBrowser";
 import PastPaperQuestion from "./components/ppq/PastPaperQuestion";
+import RevisionPage from "./components/RevisionPage";
 import ParentPage from "./components/ParentPage";
 import { VideosPage } from "./components/Placeholders";
 import HomeworkBuilder from "./components/HomeworkBuilder";
@@ -227,7 +228,8 @@ export default function App() {
     { id: "home", label: "Dashboard", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "homework", label: "Homework", icon: "checkSquare", to: `/${navBoard}/homework`, active: screen === "topics" && topicsTab === "homework" },
     { id: "lessons", label: "Lessons", icon: "calendar", to: `/${navBoard}/lessons`, active: screen === "topics" && topicsTab === "lessons" },
-    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos"].includes(topicsTab)) },
+    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "topics" && topicsTab === "practise" },
+    { id: "revision", label: "Revision", icon: "book", to: `/${navBoard}/revision`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos", "practise"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
     { id: "videos", label: "Learn", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
   ];
@@ -240,7 +242,8 @@ export default function App() {
       { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
     ] : []),
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
-    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos"].includes(topicsTab)) },
+    { id: "practise", label: "Practise", icon: "flask", to: `/${navBoard}/practise`, active: screen === "topics" && topicsTab === "practise" },
+    { id: "revision", label: "Revision", icon: "book", to: `/${navBoard}/revision`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos", "practise"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
   ];
 
@@ -487,8 +490,7 @@ export default function App() {
   }
 
 
-  const goHome = () => { navigate(`/${board}`); };
-  const isPage = ["home", "practise", "homework", "videos"].includes(topicsTab);
+  const isPage = ["home", "practise", "revision", "homework", "videos"].includes(topicsTab);
   const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
 
   // Homework player: focused mode, no tabs
@@ -518,13 +520,14 @@ export default function App() {
           <PastPaperBrowser board={board} authUser={authUser} hasFullAccess={hasFullAccess} />
         </>
       )}
+      {topicsTab === "revision" && <RevisionPage board={board} isAdmin={isAdmin} hasFullAccess={hasFullAccess} />}
       {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}
       {topicsTab === "lessons" && <StudentLessons authUser={authUser} />}
       {topicsTab === "videos" && <VideosPage />}
       {!isPage && (
         <>
-          <PageHeader eyebrow="Practise" title={legacyTitles[topicsTab] || "Practise"}
-            right={<Button variant="secondary" icon="arrowLeft" onClick={goHome}>Dashboard</Button>} />
+          <PageHeader eyebrow="Revision" title={legacyTitles[topicsTab] || "Revision"}
+            right={<Button variant="secondary" icon="arrowLeft" onClick={() => navigate(`/${board}/revision`)}>Revision</Button>} />
           <ShellBody>
       {topicsTab === "flashcards" && quizScreen === "setup" && (() => {
         const allSections = CURRENT_SECTIONS;

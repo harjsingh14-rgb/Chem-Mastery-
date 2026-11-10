@@ -5,6 +5,11 @@ import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, Icon } from "../ui/components";
 import { sourcesFor, buildItems, totals, describeItems, TYPE_LABEL, MIN_PER_MARK } from "../utils/homeworkBank";
 import { YearToggle } from "./McqTab";
+import usePpq from "../hooks/usePpq";
+import { topicsFor, seriesLabel, LEVEL_LABEL, KIND_LABEL } from "./ppq/ppqUtils";
+
+const PPQ_KINDS = ["mcq", "structured", "extended", "calculation", "practical"];
+const TYPE_TONE = { mcq: "red", calc: "accent", exam: "amber", extended: "indigo", ppq: "green" };
 
 const DIFFS = [{ id: "easy", label: "Easy" }, { id: "medium", label: "Medium" }, { id: "hard", label: "Hard" }, { id: "exam", label: "Exam style" }];
 
@@ -34,6 +39,8 @@ export default function HomeworkBuilder({ authUser }) {
   const [extCats, setExtCats] = useState([]);
   const [examTopics, setExamTopics] = useState([]);
   const [examTags, setExamTags] = useState([]);
+  const [ppqTopics, setPpqTopics] = useState([]);
+  const [ppqKinds, setPpqKinds] = useState(["structured", "extended", "calculation", "practical"]);
   const [items, setItems] = useState([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -49,11 +56,33 @@ export default function HomeworkBuilder({ authUser }) {
   const mcqTopicsShown = src.mcqTopics.filter(t => year === "a2" || t.level === "AS");
   const calcSetsShown = src.calcSets.filter(s => year === "a2" || s.year !== "a2");
 
+  // Past-paper questions: the index for this board, narrowed to the chosen
+  // level, spec topics and question kinds. AS homework uses AS papers only;
+  // A2 homework can draw on both levels.
+  const ppq = usePpq(board, null);
+  const ppqCandidates = useMemo(() => ppq.items.filter(it => (year === "a2" || it.level === "as") && ppqKinds.includes(it.kind || "structured")), [ppq.items, year, ppqKinds]);
+  const ppqByTopic = useMemo(() => {
+    const n = {};
+    for (const it of ppqCandidates) for (const t of it.topics || []) n[t] = (n[t] || 0) + 1;
+    return n;
+  }, [ppqCandidates]);
+  const ppqModules = useMemo(() => {
+    const mods = [];
+    for (const t of topicsFor(board)) {
+      if (year === "as" && t.year === 2) continue;
+      let m = mods.find(x => x.id === t.module);
+      if (!m) { m = { id: t.module, title: t.moduleTitle, topics: [] }; mods.push(m); }
+      m.topics.push(t);
+    }
+    return mods;
+  }, [board, year]);
+  const ppqPool = useMemo(() => ppqCandidates.filter(it => (it.topics || []).some(t => ppqTopics.includes(t))), [ppqCandidates, ppqTopics]);
+
   const flip = (set, id) => set(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  const anySource = mcqTopics.length + calcSets.length + extCats.length + examTopics.length > 0;
+  const anySource = mcqTopics.length + calcSets.length + extCats.length + examTopics.length + ppqPool.length > 0;
 
   const fill = () => {
-    setItems(buildItems({ board, minutes: Number(minutes) || 60, mcqTopics, calcSets, calcDifficulties: calcDiffs, extCategories: extCats, examTopics, examTags }));
+    setItems(buildItems({ board, minutes: Number(minutes) || 60, mcqTopics, calcSets, calcDifficulties: calcDiffs, extCategories: extCats, examTopics, examTags, ppqPool }));
   };
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
   const tot = totals(items);
@@ -89,7 +118,7 @@ export default function HomeworkBuilder({ authUser }) {
               <CardHeader title="Details" />
               <div className="cm-grid-2" style={{ gap: 14 }}>
                 <div style={field}><label htmlFor="hw-class" style={label}>Group</label>
-                  <select id="hw-class" value={classId} onChange={e => { setClassId(e.target.value); setMcqTopics([]); setCalcSets([]); setExtCats([]); setExamTags([]); setItems([]); }}
+                  <select id="hw-class" value={classId} onChange={e => { setClassId(e.target.value); setMcqTopics([]); setCalcSets([]); setExtCats([]); setExamTags([]); setPpqTopics([]); setItems([]); }}
                     style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 14, color: T.ink }}>
                     {classes.map(c => <option key={c.code} value={c.code}>{c.name} ({boardLabel(c.board)})</option>)}
                   </select></div>
@@ -128,6 +157,31 @@ export default function HomeworkBuilder({ authUser }) {
                 ))}
                 {examTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>A topic is used whole unless you pick tags inside it.</span>}
               </div>
+              <div style={field}><span style={label}>Past-paper questions (real exam questions, AI marked against the mark scheme)</span>
+                {ppq.loading && <span style={{ fontSize: 12, color: T.muted }}>Loading the past-paper index…</span>}
+                {ppq.error && <span style={{ fontSize: 12, color: T.red }}>{ppq.error}</span>}
+                {!ppq.loading && !ppq.error && (
+                  <>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+                      <span style={{ ...label, alignSelf: "center" }}>Question types:</span>
+                      {PPQ_KINDS.map(k => <Toggle key={k} on={ppqKinds.includes(k)} onClick={() => flip(setPpqKinds, k)}>{KIND_LABEL[k] || k}</Toggle>)}
+                    </div>
+                    {ppqModules.map(m => {
+                      const shown = m.topics.filter(t => ppqByTopic[t.ref]);
+                      if (shown.length === 0) return null;
+                      return (
+                        <div key={m.id} style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 4 }}>
+                          <span style={{ fontSize: 11, color: T.faint, fontWeight: 600 }}>{m.title}</span>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                            {shown.map(t => <Toggle key={t.ref} on={ppqTopics.includes(t.ref)} onClick={() => flip(setPpqTopics, t.ref)} count={ppqByTopic[t.ref]}>{board === "edexcel" ? `T${t.ref} ${t.title}` : `${t.ref} ${t.title}`}</Toggle>)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {ppqTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>{ppqPool.length} question{ppqPool.length === 1 ? "" : "s"} to draw from. Students answer by typing, drawing on the paper or photographing their work; their first marked attempt counts.</span>}
+                  </>
+                )}
+              </div>
               <div><Button variant="accent" icon="bolt" onClick={fill} disabled={!anySource}>{items.length ? "Refill" : "Fill"} {minutes} minutes</Button></div>
             </Card>
           </div>
@@ -144,8 +198,8 @@ export default function HomeworkBuilder({ authUser }) {
                 {items.map((it, i) => (
                   <div key={it.key} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px 8px 20px", borderBottom: `1px solid ${T.line}`, fontSize: 12 }}>
                     <span style={{ color: T.faint, width: 18 }}>{i + 1}</span>
-                    <Chip tone={it.type === "mcq" ? "red" : it.type === "calc" ? "accent" : it.type === "exam" ? "amber" : "indigo"} style={{ padding: "2px 8px", fontSize: 11 }}>{TYPE_LABEL[it.type]}</Chip>
-                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.topicLabel}{it.difficulty ? ` · ${it.difficulty}` : ""}{it.tier ? ` · tier ${it.tier}` : ""}</span>
+                    <Chip tone={TYPE_TONE[it.type] || "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{TYPE_LABEL[it.type]}</Chip>
+                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={it.type === "ppq" ? `${LEVEL_LABEL[it.level] || ""} Paper ${it.paper} · ${seriesLabel(it.series, it.year)} · Q${it.q}` : undefined}>{it.topicLabel}{it.type === "ppq" ? ` · ${seriesLabel(it.series, it.year)} P${it.paper} Q${it.q}` : ""}{it.difficulty ? ` · ${it.difficulty}` : ""}{it.tier ? ` · tier ${it.tier}` : ""}</span>
                     <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{it.marks} mk</span>
                     <button onClick={() => remove(it.key)} aria-label="Remove" style={{ border: "none", background: "transparent", color: T.faint, cursor: "pointer", padding: 2 }}><Icon name="x" size={14} /></button>
                   </div>

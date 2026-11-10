@@ -15,9 +15,14 @@ export const minutesFor = (marks) => Math.round(marks * MIN_PER_MARK * 10) / 10;
 export const CALC_MARKS = { easy: 1, medium: 2, hard: 3, exam: 4 };
 
 // Default split of the time budget across the sources the tutor selects.
-export const DEFAULT_WEIGHTS = { mcq: 35, calc: 35, extended: 15, exam: 15 };
+export const DEFAULT_WEIGHTS = { mcq: 30, calc: 30, extended: 10, exam: 10, ppq: 20 };
 
-export const TYPE_LABEL = { mcq: "MCQ", calc: "Calculation", extended: "Extended answer", exam: "Exam question" };
+export const TYPE_LABEL = { mcq: "MCQ", calc: "Calculation", extended: "Extended answer", exam: "Exam question", ppq: "Past paper" };
+
+// Past-paper questions live in Firestore (ppq/{id}), not in the bundle, so an
+// assignment item carries a snapshot of the index entry and the player loads
+// the full question by id.
+export const PPQ_SNAPSHOT = ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks"];
 
 const mcqBoardKey = (board) => board === "ocr" ? "OCR_A" : board === "edexcel" ? "EDEXCEL" : "AQA";
 const boardOk = (b, board) => b === "both" || b === board || (Array.isArray(b) && b.includes(board));
@@ -63,6 +68,7 @@ export function resolveItem(item) {
     const q = EXAM_QUESTIONS.find(x => x.id === item.questionId);
     return q ? { q, topicLabel: q.title } : null;
   }
+  if (item.type === "ppq") return { q: null, ppq: true, topicLabel: item.topicLabel };
   return null;
 }
 
@@ -72,6 +78,7 @@ function toItem(type, q, extra = {}) {
   const marks = type === "mcq" ? 1
     : type === "calc" ? (CALC_MARKS[q.difficulty] || 2)
     : type === "extended" ? (q.marks || 6)
+    : type === "ppq" ? (Number(q.totalMarks) || 1)
     : questionMarks(q);
   return { key: itemKey(type, q.id), type, questionId: q.id, marks, minutes: minutesFor(marks), ...extra };
 }
@@ -79,7 +86,8 @@ function toItem(type, q, extra = {}) {
 /**
  * Fill a time budget from the chosen sources.
  * opts: { board, minutes, mcqTopics: [ids], calcSets: [ids], calcDifficulties: [keys], extCategories: [names],
- *         examTopics: [topic labels], examTags: [tags] (optional: narrows a topic to the chosen tags), weights }
+ *         examTopics: [topic labels], examTags: [tags] (optional: narrows a topic to the chosen tags),
+ *         ppqPool: [past-paper index items already narrowed to the chosen topics, level and kinds], weights }
  */
 export function buildItems(opts) {
   const { board, minutes } = opts;
@@ -120,6 +128,16 @@ export function buildItems(opts) {
       .map(q => toItem("exam", q, { topic: q.topic, topicLabel: q.title, tier: q.tier }));
   }
 
+  if (opts.ppqPool?.length) {
+    // Shorter questions first so the homework ramps up; the snapshot lets the
+    // builder, player and review describe the question without loading it.
+    pools.ppq = shuffle(opts.ppqPool).sort((a, b) => (Number(a.totalMarks) || 0) - (Number(b.totalMarks) || 0))
+      .map(q => {
+        const snap = {}; for (const k of PPQ_SNAPSHOT) if (q[k] !== undefined) snap[k] = q[k];
+        return toItem("ppq", q, { ...snap, topic: (q.topics || [])[0] || null, topicLabel: q.title || `Question ${q.q}` });
+      });
+  }
+
   const present = Object.keys(pools).filter(k => pools[k].length > 0);
   if (present.length === 0) return [];
   const totalW = present.reduce((a, k) => a + weights[k], 0);
@@ -133,8 +151,8 @@ export function buildItems(opts) {
       if (used >= share) break;
     }
   }
-  // Order: MCQs, then calcs, then exam questions, then extended answers
-  const order = { mcq: 0, calc: 1, exam: 2, extended: 3 };
+  // Order: MCQs, then calcs, then exam questions, then extended answers, then past-paper questions
+  const order = { mcq: 0, calc: 1, exam: 2, extended: 3, ppq: 4 };
   return items.sort((a, b) => order[a.type] - order[b.type]);
 }
 
@@ -153,6 +171,7 @@ export function describeItems(items) {
   if (n.calc) parts.push(`${n.calc} calc${n.calc === 1 ? "" : "s"}`);
   if (n.exam) parts.push(`${n.exam} exam question${n.exam === 1 ? "" : "s"}`);
   if (n.extended) parts.push(`${n.extended} extended answer${n.extended === 1 ? "" : "s"}`);
+  if (n.ppq) parts.push(`${n.ppq} past-paper question${n.ppq === 1 ? "" : "s"}`);
   return parts.join(" · ");
 }
 

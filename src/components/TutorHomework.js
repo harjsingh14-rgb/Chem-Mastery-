@@ -5,6 +5,7 @@ import TutorPpqQueries from "./ppq/TutorPpqQueries";
 import { T, pctColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Bar, Avatar, Table, th, td, EmptyState, Notice, Icon, Input, chipToneForPct, StatTile } from "../ui/components";
 import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBank";
+import { seriesLabel, LEVEL_LABEL } from "./ppq/ppqUtils";
 import { relativeTime } from "../utils/analytics";
 
 const pct = (n, d) => d ? Math.round((n / d) * 100) : null;
@@ -198,7 +199,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                                     <span style={{ color: T.faint, fontSize: 12, width: 20 }}>{i + 1}</span>
                                     <Chip tone="neutral" style={{ padding: "2px 8px", fontSize: 11 }}>{TYPE_LABEL[it.type]}</Chip>
-                                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{it.topicLabel}</span>
+                                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{it.topicLabel}{it.type === "ppq" && <span style={{ color: T.muted, fontWeight: 400 }}> · {LEVEL_LABEL[it.level] || ""} Paper {it.paper} · {seriesLabel(it.series, it.year)} · Q{it.q} · <a className="cm-link" href={`/${a.board}/practise/${it.questionId}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>Open question</a></span>}</span>
                                     {r ? (
                                       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                         {r.markedBy === "ai" && <Chip tone={r.confidence === "low" ? "amber" : "neutral"} style={{ fontSize: 11 }}>AI · {r.confidence || "medium"} confidence</Chip>}
@@ -211,9 +212,9 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                   {r && (
                                     <div style={{ marginLeft: 28, display: "flex", flexDirection: "column", gap: 4, fontSize: 12 }}>
                                       <AttemptSummary r={r} />
-                                      {it.type !== "exam" && r.answer !== undefined && <div><span style={{ color: T.muted }}>Answer: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(r.answer)}</span>{res?.q?.answer !== undefined && it.type !== "extended" && <span style={{ color: T.muted }}> · correct: {String(res.q.answer)}{res.q.unit ? ` ${res.q.unit}` : ""}</span>}</div>}
-                                      {it.type === "exam" && r.detail?.parts && Object.entries(r.detail.parts).map(([lbl, pr]) => (
-                                        <div key={lbl}><span style={{ color: T.muted }}>({lbl}) {pr.score}/{pr.maxScore}: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(pr.answer ?? "")}</span> <AttemptSummary r={pr} inline />{pr.feedback && <div style={{ color: T.body, marginLeft: 12 }}>{pr.feedback}</div>}
+                                      {it.type !== "exam" && it.type !== "ppq" && r.answer !== undefined && <div><span style={{ color: T.muted }}>Answer: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(r.answer)}</span>{res?.q?.answer !== undefined && it.type !== "extended" && <span style={{ color: T.muted }}> · correct: {String(res.q.answer)}{res.q.unit ? ` ${res.q.unit}` : ""}</span>}</div>}
+                                      {(it.type === "exam" || it.type === "ppq") && r.detail?.parts && Object.entries(r.detail.parts).map(([lbl, pr]) => (
+                                        <div key={lbl}><span style={{ color: T.muted }}>{lbl === "q" ? "" : `(${lbl}) `}{pr.score}/{pr.maxScore}: </span><span style={{ whiteSpace: "pre-wrap" }}>{pr.answer ? String(pr.answer) : it.type === "ppq" ? <span style={{ color: T.muted }}>{pr.attempted ? "drawn or photographed" : "not attempted"}</span> : ""}</span> <AttemptSummary r={pr} inline />{pr.feedback && <div style={{ color: T.body, marginLeft: 12 }}>{pr.feedback}</div>}
                                           <QueryThread q={sub.queries?.[`${it.key}__${lbl}`]} draft={replies[sub.id + `${it.key}__${lbl}`]} onDraft={v => setReplies(d => ({ ...d, [sub.id + `${it.key}__${lbl}`]: v }))} onReply={() => reply(sub, `${it.key}__${lbl}`)} />
                                         </div>
                                       ))}

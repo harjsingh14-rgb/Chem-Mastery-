@@ -3,6 +3,8 @@ import { auth, fetchAssignment, startSubmission, saveItemResult, submitSubmissio
 import { T, pctColour } from "../ui/theme";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
 import McqQuestion from "./McqQuestion";
+import PastPaperQuestion from "./ppq/PastPaperQuestion";
+import { partKey } from "./ppq/ppqUtils";
 import { resolveItem, TYPE_LABEL, fmtDue } from "../utils/homeworkBank";
 import chemFormat from "../utils/chemFormat";
 
@@ -13,7 +15,8 @@ import chemFormat from "../utils/chemFormat";
 // - The first attempt is the score that counts. The best score is kept alongside it.
 // - The mark scheme, worked solution or model answer is only shown once the part is fully
 //   correct, after every attempt and every hint has been used, or once the homework is submitted.
-export const MAX_ATTEMPTS = { mcq: 2, calc: 3, short: 3, extended: 3 };
+// - A past-paper question (marked by the AI examiner against the real scheme) can be marked twice.
+export const MAX_ATTEMPTS = { mcq: 2, calc: 3, short: 3, extended: 3, ppq: 2 };
 const COUNT_AS_CORRECT = 0.75;
 
 export function hintsFor(q, type) {
@@ -346,6 +349,23 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
     });
   };
 
+  /** A past-paper question marked inside the homework: fold the examiner's result into the item. */
+  const recordPpq = (item, data, doc, extra) => {
+    const parts = Object.fromEntries((data.parts || []).map(p => [partKey(p.label), {
+      score: p.score || 0, maxScore: p.marks, answer: (extra?.answers || {})[p.label] || null, feedback: p.feedback || null, attempted: !!p.attempted,
+    }]));
+    const answered = (data.parts || []).filter(p => p.attempted).length;
+    const a = {
+      answer: `${answered} of ${(data.parts || []).length} part${(data.parts || []).length === 1 ? "" : "s"} answered`,
+      score: data.score || 0, markedBy: "ai", confidence: data.confidence || "medium", feedback: data.overall || null,
+      detail: { parts, qid: item.questionId, examinerAttempts: data.attempts || null, complete: true },
+    };
+    const prev = answers[item.key];
+    const next = addAttempt(prev, item.marks, a);
+    next.hintsUsed = Math.max(prev?.hintsUsed || 0, extra?.hintsUsed || 0);
+    record(item, next, "attempt");
+  };
+
   const query = async (key, note) => {
     const q = { note, at: Date.now(), status: "open", reply: null };
     setSubm(s => ({ ...s, queries: { ...(s.queries || {}), [key]: q } }));
@@ -420,7 +440,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-start" }}>
         {/* Question map */}
         <nav aria-label="Questions" style={{ flex: "1 1 200px", maxWidth: 240, background: T.card, border: `1px solid ${T.border}`, borderRadius: T.radius, padding: 12, display: "flex", flexDirection: "column", gap: 10 }}>
-          {["mcq", "calc", "exam", "extended"].map(type => {
+          {["mcq", "calc", "exam", "extended", "ppq"].map(type => {
             const group = items.map((it, i) => ({ it, i })).filter(x => x.it.type === type);
             if (group.length === 0) return null;
             return (
@@ -451,10 +471,20 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
             <Card key={item.key} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <span style={{ fontFamily: T.display, fontWeight: 800, fontSize: 20 }}>Question {idx + 1}</span>
-                <Chip tone={item.type === "mcq" ? "red" : item.type === "calc" ? "accent" : item.type === "exam" ? "amber" : "indigo"}>{TYPE_LABEL[item.type]} · {item.marks} mark{item.marks === 1 ? "" : "s"}</Chip>
-                <Chip tone="neutral">{item.topicLabel}</Chip>
+                <Chip tone={item.type === "mcq" ? "red" : item.type === "calc" ? "accent" : item.type === "exam" ? "amber" : item.type === "ppq" ? "green" : "indigo"}>{TYPE_LABEL[item.type]} · {item.marks} mark{item.marks === 1 ? "" : "s"}</Chip>
+                {item.type !== "ppq" && <Chip tone="neutral">{item.topicLabel}</Chip>}
                 {item.difficulty && <Chip tone="neutral">{item.difficulty}</Chip>}
               </div>
+
+              {item.type === "ppq" && (
+                <>
+                  {!readOnly && !answers[item.key] && <Notice tone="neutral" style={{ fontSize: 13 }}>A real exam question. Answer every part, then press <b>Mark my answer</b>. You can be marked twice; your first mark counts for this homework.</Notice>}
+                  <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} embedded
+                    locked={readOnly || (answers[item.key]?.attempts?.length || 0) >= MAX_ATTEMPTS.ppq}
+                    onMarked={(data, doc, extra) => recordPpq(item, data, doc, extra)} />
+                  {answers[item.key] && <AttemptBanner result={answers[item.key]} maxAttempts={MAX_ATTEMPTS.ppq} />}
+                </>
+              )}
 
               {item.type === "mcq" && (
                 <Part type="mcq" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted} showQuestion
