@@ -203,6 +203,17 @@ function siteOrigin(req) {
 }
 
 /** Delete an auth user by uid. Resolves quietly if it is already gone. */
+async function updateAuthUser(uid, fields, token) {
+  const res = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:update`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ localId: uid, ...fields }),
+  });
+  if (res.ok) return true;
+  const data = await res.json().catch(() => ({}));
+  throw httpError(502, `Could not update the account: ${data.error?.message || res.status}`);
+}
+
 async function deleteAuthUser(uid, token) {
   const res = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:delete`, {
     method: "POST",
@@ -217,5 +228,5 @@ async function deleteAuthUser(uid, token) {
 
 module.exports = {
   getAccessToken, httpError, getDocument, createDocument, updateDocument, deleteDocument, queryDocuments,
-  lookupAuthUser, createAuthUser, deleteAuthUser, generateTempPassword, newToken, requireAdmin, siteOrigin,
+  lookupAuthUser, createAuthUser, updateAuthUser, deleteAuthUser, generateTempPassword, newToken, requireAdmin, siteOrigin,
 };

@@ -44,7 +44,9 @@ export default function OnboardingPage({ token, onDone, account, onLogOut }) {
         </div>
         {account && (
           <Notice tone="accent" style={{ marginBottom: 14 }}>
-            Signed in as <b>{account}</b>. Finish this step to open the rest of your account.
+            Signed in as <b>{account}</b>. {data?.kind === "terms"
+              ? "One thing before your account opens: read and accept the agreement below. As soon as you accept, your child's page opens."
+              : "One thing before your account opens: fill in the short self-evaluation below (about 5 minutes). It goes to your tutor so they know what to teach first. As soon as you send it, your dashboard, homework and past papers open."}
             {onLogOut && <> Not you? <button type="button" className="cm-link" onClick={onLogOut} style={{ background: "none", border: 0, padding: 0, font: "inherit", cursor: "pointer" }}>Log out</button>.</>}
           </Notice>
         )}
@@ -139,9 +141,11 @@ function EvaluationForm({ token, data, onDone }) {
       <h1 style={{ fontFamily: T.display, fontSize: 24, margin: "0 0 8px" }}>Thanks, {data.studentName.split(" ")[0]}</h1>
       {placed ? (
         <>
-          <p style={{ color: T.body, lineHeight: 1.6, margin: "0 0 14px" }}>Your self-evaluation has been sent to your tutor, who will use it to plan your first lessons. Your account is now open.</p>
+          <p style={{ color: T.body, lineHeight: 1.6, margin: "0 0 14px" }}>{data.currentStudent ? "Your self-evaluation has been sent to your tutor, who will use it to plan what we cover next. Your account is now open." : "Your self-evaluation has been sent to your tutor, who will use it to plan your first lessons. Your account is now open."}</p>
           {onDone && <Button variant="accent" onClick={onDone}>Continue to my dashboard</Button>}
         </>
+      ) : data.currentStudent ? (
+        <p style={{ color: T.body, lineHeight: 1.6, margin: 0 }}>Your self-evaluation has been sent to your tutor, who will use it to plan what we cover next. Your login for the platform will follow by email. Nothing else to do for now.</p>
       ) : (
         <p style={{ color: T.body, lineHeight: 1.6, margin: 0 }}>Your self-evaluation has been sent to HSJ Tuition. Your parent has been emailed the terms to accept, and once they have, you will get a welcome email with your group and your login. Nothing else to do for now.</p>
       )}
@@ -155,7 +159,7 @@ function EvaluationForm({ token, data, onDone }) {
       <div style={{ marginBottom: 18 }}>
         <div style={label}>Self-evaluation · {data.boardLabel} · Year {data.year}</div>
         <h1 style={{ fontFamily: T.display, fontSize: 26, margin: "6px 0 6px" }}>Hi {data.studentName.split(" ")[0]}, where are you right now?</h1>
-        <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>This helps HSJ place you in the right group and plan your first lessons. Be honest: Red means you need it taught, Amber means you have gaps, Green means exam ready.</p>
+        <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>{data.currentStudent ? "This shows your tutor which topics still need work, so lessons go where they are needed." : "This helps HSJ place you in the right group and plan your first lessons."} Be honest: Red means you need it taught, Amber means you have gaps, Green means exam ready.</p>
       </div>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>

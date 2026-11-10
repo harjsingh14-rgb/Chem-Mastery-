@@ -1,6 +1,8 @@
 import { SELF_EVALUATION } from "../../data/self-evaluation";
 
 export const LEVEL_LABEL = { as: "AS", a2: "A-level" };
+// Attempt records key parts by label; an MCQ's single part has label "", which Firestore cannot store as a key.
+export const partKey = (label) => (label === "" || label === null || label === undefined) ? "q" : String(label);
 export const KIND_LABEL = { mcq: "Multiple choice", structured: "Structured", extended: "Extended response", calculation: "Calculation", practical: "Practical" };
 
 const MONTH = { JAN: "January", JUN: "June", NOV: "November", OCT: "October" };

@@ -6,7 +6,7 @@ import { Button, Card, Chip, Notice, Icon } from "../../ui/components";
 import track from "../../utils/track";
 import DrawCanvas from "./DrawCanvas";
 import { noteAttempt } from "../../hooks/usePpq";
-import { LEVEL_LABEL, seriesLabel, topicShort, compressImage, loadQueue } from "./ppqUtils";
+import { LEVEL_LABEL, seriesLabel, topicShort, compressImage, loadQueue, partKey } from "./ppqUtils";
 
 const MCQ_LETTERS = ["A", "B", "C", "D"];
 const docCache = {};
@@ -62,7 +62,8 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   // comes back later can still see their marks, the scheme and query a part.
   const showLast = () => {
     if (!doc || !attempt?.latest) return;
-    const lp = attempt.latest.parts || {};
+    const lp0 = attempt.latest.parts || {};
+    const lp = Object.fromEntries((doc.parts || []).map(p => [p.label, lp0[partKey(p.label)]]));
     setResult({
       fromRecord: true,
       score: attempt.latest.score, totalMarks: attempt.totalMarks, overall: attempt.latest.overall || "",
@@ -114,7 +115,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
       if (!res.ok) throw new Error(data.error || `Marking failed (${res.status})`);
       setResult(data);
       setDrawing(false);
-      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [p.label, { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
+      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
       noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, qid });
       logAttempt && logAttempt({
         board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null,
@@ -224,7 +225,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                 hintsShown={hints[p.label] || 0} onHint={() => { setHints(h => ({ ...h, [p.label]: Math.min((h[p.label] || 0) + 1, (p.hints || []).length) })); track("ppq_hint", { board, qid, part: p.label }); }}
                 result={result?.parts?.find(r => r.label === p.label)} scheme={result?.scheme?.find(s => s.label === p.label)}
                 showModel={!!showModel[p.label]} onToggleModel={() => setShowModel(m => ({ ...m, [p.label]: !m[p.label] }))}
-                locked={!!result} query={attempt?.queries?.[p.label]} onQuery={result ? (note) => sendQuery(p.label, note) : null} />
+                locked={!!result} query={attempt?.queries?.[partKey(p.label)]} onQuery={result ? (note) => sendQuery(p.label, note) : null} />
             ))}
           </div>
 

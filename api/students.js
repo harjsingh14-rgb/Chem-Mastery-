@@ -259,7 +259,11 @@ module.exports = async function handler(req, res) {
       // existing account if the student already has one.
       let tempPassword = fb.generateTempPassword();
       const auth = await fb.createAuthUser({ email: a.studentEmail, password: tempPassword, displayName: a.studentName }, token);
-      if (auth.existing) tempPassword = null;
+      if (auth.existing) {
+        tempPassword = null;
+        // The account may carry a gamer tag or nickname from before; the app shows the name HSJ knows them by
+        try { await fb.updateAuthUser(auth.uid, { displayName: a.studentName }, token); } catch (e) { console.error("displayName update failed:", e.message); }
+      }
       const existingProfile = await fb.getDocument(`users/${auth.uid}`, token);
 
       const now = Date.now();

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, limit, getDocs, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -26,6 +26,17 @@ export const signInEmail = (email, password) => signInWithEmailAndPassword(auth,
 export const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
 export const logOut = () => signOut(auth);
+
+/** Change the signed-in user's own display name (auth record and profile). */
+export async function updateMyName(name) {
+  const u = auth.currentUser;
+  if (!u) throw new Error("Not signed in");
+  const displayName = String(name || "").trim().slice(0, 60);
+  if (displayName.length < 2) throw new Error("Please enter your name");
+  await updateProfile(u, { displayName });
+  await setDoc(doc(db, "users", u.uid), { displayName, updatedAt: serverTimestamp() }, { merge: true });
+  return displayName;
+}
 
 export const onAuthChange = (callback) => onAuthStateChanged(auth, callback);
 

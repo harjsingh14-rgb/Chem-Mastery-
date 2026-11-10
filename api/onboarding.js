@@ -23,7 +23,7 @@ async function findByToken(token, fsToken) {
 }
 
 function publicView(kind, a) {
-  const base = { kind, id: a.id, studentName: a.studentName, board: a.board, boardLabel: BOARDS[a.board] || a.board, year: a.year, status: a.status };
+  const base = { kind, id: a.id, studentName: a.studentName, board: a.board, boardLabel: BOARDS[a.board] || a.board, year: a.year, status: a.status, currentStudent: !!a.currentStudent };
   if (kind === "evaluation") return { ...base, evaluation: a.evaluation || null };
   return {
     ...base,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt } from "./firebase";
+import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyName } from "./firebase";
 import TutorPage from "./components/TutorPage";
 import StudentDashboard from "./components/StudentDashboard";
 import ProgressPage from "./components/ProgressPage";
@@ -251,10 +251,8 @@ export default function App() {
   const menuLabel = { fontSize: 12, fontWeight: 600, color: T.muted };
   const accountMenu = (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: T.ink }}>{authUser?.displayName || "Student"}</div>
-        <div style={{ fontSize: 12, color: T.muted, wordBreak: "break-all" }}>{authUser?.email}</div>
-      </div>
+      <NameBlock name={userProfile?.displayName || authUser?.displayName || "Student"} email={authUser?.email}
+        onSave={async (n) => { const displayName = await updateMyName(n); setUserProfile(prev => ({ ...prev, displayName })); }} />
       <Chip tone={hasFullAccess ? "green" : "amber"} style={{ alignSelf: "flex-start" }}>
         {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "parent" ? "Parent" : userProfile?.classId ? `Student · ${userProfile.className || userProfile.classId}` : hasFullAccess ? "Full access" : "Not in a group yet"}
       </Chip>
@@ -281,7 +279,7 @@ export default function App() {
   );
 
   const renderShell = (children, opts = {}) => (
-    <AppShell user={authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
+    <AppShell user={authUser ? { email: authUser.email, photoURL: authUser.photoURL, displayName: userProfile?.displayName || authUser.displayName } : authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
       brandSub={isParent ? "Parent" : board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
       {children}
     </AppShell>
@@ -963,5 +961,41 @@ export default function App() {
     </ShellBody>,
     { focus: true, back: goBack, backLabel: "Back to topics", title: SETS[topic]?.title || "Flashcards", subtitle: `${topic} · ${order.length} cards`,
       right: <Button size="sm" icon="settings" onClick={() => setShowMenu(!showMenu)}>Options</Button> }
+  );
+}
+
+/** Name and email at the top of the account menu, with an inline "Change" so a student can fix a nickname. */
+function NameBlock({ name, email, onSave }) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(name);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+  useEffect(() => { if (!editing) setValue(name); }, [name, editing]);
+  const save = async () => {
+    setBusy(true); setErr(null);
+    try { await onSave(value); setEditing(false); } catch (e) { setErr(e.message); }
+    setBusy(false);
+  };
+  return (
+    <div>
+      {editing ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <input value={value} onChange={e => setValue(e.target.value)} aria-label="Your name" autoFocus maxLength={60}
+            onKeyDown={e => { if (e.key === "Enter") save(); if (e.key === "Escape") setEditing(false); }}
+            style={{ padding: "8px 10px", borderRadius: 8, border: `1px solid ${T.border}`, fontSize: 14, color: T.ink, fontFamily: "inherit" }} />
+          {err && <span style={{ fontSize: 12, color: T.red }}>{err}</span>}
+          <div style={{ display: "flex", gap: 6 }}>
+            <Button size="sm" variant="primary" disabled={busy} onClick={save}>{busy ? "Saving…" : "Save name"}</Button>
+            <Button size="sm" variant="ghost" disabled={busy} onClick={() => setEditing(false)}>Cancel</Button>
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 14, fontWeight: 700, color: T.ink }}>{name}</span>
+          <button type="button" className="cm-link" onClick={() => setEditing(true)} style={{ background: "none", border: 0, padding: 0, fontSize: 12, cursor: "pointer" }}>Change</button>
+        </div>
+      )}
+      <div style={{ fontSize: 12, color: T.muted, wordBreak: "break-all" }}>{email}</div>
+    </div>
   );
 }

@@ -142,9 +142,13 @@ function tidy(result, doc) {
   };
 }
 
+// Map keys in Firestore cannot be empty, and MCQs have one part with label "".
+const partKey = (label) => (label === "" || label === null || label === undefined) ? "q" : String(label);
+
 /** Student asks their tutor about one part's mark on their latest attempt. */
 async function query(caller, { qid, part, note }) {
-  if (!qid || !part || typeof note !== "string" || note.trim().length < 5) throw fb.httpError(400, "Write a few words about why you think the mark should be different.");
+  part = partKey(part);
+  if (!qid || typeof note !== "string" || note.trim().length < 5) throw fb.httpError(400, "Write a few words about why you think the mark should be different.");
   const token = await fb.getAccessToken();
   const id = `${qid}_${caller.uid}`;
   const att = await fb.getDocument(`ppqAttempts/${id}`, token);
@@ -167,7 +171,8 @@ async function query(caller, { qid, part, note }) {
 
 /** Tutor or admin replies to a query and may correct the part's score. */
 async function reply(caller, { attemptId, part, reply: text, score }) {
-  if (!attemptId || !part || typeof text !== "string" || !text.trim()) throw fb.httpError(400, "attemptId, part and reply required");
+  part = partKey(part);
+  if (!attemptId || typeof text !== "string" || !text.trim()) throw fb.httpError(400, "attemptId, part and reply required");
   const token = await fb.getAccessToken();
   const [profile, att] = await Promise.all([fb.getDocument(`users/${caller.uid}`, token), fb.getDocument(`ppqAttempts/${attemptId}`, token)]);
   if (!profile || !["tutor", "admin"].includes(profile.role)) throw fb.httpError(403, "Tutor accounts only");
@@ -230,8 +235,8 @@ module.exports = async function handler(req, res) {
     const now = new Date();
     const latest = {
       score: result.score, at: now, mode, model: raw.model,
-      hintsUsed: Object.fromEntries(Object.entries(hintsUsed).map(([k, v]) => [k, Math.max(0, parseInt(v, 10) || 0)])),
-      parts: Object.fromEntries(result.parts.map(p => [p.label, { answer: answers[p.label] ? String(answers[p.label]).slice(0, 4000) : null, score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted }])),
+      hintsUsed: Object.fromEntries(Object.entries(hintsUsed).map(([k, v]) => [partKey(k), Math.max(0, parseInt(v, 10) || 0)])),
+      parts: Object.fromEntries(result.parts.map(p => [partKey(p.label), { answer: answers[p.label] ? String(answers[p.label]).slice(0, 4000) : null, score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted }])),
       overall: result.overall,
     };
     const attemptDoc = {
