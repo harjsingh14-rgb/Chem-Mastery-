@@ -108,10 +108,12 @@ function lessonNote(note, { studentName, parentName, tutorName, groupName }) {
     <p>Hi ${esc(firstName(parentName) || "there")},</p>
     <p>${esc(sf)} ${ATTENDANCE[note.attendance] || "was expected in the lesson"} on ${esc(fmtLessonDate(note.date))}${groupName ? ` (${esc(groupName)})` : ""}.</p>
     ${note.summary || (note.topics || []).length ? `<p><strong>What we covered</strong><br>${note.summary ? nl2br(note.summary) : ""}${note.summary && (note.topics || []).length ? "<br>" : ""}${(note.topics || []).map(esc).join("<br>")}</p>` : ""}
+    ${note.recording ? button(note.recording, "Watch the lesson recording") : ""}
     ${note.www ? `<div style="background:#ECFDF3;border-radius:10px;padding:14px 16px;margin:14px 0;"><strong>What went well</strong><br>${nl2br(note.www)}</div>` : ""}
     ${note.ebi ? `<div style="background:#FFF7E6;border-radius:10px;padding:14px 16px;margin:14px 0;"><strong>Even better if</strong><br>${nl2br(note.ebi)}</div>` : ""}
     ${note.text ? `<div style="background:#F4F6F9;border-radius:10px;padding:14px 16px;margin:14px 0;"><strong>From ${esc(tutorName)}</strong><br>${nl2br(note.text)}</div>` : ""}
     ${hw ? `<p><strong>Homework: ${esc(hw.title)}</strong><br>${esc(hwStatus)}${hw.weak && hw.weak.length ? `<br>Needs more work: ${hw.weak.map(esc).join(", ")}.` : ""}</p>` : ""}
+    ${note.homeworkText ? `<p><strong>Homework before the next lesson</strong><br>${nl2br(note.homeworkText)}</p>` : ""}
     ${note.nextHomework ? `<p><strong>Next homework</strong><br>${esc(note.nextHomework.title)}${note.nextHomework.dueAt ? `, due ${esc(new Date(note.nextHomework.dueAt).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }))}` : ""}. ${esc(sf)} finds it in the HSJ Tuition account.</p>` : ""}
     ${note.extra ? `<p><strong>Extra notes</strong><br>${nl2br(note.extra)}</p>` : ""}
     <p style="margin-top:20px;">Any questions, just reply to this email.<br>${esc(tutorName)}, HSJ Tuition</p>`);

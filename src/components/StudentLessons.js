@@ -35,7 +35,9 @@ export function NoteBody({ n, compact }) {
       {n.www && <NoteSection label="What went well" tone={T.green} tint={T.greenTint} text={n.www} compact={compact} />}
       {n.ebi && <NoteSection label="Even better if" tone={T.amber} tint={T.amberTint} text={n.ebi} compact={compact} />}
       {n.text && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}>{compact && n.text.length > 180 ? `${n.text.slice(0, 180)}…` : n.text}</div>}
-      {n.extra && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}><strong>Extra notes.</strong> {n.extra}</div>}
+      {n.extra && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}>{n.extra}</div>}
+      {n.homeworkText && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}><strong>Homework before the next lesson.</strong> {n.homeworkText}</div>}
+      {n.recording && !compact && <div><Button size="sm" variant="primary" onClick={() => window.open(n.recording, "_blank", "noopener")}>Watch the lesson recording</Button></div>}
       {!compact && n.homework && (
         <div style={{ fontSize: 12, color: T.muted }}>
           Homework "{n.homework.title}": {n.homework.status === "submitted" ? `${n.homework.score}/${n.homework.maxScore} (${n.homework.pct}%)` : n.homework.status === "in-progress" ? "started, not finished" : "not started"}

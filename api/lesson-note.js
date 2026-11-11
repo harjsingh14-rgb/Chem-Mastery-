@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
     const note = await fb.getDocument(`lessonNotes/${noteId}`, token);
     if (!note) throw fb.httpError(404, "Note not found. Save it first.");
     if (note.tutorId !== caller.uid && callerProfile.role !== "admin") throw fb.httpError(403, "This is another tutor's note");
-    if (!note.text && !note.www && !note.ebi && !note.extra && !note.summary && !note.attendance) throw fb.httpError(400, "Write the note or record attendance before sending");
+    if (!note.text && !note.www && !note.ebi && !note.extra && !note.summary && !note.homeworkText && !note.attendance) throw fb.httpError(400, "Write the note or record attendance before sending");
 
     const student = await fb.getDocument(`users/${note.uid}`, token);
     if (!student) throw fb.httpError(404, "Student profile not found");

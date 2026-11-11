@@ -219,6 +219,8 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   const [previous, setPrevious] = useState({}); // uid -> the student's most recent earlier note
   const [drafts, setDrafts] = useState({});    // uid -> { attendance, www, ebi, extra, text, private }
   const [summary, setSummary] = useState("");
+  const [recording, setRecording] = useState("");
+  const [homeworkText, setHomeworkText] = useState("");
   const [lastHw, setLastHw] = useState(null);
   const [nextHw, setNextHw] = useState(null);
   const [subs, setSubs] = useState([]);
@@ -244,7 +246,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
         const next = forGroup.filter(a => a.dueAt && a.dueAt > dayEnd).sort((a, b) => a.dueAt - b.dueAt)[0] || null;
         const sb = last ? await fetchSubmissionsForAssignment(last.id, uid) : [];
         if (cancelled) return;
-        setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setSubs(sb); setSummary(l.summary || "");
+        setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setSubs(sb); setSummary(l.summary || ""); setRecording(l.recording || ""); setHomeworkText(l.homeworkText || "");
         const byUid = {}; for (const n of ns) byUid[n.uid] = n;
         setNotes(byUid);
         const pv = {}; for (const n of pn) pv[n.uid] = n;
@@ -266,7 +268,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
     const d = drafts[s.uid] || {};
     return {
       studentName: s.displayName || s.email || "", classId: lesson.classId, className: lesson.className || null, tutorId: uid,
-      date: lesson.date, topics: lesson.topics || [], summary: summary.trim() || null, attendance: d.attendance || "present",
+      date: lesson.date, topics: lesson.topics || [], summary: summary.trim() || null, recording: recording.trim() || null, homeworkText: homeworkText.trim() || null, attendance: d.attendance || "present",
       www: (d.www || "").trim(), ebi: (d.ebi || "").trim(), extra: (d.extra || "").trim(), text: (d.text || "").trim(),
       homework: homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null),
       nextHomework: nextHw ? { assignmentId: nextHw.id, title: nextHw.title, dueAt: nextHw.dueAt || null } : null,
@@ -318,11 +320,13 @@ export function TutorLessonEditor({ authUser, lessonId }) {
     setLesson(l => ({ ...l, topics }));
     try { await updateLesson(lessonId, { topics }); } catch (e) { setError(e.message); }
   };
-  const saveSummary = async () => {
-    const v = summary.trim();
-    if (v === (lesson.summary || "")) return;
-    try { await updateLesson(lessonId, { summary: v || null }); setLesson(l => ({ ...l, summary: v || null })); } catch (e) { setError(e.message); }
+  // Lesson-level lines (what we covered, recording, homework) save when you click away
+  const saveLessonField = (key, value) => async () => {
+    const v = value.trim();
+    if (v === (lesson[key] || "")) return;
+    try { await updateLesson(lessonId, { [key]: v || null }); setLesson(l => ({ ...l, [key]: v || null })); } catch (e) { setError(e.message); }
   };
+  const saveSummary = saveLessonField("summary", summary);
   const remove = async () => {
     if (!window.confirm("Delete this lesson? Notes already sent stay with the students.")) return;
     try {
@@ -357,24 +361,35 @@ export function TutorLessonEditor({ authUser, lessonId }) {
           style={textareaStyle} />
         {editTopics ? <TopicPicker board={lesson.board} value={lesson.topics || []} onChange={saveTopics} />
           : (lesson.topics || []).length > 0 && <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{lesson.topics.map(t => <Chip key={t} tone="accent">{t}</Chip>)}</div>}
+        <div className="cm-grid-2" style={{ gap: 10 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label htmlFor="ls-rec" style={label}>Lesson recording (link)</label>
+            <Input id="ls-rec" type="url" value={recording} onChange={e => setRecording(e.target.value)} onBlur={saveLessonField("recording", recording)} placeholder="https://zoom.us/rec/… or a Drive link. Shown as a button in the note." />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <label htmlFor="ls-hw" style={label}>Homework before next lesson</label>
+            <Input id="ls-hw" value={homeworkText} onChange={e => setHomeworkText(e.target.value)} onBlur={saveLessonField("homeworkText", homeworkText)} placeholder={nextHw ? `"${nextHw.title}" set in the app is attached automatically. Add anything else here.` : "e.g. Finish the June 2023 paper questions 3 to 5. Homework set in the app is attached automatically."} />
+          </div>
+        </div>
       </Card>
 
       {students && students.length === 0 && <Card padding={0}><EmptyState icon="users" title="No students in this group yet" body="Place students into the group from the Students tab, then come back to write their notes." /></Card>}
       {students && students.length > 0 && (
         <Card padding={0}>
-          <CardHeader title="Attendance and notes" sub="One row per student. Fill the row across, then Save or Send. Expand a row for the homework record, last lesson's note, extra notes and your private note."
+          <CardHeader title="Attendance and notes" sub="One row per student. Fill the row across, then Save or Send. More opens the homework record, last lesson's note and your private note."
             right={<div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <Button size="sm" onClick={() => applyToAll("attendance", "present")}>Mark all present</Button>
               <Button size="sm" onClick={saveAttendanceAll} disabled={anyBusy}>Save all drafts</Button>
               <Button size="sm" variant="accent" onClick={sendAllUnsent} disabled={anyBusy}>Send all written</Button>
             </div>}
             style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
-          <Table minWidth={900}>
+          <Table minWidth={1080}>
             <thead><tr>
               <th style={{ ...th, paddingLeft: 20, width: 170 }}>Student</th>
               <th style={{ ...th, width: 200 }}>Attendance</th>
               <th style={{ ...th, color: T.green }}>What went well</th>
               <th style={{ ...th, color: T.amber }}>Even better if</th>
+              <th style={th}>Anything else</th>
               <th style={{ ...th, paddingRight: 20, width: 190 }}>Note</th>
             </tr></thead>
             <tbody>
@@ -386,7 +401,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
                 const first = (s.displayName || "they").split(" ")[0];
                 const dirty = !!n && (["www", "ebi", "extra", "text"].some(k => (n[k] || "") !== (d[k] || "").trim()) || n.attendance !== d.attendance);
                 const isOpen = !!openRows[s.uid];
-                const extras = [hw ? 1 : 0, p && (p.ebi || p.text) ? 1 : 0, d.extra ? 1 : 0, d.private ? 1 : 0].reduce((x, y) => x + y, 0);
+                const extras = [hw ? 1 : 0, p && (p.ebi || p.text) ? 1 : 0, d.private ? 1 : 0].reduce((x, y) => x + y, 0);
                 return (
                   <React.Fragment key={s.uid}>
                     <tr style={{ borderTop: `1px solid ${T.line}`, verticalAlign: "top" }}>
@@ -402,6 +417,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
                       <td style={td}><AttendanceButtons value={d.attendance} onChange={v => setDraft(s.uid, { attendance: v })} /></td>
                       <td style={{ ...td, paddingLeft: 6, paddingRight: 6 }}><CellField id={`www-${s.uid}`} tone={T.green} value={d.www || ""} onChange={v => setDraft(s.uid, { www: v })} onAll={() => applyToAll("www", d.www || "")} placeholder={`${first} …`} /></td>
                       <td style={{ ...td, paddingLeft: 6, paddingRight: 6 }}><CellField id={`ebi-${s.uid}`} tone={T.amber} value={d.ebi || ""} onChange={v => setDraft(s.uid, { ebi: v })} onAll={() => applyToAll("ebi", d.ebi || "")} placeholder={`${first} …`} /></td>
+                      <td style={{ ...td, paddingLeft: 6, paddingRight: 6 }}><CellField id={`extra-${s.uid}`} tone={T.border} value={d.extra || ""} onChange={v => setDraft(s.uid, { extra: v })} onAll={() => applyToAll("extra", d.extra || "")} placeholder="For the parent, optional" /></td>
                       <td style={{ ...td, paddingRight: 20 }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
                           <div style={{ display: "flex", gap: 4 }}>
@@ -414,17 +430,14 @@ export function TutorLessonEditor({ authUser, lessonId }) {
                     </tr>
                     {isOpen && (
                       <tr style={{ background: "#FAFBFC" }}>
-                        <td colSpan={5} style={{ ...td, padding: "10px 20px 14px" }}>
+                        <td colSpan={6} style={{ ...td, padding: "10px 20px 14px" }}>
                           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", fontSize: 12, color: T.muted }}>
                               {hw ? <span style={{ display: "inline-flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>Homework "{hw.title}": <Chip tone={hw.status === "submitted" ? (hw.pct >= 75 ? "green" : hw.pct >= 50 ? "amber" : "red") : hw.status === "in-progress" ? "amber" : "red"}>{hw.status === "submitted" ? `${hw.score}/${hw.maxScore} (${hw.pct}%)` : hw.status === "in-progress" ? "Started, not finished" : "Not started"}</Chip>{hw.weak.map(w => <Chip key={w} tone="neutral">{w}</Chip>)}</span> : <span>No homework was due before this lesson.</span>}
                               {p && (p.ebi || p.text) && <span><strong>Last time ({fmtLessonDate(p.date)}):</strong> {p.ebi ? `even better if ${p.ebi}` : p.text}</span>}
                               {n?.sentAt && <span>Sent to {(n.sentTo || []).join(", ")}</span>}
                             </div>
-                            <div className="cm-grid-2" style={{ gap: 10 }}>
-                              <NoteField id={`extra-${s.uid}`} label="Extra notes (sent to the parent)" value={d.extra || ""} onChange={v => setDraft(s.uid, { extra: v })} placeholder="Anything else the parent should know." />
-                              <NoteField id={`priv-${s.uid}`} label="Private note (only you and HSJ see this, never emailed)" tone={T.indigo} value={d.private || ""} onChange={v => setDraft(s.uid, { private: v })} placeholder="e.g. seemed tired, check in next week." />
-                            </div>
+                            <NoteField id={`priv-${s.uid}`} label="Private note (only you and HSJ see this, never emailed)" tone={T.indigo} value={d.private || ""} onChange={v => setDraft(s.uid, { private: v })} placeholder="e.g. seemed tired, check in next week." />
                             {(d.text || n?.text) ? <NoteField id={`text-${s.uid}`} label="Note (older format, still sent)" value={d.text || ""} onChange={v => setDraft(s.uid, { text: v })} placeholder="" /> : null}
                           </div>
                         </td>
@@ -465,7 +478,7 @@ function AttendanceButtons({ value, onChange }) {
 function CellField({ id, tone, value, onChange, onAll, placeholder }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <textarea id={id} value={value} onChange={e => onChange(e.target.value)} rows={3} maxLength={2000} placeholder={placeholder} aria-label={id.startsWith("www") ? "What went well" : "Even better if"}
+      <textarea id={id} value={value} onChange={e => onChange(e.target.value)} rows={3} maxLength={2000} placeholder={placeholder} aria-label={id.startsWith("www") ? "What went well" : id.startsWith("ebi") ? "Even better if" : "Anything else"}
         style={{ ...textareaStyle, fontSize: 13, padding: "8px 10px", minWidth: 180, borderLeft: `3px solid ${tone}` }} />
       {onAll && value.trim() && <button type="button" onClick={onAll} style={{ alignSelf: "flex-start", border: "none", background: "transparent", color: T.accentText, fontSize: 11, fontWeight: 600, cursor: "pointer", padding: 0, fontFamily: T.font }}>Use for everyone</button>}
     </div>
