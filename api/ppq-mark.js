@@ -66,7 +66,7 @@ function markPrompt({ doc, answers, hasImages, mode, inkOnly }) {
       : "\nThe student worked on paper and photographed it. The attached image(s) are those photos. Read the handwriting carefully, follow the working, and match each piece of work to the part it answers (students usually label parts). Where a typed answer is also given for a part, consider both.";
   return `You are a senior ${BOARD_NAME[doc.board] || doc.board} ${LEVEL_NAME[doc.level] || ""} Chemistry examiner marking a student's attempt at a real past-paper question, point by point against the official mark scheme, exactly as in a real exam.
 
-PAPER: ${BOARD_NAME[doc.board]} ${LEVEL_NAME[doc.level]} Paper ${doc.paper}, ${doc.series}, question ${doc.q} (${doc.totalMarks} marks). The first attached image is the printed question as the student saw it.${imageNote}
+PAPER: ${BOARD_NAME[doc.board]} ${LEVEL_NAME[doc.level]} Paper ${doc.paper}, ${doc.series}, question ${doc.q} (${doc.totalMarks} marks). The first attached image is the printed question as the student saw it.${doc.onlyParts ? ` Only the parts listed below were set; ignore any other parts printed on the question and do not mark them.` : ""}${imageNote}
 
 ${parts}
 
@@ -205,7 +205,7 @@ module.exports = async function handler(req, res) {
     if (!caller) throw fb.httpError(401, "Unauthorised");
     if (req.body?.action === "query") return res.status(200).json(await query(caller, req.body));
     if (req.body?.action === "reply") return res.status(200).json(await reply(caller, req.body));
-    const { qid, answers = {}, images = [], mode = "typed", hintsUsed = {}, inkOnly = false } = req.body || {};
+    const { qid, answers = {}, images = [], mode = "typed", hintsUsed = {}, inkOnly = false, onlyParts = null } = req.body || {};
     if (!qid || typeof qid !== "string") throw fb.httpError(400, "qid required");
     if (!Array.isArray(images) || images.length > MAX_IMAGES) throw fb.httpError(400, `Up to ${MAX_IMAGES} images`);
     for (const im of images) {
@@ -216,14 +216,20 @@ module.exports = async function handler(req, res) {
     if (!typedAny && images.length === 0) throw fb.httpError(400, "Type an answer, draw on the question or add a photo before marking.");
 
     const token = await fb.getAccessToken();
-    const doc = await fb.getDocument(`ppq/${qid}`, token);
-    if (!doc || !Array.isArray(doc.parts) || doc.parts.length === 0) throw fb.httpError(404, "Question not found");
+    const full = await fb.getDocument(`ppq/${qid}`, token);
+    if (!full || !Array.isArray(full.parts) || full.parts.length === 0) throw fb.httpError(404, "Question not found");
+    // A homework may set only some parts: mark those alone, out of their marks
+    const subset = Array.isArray(onlyParts) && onlyParts.length > 0 ? onlyParts.map(String) : null;
+    const doc = subset
+      ? { ...full, parts: full.parts.filter(p => subset.includes(String(p.label))), totalMarks: full.parts.filter(p => subset.includes(String(p.label))).reduce((a, p) => a + (Number(p.marks) || 0), 0) }
+      : full;
+    if (doc.parts.length === 0) throw fb.httpError(400, "None of the requested parts exist on this question");
 
     const hasImages = images.length > 0;
     const content = [];
     if (doc.imageUrl) content.push({ type: "image", source: { type: "url", url: doc.imageUrl } });
     for (const im of images) content.push({ type: "image", source: { type: "base64", media_type: im.mediaType, data: im.dataBase64 } });
-    content.push({ type: "text", text: markPrompt({ doc, answers, hasImages, mode, inkOnly: !!inkOnly }) });
+    content.push({ type: "text", text: markPrompt({ doc: { ...doc, onlyParts: !!subset }, answers, hasImages, mode, inkOnly: !!inkOnly }) });
 
     const raw = await callClaude({ model: hasImages ? VISION_MODEL : TEXT_MODEL, content, maxTokens: 4000 });
     const result = tidy(raw, doc);
@@ -242,7 +248,7 @@ module.exports = async function handler(req, res) {
     const attemptDoc = {
       uid: caller.uid, tutorId: profile?.tutorId || null, classId: profile?.classId || null,
       qid, board: doc.board, level: doc.level, paper: doc.paper, series: doc.series, year: doc.year, q: doc.q,
-      totalMarks: doc.totalMarks, title: doc.title || null, topics: doc.topics || [],
+      totalMarks: doc.totalMarks, partsSubset: subset, title: doc.title || null, topics: doc.topics || [],
       attempts: (prev?.attempts || 0) + 1,
       best: Math.max(prev?.best || 0, result.score),
       first: prev?.first || { score: result.score, at: now },

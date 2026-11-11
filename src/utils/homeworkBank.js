@@ -90,6 +90,26 @@ export function ppqItem(q) {
 }
 
 /**
+ * The same item narrowed to some of the question's parts (the tutor keeps
+ * (a) and (b) and drops the buffer part). `parts` is the full list from the
+ * ppq document, `keep` the labels to keep; null keep = the whole question.
+ */
+export function ppqItemWithParts(item, parts, keep) {
+  const all = (parts || []).map(p => p.label);
+  const chosen = keep ? all.filter(l => keep.includes(l)) : all;
+  if (!keep || chosen.length === all.length) {
+    const rest = { ...item }; delete rest.parts; delete rest.partsOf;
+    const marks = Number(item.totalMarks) || item.marks;
+    return { ...rest, marks, minutes: minutesFor(marks) };
+  }
+  const marks = (parts || []).filter(p => chosen.includes(p.label)).reduce((a, p) => a + (Number(p.marks) || 0), 0) || 1;
+  return { ...item, parts: chosen, partsOf: all.length, marks, minutes: minutesFor(marks) };
+}
+
+/** "(a), (b) of 4 parts" for an item narrowed to some parts, else "". */
+export const describeParts = (item) => Array.isArray(item.parts) && item.partsOf ? `parts ${item.parts.map(l => l === "" ? "q" : l).join(", ")} of ${item.partsOf}` : "";
+
+/**
  * Fill a time budget from the chosen sources.
  * opts: { board, minutes, mcqTopics: [ids], calcSets: [ids], calcDifficulties: [keys], extCategories: [names],
  *         examTopics: [topic labels], examTags: [tags] (optional: narrows a topic to the chosen tags),

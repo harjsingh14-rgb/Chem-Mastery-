@@ -484,7 +484,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
               {item.type === "ppq" && (
                 <>
                   {!readOnly && !answers[item.key] && <Notice tone="neutral" style={{ fontSize: 13 }}>A real exam question. Answer every part, then press <b>Mark my answer</b>. You can be marked twice; your first mark counts for this homework.</Notice>}
-                  <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} embedded
+                  <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} embedded onlyParts={Array.isArray(item.parts) ? item.parts : null}
                     locked={readOnly || (answers[item.key]?.attempts?.length || 0) >= MAX_ATTEMPTS.ppq}
                     onMarked={(data, doc, extra) => recordPpq(item, data, doc, extra)} />
                   {answers[item.key] && <AttemptBanner result={answers[item.key]} maxAttempts={MAX_ATTEMPTS.ppq} />}

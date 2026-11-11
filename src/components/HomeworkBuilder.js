@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { createAssignment, fetchTutorClasses } from "../firebase";
+import { createAssignment, fetchTutorClasses, fetchPpqQuestion } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, Icon } from "../ui/components";
-import { buildItems, ppqItem, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
+import { buildItems, ppqItem, ppqItemWithParts, describeParts, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
 import { YearToggle } from "./McqTab";
 import usePpq from "../hooks/usePpq";
 import { topicsFor, seriesLabel, LEVEL_LABEL, KIND_LABEL } from "./ppq/ppqUtils";
@@ -48,6 +48,8 @@ export default function HomeworkBuilder({ authUser }) {
   const [openModules, setOpenModules] = useState({});
   const [search, setSearch] = useState("");
   const [showQuestions, setShowQuestions] = useState(true);
+  const [openParts, setOpenParts] = useState({});   // qid -> true when the parts are shown
+  const [docs, setDocs] = useState({});             // qid -> ppq document (loaded when parts are opened)
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -96,6 +98,26 @@ export default function HomeworkBuilder({ authUser }) {
   };
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
   const toggleQuestion = (q) => setItems(prev => chosen.has(q.id) ? prev.filter(it => it.questionId !== q.id) : [...prev, ppqItem(q)]);
+  const openQuestionParts = async (q) => {
+    setOpenParts(o => ({ ...o, [q.id]: !o[q.id] }));
+    if (docs[q.id]) return;
+    try { const d = await fetchPpqQuestion(q.id); setDocs(ds => ({ ...ds, [q.id]: d || { parts: [] } })); }
+    catch (e) { setError(e.message); }
+  };
+  // Tick or untick one part: the item is added if needed, narrowed to the kept parts, or removed when none are left
+  const togglePart = (q, label) => {
+    const d = docs[q.id]; if (!d) return;
+    const all = (d.parts || []).map(p => p.label);
+    setItems(prev => {
+      const cur = prev.find(it => it.questionId === q.id);
+      const kept = cur ? (Array.isArray(cur.parts) ? cur.parts : all) : [];
+      const next = kept.includes(label) ? kept.filter(l => l !== label) : [...kept, label];
+      if (next.length === 0) return prev.filter(it => it.questionId !== q.id);
+      const made = ppqItemWithParts(cur || ppqItem(q), d.parts, next);
+      return cur ? prev.map(it => it.questionId === q.id ? made : it) : [...prev, made];
+    });
+  };
+  const partsKept = (qid) => { const it = items.find(x => x.questionId === qid); if (!it) return new Set(); return Array.isArray(it.parts) ? new Set(it.parts) : null; }; // null = all
   const addShown = () => setItems(prev => [...prev, ...shownQuestions.filter(q => !chosen.has(q.id)).map(ppqItem)]);
   const removeShown = () => { const ids = new Set(shownQuestions.map(q => q.id)); setItems(prev => prev.filter(it => !ids.has(it.questionId))); };
   const topicShort = (ref) => { const t = topicsFor(board).find(x => x.ref === ref); return t ? (board === "edexcel" ? `T${t.ref} ${t.title}` : `${t.ref} ${t.title}`) : ref; };
@@ -204,17 +226,42 @@ export default function HomeworkBuilder({ authUser }) {
                       {shownQuestions.length === 0 && <div style={{ padding: 14, fontSize: 12, color: T.muted }}>No questions match. Try fewer words.</div>}
                       {shownQuestions.map((q, i) => {
                         const on = chosen.has(q.id);
+                        const it = on ? items.find(x => x.questionId === q.id) : null;
+                        const kept = partsKept(q.id);
+                        const d = docs[q.id];
+                        const isOpen = !!openParts[q.id];
                         return (
-                          <label key={q.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 12px", borderTop: i ? `1px solid ${T.line}` : "none", background: on ? T.accentTint : "transparent", cursor: "pointer", fontSize: 12 }}>
-                            <input type="checkbox" checked={on} onChange={() => toggleQuestion(q)} style={{ accentColor: T.accent }} />
-                            <span style={{ flex: 1, minWidth: 0 }}>
-                              <span style={{ fontWeight: 600, color: T.ink }}>{q.title || `Question ${q.q}`}</span>
-                              <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{topicShort((q.topics || [])[0])} · {LEVEL_LABEL[q.level] || ""} {seriesLabel(q.series, q.year)} P{q.paper} Q{q.q}{(q.keywords || []).length ? ` · ${q.keywords.slice(0, 4).join(", ")}` : ""}</span>
-                            </span>
-                            <Chip tone={on ? "accent" : "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[q.kind] || "Structured"}</Chip>
-                            <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{q.totalMarks} mk</span>
-                            <a href={`/${board}/practise/${q.id}`} target="_blank" rel="noopener noreferrer" className="cm-link" onClick={e => e.stopPropagation()} style={{ fontSize: 11, whiteSpace: "nowrap" }}>View</a>
-                          </label>
+                          <div key={q.id} style={{ borderTop: i ? `1px solid ${T.line}` : "none", background: on ? T.accentTint : "transparent" }}>
+                            <label style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 12px", cursor: "pointer", fontSize: 12 }}>
+                              <input type="checkbox" checked={on} onChange={() => toggleQuestion(q)} style={{ accentColor: T.accent }} />
+                              <span style={{ flex: 1, minWidth: 0 }}>
+                                <span style={{ fontWeight: 600, color: T.ink }}>{q.title || `Question ${q.q}`}</span>
+                                <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{topicShort((q.topics || [])[0])} · {LEVEL_LABEL[q.level] || ""} {seriesLabel(q.series, q.year)} P{q.paper} Q{q.q}{(q.keywords || []).length ? ` · ${q.keywords.slice(0, 4).join(", ")}` : ""}{it && describeParts(it) ? ` · ${describeParts(it)}` : ""}</span>
+                              </span>
+                              <Chip tone={on ? "accent" : "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[q.kind] || "Structured"}</Chip>
+                              <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{it && it.parts ? `${it.marks} of ${q.totalMarks}` : q.totalMarks} mk</span>
+                              <button type="button" onClick={e => { e.preventDefault(); openQuestionParts(q); }} className="cm-link" style={{ border: "none", background: "transparent", padding: 0, fontSize: 11, whiteSpace: "nowrap", cursor: "pointer", fontFamily: "inherit" }}>{isOpen ? "Hide parts" : "Parts"}</button>
+                              <a href={`/${board}/practise/${q.id}`} target="_blank" rel="noopener noreferrer" className="cm-link" onClick={e => e.stopPropagation()} style={{ fontSize: 11, whiteSpace: "nowrap" }}>View</a>
+                            </label>
+                            {isOpen && (
+                              <div style={{ padding: "0 12px 10px 34px", display: "flex", flexDirection: "column", gap: 4 }}>
+                                {!d && <span style={{ fontSize: 11, color: T.muted }}>Loading parts…</span>}
+                                {d && (d.parts || []).length === 0 && <span style={{ fontSize: 11, color: T.muted }}>This question has no separate parts.</span>}
+                                {d && (d.parts || []).map(p => {
+                                  const pOn = on && (kept === null || kept.has(p.label));
+                                  return (
+                                    <label key={p.label === "" ? "q" : p.label} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12, cursor: "pointer", color: pOn ? T.ink : T.muted }}>
+                                      <input type="checkbox" checked={pOn} onChange={() => togglePart(q, p.label)} style={{ accentColor: T.accent, marginTop: 2 }} />
+                                      <span style={{ fontWeight: 700, minWidth: 28 }}>{p.label || "Q"}</span>
+                                      <span style={{ flex: 1 }}>{p.ask}</span>
+                                      <span style={{ color: T.faint, whiteSpace: "nowrap" }}>{p.marks} mk</span>
+                                    </label>
+                                  );
+                                })}
+                                {d && (d.parts || []).length > 0 && <span style={{ fontSize: 11, color: T.faint }}>Untick the parts you have not taught yet. The student sees and is marked on the ticked parts only.</span>}
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
@@ -241,7 +288,7 @@ export default function HomeworkBuilder({ authUser }) {
                   <div key={it.key} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px 8px 20px", borderBottom: `1px solid ${T.line}`, fontSize: 12 }}>
                     <span style={{ color: T.faint, width: 18 }}>{i + 1}</span>
                     <Chip tone="green" style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[it.kind] || "Structured"}</Chip>
-                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={`${LEVEL_LABEL[it.level] || ""} Paper ${it.paper} · ${seriesLabel(it.series, it.year)} · Q${it.q}`}>{it.topicLabel} · {seriesLabel(it.series, it.year)} P{it.paper} Q{it.q}</span>
+                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={`${LEVEL_LABEL[it.level] || ""} Paper ${it.paper} · ${seriesLabel(it.series, it.year)} · Q${it.q}${describeParts(it) ? ` · ${describeParts(it)}` : ""}`}>{it.topicLabel} · {seriesLabel(it.series, it.year)} P{it.paper} Q{it.q}{describeParts(it) ? ` (${it.parts.map(l => l === "" ? "q" : l).join(", ")})` : ""}</span>
                     <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{it.marks} mk</span>
                     <button onClick={() => remove(it.key)} aria-label="Remove" style={{ border: "none", background: "transparent", color: T.faint, cursor: "pointer", padding: 2 }}><Icon name="x" size={14} /></button>
                   </div>

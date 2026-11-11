@@ -21,7 +21,7 @@ const docCache = {};
  * once the homework is submitted (locked=true) the stored marking is shown
  * read-only.
  */
-export default function PastPaperQuestion({ board, qid, authUser, logAttempt, onExit, embedded = false, locked = false, onMarked }) {
+export default function PastPaperQuestion({ board, qid, authUser, logAttempt, onExit, embedded = false, locked = false, onMarked, onlyParts = null }) {
   const navigate = useNavigate();
   const [doc, setDoc] = useState(docCache[qid] || null);
   const [error, setError] = useState(null);
@@ -70,13 +70,15 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     if (!doc || !attempt?.latest) return;
     if (locked) { setLockedShown(true); }
     const lp0 = attempt.latest.parts || {};
-    const lp = Object.fromEntries((doc.parts || []).map(p => [p.label, lp0[partKey(p.label)]]));
+    const shown = (doc.parts || []).filter(p => !subset || subset.includes(p.label));
+    const lp = Object.fromEntries(shown.map(p => [p.label, lp0[partKey(p.label)]]));
+    const partRows = shown.map(p => ({ label: p.label, marks: p.marks, score: lp[p.label]?.score || 0, awarded: lp[p.label]?.awarded || [], attempted: lp[p.label]?.attempted ?? !!(lp[p.label]?.answer || lp[p.label]?.score), feedback: lp[p.label]?.feedback || "" }));
     setResult({
       fromRecord: true,
-      score: attempt.latest.score, totalMarks: attempt.totalMarks, overall: attempt.latest.overall || "",
+      score: subset ? partRows.reduce((a, p) => a + p.score, 0) : attempt.latest.score, totalMarks: subset ? shown.reduce((a, p) => a + (Number(p.marks) || 0), 0) : attempt.totalMarks, overall: attempt.latest.overall || "",
       attempts: attempt.attempts, best: attempt.best, confidence: "medium",
-      parts: (doc.parts || []).map(p => ({ label: p.label, marks: p.marks, score: lp[p.label]?.score || 0, awarded: lp[p.label]?.awarded || [], attempted: lp[p.label]?.attempted ?? !!(lp[p.label]?.answer || lp[p.label]?.score), feedback: lp[p.label]?.feedback || "" })),
-      scheme: (doc.parts || []).map(p => ({ label: p.label, marks: p.marks, ms: p.ms || [], modelAnswer: p.modelAnswer || null, answer: p.answer || null })),
+      parts: partRows,
+      scheme: shown.map(p => ({ label: p.label, marks: p.marks, ms: p.ms || [], modelAnswer: p.modelAnswer || null, answer: p.answer || null })),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -90,7 +92,10 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     setAttempt(a => ({ ...(a || {}), qid, queries: r.queries, hasOpenQuery: true }));
   };
 
-  const parts = doc?.parts || [];
+  // A homework may set only some parts of the question; the rest are not shown or marked
+  const subset = Array.isArray(onlyParts) && onlyParts.length > 0 ? onlyParts : null;
+  const parts = (doc?.parts || []).filter(p => !subset || subset.includes(p.label));
+  const totalMarks = subset ? parts.reduce((a, p) => a + (Number(p.marks) || 0), 0) : (doc?.totalMarks || 0);
   const typedAny = Object.values(answers).some(v => v && v.trim());
   const canMark = !marking && (typedAny || inkCount > 0 || photos.length > 0);
 
@@ -120,18 +125,18 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
       const res = await fetch("/api/ppq-mark", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) },
-        body: JSON.stringify({ qid, answers, images: images.map(i => ({ mediaType: i.mediaType, dataBase64: i.dataBase64 })), mode: inkCount > 0 ? "draw" : photos.length ? "photo" : "typed", hintsUsed: hints, inkOnly }),
+        body: JSON.stringify({ qid, answers, images: images.map(i => ({ mediaType: i.mediaType, dataBase64: i.dataBase64 })), mode: inkCount > 0 ? "draw" : photos.length ? "photo" : "typed", hintsUsed: hints, inkOnly, onlyParts: subset }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || `Marking failed (${res.status})`);
       setResult(data);
       setDrawing(false);
-      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
-      noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: doc.totalMarks, qid });
+      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
+      noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, qid });
       onMarked && onMarked(data, doc, { answers, hintsUsed: Object.values(hints).reduce((x, n) => x + (n || 0), 0) });
       logAttempt && logAttempt({
         board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null,
-        score: data.score, maxScore: doc.totalMarks, correct: data.score >= Math.ceil(doc.totalMarks * 0.7),
+        score: data.score, maxScore: totalMarks, correct: data.score >= Math.ceil(totalMarks * 0.7),
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e) {
@@ -151,7 +156,8 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
           <h2 style={{ margin: "2px 0 0", fontFamily: T.display, fontSize: 20, fontWeight: 700, lineHeight: 1.25 }}>{doc.title || `Question ${doc.q}`}</h2>
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
-          <Chip tone="indigo">{doc.totalMarks} marks</Chip>
+          <Chip tone="indigo">{subset ? `${totalMarks} of ${doc.totalMarks} marks` : `${doc.totalMarks} marks`}</Chip>
+          {subset && <Chip tone="amber">Parts {parts.map(p => p.label || "Q").join(", ")} only</Chip>}
           {pos >= 0 && <Chip tone="neutral">{pos + 1} of {queue.length}</Chip>}
         </div>
       </div>
@@ -161,7 +167,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     </div>
   );
 
-  const scoreTone = result ? (result.score >= doc.totalMarks ? "green" : result.score >= Math.ceil(doc.totalMarks * 0.7) ? "accent" : result.score > 0 ? "amber" : "red") : null;
+  const scoreTone = result ? (result.score >= totalMarks ? "green" : result.score >= Math.ceil(totalMarks * 0.7) ? "accent" : result.score > 0 ? "amber" : "red") : null;
   const toneColour = { green: T.green, accent: T.accentText, amber: T.amber, red: T.red };
 
   return (
@@ -177,12 +183,12 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
             <Card style={{ borderColor: toneColour[scoreTone], display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
               <div style={{ width: 72, height: 72, borderRadius: 16, background: `${toneColour[scoreTone]}14`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ fontFamily: T.display, fontSize: 26, fontWeight: 800, color: toneColour[scoreTone], lineHeight: 1 }}>{result.score}</span>
-                <span style={{ fontSize: 11, color: T.muted, fontWeight: 600 }}>/ {doc.totalMarks}</span>
+                <span style={{ fontSize: 11, color: T.muted, fontWeight: 600 }}>/ {totalMarks}</span>
               </div>
               <div style={{ flex: 1, minWidth: 220, display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{result.score >= doc.totalMarks ? "Full marks" : result.score >= Math.ceil(doc.totalMarks * 0.7) ? "Good answer" : result.score > 0 ? "Some credit" : "No marks this time"}</div>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>{result.score >= totalMarks ? "Full marks" : result.score >= Math.ceil(totalMarks * 0.7) ? "Good answer" : result.score > 0 ? "Some credit" : "No marks this time"}</div>
                 {result.overall && <div style={{ fontSize: 13, color: T.body, lineHeight: 1.55 }}>{result.overall}</div>}
-                <div style={{ fontSize: 12, color: T.muted }}>Attempt {result.attempts}{result.attempts > 1 && ` · best ${result.best}/${doc.totalMarks}`}{result.confidence === "low" && " · the examiner was unsure about this one, check the scheme"}</div>
+                <div style={{ fontSize: 12, color: T.muted }}>Attempt {result.attempts}{result.attempts > 1 && ` · best ${result.best}/${result.totalMarks || totalMarks}`}{result.confidence === "low" && " · the examiner was unsure about this one, check the scheme"}</div>
               </div>
               {!locked && (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -217,6 +223,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
             </div>
           )}
 
+          {subset && !result && <Notice tone="neutral" style={{ fontSize: 13 }}>Only parts {parts.map(p => p.label || "Q").join(", ")} are set for this homework. Ignore the other parts printed on the question.</Notice>}
           {/* The question itself, with the pen layer */}
           <DrawCanvas ref={canvasRef} src={doc.imageUrl} width={doc.imageW || 1100} height={doc.imageH || 1400} active={drawing && !result} onChange={setInkCount} />
 
