@@ -1,7 +1,8 @@
 // Admin: who teaches on the platform. Add a tutor (their account is created
 // and the login emailed), make someone an admin, or take access away.
 import React, { useState, useEffect } from "react";
-import { fetchTutors, fetchAllClasses, staffApi } from "../firebase";
+import { fetchTutors, fetchAllClasses, staffApi, fetchSettings, saveSettings } from "../firebase";
+import { resetCommunityCache } from "./CommunityCard";
 import { T } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar } from "../ui/components";
 
@@ -71,6 +72,8 @@ export default function TutorStaff({ authUser, userProfile }) {
         </form>
       </Card>
 
+      <CommunitySettings />
+
       <Card padding={0}>
         <CardHeader title="Who has access" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
         {staff === null && <div style={{ padding: 20, fontSize: 13, color: T.muted }}>Loading…</div>}
@@ -109,5 +112,47 @@ export default function TutorStaff({ authUser, userProfile }) {
         )}
       </Card>
     </>
+  );
+}
+
+// The HSJ Discord invite shown to students and parents (settings/community).
+function CommunitySettings() {
+  const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState(null);
+  useEffect(() => {
+    fetchSettings("community").then(d => setForm({ discordInvite: d?.discordInvite || "", discordNote: d?.discordNote || "" }))
+      .catch(e => { setForm({ discordInvite: "", discordNote: "" }); setMsg({ tone: "red", text: /permission/i.test(e.message) ? "The settings rule is not published yet, so this cannot be read or saved." : e.message }); });
+  }, []);
+  const save = async (e) => {
+    e.preventDefault();
+    const link = form.discordInvite.trim();
+    if (link && !/^https:\/\/(discord\.gg|discord\.com\/invite)\//.test(link)) { setMsg({ tone: "red", text: "Paste a Discord invite link, like https://discord.gg/abc123" }); return; }
+    setSaving(true); setMsg(null);
+    try {
+      await saveSettings("community", { discordInvite: link, discordNote: form.discordNote.trim() });
+      resetCommunityCache();
+      setMsg({ tone: "green", text: link ? "Saved. Students and parents now see the Join the Discord card, and new welcome emails include the link." : "Saved. The Discord card is hidden until a link is set." });
+    } catch (err) { setMsg({ tone: "red", text: /permission/i.test(err.message) ? "The settings rule is not published yet. Publish firestore.rules, then save again." : err.message }); }
+    setSaving(false);
+  };
+  return (
+    <Card style={{ marginBottom: 14 }}>
+      <CardHeader title="HSJ Discord" sub="Students see a Join the Discord card on their dashboard and parents on their page, and the link goes into the welcome emails. Leave it empty to hide all of that. Make the invite one that does not expire." />
+      {msg && <Notice tone={msg.tone} style={{ margin: "10px 0" }}>{msg.text}</Notice>}
+      {form && (
+        <form onSubmit={save} style={{ display: "flex", gap: 10, alignItems: "flex-end", flexWrap: "wrap", marginTop: 10 }}>
+          <div style={{ ...field, flex: "1 1 260px" }}>
+            <label htmlFor="discord-invite" style={label}>Invite link</label>
+            <Input id="discord-invite" type="url" value={form.discordInvite} onChange={e => setForm(f => ({ ...f, discordInvite: e.target.value }))} placeholder="https://discord.gg/..." />
+          </div>
+          <div style={{ ...field, flex: "2 1 320px" }}>
+            <label htmlFor="discord-note" style={label}>Short note shown on the card (optional)</label>
+            <Input id="discord-note" value={form.discordNote} onChange={e => setForm(f => ({ ...f, discordNote: e.target.value }))} placeholder="e.g. Say hello in #introductions and pick your year group role." />
+          </div>
+          <Button type="submit" variant="accent" disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+        </form>
+      )}
+    </Card>
   );
 }

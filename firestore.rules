@@ -37,6 +37,12 @@ service cloud.firestore {
 
     // Onboarding queue. Written only by the server (api/students.js and
     // api/onboarding.js); admins read it in the Students tab.
+    // Platform settings (Discord invite and the like): everyone signed in reads, admins write
+    match /settings/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
     match /applicants/{id} {
       allow read: if isAdmin();
       allow write: if false;

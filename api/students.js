@@ -63,7 +63,7 @@ async function sendTermsInvite(a, origin) {
  * { uid, existing, emailed } or { skipped } when there is no usable parent
  * email (or it is the student's own address).
  */
-async function ensureParentAccount({ parentName, parentEmail, studentUid, studentEmail, studentName, groupName, tutorName, termsToken }, token, { sendEmail = true } = {}) {
+async function ensureParentAccount({ parentName, parentEmail, studentUid, studentEmail, studentName, groupName, tutorName, termsToken, discordInvite }, token, { sendEmail = true } = {}) {
   const email = str(parentEmail, 160).toLowerCase();
   if (!EMAIL_RE.test(email) || email === String(studentEmail || "").toLowerCase()) return { skipped: "no separate parent email" };
   let tempPassword = fb.generateTempPassword();
@@ -86,7 +86,7 @@ async function ensureParentAccount({ parentName, parentEmail, studentUid, studen
   let emailed = false, emailError = null;
   if (sendEmail) {
     try {
-      const { subject, html } = mail.parentWelcome({ parentName, studentName, email, tempPassword, groupName, tutorName });
+      const { subject, html } = mail.parentWelcome({ parentName, studentName, email, tempPassword, groupName, tutorName, discordInvite });
       await mail.sendEmail({ to: email, subject, html });
       emailed = true;
     } catch (e) { emailError = e.message; }
@@ -254,6 +254,7 @@ module.exports = async function handler(req, res) {
       const group = await fb.getDocument(`classes/${groupCode}`, token);
       if (!group) throw bad("Group not found");
       const tutor = group.tutorId ? await fb.getDocument(`users/${group.tutorId}`, token) : null;
+      const discordInvite = (await fb.getDocument("settings/community", token).catch(() => null))?.discordInvite || null;
 
       // Account: new email/password user with a temporary password, or the
       // existing account if the student already has one.
@@ -299,14 +300,14 @@ module.exports = async function handler(req, res) {
 
       let emailError = null;
       try {
-        const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail });
+        const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail, discordInvite });
         await mail.sendEmail({ to: a.studentEmail, cc: a.parentEmail, subject, html });
       } catch (e) { emailError = e.message; }
 
       // The parent gets their own account, linked to this student
       let parent = null;
       try {
-        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: true });
+        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", discordInvite, termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: true });
       } catch (e) { parent = { error: e.message }; }
       return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError, parent });
     }

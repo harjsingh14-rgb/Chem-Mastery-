@@ -10,6 +10,7 @@ import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
 import { TopicTable, AccuracySpark } from "./StudentDashboard";
 import { NoteBody, UpcomingLessons } from "./StudentLessons";
+import CommunityCard from "./CommunityCard";
 import { describeSlots, slotsOf } from "../utils/schedule";
 import { useHomework } from "./StudentHomework";
 import { fmtDue } from "../utils/homeworkBank";
@@ -55,6 +56,7 @@ export default function ParentPage({ authUser, userProfile, childUid }) {
           </div>
         )} />
       <Tabs tabs={TABS} value={tab} onChange={setTab} />
+      {tab === "progress" && <CommunityCard who="parent" style={{ marginBottom: 14 }} />}
       {tab === "progress" && <ProgressTab child={child} />}
       {tab === "lessons" && <LessonsTab child={child} />}
       {tab === "homework" && <HomeworkTab child={child} />}

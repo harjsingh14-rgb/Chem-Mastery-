@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchClassAssignments, fetchMySubmissions } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Bar, EmptyState, IconTile } from "../ui/components";
-import { fmtDue, isOverdue } from "../utils/homeworkBank";
+import { fmtDue, isOverdue } from "../utils/homeworkDates";
 
 /** Assignments for the student's class with their own submission status. */
 export function useHomework(uid, classId) {

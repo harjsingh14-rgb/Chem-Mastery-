@@ -197,5 +197,4 @@ export function describeItems(items) {
   return parts.join(" · ");
 }
 
-export const fmtDue = (ms) => ms ? new Date(ms).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }) : "No due date";
-export const isOverdue = (ms) => !!ms && Date.now() > ms;
+export { fmtDue, isOverdue } from "./homeworkDates";

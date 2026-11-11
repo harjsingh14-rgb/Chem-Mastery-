@@ -5,6 +5,7 @@ import { LessonNotesCard } from "./StudentLessons";
 import { NextLessonCard, PaymentsCard } from "./StudentPanels";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, EmptyState, Button, IconTile, Table, th, td, chipToneForPct } from "../ui/components";
 import PracticeGrid from "./PracticeGrid";
+import CommunityCard from "./CommunityCard";
 import { useHomework, HomeworkRow } from "./StudentHomework";
 import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection } from "../utils/analytics";
@@ -138,6 +139,7 @@ export default function StudentDashboard({ board, authUser, userProfile, current
           </div>
 
           {inClass && <NextLessonCard authUser={authUser} userProfile={userProfile} />}
+          {inClass && <CommunityCard who="student" />}
           {inClass && <PaymentsCard authUser={authUser} />}
           {inClass && <LessonNotesCard authUser={authUser} board={board} />}
 

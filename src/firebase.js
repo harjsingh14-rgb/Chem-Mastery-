@@ -166,6 +166,15 @@ export async function fetchClass(code) {
   const snap = await getDoc(doc(db, "classes", code));
   return snap.exists() ? { code: snap.id, ...snap.data() } : null;
 }
+/** Platform-wide settings, one document per area (e.g. settings/community). */
+export async function fetchSettings(id) {
+  const snap = await getDoc(doc(db, "settings", id));
+  return snap.exists() ? snap.data() : null;
+}
+export async function saveSettings(id, patch) {
+  await setDoc(doc(db, "settings", id), { ...patch, updatedAt: Date.now() }, { merge: true });
+}
+
 export async function updateClass(code, patch) {
   await updateDoc(doc(db, "classes", code), patch);
 }

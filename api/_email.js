@@ -65,7 +65,17 @@ function termsInvite(a, link, ragCounts) {
 }
 
 /** To the student, parent copied: your account and group. */
-function welcome(a, { groupName, tutorName, tempPassword, email }) {
+/** "Join the Discord" paragraph for the welcome emails; empty when no invite is set. */
+const discordBlock = (invite, who) => invite ? `
+    <div style="background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px 16px;margin:18px 0;">
+      <div style="font-weight:700;margin-bottom:6px;">Join the HSJ Discord</div>
+      <div style="font-size:14px;">${who === "parent"
+        ? "Announcements, term dates and reminders go out on the HSJ Discord as well as by email, and you can message HSJ there directly."
+        : "Ask questions between lessons, see announcements and revision tips, and work alongside the other HSJ students."}</div>
+      <div style="margin-top:8px;"><a href="${invite}" style="color:#4338CA;font-weight:700;">${esc(invite)}</a></div>
+    </div>` : "";
+
+function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite }) {
   const html = layout("Your HSJ Tuition account is ready", `
     <p>Hi ${esc(firstName(a.studentName))},</p>
     <p>You are in <strong>${esc(groupName)}</strong>${tutorName ? ` with ${esc(tutorName)}` : ""}. Your homework, feedback and progress all live in your HSJ Tuition account.</p>
@@ -77,6 +87,7 @@ function welcome(a, { groupName, tutorName, tempPassword, email }) {
       <div style="font-size:12px;color:#6b7a8c;margin-top:6px;">You will be asked to choose your own password when you first log in.</div>
     </div>` : `<p>Log in with your existing account for <strong>${esc(email)}</strong>.</p>`}
     ${button(SITE, "Log in to HSJ Tuition")}
+    ${discordBlock(discordInvite, "student")}
     <p style="margin-top:22px;">How it works: after each lesson a homework set appears in your account. Do it before the next lesson. Most of it is marked as you go, and I look at the rest. Your parent is copied in here so they know where to find everything.</p>
     <p>See you in the lesson,<br>Harj</p>`);
   return { subject: `Welcome to HSJ Tuition, ${firstName(a.studentName)}`, html };
@@ -159,7 +170,7 @@ function paymentReminder({ parentName, studentName, amount, description, dueAt, 
 }
 
 /** To the parent: your own account, to follow your child's progress, lessons, homework and payments. */
-function parentWelcome({ parentName, studentName, email, tempPassword, groupName, tutorName }) {
+function parentWelcome({ parentName, studentName, email, tempPassword, groupName, tutorName, discordInvite }) {
   const sf = firstName(studentName);
   const html = layout("Your HSJ Tuition parent account", `
     <p>Hi ${esc(firstName(parentName))},</p>
@@ -172,6 +183,7 @@ function parentWelcome({ parentName, studentName, email, tempPassword, groupName
       <div style="font-size:12px;color:#6b7a8c;margin-top:6px;">You will be asked to choose your own password when you first log in.</div>
     </div>` : `<p>Log in with your existing account for <strong>${esc(email)}</strong>; ${esc(sf)} has been added to it.</p>`}
     ${button(SITE, "Log in to HSJ Tuition")}
+    ${discordBlock(discordInvite, "parent")}
     <p style="margin-top:22px;">You will still get the lesson note by email after each lesson. The account is there whenever you want the fuller picture.</p>
     <p>Harj</p>`);
   return { subject: `Your HSJ Tuition parent account for ${sf}`, html };
