@@ -131,11 +131,17 @@ async function deleteDocument(path, token) {
   await fsFetch(`${DOCS}/${path}`, { method: "DELETE" }, token);
 }
 
-/** Documents in a collection where field == value (one filter), newest first if orderBy given. */
-async function queryDocuments(collection, filters, token, { limit = 50 } = {}) {
-  const fieldFilters = Object.entries(filters).map(([field, value]) => ({
-    fieldFilter: { field: { fieldPath: field }, op: "EQUAL", value: encode(value) },
-  }));
+/**
+ * Documents in a collection matching every filter (field == value). A null value
+ * matches documents where the field is null. ops[field] overrides the operator
+ * for that field, e.g. { studentIds: "ARRAY_CONTAINS" }.
+ */
+async function queryDocuments(collection, filters, token, { limit = 50, ops = {} } = {}) {
+  const fieldFilters = Object.entries(filters).map(([field, value]) => (
+    value === null
+      ? { unaryFilter: { field: { fieldPath: field }, op: "IS_NULL" } }
+      : { fieldFilter: { field: { fieldPath: field }, op: ops[field] || "EQUAL", value: encode(value) } }
+  ));
   const where = fieldFilters.length === 1 ? fieldFilters[0]
     : fieldFilters.length > 1 ? { compositeFilter: { op: "AND", filters: fieldFilters } } : undefined;
   const body = { structuredQuery: { from: [{ collectionId: collection }], where, limit } };

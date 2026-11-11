@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
 import { summarise, pct, relativeTime, attemptTime, DAY, TYPE_LABEL } from "../utils/analytics";
+import WeekList from "./WeekList";
 
 export default function TutorPage({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
@@ -158,6 +159,11 @@ export default function TutorPage({ authUser, userProfile }) {
       />
 
       {error && <Notice tone="red">{error}</Notice>}
+
+      {classes && classes.length > 0 && (
+        <WeekList sessions={sessions} classes={classes} tutorUid={tutorUid} tutorName={isAdmin ? tutorName : null}
+          onLessonCreated={(sid, lid) => setSessions(prev => prev.map(x => x.id === sid ? { ...x, lessonId: lid } : x))} />
+      )}
 
       {cls && editSchedule && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>

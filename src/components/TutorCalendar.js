@@ -11,6 +11,7 @@ import { fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fe
 import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, templateOccurrences, DEFAULT_MINUTES, describeSession, sessionEndMs } from "../utils/schedule";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
+import { CalendarSubscribePanel } from "./CalendarSubscribe";
 
 const label = { fontSize: 12, fontWeight: 600, color: T.muted };
 const selectStyle = { padding: "9px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink, fontFamily: T.font };
@@ -45,6 +46,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
   const [selected, setSelected] = useState(null);
   const [form, setForm] = useState(null);
   const [fill, setFill] = useState(null);
+  const [showSubscribe, setShowSubscribe] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [flash, setFlash] = useState(null);
@@ -205,6 +207,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
         <Button icon="arrowRight" aria-label="Next" onClick={() => go(1)} />
       </>}
       <Button icon="calendar" onClick={openFill} disabled={!classes || classes.length === 0}>Fill from usual times</Button>
+      <Button icon="calendar" onClick={() => setShowSubscribe(v => !v)}>Add to your calendar</Button>
       <Button variant="primary" icon="plus" onClick={() => openAdd()} disabled={!classes || classes.length === 0}>Add session</Button>
     </>
   );
@@ -230,6 +233,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
           onSubmit={submitForm} onCancel={() => setForm(null)} />
       )}
 
+      {showSubscribe && <CalendarSubscribePanel who="Your lessons and sessions" onClose={() => setShowSubscribe(false)} />}
       {fill && (
         <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 12 }}>
           <CardHeader title="Fill the calendar from a group's usual times" sub="Adds one session for every usual weekly time between the two dates. Days that already have a session at that time are skipped, so running it twice adds nothing. Set the usual times on the Overview tab." />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SETS } from "../data/sets";
 import { NMR_CHALLENGES } from "../data/nmr-challenges";
+import mcqData from "../mcq-data.json";
 import chemFormat from "../utils/chemFormat";
 import McqQuestion from "./McqQuestion";
 
@@ -57,7 +58,7 @@ function NmrSpectrum({ peaks, revealed }) {
   );
 }
 
-export default function NmrTab({ board, mcqData }) {
+export default function NmrTab({ board }) {
   const accentColor = "#8b5cf6";
 
   const [nmrSubTab, setNmrSubTab] = useState("challenges");

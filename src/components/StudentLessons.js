@@ -7,6 +7,7 @@ import { T } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, EmptyState } from "../ui/components";
 import { useStudentCalendar, nextLessonRows } from "./StudentPanels";
 import { fmtTime, describeSlots, slotsOf } from "../utils/schedule";
+import CalendarSubscribe from "./CalendarSubscribe";
 
 const fmtDate = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }); };
 const ATT = { present: ["green", "Present"], late: ["amber", "Late"], absent: ["red", "Absent"] };
@@ -92,6 +93,9 @@ export function UpcomingLessons({ uid, classId, who = "you" }) {
           <span>{o.cancelled ? <Chip tone="red">Cancelled</Chip> : o === live ? <Chip tone="accent">Next</Chip> : o.named ? <Chip tone="indigo">Extra session</Chip> : null}</span>
         </div>
       ))}
+      <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10 }}>
+        <CalendarSubscribe who={who === "you" ? "Your lessons" : `${who}'s lessons`} />
+      </div>
     </Card>
   );
 }

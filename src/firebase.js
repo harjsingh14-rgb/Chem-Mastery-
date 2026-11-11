@@ -225,6 +225,21 @@ export async function staffApi(action, payload = {}) {
   return data;
 }
 
+/** The signed-in user's private calendar feed link ("link" to get or create, "reset" to issue a new one). */
+export async function calendarApi(action = "link") {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Please sign in again");
+  const idToken = await user.getIdToken();
+  const res = await fetch("/api/ics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ action }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Something went wrong");
+  return data;
+}
+
 export async function studentsApi(action, payload = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error("Please sign in again");
@@ -385,8 +400,9 @@ export async function answerMarkQuery(assignmentId, uid, key, reply) {
 //  Lessons (one per group per date) and lesson notes (one per student)
 // =====================================================================
 
-export async function createLesson(tutorUid, { classId, className, board, date, topics }) {
-  const data = { classId, className: className || null, board: board || null, date, topics: topics || [], tutorId: tutorUid, createdAt: serverTimestamp(), clientTime: Date.now() };
+export async function createLesson(tutorUid, { classId, className, board, date, topics, sessionId, studentIds, title }) {
+  const data = { classId, className: className || null, board: board || null, date, topics: topics || [], tutorId: tutorUid, createdAt: serverTimestamp(), clientTime: Date.now(),
+    sessionId: sessionId || null, studentIds: Array.isArray(studentIds) && studentIds.length ? studentIds : null, title: title || null };
   const ref = await addDoc(collection(db, "lessons"), data);
   return { id: ref.id, ...data };
 }

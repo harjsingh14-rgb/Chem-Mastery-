@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import McqQuestion from "./McqQuestion";
+import mcqData from "../mcq-data.json";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Bar, Icon, EmptyState } from "../ui/components";
 
@@ -22,7 +23,7 @@ function categoryFor(id) {
 /** Spec reference shown on a topic card. */
 export const topicRef = (id) => id.startsWith("OCR-P") ? "" : id.startsWith("OCR-") ? id.slice(4) : id.startsWith("EDX-") ? `Topic ${id.slice(4)}` : id;
 
-export default function McqTab({ board, mcqData, logAttempt }) {
+export default function McqTab({ board, logAttempt }) {
   const [mcqYear, setMcqYear] = useState("as");
   const [mcqTopic, setMcqTopic] = useState(null);
   const [mcqIdx, setMcqIdx] = useState(0);

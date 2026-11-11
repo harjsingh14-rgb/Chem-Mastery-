@@ -1,41 +1,47 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyName } from "./firebase";
-import TutorPage from "./components/TutorPage";
 import StudentDashboard from "./components/StudentDashboard";
-import ProgressPage from "./components/ProgressPage";
-import PastPaperQuestion from "./components/ppq/PastPaperQuestion";
-import RevisionPage from "./components/RevisionPage";
-import ExamStyleTab from "./components/ExamStyleTab";
-import ParentPage from "./components/ParentPage";
 import { VideosPage } from "./components/Placeholders";
-import HomeworkBuilder from "./components/HomeworkBuilder";
-import { TutorHomeworkList, TutorHomeworkReview } from "./components/TutorHomework";
-import StudentHomework from "./components/StudentHomework";
-import HomeworkPlayer from "./components/HomeworkPlayer";
 import AppShell, { ShellBody } from "./ui/AppShell";
 import { T, BOARDS, BOARD_IDS, boardLabel } from "./ui/theme";
 import { Button, Card, Chip, Notice, PageHeader, EmptyState, Icon, IconTile } from "./ui/components";
 import { invalidateAttempts } from "./hooks/useAttempts";
-import mcqData from "./mcq-data.json";
+import { MCQ_COUNT } from "./data/mcq-meta";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER, EDEXCEL_SECTIONS, EDEXCEL_TOPIC_ORDER } from "./data/sections";
 import LoginScreen from "./components/LoginScreen";
-import OnboardingPage from "./components/OnboardingPage";
-import TutorStudents from "./components/TutorStudents";
-import { TutorLessonsList, TutorLessonEditor } from "./components/TutorLessons";
-import StudentLessons from "./components/StudentLessons";
-import TutorPayments from "./components/TutorPayments";
-import TutorCalendar from "./components/TutorCalendar";
-import TutorStaff from "./components/TutorStaff";
-import CalcTab from "./components/CalcTab";
-import ExtendedTab from "./components/ExtendedTab";
-import McqTab from "./components/McqTab";
-import NmrTab from "./components/NmrTab";
-import SynthTab from "./components/SynthTab";
-import PathwaysTab from "./components/PathwaysTab";
-import MechanismsTab from "./components/MechanismsTab";
+import lazyPage, { PageLoading } from "./utils/lazyPage";
 import track from "./utils/track";
+
+// Pages and practice tabs load on demand so the first screen does not carry
+// every question bank. Each import below becomes its own chunk.
+const TutorPage = lazyPage(() => import("./components/TutorPage"));
+const ProgressPage = lazyPage(() => import("./components/ProgressPage"));
+const PastPaperQuestion = lazyPage(() => import("./components/ppq/PastPaperQuestion"));
+const RevisionPage = lazyPage(() => import("./components/RevisionPage"));
+const ExamStyleTab = lazyPage(() => import("./components/ExamStyleTab"));
+const ParentPage = lazyPage(() => import("./components/ParentPage"));
+const HomeworkBuilder = lazyPage(() => import("./components/HomeworkBuilder"));
+const TutorHomeworkList = lazyPage(() => import("./components/TutorHomework"), m => m.TutorHomeworkList);
+const TutorHomeworkReview = lazyPage(() => import("./components/TutorHomework"), m => m.TutorHomeworkReview);
+const StudentHomework = lazyPage(() => import("./components/StudentHomework"));
+const HomeworkPlayer = lazyPage(() => import("./components/HomeworkPlayer"));
+const OnboardingPage = lazyPage(() => import("./components/OnboardingPage"));
+const TutorStudents = lazyPage(() => import("./components/TutorStudents"));
+const TutorLessonsList = lazyPage(() => import("./components/TutorLessons"), m => m.TutorLessonsList);
+const TutorLessonEditor = lazyPage(() => import("./components/TutorLessons"), m => m.TutorLessonEditor);
+const StudentLessons = lazyPage(() => import("./components/StudentLessons"));
+const TutorPayments = lazyPage(() => import("./components/TutorPayments"));
+const TutorCalendar = lazyPage(() => import("./components/TutorCalendar"));
+const TutorStaff = lazyPage(() => import("./components/TutorStaff"));
+const CalcTab = lazyPage(() => import("./components/CalcTab"));
+const ExtendedTab = lazyPage(() => import("./components/ExtendedTab"));
+const McqTab = lazyPage(() => import("./components/McqTab"));
+const NmrTab = lazyPage(() => import("./components/NmrTab"));
+const SynthTab = lazyPage(() => import("./components/SynthTab"));
+const PathwaysTab = lazyPage(() => import("./components/PathwaysTab"));
+const MechanismsTab = lazyPage(() => import("./components/MechanismsTab"));
 import useStudyProgress from "./hooks/useStudyProgress";
 import useFlashcards from "./hooks/useFlashcards";
 import useQuiz from "./hooks/useQuiz";
@@ -291,12 +297,12 @@ export default function App() {
   const renderShell = (children, opts = {}) => (
     <AppShell user={authUser ? { email: authUser.email, photoURL: authUser.photoURL, displayName: userProfile?.displayName || authUser.displayName } : authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
       brandSub={isParent ? "Parent" : board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
-      {children}
+      <Suspense fallback={<PageLoading />}>{children}</Suspense>
     </AppShell>
   );
 
   // PUBLIC ONBOARDING LINKS (self-evaluation, parent terms): no login needed
-  if (pathParts[0] === 'onboarding' && pathParts[1]) return <OnboardingPage token={pathParts[1]} />;
+  if (pathParts[0] === 'onboarding' && pathParts[1]) return <Suspense fallback={<PageLoading full />}><OnboardingPage token={pathParts[1]} /></Suspense>;
 
   // AUTH LOADING
   if (authLoading) return (
@@ -317,14 +323,14 @@ export default function App() {
   // when the step is done (api/onboarding).
   if (userProfile && !userProfile.needsPasswordChange) {
     if (userProfile.role === "student" && userProfile.evalToken && !userProfile.selfEvaluation) {
-      return <OnboardingPage token={userProfile.evalToken} account={authUser.email} onLogOut={() => logOut()}
-        onDone={() => setUserProfile(prev => ({ ...prev, evalToken: null, selfEvaluation: prev.selfEvaluation || { submittedAt: Date.now() } }))} />;
+      return <Suspense fallback={<PageLoading full />}><OnboardingPage token={userProfile.evalToken} account={authUser.email} onLogOut={() => logOut()}
+        onDone={() => setUserProfile(prev => ({ ...prev, evalToken: null, selfEvaluation: prev.selfEvaluation || { submittedAt: Date.now() } }))} /></Suspense>;
     }
     const pendingTerms = isParent ? Object.entries(userProfile.childTerms || {}).find(([, t]) => t?.token && !t.acceptedAt) : null;
     if (pendingTerms) {
       const [childUid, t] = pendingTerms;
-      return <OnboardingPage token={t.token} account={authUser.email} onLogOut={() => logOut()}
-        onDone={() => setUserProfile(prev => ({ ...prev, childTerms: { ...prev.childTerms, [childUid]: { ...t, acceptedAt: Date.now() } } }))} />;
+      return <Suspense fallback={<PageLoading full />}><OnboardingPage token={t.token} account={authUser.email} onLogOut={() => logOut()}
+        onDone={() => setUserProfile(prev => ({ ...prev, childTerms: { ...prev.childTerms, [childUid]: { ...t, acceptedAt: Date.now() } } }))} /></Suspense>;
     }
   }
 
@@ -528,7 +534,7 @@ export default function App() {
       )}
       {topicsTab === "home" && (
         <StudentDashboard board={board} authUser={authUser} userProfile={userProfile} currentStreak={currentStreak} known={known}
-          sets={SETS} topicOrder={CURRENT_TOPIC_ORDER} sectionOf={sectionOf} hasFullAccess={hasFullAccess} isAdmin={isAdmin} mcqCount={mcqData.questions.length} />
+          sets={SETS} topicOrder={CURRENT_TOPIC_ORDER} sectionOf={sectionOf} hasFullAccess={hasFullAccess} isAdmin={isAdmin} mcqCount={MCQ_COUNT} />
       )}
       {topicsTab === "revision" && <RevisionPage board={board} isAdmin={isAdmin} hasFullAccess={hasFullAccess} />}
       {topicsTab === "homework" && <StudentHomework board={board} authUser={authUser} userProfile={userProfile} />}
@@ -900,7 +906,7 @@ export default function App() {
 
       {/* ── MCQ TAB ────────────────────────────────────────── */}
       {topicsTab === "mcq" && (
-        <McqTab board={board} mcqData={mcqData} logAttempt={logAttempt} />
+        <McqTab board={board} logAttempt={logAttempt} />
       )}
 
       {/* ── NMR PRACTICE TAB ──────────────────────────────────────────────────── */}
@@ -908,7 +914,7 @@ export default function App() {
         <UpgradeCard section="NMR Practice" />
       )}
       {topicsTab === "nmr" && isAdmin && (
-        <NmrTab board={board} mcqData={mcqData} />
+        <NmrTab board={board} />
       )}
 
           </ShellBody>

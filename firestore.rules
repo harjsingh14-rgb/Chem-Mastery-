@@ -31,7 +31,7 @@ service cloud.firestore {
         ||
         // Own profile: may not touch role, group links or onboarding records
         (request.auth.uid == uid
-          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'parentUid', 'children', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt', 'evalToken', 'childTerms']))
+          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'parentUid', 'children', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt', 'evalToken', 'childTerms', 'calendarToken']))
       );
     }
 
