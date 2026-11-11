@@ -15,8 +15,6 @@ export const T = {
   accent: "#2AA3AE",      // teal fills, bars, tints
   accentText: "#137681",  // teal used as text (passes contrast on white)
   accentTint: "#E6F5F6",
-  brand: "#1C8591",       // sidebar
-  brandDeep: "#156C76",   // sidebar hover / active
   green: "#1A7F4B", greenTint: "#E7F6EC",
   amber: "#9A5B00", amberTint: "#FFF4DB",
   red: "#B42318", redTint: "#FDECEA",
@@ -56,8 +54,6 @@ export const GLOBAL_CSS = `
   .cm-shell button, .cm-shell input, .cm-shell select, .cm-shell textarea { font-family: inherit; }
   .cm-nav a { transition: background 0.15s, color 0.15s; }
   .cm-nav a:hover { background: ${T.soft}; color: ${T.ink}; }
-  .cm-side a { transition: background 0.15s, color 0.15s; }
-  .cm-side a:hover { background: rgba(255,255,255,0.12); color: #fff; }
   .cm-row-hover:hover { background: #F8FAFB; }
   .cm-link { color: ${T.accentText}; font-weight: 600; text-decoration: none; }
   .cm-link:hover { text-decoration: underline; }
@@ -71,11 +67,7 @@ export const GLOBAL_CSS = `
   .cm-card-link:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(21,40,58,0.08); border-color: #D3DCE3 !important; }
   .cm-tile-link { transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; }
   .cm-tile-link:hover { box-shadow: 0 6px 18px rgba(21,40,58,0.08); border-color: #CFE9EC !important; }
-  .cm-sidebar { display: flex; }
-  .cm-topnav { display: none; }
   @media (max-width: 900px) {
-    .cm-sidebar { display: none; }
-    .cm-topnav { display: flex; }
     .cm-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .cm-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .cm-nav-label { display: none; }
