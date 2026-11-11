@@ -179,6 +179,178 @@ async function deleteAccounts(body, token, res) {
   return res.status(200).json({ ok: true, results });
 }
 
+/**
+ * Place an applicant into a group: create (or reuse) the student's account,
+ * write the profile, mark the applicant placed, email the welcome (student,
+ * parent copied) and give the parent their own account. With sendEmails false
+ * the accounts are made but both welcomes are held for api action sendWelcome.
+ */
+async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = true } = {}) {
+  const group = await fb.getDocument(`classes/${groupCode}`, token);
+  if (!group) throw bad("Group not found");
+  const tutor = group.tutorId ? await fb.getDocument(`users/${group.tutorId}`, token) : null;
+  const community = await fb.getDocument("settings/community", token).catch(() => null);
+  const discordInvite = community?.hidden ? null : (community?.discordInvite || DEFAULT_DISCORD_INVITE);
+
+  // Account: new email/password user with a temporary password, or the
+  // existing account if the student already has one.
+  let tempPassword = fb.generateTempPassword();
+  const auth = await fb.createAuthUser({ email: a.studentEmail, password: tempPassword, displayName: a.studentName }, token);
+  if (auth.existing) {
+    tempPassword = null;
+    // The account may carry a gamer tag or nickname from before; the app shows the name HSJ knows them by
+    try { await fb.updateAuthUser(auth.uid, { displayName: a.studentName }, token); } catch (e) { console.error("displayName update failed:", e.message); }
+  }
+  const existingProfile = await fb.getDocument(`users/${auth.uid}`, token);
+
+  const now = Date.now();
+  const profile = {
+    email: a.studentEmail,
+    displayName: a.studentName,
+    role: "student",
+    board: group.board || a.board,
+    year: a.year,
+    classId: group.code || groupCode,
+    className: group.name || groupCode,
+    tutorId: group.tutorId,
+    joinedClassAt: new Date(now),
+    parentName: a.parentName || "", parentEmail: a.parentEmail || "", parentPhone: a.parentPhone || "",
+    paymentPlan: a.paymentPlan || null, paymentAmount: a.paymentAmount ?? null,
+    agreement: {
+      totalFee: a.paymentAmount ?? null, paymentPlan: a.paymentPlan || null, schedule: a.schedule || [],
+      programmeStart: a.programmeStart || null, programmeEnd: a.programmeEnd || null,
+      initialGrade: a.initialGrade || null, groupSize: a.groupSize || 6, extraTerms: a.extraTerms || "",
+      acceptedAt: a.terms?.acceptedAt || null, acceptedName: a.terms?.acceptedName || null, version: a.terms?.version || null,
+      agreedBeforePlatform: !!a.currentStudent,
+    },
+    selfEvaluation: a.evaluation || null,
+    termsAccepted: a.terms || null,
+    applicantId: id,
+    evalToken: a.evaluation ? null : a.evalToken,
+    placedAt: new Date(now),
+  };
+  if (!existingProfile) { profile.photoURL = ""; profile.createdAt = new Date(now); }
+  if (tempPassword) profile.needsPasswordChange = true;
+  await fb.updateDocument(`users/${auth.uid}`, profile, token);
+  await fb.updateDocument(`applicants/${id}`, { status: "placed", groupCode: profile.classId, studentUid: auth.uid, placedAt: now, welcomeHeld: !sendEmails }, token);
+
+  let emailError = null;
+  if (sendEmails) {
+    try {
+      const evalLink = a.evaluation ? null : `${origin}/onboarding/${a.evalToken}`;
+      const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail, discordInvite, evalLink });
+      await mail.sendEmail({ to: a.studentEmail, cc: a.parentEmail || undefined, subject, html });
+    } catch (e) { emailError = e.message; }
+  }
+
+  // The parent gets their own account, linked to this student
+  let parent = null;
+  try {
+    parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", discordInvite, termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: sendEmails });
+  } catch (e) { parent = { error: e.message }; }
+  return { uid: auth.uid, existingAccount: auth.existing, emailError, parent, groupName: profile.className };
+}
+
+/** Send the welcomes that an import held back. Accounts never logged into get a fresh temporary password. */
+async function sendHeldWelcome(a, id, token, origin) {
+  const st = await fb.getDocument(`users/${a.studentUid}`, token);
+  if (!st) throw bad("The student's profile is missing");
+  const group = st.classId ? await fb.getDocument(`classes/${st.classId}`, token) : null;
+  const tutor = group?.tutorId ? await fb.getDocument(`users/${group.tutorId}`, token) : null;
+  const community = await fb.getDocument("settings/community", token).catch(() => null);
+  const discordInvite = community?.hidden ? null : (community?.discordInvite || DEFAULT_DISCORD_INVITE);
+  const fresh = async (uid, profile) => {
+    if (!profile?.needsPasswordChange) return null; // they have logged in and chosen a password
+    const pw = fb.generateTempPassword();
+    await fb.updateAuthUser(uid, { password: pw }, token);
+    return pw;
+  };
+  const studentPw = await fresh(a.studentUid, st);
+  const evalLink = st.selfEvaluation || a.evaluation ? null : `${origin}/onboarding/${a.evalToken}`;
+  const { subject, html } = mail.welcome(withLabel(a), { groupName: st.className || "", tutorName: tutor?.displayName || "", tempPassword: studentPw, email: a.studentEmail, discordInvite, evalLink });
+  await mail.sendEmail({ to: a.studentEmail, cc: a.parentEmail || undefined, subject, html });
+  let parentEmailed = false;
+  if (st.parentUid) {
+    const parent = await fb.getDocument(`users/${st.parentUid}`, token);
+    if (parent?.email) {
+      const parentPw = await fresh(st.parentUid, parent);
+      const m = mail.parentWelcome({ parentName: parent.displayName || a.parentName, studentName: a.studentName, email: parent.email, tempPassword: parentPw, groupName: st.className || "", tutorName: tutor?.displayName || "", discordInvite });
+      await mail.sendEmail({ to: parent.email, subject: m.subject, html: m.html });
+      parentEmailed = true;
+    }
+  }
+  await fb.updateDocument(`applicants/${id}`, { welcomeHeld: false, welcomeSentAt: Date.now() }, token);
+  return { parentEmailed };
+}
+
+const IMPORT_MAX = 100;
+const softProblem = (p) => p.startsWith("no parent email") || p.includes("same as the student");
+
+/** Rows: [{ studentName, studentEmail, parentName, parentEmail, parentPhone, board, year, groupCode }]. */
+async function importStudents(body, admin, token, origin, res) {
+  const rows = Array.isArray(body.rows) ? body.rows.slice(0, IMPORT_MAX) : [];
+  if (rows.length === 0) throw bad("No rows to import");
+  const dryRun = !!body.dryRun;
+  const sendEmails = body.sendEmails === true;
+  const groups = {};
+  const groupOf = async (code) => {
+    const c = str(code, 20).toUpperCase();
+    if (!c) return null;
+    if (!(c in groups)) groups[c] = await fb.getDocument(`classes/${c}`, token);
+    return groups[c];
+  };
+  const existingApplicants = await fb.queryDocuments("applicants", {}, token, { limit: 2000 });
+  const byEmail = {};
+  for (const x of existingApplicants) if (x.studentEmail) byEmail[x.studentEmail.toLowerCase()] = x;
+  const seen = new Set();
+  const results = [];
+  for (const [i, r] of rows.entries()) {
+    const out = { row: i + 1, studentName: str(r.studentName), studentEmail: str(r.studentEmail, 160).toLowerCase(), status: "ready", problems: [] };
+    const parentEmail = str(r.parentEmail, 160).toLowerCase();
+    if (!out.studentName) out.problems.push("student name missing");
+    if (!EMAIL_RE.test(out.studentEmail)) out.problems.push("student email not valid");
+    if (parentEmail && !EMAIL_RE.test(parentEmail)) out.problems.push("parent email not valid");
+    if (parentEmail && parentEmail === out.studentEmail) out.problems.push("parent email is the same as the student's, so no parent account");
+    if (!parentEmail) out.problems.push("no parent email, so no parent account or lesson-note emails");
+    const group = await groupOf(r.groupCode);
+    if (!group) out.problems.push(r.groupCode ? `group ${str(r.groupCode, 20)} not found` : "no group");
+    const board = str(r.board, 10).toLowerCase() || group?.board || "";
+    if (!BOARDS[board]) out.problems.push("exam board must be AQA, OCR or Edexcel");
+    const year = Number(r.year);
+    if (![12, 13].includes(year)) out.problems.push("year must be 12 or 13");
+    if (seen.has(out.studentEmail)) out.problems.push("duplicate row");
+    seen.add(out.studentEmail);
+    const prior = byEmail[out.studentEmail];
+    if (prior) out.problems.push(prior.status === "placed" ? "already on the platform" : "already onboarding");
+    if (out.problems.some(p => !softProblem(p))) { out.status = "skipped"; results.push(out); continue; }
+    out.groupName = group.name || group.code;
+    if (dryRun) { results.push(out); continue; }
+    try {
+      const id = fb.newToken().slice(0, 20);
+      const now = Date.now();
+      const applicant = {
+        studentName: out.studentName, studentEmail: out.studentEmail,
+        parentName: str(r.parentName) || "", parentEmail: parentEmail || "", parentPhone: str(r.parentPhone, 40),
+        board, year, paymentPlan: null, paymentAmount: null, schedule: [], programmeStart: null,
+        programmeEnd: `the end of the June ${year === 12 ? 2028 : 2027} A Level examination series`,
+        initialGrade: null, groupSize: 6, extraTerms: "", notes: "Imported as a current student",
+        currentStudent: true, imported: true,
+        status: "invited", createdAt: now, createdBy: admin.uid,
+        evalToken: fb.newToken(), termsToken: fb.newToken(),
+        evalSentAt: null, termsSentAt: null, evaluation: null, terms: null,
+        groupCode: null, studentUid: null, placedAt: null,
+      };
+      await fb.createDocument("applicants", id, applicant, token);
+      const placed = await placeApplicant(applicant, id, group.code, token, origin, { sendEmails });
+      out.status = "imported"; out.id = id; out.uid = placed.uid; out.existingAccount = placed.existingAccount;
+      if (placed.emailError) out.problems.push(`welcome email failed: ${placed.emailError}`);
+      if (placed.parent?.error) out.problems.push(`parent account: ${placed.parent.error}`);
+    } catch (e) { out.status = "failed"; out.problems.push(e.message); }
+    results.push(out);
+  }
+  return res.status(200).json({ dryRun, sendEmails, results });
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -212,7 +384,12 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ applicant: { id, ...applicant }, emailError });
     }
 
-    if (!["update", "resend", "delete", "place"].includes(action)) {
+    // Bulk import of current students: rows pasted from a spreadsheet, each
+    // created as a current student (no agreement, no payment details) and
+    // placed straight into a group. dryRun checks the rows without writing.
+    if (action === "import") return importStudents(body, admin, token, origin, res);
+
+    if (!["update", "resend", "delete", "place", "sendWelcome"].includes(action)) {
       if (action === "backfillParents") return backfillParents(body, token, res);
       if (action === "backfillOnboarding") return backfillOnboarding(token, res);
       if (action === "deleteAccounts") return deleteAccounts(body, token, res);
@@ -252,67 +429,17 @@ module.exports = async function handler(req, res) {
 
     if (action === "place") {
       if (a.status === "placed") throw bad("Already placed");
-      const groupCode = str(body.groupCode, 20).toUpperCase();
-      const group = await fb.getDocument(`classes/${groupCode}`, token);
-      if (!group) throw bad("Group not found");
-      const tutor = group.tutorId ? await fb.getDocument(`users/${group.tutorId}`, token) : null;
-      const community = await fb.getDocument("settings/community", token).catch(() => null);
-      const discordInvite = community?.hidden ? null : (community?.discordInvite || DEFAULT_DISCORD_INVITE);
+      const r = await placeApplicant(a, id, str(body.groupCode, 20).toUpperCase(), token, origin, { sendEmails: true });
+      return res.status(200).json({ ok: true, ...r });
+    }
 
-      // Account: new email/password user with a temporary password, or the
-      // existing account if the student already has one.
-      let tempPassword = fb.generateTempPassword();
-      const auth = await fb.createAuthUser({ email: a.studentEmail, password: tempPassword, displayName: a.studentName }, token);
-      if (auth.existing) {
-        tempPassword = null;
-        // The account may carry a gamer tag or nickname from before; the app shows the name HSJ knows them by
-        try { await fb.updateAuthUser(auth.uid, { displayName: a.studentName }, token); } catch (e) { console.error("displayName update failed:", e.message); }
-      }
-      const existingProfile = await fb.getDocument(`users/${auth.uid}`, token);
-
-      const now = Date.now();
-      const profile = {
-        email: a.studentEmail,
-        displayName: a.studentName,
-        role: "student",
-        board: group.board || a.board,
-        year: a.year,
-        classId: group.code || groupCode,
-        className: group.name || groupCode,
-        tutorId: group.tutorId,
-        joinedClassAt: new Date(now),
-        parentName: a.parentName, parentEmail: a.parentEmail, parentPhone: a.parentPhone || "",
-        paymentPlan: a.paymentPlan, paymentAmount: a.paymentAmount ?? null,
-        agreement: {
-          totalFee: a.paymentAmount ?? null, paymentPlan: a.paymentPlan, schedule: a.schedule || [],
-          programmeStart: a.programmeStart || null, programmeEnd: a.programmeEnd || null,
-          initialGrade: a.initialGrade || null, groupSize: a.groupSize || 6, extraTerms: a.extraTerms || "",
-          acceptedAt: a.terms?.acceptedAt || null, acceptedName: a.terms?.acceptedName || null, version: a.terms?.version || null,
-          agreedBeforePlatform: !!a.currentStudent,
-        },
-        selfEvaluation: a.evaluation || null,
-        termsAccepted: a.terms || null,
-        applicantId: id,
-        evalToken: a.evaluation ? null : a.evalToken,
-        placedAt: new Date(now),
-      };
-      if (!existingProfile) { profile.photoURL = ""; profile.createdAt = new Date(now); }
-      if (tempPassword) profile.needsPasswordChange = true;
-      await fb.updateDocument(`users/${auth.uid}`, profile, token);
-      await fb.updateDocument(`applicants/${id}`, { status: "placed", groupCode: profile.classId, studentUid: auth.uid, placedAt: now }, token);
-
-      let emailError = null;
-      try {
-        const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail, discordInvite });
-        await mail.sendEmail({ to: a.studentEmail, cc: a.parentEmail, subject, html });
-      } catch (e) { emailError = e.message; }
-
-      // The parent gets their own account, linked to this student
-      let parent = null;
-      try {
-        parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", discordInvite, termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: true });
-      } catch (e) { parent = { error: e.message }; }
-      return res.status(200).json({ ok: true, uid: auth.uid, existingAccount: auth.existing, emailError, parent });
+    // Held welcome emails (imported current students): reset the temporary
+    // passwords of accounts never logged into, then send the student and
+    // parent welcomes now.
+    if (action === "sendWelcome") {
+      if (a.status !== "placed" || !a.studentUid) throw bad("This student has not been placed yet");
+      const r = await sendHeldWelcome(a, id, token, origin);
+      return res.status(200).json({ ok: true, ...r });
     }
 
     throw bad("Unknown action");

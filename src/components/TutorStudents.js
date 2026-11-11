@@ -6,6 +6,7 @@ import { T, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { SELF_EVALUATION, ragCounts } from "../data/self-evaluation";
 import { PAYMENT_PLANS, paymentPlanLabel, GRADES, programmeEndFor, DEFAULT_GROUP_SIZE, money } from "../data/terms";
+import StudentImport from "./StudentImport";
 
 const STATUS = {
   invited: { tone: "amber", label: "Self-evaluation sent" },
@@ -30,6 +31,7 @@ export default function TutorStudents({ authUser, userProfile }) {
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null);
   const [showNew, setShowNew] = useState(false);
+  const [showImport, setShowImport] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const setRow = (i, k, v) => setForm(f => ({ ...f, schedule: f.schedule.map((r, j) => j === i ? { ...r, [k]: v } : r) }));
   const [saving, setSaving] = useState(false);
@@ -72,10 +74,16 @@ export default function TutorStudents({ authUser, userProfile }) {
     <>
       <PageHeader eyebrow="Students" title="Onboarding"
         sub="Add a student after the discovery call. They get the self-evaluation, the parent gets the terms, and you place them into a group here."
-        right={<Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>Add student</Button>} />
+        right={<>
+          <Button icon="users" onClick={() => { setShowImport(v => !v); setShowNew(false); }}>Import current students</Button>
+          <Button variant="primary" icon="plus" onClick={() => { setShowNew(v => !v); setShowImport(false); }}>Add student</Button>
+        </>} />
 
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {notice && <Notice tone={notice.tone} style={{ marginBottom: 12 }}>{notice.text}</Notice>}
+
+      {showImport && <StudentImport groups={groups} onClose={() => setShowImport(false)}
+        onImported={() => { fetchApplicants().then(setApplicants).catch(() => {}); setFilter("placed"); }} />}
 
       {showNew && (
         <Card style={{ marginBottom: 14 }}>
@@ -206,6 +214,14 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
         : { tone: "green", text: `${a.studentName} placed into ${g.name}. ${r.existingAccount ? "They already had an account, so no new password was sent." : "Welcome email with login sent."}` });
     });
   };
+  const sendWelcome = () => {
+    if (!window.confirm(`Send the welcome emails with logins to ${a.studentEmail}${a.parentEmail ? ` and ${a.parentEmail}` : ""} now?`)) return;
+    run("welcome", async () => {
+      await studentsApi("sendWelcome", { id: a.id });
+      onChange({ welcomeHeld: false, welcomeSentAt: Date.now() });
+      setNotice({ tone: "green", text: `Welcome emails sent for ${a.studentName}.` });
+    });
+  };
   const remove = () => {
     if (!window.confirm(`Remove ${a.studentName} from onboarding? Their links stop working.`)) return;
     run("delete", async () => { await studentsApi("delete", { id: a.id }); onRemove(); });
@@ -256,6 +272,12 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
                 {groups.map(g => <option key={g.code} value={g.code}>{g.name} ({boardLabel(g.board)}{g.lessonSlot ? `, ${g.lessonSlot}` : ""})</option>)}
               </select>
               <Button variant="accent" onClick={place} disabled={!!busy || !groupCode}>{busy === "place" ? "Placing…" : "Place"}</Button>
+            </div>
+          )}
+          {a.status === "placed" && a.welcomeHeld && (
+            <div style={{ marginTop: 8 }}>
+              <Chip tone="amber">Welcome emails held</Chip>
+              <div style={{ marginTop: 6 }}><Button size="sm" variant="accent" onClick={sendWelcome} disabled={!!busy}>{busy === "welcome" ? "Sending…" : "Send welcome emails"}</Button></div>
             </div>
           )}
         </div>

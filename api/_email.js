@@ -75,7 +75,7 @@ const discordBlock = (invite, who) => invite ? `
       <div style="margin-top:8px;"><a href="${invite}" style="color:#4338CA;font-weight:700;">${esc(invite)}</a></div>
     </div>` : "";
 
-function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite }) {
+function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite, evalLink }) {
   const html = layout("Your HSJ Tuition account is ready", `
     <p>Hi ${esc(firstName(a.studentName))},</p>
     <p>You are in <strong>${esc(groupName)}</strong>${tutorName ? ` with ${esc(tutorName)}` : ""}. Your homework, feedback and progress all live in your HSJ Tuition account.</p>
@@ -87,6 +87,7 @@ function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite }
       <div style="font-size:12px;color:#6b7a8c;margin-top:6px;">You will be asked to choose your own password when you first log in.</div>
     </div>` : `<p>Log in with your existing account for <strong>${esc(email)}</strong>.</p>`}
     ${button(SITE, "Log in to HSJ Tuition")}
+    ${evalLink ? `<p style="margin-top:18px;"><strong>One thing to do first.</strong> Fill in the short self-evaluation (about 5 minutes): tick the modules you have been taught so far and rate yourself Red, Amber or Green on each topic. It shapes what we work on. <a href="${evalLink}" style="color:#1F7FB5;font-weight:700;">Complete my self-evaluation</a></p>` : ""}
     ${discordBlock(discordInvite, "student")}
     <p style="margin-top:22px;">How it works: after each lesson a homework set appears in your account. Do it before the next lesson. Most of it is marked as you go, and I look at the rest. Your parent is copied in here so they know where to find everything.</p>
     <p>See you in the lesson,<br>Harj</p>`);
