@@ -7,7 +7,7 @@ import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesso
   fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
   fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
-import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs } from "../ui/components";
+import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs, Icon } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
 import { lastOccurrence, lastSessionDate, describeSlots, slotsOf } from "../utils/schedule";
 
@@ -21,21 +21,34 @@ const selectStyle = { padding: "9px 12px", borderRadius: 10, border: `1px solid 
 /** Spec sub-topics for the group's board, grouped by module. A ticked topic is stored as "ref title". */
 function TopicPicker({ board, value, onChange }) {
   const spec = SELF_EVALUATION[board] || SELF_EVALUATION.aqa;
+  const [open, setOpen] = useState({});
   const toggle = (t) => onChange(value.includes(t) ? value.filter(x => x !== t) : [...value, t]);
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      {spec.modules.map(m => (
-        <div key={m.id}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 6 }}>{m.title}</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {m.subtopics.map(st => {
-              const t = `${st.ref} ${st.title}`;
-              const on = value.includes(t);
-              return <button key={st.ref} type="button" onClick={() => toggle(t)} style={{ padding: "5px 10px", borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: "pointer", border: `1px solid ${on ? T.accentText : T.border}`, background: on ? T.accentTint : T.card, color: on ? T.accentText : T.body }}>{t}</button>;
-            })}
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {spec.modules.map(m => {
+        const picked = m.subtopics.filter(st => value.includes(`${st.ref} ${st.title}`)).length;
+        const isOpen = open[m.id] ?? false;
+        return (
+          <div key={m.id} style={{ border: `1px solid ${picked ? T.accentText : T.border}`, borderRadius: T.radiusSm, overflow: "hidden" }}>
+            <button type="button" onClick={() => setOpen(o => ({ ...o, [m.id]: !isOpen }))} className="cm-row-hover" aria-expanded={isOpen}
+              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", textAlign: "left", padding: "9px 12px", background: picked ? T.accentTint : "transparent", border: "none", cursor: "pointer", color: T.ink, fontFamily: "inherit" }}>
+              <Icon name="chevronDown" size={14} color={T.muted} style={{ transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)", transition: "transform 0.15s", flexShrink: 0 }} />
+              <span style={{ flex: 1, fontSize: 13, fontWeight: 700 }}>{m.title}</span>
+              {picked > 0 && <Chip tone="accent">{picked} ticked</Chip>}
+              <span style={{ fontSize: 11, color: T.faint }}>{m.subtopics.length} topics</span>
+            </button>
+            {isOpen && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, padding: "4px 12px 12px" }}>
+                {m.subtopics.map(st => {
+                  const t = `${st.ref} ${st.title}`;
+                  const on = value.includes(t);
+                  return <button key={st.ref} type="button" onClick={() => toggle(t)} style={{ padding: "5px 10px", borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", border: `1px solid ${on ? T.accentText : T.border}`, background: on ? T.accentTint : T.card, color: on ? T.accentText : T.body }}>{on ? "✓ " : ""}{t}</button>;
+                })}
+              </div>
+            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -213,6 +226,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   const [error, setError] = useState(null);
   const [flash, setFlash] = useState(null);
   const [editTopics, setEditTopics] = useState(false);
+  const [openRows, setOpenRows] = useState({});
 
   useEffect(() => {
     if (!uid || !lessonId) return;
@@ -292,7 +306,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   const saveAttendanceAll = async () => {
     setError(null);
     for (const s of students || []) await save(s, true);
-    say("Attendance saved for everyone.");
+    say("Everyone's attendance and drafts saved.");
   };
   const sendAllUnsent = async () => {
     const pending = (students || []).filter(s => !notes[s.uid]?.sentAt && [drafts[s.uid]?.www, drafts[s.uid]?.ebi, drafts[s.uid]?.extra, drafts[s.uid]?.text].some(x => (x || "").trim()));
@@ -322,104 +336,139 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   if (!lesson) return <PageHeader eyebrow="Lessons" title="Loading…" />;
   const sentCount = (students || []).filter(s => notes[s.uid]?.sentAt).length;
   const counts = (students || []).reduce((c, s) => { const a = drafts[s.uid]?.attendance || "present"; c[a] = (c[a] || 0) + 1; return c; }, {});
+  const anyBusy = Object.values(busy).some(Boolean);
+  const toggleOpen = (suid) => setOpenRows(o => ({ ...o, [suid]: !o[suid] }));
 
   return (
     <>
       <PageHeader eyebrow="Lessons" title={`${lesson.className || lesson.classId} · ${fmtLessonDate(lesson.date)}${lesson.title ? ` · ${lesson.title}` : ""}`}
-        sub={students ? `${students.length} student${students.length === 1 ? "" : "s"} · ${sentCount} note${sentCount === 1 ? "" : "s"} sent${lastHw ? ` · homework reviewed: ${lastHw.title}` : " · no homework was due before this lesson"}` : "Loading students…"}
+        sub={students ? `${students.length} student${students.length === 1 ? "" : "s"} · ${counts.present || 0} present${counts.late ? `, ${counts.late} late` : ""}${counts.absent ? `, ${counts.absent} absent` : ""} · ${sentCount} note${sentCount === 1 ? "" : "s"} sent${lastHw ? ` · homework reviewed: ${lastHw.title}` : ""}` : "Loading students…"}
         right={<>
           <Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/lessons")}>All lessons</Button>
-          <Button variant="accent" onClick={sendAllUnsent} disabled={!students}>Send all written</Button>
           <Button variant="danger" onClick={remove}>Delete</Button>
         </>} />
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {flash && <Notice tone="green" style={{ marginBottom: 12 }}>{flash}</Notice>}
 
       <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-        <CardHeader title="Attendance" sub="Mark everyone, then save. You can write the notes now or come back later." right={<div style={{ display: "flex", gap: 6 }}><Button size="sm" onClick={() => applyToAll("attendance", "present")} disabled={!students}>Mark all present</Button><Button size="sm" variant="accent" onClick={saveAttendanceAll} disabled={!students || Object.values(busy).some(Boolean)}>Save attendance</Button></div>} />
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          {(students || []).map(s => {
-            const a = drafts[s.uid]?.attendance || "present";
-            const o = ATTENDANCE.find(x => x.id === a) || ATTENDANCE[0];
-            return (
-              <button key={s.uid} type="button" onClick={() => setDraft(s.uid, { attendance: ATTENDANCE[(ATTENDANCE.findIndex(x => x.id === a) + 1) % ATTENDANCE.length].id })} title="Click to cycle present, late, absent"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 10px 6px 6px", borderRadius: 999, border: `1px solid ${T.border}`, background: T.card, cursor: "pointer", fontFamily: T.font, fontSize: 12, fontWeight: 600, color: T.ink }}>
-                <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={24} />
-                {(s.displayName || s.email || "Student").split(" ")[0]}
-                <Chip tone={o.tone}>{o.label}</Chip>
-              </button>
-            );
-          })}
-          <span style={{ fontSize: 11, color: T.muted }}>{counts.present || 0} present{counts.late ? `, ${counts.late} late` : ""}{counts.absent ? `, ${counts.absent} absent` : ""}</span>
-        </div>
-      </Card>
-
-      <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-        <CardHeader title="What we covered" sub="Goes into every note from this lesson" right={<Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : "Edit topics"}</Button>} />
+        <CardHeader title="What we covered" sub="Goes into every note from this lesson" right={<Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : (lesson.topics || []).length ? "Edit spec topics" : "Tick spec topics"}</Button>} />
         <textarea value={summary} onChange={e => setSummary(e.target.value)} onBlur={saveSummary} rows={2} maxLength={2000}
           placeholder="One or two lines for parents, e.g. pH of strong and weak acids, Ka calculations, strong base pH. Saved when you click away."
           style={textareaStyle} />
         {editTopics ? <TopicPicker board={lesson.board} value={lesson.topics || []} onChange={saveTopics} />
-          : <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{(lesson.topics || []).length ? lesson.topics.map(t => <Chip key={t} tone="accent">{t}</Chip>) : <span style={{ fontSize: 12, color: T.muted }}>No spec topics ticked. Edit topics to add them.</span>}</div>}
+          : (lesson.topics || []).length > 0 && <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{lesson.topics.map(t => <Chip key={t} tone="accent">{t}</Chip>)}</div>}
       </Card>
 
       {students && students.length === 0 && <Card padding={0}><EmptyState icon="users" title="No students in this group yet" body="Place students into the group from the Students tab, then come back to write their notes." /></Card>}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {(students || []).map(s => {
-          const d = drafts[s.uid] || { attendance: "present" };
-          const n = notes[s.uid];
-          const p = previous[s.uid];
-          const hw = homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null);
-          const first = (s.displayName || "they").split(" ")[0];
-          const dirty = !!n && (["www", "ebi", "extra", "text"].some(k => (n[k] || "") !== (d[k] || "").trim()) || n.attendance !== d.attendance);
-          const o = ATTENDANCE.find(x => x.id === d.attendance) || ATTENDANCE[0];
-          return (
-            <Card key={s.uid} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={32} />
-                <div style={{ flex: 1, minWidth: 160 }}>
-                  <div style={{ fontWeight: 700, display: "flex", gap: 8, alignItems: "center" }}>{s.displayName || s.email} <Chip tone={o.tone}>{o.label}</Chip></div>
-                  <div style={{ fontSize: 11, color: T.muted }}>{s.parentEmail ? `Parent: ${s.parentEmail}` : "No parent email on file, the note goes to the student"}</div>
-                </div>
-                <div style={{ display: "flex", gap: 4 }}>
-                  {ATTENDANCE.map(x => <Button key={x.id} size="sm" variant={d.attendance === x.id ? "primary" : "secondary"} onClick={() => setDraft(s.uid, { attendance: x.id })}>{x.label}</Button>)}
-                </div>
-              </div>
-              {hw && (
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", fontSize: 12, color: T.muted }}>
-                  <span>Homework "{hw.title}":</span>
-                  <Chip tone={hw.status === "submitted" ? (hw.pct >= 75 ? "green" : hw.pct >= 50 ? "amber" : "red") : hw.status === "in-progress" ? "amber" : "red"}>
-                    {hw.status === "submitted" ? `${hw.score}/${hw.maxScore} (${hw.pct}%)` : hw.status === "in-progress" ? "Started, not finished" : "Not started"}
-                  </Chip>
-                  {hw.weak.map(w => <Chip key={w} tone="neutral">{w}</Chip>)}
-                </div>
-              )}
-              {p && (p.ebi || p.text) && <div style={{ fontSize: 12, color: T.muted, background: T.soft, borderRadius: T.radiusSm, padding: "8px 10px" }}><strong>Last time ({fmtLessonDate(p.date)}):</strong> {p.ebi ? `even better if ${p.ebi}` : p.text}</div>}
-              <div className="cm-grid-2" style={{ gap: 10 }}>
-                <NoteField id={`www-${s.uid}`} label="What went well" tone={T.green} value={d.www || ""} onChange={v => setDraft(s.uid, { www: v })} onAll={() => applyToAll("www", d.www || "")}
-                  placeholder={`e.g. ${first} set out the Ka calculation clearly and got the pH right first time.`} />
-                <NoteField id={`ebi-${s.uid}`} label="Even better if" tone={T.amber} value={d.ebi || ""} onChange={v => setDraft(s.uid, { ebi: v })} onAll={() => applyToAll("ebi", d.ebi || "")}
-                  placeholder={`e.g. ${first} practised the weak acid assumptions and when they break down.`} />
-              </div>
-              {(d.text || n?.text) ? <NoteField id={`text-${s.uid}`} label="Note (older format)" value={d.text || ""} onChange={v => setDraft(s.uid, { text: v })} placeholder="" /> : null}
-              <details>
-                <summary style={{ fontSize: 12, fontWeight: 600, color: T.muted, cursor: "pointer" }}>Extra notes for home and a private note{(d.extra || d.private) ? " · written" : ""}</summary>
-                <div className="cm-grid-2" style={{ gap: 10, marginTop: 8 }}>
-                  <NoteField id={`extra-${s.uid}`} label="Extra notes (sent to the parent)" value={d.extra || ""} onChange={v => setDraft(s.uid, { extra: v })} placeholder="Anything else the parent should know." />
-                  <NoteField id={`priv-${s.uid}`} label="Private note (only you and HSJ see this)" tone={T.indigo} value={d.private || ""} onChange={v => setDraft(s.uid, { private: v })} placeholder="e.g. seemed tired, check in next week. Never emailed." />
-                </div>
-              </details>
-              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                <Button variant="accent" size="sm" onClick={() => send(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "send" ? "Sending…" : n?.sentAt ? "Send again" : "Save and send"}</Button>
-                <Button size="sm" onClick={() => save(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "save" ? "Saving…" : "Save draft"}</Button>
-                {n?.sentAt && <Chip tone={dirty ? "amber" : "green"}>{dirty ? `Sent ${fmtWhen(n.sentAt)}, edited since` : `Sent ${fmtWhen(n.sentAt)} to ${(n.sentTo || []).join(", ")}`}</Chip>}
-                {!n?.sentAt && n && <Chip tone="neutral">Draft saved</Chip>}
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+      {students && students.length > 0 && (
+        <Card padding={0}>
+          <CardHeader title="Attendance and notes" sub="One row per student. Fill the row across, then Save or Send. Expand a row for the homework record, last lesson's note, extra notes and your private note."
+            right={<div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              <Button size="sm" onClick={() => applyToAll("attendance", "present")}>Mark all present</Button>
+              <Button size="sm" onClick={saveAttendanceAll} disabled={anyBusy}>Save all drafts</Button>
+              <Button size="sm" variant="accent" onClick={sendAllUnsent} disabled={anyBusy}>Send all written</Button>
+            </div>}
+            style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
+          <Table minWidth={900}>
+            <thead><tr>
+              <th style={{ ...th, paddingLeft: 20, width: 170 }}>Student</th>
+              <th style={{ ...th, width: 200 }}>Attendance</th>
+              <th style={{ ...th, color: T.green }}>What went well</th>
+              <th style={{ ...th, color: T.amber }}>Even better if</th>
+              <th style={{ ...th, paddingRight: 20, width: 190 }}>Note</th>
+            </tr></thead>
+            <tbody>
+              {students.map(s => {
+                const d = drafts[s.uid] || { attendance: "present" };
+                const n = notes[s.uid];
+                const p = previous[s.uid];
+                const hw = homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null);
+                const first = (s.displayName || "they").split(" ")[0];
+                const dirty = !!n && (["www", "ebi", "extra", "text"].some(k => (n[k] || "") !== (d[k] || "").trim()) || n.attendance !== d.attendance);
+                const isOpen = !!openRows[s.uid];
+                const extras = [hw ? 1 : 0, p && (p.ebi || p.text) ? 1 : 0, d.extra ? 1 : 0, d.private ? 1 : 0].reduce((x, y) => x + y, 0);
+                return (
+                  <React.Fragment key={s.uid}>
+                    <tr style={{ borderTop: `1px solid ${T.line}`, verticalAlign: "top" }}>
+                      <td style={{ ...td, paddingLeft: 20 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={28} />
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130 }} title={s.displayName || s.email}>{s.displayName || s.email}</div>
+                            <button type="button" onClick={() => toggleOpen(s.uid)} style={{ border: "none", background: "transparent", padding: 0, color: T.accentText, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: T.font }}>{isOpen ? "Less" : `More${extras ? ` (${extras})` : ""}`}</button>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={td}><AttendanceButtons value={d.attendance} onChange={v => setDraft(s.uid, { attendance: v })} /></td>
+                      <td style={{ ...td, paddingLeft: 6, paddingRight: 6 }}><CellField id={`www-${s.uid}`} tone={T.green} value={d.www || ""} onChange={v => setDraft(s.uid, { www: v })} onAll={() => applyToAll("www", d.www || "")} placeholder={`${first} …`} /></td>
+                      <td style={{ ...td, paddingLeft: 6, paddingRight: 6 }}><CellField id={`ebi-${s.uid}`} tone={T.amber} value={d.ebi || ""} onChange={v => setDraft(s.uid, { ebi: v })} onAll={() => applyToAll("ebi", d.ebi || "")} placeholder={`${first} …`} /></td>
+                      <td style={{ ...td, paddingRight: 20 }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
+                          <div style={{ display: "flex", gap: 4 }}>
+                            <Button variant="accent" size="sm" onClick={() => send(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "send" ? "Sending…" : n?.sentAt ? "Send again" : "Send"}</Button>
+                            <Button size="sm" onClick={() => save(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "save" ? "Saving…" : "Save"}</Button>
+                          </div>
+                          {n?.sentAt ? <Chip tone={dirty ? "amber" : "green"}>{dirty ? "Edited since sending" : `Sent ${fmtWhen(n.sentAt)}`}</Chip> : n ? <Chip tone="neutral">Draft saved</Chip> : <span style={{ fontSize: 11, color: T.faint }}>{s.parentEmail ? `To ${s.parentEmail}` : "No parent email, goes to the student"}</span>}
+                        </div>
+                      </td>
+                    </tr>
+                    {isOpen && (
+                      <tr style={{ background: "#FAFBFC" }}>
+                        <td colSpan={5} style={{ ...td, padding: "10px 20px 14px" }}>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", fontSize: 12, color: T.muted }}>
+                              {hw ? <span style={{ display: "inline-flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>Homework "{hw.title}": <Chip tone={hw.status === "submitted" ? (hw.pct >= 75 ? "green" : hw.pct >= 50 ? "amber" : "red") : hw.status === "in-progress" ? "amber" : "red"}>{hw.status === "submitted" ? `${hw.score}/${hw.maxScore} (${hw.pct}%)` : hw.status === "in-progress" ? "Started, not finished" : "Not started"}</Chip>{hw.weak.map(w => <Chip key={w} tone="neutral">{w}</Chip>)}</span> : <span>No homework was due before this lesson.</span>}
+                              {p && (p.ebi || p.text) && <span><strong>Last time ({fmtLessonDate(p.date)}):</strong> {p.ebi ? `even better if ${p.ebi}` : p.text}</span>}
+                              {n?.sentAt && <span>Sent to {(n.sentTo || []).join(", ")}</span>}
+                            </div>
+                            <div className="cm-grid-2" style={{ gap: 10 }}>
+                              <NoteField id={`extra-${s.uid}`} label="Extra notes (sent to the parent)" value={d.extra || ""} onChange={v => setDraft(s.uid, { extra: v })} placeholder="Anything else the parent should know." />
+                              <NoteField id={`priv-${s.uid}`} label="Private note (only you and HSJ see this, never emailed)" tone={T.indigo} value={d.private || ""} onChange={v => setDraft(s.uid, { private: v })} placeholder="e.g. seemed tired, check in next week." />
+                            </div>
+                            {(d.text || n?.text) ? <NoteField id={`text-${s.uid}`} label="Note (older format, still sent)" value={d.text || ""} onChange={v => setDraft(s.uid, { text: v })} placeholder="" /> : null}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Card>
+      )}
     </>
+  );
+}
+
+const ATT_STYLE = { present: [T.green, T.greenTint], late: [T.amber, T.amberTint], absent: [T.red, T.redTint] };
+
+/** Present / Late / Absent, the chosen one filled in its colour. */
+function AttendanceButtons({ value, onChange }) {
+  return (
+    <div style={{ display: "inline-flex", border: `1px solid ${T.border}`, borderRadius: T.radiusSm, overflow: "hidden" }}>
+      {ATTENDANCE.map(o => {
+        const on = value === o.id;
+        const [fg, tint] = ATT_STYLE[o.id];
+        return (
+          <button key={o.id} type="button" onClick={() => onChange(o.id)} aria-pressed={on}
+            style={{ padding: "6px 10px", border: "none", borderLeft: o.id === "present" ? "none" : `1px solid ${T.border}`, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: T.font, background: on ? fg : tint, color: on ? "#fff" : fg }}>
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** A note box inside the grid, with "Use for everyone" once something is typed. */
+function CellField({ id, tone, value, onChange, onAll, placeholder }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <textarea id={id} value={value} onChange={e => onChange(e.target.value)} rows={3} maxLength={2000} placeholder={placeholder} aria-label={id.startsWith("www") ? "What went well" : "Even better if"}
+        style={{ ...textareaStyle, fontSize: 13, padding: "8px 10px", minWidth: 180, borderLeft: `3px solid ${tone}` }} />
+      {onAll && value.trim() && <button type="button" onClick={onAll} style={{ alignSelf: "flex-start", border: "none", background: "transparent", color: T.accentText, fontSize: 11, fontWeight: 600, cursor: "pointer", padding: 0, fontFamily: T.font }}>Use for everyone</button>}
+    </div>
   );
 }
 

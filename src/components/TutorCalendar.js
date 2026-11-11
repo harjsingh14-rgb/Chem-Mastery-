@@ -54,14 +54,19 @@ export default function TutorCalendar({ authUser, userProfile }) {
     let cancelled = false;
     (async () => {
       try {
-        const [cls, ses, tut] = await Promise.all([
+        const [cls, tut] = await Promise.all([
           isAdmin ? fetchAllClasses() : fetchTutorClasses(uid),
-          isAdmin ? fetchAllSessions() : fetchTutorSessions(uid),
           isAdmin ? fetchTutors() : Promise.resolve([]),
         ]);
         if (cancelled) return;
-        setClasses(cls); setSessions(ses); setTutors(tut);
-      } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); setSessions([]); } }
+        setClasses(cls); setTutors(tut);
+      } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); } }
+      // Sessions are read separately so a refused read (rules not published
+      // yet) shows as an error rather than hiding the groups
+      try {
+        const ses = await (isAdmin ? fetchAllSessions() : fetchTutorSessions(uid));
+        if (!cancelled) setSessions(ses);
+      } catch (e) { if (!cancelled) { setSessions([]); setError(/permission/i.test(e.message) ? "The calendar cannot be read yet. The Firestore rule for sessions needs publishing in the Firebase console, then reload." : e.message); } }
     })();
     return () => { cancelled = true; };
   }, [uid, isAdmin]);
@@ -207,6 +212,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
   if (classes && classes.length === 0) return (
     <>
       <PageHeader eyebrow="Calendar" title="Calendar" />
+      {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Sessions belong to a group. Create one on the Overview tab, then come back to put lessons on the calendar." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>
     </>
   );
