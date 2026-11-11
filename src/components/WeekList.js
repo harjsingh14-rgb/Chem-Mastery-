@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateSession } from "../firebase";
 import { fmtTime, isoDate, addDays, sessionEndMs, DEFAULT_MINUTES } from "../utils/schedule";
-import { T } from "../ui/theme";
+import { T, groupColour } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Notice } from "../ui/components";
 
 // "This week" on the tutor Overview: every lesson and session from Monday to
@@ -42,6 +42,7 @@ export default function WeekList({ sessions, classes, tutorUid, tutorName, onLes
   const total = byDay.reduce((n, g) => n + g.items.filter(s => s.status !== "cancelled").length, 0);
   const minutes = byDay.reduce((n, g) => n + g.items.filter(s => s.status !== "cancelled").reduce((m, s) => m + (s.minutes || DEFAULT_MINUTES), 0), 0);
   const groupOf = (s) => (classes || []).find(c => c.code === s.classId);
+  const colourOf = (s) => groupColour((classes || []).findIndex(c => c.code === s.classId));
 
   const openNotes = async (s) => {
     if (s.lessonId) { navigate(`/tutor/lessons/${s.lessonId}`); return; }
@@ -86,7 +87,10 @@ export default function WeekList({ sessions, classes, tutorUid, tutorName, onLes
               <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 20px", flexWrap: "wrap", opacity: cancelled ? 0.6 : 1 }}>
                 <div style={{ width: 110, fontSize: 13, fontWeight: 700, color: cancelled ? T.faint : T.ink, textDecoration: cancelled ? "line-through" : "none", fontVariantNumeric: "tabular-nums" }}>{fmtTime(s.time)} – {fmtTime(endTime(s))}</div>
                 <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 2 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: cancelled ? T.faint : T.ink, textDecoration: cancelled ? "line-through" : "none" }}>{s.title ? `${s.title} · ` : ""}{s.className || grp?.name || s.classId}</span>
+                  <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: cancelled ? T.soft : colourOf(s)[0], color: cancelled ? T.faint : colourOf(s)[1], whiteSpace: "nowrap" }}>{s.className || grp?.name || s.classId}</span>
+                    {s.title && <span style={{ fontSize: 14, fontWeight: 600, color: cancelled ? T.faint : T.ink, textDecoration: cancelled ? "line-through" : "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</span>}
+                  </span>
                   <span style={{ fontSize: 12, color: T.muted }}>{[who, tutorName && tutorName(s.tutorId), s.note].filter(Boolean).join(" · ")}</span>
                 </div>
                 <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>

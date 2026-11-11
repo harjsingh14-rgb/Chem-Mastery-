@@ -18,20 +18,21 @@ import AgreementDocument, { PrintAgreementButton, agreementVarsFromProfile } fro
 
 const TABS = [{ id: "progress", label: "Progress" }, { id: "lessons", label: "Lessons" }, { id: "homework", label: "Homework" }, { id: "payments", label: "Payments" }, { id: "agreement", label: "Agreement" }];
 
-export default function ParentPage({ authUser, userProfile, childUid }) {
+export default function ParentPage({ authUser, userProfile, childUid, previewUid }) {
   const navigate = useNavigate();
   const [children, setChildren] = useState(null);
   const [tab, setTab] = useState("progress");
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const ids = userProfile?.children || [];
+    // previewUid: a tutor looking at the page as this student's parent sees it
+    const ids = previewUid ? [previewUid] : (userProfile?.children || []);
     if (ids.length === 0) { setChildren([]); return; }
     let alive = true;
     fetchUserProfiles(ids).then(list => alive && setChildren(list.sort((a, b) => (a.displayName || "").localeCompare(b.displayName || ""))))
       .catch(e => { if (alive) { setError(e.message); setChildren([]); } });
     return () => { alive = false; };
-  }, [userProfile]);
+  }, [userProfile, previewUid]);
 
   const child = useMemo(() => {
     if (!children || children.length === 0) return null;
@@ -49,7 +50,13 @@ export default function ParentPage({ authUser, userProfile, childUid }) {
 
   return (
     <>
-      <PageHeader eyebrow="Parent" title={child.displayName || "My child"}
+      {previewUid && (
+        <Notice tone="accent" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <span style={{ flex: 1 }}>This is the page {child.parentName || "the parent"} sees for {(child.displayName || "this student").split(" ")[0]}. Nothing here is sent or changed by looking.</span>
+          <Button size="sm" icon="arrowLeft" onClick={() => navigate(`/tutor/students/${previewUid}`)}>Back to the profile</Button>
+        </Notice>
+      )}
+      <PageHeader eyebrow={previewUid ? "Parent view" : "Parent"} title={child.displayName || "My child"}
         sub={[child.className, child.board ? boardLabel(child.board) : null, child.year ? `Year ${child.year}` : null].filter(Boolean).join(" · ")}
         right={children.length > 1 && (
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>

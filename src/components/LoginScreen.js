@@ -38,7 +38,7 @@ export default function LoginScreen({ onLogin, onBack }) {
       <div style={{ width: "100%", maxWidth: "420px" }}>
         {/* Back to landing page */}
         {onBack && (
-          <button onClick={onBack} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 16px", color: "#29ABE2", cursor: "pointer", fontSize: "13px", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, marginBottom: "20px", display: "flex", alignItems: "center", gap: "6px" }}>
+          <button onClick={onBack} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "8px 16px", color: "#2AA3AE", cursor: "pointer", fontSize: "13px", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, marginBottom: "20px", display: "flex", alignItems: "center", gap: "6px" }}>
             ← Back to overview
           </button>
         )}
@@ -46,7 +46,7 @@ export default function LoginScreen({ onLogin, onBack }) {
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <img src="/hsj-logo.png" alt="HSJ Tuition" style={{ height: "120px", objectFit: "contain", display: "block", margin: "0 auto 20px", filter: "drop-shadow(0 4px 20px rgba(41,171,226,0.3))" }} />
           <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "32px", color: "#ffffff", letterSpacing: "2px", textTransform: "uppercase", lineHeight: 1.1 }}>HSJ TUITION</div>
-          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "14px", color: "#29ABE2", fontWeight: 600, letterSpacing: "2.5px", textTransform: "uppercase", marginTop: "8px" }}>A-Level Chemistry. Mastered.</div>
+          <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: "14px", color: "#2AA3AE", fontWeight: 600, letterSpacing: "2.5px", textTransform: "uppercase", marginTop: "8px" }}>A-Level Chemistry. Mastered.</div>
         </div>
 
         {/* Card */}
@@ -81,13 +81,13 @@ export default function LoginScreen({ onLogin, onBack }) {
           <form onSubmit={handleEmail}>
             <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required
               style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "12px", boxSizing: "border-box", transition: "border 0.15s" }}
-              onFocus={e => e.target.style.borderColor = "#29ABE2"}
+              onFocus={e => e.target.style.borderColor = "#2AA3AE"}
               onBlur={e => e.target.style.borderColor = "#e0e8f0"}
             />
             {mode === "login" && (
               <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box", transition: "border 0.15s" }}
-                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onFocus={e => e.target.style.borderColor = "#2AA3AE"}
                 onBlur={e => e.target.style.borderColor = "#e0e8f0"}
               />
             )}
@@ -95,7 +95,7 @@ export default function LoginScreen({ onLogin, onBack }) {
             {error && <div style={{ color: "#dc2626", fontSize: "13px", fontWeight: 600, marginBottom: "12px", padding: "8px 12px", background: "#fef2f2", borderRadius: "8px" }}>{error}</div>}
             <button type="submit" disabled={loading} style={{
               width: "100%", padding: "14px", borderRadius: "12px", border: "none",
-              background: "#29ABE2", color: "#ffffff", fontSize: "15px", fontWeight: 700,
+              background: "#2AA3AE", color: "#ffffff", fontSize: "15px", fontWeight: 700,
               cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s",
               opacity: loading ? 0.6 : 1
             }}>
@@ -106,12 +106,12 @@ export default function LoginScreen({ onLogin, onBack }) {
           {/* Forgot password / back */}
           <div style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "#7a95b0" }}>
             <button onClick={() => { setMode(mode === "login" ? "reset" : "login"); setError(""); setResetSent(false); }}
-              style={{ background: "none", border: "none", color: "#29ABE2", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", fontSize: "14px", padding: 0 }}>
+              style={{ background: "none", border: "none", color: "#2AA3AE", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", fontSize: "14px", padding: 0 }}>
               {mode === "login" ? "Forgotten your password?" : "Back to log in"}
             </button>
           </div>
           <div style={{ textAlign: "center", marginTop: "14px", fontSize: "12px", color: "#7a95b0", lineHeight: 1.5 }}>
-            Accounts are set up by HSJ Tuition when you join a group. Not with HSJ yet? Visit <a href="https://hsjtuition.co.uk" style={{ color: "#29ABE2", fontWeight: 600 }}>hsjtuition.co.uk</a>.
+            Accounts are set up by HSJ Tuition when you join a group. Not with HSJ yet? Visit <a href="https://hsjtuition.co.uk" style={{ color: "#2AA3AE", fontWeight: 600 }}>hsjtuition.co.uk</a>.
           </div>
         </div>
 

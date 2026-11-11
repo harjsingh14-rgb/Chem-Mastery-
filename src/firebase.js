@@ -38,6 +38,18 @@ export async function updateMyName(name) {
   return displayName;
 }
 
+/** Own profile picture: a small data URL (see PhotoUpload), or null to remove it. */
+export async function updateMyPhoto(photoURL) {
+  const u = auth.currentUser;
+  if (!u) throw new Error("Not signed in");
+  await setDoc(doc(db, "users", u.uid), { photoURL: photoURL || null, updatedAt: serverTimestamp() }, { merge: true });
+  return photoURL || null;
+}
+/** A tutor or admin sets a student's picture (rules allow displayName and photoURL only). */
+export async function setStudentPhoto(uid, photoURL) {
+  await updateDoc(doc(db, "users", uid), { photoURL: photoURL || null });
+}
+
 export const onAuthChange = (callback) => onAuthStateChanged(auth, callback);
 
 // --- Firestore user profile ---
@@ -182,6 +194,13 @@ export async function updateClass(code, patch) {
 export async function fetchTutors() {
   const snap = await getDocs(query(collection(db, "users"), where("role", "in", ["tutor", "admin"])));
   return snap.docs.map(d => ({ uid: d.id, ...d.data() })).sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""));
+}
+
+/** Every student placed with one tutor (their own groups). */
+export async function fetchStudentsForTutor(tutorUid) {
+  const snap = await getDocs(query(collection(db, "users"), where("tutorId", "==", tutorUid)));
+  return snap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(u => u.role === "student" || u.classId)
+    .sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""));
 }
 
 /** Every placed student (admin). */
@@ -455,6 +474,15 @@ export async function fetchClassLessonNotes(classId, tutorUid) {
     : query(collection(db, "lessonNotes"), where("classId", "==", classId));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+/** Every lesson note on one student, sent or not (profile page). tutorUid null = admin, any tutor. */
+export async function fetchStudentLessonNotes(uid, tutorUid) {
+  const q = tutorUid
+    ? query(collection(db, "lessonNotes"), where("tutorId", "==", tutorUid), where("uid", "==", uid))
+    : query(collection(db, "lessonNotes"), where("uid", "==", uid));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 }
 
 /**

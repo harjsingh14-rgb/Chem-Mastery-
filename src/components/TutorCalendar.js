@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchTutorSessions, fetchAllSessions,
   createSession, createSessions, updateSession, deleteSession, createLesson } from "../firebase";
 import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, templateOccurrences, DEFAULT_MINUTES, describeSession, sessionEndMs } from "../utils/schedule";
-import { T, boardLabel } from "../ui/theme";
+import { T, boardLabel, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { CalendarSubscribePanel } from "./CalendarSubscribe";
 
@@ -18,10 +18,7 @@ const selectStyle = { padding: "9px 12px", borderRadius: T.radiusSm, border: `1p
 const field = { display: "flex", flexDirection: "column", gap: 6 };
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const GROUP_COLOURS = [
-  [T.accentTint, T.accentText], [T.indigoTint, T.indigo], [T.greenTint, T.green], [T.amberTint, T.amber],
-  ["#FCE7F3", "#9D174D"], ["#ECFEFF", "#0E7490"], ["#F3E8FF", "#6B21A8"], ["#FFEDD5", "#9A3412"],
-];
+// Colours come from the shared palette so the legend, blocks and student views agree.
 const TIMES = Array.from({ length: 4 * 15 }, (_, i) => { const h = 8 + Math.floor(i / 4), m = (i % 4) * 15; return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`; });
 const DURATIONS = [30, 45, 60, 75, 90, 105, 120, 150, 180];
 
@@ -74,7 +71,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
   }, [uid, isAdmin]);
 
   const classOf = useCallback((code) => (classes || []).find(c => c.code === code), [classes]);
-  const colourOf = useCallback((code) => GROUP_COLOURS[Math.max(0, (classes || []).findIndex(c => c.code === code)) % GROUP_COLOURS.length], [classes]);
+  const colourOf = useCallback((code) => groupColour((classes || []).findIndex(c => c.code === code)), [classes]);
   const tutorName = (tid) => { const t = tutors.find(x => x.uid === tid); return t ? (t.displayName || t.email) : ""; };
 
   const loadStudents = useCallback(async (code) => {
@@ -282,13 +279,21 @@ export default function TutorCalendar({ authUser, userProfile }) {
 function Pill({ s, colour, selected, onClick, full }) {
   const [bg, fg] = colour;
   const cancelled = s.status === "cancelled";
-  const who = s.studentIds ? (s.studentNames?.length === 1 ? s.studentNames[0].split(" ")[0] : `${s.studentIds.length} students`) : null;
+  const count = s.studentIds ? s.studentIds.length : null;
+  const who = count ? (s.studentNames?.length === 1 ? s.studentNames[0].split(" ")[0] : `${count} student${count === 1 ? "" : "s"}`) : "Whole group";
   return (
     <button onClick={e => { e.stopPropagation(); onClick(s); }} title={`${s.className || s.classId} · ${describeSession(s)}${s.title ? ` · ${s.title}` : ""}${cancelled ? " · cancelled" : ""}`}
-      style={{ display: "block", width: "100%", textAlign: "left", border: selected ? `2px solid ${fg}` : "2px solid transparent", borderRadius: 7, padding: full ? "6px 8px" : "2px 6px", background: cancelled ? T.soft : bg, color: cancelled ? T.faint : fg,
-        fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: T.font, lineHeight: 1.3, textDecoration: cancelled ? "line-through" : "none", overflow: "hidden", whiteSpace: full ? "normal" : "nowrap", textOverflow: "ellipsis" }}>
-      {fmtTime(s.time)} {who ? (s.title || who) : shortName(s)}
-      {full && <div style={{ fontWeight: 500, opacity: 0.85 }}>{who ? `${shortName(s)} · ${who}` : s.title || `${s.minutes || DEFAULT_MINUTES} min`}{s.lessonId ? " · notes" : ""}</div>}
+      style={{ display: "block", width: "100%", textAlign: "left", border: "none", outline: selected ? `2px solid ${fg}` : "none", outlineOffset: 1, borderLeft: `3px solid ${cancelled ? T.faint : fg}`, borderRadius: 6,
+        padding: full ? "6px 8px 7px" : "3px 7px", background: cancelled ? T.soft : bg, color: cancelled ? T.muted : fg,
+        fontSize: 11.5, cursor: "pointer", fontFamily: T.font, lineHeight: 1.35, textDecoration: cancelled ? "line-through" : "none", overflow: "hidden", whiteSpace: full ? "normal" : "nowrap", textOverflow: "ellipsis" }}>
+      <span style={{ fontWeight: 700 }}>{fmtTime(s.time)}</span>
+      <span style={{ fontWeight: 500, marginLeft: 5 }}>{s.title || shortName(s)}</span>
+      {full && (
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 6, marginTop: 2, opacity: 0.9, fontWeight: 500 }}>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title ? `${shortName(s)} · ${who}` : who}</span>
+          <span style={{ flexShrink: 0 }}>{s.minutes || DEFAULT_MINUTES} min{s.lessonId ? " · notes" : ""}</span>
+        </div>
+      )}
     </button>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyName } from "./firebase";
+import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyName, updateMyPhoto } from "./firebase";
 import StudentDashboard from "./components/StudentDashboard";
 import { VideosPage } from "./components/Placeholders";
 import AppShell, { ShellBody } from "./ui/AppShell";
@@ -11,6 +11,7 @@ import { MCQ_COUNT } from "./data/mcq-meta";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER, EDEXCEL_SECTIONS, EDEXCEL_TOPIC_ORDER } from "./data/sections";
 import LoginScreen from "./components/LoginScreen";
+import PhotoUpload from "./components/PhotoUpload";
 import lazyPage, { PageLoading } from "./utils/lazyPage";
 import track from "./utils/track";
 
@@ -28,7 +29,8 @@ const TutorHomeworkReview = lazyPage(() => import("./components/TutorHomework"),
 const StudentHomework = lazyPage(() => import("./components/StudentHomework"));
 const HomeworkPlayer = lazyPage(() => import("./components/HomeworkPlayer"));
 const OnboardingPage = lazyPage(() => import("./components/OnboardingPage"));
-const TutorStudents = lazyPage(() => import("./components/TutorStudents"));
+const StudentsPage = lazyPage(() => import("./components/StudentsPage"));
+const StudentProfile = lazyPage(() => import("./components/StudentProfile"));
 const TutorLessonsList = lazyPage(() => import("./components/TutorLessons"), m => m.TutorLessonsList);
 const TutorLessonEditor = lazyPage(() => import("./components/TutorLessons"), m => m.TutorLessonEditor);
 const StudentLessons = lazyPage(() => import("./components/StudentLessons"));
@@ -246,16 +248,16 @@ export default function App() {
     { id: "videos", label: "Learn", icon: "video", to: `/${navBoard}/videos`, active: screen === "topics" && topicsTab === "videos" },
   ];
   const tutorNav = [
-    { id: "tutor", label: "Overview", icon: "users", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
+    { id: "tutor", label: "Overview", icon: "grid", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
+    { id: "students", label: "Students", icon: "users", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" },
     { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
     { id: "tcal", label: "Calendar", icon: "calendar", to: "/tutor/calendar", active: screen === "tutor" && tutorPage === "calendar" },
     { id: "tlessons", label: "Lessons", icon: "pencil", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" },
     ...(isAdmin ? [
-      { id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" },
       { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
       { id: "staff", label: "Tutors", icon: "settings", to: "/tutor/staff", active: screen === "tutor" && tutorPage === "staff" },
     ] : []),
-    { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
+    { id: "student", label: "Student view", icon: "flask", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "revision", label: "Revision", icon: "book", to: `/${navBoard}/revision`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos", "practise"].includes(topicsTab)) },
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
   ];
@@ -267,8 +269,14 @@ export default function App() {
   const menuLabel = { fontSize: 12, fontWeight: 600, color: T.muted };
   const accountMenu = (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      <NameBlock name={userProfile?.displayName || authUser?.displayName || "Student"} email={authUser?.email}
-        onSave={async (n) => { const displayName = await updateMyName(n); setUserProfile(prev => ({ ...prev, displayName })); }} />
+      <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+        <PhotoUpload name={userProfile?.displayName || authUser?.displayName} email={authUser?.email} photoURL={userProfile?.photoURL || authUser?.photoURL} size={56} align="flex-start"
+          onSave={async (url) => { const photoURL = await updateMyPhoto(url); setUserProfile(prev => ({ ...prev, photoURL: photoURL || "" })); }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <NameBlock name={userProfile?.displayName || authUser?.displayName || "Student"} email={authUser?.email}
+            onSave={async (n) => { const displayName = await updateMyName(n); setUserProfile(prev => ({ ...prev, displayName })); }} />
+        </div>
+      </div>
       <Chip tone={hasFullAccess ? "green" : "amber"} style={{ alignSelf: "flex-start" }}>
         {userProfile?.role === "admin" ? "Admin" : userProfile?.role === "tutor" ? "Tutor" : userProfile?.role === "parent" ? "Parent" : userProfile?.classId ? `Student · ${userProfile.className || userProfile.classId}` : hasFullAccess ? "Full access" : "Not in a group yet"}
       </Chip>
@@ -295,7 +303,7 @@ export default function App() {
   );
 
   const renderShell = (children, opts = {}) => (
-    <AppShell user={authUser ? { email: authUser.email, photoURL: authUser.photoURL, displayName: userProfile?.displayName || authUser.displayName } : authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
+    <AppShell user={authUser ? { email: authUser.email, photoURL: userProfile?.photoURL || authUser.photoURL, displayName: userProfile?.displayName || authUser.displayName } : authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
       brandSub={isParent ? "Parent" : board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
       <Suspense fallback={<PageLoading />}>{children}</Suspense>
     </AppShell>
@@ -308,7 +316,7 @@ export default function App() {
   if (authLoading) return (
     <div style={{ minHeight: "100vh", background: "#0d1b2a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: "32px", fontWeight: 800, color: "#ffffff", marginBottom: "12px" }}><span style={{ color: "#29ABE2" }}>Chem</span>Mastery</div>
+        <div style={{ fontSize: "32px", fontWeight: 800, color: "#ffffff", marginBottom: "12px" }}><span style={{ color: "#2AA3AE" }}>Chem</span>Mastery</div>
         <div style={{ color: "#7a95b0", fontSize: "14px" }}>Loading...</div>
       </div>
     </div>
@@ -374,19 +382,19 @@ export default function App() {
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>New password</label>
               <input type="password" placeholder="At least 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
-                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onFocus={e => e.target.style.borderColor = "#2AA3AE"}
                 onBlur={e => e.target.style.borderColor = "#e0e8f0"}
               />
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Confirm new password</label>
               <input type="password" placeholder="Type it again" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
-                onFocus={e => e.target.style.borderColor = "#29ABE2"}
+                onFocus={e => e.target.style.borderColor = "#2AA3AE"}
                 onBlur={e => e.target.style.borderColor = "#e0e8f0"}
               />
               {passwordChangeError && <div style={{ color: "#dc2626", fontSize: "13px", fontWeight: 600, marginBottom: "12px", padding: "8px 12px", background: "#fef2f2", borderRadius: "8px" }}>{passwordChangeError}</div>}
               <button type="submit" disabled={passwordChangeLoading} style={{
                 width: "100%", padding: "14px", borderRadius: "12px", border: "none",
-                background: "#29ABE2", color: "#ffffff", fontSize: "15px", fontWeight: 700,
+                background: "#2AA3AE", color: "#ffffff", fontSize: "15px", fontWeight: 700,
                 cursor: "pointer", fontFamily: "inherit", opacity: passwordChangeLoading ? 0.6 : 1
               }}>
                 {passwordChangeLoading ? "Updating..." : "Set New Password"}
@@ -424,7 +432,11 @@ export default function App() {
         : tutorPage === "payments"
           ? <TutorPayments />
         : tutorPage === "students"
-          ? <TutorStudents authUser={authUser} userProfile={userProfile} />
+          ? (tutorParam && tutorParam !== "onboarding"
+              ? (pathParts[3] === "parent"
+                  ? <ParentPage authUser={authUser} userProfile={userProfile} previewUid={tutorParam} />
+                  : <StudentProfile authUser={authUser} userProfile={userProfile} uid={tutorParam} initialTab={pathParts[3] || null} />)
+              : <StudentsPage authUser={authUser} userProfile={userProfile} tab={tutorParam || "all"} />)
           : <TutorPage authUser={authUser} userProfile={userProfile} />
   );
 
@@ -453,8 +465,8 @@ export default function App() {
 
   // TOPIC SELECT
   const FOLDER_COLORS = {
-    physical_as:   { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2" },
-    physical_a2:   { accent: "#0090cc", bg: "#e0f2fa", border: "#0090cc" },
+    physical_as:   { accent: "#2AA3AE", bg: "#E6F5F6", border: "#2AA3AE" },
+    physical_a2:   { accent: "#1C8591", bg: "#e0f2fa", border: "#1C8591" },
     inorganic_as:  { accent: "#16a97d", bg: "#e6f9f3", border: "#16a97d" },
     inorganic_a2:  { accent: "#0d8c68", bg: "#dcf5ed", border: "#0d8c68" },
     organic:       { accent: "#7c3aed", bg: "#f3eeff", border: "#7c3aed" },
@@ -464,10 +476,10 @@ export default function App() {
     ocr_mod2: { accent: "#e05c00", bg: "#fff3eb", border: "#e05c00" },
     ocr_mod3: { accent: "#c0392b", bg: "#fdecec", border: "#c0392b" },
     ocr_mod4: { accent: "#8e44ad", bg: "#f5eeff", border: "#8e44ad" },
-    edx_12a: { accent: "#29ABE2", bg: "#eaf6fd", border: "#29ABE2" },
+    edx_12a: { accent: "#2AA3AE", bg: "#E6F5F6", border: "#2AA3AE" },
     edx_12b: { accent: "#7c3aed", bg: "#f3eeff", border: "#7c3aed" },
     edx_12c: { accent: "#16a97d", bg: "#e6f9f3", border: "#16a97d" },
-    edx_13a: { accent: "#0090cc", bg: "#e0f2fa", border: "#0090cc" },
+    edx_13a: { accent: "#1C8591", bg: "#e0f2fa", border: "#1C8591" },
     edx_13b: { accent: "#6d28d9", bg: "#ede9ff", border: "#6d28d9" },
     ocr_mod5: { accent: "#1a6b9a", bg: "#e8f4fb", border: "#1a6b9a" },
     ocr_mod6: { accent: "#16783a", bg: "#e9f7ef", border: "#16783a" },
@@ -574,7 +586,7 @@ export default function App() {
               <button onClick={() => setQuizScreen(null)} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600, padding: "0 0 18px 0" }}>← Back to Topics</button>
 
               {/* Hero */}
-              <div style={{ background: "linear-gradient(135deg,#29ABE2,#0090cc)", borderRadius: "20px", padding: "22px 24px", color: "#fff", marginBottom: "24px", boxShadow: "0 6px 20px rgba(41,171,226,0.35)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ background: "linear-gradient(135deg,#2AA3AE,#1C8591)", borderRadius: "20px", padding: "22px 24px", color: "#fff", marginBottom: "24px", boxShadow: "0 6px 20px rgba(41,171,226,0.35)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <div style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px" }}>Random Quiz</div>
                   <div style={{ fontSize: "13px", opacity: 0.85, marginTop: "4px" }}>Weak cards shown more often</div>
@@ -589,9 +601,9 @@ export default function App() {
                   {[["year","By Year Level"],["topics","Choose Topics"]].map(([v,label]) => (
                     <button key={v} onClick={() => setQuizMode(v)} style={{
                       flex: 1, padding: "13px 8px", borderRadius: "12px", border: "2px solid",
-                      borderColor: quizMode === v ? "#29ABE2" : "#dde4ed",
-                      background: quizMode === v ? "#eaf6fd" : "#ffffff",
-                      color: quizMode === v ? "#29ABE2" : "#7a95b0",
+                      borderColor: quizMode === v ? "#2AA3AE" : "#dde4ed",
+                      background: quizMode === v ? "#E6F5F6" : "#ffffff",
+                      color: quizMode === v ? "#2AA3AE" : "#7a95b0",
                       fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
                     }}>{label}</button>
                   ))}
@@ -606,9 +618,9 @@ export default function App() {
                     {[["as","AS Year 1"],["a2","A2 Year 2"],["all","All Topics"]].map(([v,label]) => (
                       <button key={v} onClick={() => setQuizYear(v)} style={{
                         flex: 1, padding: "13px 8px", borderRadius: "12px", border: "2px solid",
-                        borderColor: quizYear === v ? "#29ABE2" : "#dde4ed",
-                        background: quizYear === v ? "#eaf6fd" : "#ffffff",
-                        color: quizYear === v ? "#29ABE2" : "#7a95b0",
+                        borderColor: quizYear === v ? "#2AA3AE" : "#dde4ed",
+                        background: quizYear === v ? "#E6F5F6" : "#ffffff",
+                        color: quizYear === v ? "#2AA3AE" : "#7a95b0",
                         fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
                       }}>{label}</button>
                     ))}
@@ -621,7 +633,7 @@ export default function App() {
                 <div style={{ marginBottom: "20px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                     <div style={{ fontSize: "12px", fontWeight: 700, color: "#4a6070", letterSpacing: "1px", textTransform: "uppercase" }}>Pick Topics</div>
-                    <button onClick={() => setQuizSelectedTopics([])} style={{ background: "none", border: "none", color: "#29ABE2", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Clear all</button>
+                    <button onClick={() => setQuizSelectedTopics([])} style={{ background: "none", border: "none", color: "#2AA3AE", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Clear all</button>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {allSections.map(sec => {
@@ -632,7 +644,7 @@ export default function App() {
                         <div key={sec.id} style={{ background: "#f8fafc", borderRadius: "12px", border: "1px solid #e0e8f0", overflow: "hidden" }}>
                           <button onClick={() => toggleSection(sec)} style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
                             <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a2d45" }}>{sec.label}</span>
-                            <span style={{ fontSize: "12px", fontWeight: 700, color: allSel ? "#29ABE2" : someSel ? "#7a95b0" : "#bcc8d4" }}>{allSel ? "All selected" : someSel ? `${secTopics.filter(id => quizSelectedTopics.includes(id)).length}/${secTopics.length}` : "Select all"}</span>
+                            <span style={{ fontSize: "12px", fontWeight: 700, color: allSel ? "#2AA3AE" : someSel ? "#7a95b0" : "#bcc8d4" }}>{allSel ? "All selected" : someSel ? `${secTopics.filter(id => quizSelectedTopics.includes(id)).length}/${secTopics.length}` : "Select all"}</span>
                           </button>
                           <div style={{ padding: "0 10px 10px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
                             {secTopics.map(id => {
@@ -640,9 +652,9 @@ export default function App() {
                               return (
                                 <button key={id} onClick={() => toggleTopic(id)} style={{
                                   padding: "6px 12px", borderRadius: "8px", border: "2px solid",
-                                  borderColor: sel ? "#29ABE2" : "#dde4ed",
-                                  background: sel ? "#eaf6fd" : "#ffffff",
-                                  color: sel ? "#29ABE2" : "#7a95b0",
+                                  borderColor: sel ? "#2AA3AE" : "#dde4ed",
+                                  background: sel ? "#E6F5F6" : "#ffffff",
+                                  color: sel ? "#2AA3AE" : "#7a95b0",
                                   fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
                                 }}>{SETS[id]?.title || id}</button>
                               );
@@ -662,9 +674,9 @@ export default function App() {
                   {[[25,"25"],[50,"50"],["custom","Custom"]].map(([v,label]) => (
                     <button key={v} onClick={() => setQuizCount(v)} style={{
                       flex: 1, padding: "13px 8px", borderRadius: "12px", border: "2px solid",
-                      borderColor: quizCount === v ? "#29ABE2" : "#dde4ed",
-                      background: quizCount === v ? "#eaf6fd" : "#ffffff",
-                      color: quizCount === v ? "#29ABE2" : "#7a95b0",
+                      borderColor: quizCount === v ? "#2AA3AE" : "#dde4ed",
+                      background: quizCount === v ? "#E6F5F6" : "#ffffff",
+                      color: quizCount === v ? "#2AA3AE" : "#7a95b0",
                       fontFamily: "inherit", fontSize: "13px", fontWeight: 700, cursor: "pointer",
                     }}>{label}</button>
                   ))}
@@ -683,13 +695,13 @@ export default function App() {
 
               {/* Pool summary */}
               <div style={{ fontSize: "13px", color: "#7a95b0", textAlign: "center", marginBottom: "20px", padding: "12px", background: "#f8fafc", borderRadius: "10px" }}>
-                Drawing <strong style={{ color: "#29ABE2" }}>{Math.min(effectiveCount, poolSize)}</strong> cards from a pool of <strong style={{ color: "#1a2d45" }}>{poolSize}</strong>
+                Drawing <strong style={{ color: "#2AA3AE" }}>{Math.min(effectiveCount, poolSize)}</strong> cards from a pool of <strong style={{ color: "#1a2d45" }}>{poolSize}</strong>
                 {quizMode === "topics" && quizSelectedTopics.length === 0 && <div style={{ color: "#ef4444", marginTop: "4px", fontSize: "12px" }}>Select at least one topic above</div>}
               </div>
 
               <button onClick={startQuiz} disabled={!canStart} style={{
                 width: "100%", padding: "18px", borderRadius: "14px", border: "none",
-                background: canStart ? "linear-gradient(135deg,#29ABE2,#0090cc)" : "#e0e8f0",
+                background: canStart ? "linear-gradient(135deg,#2AA3AE,#1C8591)" : "#e0e8f0",
                 color: canStart ? "#ffffff" : "#aab5c2",
                 fontFamily: "inherit", fontSize: "17px", fontWeight: 800, cursor: canStart ? "pointer" : "not-allowed",
                 boxShadow: canStart ? "0 4px 16px rgba(41,171,226,0.4)" : "none",
@@ -717,7 +729,7 @@ export default function App() {
               </div>
               {/* Progress bar */}
               <div style={{ height: "6px", background: "#e0e8f0", borderRadius: "3px", overflow: "hidden", marginBottom: "14px" }}>
-                <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#29ABE2,#22c55e)", borderRadius: "3px", transition: "width 0.3s" }} />
+                <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#2AA3AE,#22c55e)", borderRadius: "3px", transition: "width 0.3s" }} />
               </div>
               {/* Topic label */}
               <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", textAlign: "center", marginBottom: "12px" }}>{topicTitle}</div>
@@ -733,7 +745,7 @@ export default function App() {
               }}>
                 {!quizFlipped ? (
                   <>
-                    <div style={{ fontSize: "11px", color: "#29ABE2", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "18px" }}>QUESTION</div>
+                    <div style={{ fontSize: "11px", color: "#2AA3AE", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "18px" }}>QUESTION</div>
                     <div style={{ fontSize: "19px", fontWeight: 600, color: "#1a2d45", lineHeight: 1.55 }}>{card?.q}</div>
                     <div style={{ marginTop: "24px", fontSize: "12px", color: "#aab5c2" }}>Tap to reveal answer</div>
                   </>
@@ -784,7 +796,7 @@ export default function App() {
           <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div style={{ width: "100%", maxWidth: "360px" }}>
               {/* Score card */}
-              <div style={{ background: "linear-gradient(135deg,#1a2d45,#29ABE2)", borderRadius: "24px", padding: "32px 24px", textAlign: "center", color: "#fff", marginBottom: "20px", boxShadow: "0 8px 28px rgba(41,171,226,0.3)" }}>
+              <div style={{ background: "linear-gradient(135deg,#1a2d45,#2AA3AE)", borderRadius: "24px", padding: "32px 24px", textAlign: "center", color: "#fff", marginBottom: "20px", boxShadow: "0 8px 28px rgba(41,171,226,0.3)" }}>
                 <div style={{ fontSize: "22px", fontWeight: 800, marginBottom: "4px" }}>{msg}</div>
                 <div style={{ fontSize: "52px", fontWeight: 800, lineHeight: 1, margin: "12px 0" }}>{pct}%</div>
                 <div style={{ fontSize: "14px", opacity: 0.85 }}>{quizSessionScore.correct} correct · {quizSessionScore.wrong} missed · {total} cards</div>
@@ -805,7 +817,7 @@ export default function App() {
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <button onClick={() => { startQuiz(); }} style={{
                   width: "100%", padding: "16px", borderRadius: "14px", border: "none",
-                  background: "linear-gradient(135deg,#29ABE2,#0090cc)", color: "#ffffff",
+                  background: "linear-gradient(135deg,#2AA3AE,#1C8591)", color: "#ffffff",
                   fontFamily: "inherit", fontSize: "15px", fontWeight: 800, cursor: "pointer",
                   boxShadow: "0 4px 16px rgba(41,171,226,0.4)",
                 }}>Play Again →</button>
@@ -936,13 +948,13 @@ export default function App() {
       )}
 
       <div style={{ padding: "10px 20px 4px", position: "relative", zIndex: 2 }}>
-        <h2 style={{ margin: "0 0 6px", fontSize: "13px", fontWeight: 600, color: "#29ABE2" }}>{topic} · {SETS[topic]?.title}</h2>
+        <h2 style={{ margin: "0 0 6px", fontSize: "13px", fontWeight: 600, color: "#2AA3AE" }}>{topic} · {SETS[topic]?.title}</h2>
         <div style={{ height: "5px", background: "#dde4ed", borderRadius: "3px", overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg, #29ABE2, #50C8F4)", borderRadius: "3px", transition: "width 0.3s ease" }} />
+          <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg, #2AA3AE, #50C8F4)", borderRadius: "3px", transition: "width 0.3s ease" }} />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "5px", fontSize: "12px", color: "#7a95b0" }}>
           <span>{index + 1} / {order.length}</span>
-          <span style={{ color: "#29ABE2", fontWeight: knownCount > 0 ? 600 : 400 }}>{knownCount} mastered</span>
+          <span style={{ color: "#2AA3AE", fontWeight: knownCount > 0 ? 600 : 400 }}>{knownCount} mastered</span>
         </div>
       </div>
 
@@ -951,15 +963,15 @@ export default function App() {
         <div onClick={() => setFlipped(f => !f)} style={{ width: "100%", maxWidth: "700px", minHeight: "440px", perspective: "1200px", cursor: "pointer" }}>
           <div style={{ position: "relative", width: "100%", minHeight: "440px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
             {/* Front */}
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(145deg, #29ABE2 0%, #1a8fc4 100%)", border: "none", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.35)" }}>
+            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(145deg, #2AA3AE 0%, #1a8fc4 100%)", border: "none", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.35)" }}>
               <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "rgba(255,255,255,0.75)", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Question</div>
               {knownSet.has(currentCardIndex) && <div style={{ position: "absolute", top: "13px", right: "18px", fontSize: "11px", color: "#ffffff", fontWeight: 600, background: "rgba(255,255,255,0.25)", padding: "3px 10px", borderRadius: "20px" }}>Mastered</div>}
               <p style={{ fontSize: card.q.length > 120 ? "16px" : card.q.length > 60 ? "18px" : "21px", lineHeight: 1.55, textAlign: "center", fontWeight: 700, color: "#ffffff", margin: 0 }}>{card.q}</p>
               <div style={{ position: "absolute", bottom: "16px", fontSize: "11px", color: "rgba(255,255,255,0.6)", letterSpacing: "0.5px" }}>Tap to reveal answer</div>
             </div>
             {/* Back */}
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "#ffffff", border: "2px solid #29ABE2", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.2)" }}>
-              <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "#29ABE2", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Answer</div>
+            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "#ffffff", border: "2px solid #2AA3AE", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.2)" }}>
+              <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "#2AA3AE", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Answer</div>
               <div style={{ fontSize: card.a.length > 200 ? "13px" : card.a.length > 100 ? "15px" : "17px", lineHeight: 1.7, textAlign: "center", color: "#1a2d45", margin: 0, whiteSpace: "pre-line", fontWeight: 500 }}>{card.a}</div>
               <div style={{ position: "absolute", bottom: "16px", fontSize: "11px", color: "#7a95b0", letterSpacing: "0.5px" }}>Tap to flip back</div>
             </div>
@@ -968,15 +980,15 @@ export default function App() {
       </div>
 
       <div style={{ padding: "8px 24px 20px", display: "flex", gap: "10px", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
-        <button onClick={prev} disabled={index === 0} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === 0 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === 0 ? "#dde4ed" : "#29ABE2"}`, color: index === 0 ? "#b0c4d4" : "#29ABE2", fontSize: "20px", cursor: index === 0 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === 0 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>←</button>
-        <button onClick={toggleKnown} style={{ height: "52px", borderRadius: "14px", padding: "0 24px", background: knownSet.has(currentCardIndex) ? "#1a8fc4" : "#29ABE2", border: "none", color: "#ffffff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 12px rgba(41,171,226,0.25)" }}>
+        <button onClick={prev} disabled={index === 0} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === 0 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === 0 ? "#dde4ed" : "#2AA3AE"}`, color: index === 0 ? "#b0c4d4" : "#2AA3AE", fontSize: "20px", cursor: index === 0 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === 0 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>←</button>
+        <button onClick={toggleKnown} style={{ height: "52px", borderRadius: "14px", padding: "0 24px", background: knownSet.has(currentCardIndex) ? "#1a8fc4" : "#2AA3AE", border: "none", color: "#ffffff", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 12px rgba(41,171,226,0.25)" }}>
           {knownSet.has(currentCardIndex) ? "Mastered" : "Mark as Known"}
         </button>
-        <button onClick={next} disabled={index === order.length - 1} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === order.length - 1 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === order.length - 1 ? "#dde4ed" : "#29ABE2"}`, color: index === order.length - 1 ? "#b0c4d4" : "#29ABE2", fontSize: "20px", cursor: index === order.length - 1 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === order.length - 1 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>→</button>
+        <button onClick={next} disabled={index === order.length - 1} style={{ width: "52px", height: "52px", borderRadius: "14px", background: index === order.length - 1 ? "#e8edf3" : "#ffffff", border: `1px solid ${index === order.length - 1 ? "#dde4ed" : "#2AA3AE"}`, color: index === order.length - 1 ? "#b0c4d4" : "#2AA3AE", fontSize: "20px", cursor: index === order.length - 1 ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: index === order.length - 1 ? "none" : "0 2px 8px rgba(41,171,226,0.15)" }}>→</button>
       </div>
 
       {knownCount === cards.length && (
-        <div style={{ margin: "0 24px 16px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg, #eaf6fd, #d0eefa)", border: "1px solid rgba(41,171,226,0.4)", textAlign: "center", fontSize: "14px", color: "#1a8fc4", fontWeight: 700 }}>
+        <div style={{ margin: "0 24px 16px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg, #E6F5F6, #d0eefa)", border: "1px solid rgba(41,171,226,0.4)", textAlign: "center", fontSize: "14px", color: "#1a8fc4", fontWeight: 700 }}>
           All {cards.length} cards mastered
         </div>
       )}

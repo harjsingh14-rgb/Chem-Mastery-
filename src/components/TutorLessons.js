@@ -414,7 +414,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                           <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={28} />
                           <div style={{ minWidth: 0 }}>
-                            <div style={{ fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130 }} title={s.displayName || s.email}>{s.displayName || s.email}</div>
+                            <div style={{ fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130, cursor: "pointer" }} title="Open the student's profile" onClick={() => navigate(`/tutor/students/${s.uid}`)}>{s.displayName || s.email}</div>
                             <button type="button" onClick={() => toggleOpen(s.uid)} style={{ border: "none", background: "transparent", padding: 0, color: T.accentText, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: T.font }}>{isOpen ? "Less" : `More${extras ? ` (${extras})` : ""}`}</button>
                           </div>
                         </div>

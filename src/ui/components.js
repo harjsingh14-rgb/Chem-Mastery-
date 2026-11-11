@@ -144,14 +144,20 @@ export function AccuracyBar({ pct, width = 160 }) {
   );
 }
 
-export function StatTile({ label, value, sub, subTone, children }) {
+/** A number with a label. `icon` and `tone` add a soft icon tile on the right; `onClick` makes the tile a link. */
+export function StatTile({ label, value, sub, subTone, icon, tone = "accent", onClick, children }) {
   const subColour = subTone === "green" ? T.green : subTone === "red" ? T.red : subTone === "amber" ? T.amber : T.muted;
   return (
-    <Card padding="18px 20px" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span style={{ fontSize: 13, color: T.muted, fontWeight: 500 }}>{label}</span>
-      <span style={{ fontFamily: T.display, fontSize: 30, fontWeight: 800, lineHeight: 1, color: T.ink }}>{value}</span>
-      {sub && <span style={{ fontSize: 12, color: subColour, fontWeight: subTone ? 600 : 400 }}>{sub}</span>}
-      {children}
+    <Card padding="18px 20px" className={onClick ? "cm-tile-link" : undefined} onClick={onClick} role={onClick ? "button" : undefined} tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(e); } }) : undefined}
+      style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: 1, minWidth: 0 }}>
+        <span style={{ fontSize: 13, color: T.muted, fontWeight: 500 }}>{label}</span>
+        <span style={{ fontFamily: T.display, fontSize: 30, fontWeight: 800, lineHeight: 1, color: T.ink }}>{value}</span>
+        {sub && <span style={{ fontSize: 12, color: subColour, fontWeight: subTone ? 600 : 400 }}>{sub}</span>}
+        {children}
+      </div>
+      {icon && <IconTile name={icon} tone={tone} size={40} />}
     </Card>
   );
 }

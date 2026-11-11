@@ -1,6 +1,7 @@
 // Admin onboarding queue: add a student after the discovery call, follow
 // their self-evaluation and parent terms, then place them into a group.
 import React, { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { fetchApplicants, fetchAllClasses, studentsApi } from "../firebase";
 import { T, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
@@ -24,14 +25,14 @@ const EMPTY_FORM = () => ({ studentName: "", studentEmail: "", parentName: "", p
   paymentPlan: "instalments", paymentAmount: "", schedule: [{ amount: "", due: "" }], programmeStart: today(), programmeEnd: programmeEndFor(12),
   initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "", currentStudent: false });
 
-export default function TutorStudents({ authUser, userProfile }) {
+export default function TutorStudents({ authUser, userProfile, embedded, startNew, startImport }) {
   const isAdmin = userProfile?.role === "admin";
   const [applicants, setApplicants] = useState(null);
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null);
-  const [showNew, setShowNew] = useState(false);
-  const [showImport, setShowImport] = useState(false);
+  const [showNew, setShowNew] = useState(!!startNew);
+  const [showImport, setShowImport] = useState(!!startImport);
   const [form, setForm] = useState(EMPTY_FORM);
   const setRow = (i, k, v) => setForm(f => ({ ...f, schedule: f.schedule.map((r, j) => j === i ? { ...r, [k]: v } : r) }));
   const [saving, setSaving] = useState(false);
@@ -42,10 +43,10 @@ export default function TutorStudents({ authUser, userProfile }) {
     if (!isAdmin) return;
     let cancelled = false;
     Promise.all([fetchApplicants(), fetchAllClasses()])
-      .then(([a, g]) => { if (!cancelled) { setApplicants(a); setGroups(g); if (a.length === 0) setShowNew(true); } })
+      .then(([a, g]) => { if (!cancelled) { setApplicants(a); setGroups(g); if (a.length === 0 && !startImport) setShowNew(true); } })
       .catch(e => { if (!cancelled) { setError(e.message); setApplicants([]); } });
     return () => { cancelled = true; };
-  }, [isAdmin]);
+  }, [isAdmin]); // eslint-disable-line
 
   const patchApplicant = (id, patch) => setApplicants(prev => (prev || []).map(a => a.id === id ? { ...a, ...patch } : a));
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -68,16 +69,23 @@ export default function TutorStudents({ authUser, userProfile }) {
   const rows = useMemo(() => (applicants || []).filter(a => filter === "placed" ? a.status === "placed" : a.status !== "placed"), [applicants, filter]);
   const openCount = (applicants || []).filter(a => a.status !== "placed").length;
 
-  if (!isAdmin) return <Card padding={0}><EmptyState icon="lock" title="HSJ admin only" body="Adding and placing students is done by HSJ Tuition. Your groups and their students are on the Overview tab." /></Card>;
+  if (!isAdmin) return <Card padding={0}><EmptyState icon="lock" title="HSJ admin only" body="Adding and placing students is done by HSJ Tuition. Your students are on the Students tab." /></Card>;
 
   return (
     <>
-      <PageHeader eyebrow="Students" title="Onboarding"
-        sub="Add a student after the discovery call. They get the self-evaluation, the parent gets the terms, and you place them into a group here."
-        right={<>
+      {embedded ? (
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <Button icon="users" onClick={() => { setShowImport(v => !v); setShowNew(false); }}>Import current students</Button>
           <Button variant="primary" icon="plus" onClick={() => { setShowNew(v => !v); setShowImport(false); }}>Add student</Button>
-        </>} />
+        </div>
+      ) : (
+        <PageHeader eyebrow="Students" title="Onboarding"
+          sub="Add a student after the discovery call. They get the self-evaluation, the parent gets the terms, and you place them into a group here."
+          right={<>
+            <Button icon="users" onClick={() => { setShowImport(v => !v); setShowNew(false); }}>Import current students</Button>
+            <Button variant="primary" icon="plus" onClick={() => { setShowNew(v => !v); setShowImport(false); }}>Add student</Button>
+          </>} />
+      )}
 
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {notice && <Notice tone={notice.tone} style={{ marginBottom: 12 }}>{notice.text}</Notice>}
@@ -156,7 +164,10 @@ export default function TutorStudents({ authUser, userProfile }) {
                 return (
                   <React.Fragment key={a.id}>
                     <tr className="cm-row-hover" onClick={() => setOpenId(isOpen ? null : a.id)} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer" }}>
-                      <td style={{ ...td, paddingLeft: 20 }}><div style={{ fontWeight: 600 }}>{a.studentName}</div><div style={{ fontSize: 11, color: T.muted }}>{a.studentEmail}</div></td>
+                      <td style={{ ...td, paddingLeft: 20 }}>
+                        <div style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>{a.studentName}{a.studentUid && <Link to={`/tutor/students/${a.studentUid}`} onClick={e => e.stopPropagation()} className="cm-link" style={{ fontSize: 11 }}>Profile</Link>}</div>
+                        <div style={{ fontSize: 11, color: T.muted }}>{a.studentEmail}</div>
+                      </td>
                       <td style={td}><div>{a.parentName}</div><div style={{ fontSize: 11, color: T.muted }}>{a.parentEmail}{a.parentPhone ? ` · ${a.parentPhone}` : ""}</div></td>
                       <td style={td}>{boardLabel(a.board)} · Year {a.year}</td>
                       <td style={td}>{paymentPlanLabel(a.paymentPlan)}{a.paymentAmount ? <span style={{ color: T.muted }}> · {money(a.paymentAmount)}</span> : null}</td>

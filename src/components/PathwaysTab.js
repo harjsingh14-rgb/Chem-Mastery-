@@ -54,12 +54,12 @@ export default function PathwaysTab({ board }) {
             padding:"12px 18px", border:"none", background:"none", fontFamily:"inherit",
             fontSize:"15px", fontWeight:800, cursor:"pointer",
             color: synthTab===id ? "#0f1d35" : "#7a95b0",
-            borderBottom: synthTab===id ? "3px solid #29ABE2" : "3px solid transparent",
+            borderBottom: synthTab===id ? "3px solid #2AA3AE" : "3px solid transparent",
             marginBottom:"-2px", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:"8px",
             letterSpacing:"0.3px"
           }}>
             {lbl}
-            <span style={{ fontSize:"11px", fontWeight:700, background:synthTab===id?"#e0f4fd":"#f0f4f8", color:synthTab===id?"#29ABE2":"#94a3b8", padding:"3px 10px", borderRadius:"12px" }}>{cnt}</span>
+            <span style={{ fontSize:"11px", fontWeight:700, background:synthTab===id?"#e0f4fd":"#f0f4f8", color:synthTab===id?"#2AA3AE":"#94a3b8", padding:"3px 10px", borderRadius:"12px" }}>{cnt}</span>
           </button>
         ))}
         <div style={{ flex:1 }} />
@@ -288,7 +288,7 @@ export default function PathwaysTab({ board }) {
                     <div style={{ display:"flex", gap:"6px", flexWrap:"wrap", marginBottom:"6px" }}>
                       <span style={{ fontSize:"10px", fontWeight:700, color:"#fff", background:"#1a2d45", padding:"3px 10px", borderRadius:"20px" }}>Rxn {selRxn[0]}</span>
                       <span style={{ fontSize:"10px", fontWeight:700, color:"#059669", background:"#dcfce7", padding:"3px 10px", borderRadius:"20px" }}>{selRxn[10]}</span>
-                      {selRxn[9] !== "--" && <span style={{ fontSize:"10px", fontWeight:700, color:"#29ABE2", background:"#eaf6fd", padding:"3px 10px", borderRadius:"20px" }}>{selRxn[9]}</span>}
+                      {selRxn[9] !== "--" && <span style={{ fontSize:"10px", fontWeight:700, color:"#2AA3AE", background:"#E6F5F6", padding:"3px 10px", borderRadius:"20px" }}>{selRxn[9]}</span>}
                     </div>
                     <div style={{ fontSize:"15px", fontWeight:800, color:"#1a2d45" }}>
                       {selRxn[5]} <span style={{ color:"#94a3b8", fontWeight:400 }}>→</span> {selRxn[6]}
@@ -304,7 +304,7 @@ export default function PathwaysTab({ board }) {
               ) : (
                 <>
                   <div style={{ padding:"12px 16px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px" }}>
-                    <div style={{ background:"#f0f7ff", borderRadius:"10px", padding:"10px 12px", borderLeft:"3px solid #29ABE2" }}>
+                    <div style={{ background:"#f0f7ff", borderRadius:"10px", padding:"10px 12px", borderLeft:"3px solid #2AA3AE" }}>
                       <div style={{ fontSize:"9px", fontWeight:700, color:"#7a95b0", textTransform:"uppercase", letterSpacing:"0.8px", marginBottom:"4px" }}>Reagents</div>
                       <div style={{ fontSize:"12.5px", color:"#1a2d45", fontWeight:600, lineHeight:1.4 }}>{selRxn[7]}</div>
                     </div>

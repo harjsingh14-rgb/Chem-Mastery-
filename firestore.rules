@@ -26,8 +26,8 @@ service cloud.firestore {
         && !('tutorId' in request.resource.data);
 
       allow update: if signedIn() && (
-        // The student's own tutor, or an admin, may set their display name and nothing else
-        ((resource.data.tutorId == request.auth.uid || isAdmin()) && changed().hasOnly(['displayName']))
+        // The student's own tutor, or an admin, may set their display name and picture and nothing else
+        ((resource.data.tutorId == request.auth.uid || isAdmin()) && changed().hasOnly(['displayName', 'photoURL']))
         ||
         // Own profile: may not touch role, group links or onboarding records
         (request.auth.uid == uid
@@ -68,7 +68,7 @@ service cloud.firestore {
 
     match /attempts/{id} {
       allow read: if signedIn()
-        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
       allow create: if signedIn()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.tutorId == myProfile().get('tutorId', null)
@@ -155,7 +155,7 @@ service cloud.firestore {
     match /assignments/{id} {
       // The tutor who set it, or a student in that group, can read it
       allow read: if signedIn()
-        && (resource.data.tutorId == request.auth.uid || resource.data.classId == myProfile().get('classId', null));
+        && (resource.data.tutorId == request.auth.uid || resource.data.classId == myProfile().get('classId', null) || isAdmin());
       // Parents read the homework set for their child's group (titles, due dates, items)
       allow get: if isParent();
       allow create: if isTutor()
@@ -173,7 +173,7 @@ service cloud.firestore {
       allow get: if signedIn()
         && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
       allow list: if signedIn()
-        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
+        && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
       // Student creates their own, for an assignment set to their group
       allow create: if signedIn()
         && request.resource.data.uid == request.auth.uid

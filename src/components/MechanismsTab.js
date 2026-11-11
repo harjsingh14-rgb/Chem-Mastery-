@@ -63,7 +63,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
         <div style={{ padding:"12px 16px 8px", display:"flex", alignItems:"center", gap:"10px", borderBottom:"1px solid #e8edf3" }}>
           <button onClick={()=>{ setMechId(null); setMechStep(0); setMechOpenCards({}); }}
             style={{ background:"#f0f4f8", border:"1px solid #dde4ed", borderRadius:"8px", padding:"6px 12px",
-              color:"#29ABE2", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
+              color:"#2AA3AE", cursor:"pointer", fontSize:"12px", fontFamily:"inherit", fontWeight:600 }}>
             ← Back
           </button>
           <div style={{ flex:1 }}>
@@ -103,7 +103,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
             </div>
             {explainers.map((ex, idx) => {
               const isOpen = mechOpenCards[idx];
-              const stepColors = ["#29ABE2", "#059669", "#d97706", "#dc2626", "#7c3aed", "#0284c7", "#ea580c", "#0d9488"];
+              const stepColors = ["#2AA3AE", "#059669", "#d97706", "#dc2626", "#7c3aed", "#0284c7", "#ea580c", "#0d9488"];
               const circleColor = stepColors[idx % stepColors.length];
               return (
                 <button key={idx} onClick={()=> setMechOpenCards(prev => ({ ...prev, [idx]: !prev[idx] }))}
@@ -152,7 +152,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
       </div>
       <button onClick={()=>{ setMechId(null); setMechStep(0); }}
         style={{ marginTop:"20px", padding:"10px 24px", borderRadius:"12px", border:"none", cursor:"pointer",
-          background:"#29ABE2", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
+          background:"#2AA3AE", color:"#fff", fontSize:"14px", fontWeight:700, fontFamily:"inherit" }}>
         ← Back to List
       </button>
     </div>

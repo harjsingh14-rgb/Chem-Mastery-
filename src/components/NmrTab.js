@@ -255,7 +255,7 @@ export default function NmrTab({ board }) {
           const pct = nmrMcqScore.total > 0 ? Math.round((nmrMcqScore.correct / nmrMcqScore.total) * 100) : 0;
           return (
             <div style={{ textAlign: "center", padding: "40px 20px" }}>
-              <div style={{ fontSize: "36px", fontWeight: 900, marginBottom: "8px", color: pct >= 80 ? "#059669" : pct >= 50 ? "#29ABE2" : "#64748b" }}>{nmrMcqScore.correct}/{nmrMcqScore.total}</div>
+              <div style={{ fontSize: "36px", fontWeight: 900, marginBottom: "8px", color: pct >= 80 ? "#059669" : pct >= 50 ? "#2AA3AE" : "#64748b" }}>{nmrMcqScore.correct}/{nmrMcqScore.total}</div>
               <div style={{ fontSize: "14px", color: "#64748b", marginBottom: "20px" }}>{pct}% correct</div>
               <button onClick={() => { setNmrMcqIdx(0); setNmrMcqSelected(null); setNmrMcqRevealed(false); setNmrMcqScore({ correct: 0, total: 0 }); }}
                 style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: accentColor, color: "#fff",

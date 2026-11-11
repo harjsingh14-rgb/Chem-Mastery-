@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchAttemptsForTutor, setStudentName, updateClass, fetchClassLessonNotes, fetchTutorSessions, fetchAllSessions } from "../firebase";
-import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, upcomingSessions, fmtLessonDay, fmtTime } from "../utils/schedule";
+import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchAllStudents, fetchStudentsForTutor, fetchAttemptsForTutor, updateClass, fetchTutorSessions, fetchAllSessions, fetchTutorSubmissions, fetchPayments, fetchApplicants } from "../firebase";
+import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, upcomingSessions, fmtLessonDay, fmtTime, isoDate, addDays, sessionEndMs } from "../utils/schedule";
 import { useNavigate } from "react-router-dom";
-import { T, pctColour, BOARDS, boardLabel } from "../ui/theme";
-import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Table, th, td, EmptyState, Notice, chipToneForPct, Icon } from "../ui/components";
-import { summarise, pct, relativeTime, attemptTime, DAY, TYPE_LABEL } from "../utils/analytics";
+import { T, pctColour, BOARDS, boardLabel, groupColour } from "../ui/theme";
+import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Notice } from "../ui/components";
+import { summarise, pct } from "../utils/analytics";
+import { money } from "../data/terms";
+import { studentRow } from "./StudentsPage";
 import WeekList from "./WeekList";
+
+// The tutor home: the numbers that matter today, this week's lessons, the
+// groups, and who needs a nudge. Students live on the Students tab; each
+// name here links to the student's profile.
+
+const mondayOf = (iso) => { const d = new Date(`${iso}T00:00:00`); return addDays(iso, -((d.getDay() + 6) % 7)); };
+const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
 
 export default function TutorPage({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
@@ -13,21 +22,20 @@ export default function TutorPage({ authUser, userProfile }) {
   const [classes, setClasses] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [tutors, setTutors] = useState([]);
-  const [newTutor, setNewTutor] = useState("");
-  const [newSlots, setNewSlots] = useState([{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }]);
-  const [editSchedule, setEditSchedule] = useState(null); // { slots, zoomLink } being edited for the selected group
-  const [attendance, setAttendance] = useState({}); // uid -> { present, late, absent }
-  const [selected, setSelected] = useState(null);
   const [students, setStudents] = useState(null);
   const [attempts, setAttempts] = useState([]);
+  const [subs, setSubs] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [applicants, setApplicants] = useState([]);
+  const [newTutor, setNewTutor] = useState("");
+  const [newSlots, setNewSlots] = useState([{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }]);
+  const [editSchedule, setEditSchedule] = useState(null); // { code, slots, zoomLink }
+  const [selected, setSelected] = useState(null); // group whose weak spots are shown
   const [showNew, setShowNew] = useState(false);
   const [newName, setNewName] = useState("");
   const [newBoard, setNewBoard] = useState("aqa");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
-  const [openStudent, setOpenStudent] = useState(null);
-  const [search, setSearch] = useState("");
-  const [nameEdit, setNameEdit] = useState(null); // { uid, value, saving }
 
   const tutorUid = authUser?.uid;
 
@@ -36,42 +44,28 @@ export default function TutorPage({ authUser, userProfile }) {
     let cancelled = false;
     (async () => {
       try {
-        // Admins see every group; tutors see their own
-        const [cls, att, tut, ses] = await Promise.all([
+        const quiet = (p) => p.catch(() => []);
+        const [cls, list, att, tut, ses, sb, pay, app] = await Promise.all([
           isAdmin ? fetchAllClasses() : fetchTutorClasses(tutorUid),
-          fetchAttemptsForTutor(tutorUid),
-          isAdmin ? fetchTutors() : Promise.resolve([]),
-          (isAdmin ? fetchAllSessions() : fetchTutorSessions(tutorUid)).catch(() => []),
+          quiet(isAdmin ? fetchAllStudents() : fetchStudentsForTutor(tutorUid)),
+          quiet(fetchAttemptsForTutor(tutorUid)),
+          isAdmin ? quiet(fetchTutors()) : Promise.resolve([]),
+          quiet(isAdmin ? fetchAllSessions() : fetchTutorSessions(tutorUid)),
+          quiet(fetchTutorSubmissions(tutorUid)),
+          isAdmin ? quiet(fetchPayments({})) : Promise.resolve([]),
+          isAdmin ? quiet(fetchApplicants()) : Promise.resolve([]),
         ]);
         if (cancelled) return;
-        setClasses(cls); setAttempts(att); setTutors(tut); setSessions(ses); setNewTutor(tutorUid);
+        setClasses(cls); setStudents(list); setAttempts(att); setTutors(tut); setSessions(ses); setSubs(sb); setPayments(pay); setApplicants(app); setNewTutor(tutorUid);
         if (cls.length > 0) setSelected(cls[0].code); else setShowNew(true);
-      } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); } }
+      } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); setStudents([]); } }
     })();
     return () => { cancelled = true; };
   }, [tutorUid, isAdmin]);
 
-  useEffect(() => {
-    if (!selected) { setStudents(null); return; }
-    let cancelled = false;
-    setStudents(null);
-    setAttendance({});
-    fetchClassStudents(selected, isAdmin ? null : tutorUid)
-      .then(s => { if (!cancelled) setStudents(s); })
-      .catch(e => { if (!cancelled) { setError(e.message); setStudents([]); } });
-    fetchClassLessonNotes(selected, isAdmin ? null : tutorUid)
-      .then(notes => {
-        if (cancelled) return;
-        const byUid = {};
-        for (const n of notes) { const a = byUid[n.uid] || (byUid[n.uid] = { present: 0, late: 0, absent: 0 }); if (a[n.attendance] !== undefined) a[n.attendance]++; }
-        setAttendance(byUid);
-      })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, [selected, tutorUid, isAdmin]);
-
   const saveSchedule = async () => {
-    if (!cls || !editSchedule) return;
+    const cls = classes?.find(c => c.code === editSchedule?.code);
+    if (!cls) return;
     try {
       const slots = (editSchedule.slots || []).filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES }));
       if (slots.length === 0) throw new Error("Add at least one lesson time");
@@ -82,6 +76,7 @@ export default function TutorPage({ authUser, userProfile }) {
       setEditSchedule(null);
     } catch (e) { setError(e.message); }
   };
+  const openSchedule = (cls) => setEditSchedule(editSchedule?.code === cls.code ? null : { code: cls.code, slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" });
 
   const handleCreate = async () => {
     if (!newName.trim()) return;
@@ -95,79 +90,79 @@ export default function TutorPage({ authUser, userProfile }) {
     setCreating(false);
   };
 
-  const saveName = async () => {
-    if (!nameEdit || !nameEdit.value.trim()) return;
-    setNameEdit({ ...nameEdit, saving: true });
-    try {
-      await setStudentName(nameEdit.uid, nameEdit.value);
-      setStudents(prev => (prev || []).map(x => x.uid === nameEdit.uid ? { ...x, displayName: nameEdit.value.trim() } : x));
-      setNameEdit(null);
-    } catch (e) { setError(e.message || "Could not save the name"); setNameEdit({ ...nameEdit, saving: false }); }
-  };
-  const cls = classes?.find(c => c.code === selected);
-  // Next lesson from the calendar; a group with nothing on the calendar yet falls back to its usual time
-  const clsSessions = cls ? sessions.filter(s => s.classId === cls.code && !s.studentIds) : [];
-  const nextSession = upcomingSessions(clsSessions.filter(s => s.status !== "cancelled"), 1)[0];
-  const nextLesson = nextSession ? { iso: nextSession.date, time: nextSession.time } : cls && clsSessions.length === 0 ? nextOccurrences(slotsOf(cls), 1)[0] : null;
   const tutorName = (uid) => { const t = tutors.find(x => x.uid === uid); return t ? (t.displayName || t.email) : null; };
-  const classUids = useMemo(() => new Set((students || []).map(s => s.uid)), [students]);
-  const classAttempts = useMemo(() => attempts.filter(a => classUids.has(a.uid)), [attempts, classUids]);
+  const colourOf = (code) => groupColour((classes || []).findIndex(c => c.code === code));
 
-  // Per-student summaries + class-wide numbers
+  // Per-student summaries from every attempt
   const perStudent = useMemo(() => {
     const by = {};
-    for (const a of classAttempts) (by[a.uid] || (by[a.uid] = [])).push(a);
+    for (const a of attempts) (by[a.uid] || (by[a.uid] = [])).push(a);
     const out = {};
     for (const uid of Object.keys(by)) out[uid] = summarise(by[uid]);
     return out;
-  }, [classAttempts]);
-  const classSum = useMemo(() => summarise(classAttempts, { minForTopic: 8 }), [classAttempts]);
-
-  const rows = useMemo(() => (students || []).map(s => {
-    const sum = perStudent[s.uid];
-    const weekPct = sum ? sum.weekPct : null;
-    const inactiveDays = sum?.last ? Math.floor((Date.now() - sum.last) / DAY) : null;
-    const flags = [];
-    if (!sum || inactiveDays === null) flags.push({ tone: "amber", text: "No activity yet" });
-    else if (inactiveDays >= 7) flags.push({ tone: "red", text: `Inactive ${inactiveDays} days` });
-    if (sum && sum.week >= 5 && weekPct !== null && weekPct < 50) flags.push({ tone: "red", text: `${weekPct}% this week` });
-    const weakest = sum?.weak?.find(t => t.pct < 75) || null;
-    return { s, sum, weekPct, flags, weakest, name: s.displayName || (s.email ? s.email.split("@")[0] : "Student") };
-  }).filter(r => !search || r.name.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => (b.flags.length - a.flags.length) || a.name.localeCompare(b.name)), [students, perStudent, search]);
-
-  const attention = rows.filter(r => r.flags.length > 0);
+  }, [attempts]);
+  const rows = useMemo(() => (students || []).map(s => studentRow(s, perStudent[s.uid])).sort((a, b) => (b.flags.length - a.flags.length) || a.name.localeCompare(b.name)), [students, perStudent]);
+  const attention = rows.filter(r => r.flags.length > 0 && r.s.classId);
   const activeThisWeek = rows.filter(r => r.sum && r.sum.week > 0).length;
+
+  // This week on the calendar
+  const today = isoDate(new Date());
+  const weekFrom = mondayOf(today), weekTo = addDays(weekFrom, 6);
+  const weekSessions = sessions.filter(s => s.date >= weekFrom && s.date <= weekTo && s.status !== "cancelled");
+  const weekMinutes = weekSessions.reduce((n, s) => n + (s.minutes || DEFAULT_MINUTES), 0);
+  const stillToCome = weekSessions.filter(s => sessionEndMs(s) > Date.now()).length;
+
+  const toReview = subs.filter(s => s.submittedAt && !s.reviewedAt).length;
+  const openInvoices = payments.filter(p => p.status === "open");
+  const owed = openInvoices.reduce((n, p) => n + Number(p.amount || 0), 0);
+  const overdue = openInvoices.filter(p => p.dueAt && p.dueAt < Date.now()).length;
+  const onboarding = applicants.filter(a => a.status !== "placed").length;
+
+  // Weak spots for one group
+  const cls = classes?.find(c => c.code === selected);
+  const clsUids = useMemo(() => new Set((students || []).filter(s => s.classId === selected).map(s => s.uid)), [students, selected]);
+  const classSum = useMemo(() => summarise(attempts.filter(a => clsUids.has(a.uid)), { minForTopic: 8 }), [attempts, clsUids]);
+  const nextLessonFor = (c) => {
+    const own = sessions.filter(s => s.classId === c.code && !s.studentIds);
+    const next = upcomingSessions(own.filter(s => s.status !== "cancelled"), 1)[0];
+    if (next) return `${fmtLessonDay(next.date)} ${fmtTime(next.time)}`;
+    if (own.length === 0) { const o = nextOccurrences(slotsOf(c), 1)[0]; return o ? `${fmtLessonDay(o.iso)} ${fmtTime(o.time)} (usual time)` : "Not scheduled"; }
+    return "Nothing scheduled";
+  };
+  const firstName = (userProfile?.displayName || authUser?.displayName || "").split(" ")[0];
+  const dateLine = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
 
   return (
     <>
       <PageHeader
         eyebrow="Overview"
-        title={cls ? cls.name : "Your groups"}
-        sub={cls ? [boardLabel(cls.board), describeSlots(slotsOf(cls)) || cls.lessonSlot, nextLesson && `next ${fmtLessonDay(nextLesson.iso)} ${fmtTime(nextLesson.time)}`, isAdmin && tutorName(cls.tutorId), students ? `${students.length} student${students.length === 1 ? "" : "s"}` : "loading students…"].filter(Boolean).join(" · ") : "Create a group, then place students into it from the Students tab."}
+        title={firstName ? `${greeting()}, ${firstName}` : greeting()}
+        sub={`${dateLine} · ${weekSessions.length} lesson${weekSessions.length === 1 ? "" : "s"} this week${stillToCome && stillToCome !== weekSessions.length ? `, ${stillToCome} still to come` : ""}`}
         right={<>
-          {classes && classes.length > 1 && (
-            <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Switch group"
-              style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, fontWeight: 600, color: T.ink }}>
-              {classes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
-            </select>
-          )}
-          {cls && <Button icon="calendar" onClick={() => setEditSchedule(editSchedule ? null : { slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" })}>{slotsOf(cls).length ? "Usual times" : "Set usual times"}</Button>}
-          {cls && <Button icon="calendar" onClick={() => navigate("/tutor/calendar")}>Calendar</Button>}
+          <Button icon="calendar" onClick={() => navigate("/tutor/calendar")}>Calendar</Button>
           <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>
         </>}
       />
 
       {error && <Notice tone="red">{error}</Notice>}
 
+      <div className={isAdmin ? "cm-grid-3" : "cm-grid-4"} style={{ gap: 16 }}>
+        <StatTile label="Lessons this week" value={weekSessions.length} sub={weekMinutes ? `${Math.round((weekMinutes / 60) * 10) / 10} teaching hours` : "Nothing on the calendar yet"} icon="calendar" onClick={() => navigate("/tutor/calendar")} />
+        <StatTile label="Students" value={students ? students.length : "–"} sub={students && students.length ? `${activeThisWeek} active this week` : "Place students from the Students tab"} icon="users" tone="indigo" onClick={() => navigate("/tutor/students")} />
+        <StatTile label="Needs attention" value={attention.length} sub="Inactive 7+ days or under 50%" icon="bolt" tone={attention.length ? "red" : "green"} onClick={() => navigate("/tutor/students?attention=1")} />
+        <StatTile label="Homework to review" value={toReview} sub={toReview ? "Submitted, not yet marked by you" : "All marked"} icon="checkSquare" tone={toReview ? "amber" : "green"} onClick={() => navigate("/tutor/homework")} />
+        {isAdmin && <StatTile label="Outstanding invoices" value={owed ? money(owed) : "£0"} sub={overdue ? `${overdue} overdue` : openInvoices.length ? `${openInvoices.length} due` : "Nothing outstanding"} icon="chart" tone={overdue ? "red" : "amber"} onClick={() => navigate("/tutor/payments")} />}
+        {isAdmin && <StatTile label="Onboarding" value={onboarding} sub={onboarding ? "Awaiting evaluation, terms or placing" : "Nobody waiting"} icon="plus" tone="accent" onClick={() => navigate("/tutor/students/onboarding")} />}
+      </div>
+
       {classes && classes.length > 0 && (
         <WeekList sessions={sessions} classes={classes} tutorUid={tutorUid} tutorName={isAdmin ? tutorName : null}
           onLessonCreated={(sid, lid) => setSessions(prev => prev.map(x => x.id === sid ? { ...x, lessonId: lid } : x))} />
       )}
 
-      {cls && editSchedule && (
+      {editSchedule && classes && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <CardHeader title={`Usual weekly times for ${cls.name}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them. Students see the calendar." />
+          <CardHeader title={`Usual weekly times for ${classes.find(c => c.code === editSchedule.code)?.name || "this group"}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them." />
           <SlotsFields slots={editSchedule.slots} onChange={slots => setEditSchedule(e => ({ ...e, slots }))} />
           <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 520 }}>
             <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Zoom link (shown to students and parents, and in reminder emails)</label>
@@ -212,156 +207,77 @@ export default function TutorPage({ authUser, userProfile }) {
         </Card>
       )}
 
-      {cls && (
-        <>
-          <div className="cm-grid-4">
-            <StatTile label="Students" value={students ? students.length : "–"} sub={students && students.length === 0 ? "Place students from the Students tab" : `${activeThisWeek} active this week`} />
-            <StatTile label="Answers · 7 days" value={classSum.week} sub={`${classSum.month} in the last 30 days`} />
-            <StatTile label="Group accuracy · 7 days" value={classSum.weekPct === null ? "–" : `${classSum.weekPct}%`}
-              sub={classSum.trend === null ? "Needs a few answers each week" : `${classSum.trend >= 0 ? "▲" : "▼"} ${Math.abs(classSum.trend)} pts on last week`}
-              subTone={classSum.trend === null ? undefined : classSum.trend >= 0 ? "green" : "red"} />
-            <StatTile label="Needs attention" value={<span style={{ color: attention.length ? T.red : T.ink }}>{attention.length}</span>} sub="Inactive 7+ days or under 50%" />
-          </div>
-
-          <div className="cm-two-col">
-            <div className="cm-main-col">
-              <Card padding={0}>
-                <CardHeader title="Students" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }}
-                  right={<>
-                    {isAdmin && <Button size="sm" icon="plus" onClick={() => navigate("/tutor/students")}>Add student</Button>}
-                    <Input placeholder="Search" value={search} onChange={e => setSearch(e.target.value)} style={{ width: 150, padding: "7px 12px", fontSize: 13 }} aria-label="Search students" />
-                  </>} />
-                {students && students.length === 0 && (
-                  <EmptyState icon="users" title="No students yet" body="Students appear here once they are placed into this group from the Students tab. Their work shows up as they practise." />
-                )}
-                {students && students.length > 0 && (
-                  <Table minWidth={760}>
-                    <thead>
-                      <tr>
-                        <th style={{ ...th, paddingLeft: 20 }}>Student</th>
-                        <th style={th}>Status</th>
-                        <th style={th}>This week</th>
-                        <th style={{ ...th, width: 190 }}>Accuracy · 7d</th>
-                        <th style={th}>Weakest topic</th>
-                        <th style={th}>Attendance</th>
-                        <th style={{ ...th, paddingRight: 20 }}>Last active</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.map(({ s, sum, weekPct, flags, weakest, name }) => {
-                        const isOpen = openStudent === s.uid;
-                        return (
-                          <React.Fragment key={s.uid}>
-                            <tr className="cm-row-hover" onClick={() => setOpenStudent(isOpen ? null : s.uid)} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer" }}>
-                              <td style={{ ...td, paddingLeft: 20 }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                  <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={32} />
-                                  <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }} onClick={e => e.stopPropagation()}>
-                                    {nameEdit?.uid === s.uid ? (
-                                      <form style={{ display: "flex", gap: 6, alignItems: "center" }} onSubmit={e => { e.preventDefault(); saveName(); }}>
-                                        <Input autoFocus value={nameEdit.value} onChange={e => setNameEdit({ ...nameEdit, value: e.target.value })} placeholder="Student's name" style={{ padding: "4px 8px", fontSize: 13, width: 180 }} />
-                                        <Button type="submit" variant="accent" disabled={nameEdit.saving || !nameEdit.value.trim()} style={{ padding: "4px 10px", fontSize: 12 }}>Save</Button>
-                                        <Button type="button" variant="ghost" onClick={() => setNameEdit(null)} style={{ padding: "4px 8px", fontSize: 12 }}>Cancel</Button>
-                                      </form>
-                                    ) : (
-                                      <span style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
-                                        <span style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: s.displayName ? T.ink : T.muted }}>{name}</span>
-                                        <button type="button" title={s.displayName ? "Edit name" : "Add name"} onClick={() => setNameEdit({ uid: s.uid, value: s.displayName || "", saving: false })}
-                                          style={{ border: "none", background: "none", cursor: "pointer", color: T.faint, padding: 2, display: "inline-flex" }}>
-                                          <Icon name="pencil" size={13} />
-                                        </button>
-                                      </span>
-                                    )}
-                                    <span style={{ fontSize: 11, color: T.muted }}>{s.email}</span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td style={td}>
-                                {flags.length === 0 ? <Chip tone="green">On track</Chip> : <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>{flags.map(f => <Chip key={f.text} tone={f.tone}>{f.text}</Chip>)}</div>}
-                              </td>
-                              <td style={{ ...td, fontWeight: 600 }}>{sum?.week || 0} <span style={{ color: T.muted, fontWeight: 400 }}>Qs</span></td>
-                              <td style={td}><AccuracyBar pct={weekPct} width={170} /></td>
-                              <td style={td}>{weakest ? <Chip tone={chipToneForPct(weakest.pct)}>{weakest.label} · {weakest.pct}%</Chip> : <span style={{ color: T.muted }}>{sum ? "None under 75%" : "No data yet"}</span>}</td>
-                              <td style={td}><AttendanceChips a={attendance[s.uid]} /></td>
-                              <td style={{ ...td, paddingRight: 20, color: T.muted }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between" }}>
-                                  {relativeTime(sum?.last)}
-                                  <Icon name="chevronDown" size={14} style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", color: T.faint }} />
-                                </div>
-                              </td>
-                            </tr>
-                            {isOpen && (
-                              <tr style={{ background: "#FAFBFC" }}>
-                                <td colSpan={6} style={{ padding: "14px 20px 18px" }}>
-                                  <div className="cm-grid-3" style={{ gap: 20 }}>
-                                    <TopicList title="Needs work" topics={sum?.weak?.filter(t => t.pct < 75)} empty="Not enough answers yet (3+ per topic)." />
-                                    <TopicList title="Going well" topics={sum?.strong} empty="Not enough answers yet." />
-                                    <div>
-                                      <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>Recent</div>
-                                      {!sum && <div style={{ fontSize: 12, color: T.muted }}>Nothing yet.</div>}
-                                      {sum?.recent.slice(0, 6).map(a => (
-                                        <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, padding: "3px 0" }}>
-                                          <span style={{ width: 8, height: 8, borderRadius: "50%", background: a.correct ? T.green : T.red, flexShrink: 0 }} />
-                                          <span style={{ fontWeight: 700, width: 44, color: T.muted }}>{TYPE_LABEL[a.type] || a.type}</span>
-                                          <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.topicLabel || a.topic || a.questionId}</span>
-                                          {a.maxScore > 1 && <span style={{ fontWeight: 700 }}>{a.score}/{a.maxScore}</span>}
-                                          <span style={{ color: T.muted, flexShrink: 0 }}>{relativeTime(attemptTime(a))}</span>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                )}
-              </Card>
-            </div>
-
-            <aside className="cm-side-col">
-              <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <CardHeader title="Needs attention" right={attention.length ? <Chip tone="red">{attention.length}</Chip> : null} />
-                {attention.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Everyone is active and above 50% this week.</span>}
-                {attention.slice(0, 5).map(r => (
-                  <div key={r.s.uid} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: 12, borderRadius: 10, background: "#FAFBFC", border: `1px solid ${T.line}` }}>
-                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: r.flags[0].tone === "red" ? T.red : T.amber, marginTop: 6, flexShrink: 0 }} />
-                    <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1 }}>
-                      <span style={{ fontWeight: 600 }}>{r.name}</span>
-                      <span style={{ fontSize: 12, color: T.muted }}>{r.flags.map(f => f.text).join(" · ")}{r.weakest ? ` · weakest: ${r.weakest.label}` : ""}</span>
+      {classes && classes.length > 0 && (
+        <div className="cm-two-col">
+          <div className="cm-main-col">
+            <Card padding={0}>
+              <CardHeader title="Groups" sub="Usual times, who teaches them and when they next meet" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
+              {classes.map((c, i) => {
+                const [bg, fg] = colourOf(c.code);
+                const count = (students || []).filter(s => s.classId === c.code).length;
+                return (
+                  <div key={c.code} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 20px", borderTop: i ? `1px solid ${T.line}` : "none", flexWrap: "wrap" }}>
+                    <span style={{ width: 12, height: 12, borderRadius: 4, background: fg, flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 2 }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                        <span style={{ fontWeight: 700 }}>{c.name}</span>
+                        <span style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: bg, color: fg }}>{boardLabel(c.board)}</span>
+                        {isAdmin && tutorName(c.tutorId) && <Chip>{tutorName(c.tutorId)}</Chip>}
+                      </span>
+                      <span style={{ fontSize: 12, color: T.muted }}>{describeSlots(slotsOf(c)) || c.lessonSlot || "No usual time set"} · next {nextLessonFor(c)} · {count} student{count === 1 ? "" : "s"}</span>
+                    </div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      <Button size="sm" onClick={() => openSchedule(c)}>{slotsOf(c).length ? "Usual times" : "Set usual times"}</Button>
+                      <Button size="sm" icon="users" onClick={() => navigate(`/tutor/students?group=${encodeURIComponent(c.code)}`)}>Students</Button>
                     </div>
                   </div>
-                ))}
-              </Card>
-
-              <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <CardHeader title="Group weak spots" sub="Topics the group scores lowest on (8+ answers)" />
-                {classSum.weak.filter(t => t.pct < 75).length === 0
-                  ? <span style={{ fontSize: 13, color: T.muted }}>Nothing flagged yet. This fills in as students practise.</span>
-                  : classSum.weak.filter(t => t.pct < 75).map(t => (
-                    <div key={t.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}>
-                        <span>{t.label}</span>
-                        <span style={{ fontWeight: 700, color: pctColour(t.pct) }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.c}/{t.n})</span></span>
-                      </div>
-                      <AccuracyBar pct={t.pct} width="100%" />
-                    </div>
-                  ))}
-                <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10, fontSize: 12, color: T.muted }}>
-                  These are the topics to record videos for first.
-                </div>
-              </Card>
-
-              <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <CardHeader title="Coming next" />
-                <span style={{ fontSize: 13, color: T.muted, lineHeight: 1.5 }}>Set homework from the question bank with a time budget and due date, review AI-marked answers, and send automatic fix-up work for weak topics.</span>
-              </Card>
-            </aside>
+                );
+              })}
+            </Card>
           </div>
-        </>
+
+          <aside className="cm-side-col">
+            <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <CardHeader title="Needs attention" right={attention.length ? <Chip tone="red">{attention.length}</Chip> : null} />
+              {attention.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Everyone is active and above 50% this week.</span>}
+              {attention.slice(0, 6).map(r => (
+                <button key={r.s.uid} type="button" onClick={() => navigate(`/tutor/students/${r.s.uid}`)} className="cm-row-hover"
+                  style={{ display: "flex", gap: 12, alignItems: "center", padding: "10px 12px", borderRadius: 10, background: T.card, border: `1px solid ${T.line}`, cursor: "pointer", textAlign: "left", fontFamily: T.font, width: "100%" }}>
+                  <Avatar name={r.s.displayName} email={r.s.email} photoURL={r.s.photoURL} size={32} />
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1, minWidth: 0 }}>
+                    <span style={{ fontWeight: 600, fontSize: 13, color: T.ink }}>{r.name}</span>
+                    <span style={{ fontSize: 12, color: T.muted }}>{r.flags.map(f => f.text).join(" · ")}{r.weakest ? ` · weakest: ${r.weakest.label}` : ""}</span>
+                  </div>
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: r.flags[0].tone === "red" ? T.red : T.amber, flexShrink: 0 }} />
+                </button>
+              ))}
+              {attention.length > 6 && <Button size="sm" variant="ghost" onClick={() => navigate("/tutor/students?attention=1")}>See all {attention.length}</Button>}
+            </Card>
+
+            <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <CardHeader title="Group weak spots" sub="Topics the group scores lowest on (8+ answers)"
+                right={classes.length > 1 ? (
+                  <select value={selected || ""} onChange={e => setSelected(e.target.value)} aria-label="Group" style={{ padding: "6px 10px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 12, fontWeight: 600, color: T.ink }}>
+                    {classes.map(c => <option key={c.code} value={c.code}>{c.name}</option>)}
+                  </select>
+                ) : null} />
+              {cls && classSum.weak.filter(t => t.pct < 75).length === 0
+                ? <span style={{ fontSize: 13, color: T.muted }}>Nothing flagged for {cls.name} yet. This fills in as students practise.</span>
+                : classSum.weak.filter(t => t.pct < 75).map(t => (
+                  <div key={t.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}>
+                      <span>{t.label}</span>
+                      <span style={{ fontWeight: 700, color: pctColour(t.pct) }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.c}/{t.n})</span></span>
+                    </div>
+                    <AccuracyBar pct={t.pct} width="100%" />
+                  </div>
+                ))}
+              <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10, fontSize: 12, color: T.muted }}>
+                These are the topics to record videos for first.
+              </div>
+            </Card>
+          </aside>
+        </div>
       )}
     </>
   );
@@ -405,17 +321,6 @@ function SlotsFields({ slots, onChange }) {
         </div>
       ))}
       <div><Button size="sm" onClick={() => onChange([...slots, { weekday: (Number(slots[slots.length - 1]?.weekday ?? 1) + 2) % 7, time: slots[slots.length - 1]?.time || "18:00", minutes: slots[slots.length - 1]?.minutes || DEFAULT_MINUTES }])}>Add another day</Button></div>
-    </div>
-  );
-}
-
-function AttendanceChips({ a }) {
-  if (!a) return <span style={{ fontSize: 12, color: T.muted }}>No lessons noted</span>;
-  const total = a.present + a.late + a.absent;
-  return (
-    <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }} title={`${a.present} present, ${a.late} late, ${a.absent} absent of ${total}`}>
-      <Chip tone={a.absent === 0 ? "green" : a.absent / total > 0.25 ? "red" : "amber"}>{a.present + a.late}/{total} attended</Chip>
-      {a.late > 0 && <Chip tone="amber">{a.late} late</Chip>}
     </div>
   );
 }
