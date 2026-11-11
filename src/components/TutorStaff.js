@@ -2,7 +2,7 @@
 // and the login emailed), make someone an admin, or take access away.
 import React, { useState, useEffect } from "react";
 import { fetchTutors, fetchAllClasses, staffApi, fetchSettings, saveSettings } from "../firebase";
-import { resetCommunityCache } from "./CommunityCard";
+import { resetCommunityCache, DEFAULT_DISCORD_INVITE } from "./CommunityCard";
 import { T } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar } from "../ui/components";
 
@@ -121,8 +121,8 @@ function CommunitySettings() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState(null);
   useEffect(() => {
-    fetchSettings("community").then(d => setForm({ discordInvite: d?.discordInvite || "", discordNote: d?.discordNote || "" }))
-      .catch(e => { setForm({ discordInvite: "", discordNote: "" }); setMsg({ tone: "red", text: /permission/i.test(e.message) ? "The settings rule is not published yet, so this cannot be read or saved." : e.message }); });
+    fetchSettings("community").then(d => setForm({ discordInvite: d?.discordInvite || "", discordNote: d?.discordNote || "", hidden: !!d?.hidden }))
+      .catch(e => { setForm({ discordInvite: "", discordNote: "", hidden: false }); setMsg({ tone: "red", text: /permission/i.test(e.message) ? "The settings rule is not published yet, so this cannot be read or saved." : e.message }); });
   }, []);
   const save = async (e) => {
     e.preventDefault();
@@ -130,26 +130,29 @@ function CommunitySettings() {
     if (link && !/^https:\/\/(discord\.gg|discord\.com\/invite)\//.test(link)) { setMsg({ tone: "red", text: "Paste a Discord invite link, like https://discord.gg/abc123" }); return; }
     setSaving(true); setMsg(null);
     try {
-      await saveSettings("community", { discordInvite: link, discordNote: form.discordNote.trim() });
+      await saveSettings("community", { discordInvite: link, discordNote: form.discordNote.trim(), hidden: !!form.hidden });
       resetCommunityCache();
-      setMsg({ tone: "green", text: link ? "Saved. Students and parents now see the Join the Discord card, and new welcome emails include the link." : "Saved. The Discord card is hidden until a link is set." });
+      setMsg({ tone: "green", text: form.hidden ? "Saved. The Discord card is hidden." : `Saved. Students and parents see the Join the Discord card with ${link || "the built-in link"}, and new welcome emails include it.` });
     } catch (err) { setMsg({ tone: "red", text: /permission/i.test(err.message) ? "The settings rule is not published yet. Publish firestore.rules, then save again." : err.message }); }
     setSaving(false);
   };
   return (
     <Card style={{ marginBottom: 14 }}>
-      <CardHeader title="HSJ Discord" sub="Students see a Join the Discord card on their dashboard and parents on their page, and the link goes into the welcome emails. Leave it empty to hide all of that. Make the invite one that does not expire." />
+      <CardHeader title="HSJ Discord" sub={`Students see a Join the Discord card on their dashboard and parents on their page, and the link goes into the welcome emails. The built-in invite is ${DEFAULT_DISCORD_INVITE}; paste a new one here if it changes, and make it one that does not expire.`} />
       {msg && <Notice tone={msg.tone} style={{ margin: "10px 0" }}>{msg.text}</Notice>}
       {form && (
         <form onSubmit={save} style={{ display: "flex", gap: 10, alignItems: "flex-end", flexWrap: "wrap", marginTop: 10 }}>
           <div style={{ ...field, flex: "1 1 260px" }}>
             <label htmlFor="discord-invite" style={label}>Invite link</label>
-            <Input id="discord-invite" type="url" value={form.discordInvite} onChange={e => setForm(f => ({ ...f, discordInvite: e.target.value }))} placeholder="https://discord.gg/..." />
+            <Input id="discord-invite" type="url" value={form.discordInvite} onChange={e => setForm(f => ({ ...f, discordInvite: e.target.value }))} placeholder={DEFAULT_DISCORD_INVITE} />
           </div>
           <div style={{ ...field, flex: "2 1 320px" }}>
             <label htmlFor="discord-note" style={label}>Short note shown on the card (optional)</label>
             <Input id="discord-note" value={form.discordNote} onChange={e => setForm(f => ({ ...f, discordNote: e.target.value }))} placeholder="e.g. Say hello in #introductions and pick your year group role." />
           </div>
+          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, padding: "9px 0" }}>
+            <input type="checkbox" checked={form.hidden} onChange={e => setForm(f => ({ ...f, hidden: e.target.checked }))} /> Hide the Discord card
+          </label>
           <Button type="submit" variant="accent" disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
         </form>
       )}

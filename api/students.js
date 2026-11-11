@@ -8,6 +8,8 @@ const mail = require("./_email");
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 const PLANS = ["pif", "instalments", "results"];
 const GRADES = ["A*", "A", "B", "C", "D", "E", "U", "Not yet assessed"];
+// Keep in step with src/components/CommunityCard.js; settings/community overrides it.
+const DEFAULT_DISCORD_INVITE = "https://discord.gg/xHfG8PDzaa";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const str = (v, max = 120) => String(v ?? "").trim().slice(0, max);
@@ -254,7 +256,8 @@ module.exports = async function handler(req, res) {
       const group = await fb.getDocument(`classes/${groupCode}`, token);
       if (!group) throw bad("Group not found");
       const tutor = group.tutorId ? await fb.getDocument(`users/${group.tutorId}`, token) : null;
-      const discordInvite = (await fb.getDocument("settings/community", token).catch(() => null))?.discordInvite || null;
+      const community = await fb.getDocument("settings/community", token).catch(() => null);
+      const discordInvite = community?.hidden ? null : (community?.discordInvite || DEFAULT_DISCORD_INVITE);
 
       // Account: new email/password user with a temporary password, or the
       // existing account if the student already has one.

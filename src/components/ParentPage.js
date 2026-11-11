@@ -13,9 +13,10 @@ import { NoteBody, UpcomingLessons } from "./StudentLessons";
 import CommunityCard from "./CommunityCard";
 import { describeSlots, slotsOf } from "../utils/schedule";
 import { useHomework } from "./StudentHomework";
-import { fmtDue } from "../utils/homeworkBank";
+import { fmtDue } from "../utils/homeworkDates";
+import AgreementDocument, { PrintAgreementButton, agreementVarsFromProfile } from "./AgreementDocument";
 
-const TABS = [{ id: "progress", label: "Progress" }, { id: "lessons", label: "Lessons" }, { id: "homework", label: "Homework" }, { id: "payments", label: "Payments" }];
+const TABS = [{ id: "progress", label: "Progress" }, { id: "lessons", label: "Lessons" }, { id: "homework", label: "Homework" }, { id: "payments", label: "Payments" }, { id: "agreement", label: "Agreement" }];
 
 export default function ParentPage({ authUser, userProfile, childUid }) {
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ export default function ParentPage({ authUser, userProfile, childUid }) {
       {tab === "lessons" && <LessonsTab child={child} />}
       {tab === "homework" && <HomeworkTab child={child} />}
       {tab === "payments" && <PaymentsTab child={child} parentName={userProfile?.displayName} />}
+      {tab === "agreement" && <AgreementTab child={child} />}
     </>
   );
 }
@@ -249,3 +251,25 @@ function PaymentsTab({ child }) {
   );
 }
 
+// ─── The signed Tutoring Programme Agreement ───────────────────────────────
+function AgreementTab({ child }) {
+  const ag = child.agreement || null;
+  const first = (child.displayName || "your child").split(" ")[0];
+  if (!ag || ag.agreedBeforePlatform) return (
+    <Card padding={0}><EmptyState icon="book" title="Agreed before the platform" body={`The terms for ${first} were agreed with HSJ Tuition directly, before this platform existed, so there is no copy to show here. Email HSJ Tuition if you would like one.`} /></Card>
+  );
+  const accepted = ag.acceptedAt ? { acceptedAt: ag.acceptedAt, acceptedName: ag.acceptedName, version: ag.version } : null;
+  const vars = agreementVarsFromProfile(child);
+  return (
+    <>
+      <Card style={{ marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }} className="cm-no-print">
+        <div>
+          <div style={{ fontWeight: 700 }}>Tutoring Programme Agreement for {first}</div>
+          <div style={{ fontSize: 13, color: T.muted }}>{accepted ? `Accepted by ${accepted.acceptedName} on ${new Date(accepted.acceptedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.` : "Not yet accepted."} Download or print saves it as a PDF from your browser's print dialog.</div>
+        </div>
+        <PrintAgreementButton />
+      </Card>
+      <AgreementDocument vars={vars} accepted={accepted} printable title={`HSJ Tuition Agreement - ${child.displayName || "student"}`} />
+    </>
+  );
+}
