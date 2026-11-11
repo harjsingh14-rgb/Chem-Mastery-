@@ -210,6 +210,21 @@ export async function fetchApplicants() {
 }
 
 /** Admin onboarding actions run server-side (account creation, emails). */
+/** Admin: add a tutor or admin, change a staff role, or revoke access. */
+export async function staffApi(action, payload = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Please sign in again");
+  const idToken = await user.getIdToken();
+  const res = await fetch("/api/staff", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Something went wrong");
+  return data;
+}
+
 export async function studentsApi(action, payload = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error("Please sign in again");

@@ -71,7 +71,7 @@ export default function HomeworkBuilder({ authUser }) {
   const ppqModules = useMemo(() => {
     const mods = [];
     for (const t of topicsFor(board)) {
-      if (year === "as" && t.year === 2) continue;
+      if (year === "as" && Number(t.year) === 13) continue; // modules carry 12 or 13
       let m = mods.find(x => x.id === t.module);
       if (!m) { m = { id: t.module, title: t.moduleTitle, topics: [] }; mods.push(m); }
       m.topics.push(t);

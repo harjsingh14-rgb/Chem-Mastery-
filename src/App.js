@@ -27,6 +27,7 @@ import { TutorLessonsList, TutorLessonEditor } from "./components/TutorLessons";
 import StudentLessons from "./components/StudentLessons";
 import TutorPayments from "./components/TutorPayments";
 import TutorCalendar from "./components/TutorCalendar";
+import TutorStaff from "./components/TutorStaff";
 import CalcTab from "./components/CalcTab";
 import ExtendedTab from "./components/ExtendedTab";
 import McqTab from "./components/McqTab";
@@ -246,6 +247,7 @@ export default function App() {
     ...(isAdmin ? [
       { id: "students", label: "Students", icon: "plus", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" },
       { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
+      { id: "staff", label: "Tutors", icon: "settings", to: "/tutor/staff", active: screen === "tutor" && tutorPage === "staff" },
     ] : []),
     { id: "student", label: "Student view", icon: "grid", to: `/${navBoard}`, active: screen === "topics" && topicsTab === "home" },
     { id: "revision", label: "Revision", icon: "book", to: `/${navBoard}/revision`, active: screen === "cards" || (screen === "topics" && !["home", "homework", "lessons", "videos", "practise"].includes(topicsTab)) },
@@ -411,6 +413,8 @@ export default function App() {
           ? (tutorParam ? <TutorLessonEditor authUser={authUser} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
         : tutorPage === "calendar"
           ? <TutorCalendar authUser={authUser} userProfile={userProfile} />
+        : tutorPage === "staff"
+          ? <TutorStaff authUser={authUser} userProfile={userProfile} />
         : tutorPage === "payments"
           ? <TutorPayments />
         : tutorPage === "students"

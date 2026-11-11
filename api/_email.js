@@ -186,6 +186,23 @@ function tutorSubmission({ tutorName, studentName, title, score, maxScore, link 
   return { subject: `${studentName} submitted ${title}`, html };
 }
 
+/** To a new tutor or admin: their HSJ Tuition staff login. */
+function staffWelcome({ name, email, tempPassword, role, addedBy }) {
+  const html = layout("Your HSJ Tuition tutor account", `
+    <p>Hi ${esc(firstName(name))},</p>
+    <p>${esc(addedBy || "HSJ Tuition")} has given you ${role === "admin" ? "an admin" : "a tutor"} account on the HSJ Tuition platform. Your groups, calendar, homework setting, lesson notes and attendance all live there.</p>
+    ${tempPassword ? `
+    <div style="background:#EEF7FC;border:1px solid #BFE3F5;border-radius:10px;padding:14px 16px;margin:18px 0;">
+      <div style="font-weight:700;margin-bottom:6px;">Your login</div>
+      <div>Email: <strong>${esc(email)}</strong></div>
+      <div>Temporary password: <code style="background:#DCEFFA;padding:2px 8px;border-radius:4px;font-size:15px;font-weight:700;">${esc(tempPassword)}</code></div>
+      <div style="font-size:12px;color:#6b7a8c;margin-top:6px;">You will be asked to choose your own password when you first log in.</div>
+    </div>` : `<p>Log in with your existing account for <strong>${esc(email)}</strong>; it now has tutor access.</p>`}
+    ${button(`${SITE}/tutor`, "Open the tutor dashboard")}
+    <p style="margin-top:22px;">Start on the Overview tab: your groups are listed there once HSJ has set them up, with the Calendar, Homework and Lessons tabs alongside.</p>`);
+  return { subject: "Your HSJ Tuition tutor account", html };
+}
+
 /** To the tutor: a student is querying a mark (homework or past paper). */
 function tutorQuery({ tutorName, studentName, where, note, link }) {
   const html = layout("Mark query", `
@@ -196,4 +213,4 @@ function tutorQuery({ tutorName, studentName, where, note, link }) {
   return { subject: `Mark query from ${studentName}: ${where}`, html };
 }
 
-module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, parentWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
+module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, parentWelcome, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
