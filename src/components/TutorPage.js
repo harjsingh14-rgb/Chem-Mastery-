@@ -4,9 +4,8 @@ import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, ne
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Notice } from "../ui/components";
-import { summarise, pct } from "../utils/analytics";
+import { summarise, pct, studentRow } from "../utils/analytics";
 import { money } from "../data/terms";
-import { studentRow } from "./StudentsPage";
 import WeekList from "./WeekList";
 
 // The tutor home: the numbers that matter today, this week's lessons, the

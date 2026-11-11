@@ -61,3 +61,15 @@ export function groupBySection(topicList, sectionOf) {
   }
   return Object.values(groups).map(g => ({ ...g, pct: pct(g.c, g.n), topics: g.topics.sort((a, b) => b.n - a.n) })).sort((a, b) => b.n - a.n);
 }
+
+/** Flags, summary and display name for one student from their attempts. Used by the Students directory and the Overview. */
+export function studentRow(s, sum) {
+  const weekPct = sum ? sum.weekPct : null;
+  const inactiveDays = sum?.last ? Math.floor((Date.now() - sum.last) / DAY) : null;
+  const flags = [];
+  if (!sum || inactiveDays === null) flags.push({ tone: "amber", text: "No activity yet" });
+  else if (inactiveDays >= 7) flags.push({ tone: "red", text: `Inactive ${inactiveDays} days` });
+  if (sum && sum.week >= 5 && weekPct !== null && weekPct < 50) flags.push({ tone: "red", text: `${weekPct}% this week` });
+  const weakest = sum?.weak?.find(t => t.pct < 75) || null;
+  return { s, sum, weekPct, flags, weakest, name: s.displayName || (s.email ? s.email.split("@")[0] : "Student") };
+}

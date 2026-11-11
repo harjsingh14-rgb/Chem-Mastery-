@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { fetchAllClasses, fetchTutorClasses, fetchAllStudents, fetchStudentsForTutor, fetchAttemptsForTutor, fetchClassLessonNotes } from "../firebase";
 import { T, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, AccuracyBar, Tabs } from "../ui/components";
-import { summarise, relativeTime, DAY } from "../utils/analytics";
+import { summarise, relativeTime, studentRow } from "../utils/analytics";
 import TutorStudents from "./TutorStudents";
 
 export function AttendanceChips({ a }) {
@@ -20,18 +20,6 @@ export function AttendanceChips({ a }) {
       {a.late > 0 && <Chip tone="amber">{a.late} late</Chip>}
     </div>
   );
-}
-
-/** Flags, summary and display name for one student from their attempts. Shared with the Overview. */
-export function studentRow(s, sum) {
-  const weekPct = sum ? sum.weekPct : null;
-  const inactiveDays = sum?.last ? Math.floor((Date.now() - sum.last) / DAY) : null;
-  const flags = [];
-  if (!sum || inactiveDays === null) flags.push({ tone: "amber", text: "No activity yet" });
-  else if (inactiveDays >= 7) flags.push({ tone: "red", text: `Inactive ${inactiveDays} days` });
-  if (sum && sum.week >= 5 && weekPct !== null && weekPct < 50) flags.push({ tone: "red", text: `${weekPct}% this week` });
-  const weakest = sum?.weak?.find(t => t.pct < 75) || null;
-  return { s, sum, weekPct, flags, weakest, name: s.displayName || (s.email ? s.email.split("@")[0] : "Student") };
 }
 
 export default function StudentsPage({ authUser, userProfile, tab = "all" }) {

@@ -36,7 +36,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
   const [privateNotes, setPrivateNotes] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [attempts, setAttempts] = useState([]);
-  const [tab, setTab] = useState(initialTab || "overview");
+  const [tab, setTab] = useState(TABS.some(t => t.id === initialTab) ? initialTab : "overview");
   const [error, setError] = useState(null);
   const [nameEdit, setNameEdit] = useState(null);
 
