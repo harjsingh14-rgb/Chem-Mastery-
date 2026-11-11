@@ -31,13 +31,25 @@ export function NoteBody({ n, compact }) {
         {attLabel && <Chip tone={tone}>{attLabel}</Chip>}
         {!compact && (n.topics || []).map(t => <Chip key={t} tone="accent">{t}</Chip>)}
       </div>
+      {n.summary && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}>{n.summary}</div>}
+      {n.www && <NoteSection label="What went well" tone={T.green} tint={T.greenTint} text={n.www} compact={compact} />}
+      {n.ebi && <NoteSection label="Even better if" tone={T.amber} tint={T.amberTint} text={n.ebi} compact={compact} />}
       {n.text && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}>{compact && n.text.length > 180 ? `${n.text.slice(0, 180)}…` : n.text}</div>}
+      {n.extra && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}><strong>Extra notes.</strong> {n.extra}</div>}
       {!compact && n.homework && (
         <div style={{ fontSize: 12, color: T.muted }}>
           Homework "{n.homework.title}": {n.homework.status === "submitted" ? `${n.homework.score}/${n.homework.maxScore} (${n.homework.pct}%)` : n.homework.status === "in-progress" ? "started, not finished" : "not started"}
           {n.homework.weak?.length ? ` · needs more work: ${n.homework.weak.join(", ")}` : ""}
         </div>
       )}
+    </div>
+  );
+}
+
+function NoteSection({ label, tone, tint, text, compact }) {
+  return (
+    <div style={{ fontSize: 13, lineHeight: 1.55, color: T.body, background: tint, borderLeft: `3px solid ${tone}`, borderRadius: 8, padding: "6px 10px", whiteSpace: "pre-wrap" }}>
+      <strong style={{ color: tone }}>{label}.</strong> {compact && text.length > 140 ? `${text.slice(0, 140)}…` : text}
     </div>
   );
 }

@@ -4,9 +4,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
-  fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession } from "../firebase";
+  fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
+  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
-import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar } from "../ui/components";
+import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
 import { lastOccurrence, lastSessionDate, describeSlots, slotsOf } from "../utils/schedule";
 
@@ -46,6 +47,7 @@ export function TutorLessonsList({ authUser }) {
   const [sessions, setSessions] = useState([]);
   const [error, setError] = useState(null);
   const [showNew, setShowNew] = useState(false);
+  const [tab, setTab] = useState("lessons");
   const [classId, setClassId] = useState("");
   const [date, setDate] = useState(today());
   const [topics, setTopics] = useState([]);
@@ -88,7 +90,9 @@ export function TutorLessonsList({ authUser }) {
         right={<Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New lesson</Button>} />
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {groups && groups.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Lessons belong to a group. Create one on the Overview tab." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
-      {showNew && groups && groups.length > 0 && (
+      {groups && groups.length > 0 && <div style={{ marginBottom: 12 }}><Tabs tabs={[{ id: "lessons", label: "Lessons" }, { id: "register", label: "Attendance register" }]} value={tab} onChange={setTab} /></div>}
+      {tab === "register" && groups && groups.length > 0 && <AttendanceRegister uid={uid} groups={groups} lessons={lessons || []} />}
+      {tab === "lessons" && showNew && groups && groups.length > 0 && (
         <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 12 }}>
           <CardHeader title="New lesson" sub="Which group, when, and what you covered. You can change the topics afterwards." />
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -103,7 +107,7 @@ export function TutorLessonsList({ authUser }) {
           </div>
         </Card>
       )}
-      <Card padding={0}>
+      {tab === "lessons" && <Card padding={0}>
         <CardHeader title="Past lessons" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
         {lessons === null && <div style={{ padding: 20, fontSize: 13, color: T.muted }}>Loading…</div>}
         {lessons && lessons.length === 0 && <EmptyState icon="calendar" title="No lessons recorded yet" body="Click New lesson after you teach." />}
@@ -122,12 +126,65 @@ export function TutorLessonsList({ authUser }) {
             </tbody>
           </Table>
         )}
-      </Card>
+      </Card>}
     </>
   );
 }
 
 const pctOf = (n, d) => d ? Math.round((n / d) * 100) : null;
+
+/** One group: students down the side, lessons across the top, P / L / A in each cell. */
+function AttendanceRegister({ uid, groups, lessons }) {
+  const navigate = useNavigate();
+  const [classId, setClassId] = useState(groups[0]?.code || "");
+  const [students, setStudents] = useState(null);
+  const [notes, setNotes] = useState([]);
+  useEffect(() => {
+    if (!classId || !uid) return;
+    let cancelled = false;
+    setStudents(null);
+    Promise.all([fetchClassStudents(classId, uid), fetchClassLessonNotes(classId, uid)])
+      .then(([st, ns]) => { if (!cancelled) { setStudents(st.sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""))); setNotes(ns); } })
+      .catch(() => { if (!cancelled) { setStudents([]); setNotes([]); } });
+    return () => { cancelled = true; };
+  }, [classId, uid]);
+  const cols = lessons.filter(l => l.classId === classId).sort((a, b) => (b.date || "").localeCompare(a.date || "")).slice(0, 20);
+  const byKey = {}; for (const n of notes) byKey[`${n.lessonId}_${n.uid}`] = n;
+  const mark = { present: ["P", T.green, T.greenTint], late: ["L", T.amber, T.amberTint], absent: ["A", T.red, T.redTint] };
+  return (
+    <Card padding={0}>
+      <CardHeader title="Attendance register" sub="Newest lesson first. Click a date to open that lesson's notes. Attendance is recorded on the notes page for each lesson."
+        right={groups.length > 1 && <select value={classId} onChange={e => setClassId(e.target.value)} style={selectStyle} aria-label="Group">{groups.map(g => <option key={g.code} value={g.code}>{g.name}</option>)}</select>}
+        style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
+      {students === null && <div style={{ padding: 20, fontSize: 13, color: T.muted }}>Loading…</div>}
+      {students && students.length === 0 && <EmptyState icon="users" title="No students in this group yet" body="Place students into the group from the Students tab." />}
+      {students && students.length > 0 && cols.length === 0 && <EmptyState icon="calendar" title="No lessons recorded yet" body="Take attendance from the Calendar, or click New lesson on the Lessons tab." />}
+      {students && students.length > 0 && cols.length > 0 && (
+        <Table minWidth={420 + cols.length * 52}>
+          <thead><tr>
+            <th style={{ ...th, paddingLeft: 20, position: "sticky", left: 0, background: T.card }}>Student</th>
+            <th style={th}>Present</th>
+            {cols.map(l => <th key={l.id} style={{ ...th, textAlign: "center", cursor: "pointer" }} onClick={() => navigate(`/tutor/lessons/${l.id}`)} title={fmtLessonDate(l.date)}>{new Date(`${l.date}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</th>)}
+          </tr></thead>
+          <tbody>
+            {students.map(s => {
+              const cells = cols.map(l => byKey[`${l.id}_${s.uid}`]?.attendance || null);
+              const recorded = cells.filter(Boolean).length;
+              const present = cells.filter(a => a === "present" || a === "late").length;
+              return (
+                <tr key={s.uid} style={{ borderTop: `1px solid ${T.line}` }}>
+                  <td style={{ ...td, paddingLeft: 20, fontWeight: 600, position: "sticky", left: 0, background: T.card, whiteSpace: "nowrap" }}>{s.displayName || s.email}</td>
+                  <td style={{ ...td, color: T.muted, whiteSpace: "nowrap" }}>{recorded ? `${Math.round((present / recorded) * 100)}%` : "–"}<span style={{ fontSize: 11, color: T.faint }}> {recorded ? `of ${recorded}` : ""}</span></td>
+                  {cells.map((a, i) => { const m = a ? mark[a] : null; return <td key={cols[i].id} style={{ ...td, textAlign: "center" }}>{m ? <span style={{ display: "inline-flex", width: 26, height: 26, borderRadius: 8, alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: m[1], background: m[2] }}>{m[0]}</span> : <span style={{ color: T.faint }}>·</span>}</td>; })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      )}
+    </Card>
+  );
+}
 
 /** The student's record on the homework due before this lesson, as it goes into the email. */
 function homeworkSnapshot(assignment, sub) {
@@ -145,12 +202,16 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   const [lesson, setLesson] = useState(null);
   const [students, setStudents] = useState(null);
   const [notes, setNotes] = useState({});      // uid -> saved note
-  const [drafts, setDrafts] = useState({});    // uid -> { attendance, text }
+  const [privates, setPrivates] = useState({}); // uid -> saved private note
+  const [previous, setPrevious] = useState({}); // uid -> the student's most recent earlier note
+  const [drafts, setDrafts] = useState({});    // uid -> { attendance, www, ebi, extra, text, private }
+  const [summary, setSummary] = useState("");
   const [lastHw, setLastHw] = useState(null);
   const [nextHw, setNextHw] = useState(null);
   const [subs, setSubs] = useState([]);
   const [busy, setBusy] = useState({});        // uid -> "save" | "send"
   const [error, setError] = useState(null);
+  const [flash, setFlash] = useState(null);
   const [editTopics, setEditTopics] = useState(false);
 
   useEffect(() => {
@@ -160,7 +221,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
       try {
         const l = await fetchLesson(lessonId);
         if (!l) { setError("This lesson no longer exists."); return; }
-        const [all, ns, asgs] = await Promise.all([fetchClassStudents(l.classId, uid), fetchLessonNotes(lessonId, uid), fetchTutorAssignments(uid)]);
+        const [all, ns, asgs, pn, history] = await Promise.all([fetchClassStudents(l.classId, uid), fetchLessonNotes(lessonId, uid), fetchTutorAssignments(uid), fetchPrivateNotes(lessonId, uid).catch(() => []), fetchClassLessonNotes(l.classId, uid).catch(() => [])]);
         // A lesson made from a session for chosen students only has those students on it
         const st = Array.isArray(l.studentIds) && l.studentIds.length ? all.filter(s => l.studentIds.includes(s.uid)) : all;
         const dayEnd = new Date(`${l.date}T23:59:59`).getTime();
@@ -169,49 +230,72 @@ export function TutorLessonEditor({ authUser, lessonId }) {
         const next = forGroup.filter(a => a.dueAt && a.dueAt > dayEnd).sort((a, b) => a.dueAt - b.dueAt)[0] || null;
         const sb = last ? await fetchSubmissionsForAssignment(last.id, uid) : [];
         if (cancelled) return;
-        setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setSubs(sb);
+        setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setSubs(sb); setSummary(l.summary || "");
         const byUid = {}; for (const n of ns) byUid[n.uid] = n;
         setNotes(byUid);
-        const d = {}; for (const s of st) d[s.uid] = { attendance: byUid[s.uid]?.attendance || "present", text: byUid[s.uid]?.text || "" };
+        const pv = {}; for (const n of pn) pv[n.uid] = n;
+        setPrivates(pv);
+        const prev = {};
+        for (const n of history) { if (n.lessonId === lessonId || !n.date || n.date >= l.date) continue; if (!prev[n.uid] || n.date > prev[n.uid].date) prev[n.uid] = n; }
+        setPrevious(prev);
+        const d = {}; for (const s of st) d[s.uid] = draftOf(byUid[s.uid], pv[s.uid]);
         setDrafts(d);
       } catch (e) { if (!cancelled) setError(e.message); }
     })();
     return () => { cancelled = true; };
   }, [uid, lessonId]);
 
+  const say = (msg) => { setFlash(msg); window.clearTimeout(say.t); say.t = window.setTimeout(() => setFlash(null), 3500); };
   const setDraft = (suid, patch) => setDrafts(prev => ({ ...prev, [suid]: { ...prev[suid], ...patch } }));
+  const applyToAll = (field, value) => setDrafts(prev => { const out = { ...prev }; for (const k of Object.keys(out)) out[k] = { ...out[k], [field]: value }; return out; });
   const noteData = (s) => {
     const d = drafts[s.uid] || {};
     return {
       studentName: s.displayName || s.email || "", classId: lesson.classId, className: lesson.className || null, tutorId: uid,
-      date: lesson.date, topics: lesson.topics || [], attendance: d.attendance || "present", text: (d.text || "").trim(),
+      date: lesson.date, topics: lesson.topics || [], summary: summary.trim() || null, attendance: d.attendance || "present",
+      www: (d.www || "").trim(), ebi: (d.ebi || "").trim(), extra: (d.extra || "").trim(), text: (d.text || "").trim(),
       homework: homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null),
       nextHomework: nextHw ? { assignmentId: nextHw.id, title: nextHw.title, dueAt: nextHw.dueAt || null } : null,
     };
   };
-  const save = async (s) => {
+  const savePrivate = async (s) => {
+    const text = (drafts[s.uid]?.private || "").trim();
+    if (text === (privates[s.uid]?.text || "")) return;
+    await savePrivateNote(lessonId, s.uid, { text, tutorId: uid, classId: lesson.classId, date: lesson.date, studentName: s.displayName || s.email || "" });
+    setPrivates(prev => ({ ...prev, [s.uid]: { ...(prev[s.uid] || {}), text } }));
+  };
+  const save = async (s, quiet) => {
     setBusy(b => ({ ...b, [s.uid]: "save" })); setError(null);
     try {
       const data = noteData(s);
       await saveLessonNote(lessonId, s.uid, data);
+      await savePrivate(s);
       setNotes(prev => ({ ...prev, [s.uid]: { ...(prev[s.uid] || {}), ...data, id: lessonNoteId(lessonId, s.uid) } }));
+      if (!quiet) say(`${(s.displayName || "Student").split(" ")[0]}'s note saved.`);
     } catch (e) { setError(e.message); }
     setBusy(b => ({ ...b, [s.uid]: null }));
   };
   const send = async (s) => {
     const d = drafts[s.uid] || {};
-    if (!(d.text || "").trim() && !window.confirm(`Send ${s.displayName || "this student"}'s note with attendance only and no comment?`)) return;
+    const written = [d.www, d.ebi, d.extra, d.text].some(x => (x || "").trim());
+    if (!written && !window.confirm(`Send ${s.displayName || "this student"}'s note with attendance only and nothing written?`)) return;
     setBusy(b => ({ ...b, [s.uid]: "send" })); setError(null);
     try {
       const data = noteData(s);
       await saveLessonNote(lessonId, s.uid, data);
+      await savePrivate(s);
       const r = await sendLessonNote(lessonNoteId(lessonId, s.uid));
       setNotes(prev => ({ ...prev, [s.uid]: { ...(prev[s.uid] || {}), ...data, sentAt: Date.now(), sentTo: r.sentTo } }));
     } catch (e) { setError(`${s.displayName || "Student"}: ${e.message}`); }
     setBusy(b => ({ ...b, [s.uid]: null }));
   };
+  const saveAttendanceAll = async () => {
+    setError(null);
+    for (const s of students || []) await save(s, true);
+    say("Attendance saved for everyone.");
+  };
   const sendAllUnsent = async () => {
-    const pending = (students || []).filter(s => !notes[s.uid]?.sentAt && (drafts[s.uid]?.text || "").trim());
+    const pending = (students || []).filter(s => !notes[s.uid]?.sentAt && [drafts[s.uid]?.www, drafts[s.uid]?.ebi, drafts[s.uid]?.extra, drafts[s.uid]?.text].some(x => (x || "").trim()));
     if (pending.length === 0) { setError("No written, unsent notes to send."); return; }
     if (!window.confirm(`Send ${pending.length} note${pending.length === 1 ? "" : "s"} now?`)) return;
     for (const s of pending) await send(s);
@@ -219,6 +303,11 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   const saveTopics = async (topics) => {
     setLesson(l => ({ ...l, topics }));
     try { await updateLesson(lessonId, { topics }); } catch (e) { setError(e.message); }
+  };
+  const saveSummary = async () => {
+    const v = summary.trim();
+    if (v === (lesson.summary || "")) return;
+    try { await updateLesson(lessonId, { summary: v || null }); setLesson(l => ({ ...l, summary: v || null })); } catch (e) { setError(e.message); }
   };
   const remove = async () => {
     if (!window.confirm("Delete this lesson? Notes already sent stay with the students.")) return;
@@ -232,6 +321,7 @@ export function TutorLessonEditor({ authUser, lessonId }) {
   if (error && !lesson) return <><PageHeader eyebrow="Lessons" title="Lesson" /><Notice tone="red">{error}</Notice></>;
   if (!lesson) return <PageHeader eyebrow="Lessons" title="Loading…" />;
   const sentCount = (students || []).filter(s => notes[s.uid]?.sentAt).length;
+  const counts = (students || []).reduce((c, s) => { const a = drafts[s.uid]?.attendance || "present"; c[a] = (c[a] || 0) + 1; return c; }, {});
 
   return (
     <>
@@ -243,30 +333,56 @@ export function TutorLessonEditor({ authUser, lessonId }) {
           <Button variant="danger" onClick={remove}>Delete</Button>
         </>} />
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
+      {flash && <Notice tone="green" style={{ marginBottom: 12 }}>{flash}</Notice>}
 
       <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-        <CardHeader title="Topics covered" sub="Goes into every note from this lesson" right={<Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : "Edit"}</Button>} />
+        <CardHeader title="Attendance" sub="Mark everyone, then save. You can write the notes now or come back later." right={<div style={{ display: "flex", gap: 6 }}><Button size="sm" onClick={() => applyToAll("attendance", "present")} disabled={!students}>Mark all present</Button><Button size="sm" variant="accent" onClick={saveAttendanceAll} disabled={!students || Object.values(busy).some(Boolean)}>Save attendance</Button></div>} />
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          {(students || []).map(s => {
+            const a = drafts[s.uid]?.attendance || "present";
+            const o = ATTENDANCE.find(x => x.id === a) || ATTENDANCE[0];
+            return (
+              <button key={s.uid} type="button" onClick={() => setDraft(s.uid, { attendance: ATTENDANCE[(ATTENDANCE.findIndex(x => x.id === a) + 1) % ATTENDANCE.length].id })} title="Click to cycle present, late, absent"
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 10px 6px 6px", borderRadius: 999, border: `1px solid ${T.border}`, background: T.card, cursor: "pointer", fontFamily: T.font, fontSize: 12, fontWeight: 600, color: T.ink }}>
+                <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={24} />
+                {(s.displayName || s.email || "Student").split(" ")[0]}
+                <Chip tone={o.tone}>{o.label}</Chip>
+              </button>
+            );
+          })}
+          <span style={{ fontSize: 11, color: T.muted }}>{counts.present || 0} present{counts.late ? `, ${counts.late} late` : ""}{counts.absent ? `, ${counts.absent} absent` : ""}</span>
+        </div>
+      </Card>
+
+      <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+        <CardHeader title="What we covered" sub="Goes into every note from this lesson" right={<Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : "Edit topics"}</Button>} />
+        <textarea value={summary} onChange={e => setSummary(e.target.value)} onBlur={saveSummary} rows={2} maxLength={2000}
+          placeholder="One or two lines for parents, e.g. pH of strong and weak acids, Ka calculations, strong base pH. Saved when you click away."
+          style={textareaStyle} />
         {editTopics ? <TopicPicker board={lesson.board} value={lesson.topics || []} onChange={saveTopics} />
-          : <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{(lesson.topics || []).length ? lesson.topics.map(t => <Chip key={t} tone="accent">{t}</Chip>) : <span style={{ fontSize: 13, color: T.muted }}>No topics ticked yet.</span>}</div>}
+          : <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>{(lesson.topics || []).length ? lesson.topics.map(t => <Chip key={t} tone="accent">{t}</Chip>) : <span style={{ fontSize: 12, color: T.muted }}>No spec topics ticked. Edit topics to add them.</span>}</div>}
       </Card>
 
       {students && students.length === 0 && <Card padding={0}><EmptyState icon="users" title="No students in this group yet" body="Place students into the group from the Students tab, then come back to write their notes." /></Card>}
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {(students || []).map(s => {
-          const d = drafts[s.uid] || { attendance: "present", text: "" };
+          const d = drafts[s.uid] || { attendance: "present" };
           const n = notes[s.uid];
+          const p = previous[s.uid];
           const hw = homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null);
-          const dirty = n && (n.text !== (d.text || "").trim() || n.attendance !== d.attendance);
+          const first = (s.displayName || "they").split(" ")[0];
+          const dirty = !!n && (["www", "ebi", "extra", "text"].some(k => (n[k] || "") !== (d[k] || "").trim()) || n.attendance !== d.attendance);
+          const o = ATTENDANCE.find(x => x.id === d.attendance) || ATTENDANCE[0];
           return (
             <Card key={s.uid} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                 <Avatar name={s.displayName} email={s.email} photoURL={s.photoURL} size={32} />
                 <div style={{ flex: 1, minWidth: 160 }}>
-                  <div style={{ fontWeight: 700 }}>{s.displayName || s.email}</div>
+                  <div style={{ fontWeight: 700, display: "flex", gap: 8, alignItems: "center" }}>{s.displayName || s.email} <Chip tone={o.tone}>{o.label}</Chip></div>
                   <div style={{ fontSize: 11, color: T.muted }}>{s.parentEmail ? `Parent: ${s.parentEmail}` : "No parent email on file, the note goes to the student"}</div>
                 </div>
                 <div style={{ display: "flex", gap: 4 }}>
-                  {ATTENDANCE.map(o => <Button key={o.id} size="sm" variant={d.attendance === o.id ? "primary" : "secondary"} onClick={() => setDraft(s.uid, { attendance: o.id })}>{o.label}</Button>)}
+                  {ATTENDANCE.map(x => <Button key={x.id} size="sm" variant={d.attendance === x.id ? "primary" : "secondary"} onClick={() => setDraft(s.uid, { attendance: x.id })}>{x.label}</Button>)}
                 </div>
               </div>
               {hw && (
@@ -278,9 +394,21 @@ export function TutorLessonEditor({ authUser, lessonId }) {
                   {hw.weak.map(w => <Chip key={w} tone="neutral">{w}</Chip>)}
                 </div>
               )}
-              <textarea value={d.text} onChange={e => setDraft(s.uid, { text: e.target.value })} rows={3} maxLength={3000}
-                placeholder={`What ${(s.displayName || "they").split(" ")[0]} did well, what to work on, anything the parent should know.`}
-                style={{ width: "100%", boxSizing: "border-box", padding: "10px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, fontFamily: T.font, color: T.ink, resize: "vertical" }} />
+              {p && (p.ebi || p.text) && <div style={{ fontSize: 12, color: T.muted, background: T.soft, borderRadius: T.radiusSm, padding: "8px 10px" }}><strong>Last time ({fmtLessonDate(p.date)}):</strong> {p.ebi ? `even better if ${p.ebi}` : p.text}</div>}
+              <div className="cm-grid-2" style={{ gap: 10 }}>
+                <NoteField id={`www-${s.uid}`} label="What went well" tone={T.green} value={d.www || ""} onChange={v => setDraft(s.uid, { www: v })} onAll={() => applyToAll("www", d.www || "")}
+                  placeholder={`e.g. ${first} set out the Ka calculation clearly and got the pH right first time.`} />
+                <NoteField id={`ebi-${s.uid}`} label="Even better if" tone={T.amber} value={d.ebi || ""} onChange={v => setDraft(s.uid, { ebi: v })} onAll={() => applyToAll("ebi", d.ebi || "")}
+                  placeholder={`e.g. ${first} practised the weak acid assumptions and when they break down.`} />
+              </div>
+              {(d.text || n?.text) ? <NoteField id={`text-${s.uid}`} label="Note (older format)" value={d.text || ""} onChange={v => setDraft(s.uid, { text: v })} placeholder="" /> : null}
+              <details>
+                <summary style={{ fontSize: 12, fontWeight: 600, color: T.muted, cursor: "pointer" }}>Extra notes for home and a private note{(d.extra || d.private) ? " · written" : ""}</summary>
+                <div className="cm-grid-2" style={{ gap: 10, marginTop: 8 }}>
+                  <NoteField id={`extra-${s.uid}`} label="Extra notes (sent to the parent)" value={d.extra || ""} onChange={v => setDraft(s.uid, { extra: v })} placeholder="Anything else the parent should know." />
+                  <NoteField id={`priv-${s.uid}`} label="Private note (only you and HSJ see this)" tone={T.indigo} value={d.private || ""} onChange={v => setDraft(s.uid, { private: v })} placeholder="e.g. seemed tired, check in next week. Never emailed." />
+                </div>
+              </details>
               <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                 <Button variant="accent" size="sm" onClick={() => send(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "send" ? "Sending…" : n?.sentAt ? "Send again" : "Save and send"}</Button>
                 <Button size="sm" onClick={() => save(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "save" ? "Saving…" : "Save draft"}</Button>
@@ -292,5 +420,21 @@ export function TutorLessonEditor({ authUser, lessonId }) {
         })}
       </div>
     </>
+  );
+}
+
+const textareaStyle = { width: "100%", boxSizing: "border-box", padding: "10px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, fontFamily: T.font, color: T.ink, resize: "vertical" };
+
+const draftOf = (n, p) => ({ attendance: n?.attendance || "present", www: n?.www || "", ebi: n?.ebi || "", extra: n?.extra || "", text: n?.text || "", private: p?.text || "" });
+
+function NoteField({ id, label: lbl, tone, value, onChange, onAll, placeholder }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label htmlFor={id} style={{ ...label, color: tone || T.muted }}>{lbl}</label>
+        {onAll && value.trim() && <button type="button" onClick={onAll} style={{ border: "none", background: "transparent", color: T.accentText, fontSize: 11, fontWeight: 600, cursor: "pointer", padding: 0, fontFamily: T.font }}>Use for everyone</button>}
+      </div>
+      <textarea id={id} value={value} onChange={e => onChange(e.target.value)} rows={2} maxLength={2000} placeholder={placeholder} style={{ ...textareaStyle, fontSize: 13, borderLeft: tone ? `3px solid ${tone}` : textareaStyle.border }} />
+    </div>
   );
 }

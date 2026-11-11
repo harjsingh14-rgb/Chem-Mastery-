@@ -417,6 +417,26 @@ export async function fetchClassLessonNotes(classId, tutorUid) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
+/**
+ * Private tutor notes: one per student per lesson, never emailed and never
+ * readable by the student or parent (own collection, tutor and admin only).
+ */
+export async function savePrivateNote(lessonId, uid, data) {
+  const id = lessonNoteId(lessonId, uid);
+  await setDoc(doc(db, "privateNotes", id), { ...data, lessonId, uid, updatedAt: Date.now() }, { merge: true });
+  return id;
+}
+export async function fetchPrivateNotes(lessonId, tutorUid) {
+  const snap = await getDocs(query(collection(db, "privateNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+/** Every private note on one student (profile page). */
+export async function fetchStudentPrivateNotes(uid, tutorUid) {
+  const q = tutorUid ? query(collection(db, "privateNotes"), where("tutorId", "==", tutorUid), where("uid", "==", uid)) : query(collection(db, "privateNotes"), where("uid", "==", uid));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+}
+
 export async function fetchMyLessonNotes(uid) {
   const snap = await getDocs(query(collection(db, "lessonNotes"), where("uid", "==", uid)));
   return snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(n => n.sentAt).sort((a, b) => (b.date || "").localeCompare(a.date || ""));

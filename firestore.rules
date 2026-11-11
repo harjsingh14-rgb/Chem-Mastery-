@@ -135,6 +135,16 @@ service cloud.firestore {
       allow delete: if signedIn() && resource.data.tutorId == request.auth.uid;
     }
 
+    // Private tutor notes (doc id lessonId_uid): the tutor's own record of a
+    // student, never emailed. Tutor who wrote it and admins only.
+    match /privateNotes/{id} {
+      allow read: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+      allow create: if isTutor()
+        && request.resource.data.tutorId == request.auth.uid
+        && id == request.resource.data.lessonId + '_' + request.resource.data.uid;
+      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+    }
+
     // Homework set by a tutor for one group
     match /assignments/{id} {
       // The tutor who set it, or a student in that group, can read it
