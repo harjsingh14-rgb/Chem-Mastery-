@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
 import track from "../utils/track";
 import { T } from "../ui/theme";
+import chemFormat from "../utils/chemFormat";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
 
 export default function ExtendedTab({ board, hasFullAccess, logActivity, logAttempt }) {
@@ -99,14 +100,14 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
         result.push(
           <div key={`tbl-${result.length}`} style={{ overflowX: "auto", margin: "12px 0" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, fontFamily: T.font }}>
-              <thead><tr>{headerRow.map((h, ci) => <th key={ci} style={{ background: T.soft, padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: `1px solid ${T.border}`, fontSize: 12 }}>{h}</th>)}</tr></thead>
-              <tbody>{dataRows.map((row, ri) => <tr key={ri}>{row.map((cell, ci) => <td key={ci} style={{ padding: "7px 10px", borderBottom: `1px solid ${T.line}` }}>{cell}</td>)}</tr>)}</tbody>
+              <thead><tr>{headerRow.map((h, ci) => <th key={ci} style={{ background: T.soft, padding: "8px 10px", textAlign: "left", fontWeight: 700, borderBottom: `1px solid ${T.border}`, fontSize: 12 }}>{chemFormat(h)}</th>)}</tr></thead>
+              <tbody>{dataRows.map((row, ri) => <tr key={ri}>{row.map((cell, ci) => <td key={ci} style={{ padding: "7px 10px", borderBottom: `1px solid ${T.line}` }}>{chemFormat(cell)}</td>)}</tr>)}</tbody>
             </table>
           </div>
         );
       } else {
         const line = lines[i];
-        result.push(line.trim() === "" ? <div key={`sp-${result.length}`} style={{ height: 8 }} /> : <div key={`ln-${result.length}`}>{line}</div>);
+        result.push(line.trim() === "" ? <div key={`sp-${result.length}`} style={{ height: 8 }} /> : <div key={`ln-${result.length}`}>{chemFormat(line)}</div>);
         i++;
       }
     }
@@ -158,7 +159,7 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
         {!ticked && showMissed && <Icon name="x" size={12} color={T.red} strokeWidth={3} />}
       </span>
       <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-        <span style={{ fontSize: 13, lineHeight: 1.5, color: ticked ? T.green : (showMissed ? "#7F1D1D" : T.ink), fontWeight: ticked ? 600 : 400 }}>{point}</span>
+        <span style={{ fontSize: 13, lineHeight: 1.5, color: ticked ? T.green : (showMissed ? "#7F1D1D" : T.ink), fontWeight: ticked ? 600 : 400 }}>{chemFormat(point)}</span>
         {aiSaid !== undefined && aiSaid !== ticked && <span style={{ fontSize: 11, color: T.muted }}>AI said {aiSaid ? "covered" : "missed"} · tap to override</span>}
       </span>
     </button>
@@ -234,7 +235,7 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
                     <span style={{ fontSize: 16, color: T.muted }}>/ {q.marks}</span>
                   </div>
                 </div>
-                <div style={{ fontSize: 14, lineHeight: 1.6 }}>{extAiResult.feedback}</div>
+                <div style={{ fontSize: 14, lineHeight: 1.6 }}>{chemFormat(extAiResult.feedback)}</div>
               </Card>
             )}
 
@@ -252,7 +253,7 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
                   <span>Model answer</span>
                   <Icon name="chevronDown" size={16} color={T.faint} style={{ transform: extShowModel ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
                 </button>
-                {extShowModel && <div style={{ padding: "0 18px 18px", fontSize: 14, lineHeight: 1.7, borderTop: `1px solid ${T.line}`, paddingTop: 14 }}>{extAiResult.modelAnswer}</div>}
+                {extShowModel && <div style={{ padding: "0 18px 18px", fontSize: 14, lineHeight: 1.7, borderTop: `1px solid ${T.line}`, paddingTop: 14 }}>{chemFormat(extAiResult.modelAnswer)}</div>}
               </Card>
             )}
 

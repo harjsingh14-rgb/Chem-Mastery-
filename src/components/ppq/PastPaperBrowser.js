@@ -4,6 +4,7 @@ import { T } from "../../ui/theme";
 import { Button, Card, Chip, Notice, EmptyState, Icon, Input, Bar } from "../../ui/components";
 import usePpq from "../../hooks/usePpq";
 import track from "../../utils/track";
+import chemFormat from "../../utils/chemFormat";
 import { LEVEL_LABEL, KIND_LABEL, seriesLabel, topicsFor, topicShort, statusOf, STATUS_LABEL, STATUS_TONE, saveQueue, shuffle } from "./ppqUtils";
 import { PRACTICE_MODULES } from "../PracticeGrid";
 
@@ -401,7 +402,7 @@ function QuestionRow({ item, board, att, onOpen, compact, indent }) {
         <span style={{ fontSize: compact ? 14 : 16, fontWeight: 800, fontFamily: T.display, lineHeight: 1.1 }}>{item.q}</span>
       </div>
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 3 }}>
-        <div style={{ fontWeight: 600, fontSize: compact ? 13 : 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.title || `Question ${item.q}`}</div>
+        <div style={{ fontWeight: 600, fontSize: compact ? 13 : 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{chemFormat(item.title) || `Question ${item.q}`}</div>
         <div style={{ fontSize: 12, color: T.muted, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
           <span>{LEVEL_LABEL[item.level]} Paper {item.paper} · {seriesLabel(item.series, item.year)}</span>
           <span>·</span>

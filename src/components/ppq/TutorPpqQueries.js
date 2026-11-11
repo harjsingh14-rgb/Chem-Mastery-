@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchOpenPpqQueries, fetchUserNames, ppqMarkApi } from "../../firebase";
 import { T } from "../../ui/theme";
+import chemFormat from "../../utils/chemFormat";
 import { Card, CardHeader, Chip, Button, Notice } from "../../ui/components";
 import { relativeTime } from "../../utils/analytics";
 import { LEVEL_LABEL, seriesLabel } from "./ppqUtils";
@@ -69,7 +70,7 @@ export default function TutorPpqQueries({ authUser, isAdmin }) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10, fontSize: 13 }}>
               <div style={{ padding: "10px 12px", background: T.soft, borderRadius: T.radiusSm }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 4 }}>Student's answer</div>
-                <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.5 }}>{q.answer || lp.answer || <span style={{ color: T.muted }}>Drawn or photographed, not typed. Open the question to see the paper.</span>}</div>
+                <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.5 }}>{chemFormat(q.answer || lp.answer) || <span style={{ color: T.muted }}>Drawn or photographed, not typed. Open the question to see the paper.</span>}</div>
               </div>
               <div style={{ padding: "10px 12px", background: T.soft, borderRadius: T.radiusSm }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 4 }}>AI examiner said</div>

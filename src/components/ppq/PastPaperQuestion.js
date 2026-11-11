@@ -4,6 +4,7 @@ import { auth, fetchPpqQuestion, fetchPpqAttempt, ppqMarkApi } from "../../fireb
 import { T } from "../../ui/theme";
 import { Button, Card, Chip, Notice, Icon } from "../../ui/components";
 import track from "../../utils/track";
+import chemFormat from "../../utils/chemFormat";
 import DrawCanvas from "./DrawCanvas";
 import { noteAttempt } from "../../hooks/usePpq";
 import { LEVEL_LABEL, seriesLabel, topicShort, compressImage, loadQueue, partKey } from "./ppqUtils";
@@ -153,7 +154,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 240 }}>
           <div style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>{LEVEL_LABEL[doc.level]} Paper {doc.paper} · {seriesLabel(doc.series, doc.year)} · Question {doc.q}</div>
-          <h2 style={{ margin: "2px 0 0", fontFamily: T.display, fontSize: 20, fontWeight: 700, lineHeight: 1.25 }}>{doc.title || `Question ${doc.q}`}</h2>
+          <h2 style={{ margin: "2px 0 0", fontFamily: T.display, fontSize: 20, fontWeight: 700, lineHeight: 1.25 }}>{chemFormat(doc.title) || `Question ${doc.q}`}</h2>
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
           <Chip tone="indigo">{subset ? `${totalMarks} of ${doc.totalMarks} marks` : `${doc.totalMarks} marks`}</Chip>
@@ -283,7 +284,7 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
       <div style={{ display: "flex", alignItems: "flex-start", gap: 10, flexWrap: "wrap" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 8, flex: 1, minWidth: 200 }}>
           <span style={{ fontFamily: T.display, fontWeight: 800, fontSize: 15, color: T.ink }}>{part.label}</span>
-          <span style={{ fontSize: 13, color: T.body, lineHeight: 1.5 }}>{part.ask}</span>
+          <span style={{ fontSize: 13, color: T.body, lineHeight: 1.5 }}>{chemFormat(part.ask)}</span>
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
           {result ? <Chip tone={tone === "neutral" ? "neutral" : tone}>{result.score} / {part.marks}</Chip> : <Chip tone="neutral">{part.marks} mark{part.marks === 1 ? "" : "s"}</Chip>}
@@ -327,7 +328,7 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
       {/* After marking: feedback, scheme, model answer */}
       {result && (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {result.feedback && <div style={{ fontSize: 13, color: T.body, lineHeight: 1.55 }}>{result.feedback}</div>}
+          {result.feedback && <div style={{ fontSize: 13, color: T.body, lineHeight: 1.55 }}>{chemFormat(result.feedback)}</div>}
           {!result.attempted && <div style={{ fontSize: 12, color: T.muted }}>Not attempted.</div>}
           {scheme && scheme.ms.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -339,7 +340,7 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
                     <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: 6, border: `2px solid ${got ? T.green : T.faint}`, background: got ? T.green : T.card, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 1 }}>
                       {got && <Icon name="check" size={12} color="#fff" strokeWidth={3} />}
                     </span>
-                    <span style={{ fontSize: 13, lineHeight: 1.5, color: got ? T.green : T.ink, fontWeight: got ? 600 : 400 }}>{m}</span>
+                    <span style={{ fontSize: 13, lineHeight: 1.5, color: got ? T.green : T.ink, fontWeight: got ? 600 : 400 }}>{chemFormat(m)}</span>
                   </div>
                 );
               })}
@@ -351,8 +352,8 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
               <button type="button" onClick={onToggleModel} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: T.accentText, fontSize: 12, fontWeight: 600 }}>{showModel ? "Hide model answer" : "Show model answer"}</button>
               {showModel && (
                 <div style={{ marginTop: 6, padding: "10px 12px", borderRadius: T.radiusSm, background: T.indigoTint, fontSize: 13, color: T.ink, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-                  {scheme.answer && <div style={{ fontWeight: 700, marginBottom: scheme.modelAnswer ? 4 : 0 }}>{scheme.answer}</div>}
-                  {scheme.modelAnswer}
+                  {scheme.answer && <div style={{ fontWeight: 700, marginBottom: scheme.modelAnswer ? 4 : 0 }}>{chemFormat(scheme.answer)}</div>}
+                  {chemFormat(scheme.modelAnswer)}
                 </div>
               )}
             </div>

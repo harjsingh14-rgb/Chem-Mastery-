@@ -12,9 +12,13 @@ const RULES = [
   // ΔHf, ΔHlatt, ΔStotal, ΔG and so on: the label becomes a subscript
   { re: new RegExp("Δ([HSGU])(IE1|IE2|IE|EA1|EA2|EA|LE|latt|sol|hyd|neut|total|system|surroundings|sys|surr|vap|fus|diss|form|comb|at|f|c|r)(?![A-Za-z])", "y"),
     fn: (m) => <>Δ{m[1]}<sub>{m[2]}</sub></> },
-  // Units with negative powers: mol-1, dm-3, cm-1, s-1, K-1, g-1
-  { re: /(mol|dm|cm|kg|kJ|kPa|Pa|atm|nm|mm|g|s|K|m|J)-(\d)(?!\d)/y, prev: /^$|[^A-Za-z0-9]/,
+  // Units with negative powers: mol-1, dm-3, cm-1, s-1, K-1, g-1 (hyphen, en dash or minus sign)
+  { re: /(mol|dm|cm|kg|kJ|kPa|Pa|atm|nm|mm|g|s|K|m|J)[−–-](\d)(?!\d)/y, prev: /^$|[^A-Za-z0-9]/,
     fn: (m) => <>{m[1]}<sup>−{m[2]}</sup></> },
+  // Powers of ten written without a caret: "1.6 × 10−4", "10-3" after a ×. A true minus sign always
+  // counts; a hyphen or en dash only straight after a multiplication sign, so "10-14" ranges are left alone.
+  { re: /10−(\d{1,2})(?!\d)/y, prev: /^$|[^A-Za-z0-9.]/, fn: (m) => <>10<sup>−{m[1]}</sup></> },
+  { re: /10[–-](\d{1,2})(?!\d)/y, before: /[×x*]\s*$/, fn: (m) => <>10<sup>−{m[1]}</sup></> },
   // Volume units: dm3, cm3, m3
   { re: /(dm|cm|m)([23])(?!\d)/y, prev: /^$|[^A-Za-z0-9]/, fn: (m) => <>{m[1]}<sup>{m[2]}</sup></> },
   // Equilibrium and acid constants and relative molecular mass: Kc, Kp, Ka, Kw, pKa, Mr
@@ -52,6 +56,7 @@ export default function chemFormat(text) {
       const m = r.re.exec(text);
       if (!m || m.index !== i) continue;
       if (r.prev && !r.prev.test(i === 0 ? "" : text[i - 1])) continue;
+      if (r.before && !r.before.test(text.slice(Math.max(0, i - 4), i))) continue;
       if (buf) { out.push(buf); buf = ""; }
       out.push(<React.Fragment key={key++}>{r.fn(m)}</React.Fragment>);
       i += m[0].length;

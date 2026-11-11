@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, updateLesson } from "../firebase";
 import { fmtLessonDay, addDays, isoDate } from "../utils/schedule";
 import { T, boardLabel } from "../ui/theme";
+import chemFormat from "../utils/chemFormat";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, Icon } from "../ui/components";
 import { buildItems, ppqItem, ppqItemWithParts, describeParts, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
 import { YearToggle } from "./McqTab";
@@ -291,7 +292,7 @@ export default function HomeworkBuilder({ authUser }) {
                             <label style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 12px", cursor: "pointer", fontSize: 12 }}>
                               <input type="checkbox" checked={on} onChange={() => toggleQuestion(q)} style={{ accentColor: T.accent }} />
                               <span style={{ flex: 1, minWidth: 0 }}>
-                                <span style={{ fontWeight: 600, color: T.ink }}>{q.title || `Question ${q.q}`}</span>
+                                <span style={{ fontWeight: 600, color: T.ink }}>{chemFormat(q.title) || `Question ${q.q}`}</span>
                                 <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{topicShort((q.topics || [])[0])} · {LEVEL_LABEL[q.level] || ""} {seriesLabel(q.series, q.year)} P{q.paper} Q{q.q}{(q.keywords || []).length ? ` · ${q.keywords.slice(0, 4).join(", ")}` : ""}{it && describeParts(it) ? ` · ${describeParts(it)}` : ""}</span>
                               </span>
                               <Chip tone={on ? "accent" : "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[q.kind] || "Structured"}</Chip>

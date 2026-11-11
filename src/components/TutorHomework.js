@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery } from "../firebase";
 import TutorPpqQueries from "./ppq/TutorPpqQueries";
 import { T, pctColour } from "../ui/theme";
+import chemFormat from "../utils/chemFormat";
 import { Card, CardHeader, PageHeader, Chip, Button, Bar, Avatar, Table, th, td, EmptyState, Notice, Icon, Input, chipToneForPct, StatTile } from "../ui/components";
 import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBank";
 import { seriesLabel, LEVEL_LABEL } from "./ppq/ppqUtils";
@@ -199,7 +200,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                                     <span style={{ color: T.faint, fontSize: 12, width: 20 }}>{i + 1}</span>
                                     <Chip tone="neutral" style={{ padding: "2px 8px", fontSize: 11 }}>{TYPE_LABEL[it.type]}</Chip>
-                                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{it.topicLabel}{it.type === "ppq" && <span style={{ color: T.muted, fontWeight: 400 }}> · {LEVEL_LABEL[it.level] || ""} Paper {it.paper} · {seriesLabel(it.series, it.year)} · Q{it.q} · <a className="cm-link" href={`/${a.board}/practise/${it.questionId}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>Open question</a></span>}</span>
+                                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{chemFormat(it.topicLabel)}{it.type === "ppq" && <span style={{ color: T.muted, fontWeight: 400 }}> · {LEVEL_LABEL[it.level] || ""} Paper {it.paper} · {seriesLabel(it.series, it.year)} · Q{it.q} · <a className="cm-link" href={`/${a.board}/practise/${it.questionId}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>Open question</a></span>}</span>
                                     {r ? (
                                       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                         {r.markedBy === "ai" && <Chip tone={r.confidence === "low" ? "amber" : "neutral"} style={{ fontSize: 11 }}>AI · {r.confidence || "medium"} confidence</Chip>}
@@ -212,13 +213,13 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                   {r && (
                                     <div style={{ marginLeft: 28, display: "flex", flexDirection: "column", gap: 4, fontSize: 12 }}>
                                       <AttemptSummary r={r} />
-                                      {it.type !== "exam" && it.type !== "ppq" && r.answer !== undefined && <div><span style={{ color: T.muted }}>Answer: </span><span style={{ whiteSpace: "pre-wrap" }}>{String(r.answer)}</span>{res?.q?.answer !== undefined && it.type !== "extended" && <span style={{ color: T.muted }}> · correct: {String(res.q.answer)}{res.q.unit ? ` ${res.q.unit}` : ""}</span>}</div>}
+                                      {it.type !== "exam" && it.type !== "ppq" && r.answer !== undefined && <div><span style={{ color: T.muted }}>Answer: </span><span style={{ whiteSpace: "pre-wrap" }}>{chemFormat(String(r.answer))}</span>{res?.q?.answer !== undefined && it.type !== "extended" && <span style={{ color: T.muted }}> · correct: {chemFormat(`${res.q.answer}${res.q.unit ? ` ${res.q.unit}` : ""}`)}</span>}</div>}
                                       {(it.type === "exam" || it.type === "ppq") && r.detail?.parts && Object.entries(r.detail.parts).map(([lbl, pr]) => (
-                                        <div key={lbl}><span style={{ color: T.muted }}>{lbl === "q" ? "" : `(${lbl}) `}{pr.score}/{pr.maxScore}: </span><span style={{ whiteSpace: "pre-wrap" }}>{pr.answer ? String(pr.answer) : it.type === "ppq" ? <span style={{ color: T.muted }}>{pr.attempted ? "drawn or photographed" : "not attempted"}</span> : ""}</span> <AttemptSummary r={pr} inline />{pr.feedback && <div style={{ color: T.body, marginLeft: 12 }}>{pr.feedback}</div>}
+                                        <div key={lbl}><span style={{ color: T.muted }}>{lbl === "q" ? "" : `(${lbl}) `}{pr.score}/{pr.maxScore}: </span><span style={{ whiteSpace: "pre-wrap" }}>{pr.answer ? chemFormat(String(pr.answer)) : it.type === "ppq" ? <span style={{ color: T.muted }}>{pr.attempted ? "drawn or photographed" : "not attempted"}</span> : ""}</span> <AttemptSummary r={pr} inline />{pr.feedback && <div style={{ color: T.body, marginLeft: 12 }}>{chemFormat(pr.feedback)}</div>}
                                           <QueryThread q={sub.queries?.[`${it.key}__${lbl}`]} draft={replies[sub.id + `${it.key}__${lbl}`]} onDraft={v => setReplies(d => ({ ...d, [sub.id + `${it.key}__${lbl}`]: v }))} onReply={() => reply(sub, `${it.key}__${lbl}`)} />
                                         </div>
                                       ))}
-                                      {r.feedback && <div style={{ color: T.body }}><span style={{ color: T.muted }}>Feedback: </span>{r.feedback}</div>}
+                                      {r.feedback && <div style={{ color: T.body }}><span style={{ color: T.muted }}>Feedback: </span>{chemFormat(r.feedback)}</div>}
                                       <QueryThread q={sub.queries?.[it.key]} draft={replies[sub.id + it.key]} onDraft={v => setReplies(d => ({ ...d, [sub.id + it.key]: v }))} onReply={() => reply(sub, it.key)} />
                                     </div>
                                   )}
@@ -241,7 +242,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
             {missed.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Shows once two or more students have submitted.</span>}
             {missed.map(({ it, pct: p, n }) => (
               <div key={it.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}><span>{TYPE_LABEL[it.type]} · {it.topicLabel}</span><span style={{ fontWeight: 700, color: pctColour(p) }}>{p}% <span style={{ color: T.faint, fontWeight: 400 }}>({n})</span></span></div>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}><span>{TYPE_LABEL[it.type]} · {chemFormat(it.topicLabel)}</span><span style={{ fontWeight: 700, color: pctColour(p) }}>{p}% <span style={{ color: T.faint, fontWeight: 400 }}>({n})</span></span></div>
                 <Bar value={p} />
               </div>
             ))}
@@ -268,7 +269,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
           <Card style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <CardHeader title="Questions" sub={`${a.items.length} items`} />
             <div style={{ display: "flex", flexDirection: "column", gap: 4, maxHeight: 300, overflowY: "auto" }}>
-              {a.items.map((it, i) => <div key={it.key} style={{ display: "flex", gap: 8, fontSize: 12 }}><span style={{ color: T.faint, width: 18 }}>{i + 1}</span><span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.topicLabel}</span><span style={{ color: T.muted }}>{it.marks} mk</span></div>)}
+              {a.items.map((it, i) => <div key={it.key} style={{ display: "flex", gap: 8, fontSize: 12 }}><span style={{ color: T.faint, width: 18 }}>{i + 1}</span><span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{chemFormat(it.topicLabel)}</span><span style={{ color: T.muted }}>{it.marks} mk</span></div>)}
             </div>
           </Card>
         </aside>

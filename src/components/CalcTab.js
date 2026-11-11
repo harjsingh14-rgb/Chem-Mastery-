@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CALC_SETS } from "../data/calc-sets";
 import track from "../utils/track";
 import { T } from "../ui/theme";
+import chemFormat from "../utils/chemFormat";
 import { Card, Chip, Button, Bar, Notice, EmptyState } from "../ui/components";
 import { YearToggle } from "./McqTab";
 
@@ -176,7 +177,7 @@ export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivi
         )}
 
         <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: T.display }}>{q.q}</div>
+          <div style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: T.display }}>{chemFormat(q.q)}</div>
           {(q.dataTable || q.diagram) && (
             <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
               {q.dataTable && (
@@ -201,11 +202,11 @@ export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivi
                   onKeyDown={e => e.key === "Enter" && calcInput && checkAnswer()} placeholder={q.isText ? "e.g. C2H4" : "Your answer"} aria-label="Your answer"
                   style={{ width: 200, padding: "11px 14px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 16, outline: "none", color: T.ink, background: T.card }}
                   onFocus={e => e.target.style.borderColor = T.accent} onBlur={e => e.target.style.borderColor = T.border} />
-                {q.unit && <span style={{ fontSize: 14, color: T.muted, fontWeight: 600 }}>{q.unit}</span>}
+                {q.unit && <span style={{ fontSize: 14, color: T.muted, fontWeight: 600 }}>{chemFormat(q.unit)}</span>}
                 <Button variant="primary" size="lg" onClick={checkAnswer} disabled={!calcInput}>Check</Button>
                 <Button variant="ghost" icon="help" onClick={() => setCalcShowHint(v => !v)}>{calcShowHint ? "Hide hint" : "Hint"}</Button>
               </div>
-              {calcShowHint && <Notice tone="accent">{q.hint}</Notice>}
+              {calcShowHint && <Notice tone="accent">{chemFormat(q.hint)}</Notice>}
             </>
           )}
         </Card>
@@ -213,14 +214,14 @@ export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivi
         {calcChecked && (
           <Card style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <Notice tone={isCorrect ? "green" : "red"} style={{ fontWeight: 600, fontSize: 14 }}>
-              {isCorrect ? "Correct" : "Not quite"}{!isCorrect && <span style={{ fontWeight: 500, marginLeft: 8 }}>Answer: {q.answer} {q.unit}</span>}
+              {isCorrect ? "Correct" : "Not quite"}{!isCorrect && <span style={{ fontWeight: 500, marginLeft: 8 }}>Answer: {q.answer} {chemFormat(q.unit)}</span>}
             </Notice>
             <span style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.8 }}>Worked solution</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {q.steps.map((step, si) => (
                 <div key={si} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: T.accentText, background: T.accentTint, borderRadius: "50%", width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 3 }}>{si + 1}</span>
-                  <span style={{ fontSize: 19, lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{step}</span>
+                  <span style={{ fontSize: 19, lineHeight: 1.5, fontFamily: "'Caveat', cursive", fontWeight: 600 }}>{chemFormat(step)}</span>
                 </div>
               ))}
             </div>

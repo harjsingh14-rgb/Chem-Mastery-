@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { T, boardLabel } from "../ui/theme";
+import chemFormat from "../utils/chemFormat";
 import { Card, CardHeader, Chip, Button, Icon, EmptyState, Notice } from "../ui/components";
 import { EXAM_QUESTIONS, EXAM_TOPICS, questionMarks } from "../data/exam-questions";
 import { ExamItem } from "./HomeworkPlayer";
@@ -63,7 +64,7 @@ export default function ExamStyleTab({ board, logAttempt }) {
           {complete && <Chip tone={pct >= 75 ? "green" : pct >= 50 ? "amber" : "red"}>{r.score} / {marks} · {pct}%</Chip>}
         </div>
         <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ fontFamily: T.display, fontWeight: 800, fontSize: 20 }}>{q.title}</div>
+          <div style={{ fontFamily: T.display, fontWeight: 800, fontSize: 20 }}>{chemFormat(q.title)}</div>
           {!r && <Notice tone="neutral" style={{ fontSize: 13 }}>Answer each part and press <b>Mark</b>. Hints open after your first go at a part and cost nothing. The mark scheme, worked solution and model answer open once every part is done.</Notice>}
           <ExamItem q={q} item={{ key: q.id, marks }} result={r} readOnly={false} submitted={complete} onRecord={(res, kind) => save(q.id, res, kind)} queries={{}} onQuery={null} />
           {complete && (
@@ -96,7 +97,7 @@ export default function ExamStyleTab({ board, logAttempt }) {
             return (
               <button key={x.id} className="cm-card-link" onClick={() => setQid(x.id)} style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", textAlign: "left", padding: "12px 16px", borderBottom: `1px solid ${T.line}`, background: "transparent", border: "none", cursor: "pointer" }}>
                 <Chip tone={TIER[x.tier]?.tone || "neutral"} style={{ fontSize: 11, minWidth: 96, justifyContent: "center" }}>{TIER[x.tier]?.short || "Exam style"}</Chip>
-                <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: T.ink }}>{x.title}</span>
+                <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: T.ink }}>{chemFormat(x.title)}</span>
                 <span style={{ fontSize: 12, color: T.muted, whiteSpace: "nowrap" }}>{x.parts.length} part{x.parts.length === 1 ? "" : "s"} · {marks} marks</span>
                 {done ? <Chip tone={r.score / marks >= 0.75 ? "green" : r.score > 0 ? "amber" : "red"} style={{ fontSize: 11 }}>{r.score} / {marks}</Chip> : r ? <Chip tone="neutral" style={{ fontSize: 11 }}>In progress</Chip> : <Icon name="arrowRight" size={16} color={T.faint} />}
               </button>
