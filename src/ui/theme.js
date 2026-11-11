@@ -12,9 +12,10 @@ export const T = {
   body: "#3F4F60",
   muted: "#64748A",
   faint: "#AEB9C6",
-  accent: "#2AA3AE",      // teal fills, bars, tints
-  accentText: "#137681",  // teal used as text (passes contrast on white)
-  accentTint: "#E6F5F6",
+  accent: "#3B9FDB",      // logo sky blue: fills, bars, tints
+  accentText: "#1A6FA8",  // sky blue used as text (passes contrast on white)
+  navy: "#23408F",        // logo navy: brand name, page titles, primary buttons
+  accentTint: "#E9F4FB",
   green: "#1A7F4B", greenTint: "#E7F6EC",
   amber: "#9A5B00", amberTint: "#FFF4DB",
   red: "#B42318", redTint: "#FDECEA",
@@ -30,7 +31,7 @@ export const T = {
 // next to each other on a calendar; the text colour carries the contrast.
 export const GROUP_PALETTE = [
   ["#DDF3E4", "#1D6B3A"], ["#E9E2F7", "#5B3FA3"], ["#FBF0C7", "#7A4F00"], ["#DCEEFB", "#1F5F94"],
-  ["#F9E1EC", "#9A2D5E"], ["#D9F1F2", "#137681"], ["#FDE7D3", "#9A4A12"], ["#ECEFF3", "#3F4F60"],
+  ["#F9E1EC", "#9A2D5E"], ["#E0E6F7", "#23408F"], ["#FDE7D3", "#9A4A12"], ["#ECEFF3", "#3F4F60"],
 ];
 export const groupColour = (index) => GROUP_PALETTE[Math.max(0, index) % GROUP_PALETTE.length];
 

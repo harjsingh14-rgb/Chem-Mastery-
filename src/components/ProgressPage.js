@@ -22,7 +22,7 @@ export default function ProgressPage({ board, authUser, currentStreak, studyLog,
     const tot = dd ? (dd.cards || 0) + (dd.calcs || 0) + (dd.extended || 0) + (dd.mechanisms || 0) : 0;
     cells.push({ k, tot, level: tot === 0 ? 0 : tot < 5 ? 1 : tot < 15 ? 2 : tot < 30 ? 3 : 4, today: k === todayKey });
   }
-  const levelColours = [T.line, "#CFEBED", "#8ED3D9", T.accent, T.accentText];
+  const levelColours = [T.line, "#CFE6F7", "#8CC7EC", T.accent, T.accentText];
 
   return (
     <>

@@ -50,7 +50,7 @@ export function Icon({ name, size = 16, color = "currentColor", strokeWidth = 2,
 
 // ─── Buttons ───────────────────────────────────────────────────────────────
 const BTN = {
-  primary: { background: T.ink, color: "#fff", border: `1px solid ${T.ink}` },
+  primary: { background: T.navy, color: "#fff", border: `1px solid ${T.navy}` },
   accent: { background: T.accent, color: "#fff", border: `1px solid ${T.accent}` },
   secondary: { background: T.card, color: T.ink, border: `1px solid ${T.border}` },
   ghost: { background: "transparent", color: T.muted, border: "1px solid transparent" },
@@ -98,8 +98,8 @@ export function PageHeader({ eyebrow, title, sub, right }) {
   return (
     <div style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 240 }}>
-        {eyebrow && <span style={{ fontSize: 12, fontWeight: 600, color: T.muted, letterSpacing: 0.6, textTransform: "uppercase" }}>{eyebrow}</span>}
-        <h1 style={{ margin: 0, fontFamily: T.display, fontSize: 28, fontWeight: 800, letterSpacing: -0.5, color: T.ink }}>{title}</h1>
+        {eyebrow && <span style={{ fontSize: 12, fontWeight: 700, color: T.accentText, letterSpacing: 0.6, textTransform: "uppercase" }}>{eyebrow}</span>}
+        <h1 style={{ margin: 0, fontFamily: T.display, fontSize: 28, fontWeight: 800, letterSpacing: -0.5, color: T.navy }}>{title}</h1>
         {sub && <span style={{ color: T.muted, fontSize: 14 }}>{sub}</span>}
       </div>
       {right && <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>{right}</div>}
@@ -248,7 +248,7 @@ export function Input(props) {
 export function Notice({ tone = "neutral", children, style }) {
   const tones = {
     neutral: [T.soft, T.body, T.border], green: [T.greenTint, T.green, "#BBF7D0"], amber: [T.amberTint, "#92400E", "#FDE2B5"], red: [T.redTint, T.red, "#FECACA"],
-    accent: [T.accentTint, T.accentText, "#B5E0E4"],
+    accent: [T.accentTint, T.accentText, "#BBDDF3"],
   };
   const [bg, fg, bd] = tones[tone];
   return <div style={{ background: bg, color: fg, border: `1px solid ${bd}`, borderRadius: T.radiusSm, padding: "10px 14px", fontSize: 13, lineHeight: 1.5, ...style }}>{children}</div>;

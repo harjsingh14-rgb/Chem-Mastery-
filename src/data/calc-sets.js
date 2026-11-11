@@ -3,7 +3,7 @@ import { HessTriangle, HessBox, BornHaberCycle } from "./energy-cycles";
 
 export const CALC_SETS = [
   {
-    id: "calc_moles", title: "Moles & Amount of Substance", color: "#2AA3AE", board: "both", year: "as",
+    id: "calc_moles", title: "Moles & Amount of Substance", color: "#3B9FDB", board: "both", year: "as",
     questions: [
       // ═══ EASY ═══ (15 questions - basic n=m/M, m=nM, molar volume)
       // n = m/M variations
@@ -108,7 +108,7 @@ export const CALC_SETS = [
     ]
   },
   {
-    id: "calc_formula", title: "Empirical & Molecular Formula", color: "#1C8591", board: "both", year: "as",
+    id: "calc_formula", title: "Empirical & Molecular Formula", color: "#23408F", board: "both", year: "as",
     questions: [
       // ═══ EASY (12) ═══
       // Empirical to molecular

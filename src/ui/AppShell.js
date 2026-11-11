@@ -20,6 +20,7 @@ export default function AppShell({ brandSub, nav = [], right, menu, user, childr
       <style>{GLOBAL_CSS}</style>
 
       <header style={{ background: T.card, borderBottom: `1px solid ${T.border}`, padding: "0 24px", display: "flex", alignItems: "center", gap: 16, minHeight: 62, position: "sticky", top: 0, zIndex: 20 }}>
+        <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${T.navy}, ${T.accent})` }} />
         {focus && back ? (
           <>
             <button onClick={back} aria-label={backLabel} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 9, border: `1px solid ${T.border}`, background: T.card, color: T.body, cursor: "pointer" }}>
@@ -37,7 +38,7 @@ export default function AppShell({ brandSub, nav = [], right, menu, user, childr
                 <img src="/hsj-logo.png" alt="" style={{ height: 28, objectFit: "contain" }} />
               </div>
               <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
-                <span style={{ fontFamily: T.display, fontWeight: 800, fontSize: 16, letterSpacing: -0.2 }}>HSJ Tuition</span>
+                <span style={{ fontFamily: T.display, fontWeight: 800, fontSize: 16, letterSpacing: -0.2, color: T.navy }}>HSJ Tuition</span>
                 <span style={{ fontSize: 11, color: T.muted, fontWeight: 500 }}>ChemMastery{brandSub ? ` · ${brandSub}` : ""}</span>
               </div>
             </Link>

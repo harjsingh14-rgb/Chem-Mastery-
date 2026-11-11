@@ -8,8 +8,8 @@ export const HessTriangle = ({ top, left, right, dh1, dh2, dhr, find }) => (
     <line x1="60" y1="30" x2="240" y2="30" stroke="#1a2d45" strokeWidth="2" markerEnd="url(#ah)"/>
     <text x="150" y="22" textAnchor="middle" fontSize="14" fontWeight="700" fill={find==="dhr"?"#dc2626":"#1a2d45"}>{dhr}</text>
     {/* Left arrow down */}
-    <line x1="40" y1="45" x2="140" y2="135" stroke="#2AA3AE" strokeWidth="2" markerEnd="url(#ah)"/>
-    <text x="70" y="100" fontSize="13" fontWeight="600" fill={find==="dh1"?"#dc2626":"#2AA3AE"}>{dh1}</text>
+    <line x1="40" y1="45" x2="140" y2="135" stroke="#3B9FDB" strokeWidth="2" markerEnd="url(#ah)"/>
+    <text x="70" y="100" fontSize="13" fontWeight="600" fill={find==="dh1"?"#dc2626":"#3B9FDB"}>{dh1}</text>
     {/* Right arrow up */}
     <line x1="180" y1="135" x2="260" y2="45" stroke="#7c3aed" strokeWidth="2" markerEnd="url(#ah)"/>
     <text x="235" y="100" fontSize="13" fontWeight="600" fill={find==="dh2"?"#dc2626":"#7c3aed"}>{dh2}</text>
@@ -30,8 +30,8 @@ export const HessBox = ({ topLeft, topRight, botLeft, botRight, dhTop, dhBot, dh
     {dhBot && <line x1="80" y1="140" x2="260" y2="140" stroke="#64748b" strokeWidth="2" markerEnd="url(#ah2)"/>}
     {dhBot && <text x="170" y="160" textAnchor="middle" fontSize="13" fontWeight="600" fill="#64748b">{dhBot}</text>}
     {/* Left arrow down */}
-    <line x1="50" y1="45" x2="50" y2="125" stroke="#2AA3AE" strokeWidth="2" markerEnd="url(#ah2)"/>
-    <text x="30" y="90" textAnchor="middle" fontSize="12" fontWeight="600" fill={find==="left"?"#dc2626":"#2AA3AE"}>{dhL}</text>
+    <line x1="50" y1="45" x2="50" y2="125" stroke="#3B9FDB" strokeWidth="2" markerEnd="url(#ah2)"/>
+    <text x="30" y="90" textAnchor="middle" fontSize="12" fontWeight="600" fill={find==="left"?"#dc2626":"#3B9FDB"}>{dhL}</text>
     {/* Right arrow down */}
     <line x1="310" y1="45" x2="310" y2="125" stroke="#7c3aed" strokeWidth="2" markerEnd="url(#ah2)"/>
     <text x="335" y="90" textAnchor="middle" fontSize="12" fontWeight="600" fill={find==="right"?"#dc2626":"#7c3aed"}>{dhR}</text>
@@ -130,7 +130,7 @@ export const BornHaberCycle = ({ compound, steps, find }) => {
         const prev = allLevels[i - 1];
         const py = toY(prev.e), cy = toY(lv.e);
         const isMiss = lv.miss;
-        const col = isMiss ? "#dc2626" : "#2AA3AE";
+        const col = isMiss ? "#dc2626" : "#3B9FDB";
 
         // Left-to-left: endothermic steps going UP
         if (prev.col === "left" && lv.col === "left") {

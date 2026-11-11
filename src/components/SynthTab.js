@@ -66,7 +66,7 @@ export default function SynthTab({ board }) {
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 14px 7px", borderBottom: "1px solid #e8edf2", background: "#fafbfc", flexShrink: 0 }}>
-        <div style={{ fontSize: "11px", fontWeight: 700, color: selectedFrom ? "#2AA3AE" : "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        <div style={{ fontSize: "11px", fontWeight: 700, color: selectedFrom ? "#3B9FDB" : "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px" }}>
           {selectedFrom ? `From: ${selectedFrom}` : "Pick a starting material"}
         </div>
         <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
@@ -93,8 +93,8 @@ export default function SynthTab({ board }) {
             {allFroms.map(from => {
               const count = boardRoutes.filter(r => r.from === from).length;
               const isAro = aromaticFroms.has(from);
-              const accent = isAro ? "#7c3aed" : "#2AA3AE";
-              const bg = isAro ? "#fdf4ff" : "#E6F5F6";
+              const accent = isAro ? "#7c3aed" : "#3B9FDB";
+              const bg = isAro ? "#fdf4ff" : "#E9F4FB";
               const borderCol = isAro ? "#e9d5ff" : "#bae3f9";
               return (
                 <button key={from} onClick={() => { setSelectedFrom(from); setRevealedRoutes(new Set()); }} style={{
@@ -133,7 +133,7 @@ export default function SynthTab({ board }) {
                     }}>{route.mechanism}</span>
                   </div>
                   <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a2d45", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                    <span style={{ color: "#2AA3AE" }}>{route.from}</span>
+                    <span style={{ color: "#3B9FDB" }}>{route.from}</span>
                     <span style={{ fontSize: "18px", color: "#c4cdd6", lineHeight: 1 }}>→</span>
                     <span>{route.to}</span>
                   </div>
@@ -144,7 +144,7 @@ export default function SynthTab({ board }) {
                   </div>
                 ) : (
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", padding: "0 14px 12px" }}>
-                    <div style={{ background: "#f0f7ff", borderRadius: "12px", padding: "10px 12px", borderLeft: "3px solid #2AA3AE" }}>
+                    <div style={{ background: "#f0f7ff", borderRadius: "12px", padding: "10px 12px", borderLeft: "3px solid #3B9FDB" }}>
                       <div style={{ fontSize: "10px", fontWeight: 700, color: "#7a95b0", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" }}>Reagents</div>
                       <div style={{ fontSize: "12px", color: "#1a2d45", fontWeight: 600, lineHeight: 1.5 }}>{route.reagents}</div>
                     </div>
@@ -167,9 +167,9 @@ export default function SynthTab({ board }) {
                     return next;
                   })} style={{
                     width: "100%", padding: "10px 14px", border: "none", borderTop: "1px solid #e8edf2",
-                    background: isOpen ? "#E6F5F6" : "#f8fafc", cursor: "pointer",
+                    background: isOpen ? "#E9F4FB" : "#f8fafc", cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "space-between",
-                    fontFamily: "inherit", color: "#2AA3AE", fontSize: "12px", fontWeight: 700
+                    fontFamily: "inherit", color: "#3B9FDB", fontSize: "12px", fontWeight: 700
                   }}>
                     <span>Step-by-step mechanism</span>
                     <span style={{ fontSize: "13px", transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s", display: "inline-block" }}>▾</span>
@@ -180,7 +180,7 @@ export default function SynthTab({ board }) {
                     {route.steps.map((step, si) => (
                       <div key={si} style={{ marginBottom: si < route.steps.length - 1 ? "16px" : "0" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                          <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#2AA3AE", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 1px 4px rgba(41,171,226,0.3)" }}>
+                          <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#3B9FDB", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 1px 4px rgba(41,171,226,0.3)" }}>
                             <span style={{ fontSize: "10px", fontWeight: 800, color: "#fff" }}>{si + 1}</span>
                           </div>
                           <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45" }}>{step.stage}</div>
@@ -188,7 +188,7 @@ export default function SynthTab({ board }) {
                         {step.equation && (
                           <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px", color: "#1a2d45", background: "#fff", borderRadius: "10px", padding: "9px 12px", margin: "4px 0 6px 30px", border: "1px solid #e8edf2", whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
                             {step.equation}
-                            {step.arrow && <span style={{ color: "#2AA3AE", fontWeight: 700 }}>{" "}{step.arrow}</span>}
+                            {step.arrow && <span style={{ color: "#3B9FDB", fontWeight: 700 }}>{" "}{step.arrow}</span>}
                           </div>
                         )}
                         {step.note && (
