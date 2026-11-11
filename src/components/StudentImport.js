@@ -14,14 +14,19 @@ const HEADINGS = {
   studentLast: ["last name", "student last name", "last", "surname", "family name"],
   studentEmail: ["student email", "email", "e-mail", "student e-mail", "email address", "student email address"],
   parentName: ["parent name", "parent", "guardian", "parent/guardian", "parent or guardian", "family", "parent guardian name", "contact name"],
-  parentFirst: ["parent first name", "guardian first name", "contact first name"],
-  parentLast: ["parent last name", "guardian last name", "contact last name"],
-  parentEmail: ["parent email", "guardian email", "family email", "parent e-mail", "contact email", "parent email address"],
-  parentPhone: ["phone", "parent phone", "mobile", "telephone", "phone number", "contact phone", "parent mobile"],
+  parentFirst: ["parent first name", "guardian first name", "contact first name", "parent contact 1 first name"],
+  parentLast: ["parent last name", "guardian last name", "contact last name", "parent contact 1 last name"],
+  parentEmail: ["parent email", "guardian email", "family email", "parent e-mail", "contact email", "parent email address", "parent contact 1 email"],
+  parentPhone: ["phone", "parent phone", "mobile", "telephone", "phone number", "contact phone", "parent mobile", "parent contact 1 mobile phone"],
   board: ["board", "exam board", "specification", "spec"],
   year: ["year", "year group", "yr", "school year"],
   groupCode: ["group", "group code", "class", "group name"],
+  // TutorBird contact export: "Group Tags" like "A Level Chemistry Year 13 - OCR A; Tuesday group"
+  tags: ["group tags", "tags"],
+  status: ["status"],
 };
+// "Khan, Nadia" (TutorBird order) -> "Nadia Khan"
+const fixName = (v) => { const m = String(v || "").trim().match(/^([^,]+),\s*([^,]+)$/); return m ? `${m[2].trim()} ${m[1].trim()}` : String(v || "").trim(); };
 const norm = (s) => String(s || "").trim().toLowerCase().replace(/[_\s]+/g, " ");
 
 /** Split pasted text into rows of cells: tab-separated (spreadsheet paste) or comma-separated with quotes. */
@@ -68,17 +73,29 @@ function toRows(table, groups, defaults) {
   };
   const body = hasHeader ? table.slice(1) : table;
   const get = (r, k) => col[k] === undefined ? "" : (r[col[k]] || "");
-  const rows = body.map(r => ({
-    studentName: get(r, "studentName") || [get(r, "studentFirst"), get(r, "studentLast")].filter(Boolean).join(" "),
-    studentEmail: get(r, "studentEmail"),
-    parentName: get(r, "parentName") || [get(r, "parentFirst"), get(r, "parentLast")].filter(Boolean).join(" "),
-    parentEmail: get(r, "parentEmail"),
-    parentPhone: get(r, "parentPhone"),
-    board: boardOf(get(r, "board")) || defaults.board,
-    year: yearOf(get(r, "year")) || defaults.year,
-    groupCode: groupCodeOf(get(r, "groupCode")),
-  })).filter(r => r.studentName || r.studentEmail);
-  return { rows, mapped: Object.keys(col).filter(k => !k.endsWith("First") && !k.endsWith("Last")) };
+  // Board, year and group hidden in a tags cell ("Year 13 - OCR A; Tuesday group"): a tag only counts as the group when it names one
+  const fromTags = (v) => {
+    const parts = String(v || "").split(/[;|]/).map(x => x.trim()).filter(Boolean);
+    const board = parts.map(x => (norm(x).match(/\b(aqa|ocr|edexcel|pearson)\b/) || [])[1]).find(Boolean) || "";
+    const year = parts.map(yearOf).find(Boolean) || "";
+    const group = parts.map(x => groups.find(g => norm(g.name) === norm(x) || norm(g.code) === norm(x))).find(Boolean);
+    return { board: boardOf(board), year, groupCode: group ? group.code : "" };
+  };
+  const rows = body.filter(r => !/^inactive|^archived|^former/i.test(get(r, "status"))).map(r => {
+    const tags = fromTags(get(r, "tags"));
+    const parentFull = [get(r, "parentFirst"), get(r, "parentLast")].filter(Boolean).join(" ");
+    return {
+      studentName: fixName(get(r, "studentName")) || [get(r, "studentFirst"), get(r, "studentLast")].filter(Boolean).join(" "),
+      studentEmail: get(r, "studentEmail"),
+      parentName: parentFull || fixName(get(r, "parentName")),
+      parentEmail: get(r, "parentEmail"),
+      parentPhone: get(r, "parentPhone"),
+      board: boardOf(get(r, "board")) || tags.board || defaults.board,
+      year: yearOf(get(r, "year")) || tags.year || defaults.year,
+      groupCode: get(r, "groupCode") ? groupCodeOf(get(r, "groupCode")) : (tags.groupCode || defaults.groupCode),
+    };
+  }).filter(r => r.studentName || r.studentEmail);
+  return { rows, mapped: Object.keys(col).filter(k => !k.endsWith("First") && !k.endsWith("Last") && k !== "status") };
 }
 
 export default function StudentImport({ groups, onImported, onClose }) {
