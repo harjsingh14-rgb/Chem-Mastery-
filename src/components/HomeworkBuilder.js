@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { createAssignment, fetchTutorClasses, fetchPpqQuestion } from "../firebase";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, updateLesson } from "../firebase";
+import { fmtLessonDay, addDays, isoDate } from "../utils/schedule";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, Icon } from "../ui/components";
 import { buildItems, ppqItem, ppqItemWithParts, describeParts, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
@@ -52,6 +53,13 @@ export default function HomeworkBuilder({ authUser }) {
   const [docs, setDocs] = useState({});             // qid -> ppq document (loaded when parts are opened)
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  // "Set homework from this lesson": /tutor/homework/new?lesson=ID prefills the
+  // group, the lesson's spec topics, a title, the due date (the day before the
+  // next lesson) and fills the questions once, for the tutor to check and send.
+  const [searchParams] = useSearchParams();
+  const lessonId = searchParams.get("lesson");
+  const [lesson, setLesson] = useState(null);
+  const autoFilled = useRef(false);
 
   useEffect(() => {
     if (!authUser?.uid) return;
@@ -60,6 +68,42 @@ export default function HomeworkBuilder({ authUser }) {
 
   const cls = classes?.find(c => c.code === classId);
   const board = cls?.board || "aqa";
+
+  useEffect(() => {
+    if (!lessonId || !classes || classes.length === 0 || !authUser?.uid) return undefined;
+    let alive = true;
+    (async () => {
+      try {
+        const l = await fetchLesson(lessonId);
+        if (!alive) return;
+        if (!l) { setError("That lesson no longer exists, so nothing was prefilled."); return; }
+        const group = classes.find(c => c.code === l.classId);
+        if (!group) { setError("That lesson's group is not one of yours, so nothing was prefilled."); return; }
+        const all = topicsFor(group.board);
+        const refs = (l.topics || []).map(t => String(t).split(" ")[0]).filter(r => all.some(x => x.ref === r));
+        const picked = all.filter(t => refs.includes(t.ref));
+        const titles = picked.map(t => t.title);
+        const when = fmtLessonDay(l.date);
+        setLesson(l);
+        setClassId(group.code);
+        setPpqTopics(refs);
+        setOpenModules(Object.fromEntries(picked.map(t => [t.module, true])));
+        setYear(picked.some(t => Number(t.year) === 13) ? "a2" : "as");
+        setTitle(`${titles.length ? (titles.length > 3 ? `${titles.slice(0, 3).join(", ")} and more` : titles.join(", ")) : "Homework"} (lesson ${when})`);
+        if (l.summary) setNote(`From the lesson on ${when}: ${l.summary}`);
+        // Due the day before the group's next lesson, if one is on the calendar
+        try {
+          const sessions = await fetchTutorSessions(authUser.uid);
+          const next = sessions.filter(x => x.classId === l.classId && !x.studentIds && x.status !== "cancelled" && x.date > l.date).sort((a, b) => a.date.localeCompare(b.date))[0];
+          if (next && alive) {
+            const dayBefore = addDays(next.date, -1);
+            setDue(dayBefore > isoDate(new Date()) ? dayBefore : next.date);
+          }
+        } catch { /* keep the default due date */ }
+      } catch (e) { if (alive) setError(e.message); }
+    })();
+    return () => { alive = false; };
+  }, [lessonId, classes, authUser]);
   // Past-paper questions: the index for this board, narrowed to the chosen
   // level, spec topics and question kinds. AS homework uses AS papers only;
   // A2 homework can draw on both levels.
@@ -96,6 +140,13 @@ export default function HomeworkBuilder({ authUser }) {
   const fill = () => {
     setItems(buildItems({ board, minutes: Number(minutes) || 60, ppqPool: shownQuestions }));
   };
+  // Prefilled from a lesson: fill once as soon as the index gives a pool
+  useEffect(() => {
+    if (!lesson || autoFilled.current || ppq.loading || ppqTopics.length === 0) return;
+    if (shownQuestions.length === 0) return;
+    autoFilled.current = true;
+    setItems(buildItems({ board, minutes: Number(minutes) || 60, ppqPool: shownQuestions }));
+  }, [lesson, ppq.loading, ppqTopics, shownQuestions, board, minutes]);
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
   const toggleQuestion = (q) => setItems(prev => chosen.has(q.id) ? prev.filter(it => it.questionId !== q.id) : [...prev, ppqItem(q)]);
   const openQuestionParts = async (q) => {
@@ -128,11 +179,14 @@ export default function HomeworkBuilder({ authUser }) {
     setSaving(true); setError(null);
     try {
       const dueAt = due ? new Date(due + "T23:59:00").getTime() : null;
-      await createAssignment(authUser.uid, {
+      const made = await createAssignment(authUser.uid, {
         title: title.trim(), classId: cls.code, board, minutes: Number(minutes) || tot.minutes, dueAt, note: note.trim() || null,
-        items, summary: describeItems(items), maxScore: tot.marks,
+        items, summary: describeItems(items), maxScore: tot.marks, lessonId: lesson?.id || null,
       });
-      navigate("/tutor/homework");
+      if (lesson) {
+        await updateLesson(lesson.id, { homeworkAssignmentId: made.id, homeworkAssignmentTitle: title.trim() }).catch(() => {});
+        navigate(`/tutor/lessons/${lesson.id}`);
+      } else navigate("/tutor/homework");
     } catch (e) { setError(e.message || "Could not set the homework"); }
     setSaving(false);
   };
@@ -142,8 +196,10 @@ export default function HomeworkBuilder({ authUser }) {
 
   return (
     <>
-      <PageHeader eyebrow="Homework" title="Set homework" sub={`Pick the spec topics, then tick the past-paper questions you want, or give it a time budget and let Fill choose at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
-        right={<Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>} />
+      <PageHeader eyebrow="Homework" title={lesson ? "Homework from this lesson" : "Set homework"} sub={lesson ? `Drafted from the ${lesson.className || lesson.classId} lesson on ${fmtLessonDay(lesson.date)}: the spec topics you ticked are picked and the questions filled to the time budget. Untick anything you did not cover (or search, e.g. "ph -buffer"), then Set homework.` : `Pick the spec topics, then tick the past-paper questions you want, or give it a time budget and let Fill choose at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
+        right={lesson ? <Button variant="secondary" icon="arrowLeft" onClick={() => navigate(`/tutor/lessons/${lesson.id}`)}>Back to the lesson</Button> : <Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>} />
+      {lesson && !ppq.loading && ppqTopics.length > 0 && ppqPool.length === 0 && <Notice tone="amber">No past-paper questions in the index match the topics ticked on this lesson. Pick a neighbouring topic below.</Notice>}
+      {lesson && ppqTopics.length === 0 && <Notice tone="amber">This lesson has no spec topics ticked, so nothing could be picked. Choose the topics below.</Notice>}
       {error && <Notice tone="red">{error}</Notice>}
       {classes && classes.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Homework is set for a group. Create one on the Overview tab, then come back here." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
 

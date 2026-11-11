@@ -355,7 +355,12 @@ export function TutorLessonEditor({ authUser, lessonId }) {
       {flash && <Notice tone="green" style={{ marginBottom: 12 }}>{flash}</Notice>}
 
       <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-        <CardHeader title="What we covered" sub="Goes into every note from this lesson" right={<Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : (lesson.topics || []).length ? "Edit spec topics" : "Tick spec topics"}</Button>} />
+        <CardHeader title="What we covered" sub="Goes into every note from this lesson" right={<>
+          {lesson.homeworkAssignmentId
+            ? <Button size="sm" icon="checkSquare" onClick={() => navigate(`/tutor/homework/${lesson.homeworkAssignmentId}`)} title={lesson.homeworkAssignmentTitle || ""}>Homework set · open</Button>
+            : <Button size="sm" variant="accent" icon="plus" onClick={() => navigate(`/tutor/homework/new?lesson=${lessonId}`)} disabled={!(lesson.topics || []).length} title={(lesson.topics || []).length ? "Drafts a homework from the ticked topics for you to check and send" : "Tick the spec topics first"}>Set homework from this lesson</Button>}
+          <Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : (lesson.topics || []).length ? "Edit spec topics" : "Tick spec topics"}</Button>
+        </>} />
         <textarea value={summary} onChange={e => setSummary(e.target.value)} onBlur={saveSummary} rows={2} maxLength={2000}
           placeholder="One or two lines for parents, e.g. pH of strong and weak acids, Ka calculations, strong base pH. Saved when you click away."
           style={textareaStyle} />
