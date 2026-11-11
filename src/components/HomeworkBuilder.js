@@ -3,10 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { createAssignment, fetchTutorClasses } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, Icon } from "../ui/components";
-import { buildItems, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
+import { buildItems, ppqItem, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
 import { YearToggle } from "./McqTab";
 import usePpq from "../hooks/usePpq";
 import { topicsFor, seriesLabel, LEVEL_LABEL, KIND_LABEL } from "./ppq/ppqUtils";
+
+/** "ph weak -buffer": every plain word must appear in the title or keywords, no "-word" may. */
+function matchesSearch(q, search) {
+  const hay = `${q.title || ""} ${(q.keywords || []).join(" ")} ${(q.topics || []).join(" ")}`.toLowerCase();
+  for (const tok of search.toLowerCase().split(/\s+/).filter(Boolean)) {
+    if (tok.startsWith("-")) { if (tok.length > 1 && hay.includes(tok.slice(1))) return false; }
+    else if (!hay.includes(tok)) return false;
+  }
+  return true;
+}
 
 // Homework is set from real past-paper questions only (HSJ decision, 10 Nov
 // 2026). The HSJ-written tiered banks are for students' own revision.
@@ -35,6 +45,9 @@ export default function HomeworkBuilder({ authUser }) {
   const [ppqTopics, setPpqTopics] = useState([]);
   const [ppqKinds, setPpqKinds] = useState(["structured", "extended", "calculation", "practical"]);
   const [items, setItems] = useState([]);
+  const [openModules, setOpenModules] = useState({});
+  const [search, setSearch] = useState("");
+  const [showQuestions, setShowQuestions] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -66,14 +79,26 @@ export default function HomeworkBuilder({ authUser }) {
     return mods;
   }, [board, year]);
   const ppqPool = useMemo(() => ppqCandidates.filter(it => (it.topics || []).some(t => ppqTopics.includes(t))), [ppqCandidates, ppqTopics]);
+  // The questions on offer: the pool, narrowed by the search box. Both the
+  // tick boxes and the auto-fill draw from this list, so searching "ph -buffer"
+  // keeps buffer questions out of a fill as well.
+  const shownQuestions = useMemo(() => {
+    const list = search.trim() ? ppqPool.filter(q => matchesSearch(q, search.trim())) : ppqPool;
+    return list.slice().sort((a, b) => (a.topics?.[0] || "").localeCompare(b.topics?.[0] || "", undefined, { numeric: true }) || (b.year || 0) - (a.year || 0) || (a.q || 0) - (b.q || 0));
+  }, [ppqPool, search]);
+  const chosen = useMemo(() => new Set(items.filter(it => it.type === "ppq").map(it => it.questionId)), [items]);
 
   const flip = (set, id) => set(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  const anySource = ppqPool.length > 0;
+  const anySource = shownQuestions.length > 0;
 
   const fill = () => {
-    setItems(buildItems({ board, minutes: Number(minutes) || 60, ppqPool }));
+    setItems(buildItems({ board, minutes: Number(minutes) || 60, ppqPool: shownQuestions }));
   };
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
+  const toggleQuestion = (q) => setItems(prev => chosen.has(q.id) ? prev.filter(it => it.questionId !== q.id) : [...prev, ppqItem(q)]);
+  const addShown = () => setItems(prev => [...prev, ...shownQuestions.filter(q => !chosen.has(q.id)).map(ppqItem)]);
+  const removeShown = () => { const ids = new Set(shownQuestions.map(q => q.id)); setItems(prev => prev.filter(it => !ids.has(it.questionId))); };
+  const topicShort = (ref) => { const t = topicsFor(board).find(x => x.ref === ref); return t ? (board === "edexcel" ? `T${t.ref} ${t.title}` : `${t.ref} ${t.title}`) : ref; };
   const tot = totals(items);
 
   const assign = async () => {
@@ -95,7 +120,7 @@ export default function HomeworkBuilder({ authUser }) {
 
   return (
     <>
-      <PageHeader eyebrow="Homework" title="Set homework" sub={`Pick the spec topics, give it a time budget and the builder fills it with real past-paper questions at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
+      <PageHeader eyebrow="Homework" title="Set homework" sub={`Pick the spec topics, then tick the past-paper questions you want, or give it a time budget and let Fill choose at ${MIN_PER_MARK} minutes per mark. Remove anything you don't want before assigning.`}
         right={<Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>} />
       {error && <Notice tone="red">{error}</Notice>}
       {classes && classes.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Homework is set for a group. Create one on the Overview tab, then come back here." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
@@ -131,24 +156,75 @@ export default function HomeworkBuilder({ authUser }) {
                       <span style={{ ...label, alignSelf: "center" }}>Question types:</span>
                       {PPQ_KINDS.map(k => <Toggle key={k} on={ppqKinds.includes(k)} onClick={() => flip(setPpqKinds, k)}>{KIND_LABEL[k] || k}</Toggle>)}
                     </div>
-                    {ppqModules.map(m => {
-                      const shown = m.topics.filter(t => ppqByTopic[t.ref]);
-                      if (shown.length === 0) return null;
-                      return (
-                        <div key={m.id} style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 4 }}>
-                          <span style={{ fontSize: 11, color: T.faint, fontWeight: 600 }}>{m.title}</span>
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                            {shown.map(t => <Toggle key={t.ref} on={ppqTopics.includes(t.ref)} onClick={() => flip(setPpqTopics, t.ref)} count={ppqByTopic[t.ref]}>{board === "edexcel" ? `T${t.ref} ${t.title}` : `${t.ref} ${t.title}`}</Toggle>)}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }}>
+                      {ppqModules.map(m => {
+                        const shown = m.topics.filter(t => ppqByTopic[t.ref]);
+                        if (shown.length === 0) return null;
+                        const picked = shown.filter(t => ppqTopics.includes(t.ref));
+                        const isOpen = openModules[m.id] ?? false;
+                        const n = shown.reduce((a, t) => a + ppqByTopic[t.ref], 0);
+                        return (
+                          <div key={m.id} style={{ border: `1px solid ${picked.length ? T.accentText : T.border}`, borderRadius: T.radiusSm, overflow: "hidden" }}>
+                            <button type="button" onClick={() => setOpenModules(o => ({ ...o, [m.id]: !isOpen }))} className="cm-row-hover" aria-expanded={isOpen}
+                              style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", textAlign: "left", padding: "10px 12px", background: picked.length ? T.accentTint : "transparent", border: "none", cursor: "pointer", color: T.ink, fontFamily: "inherit" }}>
+                              <Icon name="chevronDown" size={14} color={T.muted} style={{ transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)", transition: "transform 0.15s", flexShrink: 0 }} />
+                              <span style={{ flex: 1, fontSize: 13, fontWeight: 700 }}>{m.title}</span>
+                              {picked.length > 0 && <Chip tone="accent">{picked.length} picked</Chip>}
+                              <span style={{ fontSize: 11, color: T.faint }}>{n} question{n === 1 ? "" : "s"}</span>
+                            </button>
+                            {isOpen && (
+                              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, padding: "4px 12px 12px" }}>
+                                {shown.map(t => <Toggle key={t.ref} on={ppqTopics.includes(t.ref)} onClick={() => flip(setPpqTopics, t.ref)} count={ppqByTopic[t.ref]}>{board === "edexcel" ? `T${t.ref} ${t.title}` : `${t.ref} ${t.title}`}</Toggle>)}
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      );
-                    })}
-                    {ppqTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>{ppqPool.length} question{ppqPool.length === 1 ? "" : "s"} to draw from. Students answer by typing, drawing on the paper or photographing their work; their first marked attempt counts.</span>}
-                    {ppqTopics.length === 0 && ppqModules.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>Pick one or more topics. {year === "as" ? "AS homework draws on AS papers only." : "A2 homework draws on AS and A-level papers."}</span>}
+                        );
+                      })}
+                    </div>
+                    {ppqTopics.length === 0 && ppqModules.length > 0 && <span style={{ fontSize: 11, color: T.faint, marginTop: 4 }}>Open a module and pick one or more topics. {year === "as" ? "AS homework draws on AS papers only." : "A2 homework draws on AS and A-level papers."}</span>}
                   </>
                 )}
               </div>
-              <div><Button variant="accent" icon="bolt" onClick={fill} disabled={!anySource}>{items.length ? "Refill" : "Fill"} {minutes} minutes</Button></div>
+
+              {ppqTopics.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: `1px solid ${T.line}`, paddingTop: 12 }}>
+                  <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Choose the questions</span>
+                    <span style={{ fontSize: 11, color: T.muted }}>{shownQuestions.length} of {ppqPool.length} shown · {chosen.size} ticked</span>
+                    <Button size="sm" variant="ghost" onClick={() => setShowQuestions(v => !v)}>{showQuestions ? "Hide list" : "Show list"}</Button>
+                  </div>
+                  <Input value={search} onChange={e => setSearch(e.target.value)} placeholder='Narrow by what you taught, e.g. "weak acid" or "ph -buffer" (a minus leaves that word out)' aria-label="Search questions" />
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    <Button size="sm" onClick={addShown} disabled={shownQuestions.length === 0}>Tick all shown</Button>
+                    <Button size="sm" onClick={removeShown} disabled={shownQuestions.every(q => !chosen.has(q.id))}>Untick all shown</Button>
+                    <span style={{ fontSize: 11, color: T.faint, alignSelf: "center" }}>Tick questions yourself, or let Fill choose from the ones shown.</span>
+                  </div>
+                  {showQuestions && (
+                    <div style={{ maxHeight: 380, overflowY: "auto", border: `1px solid ${T.line}`, borderRadius: T.radiusSm }}>
+                      {shownQuestions.length === 0 && <div style={{ padding: 14, fontSize: 12, color: T.muted }}>No questions match. Try fewer words.</div>}
+                      {shownQuestions.map((q, i) => {
+                        const on = chosen.has(q.id);
+                        return (
+                          <label key={q.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 12px", borderTop: i ? `1px solid ${T.line}` : "none", background: on ? T.accentTint : "transparent", cursor: "pointer", fontSize: 12 }}>
+                            <input type="checkbox" checked={on} onChange={() => toggleQuestion(q)} style={{ accentColor: T.accent }} />
+                            <span style={{ flex: 1, minWidth: 0 }}>
+                              <span style={{ fontWeight: 600, color: T.ink }}>{q.title || `Question ${q.q}`}</span>
+                              <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{topicShort((q.topics || [])[0])} · {LEVEL_LABEL[q.level] || ""} {seriesLabel(q.series, q.year)} P{q.paper} Q{q.q}{(q.keywords || []).length ? ` · ${q.keywords.slice(0, 4).join(", ")}` : ""}</span>
+                            </span>
+                            <Chip tone={on ? "accent" : "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[q.kind] || "Structured"}</Chip>
+                            <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{q.totalMarks} mk</span>
+                            <a href={`/${board}/practise/${q.id}`} target="_blank" rel="noopener noreferrer" className="cm-link" onClick={e => e.stopPropagation()} style={{ fontSize: 11, whiteSpace: "nowrap" }}>View</a>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                <Button variant="accent" icon="bolt" onClick={fill} disabled={!anySource}>{items.length ? "Refill" : "Fill"} {minutes} minutes</Button>
+                {ppqTopics.length > 0 && <span style={{ fontSize: 11, color: T.faint }}>Replaces the list with an automatic pick from the {shownQuestions.length} question{shownQuestions.length === 1 ? "" : "s"} shown. Your own ticks are kept if you tick after filling.</span>}
+              </div>
             </Card>
           </div>
 
