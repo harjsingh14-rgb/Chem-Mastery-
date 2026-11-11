@@ -127,7 +127,7 @@ async function enrich(payload) {
 }
 
 // ---- Firestore -------------------------------------------------------------
-const INDEX_FIELDS = ["q", "paper", "series", "year", "totalMarks", "title", "topics", "kind", "imageUrl"];
+const INDEX_FIELDS = ["q", "paper", "series", "year", "totalMarks", "title", "topics", "kind", "keywords", "imageUrl"]; // keywords: searched by the homework builder
 
 async function reindex({ board, level }, token) {
   if (!board || !level) throw fb.httpError(400, "board and level required");
