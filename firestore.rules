@@ -7,6 +7,10 @@ service cloud.firestore {
     function myProfile() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
     function isTutor() { return signedIn() && myProfile().role in ['tutor', 'admin']; }
     function isAdmin() { return signedIn() && myProfile().role == 'admin'; }
+    // What a tutor may do (src/utils/privileges.js). Admin switches a key
+    // off by writing users/{uid}.privileges.{key} = false; a missing key
+    // means allowed. Admins may do everything.
+    function may(p) { return isAdmin() || (isTutor() && myProfile().get('privileges', {}).get(p, true) == true); }
     function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
     // Parents: users/{uid} with role 'parent' and children = [student uid, ...]
     function isParent() { return signedIn() && myProfile().role == 'parent'; }
@@ -27,11 +31,11 @@ service cloud.firestore {
 
       allow update: if signedIn() && (
         // The student's own tutor, or an admin, may set their display name and picture and nothing else
-        ((resource.data.tutorId == request.auth.uid || isAdmin()) && changed().hasOnly(['displayName', 'photoURL']))
+        ((resource.data.tutorId == request.auth.uid || isAdmin()) && may('editStudents') && changed().hasOnly(['displayName', 'photoURL']))
         ||
         // Own profile: may not touch role, group links or onboarding records
         (request.auth.uid == uid
-          && !changed().hasAny(['role', 'classId', 'className', 'tutorId', 'parentUid', 'children', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt', 'evalToken', 'childTerms', 'calendarToken']))
+          && !changed().hasAny(['role', 'privileges', 'classId', 'className', 'tutorId', 'parentUid', 'children', 'year', 'parentName', 'parentEmail', 'parentPhone', 'paymentPlan', 'paymentAmount', 'selfEvaluation', 'termsAccepted', 'agreement', 'applicantId', 'placedAt', 'evalToken', 'childTerms', 'calendarToken']))
       );
     }
 
@@ -59,11 +63,11 @@ service cloud.firestore {
     match /classes/{code} {
       allow get: if signedIn();
       allow list: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
-      allow create: if isTutor()
+      allow create: if isTutor() && may('groups')
         && (request.resource.data.tutorId == request.auth.uid || isAdmin())
         && request.resource.data.code == code
         && request.resource.data.name is string;
-      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin()) && may('groups');
     }
 
     match /attempts/{id} {
@@ -88,12 +92,15 @@ service cloud.firestore {
         || (resource.data.studentIds is list && request.auth.uid in resource.data.studentIds)
         || (isParent() && (resource.data.studentIds == null || myProfile().get('children', []).hasAny(resource.data.studentIds)))
       );
-      allow create: if isTutor()
+      allow create: if isTutor() && may('calendar')
         && (request.resource.data.tutorId == request.auth.uid || isAdmin())
         && request.resource.data.classId is string
         && request.resource.data.date is string
         && request.resource.data.startAt is number;
-      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+      // Linking a lesson to its session is part of writing notes, not of editing the calendar
+      allow update: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin())
+        && (may('calendar') || (may('lessons') && changed().hasOnly(['lessonId', 'updatedAt'])));
+      allow delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin()) && may('calendar');
     }
 
     // Reminder de-duplication keys, written only by the cron endpoint
@@ -120,11 +127,11 @@ service cloud.firestore {
     // Lessons: one per group per date, written by the tutor
     match /lessons/{id} {
       allow read: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
-      allow create: if isTutor()
+      allow create: if isTutor() && may('lessons')
         && request.resource.data.tutorId == request.auth.uid
         && request.resource.data.classId is string
         && request.resource.data.date is string;
-      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid && may('lessons');
     }
 
     // Lesson notes: one per student per lesson (doc id lessonId_uid). The
@@ -133,22 +140,22 @@ service cloud.firestore {
     match /lessonNotes/{id} {
       allow read: if signedIn()
         && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
-      allow create: if isTutor()
+      allow create: if isTutor() && may('lessons')
         && request.resource.data.tutorId == request.auth.uid
         && id == request.resource.data.lessonId + '_' + request.resource.data.uid;
-      allow update: if signedIn() && resource.data.tutorId == request.auth.uid
+      allow update: if signedIn() && resource.data.tutorId == request.auth.uid && may('lessons')
         && !changed().hasAny(['uid', 'tutorId', 'lessonId']);
-      allow delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+      allow delete: if signedIn() && resource.data.tutorId == request.auth.uid && may('lessons');
     }
 
     // Private tutor notes (doc id lessonId_uid): the tutor's own record of a
     // student, never emailed. Tutor who wrote it and admins only.
     match /privateNotes/{id} {
       allow read: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
-      allow create: if isTutor()
+      allow create: if isTutor() && may('lessons')
         && request.resource.data.tutorId == request.auth.uid
         && id == request.resource.data.lessonId + '_' + request.resource.data.uid;
-      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin());
+      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin()) && may('lessons');
     }
 
     // Homework set by a tutor for one group
@@ -158,12 +165,12 @@ service cloud.firestore {
         && (resource.data.tutorId == request.auth.uid || resource.data.classId == myProfile().get('classId', null) || isAdmin());
       // Parents read the homework set for their child's group (titles, due dates, items)
       allow get: if isParent();
-      allow create: if isTutor()
+      allow create: if isTutor() && may('homework')
         && request.resource.data.tutorId == request.auth.uid
         && request.resource.data.classId is string
         && request.resource.data.title is string
         && request.resource.data.items is list;
-      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid && may('homework');
     }
 
     // One submission per student per assignment (doc id: assignmentId_uid)
@@ -189,7 +196,7 @@ service cloud.firestore {
         ||
         (resource.data.uid == request.auth.uid && changed().hasOnly(['queries']))
         ||
-        (resource.data.tutorId == request.auth.uid
+        (resource.data.tutorId == request.auth.uid && may('marking')
           && changed().hasOnly(['tutorMarks', 'tutorComment', 'totalScore', 'reviewedAt', 'queries']))
       );
       allow delete: if false;

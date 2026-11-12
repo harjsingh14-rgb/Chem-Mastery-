@@ -19,7 +19,7 @@ const dayHeading = (iso, today) => {
 };
 const endTime = (s) => { const d = new Date(sessionEndMs({ ...s, minutes: s.minutes || DEFAULT_MINUTES })); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
 
-export default function WeekList({ sessions, classes, tutorUid, tutorName, onLessonCreated }) {
+export default function WeekList({ sessions, classes, tutorUid, tutorName, onLessonCreated, canNotes = true }) {
   const navigate = useNavigate();
   const [offset, setOffset] = useState(0); // weeks from this week
   const [busyId, setBusyId] = useState(null);
@@ -97,7 +97,7 @@ export default function WeekList({ sessions, classes, tutorUid, tutorName, onLes
                   {cancelled && <Chip tone="red">Cancelled</Chip>}
                   {!cancelled && s.lessonId && <Chip tone="green">Notes started</Chip>}
                   {!cancelled && zoom && <Button size="sm" onClick={() => window.open(zoom, "_blank", "noopener")}>Zoom</Button>}
-                  {!cancelled && <Button size="sm" variant={past && !s.lessonId ? "accent" : "secondary"} icon="pencil" onClick={() => openNotes(s)} disabled={busyId === s.id}>
+                  {!cancelled && canNotes && <Button size="sm" variant={past && !s.lessonId ? "accent" : "secondary"} icon="pencil" onClick={() => openNotes(s)} disabled={busyId === s.id}>
                     {busyId === s.id ? "Opening…" : s.lessonId ? "Open notes" : past ? "Attendance and notes" : "Take attendance"}
                   </Button>}
                 </div>

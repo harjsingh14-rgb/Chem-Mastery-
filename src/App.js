@@ -15,6 +15,8 @@ import LoginScreen from "./components/LoginScreen";
 import PhotoUpload from "./components/PhotoUpload";
 import lazyPage, { PageLoading } from "./utils/lazyPage";
 import track from "./utils/track";
+import { can } from "./utils/privileges";
+import Locked from "./components/Locked";
 
 // Pages and practice tabs load on demand so the first screen does not carry
 // every question bank. Each import below becomes its own chunk.
@@ -251,9 +253,9 @@ export default function App() {
   const tutorNav = [
     { id: "tutor", label: "Overview", icon: "grid", to: "/tutor", active: screen === "tutor" && tutorPage === "overview" },
     { id: "students", label: "Students", icon: "users", to: "/tutor/students", active: screen === "tutor" && tutorPage === "students" },
-    { id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" },
+    ...(can(userProfile, "homework") || can(userProfile, "marking") ? [{ id: "thw", label: "Homework", icon: "checkSquare", to: "/tutor/homework", active: screen === "tutor" && tutorPage === "homework" }] : []),
     { id: "tcal", label: "Calendar", icon: "calendar", to: "/tutor/calendar", active: screen === "tutor" && tutorPage === "calendar" },
-    { id: "tlessons", label: "Lessons", icon: "pencil", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" },
+    ...(can(userProfile, "lessons") ? [{ id: "tlessons", label: "Lessons", icon: "pencil", to: "/tutor/lessons", active: screen === "tutor" && tutorPage === "lessons" }] : []),
     ...(isAdmin ? [
       { id: "payments", label: "Payments", icon: "chart", to: "/tutor/payments", active: screen === "tutor" && tutorPage === "payments" },
       { id: "staff", label: "Tutors", icon: "settings", to: "/tutor/staff", active: screen === "tutor" && tutorPage === "staff" },
@@ -420,12 +422,13 @@ export default function App() {
       ? <Card padding={0}><EmptyState icon="lock" title="Tutor accounts only" body="Ask HSJ Tuition to upgrade your account to a tutor account." /></Card>
       : tutorPage === "homework"
         ? (tutorParam === "new"
-            ? <HomeworkBuilder authUser={authUser} />
+            ? (can(userProfile, "homework") ? <HomeworkBuilder authUser={authUser} /> : <Locked what="Setting homework" />)
             : tutorParam
-              ? <TutorHomeworkReview authUser={authUser} assignmentId={tutorParam} />
-              : <TutorHomeworkList authUser={authUser} userProfile={userProfile} />)
+              ? (can(userProfile, "homework") || can(userProfile, "marking") ? <TutorHomeworkReview authUser={authUser} userProfile={userProfile} assignmentId={tutorParam} /> : <Locked what="Homework" />)
+              : (can(userProfile, "homework") || can(userProfile, "marking") ? <TutorHomeworkList authUser={authUser} userProfile={userProfile} /> : <Locked what="Homework" />))
         : tutorPage === "lessons"
-          ? (tutorParam ? <TutorLessonEditor authUser={authUser} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
+          ? (!can(userProfile, "lessons") ? <Locked what="Lesson notes" />
+              : tutorParam ? <TutorLessonEditor authUser={authUser} userProfile={userProfile} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
         : tutorPage === "calendar"
           ? <TutorCalendar authUser={authUser} userProfile={userProfile} />
         : tutorPage === "staff"
@@ -435,7 +438,7 @@ export default function App() {
         : tutorPage === "students"
           ? (tutorParam && tutorParam !== "onboarding"
               ? (pathParts[3] === "parent"
-                  ? <ParentPage authUser={authUser} userProfile={userProfile} previewUid={tutorParam} />
+                  ? (can(userProfile, "family") ? <ParentPage authUser={authUser} userProfile={userProfile} previewUid={tutorParam} /> : <Locked what="The parent view" />)
                   : <StudentProfile authUser={authUser} userProfile={userProfile} uid={tutorParam} initialTab={pathParts[3] || null} />)
               : <StudentsPage authUser={authUser} userProfile={userProfile} tab={tutorParam || "all"} />)
           : <TutorPage authUser={authUser} userProfile={userProfile} />

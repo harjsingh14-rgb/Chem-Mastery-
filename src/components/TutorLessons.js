@@ -10,6 +10,7 @@ import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs, Icon } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
 import { lastOccurrence, lastSessionDate, describeSlots, slotsOf } from "../utils/schedule";
+import { can } from "../utils/privileges";
 
 const today = () => new Date().toISOString().slice(0, 10);
 export const fmtLessonDate = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }); };
@@ -209,9 +210,10 @@ function homeworkSnapshot(assignment, sub) {
   return { ...base, status: sub.submittedAt ? "submitted" : "in-progress", score, maxScore: max, pct: pctOf(score, max), weak };
 }
 
-export function TutorLessonEditor({ authUser, lessonId }) {
+export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
   const navigate = useNavigate();
   const uid = authUser?.uid;
+  const canSend = can(userProfile, "sendNotes");
   const [lesson, setLesson] = useState(null);
   const [students, setStudents] = useState(null);
   const [notes, setNotes] = useState({});      // uid -> saved note
@@ -381,11 +383,11 @@ export function TutorLessonEditor({ authUser, lessonId }) {
       {students && students.length === 0 && <Card padding={0}><EmptyState icon="users" title="No students in this group yet" body="Place students into the group from the Students tab, then come back to write their notes." /></Card>}
       {students && students.length > 0 && (
         <Card padding={0}>
-          <CardHeader title="Attendance and notes" sub="One row per student. Fill the row across, then Save or Send. More opens the homework record, last lesson's note and your private note."
+          <CardHeader title="Attendance and notes" sub={canSend ? "One row per student. Fill the row across, then Save or Send. More opens the homework record, last lesson's note and your private note." : "One row per student. Fill the row across and Save. Notes are emailed to parents by HSJ admin. More opens the homework record, last lesson's note and your private note."}
             right={<div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <Button size="sm" onClick={() => applyToAll("attendance", "present")}>Mark all present</Button>
               <Button size="sm" onClick={saveAttendanceAll} disabled={anyBusy}>Save all drafts</Button>
-              <Button size="sm" variant="accent" onClick={sendAllUnsent} disabled={anyBusy}>Send all written</Button>
+              {canSend && <Button size="sm" variant="accent" onClick={sendAllUnsent} disabled={anyBusy}>Send all written</Button>}
             </div>}
             style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
           <Table minWidth={1080}>
@@ -426,8 +428,8 @@ export function TutorLessonEditor({ authUser, lessonId }) {
                       <td style={{ ...td, paddingRight: 20 }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-start" }}>
                           <div style={{ display: "flex", gap: 4 }}>
-                            <Button variant="accent" size="sm" onClick={() => send(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "send" ? "Sending…" : n?.sentAt ? "Send again" : "Send"}</Button>
-                            <Button size="sm" onClick={() => save(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "save" ? "Saving…" : "Save"}</Button>
+                            {canSend && <Button variant="accent" size="sm" onClick={() => send(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "send" ? "Sending…" : n?.sentAt ? "Send again" : "Send"}</Button>}
+                            <Button size="sm" variant={canSend ? "secondary" : "accent"} onClick={() => save(s)} disabled={!!busy[s.uid]}>{busy[s.uid] === "save" ? "Saving…" : "Save"}</Button>
                           </div>
                           {n?.sentAt ? <Chip tone={dirty ? "amber" : "green"}>{dirty ? "Edited since sending" : `Sent ${fmtWhen(n.sentAt)}`}</Chip> : n ? <Chip tone="neutral">Draft saved</Chip> : <span style={{ fontSize: 11, color: T.faint }}>{s.parentEmail ? `To ${s.parentEmail}` : "No parent email, goes to the student"}</span>}
                         </div>

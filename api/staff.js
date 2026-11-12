@@ -7,6 +7,8 @@ const mail = require("./_email");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ROLES = ["tutor", "admin"];
+// Must match src/utils/privileges.js
+const PRIVILEGES = ["groups", "calendar", "lessons", "sendNotes", "homework", "marking", "family", "editStudents"];
 const str = (v, max = 120) => String(v ?? "").trim().slice(0, max);
 const bad = (m) => fb.httpError(400, m);
 
@@ -59,6 +61,22 @@ module.exports = async function handler(req, res) {
       }
       await fb.updateDocument(`users/${uid}`, { role, updatedAt: new Date(), roleChangedBy: admin.uid }, token);
       return res.status(200).json({ ok: true });
+    }
+
+    if (action === "setPrivileges") {
+      // What this tutor may do (src/utils/privileges.js). Stored as a map of
+      // id -> boolean; a key left out means allowed.
+      const uid = str(body.uid, 128);
+      if (!uid) throw bad("Missing user");
+      const given = body.privileges && typeof body.privileges === "object" ? body.privileges : null;
+      if (!given) throw bad("Missing privileges");
+      const target = await fb.getDocument(`users/${uid}`, token);
+      if (!target) throw fb.httpError(404, "User not found");
+      if (target.role !== "tutor") throw bad(target.role === "admin" ? "Admins can do everything; make them a tutor first" : "That account is not a tutor");
+      const privileges = {};
+      for (const id of PRIVILEGES) if (id in given) privileges[id] = !!given[id];
+      await fb.updateDocument(`users/${uid}`, { privileges, privilegesChangedBy: admin.uid, privilegesChangedAt: new Date(), updatedAt: new Date() }, token);
+      return res.status(200).json({ ok: true, privileges });
     }
 
     throw bad("Unknown action");

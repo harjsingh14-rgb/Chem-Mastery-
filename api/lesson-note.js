@@ -15,6 +15,8 @@ module.exports = async function handler(req, res) {
     const token = await fb.getAccessToken();
     const callerProfile = await fb.getDocument(`users/${caller.uid}`, token);
     if (!callerProfile || !["tutor", "admin"].includes(callerProfile.role)) throw fb.httpError(403, "Tutor accounts only");
+    // Admin can switch emailing parents off for a tutor (src/utils/privileges.js)
+    if (callerProfile.role !== "admin" && callerProfile.privileges && callerProfile.privileges.sendNotes === false) throw fb.httpError(403, "Sending notes to parents is turned off for your account. Save the note and ask HSJ admin to send it.");
 
     const noteId = String(req.body?.noteId || "").trim();
     if (!/^[\w-]+_[\w-]+$/.test(noteId)) throw fb.httpError(400, "Missing note id");

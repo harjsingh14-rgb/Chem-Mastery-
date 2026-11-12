@@ -16,6 +16,7 @@ import { ragCounts } from "../data/self-evaluation";
 import { PAYMENT_TONE, paymentStatusLabel } from "./StudentPanels";
 import { fmtDue } from "../utils/homeworkDates";
 import PhotoUpload from "./PhotoUpload";
+import { can } from "../utils/privileges";
 
 const toMs = (v) => v?.toMillis ? v.toMillis() : typeof v === "number" ? v : v ? new Date(v).getTime() : null;
 const fmtDate = (v) => { const ms = toMs(v); return ms ? new Date(ms).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""; };
@@ -29,6 +30,8 @@ const TABS = [
 export default function StudentProfile({ authUser, userProfile, uid, initialTab }) {
   const navigate = useNavigate();
   const isAdmin = userProfile?.role === "admin";
+  const canFamily = can(userProfile, "family");
+  const tabs = canFamily ? TABS : TABS.filter(t => t.id !== "payments" && t.id !== "details");
   const tutorUid = authUser?.uid;
   const [student, setStudent] = useState(undefined);
   const [group, setGroup] = useState(null);
@@ -36,7 +39,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
   const [privateNotes, setPrivateNotes] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [attempts, setAttempts] = useState([]);
-  const [tab, setTab] = useState(TABS.some(t => t.id === initialTab) ? initialTab : "overview");
+  const [tab, setTab] = useState(tabs.some(t => t.id === initialTab) ? initialTab : "overview");
   const [error, setError] = useState(null);
   const [nameEdit, setNameEdit] = useState(null);
 
@@ -66,7 +69,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
   const counts = useMemo(() => (notes || []).reduce((c, n) => { c[n.attendance || "unknown"] = (c[n.attendance || "unknown"] || 0) + 1; return c; }, {}), [notes]);
   const noted = (notes || []).filter(n => ATT[n.attendance]).length;
   const attended = (counts.present || 0) + (counts.late || 0);
-  const canEdit = !!student && (isAdmin || student.tutorId === tutorUid);
+  const canEdit = !!student && (isAdmin || student.tutorId === tutorUid) && can(userProfile, "editStudents");
   const name = student?.displayName || (student?.email ? student.email.split("@")[0] : "Student");
 
   const saveName = async () => {
@@ -91,7 +94,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
         <Button variant="ghost" icon="arrowLeft" onClick={() => navigate("/tutor/students")}>All students</Button>
         <div style={{ flex: 1 }} />
-        <Button icon="users" onClick={() => navigate(`/tutor/students/${uid}/parent`)}>Parent view</Button>
+        {canFamily && <Button icon="users" onClick={() => navigate(`/tutor/students/${uid}/parent`)}>Parent view</Button>}
         {group && <Button icon="calendar" onClick={() => navigate("/tutor/calendar")}>Calendar</Button>}
       </div>
       {error && <Notice tone="red">{error}</Notice>}
@@ -126,7 +129,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
             </div>
           </Card>
 
-          <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {canFamily && <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <CardHeader title="Family" />
             {(student.parentName || student.parentEmail) ? (
               <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 13 }}>
@@ -136,11 +139,11 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
                 <span style={{ fontSize: 12, color: T.muted }}>{student.parentUid ? "Has a parent login" : "No parent login yet"}{student.agreement?.acceptedAt ? ` · agreement accepted ${fmtDate(student.agreement.acceptedAt)}` : student.agreement?.agreedBeforePlatform ? " · agreed before the platform" : " · agreement not accepted"}</span>
               </div>
             ) : <span style={{ fontSize: 13, color: T.muted }}>No parent details on file.</span>}
-          </Card>
+          </Card>}
         </aside>
 
         <div className="cm-main-col">
-          <Tabs tabs={TABS} value={tab} onChange={setTab} />
+          <Tabs tabs={tabs} value={tab} onChange={setTab} />
 
           {tab === "overview" && (
             <>
@@ -239,8 +242,8 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
           )}
 
           {tab === "homework" && <HomeworkTab student={student} />}
-          {tab === "payments" && <PaymentsTab student={student} isAdmin={isAdmin} />}
-          {tab === "details" && <DetailsTab student={student} group={group} />}
+          {tab === "payments" && canFamily && <PaymentsTab student={student} isAdmin={isAdmin} />}
+          {tab === "details" && canFamily && <DetailsTab student={student} group={group} />}
         </div>
       </div>
     </>

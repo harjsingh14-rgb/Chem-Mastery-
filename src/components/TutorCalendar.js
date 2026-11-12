@@ -12,6 +12,7 @@ import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, templa
 import { T, boardLabel, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { CalendarSubscribePanel } from "./CalendarSubscribe";
+import { can } from "../utils/privileges";
 
 const label = { fontSize: 12, fontWeight: 600, color: T.muted };
 const selectStyle = { padding: "9px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink, fontFamily: T.font };
@@ -31,6 +32,8 @@ const shortName = (s) => (s.className || s.classId || "").replace(/^Year\s+/i, "
 
 export default function TutorCalendar({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
+  const canEdit = can(userProfile, "calendar");   // off = view only
+  const canNotes = can(userProfile, "lessons");
   const uid = authUser?.uid;
   const navigate = useNavigate();
   const [classes, setClasses] = useState(null);
@@ -94,7 +97,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
     const slot = slotsOf(cls)[0];
     return { mode: "add", classId: cls?.code || "", date: todayIso(), time: slot?.time || "18:00", minutes: slot?.minutes || DEFAULT_MINUTES, who: "group", studentIds: [], title: "", zoomLink: "", note: "", repeat: 1, type: "lesson", ...patch };
   };
-  const openAdd = (patch) => { setFill(null); setSelected(null); setForm(blankForm(patch)); };
+  const openAdd = (patch) => { if (!canEdit) return; setFill(null); setSelected(null); setForm(blankForm(patch)); };
   const openEdit = (s) => { setFill(null); setForm({ mode: "edit", id: s.id, classId: s.classId, date: s.date, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, who: s.studentIds ? "students" : "group", studentIds: s.studentIds || [], title: s.title || "", zoomLink: s.zoomLink || "", note: s.note || "", type: s.type || "lesson" }); };
   const setF = (patch) => setForm(f => ({ ...f, ...patch }));
 
@@ -181,6 +184,9 @@ export default function TutorCalendar({ authUser, userProfile }) {
     } catch (e) { setError(e.message); setBusy(false); }
   };
 
+  const dayHandler = (d) => openAdd({ date: d });
+  dayHandler.enabled = canEdit;
+
   // ---- navigation ----
   const go = (n) => setCursor(c => view === "month" ? shiftMonth(c, n) : addDays(c, 7 * n));
   const title = view === "month" ? monthTitle(cursor) : view === "week" ? `Week of ${fmtLessonDay(monday(cursor))}` : "Upcoming sessions";
@@ -203,9 +209,9 @@ export default function TutorCalendar({ authUser, userProfile }) {
         <Button onClick={() => setCursor(todayIso())}>Today</Button>
         <Button icon="arrowRight" aria-label="Next" onClick={() => go(1)} />
       </>}
-      <Button icon="calendar" onClick={openFill} disabled={!classes || classes.length === 0}>Fill from usual times</Button>
+      {canEdit && <Button icon="calendar" onClick={openFill} disabled={!classes || classes.length === 0}>Fill from usual times</Button>}
       <Button icon="calendar" onClick={() => setShowSubscribe(v => !v)}>Add to your calendar</Button>
-      <Button variant="primary" icon="plus" onClick={() => openAdd()} disabled={!classes || classes.length === 0}>Add session</Button>
+      {canEdit && <Button variant="primary" icon="plus" onClick={() => openAdd()} disabled={!classes || classes.length === 0}>Add session</Button>}
     </>
   );
 
@@ -220,7 +226,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
   return (
     <>
       <PageHeader eyebrow="Calendar" title={title}
-        sub={sessions === null ? "Loading…" : `${visible.filter(s => s.status !== "cancelled" && sessionEndMs(s) > Date.now()).length} upcoming · click a day to add a session there, click a session to open it`}
+        sub={sessions === null ? "Loading…" : `${visible.filter(s => s.status !== "cancelled" && sessionEndMs(s) > Date.now()).length} upcoming · ${canEdit ? "click a day to add a session there, click a session to open it" : "click a session to open it. Changes to the calendar are made by HSJ admin"}`}
         right={headerRight} />
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {flash && <Notice tone="green" style={{ marginBottom: 12 }}>{flash}</Notice>}
@@ -255,13 +261,13 @@ export default function TutorCalendar({ authUser, userProfile }) {
       )}
 
       {sel && !form && (
-        <SessionDetail s={sel} cls={classOf(sel.classId)} colour={colourOf(sel.classId)} tutorName={isAdmin ? tutorName(sel.tutorId) : null} busy={busy}
+        <SessionDetail s={sel} cls={classOf(sel.classId)} colour={colourOf(sel.classId)} tutorName={isAdmin ? tutorName(sel.tutorId) : null} busy={busy} canEdit={canEdit} canNotes={canNotes}
           onEdit={() => openEdit(sel)} onCancel={() => setStatus(sel, "cancelled")} onRestore={() => setStatus(sel, "scheduled")}
           onDelete={() => remove(sel)} onDeleteFuture={() => removeFuture(sel)} onNotes={() => openNotes(sel)} onClose={() => setSelected(null)} />
       )}
 
-      {view === "month" && <MonthGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} onDay={d => openAdd({ date: d })} />}
-      {view === "week" && <WeekGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} onDay={d => openAdd({ date: d })} />}
+      {view === "month" && <MonthGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} onDay={dayHandler} />}
+      {view === "week" && <WeekGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} onDay={dayHandler} />}
       {view === "list" && <UpcomingList sessions={visible} colourOf={colourOf} selected={selected} tutorName={isAdmin ? tutorName : null} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} />}
 
       {classes && classes.length > 0 && (
@@ -316,7 +322,7 @@ function MonthGrid({ cursor, byDate, colourOf, selected, onPick, onDay }) {
             const inMonth = d.slice(0, 7) === month;
             const list = byDate[d] || [];
             return (
-              <div key={d} role="button" tabIndex={0} onClick={() => onDay(d)} onKeyDown={e => e.key === "Enter" && onDay(d)} title="Add a session on this day"
+              <div key={d} role="button" tabIndex={0} onClick={() => onDay(d)} onKeyDown={e => e.key === "Enter" && onDay(d)} title={onDay.enabled === false ? undefined : "Add a session on this day"}
                 style={{ minHeight: 92, padding: 6, borderTop: `1px solid ${T.line}`, borderLeft: i % 7 ? `1px solid ${T.line}` : "none", background: inMonth ? T.card : "#FAFBFC", cursor: "pointer", display: "flex", flexDirection: "column", gap: 3 }}>
                 <span style={{ alignSelf: "flex-start", fontSize: 12, fontWeight: d === today ? 800 : 600, color: d === today ? "#fff" : inMonth ? T.ink : T.faint, background: d === today ? T.accent : "transparent", borderRadius: 999, minWidth: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0 5px" }}>{Number(d.slice(8))}</span>
                 {list.map(s => <Pill key={s.id} s={s} colour={colourOf(s.classId)} selected={s.id === selected} onClick={onPick} />)}
@@ -338,7 +344,7 @@ function WeekGrid({ cursor, byDate, colourOf, selected, onPick, onDay }) {
         {Array.from({ length: 7 }, (_, i) => addDays(start, i)).map((d, i) => {
           const list = byDate[d] || [];
           return (
-            <div key={d} role="button" tabIndex={0} onClick={() => onDay(d)} onKeyDown={e => e.key === "Enter" && onDay(d)} title="Add a session on this day"
+            <div key={d} role="button" tabIndex={0} onClick={() => onDay(d)} onKeyDown={e => e.key === "Enter" && onDay(d)} title={onDay.enabled === false ? undefined : "Add a session on this day"}
               style={{ minHeight: 260, padding: 8, borderLeft: i ? `1px solid ${T.line}` : "none", cursor: "pointer", display: "flex", flexDirection: "column", gap: 6 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: d === today ? T.accentText : T.ink, paddingBottom: 6, borderBottom: `1px solid ${T.line}` }}>{DAYS[i]} <span style={{ color: T.muted, fontWeight: 500 }}>{Number(d.slice(8))}</span></div>
               {list.length === 0 && <span style={{ fontSize: 11, color: T.faint }}>Nothing on</span>}
@@ -375,7 +381,7 @@ function UpcomingList({ sessions, colourOf, selected, tutorName, onPick }) {
   );
 }
 
-function SessionDetail({ s, cls, colour, tutorName, busy, onEdit, onCancel, onRestore, onDelete, onDeleteFuture, onNotes, onClose }) {
+function SessionDetail({ s, cls, colour, tutorName, busy, canEdit = true, canNotes = true, onEdit, onCancel, onRestore, onDelete, onDeleteFuture, onNotes, onClose }) {
   const [bg, fg] = colour;
   const cancelled = s.status === "cancelled";
   const zoom = s.zoomLink || cls?.zoomLink || null;
@@ -401,13 +407,16 @@ function SessionDetail({ s, cls, colour, tutorName, busy, onEdit, onCancel, onRe
         <Button variant="ghost" aria-label="Close" onClick={onClose}><Icon name="x" size={16} /></Button>
       </div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <Button variant="accent" icon="pencil" onClick={onNotes} disabled={busy || cancelled}>{s.lessonId ? "Open lesson notes" : past ? "Attendance and notes" : "Take attendance"}</Button>
-        <Button onClick={onEdit} disabled={busy}>Edit or move</Button>
-        {cancelled ? <Button onClick={onRestore} disabled={busy}>Restore</Button> : <Button onClick={onCancel} disabled={busy || !!s.lessonId}>Cancel session</Button>}
-        <Button variant="danger" onClick={onDelete} disabled={busy || !!s.lessonId}>Delete</Button>
-        {!s.studentIds && !s.lessonId && <Button variant="danger" onClick={onDeleteFuture} disabled={busy}>Delete this and later</Button>}
+        {canNotes && <Button variant="accent" icon="pencil" onClick={onNotes} disabled={busy || cancelled}>{s.lessonId ? "Open lesson notes" : past ? "Attendance and notes" : "Take attendance"}</Button>}
+        {canEdit && <>
+          <Button onClick={onEdit} disabled={busy}>Edit or move</Button>
+          {cancelled ? <Button onClick={onRestore} disabled={busy}>Restore</Button> : <Button onClick={onCancel} disabled={busy || !!s.lessonId}>Cancel session</Button>}
+          <Button variant="danger" onClick={onDelete} disabled={busy || !!s.lessonId}>Delete</Button>
+          {!s.studentIds && !s.lessonId && <Button variant="danger" onClick={onDeleteFuture} disabled={busy}>Delete this and later</Button>}
+        </>}
       </div>
-      {s.lessonId && <span style={{ fontSize: 11, color: T.muted }}>Notes have been started for this session, so it cannot be cancelled or deleted from here. Delete the lesson from its notes page first.</span>}
+      {!canEdit && <span style={{ fontSize: 11, color: T.muted }}>Moving, cancelling or deleting sessions is done by HSJ admin.</span>}
+      {s.lessonId && canEdit && <span style={{ fontSize: 11, color: T.muted }}>Notes have been started for this session, so it cannot be cancelled or deleted from here. Delete the lesson from its notes page first.</span>}
     </Card>
   );
 }

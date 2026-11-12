@@ -8,6 +8,7 @@ import { Card, CardHeader, PageHeader, Chip, Button, Bar, Avatar, Table, th, td,
 import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBank";
 import { seriesLabel, paperLabel } from "./ppq/ppqUtils";
 import { relativeTime } from "../utils/analytics";
+import { can } from "../utils/privileges";
 
 const pct = (n, d) => d ? Math.round((n / d) * 100) : null;
 
@@ -27,6 +28,8 @@ export function TutorHomeworkList({ authUser, userProfile }) {
 
   const open = (assignments || []).filter(a => a.status !== "closed");
   const closed = (assignments || []).filter(a => a.status === "closed");
+  const canSet = can(userProfile, "homework");
+  const setBtn = canSet ? <Button variant="primary" icon="plus" onClick={() => navigate("/tutor/homework/new")}>Set homework</Button> : null;
 
   const Row = ({ a }) => {
     const mine = subs.filter(s => s.assignmentId === a.id);
@@ -51,13 +54,13 @@ export function TutorHomeworkList({ authUser, userProfile }) {
   return (
     <>
       <PageHeader eyebrow="Homework" title="Homework" sub="Everything you've set, with who has done it and how they did."
-        right={<Button variant="primary" icon="plus" onClick={() => navigate("/tutor/homework/new")}>Set homework</Button>} />
+        right={setBtn} />
       {error && <Notice tone="red">{error}</Notice>}
-      <TutorPpqQueries authUser={authUser} isAdmin={userProfile?.role === "admin"} />
+      {can(userProfile, "marking") && <TutorPpqQueries authUser={authUser} isAdmin={userProfile?.role === "admin"} />}
       <Card padding={0}>
         <CardHeader title="Open" right={<Chip tone="accent">{open.length}</Chip>} style={{ padding: "16px 20px" }} />
         {assignments === null && <div style={{ padding: 20, color: T.muted, fontSize: 13 }}>Loading…</div>}
-        {assignments && open.length === 0 && <EmptyState icon="checkSquare" title="No open homework" body="Set homework from the question banks with a time budget and due date." action={<Button variant="primary" icon="plus" onClick={() => navigate("/tutor/homework/new")}>Set homework</Button>} />}
+        {assignments && open.length === 0 && <EmptyState icon="checkSquare" title="No open homework" body={canSet ? "Set homework from the question banks with a time budget and due date." : "Homework for your groups is set by HSJ admin."} action={setBtn} />}
         {open.map(a => <Row key={a.id} a={a} />)}
       </Card>
       {closed.length > 0 && (
@@ -71,8 +74,10 @@ export function TutorHomeworkList({ authUser, userProfile }) {
 }
 
 // ─── Review one assignment ───────────────────────────────────────────────
-export function TutorHomeworkReview({ authUser, assignmentId }) {
+export function TutorHomeworkReview({ authUser, userProfile, assignmentId }) {
   const navigate = useNavigate();
+  const canMark = can(userProfile, "marking");
+  const canManage = can(userProfile, "homework");
   const [a, setA] = useState(null);
   const [students, setStudents] = useState(null);
   const [subs, setSubs] = useState([]);
@@ -153,8 +158,8 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
       <PageHeader eyebrow="Homework" title={a.title} sub={`${a.minutes} min · ${a.summary} · ${a.maxScore} marks · Due ${fmtDue(a.dueAt)}`}
         right={<>
           <Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>
-          <Button variant="secondary" onClick={toggleClosed} disabled={busy}>{a.status === "closed" ? "Reopen" : "Close"}</Button>
-          <Button variant="danger" onClick={remove} disabled={busy}>Delete</Button>
+          {canManage && <Button variant="secondary" onClick={toggleClosed} disabled={busy}>{a.status === "closed" ? "Reopen" : "Close"}</Button>}
+          {canManage && <Button variant="danger" onClick={remove} disabled={busy}>Delete</Button>}
         </>} />
       {a.note && <Notice tone="amber"><b>Your note to students:</b> {a.note}</Notice>}
 
@@ -205,7 +210,9 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                         {r.markedBy === "ai" && <Chip tone={r.confidence === "low" ? "amber" : "neutral"} style={{ fontSize: 11 }}>AI · {r.confidence || "medium"} confidence</Chip>}
                                         <label style={{ fontSize: 12, color: T.muted }}>Mark</label>
-                                        <Input type="number" min={0} max={it.marks} value={eff} onChange={e => override(sub, it.key, e.target.value, it.marks)} onClick={e => e.stopPropagation()} style={{ width: 60, padding: "4px 8px", fontSize: 13 }} aria-label="Override mark" />
+                                        {canMark
+                                          ? <Input type="number" min={0} max={it.marks} value={eff} onChange={e => override(sub, it.key, e.target.value, it.marks)} onClick={e => e.stopPropagation()} style={{ width: 60, padding: "4px 8px", fontSize: 13 }} aria-label="Override mark" />
+                                          : <span style={{ fontWeight: 700, fontSize: 13 }}>{eff}</span>}
                                         <span style={{ fontSize: 12, color: T.muted }}>/ {it.marks}{overridden ? " (adjusted)" : ""}</span>
                                       </div>
                                     ) : <Chip tone="neutral" style={{ fontSize: 11 }}>Not answered</Chip>}

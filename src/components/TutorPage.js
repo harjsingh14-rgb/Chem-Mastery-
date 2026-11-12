@@ -7,6 +7,7 @@ import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Butt
 import { summarise, pct, studentRow } from "../utils/analytics";
 import { money } from "../data/terms";
 import WeekList from "./WeekList";
+import { can } from "../utils/privileges";
 
 // The tutor home: the numbers that matter today, this week's lessons, the
 // groups, and who needs a nudge. Students live on the Students tab; each
@@ -17,6 +18,8 @@ const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good 
 
 export default function TutorPage({ authUser, userProfile }) {
   const isAdmin = userProfile?.role === "admin";
+  const canGroups = can(userProfile, "groups");
+  const canNotes = can(userProfile, "lessons");
   const navigate = useNavigate();
   const [classes, setClasses] = useState(null);
   const [sessions, setSessions] = useState([]);
@@ -56,11 +59,11 @@ export default function TutorPage({ authUser, userProfile }) {
         ]);
         if (cancelled) return;
         setClasses(cls); setStudents(list); setAttempts(att); setTutors(tut); setSessions(ses); setSubs(sb); setPayments(pay); setApplicants(app); setNewTutor(tutorUid);
-        if (cls.length > 0) setSelected(cls[0].code); else setShowNew(true);
+        if (cls.length > 0) setSelected(cls[0].code); else if (canGroups) setShowNew(true);
       } catch (e) { if (!cancelled) { setError(e.message); setClasses([]); setStudents([]); } }
     })();
     return () => { cancelled = true; };
-  }, [tutorUid, isAdmin]);
+  }, [tutorUid, isAdmin, canGroups]);
 
   const saveSchedule = async () => {
     const cls = classes?.find(c => c.code === editSchedule?.code);
@@ -139,11 +142,12 @@ export default function TutorPage({ authUser, userProfile }) {
         sub={`${dateLine} · ${weekSessions.length} lesson${weekSessions.length === 1 ? "" : "s"} this week${stillToCome && stillToCome !== weekSessions.length ? `, ${stillToCome} still to come` : ""}`}
         right={<>
           <Button icon="calendar" onClick={() => navigate("/tutor/calendar")}>Calendar</Button>
-          <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>
+          {canGroups && <Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New group</Button>}
         </>}
       />
 
       {error && <Notice tone="red">{error}</Notice>}
+      {classes && classes.length === 0 && !canGroups && <Notice tone="amber">You have no groups yet. HSJ admin creates your groups and places students into them.</Notice>}
 
       <div className={isAdmin ? "cm-grid-3" : "cm-grid-4"} style={{ gap: 16 }}>
         <StatTile label="Lessons this week" value={weekSessions.length} sub={weekMinutes ? `${Math.round((weekMinutes / 60) * 10) / 10} teaching hours` : "Nothing on the calendar yet"} icon="calendar" onClick={() => navigate("/tutor/calendar")} />
@@ -155,11 +159,11 @@ export default function TutorPage({ authUser, userProfile }) {
       </div>
 
       {classes && classes.length > 0 && (
-        <WeekList sessions={sessions} classes={classes} tutorUid={tutorUid} tutorName={isAdmin ? tutorName : null}
+        <WeekList sessions={sessions} classes={classes} tutorUid={tutorUid} tutorName={isAdmin ? tutorName : null} canNotes={canNotes}
           onLessonCreated={(sid, lid) => setSessions(prev => prev.map(x => x.id === sid ? { ...x, lessonId: lid } : x))} />
       )}
 
-      {editSchedule && classes && (
+      {editSchedule && classes && canGroups && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <CardHeader title={`Usual weekly times for ${classes.find(c => c.code === editSchedule.code)?.name || "this group"}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them." />
           <SlotsFields slots={editSchedule.slots} onChange={slots => setEditSchedule(e => ({ ...e, slots }))} />
@@ -174,7 +178,7 @@ export default function TutorPage({ authUser, userProfile }) {
         </Card>
       )}
 
-      {showNew && (
+      {showNew && canGroups && (
         <Card style={{ display: "flex", gap: 10, alignItems: "flex-end", flexWrap: "wrap" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "1 1 220px" }}>
             <label htmlFor="new-class-name" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Group name</label>
@@ -226,7 +230,7 @@ export default function TutorPage({ authUser, userProfile }) {
                       <span style={{ fontSize: 12, color: T.muted }}>{describeSlots(slotsOf(c)) || c.lessonSlot || "No usual time set"} · next {nextLessonFor(c)} · {count} student{count === 1 ? "" : "s"}</span>
                     </div>
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                      <Button size="sm" onClick={() => openSchedule(c)}>{slotsOf(c).length ? "Usual times" : "Set usual times"}</Button>
+                      {canGroups && <Button size="sm" onClick={() => openSchedule(c)}>{slotsOf(c).length ? "Usual times" : "Set usual times"}</Button>}
                       <Button size="sm" icon="users" onClick={() => navigate(`/tutor/students?group=${encodeURIComponent(c.code)}`)}>Students</Button>
                     </div>
                   </div>
