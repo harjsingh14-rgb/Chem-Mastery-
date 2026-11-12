@@ -62,6 +62,22 @@ import { TM_OXIDATION_STATES } from "./exam/tm-oxidation-states";
 import { POLYMERS } from "./exam/polymers";
 import { AMINO_ACIDS_PROTEINS } from "./exam/amino-acids-proteins";
 import { ORGANIC_SYNTHESIS } from "./exam/organic-synthesis";
+import { SS_AMOUNT_OF_SUBSTANCE } from "./exam/ss-amount-of-substance";
+import { SS_REACTING_QUANTITIES } from "./exam/ss-reacting-quantities";
+import { SS_LIMITING_REAGENTS } from "./exam/ss-limiting-reagents";
+import { SS_ATOMIC_STRUCTURE } from "./exam/ss-atomic-structure";
+import { SS_ATOMIC_CALCS } from "./exam/ss-atomic-calcs";
+import { SS_SHAPES, SS_REACTION_RATES, SS_EQUILIBRIA, SS_REDOX } from "./exam/ss-physical-as";
+import { SS_ENERGETICS } from "./exam/ss-energetics";
+import { SS_KC } from "./exam/ss-equilibrium-constants";
+import { SS_KP } from "./exam/ss-kp";
+import { SS_KINETICS_A2 } from "./exam/ss-kinetics-a2";
+import { SS_RATE_ORDERS } from "./exam/ss-rate-orders";
+import { SS_ACIDS } from "./exam/ss-acids";
+import { SS_BUFFERS } from "./exam/ss-buffers";
+import { SS_ELECTROCHEMISTRY } from "./exam/ss-electrochemistry";
+import { SS_BONDING_IMF, SS_GROUP_2, SS_GROUP_7, SS_PERIOD_3 } from "./exam/ss-inorganic";
+import { SS_HALOGENOALKANES, SS_STEREOISOMERISM, SS_AROMATIC, SS_CARBONYLS, SS_NMR } from "./exam/ss-organic";
 
 // One file per topic in src/data/exam/. `board` is an array of board ids
 // (["aqa", "ocr", "edexcel"]) or the string "both" for all boards.
@@ -102,6 +118,32 @@ export const EXAM_QUESTIONS = [
   ...withTopic("Polymers", POLYMERS),
   ...withTopic("Organic synthesis and techniques", ORGANIC_SYNTHESIS),
   ...withTopic("NMR and chromatography", SPECTROSCOPY),
+  ...withTopic("Atomic structure", SS_ATOMIC_STRUCTURE),
+  ...withTopic("Atomic structure", SS_ATOMIC_CALCS),
+  ...withTopic("Amount of substance", SS_AMOUNT_OF_SUBSTANCE),
+  ...withTopic("Amount of substance", SS_REACTING_QUANTITIES),
+  ...withTopic("Amount of substance", SS_LIMITING_REAGENTS),
+  ...withTopic("Bonding and shapes", SS_SHAPES),
+  ...withTopic("Bonding and shapes", SS_BONDING_IMF),
+  ...withTopic("Energetics", SS_ENERGETICS),
+  ...withTopic("Reaction rates", SS_REACTION_RATES),
+  ...withTopic("Equilibria, Kc and Kp", SS_EQUILIBRIA),
+  ...withTopic("Equilibria, Kc and Kp", SS_KC),
+  ...withTopic("Equilibria, Kc and Kp", SS_KP),
+  ...withTopic("Redox", SS_REDOX),
+  ...withTopic("Rate equations", SS_RATE_ORDERS),
+  ...withTopic("Rate equations", SS_KINETICS_A2),
+  ...withTopic("Electrode potentials and cells", SS_ELECTROCHEMISTRY),
+  ...withTopic("Acids, bases and buffers", SS_ACIDS),
+  ...withTopic("Acids, bases and buffers", SS_BUFFERS),
+  ...withTopic("Periodicity and Period 3", SS_PERIOD_3),
+  ...withTopic("Group 2", SS_GROUP_2),
+  ...withTopic("Halogens", SS_GROUP_7),
+  ...withTopic("Halogenoalkanes", SS_HALOGENOALKANES),
+  ...withTopic("Aldehydes and ketones", SS_CARBONYLS),
+  ...withTopic("Aromatic chemistry", SS_AROMATIC),
+  ...withTopic("Organic basics and analysis", SS_STEREOISOMERISM),
+  ...withTopic("NMR and chromatography", SS_NMR),
 ];
 
 /** Topic labels in teaching order, for the builder's picker. */
