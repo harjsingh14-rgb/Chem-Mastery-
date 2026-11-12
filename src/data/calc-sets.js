@@ -768,7 +768,7 @@ export const CALC_SETS = [
     ]
   },
   {
-    id: "calc_tof", title: "TOF Mass Spectrometry", color: "#be185d", board: "aqa", year: "as",
+    id: "calc_tof", title: "Time of Flight (TOF) Mass Spectrometry", color: "#be185d", board: "aqa", year: "as",
     questions: [
       // ═══ EASY (10) ═══
       { id: "calc_tof_q01", difficulty: "easy", q: "In a TOF mass spectrometer, an ion has a velocity of 5000 m s⁻¹. The drift region is 1.50 m long.\nCalculate the time of flight (s).", hint: "t = d / v", answer: 3.00e-4, unit: "s", tolerance: 5e-6, steps: ["t = d / v", "t = 1.50 / 5000", "t = 3.00 x 10⁻⁴ s"] },

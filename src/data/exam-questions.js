@@ -117,7 +117,7 @@ export const EXAM_QUESTIONS = [
   ...withTopic("Amino acids and proteins", AMINO_ACIDS_PROTEINS),
   ...withTopic("Polymers", POLYMERS),
   ...withTopic("Organic synthesis and techniques", ORGANIC_SYNTHESIS),
-  ...withTopic("NMR and chromatography", SPECTROSCOPY),
+  ...withTopic("Nuclear Magnetic Resonance (NMR) and chromatography", SPECTROSCOPY),
   ...withTopic("Atomic structure", SS_ATOMIC_STRUCTURE),
   ...withTopic("Atomic structure", SS_ATOMIC_CALCS),
   ...withTopic("Amount of substance", SS_AMOUNT_OF_SUBSTANCE),
@@ -143,7 +143,7 @@ export const EXAM_QUESTIONS = [
   ...withTopic("Aldehydes and ketones", SS_CARBONYLS),
   ...withTopic("Aromatic chemistry", SS_AROMATIC),
   ...withTopic("Organic basics and analysis", SS_STEREOISOMERISM),
-  ...withTopic("NMR and chromatography", SS_NMR),
+  ...withTopic("Nuclear Magnetic Resonance (NMR) and chromatography", SS_NMR),
 ];
 
 /** Topic labels in teaching order, for the builder's picker. */

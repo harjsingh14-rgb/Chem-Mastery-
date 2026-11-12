@@ -42,7 +42,7 @@ export default function RevisionPage({ board, isAdmin, hasFullAccess }) {
       count: hasFullAccess ? "Route planner" : "HSJ students", empty: null },
     ...(isAdmin ? [
       { id: "mechanisms", title: "Mechanisms", icon: "arrowCurve", tone: "neutral", to: "mechanisms", body: "Step-by-step curly arrow mechanisms.", count: "Admin preview", empty: null },
-      { id: "nmr", title: "NMR Practice", icon: "spectrum", tone: "neutral", to: "nmr", body: "Work out structures from spectra.", count: "Admin preview", empty: null },
+      { id: "nmr", title: "Nuclear Magnetic Resonance (NMR)", icon: "spectrum", tone: "neutral", to: "nmr", body: "Work out structures from spectra.", count: "Admin preview", empty: null },
     ] : []),
   ];
 

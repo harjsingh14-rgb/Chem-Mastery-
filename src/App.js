@@ -529,7 +529,7 @@ export default function App() {
 
 
   const isPage = ["home", "practise", "revision", "homework", "videos"].includes(topicsTab);   // "practise" with no question id redirects to Revision
-  const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", exam: "Exam-style questions", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "NMR Practice" };
+  const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", exam: "Exam-style questions", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "Nuclear Magnetic Resonance (NMR)" };
 
   // Homework player: focused mode, no tabs
   if (screen === "topics" && topicsTab === "homework" && routeParam) return renderShell(
@@ -927,7 +927,7 @@ export default function App() {
 
       {/* ── NMR PRACTICE TAB ──────────────────────────────────────────────────── */}
       {topicsTab === "nmr" && !isAdmin && (
-        <UpgradeCard section="NMR Practice" />
+        <UpgradeCard section="Nuclear Magnetic Resonance (NMR)" />
       )}
       {topicsTab === "nmr" && isAdmin && (
         <NmrTab board={board} />

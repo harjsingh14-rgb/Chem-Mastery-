@@ -599,7 +599,7 @@ export const SETS = {
     {q:"How would you convert benzene to an amine in multiple steps?", a:"Step 1: Benzene + conc HNO₃/H₂SO₄, <55°C → nitrobenzene.\nStep 2: Nitrobenzene + Sn/conc HCl, reflux → PhNH₃⁺Cl⁻; + NaOH → PhNH₂."},
     {q:"What information do IR and MS data give you when planning a synthesis or confirming a product?", a:"MS: M⁺ peak = Mr; fragmentation = structural clues.\nIR: identifies functional groups. Compare starting material and product IR to confirm transformation (e.g. loss of O–H peak, gain of C=O → oxidation of alcohol)."},
   ]},
-    "3.3.15": { title: "NMR Spectroscopy", cards: [
+    "3.3.15": { title: "Nuclear Magnetic Resonance (NMR) Spectroscopy", cards: [
     {q:"What is the physical basis of NMR spectroscopy?", a:"Nuclei with spin (¹H, ¹³C) align in an external field. RF radiation flips spins between energy states, absorbing energy at characteristic frequencies - this resonance is detected."},
     {q:"What is chemical shift (δ) and why is TMS used as the reference standard?", a:"δ (ppm): resonance position relative to TMS (δ = 0). TMS: all 12 H equivalent (one peak); inert; low bp; peak away from organic signals."},
     {q:"How does ¹³C NMR differ from ¹H NMR in the information it provides?", a:"¹³C: each peak = distinct C environment; no splitting; peak height not proportional to number of C.\n¹H: integration = relative number of H; splitting observed; shift identifies environment."},
@@ -725,7 +725,7 @@ export const SETS = {
     {q: "What safety precautions are specific to the Activity 5 oxidation experiment?", a: "K₂Cr₂O₇: toxic, carcinogenic - gloves. H₂SO₄: corrosive. Propan-1-ol/propanal: flammable - electric mantle. Fume cupboard."}
   ]},
 
-  "RP5": { title: "TLC Separation (Activity 12)", cards: [
+  "RP5": { title: "Thin-Layer Chromatography (TLC) Separation (Activity 12)", cards: [
     {q: "What are the two phases in chromatography, and what is their role?", a: "Stationary phase: stays still (silica). Mobile phase: moves (solvent). Compounds separate by differential attraction to each phase."},
     {q: "How is Rf value defined and calculated?", a: "Rf = distance moved by spot ÷ distance moved by solvent front. No units; always 0–1."},
     {q: "What does a high Rf value indicate about a compound?", a: "Greater affinity for the mobile phase - more soluble in solvent, less adsorbed to silica."},
@@ -858,7 +858,7 @@ export const SETS = {
     {q: "Why must ice be used throughout the diazotisation step?", a: "Reaction exothermic; diazonium salt decomposes even at modest T. Continuous ice cooling keeps T below 5°C."}
   ]},
 
-  "RP11": { title: "TLC & Column Chromatography (A2)", cards: [
+  "RP11": { title: "Thin-Layer Chromatography (TLC) and Column Chromatography (A2)", cards: [
     {q: "How is TLC used to monitor the progress of an organic reaction?", a: "Spot reaction mixture at intervals alongside starting material and product. Starting material spot shrinks; product spot grows."},
     {q: "How can co-spotting identify an unknown compound by TLC?", a: "Apply unknown, reference, and mixed spot. Single spot in the mixture at the same Rf as both = same compound."},
     {q: "What is the formula for Rf value?", a: "Rf = distance moved by compound ÷ distance moved by solvent front. Dimensionless; 0–1."},
@@ -1424,7 +1424,7 @@ export const SETS = {
     {q:"Describe a complete analytical strategy for identifying an unknown organic compound.", a:"1. Combustion → empirical formula. 2. MS → Mr → molecular formula. 3. DoU. 4. IR → functional groups. 5. ¹H NMR → environments, integration, splitting. 6. ¹³C NMR → C environments. 7. Chemical tests (2,4-DNPH, Tollens', iodoform). 8. Combine → propose structure."},
   ]},
 
-  "ocr_6.5.1": { title: "NMR Spectroscopy", cards: [
+  "ocr_6.5.1": { title: "Nuclear Magnetic Resonance (NMR) Spectroscopy", cards: [
     {q:"Explain the principle of NMR spectroscopy.", a:"Nuclei with spin (¹H, ¹³C) align in a magnetic field. RF radiation flips nuclei between energy states; resonance frequency depends on chemical environment. ¹H and ¹³C most commonly used."},
     {q:"What is TMS and why is it used as the reference standard?", a:"Si(CH₃)₄. δ = 0 reference. 12 equivalent H → single sharp peak. Highly shielded (upfield). Inert, volatile (bp 27°C, easy to remove). Does not overlap with organic peaks."},
     {q:"Explain chemical shift and what causes differences between environments.", a:"δ (ppm): position relative to TMS (δ=0). Electronegative groups deshield H → higher δ (downfield). Electron-rich → shielded → lower δ. CHO ~9–10; ArH ~7–8; OCH ~3.5–4; CH₃ ~0.9."},

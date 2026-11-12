@@ -12,7 +12,7 @@ export const PRACTICE_MODULES = [
   { id: "flashcards", label: "Flashcards",    icon: "cards",       tone: "green",   desc: (c) => c.topics ? `${c.topics} topics · random quiz` : "Every topic, random quiz" },
   { id: "mechanisms", label: "Mechanisms",    icon: "arrowCurve",  tone: "amber",   desc: () => "Hand-drawn curly-arrow walkthroughs" },
   { id: "pathways",   label: "Pathways",      icon: "nodes",       tone: "neutral", desc: () => "Organic synthesis routes" },
-  { id: "nmr",        label: "NMR Practice",  icon: "spectrum",    tone: "indigo",  desc: () => "Spectra, shifts and structures" },
+  { id: "nmr",        label: "Nuclear Magnetic Resonance (NMR)",  icon: "spectrum",    tone: "indigo",  desc: () => "Spectra, shifts and structures" },
 ];
 
 export default function PracticeGrid({ board, counts = {}, hasFullAccess, isAdmin, compact }) {
