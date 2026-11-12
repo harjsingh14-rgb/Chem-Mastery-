@@ -8,12 +8,37 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 OUT = os.path.join(ROOT, "ppq-build")
 NOISE = re.compile(r"^(PMT|MARK SCHEME – .*|H[04]32/0\d|Mark Scheme|June 20\d\d|November 20\d\d|\d{1,2}|Question|Answers?|Marks?|Guidance|Additional.*|Marking guidance|Number|Acceptable Answer|Expected Answers|Mark|Version.*|\*\w+\*|© .*)$")
 
+def page_blocks(page):
+    """Text blocks in display coordinates. Rotated pages (old OCR and AQA schemes are landscape
+    tables stored sideways) are rebuilt line by line from the unrotated text frame."""
+    if page.rotation not in (90, 270):
+        return [b for b in page.get_text("blocks") if b[6] == 0]
+    H = page.mediabox.height; W = page.mediabox.width
+    out = []
+    for b in page.get_text("dict")["blocks"]:
+        if b["type"] != 0: continue
+        for ln in b["lines"]:
+            x0, y0, x1, y1 = ln["bbox"]
+            t = "".join(sp["text"] for sp in ln["spans"])
+            if not t.strip(): continue
+            if page.rotation == 90: dx0, dy0, dx1, dy1 = H - y1, x0, H - y0, x1
+            else: dx0, dy0, dx1, dy1 = y0, W - x1, y1, W - x0
+            out.append((dx0, dy0, dx1, dy1, t, 0, 0))
+    return out
+
 def clean(t):
     return re.sub(r"[\ud800-\udfff\uf000-\uf8ff]", "", t).strip()   # lost surrogates and private-use tick glyphs
 
-def marker(board, block):
+def marker(board, block, legacy=False, page_h=842):
     x0, y0, x1, y1, text = block[0], block[1], block[2], block[3], block[4].strip()
     first = text.split("\n")[0].strip()
+    if board == "aqa" and legacy:
+        # 2010 to 2016 tables: "1(a)(i)" in one cell, or "8" with the part letter in the next cell.
+        # A bare number in the bottom strip of the page is the page number.
+        if x0 > 100: return None
+        if re.fullmatch(r"\d{1,2}", first) and y0 > page_h - 80: return None
+        m = re.fullmatch(r"(\d{1,2})(?:\s*\(?[a-z]{1,3}\)?)?(?:\s*\([ivx]{1,4}\))?", first)
+        return int(m.group(1)) if m and int(m.group(1)) <= 12 else None
     if board == "aqa":
         if x0 > 95: return None
         if re.fullmatch(r"\d{1,2}", first) and y0 > 500: return None   # page number
@@ -28,6 +53,7 @@ def marker(board, block):
     if board == "edexcel":
         if x0 > 135: return None
         m = re.match(r"^\*?(\d{1,2})(?=\s*$|\s*\(|\*)", first)
+        if not m and legacy: m = re.match(r"^(\d{1,2})\s+[A-D](?:\s|$)", first)   # 2010 to 2014 multiple choice rows: "2 C"
         return int(m.group(1)) if m else None
 
 HEADER = re.compile(r"^(Question|Qu)\s*\n(Answers?|Marking guidance)", re.I)
@@ -36,7 +62,7 @@ def slice_aqa(rec):
     doc = fitz.open(os.path.join(ROOT, rec["ms"]))
     rows, row, started = [], [], False
     for pno in range(len(doc)):
-        for b in sorted([b for b in doc[pno].get_text("blocks") if b[6] == 0], key=lambda b: (round(b[1] / 6), b[0])):
+        for b in sorted(page_blocks(doc[pno]), key=lambda b: (round(b[1] / 6), b[0])):
             text = clean(b[4])
             if not text: continue
             if HEADER.match(text):
@@ -63,14 +89,14 @@ def slice_aqa(rec):
     return {k: "\n".join(v) for k, v in out.items()}, misses
 
 def slice_ms(rec):
-    if rec["board"] == "aqa": return slice_aqa(rec)
+    if rec["board"] == "aqa" and not rec.get("legacy"): return slice_aqa(rec)
     doc = fitz.open(os.path.join(ROOT, rec["ms"]))
     stream = []  # (q_marker or None, text)
     for pno in range(len(doc)):
-        for b in sorted([b for b in doc[pno].get_text("blocks") if b[6] == 0], key=lambda b: (round(b[1] / 6), b[0])):
+        for b in sorted(page_blocks(doc[pno]), key=lambda b: (round(b[1] / 6), b[0])):
             text = clean(b[4])
             if not text: continue
-            stream.append((marker(rec["board"], b), text))
+            stream.append((marker(rec["board"], b, bool(rec.get("legacy")), doc[pno].rect.height), text))
     out, expected, cur, buf, misses = {}, 1, None, [], []
     for q, text in stream:
         if q is not None and q >= expected and q <= expected + 1:

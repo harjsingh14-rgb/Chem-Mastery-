@@ -66,7 +66,7 @@ function markPrompt({ doc, answers, hasImages, mode, inkOnly }) {
       : "\nThe student worked on paper and photographed it. The attached image(s) are those photos. Read the handwriting carefully, follow the working, and match each piece of work to the part it answers (students usually label parts). Where a typed answer is also given for a part, consider both.";
   return `You are a senior ${BOARD_NAME[doc.board] || doc.board} ${LEVEL_NAME[doc.level] || ""} Chemistry examiner marking a student's attempt at a real past-paper question, point by point against the official mark scheme, exactly as in a real exam.
 
-PAPER: ${BOARD_NAME[doc.board]} ${LEVEL_NAME[doc.level]} Paper ${doc.paper}, ${doc.series}, question ${doc.q} (${doc.totalMarks} marks). The first attached image is the printed question as the student saw it.${doc.onlyParts ? ` Only the parts listed below were set; ignore any other parts printed on the question and do not mark them.` : ""}${imageNote}
+PAPER: ${doc.legacy ? `${BOARD_NAME[doc.board]} legacy unit ${doc.unit} (2010 to 2016 specification)` : `${BOARD_NAME[doc.board]} ${LEVEL_NAME[doc.level]} Paper ${doc.paper}`}, ${doc.series}, question ${doc.q} (${doc.totalMarks} marks). The first attached image is the printed question as the student saw it.${doc.onlyParts ? ` Only the parts listed below were set; ignore any other parts printed on the question and do not mark them.` : ""}${imageNote}
 
 ${parts}
 

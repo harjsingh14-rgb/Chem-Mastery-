@@ -58,7 +58,7 @@ function enrichPrompt({ question, msText, topics }) {
   const topicList = (topics || []).map(t => `${t.ref}: ${t.title}`).join("\n");
   return `You are a senior ${BOARD_NAME[question.board] || question.board} ${LEVEL_NAME[question.level] || ""} Chemistry examiner preparing a past-paper question for a revision app. Students will see the original question as an image; you are producing the structured data behind it.
 
-PAPER: ${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} Paper ${question.paper}, ${question.series}, question ${question.q}. Total marks on the paper: ${question.total}.
+PAPER: ${question.legacy ? `${BOARD_NAME[question.board]} legacy unit ${question.unit} (the specification examined 2010 to 2016)` : `${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} Paper ${question.paper}`}, ${question.series}, question ${question.q}. Total marks on the paper: ${question.total}.
 
 QUESTION TEXT (extracted from the PDF; layout, tables and diagrams may be lost or garbled; answer lines removed):
 <<<
@@ -91,7 +91,8 @@ Return ONLY a JSON object, no markdown, with exactly this shape:
       "modelAnswer": "a concise answer that would earn full marks, as a strong student would write it; for calc show the working lines"
     }
   ],
-  "totalMarks": ${question.total}
+  "totalMarks": ${question.total},
+  "offSpec": false                   // true only if the question mainly tests content that is not in the specification topics listed above
 }
 
 Rules:
@@ -99,7 +100,8 @@ Rules:
 - The sum of part marks must equal totalMarks. If the extracted text disagrees with the mark scheme, trust the mark scheme.
 - Keep marking points faithful to the official mark scheme; do not invent credit the scheme does not give. For levels-of-response (6 mark) parts give the indicative content as the ms points and type "extended".
 - "draw" is for structures, mechanisms, dot-and-cross diagrams, graphs or apparatus; the ms points describe what must be shown.
-- Hints must not contain the final answer, the correct letter, or a quoted marking point. Use UK spelling and exam-style language. No em dashes.`;
+- Hints must not contain the final answer, the correct letter, or a quoted marking point. Use UK spelling and exam-style language. No em dashes.${question.legacy ? `
+- This question is from the old specification. If the chemistry it mainly tests is no longer in the current specification topics listed above (for example extraction of metals, old-style polymer or haloalkane content, or ozone and CFC chemistry where the current board has dropped it), set "offSpec": true and leave "topics" empty. If only a small part is off the current specification, keep "offSpec": false and tag the topics that remain.` : ""}`;
 }
 
 async function enrich(payload) {
@@ -127,12 +129,12 @@ async function enrich(payload) {
 }
 
 // ---- Firestore -------------------------------------------------------------
-const INDEX_FIELDS = ["q", "paper", "series", "year", "totalMarks", "title", "topics", "kind", "keywords", "imageUrl"]; // keywords: searched by the homework builder
+const INDEX_FIELDS = ["q", "paper", "series", "year", "totalMarks", "title", "topics", "kind", "keywords", "imageUrl", "legacy", "unit"]; // keywords: searched by the homework builder
 
 async function reindex({ board, level }, token) {
   if (!board || !level) throw fb.httpError(400, "board and level required");
   const docs = await fb.queryDocuments("ppq", { board, level }, token, { limit: 3000 });
-  const items = docs.map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined) o[k] = d[k]; return o; })
+  const items = docs.filter(d => d.status !== "offspec").map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined && d[k] !== null && d[k] !== false) o[k] = d[k]; return o; })
     .sort((a, b) => (a.year - b.year) || String(a.series).localeCompare(String(b.series)) || (a.paper - b.paper) || (a.q - b.q));
   await fb.updateDocument(`ppqIndex/${board}_${level}`, { board, level, count: items.length, items, updatedAt: new Date() }, token);
   return { count: items.length };

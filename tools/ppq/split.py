@@ -15,10 +15,15 @@ GEOM = {
     "aqa":     dict(x0=34, x1=545, top=60, bottom=806),
     "ocr":     dict(x0=34, x1=562, top=58, bottom=768),
     "edexcel": dict(x0=34, x1=562, top=52, bottom=800),
+    # old-spec (2010 to 2016) layouts: AQA had a boxed page with "(02)" page codes under the box
+    "aqa-legacy":     dict(x0=34, x1=545, top=60, bottom=788),
+    "ocr-legacy":     dict(x0=34, x1=562, top=58, bottom=768),
+    "edexcel-legacy": dict(x0=34, x1=562, top=52, bottom=790),
 }
-END_RE = re.compile(r"END OF QUESTION|END OF PAPER|TOTAL FOR PAPER|END OF QUESTIONS", re.I)
+def geom_for(rec): return GEOM[rec["board"] + ("-legacy" if rec.get("legacy") else "")]
+END_RE = re.compile(r"END\s+OF\s+QUESTION|END\s+OF\s+PAPER|TOTAL FOR PAPER", re.I)
 SKIP_PAGE_RE = re.compile(r"no questions printed on this page|BLANK PAGE|ADDITIONAL ANSWER SPACE|Additional page", re.I)
-NOISE_RE = re.compile(r"^(PMT|Do not write|outside the|box|DO NOT WRITE IN THIS AREA.*|Turn over.*|\d{1,2}|\*\w+\*|© .*|IB/M/.*|Question \d+ continues on the next page|[.\s_]+)$", re.I)
+NOISE_RE = re.compile(r"^(PMT|Do not write|outside the|box|DO NOT WRITE IN THIS AREA.*|Turn over.*|\d{1,2}|\(\d\d\)|WMP/.*|© OCR 20\d\d|\*\w+\*|© .*|IB/M/.*|Question \d+ continues on the next page|[.\s_]+)$", re.I)
 GAP = 36      # vertical white space (points) above which answer space is collapsed
 SPACER = 26   # what it is collapsed to
 
@@ -80,10 +85,15 @@ def blocks(page):
         out.append(dict(x0=b[0] / s, y0=b[1] / s, x1=b[2] / s, y1=b[3] / s, text=txt))
     return sorted(out, key=lambda b: (round(b["y0"]), b["x0"]))
 
-def qnum_at(block, board):
+def qnum_at(block, board, legacy=False):
     """Return the top-level question number if this block starts one, else None."""
     t = block["text"]
     first = t.split("\n")[0].strip()
+    if board == "aqa" and legacy:
+        # 2010 to 2016 CHEM1/2/4/5: "1  (a)" or "3  This question is about" in the left margin
+        if block["x0"] > 60: return None
+        m = re.match(r"^(\d{1,2})\s+\(a\)", first) or re.match(r"^(\d{1,2})\s{2,}[A-Z(]", first) or re.match(r"^(\d{1,2})\n[A-Z(]", t)
+        return int(m.group(1)) if m else None
     if board == "aqa":
         if block["x0"] > 76: return None
         norm = re.sub(r"\s+", " ", t)
@@ -109,14 +119,14 @@ def qnum_at(block, board):
         return None
 
 def marks_in(text, board):
-    if board == "aqa": return [int(x) for x in re.findall(r"\[(\d+) marks?\]?", text)]
+    if board == "aqa": return [int(x) for x in re.findall(r"[\[(](\d+) marks?[\])]?", text)]
     if board == "ocr": return [int(x) for x in re.findall(r"\[(\d+)\]", text)]
     tot = re.search(r"Total for Question \d+\s*=\s*(\d+)\s*marks?", text, re.I)
     if tot: return [int(tot.group(1))]
     return [int(x) for x in re.findall(r"^\s*\((\d{1,2})\)\s*$", text, re.M)]
 
 def split_paper(rec, verbose=True):
-    board = rec["board"]; g = GEOM[board]
+    board = rec["board"]; g = geom_for(rec); legacy = bool(rec.get("legacy"))
     doc = fitz.open(os.path.join(ROOT, rec["qp"]))
     starts = []  # (qnum, page, y)
     end = None   # (page, y)
@@ -130,14 +140,14 @@ def split_paper(rec, verbose=True):
             if end: break
             if END_RE.search(b["text"]) and b["x0"] < 400:
                 end = (pno, b["y0"]); break
-            q = qnum_at(b, board)
+            q = qnum_at(b, board, legacy)
             if q == expected:
                 starts.append((q, pno, b["y0"])); expected += 1
         if end: break
     if not starts:
         chars = sum(len(doc[i].get_text()) for i in range(min(6, len(doc))))
         print(f"  !! no questions found {rec['id']}" + ("  (no text layer: scanned PDF)" if chars < 400 else "")); return []
-    if end is None: end = (len(doc) - 1, GEOM[board]["bottom"])
+    if end is None: end = (len(doc) - 1, g["bottom"])
     questions = []
     for i, (q, p0, y0) in enumerate(starts):
         if i + 1 < len(starts):
@@ -164,7 +174,7 @@ def split_paper(rec, verbose=True):
     return questions, doc
 
 def render(rec, questions, doc):
-    g = GEOM[rec["board"]]
+    g = geom_for(rec)
     outdir = os.path.join(OUT, rec["id"]); os.makedirs(outdir, exist_ok=True)
     for qd in questions:
         from PIL import Image
@@ -197,6 +207,8 @@ def render(rec, questions, doc):
 EXPECTED = {("aqa","a2",1):105, ("aqa","a2",2):105, ("aqa","a2",3):90, ("aqa","as",1):80, ("aqa","as",2):80,
             ("ocr","a2",1):100, ("ocr","a2",2):100, ("ocr","a2",3):70, ("ocr","as",1):70, ("ocr","as",2):70,
             ("edexcel","a2",1):90, ("edexcel","a2",2):90, ("edexcel","a2",3):120, ("edexcel","as",1):80, ("edexcel","as",2):80}
+LEGACY_EXPECTED = {"CHEM1": 70, "CHEM2": 100, "CHEM4": 100, "CHEM5": 100, "F321": 60, "F322": 100, "F324": 60, "F325": 100,
+                   "6CH01": 80, "6CH02": 80, "6CH04": 90, "6CH05": 90}
 
 def main():
     manifest = json.load(open(os.path.join(OUT, "manifest.json")))
@@ -214,7 +226,7 @@ def run_one(rec):
         questions, doc = res
         render(rec, questions, doc)
         tot = sum(q["total"] for q in questions); kb = sum(q.get("bytes", 0) for q in questions) // 1024
-        exp = EXPECTED.get((rec["board"], rec["level"], rec["paper"]))
+        exp = LEGACY_EXPECTED.get(rec.get("unit")) if rec.get("legacy") else EXPECTED.get((rec["board"], rec["level"], rec["paper"]))
         flag = "" if exp == tot else f"  <-- expected {exp}"
         print(f"{rec['id']:24s} {len(questions):3d} questions, {tot:3d} marks, {kb:5d} KB{flag}  " + " ".join(f"{q['q']}:{q['total']}" for q in questions), flush=True)
 

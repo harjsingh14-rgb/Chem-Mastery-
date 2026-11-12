@@ -51,7 +51,7 @@ def validate(enr, qd, board):
     refs = {t["ref"] for t in TOPICS[board]}
     bad = [t for t in enr.get("topics") or [] if t not in refs]
     if bad: problems.append(f"unknown topics {bad}")
-    if not enr.get("topics"): problems.append("no topics")
+    if not enr.get("topics") and not enr.get("offSpec"): problems.append("no topics")
     for p in parts:
         if len(p.get("hints") or []) < 2: problems.append(f"part {p.get('label')} has {len(p.get('hints') or [])} hints")
         if not p.get("ms"): problems.append(f"part {p.get('label')} has no ms")
@@ -69,6 +69,7 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
         return qid, ["not indexed yet"], None
     else:
         question = {k: rec[k] for k in ("board", "level", "paper", "series")}
+        if rec.get("legacy"): question.update(legacy=True, unit=rec.get("unit"))
         question.update(q=qd["q"], total=qd["total"], text=qd["text"][:9000])
         enr = call("enrich", {"question": question, "msText": ms_text[:12000], "topics": [{"ref": t["ref"], "title": t["title"]} for t in TOPICS[rec["board"]]]})
         os.makedirs(os.path.dirname(epath), exist_ok=True)
@@ -87,7 +88,8 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
                    topics=enr.get("topics") or [], keywords=enr.get("keywords") or [], kind=enr.get("kind") or "structured",
                    parts=enr.get("parts") or [], imageUrl=s.get("imageUrl"), imageW=qd.get("width"), imageH=qd.get("height"),
                    qText=qd["text"][:6000], msText=ms_text[:8000], source={"qp": rec.get("qp"), "ms": rec.get("ms")},
-                   status="live" if not problems else "review", problems=problems)
+                   legacy=bool(rec.get("legacy")), unit=rec.get("unit") or None,
+                   status="offspec" if enr.get("offSpec") else ("live" if not problems else "review"), problems=problems)
         call("upsert", {"id": qid, "doc": doc})
         s["upserted"] = True
     return qid, problems, enr.get("usage")

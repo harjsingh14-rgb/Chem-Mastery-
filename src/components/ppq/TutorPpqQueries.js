@@ -4,7 +4,7 @@ import { T } from "../../ui/theme";
 import chemFormat from "../../utils/chemFormat";
 import { Card, CardHeader, Chip, Button, Notice } from "../../ui/components";
 import { relativeTime } from "../../utils/analytics";
-import { LEVEL_LABEL, seriesLabel } from "./ppqUtils";
+import { seriesLabel, paperLabel } from "./ppqUtils";
 
 const BOARD_NAME = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 
@@ -61,7 +61,7 @@ export default function TutorPpqQueries({ authUser, isAdmin }) {
           <div key={key} style={{ borderTop: `1px solid ${T.line}`, padding: "14px 20px", display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
               <span style={{ fontWeight: 700 }}>{names[a.uid] || "Student"}</span>
-              <span style={{ fontSize: 12, color: T.muted }}>{BOARD_NAME[a.board] || a.board} {LEVEL_LABEL[a.level]} Paper {a.paper} · {seriesLabel(a.series, a.year)} · Q{a.q}{part === "q" ? "" : ` part ${part}`}</span>
+              <span style={{ fontSize: 12, color: T.muted }}>{BOARD_NAME[a.board] || a.board} {paperLabel(a)} · {seriesLabel(a.series, a.year)} · Q{a.q}{part === "q" ? "" : ` part ${part}`}</span>
               <Chip tone="neutral">{lp.score ?? q.score} / {lp.marks ?? "?"}</Chip>
               <span style={{ fontSize: 12, color: T.muted, marginLeft: "auto" }}>{relativeTime(q.at)}</span>
               <a className="cm-link" style={{ fontSize: 12 }} href={`/${a.board}/practise/${a.qid}`} target="_blank" rel="noreferrer">Open question</a>

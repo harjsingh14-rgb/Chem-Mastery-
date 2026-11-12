@@ -8,7 +8,7 @@ import { Card, CardHeader, PageHeader, Chip, Button, Input, Notice, EmptyState, 
 import { buildItems, ppqItem, ppqItemWithParts, describeParts, totals, describeItems, MIN_PER_MARK } from "../utils/homeworkBank";
 import { YearToggle } from "./McqTab";
 import usePpq from "../hooks/usePpq";
-import { topicsFor, seriesLabel, LEVEL_LABEL, KIND_LABEL } from "./ppq/ppqUtils";
+import { topicsFor, seriesLabel, paperLabel, paperShort, LEVEL_LABEL, KIND_LABEL } from "./ppq/ppqUtils";
 
 /** "ph weak -buffer": every plain word must appear in the title or keywords, no "-word" may. */
 function matchesSearch(q, search) {
@@ -293,7 +293,7 @@ export default function HomeworkBuilder({ authUser }) {
                               <input type="checkbox" checked={on} onChange={() => toggleQuestion(q)} style={{ accentColor: T.accent }} />
                               <span style={{ flex: 1, minWidth: 0 }}>
                                 <span style={{ fontWeight: 600, color: T.ink }}>{chemFormat(q.title) || `Question ${q.q}`}</span>
-                                <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{topicShort((q.topics || [])[0])} · {LEVEL_LABEL[q.level] || ""} {seriesLabel(q.series, q.year)} P{q.paper} Q{q.q}{(q.keywords || []).length ? ` · ${q.keywords.slice(0, 4).join(", ")}` : ""}{it && describeParts(it) ? ` · ${describeParts(it)}` : ""}</span>
+                                <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{topicShort((q.topics || [])[0])} · {LEVEL_LABEL[q.level] || ""} {seriesLabel(q.series, q.year)} {paperShort(q)} Q{q.q}{(q.keywords || []).length ? ` · ${q.keywords.slice(0, 4).join(", ")}` : ""}{it && describeParts(it) ? ` · ${describeParts(it)}` : ""}</span>
                               </span>
                               <Chip tone={on ? "accent" : "neutral"} style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[q.kind] || "Structured"}</Chip>
                               <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{it && it.parts ? `${it.marks} of ${q.totalMarks}` : q.totalMarks} mk</span>
@@ -345,7 +345,7 @@ export default function HomeworkBuilder({ authUser }) {
                   <div key={it.key} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px 8px 20px", borderBottom: `1px solid ${T.line}`, fontSize: 12 }}>
                     <span style={{ color: T.faint, width: 18 }}>{i + 1}</span>
                     <Chip tone="green" style={{ padding: "2px 8px", fontSize: 11 }}>{KIND_LABEL[it.kind] || "Structured"}</Chip>
-                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={`${LEVEL_LABEL[it.level] || ""} Paper ${it.paper} · ${seriesLabel(it.series, it.year)} · Q${it.q}${describeParts(it) ? ` · ${describeParts(it)}` : ""}`}>{it.topicLabel} · {seriesLabel(it.series, it.year)} P{it.paper} Q{it.q}{describeParts(it) ? ` (${it.parts.map(l => l === "" ? "q" : l).join(", ")})` : ""}</span>
+                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={`${paperLabel(it)} · ${seriesLabel(it.series, it.year)} · Q${it.q}${describeParts(it) ? ` · ${describeParts(it)}` : ""}`}>{it.topicLabel} · {seriesLabel(it.series, it.year)} {paperShort(it)} Q{it.q}{describeParts(it) ? ` (${it.parts.map(l => l === "" ? "q" : l).join(", ")})` : ""}</span>
                     <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{it.marks} mk</span>
                     <button onClick={() => remove(it.key)} aria-label="Remove" style={{ border: "none", background: "transparent", color: T.faint, cursor: "pointer", padding: 2 }}><Icon name="x" size={14} /></button>
                   </div>

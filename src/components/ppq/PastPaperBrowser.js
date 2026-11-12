@@ -5,7 +5,7 @@ import { Button, Card, Chip, Notice, EmptyState, Icon, Input, Bar } from "../../
 import usePpq from "../../hooks/usePpq";
 import track from "../../utils/track";
 import chemFormat from "../../utils/chemFormat";
-import { LEVEL_LABEL, KIND_LABEL, seriesLabel, topicsFor, topicShort, statusOf, STATUS_LABEL, STATUS_TONE, saveQueue, shuffle } from "./ppqUtils";
+import { KIND_LABEL, seriesLabel, paperLabel, paperKey, topicsFor, topicShort, statusOf, STATUS_LABEL, STATUS_TONE, saveQueue, shuffle } from "./ppqUtils";
 import { PRACTICE_MODULES } from "../PracticeGrid";
 
 const FILTER_KEY = "hsj-ppq-filters";
@@ -37,11 +37,13 @@ export default function PastPaperBrowser({ board, authUser, hasFullAccess }) {
   useEffect(() => { setPrefs(loadPrefs(board)); }, [board]);
   useEffect(() => { storePrefs(board, prefs); }, [board, prefs]);
   const { mode, level } = prefs;
+  const showLegacy = prefs.legacy !== false;   // 2010 to 2016 papers are in unless the student switches them off
   const setMode = (m) => setPrefs(p => ({ ...p, mode: m }));
   const setLevel = (l) => setPrefs(p => ({ ...p, level: l }));
   const setF = (fn) => setPrefs(p => ({ ...p, filters: typeof fn === "function" ? fn(p.filters) : fn }));
 
-  const levelled = useMemo(() => level === "all" ? items : items.filter(i => i.level === level), [items, level]);
+  const hasLegacy = useMemo(() => items.some(i => i.legacy), [items]);
+  const levelled = useMemo(() => items.filter(i => (level === "all" || i.level === level) && (showLegacy || !i.legacy)), [items, level, showLegacy]);
 
   const open = (id, list) => {
     saveQueue(list.map(i => i.id));
@@ -73,6 +75,12 @@ export default function PastPaperBrowser({ board, authUser, hasFullAccess }) {
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
         {seg(MODES, mode, setMode)}
         {seg([["all", "AS + A-level"], ["as", "AS"], ["a2", "A-level"]], level, setLevel)}
+        {hasLegacy && (
+          <label style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: T.body, cursor: "pointer" }} title="Papers from the specification examined 2010 to 2016. The chemistry is the same where it is still on your course; the paper layout and some question styles differ.">
+            <input type="checkbox" checked={showLegacy} onChange={e => setPrefs(p => ({ ...p, legacy: e.target.checked }))} />
+            Include old-spec papers (2010 to 2016)
+          </label>
+        )}
         <span style={{ fontSize: 12, color: T.muted, marginLeft: "auto" }}>
           {loading ? "Loading past papers…" : <>{levelled.length} questions{Object.keys(attempts).length > 0 && <> · {levelled.filter(i => statusOf(attempts[i.id]) !== "new").length} tried</>}</>}
         </span>
@@ -184,13 +192,13 @@ function PaperFolders({ items, attempts, onOpen, onStart }) {
     for (const i of items) {
       if (!bySeries.has(i.series)) bySeries.set(i.series, { series: i.series, year: i.year || 0, papers: new Map() });
       const s = bySeries.get(i.series);
-      const key = `${i.level}-${i.paper}`;
-      if (!s.papers.has(key)) s.papers.set(key, { key, level: i.level, paper: i.paper, series: i.series, year: i.year, items: [] });
+      const key = `${i.level}-${paperKey(i)}`;
+      if (!s.papers.has(key)) s.papers.set(key, { key, level: i.level, paper: i.paper, legacy: !!i.legacy, unit: i.unit, series: i.series, year: i.year, items: [] });
       s.papers.get(key).items.push(i);
     }
     return [...bySeries.values()]
       .sort((a, b) => (b.year - a.year) || String(a.series).localeCompare(String(b.series)))
-      .map(s => ({ ...s, papers: [...s.papers.values()].sort((a, b) => (a.level === b.level ? 0 : a.level === "as" ? -1 : 1) || (a.paper - b.paper)).map(p => ({ ...p, items: p.items.sort((a, b) => a.q - b.q) })) }));
+      .map(s => ({ ...s, papers: [...s.papers.values()].sort((a, b) => (a.level === b.level ? 0 : a.level === "as" ? -1 : 1) || ((a.legacy ? 1 : 0) - (b.legacy ? 1 : 0)) || (a.paper - b.paper)).map(p => ({ ...p, items: p.items.sort((a, b) => a.q - b.q) })) }));
   }, [items]);
 
   if (groups.length === 0) return <EmptyState icon="search" title="No papers at this level" body="Switch to AS + A-level to see everything." />;
@@ -224,7 +232,7 @@ function PaperFolders({ items, attempts, onOpen, onStart }) {
                       <div className="cm-row-hover" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px 10px 44px", flexWrap: "wrap" }}>
                         <button type="button" onClick={() => setOpenPaper(pOpen ? null : `${s.series}|${p.key}`)} style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 200, textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: T.ink }}>
                           <Icon name="chevronDown" size={14} color={T.muted} style={{ transform: pOpen ? "rotate(0deg)" : "rotate(-90deg)", transition: "transform 0.15s", flexShrink: 0 }} />
-                          <span style={{ fontWeight: 600, fontSize: 14 }}>{LEVEL_LABEL[p.level]} Paper {p.paper}</span>
+                          <span style={{ fontWeight: 600, fontSize: 14 }}>{paperLabel(p)}</span>
                         </button>
                         <span style={{ fontSize: 12, color: T.muted }}>{p.items.length} questions · {marks} marks{pTried > 0 && ` · ${best}/${marks} so far`}</span>
                         {pTried > 0 && <Chip tone={pTried === p.items.length ? "green" : "amber"}>{pTried}/{p.items.length} done</Chip>}
@@ -252,7 +260,11 @@ function PaperFolders({ items, attempts, onOpen, onStart }) {
 function MixedPractice({ board, items, attempts, f, setF, onOpen, onStart }) {
   const [showTopics, setShowTopics] = useState(false);
   const topics = useMemo(() => topicsFor(board), [board]);
-  const papers = useMemo(() => [...new Set(items.map(i => i.paper))].sort(), [items]);
+  const papers = useMemo(() => {
+    const seen = new Map();
+    for (const i of items) if (!seen.has(paperKey(i))) seen.set(paperKey(i), { key: paperKey(i), label: i.legacy ? `${i.unit || `Unit ${i.paper}`} (old spec)` : `Paper ${i.paper}`, legacy: !!i.legacy, paper: i.paper });
+    return [...seen.values()].sort((a, b) => ((a.legacy ? 1 : 0) - (b.legacy ? 1 : 0)) || (a.paper - b.paper));
+  }, [items]);
   const seriesList = useMemo(() => {
     const seen = new Map();
     for (const i of items) if (!seen.has(i.series)) seen.set(i.series, i.year || 0);
@@ -268,7 +280,7 @@ function MixedPractice({ board, items, attempts, f, setF, onOpen, onStart }) {
   const filtered = useMemo(() => {
     const s = f.search.trim().toLowerCase();
     return items.filter(i => {
-      if (f.papers.length && !f.papers.includes(i.paper)) return false;
+      if (f.papers.length && !f.papers.includes(paperKey(i))) return false;
       if (f.series.length && !f.series.includes(i.series)) return false;
       if (f.kinds.length && !f.kinds.includes(i.kind)) return false;
       if (f.topics.length && !(i.topics || []).some(t => f.topics.includes(t))) return false;
@@ -279,7 +291,7 @@ function MixedPractice({ board, items, attempts, f, setF, onOpen, onStart }) {
         if (f.status === "full" && st !== "full") return false;
       }
       if (s) {
-        const hay = `${i.title || ""} ${(i.topics || []).map(t => topicShort(board, t)).join(" ")} ${seriesLabel(i.series, i.year)} paper ${i.paper} q${i.q}`.toLowerCase();
+        const hay = `${i.title || ""} ${(i.topics || []).map(t => topicShort(board, t)).join(" ")} ${seriesLabel(i.series, i.year)} paper ${i.paper} ${i.unit || ""} ${i.legacy ? "old spec legacy" : ""} q${i.q}`.toLowerCase();
         if (!hay.includes(s)) return false;
       }
       return true;
@@ -309,7 +321,7 @@ function MixedPractice({ board, items, attempts, f, setF, onOpen, onStart }) {
 
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
           <span style={{ ...eyebrow, marginRight: 4 }}>Paper</span>
-          {papers.map(p => chipBtn(f.papers.includes(p), () => setF(x => ({ ...x, papers: toggleIn(x.papers, p) })), `Paper ${p}`, `p${p}`))}
+          {papers.map(p => chipBtn(f.papers.includes(p.key), () => setF(x => ({ ...x, papers: toggleIn(x.papers, p.key) })), p.label, `p${p.key}`))}
           <span style={{ width: 1, height: 18, background: T.border, margin: "0 6px" }} />
           <span style={{ ...eyebrow, marginRight: 4 }}>Type</span>
           {kinds.map(k => chipBtn(f.kinds.includes(k), () => setF(x => ({ ...x, kinds: toggleIn(x.kinds, k) })), KIND_LABEL[k] || k, `k${k}`))}
@@ -404,7 +416,7 @@ function QuestionRow({ item, board, att, onOpen, compact, indent }) {
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 3 }}>
         <div style={{ fontWeight: 600, fontSize: compact ? 13 : 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{chemFormat(item.title) || `Question ${item.q}`}</div>
         <div style={{ fontSize: 12, color: T.muted, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-          <span>{LEVEL_LABEL[item.level]} Paper {item.paper} · {seriesLabel(item.series, item.year)}</span>
+          <span>{paperLabel(item)} · {seriesLabel(item.series, item.year)}</span>
           <span>·</span>
           <span>{item.totalMarks} mark{item.totalMarks === 1 ? "" : "s"}</span>
           {item.kind && item.kind !== "structured" && <><span>·</span><span>{KIND_LABEL[item.kind] || item.kind}</span></>}

@@ -32,6 +32,29 @@ SOURCES = [
 
 MONTHS = {"january": "JAN", "june": "JUN", "may": "JUN", "october": "NOV", "november": "NOV"}
 
+# Old-specification papers (2010 to 2016), downloaded from scienceskool.co.uk into resources/legacy/<board>/.
+# Units 1 and 2 were AS, units 4 and 5 were A2. Ids use "u" (unit) so they never collide with current-spec paper ids.
+LEGACY = [("resources/legacy/aqa", "aqa"), ("resources/legacy/ocr", "ocr"), ("resources/legacy/edexcel", "edexcel")]
+UNIT_CODE = {"aqa": "CHEM{n}", "ocr": "F32{n}", "edexcel": "6CH0{n}"}
+
+def legacy_from_name(name, board):
+    """(unit, series, kind) for an old-spec file name, or None."""
+    n = name.lower()
+    if board == "aqa":
+        m = re.match(r"aqa-chem(\d)-(?:w-)?(qp|ms)-(jan|jun)(\d\d)\.pdf$", n)
+        if m: return int(m.group(1)), m.group(3).upper() + m.group(4), m.group(2)
+    if board == "ocr":
+        m = re.match(r"f32(\d)_(jan|june)_20(\d\d)_(qp|ms)\.pdf$", n)
+        if m: return int(m.group(1)), m.group(2)[:3].upper() + m.group(3), m.group(4)
+    if board == "edexcel":
+        m = re.match(r"unit_(\d)_(jan|june)_20(\d\d)_(qp|ms)\.pdf$", n)
+        if m: return int(m.group(1)), m.group(2)[:3].upper() + m.group(3), m.group(4)
+        m = re.match(r"6ch0(\d)_01(r?)_(que|msc)_20(\d\d)\d{4}\.pdf$", n)
+        if m: return int(m.group(1)), "JUN" + m.group(4) + m.group(2).upper(), ("qp" if m.group(3) == "que" else "ms")
+        m = re.match(r"(question-paper|mark-scheme)-unit-(\d)-_6ch0\d_-(paper-1r-)?june-20(\d\d)\.pdf$", n)
+        if m: return int(m.group(2)), "JUN" + m.group(4) + ("R" if m.group(3) else ""), ("qp" if m.group(1) == "question-paper" else "ms")
+    return None
+
 def series_from_name(name):
     n = name.upper()
     m = re.search(r"(JUN|NOV|JAN)(\d\d)", n)
@@ -85,10 +108,20 @@ def main():
             if not p or not s:
                 print(f"skip (paper={p}, series={s}): {folder}/{name}", file=sys.stderr); continue
             files.append(dict(board=board, level=level, paper=p, series=s, kind=k, path=os.path.join(folder, name)))
+    for folder, board in LEGACY:
+        full = os.path.join(ROOT, folder)
+        if not os.path.isdir(full): continue
+        for name in sorted(os.listdir(full)):
+            info = legacy_from_name(name, board)
+            if not info: print(f"skip (legacy name not understood): {folder}/{name}", file=sys.stderr); continue
+            unit, series, kind = info
+            files.append(dict(board=board, level="as" if unit <= 2 else "a2", paper=unit, series=series, kind=kind,
+                              path=os.path.join(folder, name), legacy=True, unit=UNIT_CODE[board].format(n=unit)))
     papers = {}
     for f in files:
-        key = f"{f['board']}-{f['level']}-p{f['paper']}-{f['series']}"
-        rec = papers.setdefault(key, dict(id=key, board=f["board"], level=f["level"], paper=f["paper"], series=f["series"]))
+        key = f"{f['board']}-{f['level']}-{'u' if f.get('legacy') else 'p'}{f['paper']}-{f['series']}"
+        rec = papers.setdefault(key, dict(id=key, board=f["board"], level=f["level"], paper=f["paper"], series=f["series"],
+                                          **({"legacy": True, "unit": f["unit"]} if f.get("legacy") else {})))
         if f["kind"] in rec and rec[f["kind"]] != f["path"]:
             # prefer resources/ copies (cleaner names) over scattered analysis folders
             if f["path"].startswith("resources/"): rec[f["kind"]] = f["path"]

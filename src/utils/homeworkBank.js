@@ -22,7 +22,7 @@ export const TYPE_LABEL = { mcq: "MCQ", calc: "Calculation", extended: "Extended
 // Past-paper questions live in Firestore (ppq/{id}), not in the bundle, so an
 // assignment item carries a snapshot of the index entry and the player loads
 // the full question by id.
-export const PPQ_SNAPSHOT = ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks"];
+export const PPQ_SNAPSHOT = ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks", "legacy", "unit"];
 
 const mcqBoardKey = (board) => board === "ocr" ? "OCR_A" : board === "edexcel" ? "EDEXCEL" : "AQA";
 const boardOk = (b, board) => b === "both" || b === board || (Array.isArray(b) && b.includes(board));

@@ -7,7 +7,7 @@ import track from "../../utils/track";
 import chemFormat from "../../utils/chemFormat";
 import DrawCanvas from "./DrawCanvas";
 import { noteAttempt } from "../../hooks/usePpq";
-import { LEVEL_LABEL, seriesLabel, topicShort, compressImage, loadQueue, partKey } from "./ppqUtils";
+import { seriesLabel, paperLabel, topicShort, compressImage, loadQueue, partKey } from "./ppqUtils";
 
 const MCQ_LETTERS = ["A", "B", "C", "D"];
 const docCache = {};
@@ -153,7 +153,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 240 }}>
-          <div style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>{LEVEL_LABEL[doc.level]} Paper {doc.paper} · {seriesLabel(doc.series, doc.year)} · Question {doc.q}</div>
+          <div style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>{paperLabel(doc)} · {seriesLabel(doc.series, doc.year)} · Question {doc.q}</div>
           <h2 style={{ margin: "2px 0 0", fontFamily: T.display, fontSize: 20, fontWeight: 700, lineHeight: 1.25 }}>{chemFormat(doc.title) || `Question ${doc.q}`}</h2>
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>

@@ -12,14 +12,24 @@ export function seriesLabel(series, year) {
   if (!series) return year ? String(year) : "";
   const s = String(series).toUpperCase();
   if (s === "SPEC") return "Specimen";
-  const m = s.match(/^([A-Z]{3})(\d\d)$/);
-  if (m) return `${MONTH[m[1]] || m[1]} 20${m[2]}`;
+  const m = s.match(/^([A-Z]{3})(\d\d)(R?)$/);
+  if (m) return `${MONTH[m[1]] || m[1]} 20${m[2]}${m[3] ? " (R)" : ""}`;
   return year ? `${s} ${year}` : s;
 }
 
+/** "A-level Paper 2", or for a 2010 to 2016 paper "AS CHEM1 (old spec)". */
 export function paperLabel(item) {
+  if (item.legacy) return `${LEVEL_LABEL[item.level] || ""} ${item.unit || `Unit ${item.paper}`} (old spec)`.trim();
   return `${LEVEL_LABEL[item.level] || ""} Paper ${item.paper}`.trim();
 }
+
+/** Short form for tight lists: "P2" or "CHEM1". */
+export function paperShort(item) {
+  return item.legacy ? (item.unit || `U${item.paper}`) : `P${item.paper}`;
+}
+
+/** Key that keeps an old-spec unit apart from a current paper with the same number. */
+export const paperKey = (item) => item.legacy ? `u${item.paper}` : item.paper;
 
 export function qLabel(item) {
   return `Q${item.q}`;

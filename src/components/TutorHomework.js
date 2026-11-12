@@ -6,7 +6,7 @@ import { T, pctColour } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
 import { Card, CardHeader, PageHeader, Chip, Button, Bar, Avatar, Table, th, td, EmptyState, Notice, Icon, Input, chipToneForPct, StatTile } from "../ui/components";
 import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBank";
-import { seriesLabel, LEVEL_LABEL } from "./ppq/ppqUtils";
+import { seriesLabel, paperLabel } from "./ppq/ppqUtils";
 import { relativeTime } from "../utils/analytics";
 
 const pct = (n, d) => d ? Math.round((n / d) * 100) : null;
@@ -200,7 +200,7 @@ export function TutorHomeworkReview({ authUser, assignmentId }) {
                                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                                     <span style={{ color: T.faint, fontSize: 12, width: 20 }}>{i + 1}</span>
                                     <Chip tone="neutral" style={{ padding: "2px 8px", fontSize: 11 }}>{TYPE_LABEL[it.type]}</Chip>
-                                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{chemFormat(it.topicLabel)}{it.type === "ppq" && <span style={{ color: T.muted, fontWeight: 400 }}> · {LEVEL_LABEL[it.level] || ""} Paper {it.paper} · {seriesLabel(it.series, it.year)} · Q{it.q} · <a className="cm-link" href={`/${a.board}/practise/${it.questionId}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>Open question</a></span>}</span>
+                                    <span style={{ fontSize: 13, fontWeight: 600, flex: 1 }}>{chemFormat(it.topicLabel)}{it.type === "ppq" && <span style={{ color: T.muted, fontWeight: 400 }}> · {paperLabel(it)} · {seriesLabel(it.series, it.year)} · Q{it.q} · <a className="cm-link" href={`/${a.board}/practise/${it.questionId}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>Open question</a></span>}</span>
                                     {r ? (
                                       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                         {r.markedBy === "ai" && <Chip tone={r.confidence === "low" ? "amber" : "neutral"} style={{ fontSize: 11 }}>AI · {r.confidence || "medium"} confidence</Chip>}
