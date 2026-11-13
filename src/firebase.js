@@ -403,7 +403,10 @@ export async function fetchMySubmissions(uid) {
 }
 
 export async function fetchSubmissionsForAssignment(assignmentId, tutorUid) {
-  const snap = await getDocs(query(collection(db, "submissions"), where("tutorId", "==", tutorUid), where("assignmentId", "==", assignmentId)));
+  const q = tutorUid
+    ? query(collection(db, "submissions"), where("tutorId", "==", tutorUid), where("assignmentId", "==", assignmentId))
+    : query(collection(db, "submissions"), where("assignmentId", "==", assignmentId)); // null = any tutor (admins)
+  const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
@@ -520,7 +523,10 @@ export async function saveLessonNote(lessonId, uid, data) {
 }
 
 export async function fetchLessonNotes(lessonId, tutorUid) {
-  const snap = await getDocs(query(collection(db, "lessonNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId)));
+  const q = tutorUid
+    ? query(collection(db, "lessonNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId))
+    : query(collection(db, "lessonNotes"), where("lessonId", "==", lessonId)); // null = any tutor (admins)
+  const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
@@ -552,7 +558,10 @@ export async function savePrivateNote(lessonId, uid, data) {
   return id;
 }
 export async function fetchPrivateNotes(lessonId, tutorUid) {
-  const snap = await getDocs(query(collection(db, "privateNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId)));
+  const q = tutorUid
+    ? query(collection(db, "privateNotes"), where("tutorId", "==", tutorUid), where("lessonId", "==", lessonId))
+    : query(collection(db, "privateNotes"), where("lessonId", "==", lessonId)); // null = any tutor (admins)
+  const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 /** Every private note on one student (profile page). */

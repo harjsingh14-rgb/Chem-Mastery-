@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
   fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
-  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote } from "../firebase";
+  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote, fetchClassAssignments } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs, Icon } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
@@ -57,7 +57,7 @@ function TopicPicker({ board, value, onChange }) {
   );
 }
 
-export function TutorLessonsList({ authUser }) {
+export function TutorLessonsList({ authUser, userProfile }) {
   const navigate = useNavigate();
   const [groups, setGroups] = useState(null);
   const [lessons, setLessons] = useState(null);
@@ -108,7 +108,7 @@ export function TutorLessonsList({ authUser }) {
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {groups && groups.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Lessons belong to a group. Create one on the Overview tab." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
       {groups && groups.length > 0 && <div style={{ marginBottom: 12 }}><Tabs tabs={[{ id: "lessons", label: "Lessons" }, { id: "register", label: "Attendance register" }]} value={tab} onChange={setTab} /></div>}
-      {tab === "register" && groups && groups.length > 0 && <AttendanceRegister uid={uid} groups={groups} lessons={lessons || []} />}
+      {tab === "register" && groups && groups.length > 0 && <AttendanceRegister uid={uid} scope={userProfile?.role === "admin" ? null : uid} groups={groups} lessons={lessons || []} />}
       {tab === "lessons" && showNew && groups && groups.length > 0 && (
         <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 12 }}>
           <CardHeader title="New lesson" sub="Which group, when, and what you covered. You can change the topics afterwards." />
@@ -151,7 +151,7 @@ export function TutorLessonsList({ authUser }) {
 const pctOf = (n, d) => d ? Math.round((n / d) * 100) : null;
 
 /** One group: students down the side, lessons across the top, P / L / A in each cell. */
-function AttendanceRegister({ uid, groups, lessons }) {
+function AttendanceRegister({ uid, scope, groups, lessons }) {
   const navigate = useNavigate();
   const [classId, setClassId] = useState(groups[0]?.code || "");
   const [students, setStudents] = useState(null);
@@ -160,11 +160,11 @@ function AttendanceRegister({ uid, groups, lessons }) {
     if (!classId || !uid) return;
     let cancelled = false;
     setStudents(null);
-    Promise.all([fetchClassStudents(classId, uid), fetchClassLessonNotes(classId, uid)])
+    Promise.all([fetchClassStudents(classId, scope), fetchClassLessonNotes(classId, scope)])
       .then(([st, ns]) => { if (!cancelled) { setStudents(st.sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""))); setNotes(ns); } })
       .catch(() => { if (!cancelled) { setStudents([]); setNotes([]); } });
     return () => { cancelled = true; };
-  }, [classId, uid]);
+  }, [classId, uid, scope]);
   const cols = lessons.filter(l => l.classId === classId).sort((a, b) => (b.date || "").localeCompare(a.date || "")).slice(0, 20);
   const byKey = {}; for (const n of notes) byKey[`${n.lessonId}_${n.uid}`] = n;
   const mark = { present: ["P", T.green, T.greenTint], late: ["L", T.amber, T.amberTint], absent: ["A", T.red, T.redTint] };
@@ -217,6 +217,9 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
   const navigate = useNavigate();
   const uid = authUser?.uid;
   const canSend = can(userProfile, "sendNotes");
+  // Admins see the whole group whoever its tutor is; a tutor sees their own students and notes
+  const isAdmin = userProfile?.role === "admin";
+  const scope = isAdmin ? null : uid;
   const [lesson, setLesson] = useState(null);
   const [students, setStudents] = useState(null);
   const [notes, setNotes] = useState({});      // uid -> saved note
@@ -243,7 +246,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
       try {
         const l = await fetchLesson(lessonId);
         if (!l) { setError("This lesson no longer exists."); return; }
-        const [all, ns, asgs, pn, history] = await Promise.all([fetchClassStudents(l.classId, uid), fetchLessonNotes(lessonId, uid), fetchTutorAssignments(uid), fetchPrivateNotes(lessonId, uid).catch(() => []), fetchClassLessonNotes(l.classId, uid).catch(() => [])]);
+        const [all, ns, asgs, pn, history] = await Promise.all([fetchClassStudents(l.classId, scope), fetchLessonNotes(lessonId, scope), isAdmin ? fetchClassAssignments(l.classId) : fetchTutorAssignments(uid), fetchPrivateNotes(lessonId, scope).catch(() => []), fetchClassLessonNotes(l.classId, scope).catch(() => [])]);
         // A lesson made from a session for chosen students only has those students on it
         const st = Array.isArray(l.studentIds) && l.studentIds.length ? all.filter(s => l.studentIds.includes(s.uid)) : all;
         const dayEnd = new Date(`${l.date}T23:59:59`).getTime();
@@ -259,7 +262,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
           l.homeworkAssignmentId = null; l.homeworkAssignmentTitle = null;
           updateLesson(lessonId, { homeworkAssignmentId: null, homeworkAssignmentTitle: null }).catch(() => {});
         }
-        const sb = last ? await fetchSubmissionsForAssignment(last.id, uid) : [];
+        const sb = last ? await fetchSubmissionsForAssignment(last.id, scope) : [];
         if (cancelled) return;
         setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setLinkedHw(linked); setSubs(sb); setSummary(l.summary || ""); setRecording(l.recording || ""); setHomeworkText(l.homeworkText || "");
         const byUid = {}; for (const n of ns) byUid[n.uid] = n;
@@ -282,7 +285,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
       } catch (e) { if (!cancelled) setError(e.message); }
     })();
     return () => { cancelled = true; };
-  }, [uid, lessonId]);
+  }, [uid, lessonId, scope, isAdmin]);
 
   const say = (msg) => { setFlash(msg); window.clearTimeout(say.t); say.t = window.setTimeout(() => setFlash(null), 3500); };
   const setDraft = (suid, patch) => setDrafts(prev => ({ ...prev, [suid]: { ...prev[suid], ...patch } }));
@@ -290,7 +293,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
   const noteData = (s) => {
     const d = drafts[s.uid] || {};
     return {
-      studentName: s.displayName || s.email || "", classId: lesson.classId, className: lesson.className || null, tutorId: uid,
+      studentName: s.displayName || s.email || "", classId: lesson.classId, className: lesson.className || null, tutorId: notes[s.uid]?.tutorId || uid,
       date: lesson.date, topics: lesson.topics || [], summary: summary.trim() || null, recording: recording.trim() || null, homeworkText: homeworkText.trim() || null, attendance: d.attendance || "present",
       www: (d.www || "").trim(), ebi: (d.ebi || "").trim(), extra: (d.extra || "").trim(), text: (d.text || "").trim(),
       homework: homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null),

@@ -152,7 +152,7 @@ service cloud.firestore {
         && request.resource.data.tutorId == request.auth.uid
         && request.resource.data.classId is string
         && request.resource.data.date is string;
-      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid && may('lessons');
+      allow update, delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin()) && may('lessons');
     }
 
     // Lesson notes: one per student per lesson (doc id lessonId_uid). The
@@ -164,9 +164,9 @@ service cloud.firestore {
       allow create: if isTutor() && may('lessons')
         && request.resource.data.tutorId == request.auth.uid
         && id == request.resource.data.lessonId + '_' + request.resource.data.uid;
-      allow update: if signedIn() && resource.data.tutorId == request.auth.uid && may('lessons')
+      allow update: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin()) && may('lessons')
         && !changed().hasAny(['uid', 'tutorId', 'lessonId']);
-      allow delete: if signedIn() && resource.data.tutorId == request.auth.uid && may('lessons');
+      allow delete: if signedIn() && (resource.data.tutorId == request.auth.uid || isAdmin()) && may('lessons');
     }
 
     // Private tutor notes (doc id lessonId_uid): the tutor's own record of a

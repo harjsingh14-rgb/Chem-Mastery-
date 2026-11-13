@@ -456,7 +456,7 @@ export default function App() {
               : (can(userProfile, "homework") || can(userProfile, "marking") ? <TutorHomeworkList authUser={authUser} userProfile={userProfile} /> : <Locked what="Homework" />))
         : tutorPage === "lessons"
           ? (!can(userProfile, "lessons") ? <Locked what="Lesson notes" />
-              : tutorParam ? <TutorLessonEditor authUser={authUser} userProfile={userProfile} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} />)
+              : tutorParam ? <TutorLessonEditor authUser={authUser} userProfile={userProfile} lessonId={tutorParam} /> : <TutorLessonsList authUser={authUser} userProfile={userProfile} />)
         : tutorPage === "calendar"
           ? <TutorCalendar authUser={authUser} userProfile={userProfile} />
         : tutorPage === "staff"
