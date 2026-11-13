@@ -177,7 +177,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
     if (s.lessonId) { navigate(`/tutor/lessons/${s.lessonId}`); return; }
     setBusy(true); setError(null);
     try {
-      const l = await createLesson(uid, { classId: s.classId, className: s.className, board: s.board, date: s.date, topics: [], sessionId: s.id, studentIds: s.studentIds || null, title: s.title || null });
+      const l = await createLesson(s.tutorId || uid, { classId: s.classId, className: s.className, board: s.board, date: s.date, topics: [], sessionId: s.id, studentIds: s.studentIds || null, title: s.title || null });
       await updateSession(s.id, { lessonId: l.id });
       setSessions(prev => prev.map(x => x.id === s.id ? { ...x, lessonId: l.id } : x));
       navigate(`/tutor/lessons/${l.id}`);

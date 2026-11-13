@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
   fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
-  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote, fetchClassAssignments, fetchAllClasses, fetchAllLessons, fetchAllSessions } from "../firebase";
+  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote, fetchClassAssignments, fetchAllClasses, fetchAllLessons, fetchAllSessions, fetchClass } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs, Icon } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
@@ -96,7 +96,7 @@ export function TutorLessonsList({ authUser, userProfile }) {
     try {
       // Tie the lesson to the calendar session on that day, if there is one without notes yet
       const session = sessions.find(s => s.classId === group.code && s.date === date && !s.lessonId && !s.studentIds && s.status !== "cancelled") || null;
-      const l = await createLesson(uid, { classId: group.code, className: group.name, board: group.board, date, topics, sessionId: session?.id || null });
+      const l = await createLesson(group.tutorId || uid, { classId: group.code, className: group.name, board: group.board, date, topics, sessionId: session?.id || null }); // the group's tutor owns it, whoever creates it
       if (session) await updateSession(session.id, { lessonId: l.id }).catch(() => {});
       navigate(`/tutor/lessons/${l.id}`);
     } catch (e) { setError(e.message); setCreating(false); }
@@ -247,6 +247,12 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
       try {
         const l = await fetchLesson(lessonId);
         if (!l) { setError("This lesson no longer exists."); return; }
+        // A lesson an admin created was stamped with the admin's account; it
+        // belongs to the group's assigned tutor, so move it across on open.
+        if (isAdmin) {
+          const cls = await fetchClass(l.classId).catch(() => null);
+          if (cls?.tutorId && cls.tutorId !== l.tutorId) { await updateLesson(lessonId, { tutorId: cls.tutorId }).catch(() => {}); l.tutorId = cls.tutorId; }
+        }
         const [all, ns, asgs, pn, history] = await Promise.all([fetchClassStudents(l.classId, scope), fetchLessonNotes(lessonId, scope), isAdmin ? fetchClassAssignments(l.classId) : fetchTutorAssignments(uid), fetchPrivateNotes(lessonId, scope).catch(() => []), fetchClassLessonNotes(l.classId, scope).catch(() => [])]);
         // A lesson made from a session for chosen students only has those students on it
         const st = Array.isArray(l.studentIds) && l.studentIds.length ? all.filter(s => l.studentIds.includes(s.uid)) : all;
@@ -270,12 +276,20 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
         // Notes saved before a lesson-level field changed (the recording link
         // added later, say) are brought up to date now, so students see it.
         const level = { summary: l.summary || null, recording: l.recording || null, homeworkText: l.homeworkText || null, topics: l.topics || [], attachments: (l.attachments || []).length ? l.attachments : null };
+        const stale = [];
         for (const n of ns) {
           const patch = {};
           for (const k of Object.keys(level)) if (JSON.stringify(n[k] ?? null) !== JSON.stringify(level[k])) patch[k] = level[k];
-          if (Object.keys(patch).length) { byUid[n.uid] = { ...n, ...patch }; saveLessonNote(lessonId, n.uid, patch).catch(() => {}); }
+          if (Object.keys(patch).length) { byUid[n.uid] = { ...n, ...patch }; stale.push([n, patch]); }
         }
         setNotes(byUid);
+        if (stale.length) {
+          const results = await Promise.all(stale.map(([n, patch]) => saveLessonNote(lessonId, n.uid, patch).then(() => null).catch(e => `${n.studentName || n.uid}: ${e.message}`)));
+          const failed = results.filter(Boolean);
+          if (cancelled) return;
+          if (failed.length) setError(`Could not bring ${failed.length} saved note${failed.length === 1 ? "" : "s"} up to date with the lesson details. ${failed[0]}`);
+          else setFlash(`${stale.length} saved note${stale.length === 1 ? "" : "s"} brought up to date with the lesson details${level.recording ? ", including the recording link" : ""}.`);
+        }
         const pv = {}; for (const n of pn) pv[n.uid] = n;
         setPrivates(pv);
         const prev = {};
@@ -294,7 +308,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
   const noteData = (s) => {
     const d = drafts[s.uid] || {};
     return {
-      studentName: s.displayName || s.email || "", classId: lesson.classId, className: lesson.className || null, tutorId: notes[s.uid]?.tutorId || uid,
+      studentName: s.displayName || s.email || "", classId: lesson.classId, className: lesson.className || null, tutorId: notes[s.uid]?.tutorId || lesson.tutorId || uid,
       date: lesson.date, topics: lesson.topics || [], summary: summary.trim() || null, recording: recording.trim() || null, homeworkText: homeworkText.trim() || null, attendance: d.attendance || "present",
       www: (d.www || "").trim(), ebi: (d.ebi || "").trim(), extra: (d.extra || "").trim(), text: (d.text || "").trim(),
       homework: homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null),

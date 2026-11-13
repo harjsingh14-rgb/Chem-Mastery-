@@ -48,7 +48,7 @@ export default function WeekList({ sessions, classes, tutorUid, tutorName, onLes
     if (s.lessonId) { navigate(`/tutor/lessons/${s.lessonId}`); return; }
     setBusyId(s.id); setError(null);
     try {
-      const l = await createLesson(tutorUid, { classId: s.classId, className: s.className, board: s.board, date: s.date, topics: [], sessionId: s.id, studentIds: s.studentIds || null, title: s.title || null });
+      const l = await createLesson(s.tutorId || groupOf(s)?.tutorId || tutorUid, { classId: s.classId, className: s.className, board: s.board, date: s.date, topics: [], sessionId: s.id, studentIds: s.studentIds || null, title: s.title || null });
       await updateSession(s.id, { lessonId: l.id });
       if (onLessonCreated) onLessonCreated(s.id, l.id);
       navigate(`/tutor/lessons/${l.id}`);
