@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, updateLesson } from "../firebase";
+import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, fetchTutorLessons, updateLesson } from "../firebase";
 import { fmtLessonDay, addDays, isoDate } from "../utils/schedule";
 import { T, boardLabel } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
@@ -180,14 +180,21 @@ export default function HomeworkBuilder({ authUser }) {
     setSaving(true); setError(null);
     try {
       const dueAt = due ? new Date(due + "T23:59:00").getTime() : null;
+      // Set from the Homework tab: attach to the group's most recent lesson that
+      // has no homework yet, so it shows under that lesson's notes too.
+      let target = lesson;
+      if (!target) {
+        try {
+          const today = isoDate(new Date());
+          target = (await fetchTutorLessons(authUser.uid)).filter(l => l.classId === cls.code && !l.homeworkAssignmentId && l.date <= today).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+        } catch { target = null; }
+      }
       const made = await createAssignment(authUser.uid, {
         title: title.trim(), classId: cls.code, board, minutes: Number(minutes) || tot.minutes, dueAt, note: note.trim() || null,
-        items, summary: describeItems(items), maxScore: tot.marks, lessonId: lesson?.id || null,
+        items, summary: describeItems(items), maxScore: tot.marks, lessonId: target?.id || null,
       });
-      if (lesson) {
-        await updateLesson(lesson.id, { homeworkAssignmentId: made.id, homeworkAssignmentTitle: title.trim() }).catch(() => {});
-        navigate(`/tutor/lessons/${lesson.id}`);
-      } else navigate("/tutor/homework");
+      if (target) await updateLesson(target.id, { homeworkAssignmentId: made.id, homeworkAssignmentTitle: title.trim() }).catch(() => {});
+      if (lesson) navigate(`/tutor/lessons/${lesson.id}`); else navigate("/tutor/homework");
     } catch (e) { setError(e.message || "Could not set the homework"); }
     setSaving(false);
   };

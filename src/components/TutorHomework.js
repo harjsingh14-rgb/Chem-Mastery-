@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery } from "../firebase";
+import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery, updateLesson } from "../firebase";
 import TutorPpqQueries from "./ppq/TutorPpqQueries";
 import { T, pctColour } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
@@ -88,11 +88,11 @@ export function TutorHomeworkReview({ authUser, userProfile, assignmentId }) {
   const load = () => {
     if (!authUser?.uid || !assignmentId) return;
     fetchAssignment(assignmentId).then(async asg => {
-      if (!asg) { setError("This homework no longer exists."); return; }
+      if (!asg) { setError("This homework has been deleted. Set a new one from the Homework tab."); return; }
       setA(asg);
       const [st, sb] = await Promise.all([fetchClassStudents(asg.classId, authUser.uid), fetchSubmissionsForAssignment(assignmentId, authUser.uid)]);
       setStudents(st); setSubs(sb);
-    }).catch(e => setError(e.message));
+    }).catch(e => setError(/permission/i.test(e.message) ? "This homework has been deleted, or it was set by another tutor. Set a new one from the Homework tab." : e.message));
   };
   useEffect(load, [authUser, assignmentId]); // eslint-disable-line
 
@@ -147,10 +147,15 @@ export function TutorHomeworkReview({ authUser, userProfile, assignmentId }) {
   const remove = async () => {
     if (!window.confirm("Delete this homework? Students' submissions stay in the database but will no longer be shown.")) return;
     setBusy(true);
-    try { await deleteAssignment(a.id); navigate("/tutor/homework"); } catch (e) { setError(e.message); setBusy(false); }
+    try {
+      await deleteAssignment(a.id);
+      // The lesson it was set from should offer to set homework again
+      if (a.lessonId) await updateLesson(a.lessonId, { homeworkAssignmentId: null, homeworkAssignmentTitle: null }).catch(() => {});
+      navigate("/tutor/homework");
+    } catch (e) { setError(e.message); setBusy(false); }
   };
 
-  if (error) return <><PageHeader eyebrow="Homework" title="Homework" /><Notice tone="red">{error}</Notice></>;
+  if (error) return <><PageHeader eyebrow="Homework" title="Homework" right={<Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>} /><Notice tone="red">{error}</Notice></>;
   if (!a) return <PageHeader eyebrow="Homework" title="Loading…" />;
 
   return (

@@ -225,6 +225,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
   const [homeworkText, setHomeworkText] = useState("");
   const [lastHw, setLastHw] = useState(null);
   const [nextHw, setNextHw] = useState(null);
+  const [linkedHw, setLinkedHw] = useState(null); // the homework set from (or for) this lesson, if it still exists
   const [subs, setSubs] = useState([]);
   const [busy, setBusy] = useState({});        // uid -> "save" | "send"
   const [error, setError] = useState(null);
@@ -246,9 +247,18 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
         const forGroup = asgs.filter(a => a.classId === l.classId);
         const last = forGroup.filter(a => a.dueAt && a.dueAt <= dayEnd).sort((a, b) => b.dueAt - a.dueAt)[0] || null;
         const next = forGroup.filter(a => a.dueAt && a.dueAt > dayEnd).sort((a, b) => a.dueAt - b.dueAt)[0] || null;
+        // This lesson's homework: the one it was set from, else one set for this
+        // group after the lesson from the Homework tab. A link to a homework that
+        // has since been deleted is cleared so the button offers to set one again.
+        const linked = forGroup.find(a => a.id === l.homeworkAssignmentId) || forGroup.find(a => a.lessonId === lessonId)
+          || forGroup.filter(a => !a.lessonId && (a.clientTime || 0) >= new Date(`${l.date}T00:00:00`).getTime()).sort((a, b) => (a.clientTime || 0) - (b.clientTime || 0))[0] || null;
+        if (l.homeworkAssignmentId && !forGroup.some(a => a.id === l.homeworkAssignmentId)) {
+          l.homeworkAssignmentId = null; l.homeworkAssignmentTitle = null;
+          updateLesson(lessonId, { homeworkAssignmentId: null, homeworkAssignmentTitle: null }).catch(() => {});
+        }
         const sb = last ? await fetchSubmissionsForAssignment(last.id, uid) : [];
         if (cancelled) return;
-        setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setSubs(sb); setSummary(l.summary || ""); setRecording(l.recording || ""); setHomeworkText(l.homeworkText || "");
+        setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setLinkedHw(linked); setSubs(sb); setSummary(l.summary || ""); setRecording(l.recording || ""); setHomeworkText(l.homeworkText || "");
         const byUid = {}; for (const n of ns) byUid[n.uid] = n;
         setNotes(byUid);
         const pv = {}; for (const n of pn) pv[n.uid] = n;
@@ -358,8 +368,8 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
 
       <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
         <CardHeader title="What we covered" sub="Goes into every note from this lesson" right={<>
-          {lesson.homeworkAssignmentId
-            ? <Button size="sm" icon="checkSquare" onClick={() => navigate(`/tutor/homework/${lesson.homeworkAssignmentId}`)} title={lesson.homeworkAssignmentTitle || ""}>Homework set · open</Button>
+          {linkedHw
+            ? <Button size="sm" icon="checkSquare" onClick={() => navigate(`/tutor/homework/${linkedHw.id}`)} title={linkedHw.title || ""}>Homework set · open</Button>
             : <Button size="sm" variant="accent" icon="plus" onClick={() => navigate(`/tutor/homework/new?lesson=${lessonId}`)} disabled={!(lesson.topics || []).length} title={(lesson.topics || []).length ? "Drafts a homework from the ticked topics for you to check and send" : "Tick the spec topics first"}>Set homework from this lesson</Button>}
           <Button size="sm" onClick={() => setEditTopics(v => !v)}>{editTopics ? "Done" : (lesson.topics || []).length ? "Edit spec topics" : "Tick spec topics"}</Button>
         </>} />
