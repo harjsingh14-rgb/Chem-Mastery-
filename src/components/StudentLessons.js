@@ -80,6 +80,43 @@ export function LessonNotesCard({ authUser, board }) {
   );
 }
 
+const endOf = (hhmm, minutes) => {
+  if (!hhmm) return "";
+  const [h, m] = hhmm.split(":").map(Number);
+  const t = h * 60 + m + (minutes || 0);
+  return fmtTime(`${String(Math.floor(t / 60) % 24).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`);
+};
+
+/** One upcoming lesson: a row that opens to its time, note and Zoom link. */
+function UpcomingRow({ o, live, open, onToggle, first, who }) {
+  return (
+    <div style={{ borderTop: first ? "none" : `1px solid ${T.line}` }}>
+      <button type="button" onClick={onToggle} aria-expanded={open}
+        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "10px 0", border: "none", background: "none", cursor: "pointer", textAlign: "left", color: T.ink }}>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 3 }}>
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+            <span style={{ fontSize: 13, fontWeight: live ? 700 : 500, color: o.cancelled ? T.faint : T.ink, textDecoration: o.cancelled ? "line-through" : "none" }}>{fmtDate(o.date)} · {fmtTime(o.time)}</span>
+            {o.cancelled ? <Chip tone="red">Cancelled</Chip> : live ? <Chip tone="accent">Next</Chip> : o.named ? <Chip tone="indigo">Extra session</Chip> : null}
+          </div>
+          {!open && (o.title || o.note) && <span style={{ fontSize: 12, color: T.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.title || o.note}</span>}
+        </div>
+        <Icon name="chevronDown" size={16} color={T.muted} style={{ flexShrink: 0, transform: open ? "rotate(180deg)" : "none", transition: "transform .15s" }} />
+      </button>
+      {open && (
+        <div style={{ paddingBottom: 12, display: "flex", flexDirection: "column", gap: 8, fontSize: 13, color: T.body }}>
+          <div>{fmtTime(o.time)} to {endOf(o.time, o.minutes)}{o.title ? ` · ${o.title}` : ""}{o.named ? ` · only for ${who}` : ""}</div>
+          {o.note && <div style={{ color: T.muted }}>{o.note}</div>}
+          {o.cancelled
+            ? <div style={{ color: T.muted }}>This lesson is cancelled.</div>
+            : o.zoomLink
+              ? <div><Button size="sm" variant="primary" icon="play" onClick={() => window.open(o.zoomLink, "_blank", "noopener")}>Join on Zoom</Button></div>
+              : <div style={{ color: T.muted }}>No Zoom link yet. Your tutor adds it to the group and it appears here.</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /** The next few lessons from the calendar, for the student's and the parent's Lessons pages. */
 export function UpcomingLessons({ uid, classId, who = "you" }) {
   const { cls, sessions } = useStudentCalendar(uid, classId);
@@ -87,22 +124,16 @@ export function UpcomingLessons({ uid, classId, who = "you" }) {
   const rows = loading ? [] : nextLessonRows(cls, sessions, 6);
   const live = rows.find(r => !r.cancelled);
   const slots = slotsOf(cls);
+  const [open, setOpen] = useState(null); // row key; the next lesson is open until you tap another
+  const openKey = open ?? live?.key ?? null;
   return (
-    <Card style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
-      <CardHeader title="Coming up" sub={slots.length ? `Usually ${describeSlots(slots)}. Sessions listed only for ${who} are marked.` : "Lessons and sessions on the calendar"}
+    <Card style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 14 }}>
+      <CardHeader title="Coming up" sub={slots.length ? `Usually ${describeSlots(slots)}. Tap a lesson for the Zoom link.` : "Lessons and sessions on the calendar"}
         right={live?.zoomLink ? <Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join on Zoom</Button> : null} />
       {loading && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
       {!loading && rows.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Nothing is on the calendar yet.</span>}
-      {rows.map((o, i) => (
-        <div key={o.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap", borderTop: i ? `1px solid ${T.line}` : "none", paddingTop: i ? 8 : 0 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <span style={{ fontSize: 13, fontWeight: o === live ? 700 : 500, color: o.cancelled ? T.faint : T.ink, textDecoration: o.cancelled ? "line-through" : "none" }}>{fmtDate(o.date)} · {fmtTime(o.time)}{o.title ? ` · ${o.title}` : ""}</span>
-            {(o.note || o.named) && <span style={{ fontSize: 11, color: T.muted }}>{[o.named ? `Only for ${who}` : null, o.note].filter(Boolean).join(" · ")}</span>}
-          </div>
-          <span>{o.cancelled ? <Chip tone="red">Cancelled</Chip> : o === live ? <Chip tone="accent">Next</Chip> : o.named ? <Chip tone="indigo">Extra session</Chip> : null}</span>
-        </div>
-      ))}
-      <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10 }}>
+      {rows.map((o, i) => <UpcomingRow key={o.key} o={o} live={o === live} first={i === 0} open={openKey === o.key} onToggle={() => setOpen(openKey === o.key ? "" : o.key)} who={who} />)}
+      <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10, marginTop: 6 }}>
         <CalendarSubscribe who={who === "you" ? "Your lessons" : `${who}'s lessons`} />
       </div>
     </Card>
