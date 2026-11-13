@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, fetchTutorLessons, updateLesson } from "../firebase";
+import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, fetchTutorLessons, updateLesson, fetchOpenErrorLogForGroup } from "../firebase";
+import { typeShort, isDue } from "../utils/errorLog";
 import { fmtLessonDay, addDays, isoDate } from "../utils/schedule";
 import { T, boardLabel } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
@@ -54,6 +55,7 @@ export default function HomeworkBuilder({ authUser }) {
   const [docs, setDocs] = useState({});             // qid -> ppq document (loaded when parts are opened)
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [logEntries, setLogEntries] = useState([]);   // the group's open error-log entries
   // "Set homework from this lesson": /tutor/homework/new?lesson=ID prefills the
   // group, the lesson's spec topics, a title, the due date (the day before the
   // next lesson) and fills the questions once, for the tutor to check and send.
@@ -69,6 +71,14 @@ export default function HomeworkBuilder({ authUser }) {
 
   const cls = classes?.find(c => c.code === classId);
   const board = cls?.board || "aqa";
+
+  const classCode = cls?.code || null;
+  useEffect(() => {
+    if (!classCode) { setLogEntries([]); return undefined; }
+    let alive = true;
+    fetchOpenErrorLogForGroup(classCode).then(d => alive && setLogEntries(d)).catch(() => alive && setLogEntries([]));
+    return () => { alive = false; };
+  }, [classCode]);
 
   useEffect(() => {
     if (!lessonId || !classes || classes.length === 0 || !authUser?.uid) return undefined;
@@ -134,6 +144,19 @@ export default function HomeworkBuilder({ authUser }) {
     return list.slice().sort((a, b) => (a.topics?.[0] || "").localeCompare(b.topics?.[0] || "", undefined, { numeric: true }) || (b.year || 0) - (a.year || 0) || (a.q || 0) - (b.q || 0));
   }, [ppqPool, search]);
   const chosen = useMemo(() => new Set(items.filter(it => it.type === "ppq").map(it => it.questionId)), [items]);
+  // Past-paper questions the group's students have in their error logs, most
+  // retests due first, so the tutor can set them again two weeks on.
+  const retestQs = useMemo(() => {
+    const byQ = {};
+    for (const e of logEntries) {
+      const q = ppq.items.find(it => it.id === e.questionId);
+      if (!q) continue;
+      const r = byQ[q.id] || (byQ[q.id] = { q, students: new Set(), due: 0, cats: {} });
+      r.students.add(e.uid); if (isDue(e)) r.due++; r.cats[e.category] = (r.cats[e.category] || 0) + 1;
+    }
+    return Object.values(byQ).map(r => ({ ...r, n: r.students.size, cats: Object.entries(r.cats).sort((a, b) => b[1] - a[1]).map(([c]) => typeShort(c)) }))
+      .sort((a, b) => b.due - a.due || b.n - a.n);
+  }, [logEntries, ppq.items]);
 
   const flip = (set, id) => set(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   const anySource = shownQuestions.length > 0;
@@ -230,6 +253,30 @@ export default function HomeworkBuilder({ authUser }) {
                 <textarea id="hw-note" value={note} onChange={e => setNote(e.target.value)} rows={2} placeholder="e.g. Show your working in the calculations. Method marks are given even if the final value is off."
                   style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, fontSize: 14, color: T.ink, resize: "vertical", fontFamily: "inherit" }} /></div>
             </Card>
+
+            {retestQs.length > 0 && (
+              <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <CardHeader title="Retest from the error log" sub="Questions this group's students lost marks on and filed. Those marked due were logged two weeks or more ago."
+                  right={<Button size="sm" onClick={() => setItems(prev => [...prev, ...retestQs.filter(r => r.due > 0 && !chosen.has(r.q.id)).map(r => ppqItem(r.q))])} disabled={!retestQs.some(r => r.due > 0 && !chosen.has(r.q.id))}>Tick all due</Button>} />
+                <div style={{ border: `1px solid ${T.line}`, borderRadius: T.radiusSm, maxHeight: 260, overflowY: "auto" }}>
+                  {retestQs.map((r, i) => {
+                    const on = chosen.has(r.q.id);
+                    return (
+                      <label key={r.q.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "7px 12px", cursor: "pointer", fontSize: 12, borderTop: i ? `1px solid ${T.line}` : "none", background: on ? T.accentTint : "transparent" }}>
+                        <input type="checkbox" checked={on} onChange={() => toggleQuestion(r.q)} style={{ accentColor: T.accent }} />
+                        <span style={{ flex: 1, minWidth: 0 }}>
+                          <span style={{ fontWeight: 600, color: T.ink }}>{chemFormat(r.q.title) || `Question ${r.q.q}`}</span>
+                          <span style={{ display: "block", color: T.muted, fontSize: 11 }}>{r.n} student{r.n === 1 ? "" : "s"} · {r.cats.join(", ")} · {LEVEL_LABEL[r.q.level] || ""} {seriesLabel(r.q.series, r.q.year)} {paperShort(r.q)} Q{r.q.q}</span>
+                        </span>
+                        {r.due > 0 ? <Chip tone="red" style={{ padding: "2px 8px", fontSize: 11 }}>{r.due} due</Chip> : <Chip tone="neutral" style={{ padding: "2px 8px", fontSize: 11 }}>Not yet due</Chip>}
+                        <span style={{ color: T.muted, whiteSpace: "nowrap" }}>{r.q.totalMarks} mk</span>
+                        <a href={`/${board}/practise/${r.q.id}`} target="_blank" rel="noopener noreferrer" className="cm-link" onClick={e => e.stopPropagation()} style={{ fontSize: 11, whiteSpace: "nowrap" }}>View</a>
+                      </label>
+                    );
+                  })}
+                </div>
+              </Card>
+            )}
 
             <Card style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <CardHeader title="Past-paper questions" sub={`${boardLabel(board)} papers, marked by the AI examiner against the real mark scheme`} right={<YearToggle value={year} onChange={setYear} />} />

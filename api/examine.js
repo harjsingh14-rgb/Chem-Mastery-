@@ -1,5 +1,6 @@
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
+const { ERROR_TYPES_PROMPT, cleanErrorType, cleanErrorNote } = require("./_errorTypes");
 
 // Marking conventions agreed with HSJ Tuition. These are quoted verbatim in
 // the prompt so the examiner applies the same rules as a real mark scheme.
@@ -48,6 +49,8 @@ MARKING INSTRUCTIONS:
 
 ${FEEDBACK_RULES}
 
+${ERROR_TYPES_PROMPT}
+
 Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 {
   "level": <integer 0 to 3>,
@@ -55,7 +58,9 @@ Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
   "coveredPoints": [<boolean for each indicative content point listed above, in order>],
   "feedback": "<2 to 3 sentences: acknowledge what they got right, state the level assigned and why, and describe in general terms the kind of thing missing, without giving it away>",
   "modelAnswer": "<concise model student answer covering all key indicative content in full connected sentences>",
-  "confidence": "<high | medium | low: how confident you are in this mark>"
+  "confidence": "<high | medium | low: how confident you are in this mark>",
+  "errorType": <one of the error type ids, or null for full marks>,
+  "errorNote": <string or null>
 }`;
 }
 
@@ -83,13 +88,17 @@ MARKING INSTRUCTIONS:
 
 ${FEEDBACK_RULES}
 
+${ERROR_TYPES_PROMPT}
+
 Return ONLY valid JSON (no markdown code fences, no text outside the JSON):
 {
   "awarded": [<boolean for each mark scheme point listed above, in order>],
   "score": <integer 0 to ${maxMarks}>,
   "feedback": "<2 to 3 sentences in examiner language, following the FEEDBACK RULES>",
   "modelAnswer": "<full-mark answer>",
-  "confidence": "<high | medium | low>"
+  "confidence": "<high | medium | low>",
+  "errorType": <one of the error type ids, or null for full marks>,
+  "errorNote": <string or null>
 }`;
 }
 
@@ -163,6 +172,9 @@ module.exports = async function handler(req, res) {
     const n = Array.isArray(markScheme) ? markScheme.length : 0;
     result.score = Math.max(0, Math.min(max, parseInt(result.score, 10) || 0));
     if (!["high", "medium", "low"].includes(result.confidence)) result.confidence = "medium";
+    // Suggested error-log category: only meaningful when marks were lost
+    result.errorType = result.score < max ? cleanErrorType(result.errorType) : null;
+    result.errorNote = result.errorType ? cleanErrorNote(result.errorNote) : null;
 
     if (usePoints) {
       if (!Array.isArray(result.awarded) || result.awarded.length !== n) result.awarded = Array.from({ length: n }, () => false);

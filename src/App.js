@@ -8,6 +8,7 @@ import { T, BOARDS, BOARD_IDS, boardLabel } from "./ui/theme";
 import chemFormat from "./utils/chemFormat";
 import { Button, Card, Chip, Notice, PageHeader, EmptyState, Icon, IconTile } from "./ui/components";
 import { invalidateAttempts } from "./hooks/useAttempts";
+import { settleRetests } from "./hooks/useErrorLog";
 import { MCQ_COUNT } from "./data/mcq-meta";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER, EDEXCEL_SECTIONS, EDEXCEL_TOPIC_ORDER } from "./data/sections";
@@ -93,6 +94,8 @@ export default function App() {
     if (!authUser) return;
     recordAttempt(authUser, userProfile, data);
     invalidateAttempts();
+    // A correct answer to a question in the error log, a day or more after it was logged, closes it
+    settleRetests(authUser.uid, data);
   }, [authUser, userProfile]);
 
   const LockedOverlay = ({ style }) => (
@@ -539,7 +542,7 @@ export default function App() {
 
   // Past-paper question: focused mode, no tabs
   if (screen === "topics" && topicsTab === "practise" && routeParam) return renderShell(
-    <PastPaperQuestion board={board} qid={routeParam} authUser={authUser} logAttempt={logAttempt} onExit={() => navigate(`/${board}/homework`)} />,
+    <PastPaperQuestion board={board} qid={routeParam} authUser={authUser} userProfile={userProfile} logAttempt={logAttempt} onExit={() => navigate(`/${board}/homework`)} />,
     { focus: true, back: () => navigate(`/${board}/homework`), backLabel: "Back to homework", title: "Past-paper question", subtitle: boardLabel(board) }
   );
 
@@ -897,13 +900,13 @@ export default function App() {
         <PathwaysTab board={board} />
       )}
       {topicsTab === "exam" && (
-        <ExamStyleTab board={board} logAttempt={logAttempt} />
+        <ExamStyleTab board={board} logAttempt={logAttempt} authUser={authUser} userProfile={userProfile} />
       )}
       {topicsTab === "extended" && (
-        <ExtendedTab board={board} hasFullAccess={hasFullAccess} logActivity={logActivity} logAttempt={logAttempt} LockedOverlay={LockedOverlay} />
+        <ExtendedTab board={board} hasFullAccess={hasFullAccess} logActivity={logActivity} logAttempt={logAttempt} LockedOverlay={LockedOverlay} authUser={authUser} userProfile={userProfile} />
       )}
       {topicsTab === "calc" && (
-        <CalcTab board={board} hasFullAccess={hasFullAccess} FREE_CALC_IDS={FREE_CALC_IDS} logActivity={logActivity} logScore={logScore} logAttempt={logAttempt} LockedOverlay={LockedOverlay} />
+        <CalcTab board={board} hasFullAccess={hasFullAccess} FREE_CALC_IDS={FREE_CALC_IDS} logActivity={logActivity} logScore={logScore} logAttempt={logAttempt} LockedOverlay={LockedOverlay} authUser={authUser} userProfile={userProfile} />
       )}
 
       {/* ── MECHANISMS TAB ────────────────────────────────── */}

@@ -121,6 +121,63 @@ export async function fetchAttemptsForUser(uid, max = 1000) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => tsToMs(b) - tsToMs(a));
 }
 
+// =====================================================================
+// Error log: one document per lost-mark slip a student has confirmed
+// (src/utils/errorLog.js). Retests are settled in hooks/useErrorLog.js.
+// =====================================================================
+export async function addErrorLogEntry(user, profile, data) {
+  if (!user?.uid) throw new Error("Not signed in");
+  const now = Date.now();
+  const entry = JSON.parse(JSON.stringify({
+    uid: user.uid,
+    tutorId: profile?.tutorId || null,
+    classId: profile?.classId || null,
+    board: data.board || null,
+    source: data.source || "revision",          // "homework" | "ppq" | "revision"
+    type: data.type || null,                     // item type: mcq, calc, short, extended, exam, ppq
+    questionId: String(data.questionId),
+    partLabel: data.partLabel || null,
+    topic: data.topic || null,
+    topicLabel: data.topicLabel || null,
+    title: data.title || null,
+    category: data.category,                     // one of ERROR_TYPES ids
+    suggested: data.suggested || null,           // what the examiner suggested
+    note: data.note || null,
+    marksLost: data.marksLost ?? null,
+    maxMarks: data.maxMarks ?? null,
+    assignmentId: data.assignmentId || null,
+    retestPath: data.retestPath || null,
+    status: "open",
+    retestDue: now + 14 * 24 * 60 * 60 * 1000,
+    retestCount: 0,
+    retestAt: null,
+    clientTime: now,
+  }));
+  const ref = await addDoc(collection(db, "errorLog"), { ...entry, createdAt: serverTimestamp() });
+  return { id: ref.id, ...entry };
+}
+
+export async function fetchErrorLogForUser(uid, max = 2000) {
+  const q = query(collection(db, "errorLog"), where("uid", "==", uid), limit(max));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.clientTime || 0) - (a.clientTime || 0));
+}
+
+/** Open entries across one group, for the homework builder's retest picks. */
+export async function fetchOpenErrorLogForGroup(classId, max = 3000) {
+  const q = query(collection(db, "errorLog"), where("classId", "==", classId), where("status", "==", "open"), limit(max));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export async function updateErrorLogEntry(id, patch) {
+  await updateDoc(doc(db, "errorLog", id), { ...patch, updatedAt: serverTimestamp() });
+}
+
+export async function deleteErrorLogEntry(id) {
+  await deleteDoc(doc(db, "errorLog", id));
+}
+
 export async function fetchAttemptsForTutor(tutorId, max = 5000) {
   const q = query(collection(db, "attempts"), where("tutorId", "==", tutorId), limit(max));
   const snap = await getDocs(q);

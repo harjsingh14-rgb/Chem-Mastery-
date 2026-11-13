@@ -23,7 +23,7 @@ const loadResults = (board) => { try { return JSON.parse(localStorage.getItem(st
  * and the mark scheme opens once the whole question is complete. Progress is
  * kept on this device; first attempts feed the student's Progress page.
  */
-export default function ExamStyleTab({ board, logAttempt }) {
+export default function ExamStyleTab({ board, logAttempt, authUser, userProfile }) {
   const [topic, setTopic] = useState(null);
   const [tier, setTier] = useState(0);              // 0 = all
   const [qid, setQid] = useState(null);
@@ -66,7 +66,8 @@ export default function ExamStyleTab({ board, logAttempt }) {
         <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ fontFamily: T.display, fontWeight: 800, fontSize: 20 }}>{chemFormat(q.title)}</div>
           {!r && <Notice tone="neutral" style={{ fontSize: 13 }}>Answer each part and press <b>Mark</b>. Hints open after your first go at a part and cost nothing. The mark scheme, worked solution and model answer open once every part is done.</Notice>}
-          <ExamItem q={q} item={{ key: q.id, marks }} result={r} readOnly={false} submitted={complete} onRecord={(res, kind) => save(q.id, res, kind)} queries={{}} onQuery={null} />
+          <ExamItem q={q} item={{ key: q.id, marks }} result={r} readOnly={false} submitted={complete} onRecord={(res, kind) => save(q.id, res, kind)} queries={{}} onQuery={null}
+            log={authUser ? { authUser, userProfile, entry: { source: "revision", questionId: q.id, topic: q.topic, topicLabel: q.title, title: q.title, board, retestPath: `/${board}/exam` } } : null} />
           {complete && (
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingTop: 8, borderTop: `1px solid ${T.line}` }}>
               <Button onClick={() => retry(q.id)}>Try this question again</Button>

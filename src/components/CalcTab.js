@@ -4,6 +4,7 @@ import track from "../utils/track";
 import { T } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
 import { Card, Chip, Button, Bar, Notice, EmptyState } from "../ui/components";
+import ErrorLogPrompt from "./ErrorLogPrompt";
 import { YearToggle } from "./McqTab";
 
 const DIFF = {
@@ -13,7 +14,7 @@ const DIFF = {
   exam: { label: "Exam style", tone: "indigo", colour: T.indigo, desc: "past-paper difficulty" },
 };
 
-export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivity, logScore, logAttempt }) {
+export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivity, logScore, logAttempt, authUser, userProfile }) {
   const [calcTopic, setCalcTopic] = useState(null);
   const [calcYear, setCalcYear] = useState("as");
   const [calcDifficulty, setCalcDifficulty] = useState(null);
@@ -216,6 +217,8 @@ export default function CalcTab({ board, hasFullAccess, FREE_CALC_IDS, logActivi
             <Notice tone={isCorrect ? "green" : "red"} style={{ fontWeight: 600, fontSize: 14 }}>
               {isCorrect ? "Correct" : "Not quite"}{!isCorrect && <span style={{ fontWeight: 500, marginLeft: 8 }}>Answer: {q.answer} {chemFormat(q.unit)}</span>}
             </Notice>
+            <ErrorLogPrompt authUser={authUser} userProfile={userProfile} suggested={null} note={null} lost={isCorrect ? 0 : 1} maxMarks={1}
+              entry={{ source: "revision", type: "calc", questionId: q.id, topic: calcTopic, topicLabel: set.title, title: set.title, board, retestPath: `/${board}/calc` }} />
             <span style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.8 }}>Worked solution</span>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {q.steps.map((step, si) => (

@@ -16,6 +16,7 @@
 //   { action: "query", qid, part, note }                      student asks their tutor to check a part's mark
 //   { action: "reply", attemptId, part, reply, score? }       tutor (or admin) answers and may adjust the part's score
 const fb = require("./_firebaseAdmin");
+const { ERROR_TYPES_PROMPT, cleanErrorType, cleanErrorNote } = require("./_errorTypes");
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
 const mail = require("./_email");
@@ -76,10 +77,13 @@ ${FEEDBACK_RULES}
 
 For each part decide, for every mark scheme point in order, whether the student earns it, then total the marks for that part (capped at the marks available). For levels-of-response parts with indicative content, judge the level holistically and set "awarded" to which indicative points were covered. Then write one or two sentences of overall feedback for the whole question in the same style.
 
+${ERROR_TYPES_PROMPT}
+For a part that was not attempted use "timing".
+
 Return ONLY a JSON object, no markdown, with exactly this shape:
 {
   "parts": [
-    { "label": "<part label exactly as given>", "score": <integer>, "awarded": [<boolean per mark scheme point, in order>], "feedback": "<one or two sentences following the FEEDBACK RULES, or an empty string if the part was not attempted>", "attempted": <boolean> }
+    { "label": "<part label exactly as given>", "score": <integer>, "awarded": [<boolean per mark scheme point, in order>], "feedback": "<one or two sentences following the FEEDBACK RULES, or an empty string if the part was not attempted>", "attempted": <boolean>, "errorType": <error type id or null>, "errorNote": <string or null> }
   ],
   "overall": "<one or two sentences>",
   "confidence": "<high | medium | low>"
@@ -133,7 +137,8 @@ function tidy(result, doc) {
     if (n >= p.marks) score = Math.min(score, awarded.filter(Boolean).length);
     const attempted = r.attempted === undefined ? score > 0 || awarded.some(Boolean) : !!r.attempted;
     total += score;
-    return { label: p.label, marks: p.marks, score, awarded, attempted, feedback: typeof r.feedback === "string" ? r.feedback : "" };
+    const errorType = score < p.marks ? (cleanErrorType(r.errorType) || (!attempted ? "timing" : null)) : null;
+    return { label: p.label, marks: p.marks, score, awarded, attempted, feedback: typeof r.feedback === "string" ? r.feedback : "", errorType, errorNote: errorType ? cleanErrorNote(r.errorNote) : null };
   });
   return {
     parts, score: Math.min(total, doc.totalMarks || total), totalMarks: doc.totalMarks,
@@ -242,7 +247,7 @@ module.exports = async function handler(req, res) {
     const latest = {
       score: result.score, at: now, mode, model: raw.model,
       hintsUsed: Object.fromEntries(Object.entries(hintsUsed).map(([k, v]) => [partKey(k), Math.max(0, parseInt(v, 10) || 0)])),
-      parts: Object.fromEntries(result.parts.map(p => [partKey(p.label), { answer: answers[p.label] ? String(answers[p.label]).slice(0, 4000) : null, score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted }])),
+      parts: Object.fromEntries(result.parts.map(p => [partKey(p.label), { answer: answers[p.label] ? String(answers[p.label]).slice(0, 4000) : null, score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, errorType: p.errorType || null, errorNote: p.errorNote || null }])),
       overall: result.overall,
     };
     const attemptDoc = {

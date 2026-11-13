@@ -9,6 +9,7 @@ import CommunityCard from "./CommunityCard";
 import { useHomework, HomeworkRow } from "./StudentHomework";
 import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection } from "../utils/analytics";
+import { ErrorLogCard } from "./ErrorLogCard";
 
 const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
 const longDate = () => new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
@@ -155,6 +156,8 @@ export default function StudentDashboard({ board, authUser, userProfile, current
               <span style={{ fontSize: 12, color: T.muted }}>Video explanations for weak topics will link here as the library grows.</span>
             </div>
           </Card>
+
+          <ErrorLogCard authUser={authUser} board={board} />
 
           <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <CardHeader title="Strengths" />

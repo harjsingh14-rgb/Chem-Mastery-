@@ -8,6 +8,7 @@ import { fetchUserProfiles, fetchClass, fetchStudentLessonNotes, fetchStudentPri
 import { T, boardLabel, pctColour } from "../ui/theme";
 import { Card, CardHeader, Chip, StatTile, Tabs, EmptyState, Notice, Table, th, td, Button, Input, Icon, AccuracyBar, chipToneForPct } from "../ui/components";
 import { summarise, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
+import { TutorErrorLog } from "./ErrorLogCard";
 import { fmtTime, describeSlots, slotsOf, sessionEndMs, fmtLessonDay } from "../utils/schedule";
 import { NoteBody } from "./StudentLessons";
 import { useHomework } from "./StudentHomework";
@@ -177,6 +178,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
                       </div>
                     ))}
                   </Card>
+                  <TutorErrorLog uid={uid} />
                   <Card style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     <CardHeader title="Recent answers" />
                     {sum.recent.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Nothing yet.</span>}

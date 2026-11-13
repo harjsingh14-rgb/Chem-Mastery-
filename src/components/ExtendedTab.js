@@ -5,8 +5,9 @@ import track from "../utils/track";
 import { T } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
+import ErrorLogPrompt from "./ErrorLogPrompt";
 
-export default function ExtendedTab({ board, hasFullAccess, logActivity, logAttempt }) {
+export default function ExtendedTab({ board, hasFullAccess, logActivity, logAttempt, authUser, userProfile }) {
   const [extCategory, setExtCategory] = useState(null);
   const [extIndex, setExtIndex] = useState(0);
   const [extQPicker, setExtQPicker] = useState(false);
@@ -236,6 +237,8 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
                   </div>
                 </div>
                 <div style={{ fontSize: 14, lineHeight: 1.6 }}>{chemFormat(extAiResult.feedback)}</div>
+                <ErrorLogPrompt authUser={authUser} userProfile={userProfile} suggested={extAiResult.errorType || null} note={extAiResult.errorNote || null} lost={q.marks - (extAiResult.score || 0)} maxMarks={q.marks}
+                  entry={{ source: "revision", type: "extended", questionId: q.id, topic: q.category, topicLabel: q.category, title: q.category, board, retestPath: `/${board}/extended` }} />
               </Card>
             )}
 

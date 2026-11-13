@@ -7,6 +7,7 @@ import PastPaperQuestion from "./ppq/PastPaperQuestion";
 import { partKey } from "./ppq/ppqUtils";
 import { resolveItem, TYPE_LABEL, fmtDue } from "../utils/homeworkBank";
 import chemFormat from "../utils/chemFormat";
+import ErrorLogPrompt from "./ErrorLogPrompt";
 
 // ─── Attempt and hint rules, agreed with HSJ Tuition ─────────────────────
 // - A part can be attempted up to MAX_ATTEMPTS times (MCQs twice: four options).
@@ -18,6 +19,8 @@ import chemFormat from "../utils/chemFormat";
 // - A past-paper question (marked by the AI examiner against the real scheme) can be marked twice.
 export const MAX_ATTEMPTS = { mcq: 2, calc: 3, short: 3, extended: 3, ppq: 2 };
 const COUNT_AS_CORRECT = 0.75;
+// Where a homework question from the HSJ banks can be retested under Revision
+const REVISION_TAB = { mcq: "mcq", calc: "calc", extended: "extended", exam: "exam" };
 
 export function hintsFor(q, type) {
   if (Array.isArray(q.hints) && q.hints.length) return q.hints;
@@ -31,7 +34,7 @@ export const isRevealed = (r, hints, maxAttempts, submitted) =>
 
 /** Fold a newly marked attempt into the stored result for a part. */
 function addAttempt(prev, maxScore, a) {
-  const attempts = [...(prev?.attempts || []), { answer: a.answer, score: a.score, feedback: a.feedback || null, at: Date.now() }];
+  const attempts = [...(prev?.attempts || []), { answer: a.answer, score: a.score, feedback: a.feedback || null, errorType: a.errorType || null, errorNote: a.errorNote || null, at: Date.now() }];
   const first = attempts[0].score;
   return {
     ...(prev || {}), ...a, maxScore, attempts,
@@ -71,6 +74,7 @@ async function mark(type, q, context, answer, maxScore, attemptNumber) {
   });
   return {
     answer, score: data.score, markedBy: "ai", confidence: data.confidence || "medium", feedback: data.feedback || null,
+    errorType: data.errorType || null, errorNote: data.errorNote || null,
     detail: { level: data.level ?? null, modelAnswer: data.modelAnswer || null, points: ms.map((t, i) => ({ text: t, got: !!(data.awarded || data.coveredPoints)?.[i] })) },
   };
 }
@@ -191,7 +195,7 @@ function QueryBox({ query, onSend, readOnly }) {
 }
 
 // ─── One markable part (an MCQ, a calculation, a short or extended answer) ──
-function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecord, query, onQuery, showQuestion }) {
+function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecord, query, onQuery, showQuestion, log }) {
   const hints = useMemo(() => hintsFor(q, type), [q, type]);
   const maxAttempts = MAX_ATTEMPTS[type] || 3;
   const attempts = result?.attempts || [];
@@ -255,6 +259,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
 
       {error && <Notice tone="red">{error}</Notice>}
       {result && <AttemptBanner result={result} maxAttempts={maxAttempts} />}
+      {last && log && <ErrorLogPrompt authUser={log.authUser} userProfile={log.userProfile} entry={{ ...log.entry, type }} suggested={last.errorType || null} note={last.errorNote || null} lost={maxScore - last.score} maxMarks={maxScore} />}
 
       {last && <HintLadder hints={hints} used={result.hintsUsed || 0} canOpen={!readOnly && !revealed} onOpen={openHint} />}
       {exhausted && (result.hintsUsed || 0) < hints.length && !readOnly && (
@@ -399,6 +404,11 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   if (!a || !subm) return <div style={{ color: T.muted, fontSize: 13, padding: 20 }}>Loading homework…</div>;
 
   const readOnly = submitted;
+  // Context for the error-log prompt under each marked part
+  const logFor = (it) => ({ authUser, userProfile, entry: {
+    source: "homework", questionId: String(it.questionId), topic: it.topic || null, topicLabel: it.topicLabel || null, title: it.topicLabel || null, board, assignmentId: a.id,
+    retestPath: it.type === "ppq" ? `/${board}/practise/${it.questionId}` : `/${board}/${REVISION_TAB[it.type] || "revision"}`,
+  } });
   const pctScore = subm.maxScore ? Math.round((total(answers) / subm.maxScore) * 100) : 0;
   const openQueries = Object.values(queries).filter(q => q.status === "open").length;
   const replies = Object.values(queries).filter(q => q.status === "resolved").length;
@@ -484,7 +494,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
               {item.type === "ppq" && (
                 <>
                   {!readOnly && !answers[item.key] && <Notice tone="neutral" style={{ fontSize: 13 }}>A real exam question. Answer every part, then press <b>Mark my answer</b>. You can be marked twice; your first mark counts for this homework.</Notice>}
-                  <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} embedded onlyParts={Array.isArray(item.parts) ? item.parts : null}
+                  <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} userProfile={userProfile} assignmentId={a.id} embedded onlyParts={Array.isArray(item.parts) ? item.parts : null}
                     locked={readOnly || (answers[item.key]?.attempts?.length || 0) >= MAX_ATTEMPTS.ppq}
                     onMarked={(data, doc, extra) => recordPpq(item, data, doc, extra)} />
                   {answers[item.key] && <AttemptBanner result={answers[item.key]} maxAttempts={MAX_ATTEMPTS.ppq} />}
@@ -492,7 +502,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
               )}
 
               {item.type === "mcq" && (
-                <Part type="mcq" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted} showQuestion
+                <Part type="mcq" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted} showQuestion log={logFor(item)}
                   onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
               )}
 
@@ -501,7 +511,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
                   <div style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 500, whiteSpace: "pre-line", fontFamily: T.display }}>{chemFormat(res.q.q)}</div>
                   {res.q.dataTable && <DataTable rows={res.q.dataTable} />}
                   {res.q.diagram && <div style={{ maxWidth: 700 }}>{res.q.diagram}</div>}
-                  <Part type="calc" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
+                  <Part type="calc" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted} log={logFor(item)}
                     onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
                 </>
               )}
@@ -509,13 +519,13 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
               {item.type === "extended" && (
                 <>
                   <div style={serif}>{chemFormat(res.q.question)}</div>
-                  <Part type="extended" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
+                  <Part type="extended" q={res.q} maxScore={item.marks} result={answers[item.key]} readOnly={readOnly} submitted={submitted} log={logFor(item)}
                     onRecord={(r, kind) => record(item, r, kind)} query={queries[item.key]} onQuery={(note) => query(item.key, note)} />
                 </>
               )}
 
               {item.type === "exam" && (
-                <ExamItem q={res.q} item={item} result={answers[item.key]} readOnly={readOnly} submitted={submitted}
+                <ExamItem q={res.q} item={item} result={answers[item.key]} readOnly={readOnly} submitted={submitted} log={logFor(item)}
                   onRecord={(r, kind) => record(item, r, kind)} queries={queries} onQuery={query} />
               )}
 
@@ -536,7 +546,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 export const partQueryKey = (itemKey, label) => `${itemKey}__${label}`;
 
 /** Also used on its own under Revision (ExamStyleTab), with no tutor queries: pass onQuery null. */
-export function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQuery }) {
+export function ExamItem({ q, item, result, readOnly, submitted, onRecord, queries, onQuery, log }) {
   const parts = result?.detail?.parts || {};
   const partMax = (p) => p.marks || 1;
   const save = (label, partResult, kind) => {
@@ -569,7 +579,8 @@ export function ExamItem({ q, item, result, readOnly, submitted, onRecord, queri
               <Chip tone="neutral">{partMax(p)} mark{partMax(p) === 1 ? "" : "s"}</Chip>
             </div>
             <Part type={p.type} q={p} context={q.context} maxScore={partMax(p)} result={parts[p.label]} readOnly={readOnly} submitted={submitted}
-              onRecord={(r, kind) => save(p.label, r, kind)} query={(queries || {})[key]} onQuery={onQuery ? (note) => onQuery(key, note) : null} />
+              onRecord={(r, kind) => save(p.label, r, kind)} query={(queries || {})[key]} onQuery={onQuery ? (note) => onQuery(key, note) : null}
+              log={log ? { ...log, entry: { ...log.entry, partLabel: p.label } } : null} />
           </div>
         );
       })}

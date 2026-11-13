@@ -81,6 +81,21 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Error log: a student's own record of lost marks (src/utils/errorLog.js).
+    // The student writes and edits their own entries; tutors and parents read
+    // them; a tutor may update the status when they go through it with the student.
+    match /errorLog/{id} {
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isTutor() || isParentOf(resource.data.uid));
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.tutorId == myProfile().get('tutorId', null)
+        && request.resource.data.category is string
+        && request.resource.data.questionId is string;
+      allow update: if signedIn() && (resource.data.uid == request.auth.uid || isTutor())
+        && !changed().hasAny(['uid', 'tutorId', 'classId', 'questionId']);
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
     // Calendar sessions: one document per lesson or extra session. The tutor
     // (or an admin) writes them. A student reads their group's sessions
     // (studentIds null) and any they are named on; parents likewise for

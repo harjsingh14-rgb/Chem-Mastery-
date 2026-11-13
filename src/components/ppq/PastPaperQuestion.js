@@ -6,6 +6,7 @@ import { Button, Card, Chip, Notice, Icon } from "../../ui/components";
 import track from "../../utils/track";
 import chemFormat from "../../utils/chemFormat";
 import DrawCanvas from "./DrawCanvas";
+import ErrorLogPrompt from "../ErrorLogPrompt";
 import { noteAttempt } from "../../hooks/usePpq";
 import { seriesLabel, paperLabel, topicShort, compressImage, loadQueue, partKey } from "./ppqUtils";
 
@@ -22,7 +23,7 @@ const docCache = {};
  * once the homework is submitted (locked=true) the stored marking is shown
  * read-only.
  */
-export default function PastPaperQuestion({ board, qid, authUser, logAttempt, onExit, embedded = false, locked = false, onMarked, onlyParts = null }) {
+export default function PastPaperQuestion({ board, qid, authUser, userProfile = null, assignmentId = null, logAttempt, onExit, embedded = false, locked = false, onMarked, onlyParts = null }) {
   const navigate = useNavigate();
   const [doc, setDoc] = useState(docCache[qid] || null);
   const [error, setError] = useState(null);
@@ -73,7 +74,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
     const lp0 = attempt.latest.parts || {};
     const shown = (doc.parts || []).filter(p => !subset || subset.includes(p.label));
     const lp = Object.fromEntries(shown.map(p => [p.label, lp0[partKey(p.label)]]));
-    const partRows = shown.map(p => ({ label: p.label, marks: p.marks, score: lp[p.label]?.score || 0, awarded: lp[p.label]?.awarded || [], attempted: lp[p.label]?.attempted ?? !!(lp[p.label]?.answer || lp[p.label]?.score), feedback: lp[p.label]?.feedback || "" }));
+    const partRows = shown.map(p => ({ label: p.label, marks: p.marks, score: lp[p.label]?.score || 0, awarded: lp[p.label]?.awarded || [], attempted: lp[p.label]?.attempted ?? !!(lp[p.label]?.answer || lp[p.label]?.score), feedback: lp[p.label]?.feedback || "", errorType: lp[p.label]?.errorType || null, errorNote: lp[p.label]?.errorNote || null }));
     setResult({
       fromRecord: true,
       score: subset ? partRows.reduce((a, p) => a + p.score, 0) : attempt.latest.score, totalMarks: subset ? shown.reduce((a, p) => a + (Number(p.marks) || 0), 0) : attempt.totalMarks, overall: attempt.latest.overall || "",
@@ -132,7 +133,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
       if (!res.ok) throw new Error(data.error || `Marking failed (${res.status})`);
       setResult(data);
       setDrawing(false);
-      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, answer: answers[p.label] || null }])) }, queries: {} }));
+      setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, errorType: p.errorType || null, errorNote: p.errorNote || null, answer: answers[p.label] || null }])) }, queries: {} }));
       noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, qid });
       onMarked && onMarked(data, doc, { answers, hintsUsed: Object.values(hints).reduce((x, n) => x + (n || 0), 0) });
       logAttempt && logAttempt({
@@ -249,7 +250,13 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
                 hintsShown={hints[p.label] || 0} onHint={() => { setHints(h => ({ ...h, [p.label]: Math.min((h[p.label] || 0) + 1, (p.hints || []).length) })); track("ppq_hint", { board, qid, part: p.label }); }}
                 result={result?.parts?.find(r => r.label === p.label)} scheme={result?.scheme?.find(s => s.label === p.label)}
                 showModel={!!showModel[p.label]} onToggleModel={() => setShowModel(m => ({ ...m, [p.label]: !m[p.label] }))}
-                locked={!!result || locked} query={attempt?.queries?.[partKey(p.label)]} onQuery={result ? (note) => sendQuery(p.label, note) : null} />
+                locked={!!result || locked} query={attempt?.queries?.[partKey(p.label)]} onQuery={result ? (note) => sendQuery(p.label, note) : null}
+                logPrompt={(() => {
+                  const r = result?.parts?.find(x => x.label === p.label);
+                  if (!r) return null;
+                  return <ErrorLogPrompt authUser={authUser} userProfile={userProfile} suggested={r.errorType || null} note={r.errorNote || null} lost={(Number(p.marks) || 0) - (r.score || 0)} maxMarks={p.marks}
+                    entry={{ source: embedded ? "homework" : "ppq", type: "ppq", questionId: qid, partLabel: p.label || "Q", topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null, title: doc.title || `Question ${doc.q}`, board, assignmentId, retestPath: `/${board}/practise/${qid}`, attempted: r.attempted !== false }} />;
+                })()} />
             ))}
           </div>
 
@@ -274,7 +281,7 @@ export default function PastPaperQuestion({ board, qid, authUser, logAttempt, on
   );
 }
 
-function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, showModel, onToggleModel, locked, query, onQuery }) {
+function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, showModel, onToggleModel, locked, query, onQuery, logPrompt }) {
   const hints = part.hints || [];
   const isMcq = part.type === "mcq";
   const tone = result ? (result.score >= part.marks ? "green" : result.score > 0 ? "amber" : result.attempted ? "red" : "neutral") : null;
@@ -330,6 +337,7 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {result.feedback && <div style={{ fontSize: 13, color: T.body, lineHeight: 1.55 }}>{chemFormat(result.feedback)}</div>}
           {!result.attempted && <div style={{ fontSize: 12, color: T.muted }}>Not attempted.</div>}
+          {logPrompt}
           {scheme && scheme.ms.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6 }}>Mark scheme</div>

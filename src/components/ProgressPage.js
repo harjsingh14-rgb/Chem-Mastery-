@@ -5,6 +5,7 @@ import { Card, CardHeader, PageHeader, StatTile, Bar, Button, Chip, chipToneForP
 import useAttempts from "../hooks/useAttempts";
 import { summarise, groupBySection, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
 import { TopicTable, AccuracySpark } from "./StudentDashboard";
+import { ErrorLogPanel } from "./ErrorLogCard";
 
 export default function ProgressPage({ board, authUser, currentStreak, studyLog, todayKey, known, sets, sections, sectionOf }) {
   const navigate = useNavigate();
@@ -42,6 +43,8 @@ export default function ProgressPage({ board, authUser, currentStreak, studyLog,
             <CardHeader title="Performance by topic" sub="All recorded answers" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
             <TopicTable groups={groups} />
           </Card>
+
+          <ErrorLogPanel authUser={authUser} board={board} />
 
           <Card padding={0}>
             <CardHeader title="Flashcards" sub="Cards you've marked as known, by section" style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
