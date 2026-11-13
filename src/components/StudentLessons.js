@@ -23,15 +23,18 @@ export function useMyLessonNotes(uid) {
   return notes;
 }
 
-export function NoteBody({ n, compact }) {
+export function NoteBody({ n, compact, hideHead }) {
   const [tone, attLabel] = ATT[n.attendance] || ["neutral", ""];
+  const topics = compact ? [] : (n.topics || []);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-        <span style={{ fontWeight: 700, fontSize: 14 }}>{fmtDate(n.date)}</span>
-        {attLabel && <Chip tone={tone}>{attLabel}</Chip>}
-        {!compact && (n.topics || []).map(t => <Chip key={t} tone="accent">{t}</Chip>)}
-      </div>
+      {(!hideHead || topics.length > 0) && (
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+          {!hideHead && <span style={{ fontWeight: 700, fontSize: 14 }}>{fmtDate(n.date)}</span>}
+          {!hideHead && attLabel && <Chip tone={tone}>{attLabel}</Chip>}
+          {topics.map(t => <Chip key={t} tone="accent">{t}</Chip>)}
+        </div>
+      )}
       {n.summary && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}>{n.summary}</div>}
       {n.www && <NoteSection label="What went well" tone={T.green} tint={T.greenTint} text={n.www} compact={compact} />}
       {n.ebi && <NoteSection label="Even better if" tone={T.amber} tint={T.amberTint} text={n.ebi} compact={compact} />}
@@ -130,7 +133,7 @@ function LessonRow({ n, open, onToggle, first }) {
       {open && (
         <div style={{ paddingBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
           {n.recording && <div><Button variant="primary" icon="play" onClick={() => window.open(n.recording, "_blank", "noopener")}>Watch the lesson recording</Button></div>}
-          <NoteBody n={{ ...n, recording: null }} />
+          <NoteBody n={{ ...n, recording: null }} hideHead />
         </div>
       )}
     </div>

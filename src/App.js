@@ -558,7 +558,7 @@ export default function App() {
   }
 
 
-  const isPage = ["home", "practise", "revision", "homework", "videos"].includes(topicsTab);   // "practise" with no question id redirects to Revision
+  const isPage = ["home", "practise", "revision", "homework", "lessons", "videos"].includes(topicsTab);   // "practise" with no question id redirects to Revision
   const legacyTitles = { flashcards: "Flashcards", mcq: "MCQs", calc: "Calculations", extended: "AI Examiner", exam: "Exam-style questions", mechanisms: "Mechanisms", pathways: "Pathways", synth: "Synthesis", nmr: "Nuclear Magnetic Resonance (NMR)" };
 
   // Homework player: focused mode, no tabs

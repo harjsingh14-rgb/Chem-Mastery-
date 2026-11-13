@@ -263,6 +263,14 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
         if (cancelled) return;
         setLesson(l); setStudents(st); setLastHw(last); setNextHw(next); setLinkedHw(linked); setSubs(sb); setSummary(l.summary || ""); setRecording(l.recording || ""); setHomeworkText(l.homeworkText || "");
         const byUid = {}; for (const n of ns) byUid[n.uid] = n;
+        // Notes saved before a lesson-level field changed (the recording link
+        // added later, say) are brought up to date now, so students see it.
+        const level = { summary: l.summary || null, recording: l.recording || null, homeworkText: l.homeworkText || null, topics: l.topics || [], attachments: (l.attachments || []).length ? l.attachments : null };
+        for (const n of ns) {
+          const patch = {};
+          for (const k of Object.keys(level)) if (JSON.stringify(n[k] ?? null) !== JSON.stringify(level[k])) patch[k] = level[k];
+          if (Object.keys(patch).length) { byUid[n.uid] = { ...n, ...patch }; saveLessonNote(lessonId, n.uid, patch).catch(() => {}); }
+        }
         setNotes(byUid);
         const pv = {}; for (const n of pn) pv[n.uid] = n;
         setPrivates(pv);
