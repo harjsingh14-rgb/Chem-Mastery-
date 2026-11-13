@@ -35,6 +35,7 @@ export default function StudentsPage({ authUser, userProfile, tab = "all" }) {
       <PageHeader eyebrow="Students" title={tab === "onboarding" ? "Onboarding" : "Students"}
         sub={tab === "onboarding" ? "Add a student after the discovery call. They get the self-evaluation, the parent gets the terms, and you place them into a group here." : "Everyone you teach. Open a student for their attendance, notes, homework and family details."}
         right={isAdmin && tab === "all" ? <>
+          <Button icon="message" onClick={() => navigate("/tutor/students/email")}>Email students</Button>
           <Button icon="users" onClick={() => navigate("/tutor/students/onboarding?import=1")}>Import current students</Button>
           <Button variant="primary" icon="plus" onClick={() => navigate("/tutor/students/onboarding?new=1")}>Add student</Button>
         </> : null} />
@@ -147,7 +148,7 @@ function Directory({ authUser, isAdmin, initialGroup, initialAttention }) {
                     </td>
                     <td style={td}>{s.classId ? <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: bg, color: fg, whiteSpace: "nowrap" }}>{s.className || s.classId}</span> : <Chip tone="amber">No group</Chip>}</td>
                     <td style={td}>
-                      {other ? <Chip tone="neutral">Another tutor</Chip> : flags.length === 0 ? <Chip tone="green">On track</Chip> : <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>{flags.map(f => <Chip key={f.text} tone={f.tone}>{f.text}</Chip>)}</div>}
+                      {s.accessDisabled ? <Chip tone="red">Access off</Chip> : other ? <Chip tone="neutral">Another tutor</Chip> : flags.length === 0 ? <Chip tone="green">On track</Chip> : <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>{flags.map(f => <Chip key={f.text} tone={f.tone}>{f.text}</Chip>)}</div>}
                     </td>
                     <td style={{ ...td, fontWeight: 600 }}>{sum?.week || 0} <span style={{ color: T.muted, fontWeight: 400 }}>Qs</span></td>
                     <td style={td}><AccuracyBar pct={weekPct} width={150} /></td>

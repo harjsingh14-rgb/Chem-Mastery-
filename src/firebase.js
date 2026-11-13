@@ -725,4 +725,51 @@ export async function fetchMyPpqAttempts(uid) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
+// =====================================================================
+// Files attached to lesson notes and to emails (stored by the server in
+// Firebase Storage; api/_storage.js), and the log of emails sent
+// =====================================================================
+export const MAX_ATTACHMENT_BYTES = 3 * 1024 * 1024;
+
+export function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result).split(",")[1] || "");
+    r.onerror = () => reject(new Error("Could not read the file"));
+    r.readAsDataURL(file);
+  });
+}
+
+async function postApi(path, body) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Please sign in again");
+  const idToken = await user.getIdToken();
+  const res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` }, body: JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
+
+const checkSize = (file) => { if (file.size > MAX_ATTACHMENT_BYTES) throw new Error(`${file.name} is over 3 MB. Share it as a link instead.`); };
+
+/** A file for one lesson: returns { name, url, size, type } to save on the lesson's attachments. */
+export async function uploadLessonFile(lessonId, file) {
+  checkSize(file);
+  const dataBase64 = await fileToBase64(file);
+  return (await postApi("/api/lesson-note", { action: "upload", lessonId, name: file.name, type: file.type, dataBase64 })).file;
+}
+
+/** A file for an email from the Students tab (admin). */
+export async function uploadMailFile(file) {
+  checkSize(file);
+  const dataBase64 = await fileToBase64(file);
+  return (await postApi("/api/students", { action: "upload", name: file.name, type: file.type, dataBase64 })).file;
+}
+
+/** Emails sent to students and parents, newest first (admin). */
+export async function fetchMessages(max = 200) {
+  const snap = await getDocs(query(collection(db, "messages"), limit(max)));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.sentAt || 0) - (a.sentAt || 0));
+}
+
 export { auth, db };

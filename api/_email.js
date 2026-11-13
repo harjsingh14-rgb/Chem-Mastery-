@@ -40,6 +40,25 @@ async function sendEmail({ to, cc, subject, html, replyTo }) {
   return data;
 }
 
+/** Several personalised emails in one call (Resend batch, up to 100 per request). */
+async function sendBatch(messages) {
+  const key = (process.env.RESEND_API_KEY || "").trim();
+  if (!key) { console.log("RESEND_API_KEY not set, skipping batch of", messages.length); return { skipped: true, sent: 0 }; }
+  let sent = 0;
+  for (let i = 0; i < messages.length; i += 100) {
+    const chunk = messages.slice(i, i + 100).map(m => ({ from: FROM, to: [m.to], reply_to: m.replyTo || REPLY_TO, subject: m.subject, html: m.html }));
+    const res = await fetch("https://api.resend.com/emails/batch", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify(chunk),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) { console.error("Resend batch error:", data); throw new Error(data.message || `Emails could not be sent (${sent} of ${messages.length} went)`); }
+    sent += chunk.length;
+  }
+  return { sent };
+}
+
 /** To the student: please complete your self-evaluation. */
 function evaluationInvite(a, link) {
   const html = layout("Welcome to HSJ Tuition", `
@@ -108,6 +127,13 @@ const fmtLessonDate = (iso) => {
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
 };
 const nl2br = (t) => esc(t).replace(/\n/g, "<br>");
+const fmtSize = (b) => b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`;
+/** Files stored in Firebase Storage, shown as links: email attachments are links so nothing bounces for size. */
+const attachmentsBlock = (list) => Array.isArray(list) && list.length ? `
+    <div style="margin:18px 0;padding:12px 14px;background:#F4F6F9;border-radius:10px;">
+      <div style="font-weight:700;margin-bottom:6px;">Attached</div>
+      ${list.map(a => `<div style="margin:3px 0;"><a href="${a.url}" style="color:#1F7FB5;font-weight:600;">${esc(a.name)}</a>${a.size ? ` <span style="color:#6b7a8c;font-size:12px;">(${fmtSize(a.size)})</span>` : ""}</div>`).join("")}
+    </div>` : "";
 
 /** To the parent, student copied: what happened in one lesson. */
 function lessonNote(note, { studentName, parentName, tutorName, groupName }) {
@@ -128,6 +154,7 @@ function lessonNote(note, { studentName, parentName, tutorName, groupName }) {
     ${note.homeworkText ? `<p><strong>Homework before the next lesson</strong><br>${nl2br(note.homeworkText)}</p>` : ""}
     ${note.nextHomework ? `<p><strong>Next homework</strong><br>${esc(note.nextHomework.title)}${note.nextHomework.dueAt ? `, due ${esc(new Date(note.nextHomework.dueAt).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }))}` : ""}. ${esc(sf)} finds it in the HSJ Tuition account.</p>` : ""}
     ${note.extra ? `<p><strong>Extra notes</strong><br>${nl2br(note.extra)}</p>` : ""}
+    ${attachmentsBlock(note.attachments)}
     <p style="margin-top:20px;">Any questions, just reply to this email.<br>${esc(tutorName)}, HSJ Tuition</p>`);
   return { subject: `Lesson note for ${sf}, ${fmtLessonDate(note.date)}`, html };
 }
@@ -190,6 +217,34 @@ function parentWelcome({ parentName, studentName, email, tempPassword, groupName
   return { subject: `Your HSJ Tuition parent account for ${sf}`, html };
 }
 
+/** To a student or parent: a fresh temporary password, sent again or after a reset by HSJ admin. */
+function loginDetails({ name, email, tempPassword, isParent, reset, studentName, groupName }) {
+  const sf = firstName(studentName);
+  const html = layout(reset ? "Your HSJ Tuition password has been reset" : "Your HSJ Tuition login details", `
+    <p>Hi ${esc(firstName(name))},</p>
+    <p>${reset ? "HSJ Tuition has reset the password on your account. Use the temporary password below to log in, then choose your own." : `Here are your login details for the HSJ Tuition platform${isParent ? `, where you can follow ${esc(sf)}'s lessons, homework and progress` : groupName ? ` (you are in <strong>${esc(groupName)}</strong>)` : ""}.`}</p>
+    <div style="background:#EEF7FC;border:1px solid #BFE3F5;border-radius:10px;padding:14px 16px;margin:18px 0;">
+      <div style="font-weight:700;margin-bottom:6px;">Your login</div>
+      <div>Email: <strong>${esc(email)}</strong></div>
+      <div>Temporary password: <code style="background:#DCEFFA;padding:2px 8px;border-radius:4px;font-size:15px;font-weight:700;">${esc(tempPassword)}</code></div>
+      <div style="font-size:12px;color:#6b7a8c;margin-top:6px;">You will be asked to choose your own password when you log in.</div>
+    </div>
+    ${button(SITE, "Log in to HSJ Tuition")}
+    <p style="margin-top:22px;">If you did not expect this email, reply and let us know.<br>HSJ Tuition</p>`);
+  return { subject: reset ? "Your HSJ Tuition password has been reset" : "Your HSJ Tuition login details", html };
+}
+
+/** A message from HSJ to students or parents, written in the Students tab. */
+function broadcast({ name, subject, message, link, linkLabel, from, attachments }) {
+  const html = layout(subject, `
+    <p>Hi ${esc(firstName(name))},</p>
+    ${String(message || "").split(/\n{2,}/).map(par => `<p>${nl2br(par.trim())}</p>`).join("")}
+    ${link ? button(link, linkLabel || "Open") : ""}
+    ${attachmentsBlock(attachments)}
+    <p style="margin-top:22px;">${esc(from || "HSJ Tuition")}</p>`);
+  return { subject, html };
+}
+
 /** To the tutor: a student has submitted homework. */
 function tutorSubmission({ tutorName, studentName, title, score, maxScore, link }) {
   const html = layout("Homework submitted", `
@@ -226,4 +281,4 @@ function tutorQuery({ tutorName, studentName, where, note, link }) {
   return { subject: `Mark query from ${studentName}: ${where}`, html };
 }
 
-module.exports = { sendEmail, evaluationInvite, termsInvite, welcome, parentWelcome, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
+module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, welcome, parentWelcome, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };

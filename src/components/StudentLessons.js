@@ -39,6 +39,12 @@ export function NoteBody({ n, compact }) {
       {n.extra && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}>{n.extra}</div>}
       {n.homeworkText && !compact && <div style={{ fontSize: 13, lineHeight: 1.6, color: T.body, whiteSpace: "pre-wrap" }}><strong>Homework before the next lesson.</strong> {n.homeworkText}</div>}
       {n.recording && !compact && <div><Button size="sm" variant="primary" onClick={() => window.open(n.recording, "_blank", "noopener")}>Watch the lesson recording</Button></div>}
+      {!compact && (n.attachments || []).length > 0 && (
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+          <span style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>Attached:</span>
+          {n.attachments.map(a => <a key={a.url} href={a.url} target="_blank" rel="noopener noreferrer" className="cm-link" style={{ fontSize: 12, fontWeight: 600, padding: "4px 10px", borderRadius: 999, background: T.soft }}>{a.name}</a>)}
+        </div>
+      )}
       {!compact && n.homework && (
         <div style={{ fontSize: 12, color: T.muted }}>
           Homework "{n.homework.title}": {n.homework.status === "submitted" ? `${n.homework.score}/${n.homework.maxScore} (${n.homework.pct}%)` : n.homework.status === "in-progress" ? "started, not finished" : "not started"}

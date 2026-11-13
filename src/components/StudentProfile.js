@@ -4,7 +4,7 @@
 // details. "Parent view" opens the page the parent sees for this student.
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserProfiles, fetchClass, fetchStudentLessonNotes, fetchStudentPrivateNotes, fetchPayments, fetchStudentSessions, fetchAttemptsForUser, setStudentName, setStudentPhoto } from "../firebase";
+import { fetchUserProfiles, fetchClass, fetchStudentLessonNotes, fetchStudentPrivateNotes, fetchPayments, fetchStudentSessions, fetchAttemptsForUser, setStudentName, setStudentPhoto, studentsApi } from "../firebase";
 import { T, boardLabel, pctColour } from "../ui/theme";
 import { Card, CardHeader, Chip, StatTile, Tabs, EmptyState, Notice, Table, th, td, Button, Input, Icon, AccuracyBar, chipToneForPct } from "../ui/components";
 import { summarise, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
@@ -43,6 +43,16 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
   const [tab, setTab] = useState(tabs.some(t => t.id === initialTab) ? initialTab : "overview");
   const [error, setError] = useState(null);
   const [nameEdit, setNameEdit] = useState(null);
+  // "View as student": the student pages open with this student's account in
+  // place of the admin's (App.js reads this on load). Read only.
+  const viewAsStudent = () => {
+    if (!student) return;
+    try {
+      const profile = JSON.parse(JSON.stringify(student));
+      sessionStorage.setItem("hsj-view-as", JSON.stringify({ uid, user: { uid, email: student.email || "", displayName: student.displayName || "", photoURL: student.photoURL || "" }, profile }));
+    } catch { setError("Could not open the student view in this browser."); return; }
+    window.location.assign(`/${student.board || "aqa"}`);
+  };
 
   useEffect(() => {
     if (!uid) return;
@@ -95,7 +105,9 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
         <Button variant="ghost" icon="arrowLeft" onClick={() => navigate("/tutor/students")}>All students</Button>
         <div style={{ flex: 1 }} />
+        {isAdmin && <Button icon="flask" onClick={viewAsStudent} title="See the app exactly as this student sees it (read only)">View as student</Button>}
         {canFamily && <Button icon="users" onClick={() => navigate(`/tutor/students/${uid}/parent`)}>Parent view</Button>}
+        {isAdmin && <Button icon="message" onClick={() => navigate(`/tutor/students/email?uid=${uid}`)}>Email</Button>}
         {group && <Button icon="calendar" onClick={() => navigate("/tutor/calendar")}>Calendar</Button>}
       </div>
       {error && <Notice tone="red">{error}</Notice>}
@@ -129,6 +141,8 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
               <Row label="Last active">{sum.last ? relativeTime(sum.last) : "No practice yet"}</Row>
             </div>
           </Card>
+
+          {isAdmin && <AccessCard student={student} onChange={patch => setStudent(s => ({ ...s, ...patch }))} />}
 
           {canFamily && <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <CardHeader title="Family" />
@@ -249,6 +263,70 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
         </div>
       </div>
     </>
+  );
+}
+
+const loginMs = (u) => u?.lastLogin?.toMillis ? u.lastLogin.toMillis() : (u?.lastLogin?.seconds ? u.lastLogin.seconds * 1000 : null);
+
+/** Admin: the student's (and parent's) login, with new login details, a password reset and an on/off switch. */
+function AccessCard({ student, onChange }) {
+  const [parent, setParent] = useState(null);
+  const [busy, setBusy] = useState(null);
+  const [msg, setMsg] = useState(null);
+  const parentUid = student.parentUid || null;
+  useEffect(() => {
+    let alive = true;
+    if (!parentUid) { setParent(null); return undefined; }
+    fetchUserProfiles([parentUid]).then(([p]) => { if (alive) setParent(p || null); }).catch(() => {});
+    return () => { alive = false; };
+  }, [parentUid]);
+
+  const run = async (who, op) => {
+    const target = who === "parent" ? parent : student;
+    if (!target) return;
+    const first = (target.displayName || target.email || "them").split(" ")[0];
+    const ask = op === "disable" ? `Switch off ${first}'s access? They will not be able to log in until it is switched back on.`
+      : op === "enable" ? null
+      : `Email ${first} a new temporary password? Their current password stops working${who === "student" && student.parentEmail ? ", and the parent is copied in" : ""}.`;
+    if (ask && !window.confirm(ask)) return;
+    setBusy(`${who}:${op}`); setMsg(null);
+    try {
+      const r = await studentsApi("access", { uid: target.uid, op });
+      const patch = op === "disable" || op === "enable" ? { accessDisabled: r.accessDisabled } : { needsPasswordChange: true };
+      if (who === "parent") setParent(p => ({ ...p, ...patch })); else onChange(patch);
+      setMsg({ tone: "green", text: op === "disable" ? `${first}'s access is switched off.` : op === "enable" ? `${first}'s access is back on.` : `Sent to ${r.sentTo}${r.cc ? `, copied to ${r.cc}` : ""}.` });
+    } catch (e) { setMsg({ tone: "red", text: e.message }); }
+    setBusy(null);
+  };
+
+  const row = (who, u, title) => {
+    const off = !!u.accessDisabled;
+    const last = loginMs(u);
+    const is = (op) => busy === `${who}:${op}`;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 13 }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ fontWeight: 700 }}>{title}</span>
+          {off ? <Chip tone="red">Access off</Chip> : u.needsPasswordChange ? <Chip tone="amber">Not logged in yet</Chip> : <Chip tone="green">Enabled</Chip>}
+        </div>
+        <span style={{ fontSize: 12, color: T.muted }}>{u.email || "No email"} · {last ? `last login ${relativeTime(last)}` : "never logged in"}</span>
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+          <Button size="sm" onClick={() => run(who, "resendLogin")} disabled={!!busy || off}>{is("resendLogin") ? "Sending…" : "Send login details"}</Button>
+          <Button size="sm" onClick={() => run(who, "resetPassword")} disabled={!!busy || off}>{is("resetPassword") ? "Resetting…" : "Reset password"}</Button>
+          <Button size="sm" variant={off ? "accent" : "ghost"} onClick={() => run(who, off ? "enable" : "disable")} disabled={!!busy} style={off ? undefined : { color: T.red }}>{is("disable") || is("enable") ? "Saving…" : off ? "Switch access on" : "Switch access off"}</Button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <CardHeader title="Login and access" sub="A new temporary password is emailed; they choose their own when they next log in." />
+      {row("student", student, "Student")}
+      {parentUid && parent && <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10 }}>{row("parent", parent, "Parent")}</div>}
+      {parentUid && !parent && <span style={{ fontSize: 12, color: T.muted }}>Loading the parent's login…</span>}
+      {msg && <Notice tone={msg.tone} style={{ fontSize: 12 }}>{msg.text}</Notice>}
+    </Card>
   );
 }
 

@@ -4,6 +4,7 @@
 const { setCors } = require("./_cors");
 const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
+const storage = require("./_storage");
 
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 const PLANS = ["pif", "instalments", "results"];
@@ -283,6 +284,94 @@ async function sendHeldWelcome(a, id, token, origin) {
   return { parentEmailed };
 }
 
+// ---- Account access (admin): new login details, password reset, disable ----
+async function accessAction(body, admin, token, res) {
+  const uid = str(body.uid, 64);
+  const op = str(body.op, 20);
+  if (!uid) throw bad("Missing account id");
+  const u = await fb.getDocument(`users/${uid}`, token);
+  if (!u) throw fb.httpError(404, "Account not found");
+  if (!["student", "parent"].includes(u.role)) throw bad("Only student and parent accounts can be managed here");
+
+  if (op === "disable" || op === "enable") {
+    const off = op === "disable";
+    await fb.updateAuthUser(uid, { disableUser: off }, token);
+    await fb.updateDocument(`users/${uid}`, { accessDisabled: off, accessChangedAt: Date.now(), accessChangedBy: admin.uid }, token);
+    return res.status(200).json({ ok: true, accessDisabled: off });
+  }
+
+  if (op === "resendLogin" || op === "resetPassword") {
+    if (!u.email) throw bad("This account has no email address");
+    if (u.accessDisabled) throw bad("Access is switched off for this account. Switch it back on first.");
+    const pw = fb.generateTempPassword();
+    await fb.updateAuthUser(uid, { password: pw }, token);
+    await fb.updateDocument(`users/${uid}`, { needsPasswordChange: true, loginSentAt: Date.now(), loginSentBy: admin.uid }, token);
+    const isParent = u.role === "parent";
+    let studentName = null;
+    if (isParent && Array.isArray(u.children) && u.children[0]) {
+      const child = await fb.getDocument(`users/${u.children[0]}`, token).catch(() => null);
+      studentName = child?.displayName || null;
+    }
+    const cc = !isParent && body.copyParent !== false && u.parentEmail && u.parentEmail.toLowerCase() !== u.email.toLowerCase() ? u.parentEmail : undefined;
+    const { subject, html } = mail.loginDetails({ name: u.displayName, email: u.email, tempPassword: pw, isParent, reset: op === "resetPassword", studentName, groupName: u.className || "" });
+    await mail.sendEmail({ to: u.email, cc, subject, html });
+    return res.status(200).json({ ok: true, sentTo: u.email, cc: cc || null });
+  }
+  throw bad("Unknown access action");
+}
+
+// ---- Email to students and parents (admin) ----------------------------------
+const EMAIL_MAX = 400;
+async function emailAction(body, admin, token, res) {
+  const subject = str(body.subject, 150);
+  const message = String(body.message ?? "").trim().slice(0, 6000);
+  const link = str(body.link, 500);
+  const linkLabel = str(body.linkLabel, 60);
+  if (subject.length < 3) throw bad("Give the email a subject");
+  if (message.length < 10) throw bad("Write a message first");
+  if (link && !/^https?:\/\//i.test(link)) throw bad("The link must start with http:// or https://");
+  const attachments = storage.cleanAttachments(body.attachments);
+  const groups = Array.isArray(body.groups) ? body.groups.map(g => str(g, 20).toUpperCase()).filter(Boolean) : [];
+  const uids = Array.isArray(body.uids) ? body.uids.map(u => str(u, 64)).filter(Boolean) : [];
+  const toStudents = body.students !== false;
+  const toParents = body.parents === true;
+  const test = body.test === true;
+
+  const all = await fb.queryDocuments("users", { role: "student" }, token, { limit: 1000 });
+  const students = all.filter(u => (uids.length ? uids.includes(u.id) : (groups.length === 0 || groups.includes(u.classId))) && !u.accessDisabled);
+  const seen = new Set();
+  const recipients = [];
+  const add = (r) => { const k = (r.email || "").toLowerCase(); if (!k || seen.has(k)) return; seen.add(k); recipients.push(r); };
+  for (const u of students) {
+    if (toStudents && u.email) add({ uid: u.id, name: u.displayName || "", email: u.email, role: "student" });
+    if (toParents && u.parentEmail) add({ uid: u.id, name: u.parentName || "", email: u.parentEmail, role: "parent", studentName: u.displayName || "" });
+  }
+  if (recipients.length === 0) throw bad("Nobody matches: check the groups and who the email is for");
+  if (recipients.length > EMAIL_MAX) throw bad(`That is ${recipients.length} people; the most one send can go to is ${EMAIL_MAX}`);
+  const from = admin.profile?.displayName ? `${admin.profile.displayName}, HSJ Tuition` : "HSJ Tuition";
+
+  if (test) {
+    const to = admin.email || admin.profile?.email;
+    if (!to) throw bad("Your admin account has no email to send the test to");
+    const m = mail.broadcast({ name: admin.profile?.displayName || "there", subject, message, link, linkLabel, from, attachments });
+    await mail.sendEmail({ to, subject: `[Test] ${m.subject}`, html: m.html });
+    return res.status(200).json({ ok: true, test: true, sentTo: to, wouldGoTo: recipients.length });
+  }
+
+  const messages = recipients.map(r => { const m = mail.broadcast({ name: r.name, subject, message, link, linkLabel, from, attachments }); return { to: r.email, subject: m.subject, html: m.html }; });
+  const result = await mail.sendBatch(messages);
+  const id = fb.newToken().slice(0, 20);
+  const record = {
+    subject, message, link: link || null, linkLabel: linkLabel || null, attachments,
+    groups, uids, students: toStudents, parents: toParents,
+    recipients: recipients.map(r => ({ uid: r.uid, name: r.name, email: r.email, role: r.role })),
+    count: recipients.length, skipped: !!result.skipped,
+    sentBy: admin.uid, sentByName: admin.profile?.displayName || null, sentAt: Date.now(),
+  };
+  await fb.createDocument("messages", id, record, token);
+  return res.status(200).json({ ok: true, id, count: recipients.length, skipped: !!result.skipped });
+}
+
 const IMPORT_MAX = 100;
 const softProblem = (p) => p.startsWith("no parent email") || p.includes("same as the student");
 
@@ -388,6 +477,14 @@ module.exports = async function handler(req, res) {
     // created as a current student (no agreement, no payment details) and
     // placed straight into a group. dryRun checks the rows without writing.
     if (action === "import") return importStudents(body, admin, token, origin, res);
+    // Account access for one student or parent, and emails to many
+    if (action === "access") return accessAction(body, admin, token, res);
+    if (action === "email") return emailAction(body, admin, token, res);
+    // One file for an email, stored first so the send itself stays small
+    if (action === "upload") {
+      const file = await storage.uploadAttachment({ folder: `mail/${admin.uid.slice(0, 12)}`, name: body.name, type: body.type, dataBase64: body.dataBase64 }, token);
+      return res.status(200).json({ ok: true, file });
+    }
 
     if (!["update", "resend", "delete", "place", "sendWelcome"].includes(action)) {
       if (action === "backfillParents") return backfillParents(body, token, res);

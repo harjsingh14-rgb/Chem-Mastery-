@@ -22,6 +22,7 @@ import Locked from "./components/Locked";
 // Pages and practice tabs load on demand so the first screen does not carry
 // every question bank. Each import below becomes its own chunk.
 const TutorPage = lazyPage(() => import("./components/TutorPage"));
+const TutorEmail = lazyPage(() => import("./components/TutorEmail"));
 const ProgressPage = lazyPage(() => import("./components/ProgressPage"));
 const PastPaperQuestion = lazyPage(() => import("./components/ppq/PastPaperQuestion"));
 const RevisionPage = lazyPage(() => import("./components/RevisionPage"));
@@ -55,8 +56,23 @@ import useQuiz from "./hooks/useQuiz";
 
 export default function App() {
   // --- Auth state ---
-  const [authUser, setAuthUser] = useState(undefined); // undefined=loading, null=not logged in, object=logged in
-  const [userProfile, setUserProfile] = useState(null);
+  const [realUser, setAuthUser] = useState(undefined); // undefined=loading, null=not logged in, object=logged in
+  const [realProfile, setUserProfile] = useState(null);
+  // "View as student" (admin, from a student's profile): the student pages
+  // render with that student's account in place of the admin's, read only.
+  // The tutor pages keep the admin's own account.
+  const [preview, setPreview] = useState(() => { try { return JSON.parse(sessionStorage.getItem("hsj-view-as") || "null"); } catch { return null; } });
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathParts = location.pathname.split('/').filter(Boolean);
+  const viewingAs = preview?.user && realProfile?.role === "admin" && pathParts[0] !== "tutor" ? preview : null;
+  const authUser = viewingAs ? viewingAs.user : realUser;
+  const userProfile = viewingAs ? viewingAs.profile : realProfile;
+  const exitPreview = () => {
+    try { sessionStorage.removeItem("hsj-view-as"); } catch {}
+    const uid = preview?.uid; setPreview(null);
+    navigate(uid ? `/tutor/students/${uid}` : "/tutor/students");
+  };
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
@@ -90,13 +106,14 @@ export default function App() {
 
   // Every answered question is written to Firestore so progress survives
   // across devices and tutors can see it. Safe to call when logged out (no-op).
+  const previewing = !!viewingAs;
   const logAttempt = useCallback((data) => {
-    if (!authUser) return;
+    if (!authUser || previewing) return;
     recordAttempt(authUser, userProfile, data);
     invalidateAttempts();
     // A correct answer to a question in the error log, a day or more after it was logged, closes it
     settleRetests(authUser.uid, data);
-  }, [authUser, userProfile]);
+  }, [authUser, userProfile, previewing]);
 
   const LockedOverlay = ({ style }) => (
     <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.6)", backdropFilter: "blur(1px)", borderRadius: "inherit", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, ...style }}>
@@ -119,9 +136,6 @@ export default function App() {
     </div>
   );
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const pathParts = location.pathname.split('/').filter(Boolean);
   const board = BOARD_IDS.includes(pathParts[0]) ? pathParts[0] : null;
   const routeTab = pathParts[1] || null;
   const routeParam = pathParts[2] || null;
@@ -273,7 +287,12 @@ export default function App() {
   ];
   const menuSection = { borderTop: `1px solid ${T.line}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 6 };
   const menuLabel = { fontSize: 12, fontWeight: 600, color: T.muted };
-  const accountMenu = (
+  const accountMenu = viewingAs ? (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <span style={{ fontSize: 13, lineHeight: 1.5 }}>You are viewing the app as <b>{userProfile?.displayName || authUser?.email}</b>. Nothing you do here is saved to their account.</span>
+      <Button variant="primary" data-close-menu icon="arrowLeft" onClick={exitPreview}>Back to their profile</Button>
+    </div>
+  ) : (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
         <PhotoUpload name={userProfile?.displayName || authUser?.displayName} email={authUser?.email} photoURL={userProfile?.photoURL || authUser?.photoURL} size={56} align="flex-start"
@@ -311,6 +330,12 @@ export default function App() {
   const renderShell = (children, opts = {}) => (
     <AppShell user={authUser ? { email: authUser.email, photoURL: userProfile?.photoURL || authUser.photoURL, displayName: userProfile?.displayName || authUser.displayName } : authUser} menu={accountMenu} nav={isTutor ? tutorNav : isParent ? parentNav : studentNav}
       brandSub={isParent ? "Parent" : board ? boardLabel(board) : (isTutor ? "Tutor" : undefined)} {...opts}>
+      {viewingAs && (
+        <div style={{ background: T.amberTint, border: "1px solid #FDE2B5", color: "#92400E", borderRadius: T.radiusSm, padding: "8px 14px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", fontSize: 13 }}>
+          <span style={{ flex: 1, minWidth: 200 }}>Viewing as <b>{userProfile?.displayName || authUser?.email}</b>. Read only: answers, marks and settings here are not saved to their account.</span>
+          <Button size="sm" icon="arrowLeft" onClick={exitPreview}>Back to the profile</Button>
+        </div>
+      )}
       <Suspense fallback={<PageLoading />}>{children}</Suspense>
     </AppShell>
   );
@@ -335,7 +360,7 @@ export default function App() {
   // parent must accept the agreement, before the rest of the account opens.
   // The tokens are copied onto the profile at placement and cleared server-side
   // when the step is done (api/onboarding).
-  if (userProfile && !userProfile.needsPasswordChange) {
+  if (userProfile && !viewingAs && !userProfile.needsPasswordChange) {
     if (userProfile.role === "student" && userProfile.evalToken && !userProfile.selfEvaluation) {
       return <Suspense fallback={<PageLoading full />}><OnboardingPage token={userProfile.evalToken} account={authUser.email} onLogOut={() => logOut()}
         onDone={() => setUserProfile(prev => ({ ...prev, evalToken: null, selfEvaluation: prev.selfEvaluation || { submittedAt: Date.now() } }))} /></Suspense>;
@@ -349,7 +374,7 @@ export default function App() {
   }
 
   // CHANGE PASSWORD PROMPT (new students log in with a temporary password)
-  if (userProfile?.needsPasswordChange && !passwordChanged) {
+  if (userProfile?.needsPasswordChange && !passwordChanged && !viewingAs) {
     const handleChangePassword = async (e) => {
       e.preventDefault();
       setPasswordChangeError("");
@@ -439,7 +464,9 @@ export default function App() {
         : tutorPage === "payments"
           ? <TutorPayments />
         : tutorPage === "students"
-          ? (tutorParam && tutorParam !== "onboarding"
+          ? (tutorParam === "email"
+              ? (isAdmin ? <TutorEmail authUser={authUser} userProfile={userProfile} /> : <Locked what="Emailing students" />)
+              : tutorParam && tutorParam !== "onboarding"
               ? (pathParts[3] === "parent"
                   ? (can(userProfile, "family") ? <ParentPage authUser={authUser} userProfile={userProfile} previewUid={tutorParam} /> : <Locked what="The parent view" />)
                   : <StudentProfile authUser={authUser} userProfile={userProfile} uid={tutorParam} initialTab={pathParts[3] || null} />)

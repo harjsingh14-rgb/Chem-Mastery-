@@ -1,7 +1,7 @@
 // Lessons tab: a lesson per group per date (topics covered), then one note
 // per student with attendance, the tutor's comment and the week's homework
 // record, emailed to the parent with the student copied.
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
   fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
@@ -11,6 +11,9 @@ import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, Empty
 import { SELF_EVALUATION } from "../data/self-evaluation";
 import { lastOccurrence, lastSessionDate, describeSlots, slotsOf } from "../utils/schedule";
 import { can } from "../utils/privileges";
+import { uploadLessonFile } from "../firebase";
+
+const fmtSize = (b) => b >= 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round((b || 0) / 1024))} KB`;
 
 const today = () => new Date().toISOString().slice(0, 10);
 export const fmtLessonDate = (iso) => { const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }); };
@@ -284,6 +287,7 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
       www: (d.www || "").trim(), ebi: (d.ebi || "").trim(), extra: (d.extra || "").trim(), text: (d.text || "").trim(),
       homework: homeworkSnapshot(lastHw, subs.find(x => x.uid === s.uid) || null),
       nextHomework: nextHw ? { assignmentId: nextHw.id, title: nextHw.title, dueAt: nextHw.dueAt || null } : null,
+      attachments: (lesson.attachments || []).length ? lesson.attachments : null,
     };
   };
   const savePrivate = async (s) => {
@@ -339,6 +343,27 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
     try { await updateLesson(lessonId, { [key]: v || null }); setLesson(l => ({ ...l, [key]: v || null })); } catch (e) { setError(e.message); }
   };
   const saveSummary = saveLessonField("summary", summary);
+  // Files for this lesson (worksheets, mark schemes, slides): stored once,
+  // linked from every student's note for the lesson and in the emailed note.
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const addAttachments = async (files) => {
+    const list = Array.from(files || []).slice(0, 5 - (lesson?.attachments || []).length);
+    if (!list.length) return;
+    setUploading(true); setError(null);
+    try {
+      const added = [];
+      for (const f of list) added.push(await uploadLessonFile(lessonId, f));
+      const attachments = [...(lesson.attachments || []), ...added];
+      await updateLesson(lessonId, { attachments });
+      setLesson(l => ({ ...l, attachments }));
+    } catch (e) { setError(e.message); }
+    setUploading(false);
+  };
+  const removeAttachment = async (a) => {
+    const attachments = (lesson.attachments || []).filter(x => x.url !== a.url);
+    try { await updateLesson(lessonId, { attachments }); setLesson(l => ({ ...l, attachments })); } catch (e) { setError(e.message); }
+  };
   const remove = async () => {
     if (!window.confirm("Delete this lesson? Notes already sent stay with the students.")) return;
     try {
@@ -386,6 +411,21 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <label htmlFor="ls-hw" style={label}>Homework before next lesson</label>
             <Input id="ls-hw" value={homeworkText} onChange={e => setHomeworkText(e.target.value)} onBlur={saveLessonField("homeworkText", homeworkText)} placeholder={nextHw ? `"${nextHw.title}" set in the app is attached automatically. Add anything else here.` : "e.g. Finish the June 2023 paper questions 3 to 5. Homework set in the app is attached automatically."} />
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <span style={label}>Attachments</span>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+            {(lesson.attachments || []).map(a => (
+              <span key={a.url} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 999, background: T.soft, fontSize: 12 }}>
+                <a href={a.url} target="_blank" rel="noopener noreferrer" className="cm-link" style={{ fontWeight: 600 }}>{a.name}</a>
+                <span style={{ color: T.faint }}>{fmtSize(a.size)}</span>
+                <button type="button" aria-label={`Remove ${a.name}`} onClick={() => removeAttachment(a)} style={{ border: "none", background: "none", cursor: "pointer", color: T.muted, padding: 0, display: "inline-flex" }}><Icon name="x" size={12} /></button>
+              </span>
+            ))}
+            {(lesson.attachments || []).length < 5 && <Button size="sm" icon="plus" onClick={() => fileRef.current?.click()} disabled={uploading}>{uploading ? "Uploading…" : "Add file"}</Button>}
+            <input ref={fileRef} type="file" hidden multiple accept=".pdf,image/*,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv" onChange={e => { addAttachments(e.target.files); e.target.value = ""; }} />
+            <span style={{ fontSize: 11, color: T.faint }}>Worksheets, mark schemes or slides, up to 3 MB each. Linked in every note for this lesson and in the emailed note.</span>
           </div>
         </div>
       </Card>

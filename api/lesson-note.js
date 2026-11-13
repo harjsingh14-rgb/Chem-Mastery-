@@ -5,6 +5,7 @@ const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
 const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
+const storage = require("./_storage");
 
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
@@ -17,6 +18,18 @@ module.exports = async function handler(req, res) {
     if (!callerProfile || !["tutor", "admin"].includes(callerProfile.role)) throw fb.httpError(403, "Tutor accounts only");
     // Admin can switch emailing parents off for a tutor (src/utils/privileges.js)
     if (callerProfile.role !== "admin" && callerProfile.privileges && callerProfile.privileges.sendNotes === false) throw fb.httpError(403, "Sending notes to parents is turned off for your account. Save the note and ask HSJ admin to send it.");
+
+    // A file for a lesson (shown on every student's note for it): stored, the
+    // tutor then saves the returned { name, url, size, type } on the lesson.
+    if (req.body?.action === "upload") {
+      const lessonId = String(req.body.lessonId || "").trim();
+      if (!/^[\w-]+$/.test(lessonId)) throw fb.httpError(400, "Missing lesson id");
+      const lesson = await fb.getDocument(`lessons/${lessonId}`, token);
+      if (!lesson) throw fb.httpError(404, "Lesson not found");
+      if (lesson.tutorId !== caller.uid && callerProfile.role !== "admin") throw fb.httpError(403, "This is another tutor's lesson");
+      const file = await storage.uploadAttachment({ folder: `lessons/${lessonId}`, name: req.body.name, type: req.body.type, dataBase64: req.body.dataBase64 }, token);
+      return res.status(200).json({ ok: true, file });
+    }
 
     const noteId = String(req.body?.noteId || "").trim();
     if (!/^[\w-]+_[\w-]+$/.test(noteId)) throw fb.httpError(400, "Missing note id");
