@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchMyLessonNotes } from "../firebase";
 import { T } from "../ui/theme";
-import { Card, CardHeader, PageHeader, Chip, Button, EmptyState } from "../ui/components";
+import { Card, CardHeader, PageHeader, Chip, Button, EmptyState, Icon } from "../ui/components";
 import { useStudentCalendar, nextLessonRows } from "./StudentPanels";
 import { fmtTime, describeSlots, slotsOf } from "../utils/schedule";
 import CalendarSubscribe from "./CalendarSubscribe";
@@ -106,17 +106,55 @@ export function UpcomingLessons({ uid, classId, who = "you" }) {
   );
 }
 
+/** One lesson in the student's list: a row that opens to the full note. */
+function LessonRow({ n, open, onToggle, first }) {
+  const [tone, attLabel] = ATT[n.attendance] || ["neutral", ""];
+  const files = (n.attachments || []).length;
+  const line = (n.topics || [])[0] || (n.summary || "").split("\n")[0] || n.www || n.text || "";
+  const more = (n.topics || []).length > 1 ? ` +${n.topics.length - 1}` : "";
+  return (
+    <div style={{ borderTop: first ? "none" : `1px solid ${T.line}` }}>
+      <button type="button" onClick={onToggle} aria-expanded={open}
+        style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "12px 0", border: "none", background: "none", cursor: "pointer", textAlign: "left", color: T.ink }}>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 4 }}>
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+            <span style={{ fontWeight: 700, fontSize: 14 }}>{fmtDate(n.date)}</span>
+            {attLabel && <Chip tone={tone}>{attLabel}</Chip>}
+            {n.recording && <Chip tone="indigo">Recording</Chip>}
+            {files > 0 && <Chip tone="neutral">{files} file{files === 1 ? "" : "s"}</Chip>}
+          </div>
+          {!open && line && <span style={{ fontSize: 13, color: T.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{line}{more}</span>}
+        </div>
+        <Icon name="chevronDown" size={16} color={T.muted} style={{ flexShrink: 0, transform: open ? "rotate(180deg)" : "none", transition: "transform .15s" }} />
+      </button>
+      {open && (
+        <div style={{ paddingBottom: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+          {n.recording && <div><Button variant="primary" icon="play" onClick={() => window.open(n.recording, "_blank", "noopener")}>Watch the lesson recording</Button></div>}
+          <NoteBody n={{ ...n, recording: null }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function StudentLessons({ authUser, userProfile }) {
   const notes = useMyLessonNotes(authUser?.uid);
+  const [open, setOpen] = useState(null); // note id; the newest is open until you tap another
+  const openId = open ?? notes?.[0]?.id ?? null;
+  const toggle = (id) => setOpen(openId === id ? "" : id);
+  const recorded = (notes || []).filter(n => n.recording).length;
   return (
     <>
-      <PageHeader eyebrow="Lessons" title="Lessons" sub="What is coming up, then the notes your tutor sent after each lesson. Your parent gets the same note by email." />
+      <PageHeader eyebrow="Lessons" title="Lessons" sub="What is coming up, then a note from your tutor after each lesson. Tap a lesson to open it. Your parent gets the same note by email." />
       {userProfile?.classId && <UpcomingLessons uid={authUser?.uid} classId={userProfile.classId} who="you" />}
       {notes === null && <div style={{ fontSize: 13, color: T.muted }}>Loading…</div>}
       {notes && notes.length === 0 && <Card padding={0}><EmptyState icon="calendar" title="No notes yet" body="After each lesson your tutor writes a short note: what was covered, how you did on the homework, and what to work on." /></Card>}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {(notes || []).map(n => <Card key={n.id}><NoteBody n={n} /></Card>)}
-      </div>
+      {notes && notes.length > 0 && (
+        <Card style={{ display: "flex", flexDirection: "column" }}>
+          <CardHeader title="Past lessons" sub={`${notes.length} lesson${notes.length === 1 ? "" : "s"}${recorded ? ` · ${recorded} with a recording` : ""}`} />
+          {notes.map((n, i) => <LessonRow key={n.id} n={n} first={i === 0} open={openId === n.id} onToggle={() => toggle(n.id)} />)}
+        </Card>
+      )}
     </>
   );
 }

@@ -332,15 +332,24 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
     if (!window.confirm(`Send ${pending.length} note${pending.length === 1 ? "" : "s"} now?`)) return;
     for (const s of pending) await send(s);
   };
+  // Lesson-level fields are copied into each note when it is saved, so a change
+  // made afterwards (adding the recording link once Zoom has processed it, say)
+  // is also written into every note already saved for this lesson. Otherwise the
+  // students whose notes went out first would never see it.
+  const syncNotes = async (patch) => {
+    const saved = Object.values(notes).filter(n => n && n.uid);
+    await Promise.all(saved.map(n => saveLessonNote(lessonId, n.uid, patch)));
+    if (saved.length) setNotes(prev => { const out = { ...prev }; for (const n of saved) out[n.uid] = { ...out[n.uid], ...patch }; return out; });
+  };
   const saveTopics = async (topics) => {
     setLesson(l => ({ ...l, topics }));
-    try { await updateLesson(lessonId, { topics }); } catch (e) { setError(e.message); }
+    try { await updateLesson(lessonId, { topics }); await syncNotes({ topics }); } catch (e) { setError(e.message); }
   };
   // Lesson-level lines (what we covered, recording, homework) save when you click away
   const saveLessonField = (key, value) => async () => {
     const v = value.trim();
     if (v === (lesson[key] || "")) return;
-    try { await updateLesson(lessonId, { [key]: v || null }); setLesson(l => ({ ...l, [key]: v || null })); } catch (e) { setError(e.message); }
+    try { await updateLesson(lessonId, { [key]: v || null }); setLesson(l => ({ ...l, [key]: v || null })); await syncNotes({ [key]: v || null }); } catch (e) { setError(e.message); }
   };
   const saveSummary = saveLessonField("summary", summary);
   // Files for this lesson (worksheets, mark schemes, slides): stored once,
@@ -357,12 +366,13 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
       const attachments = [...(lesson.attachments || []), ...added];
       await updateLesson(lessonId, { attachments });
       setLesson(l => ({ ...l, attachments }));
+      await syncNotes({ attachments });
     } catch (e) { setError(e.message); }
     setUploading(false);
   };
   const removeAttachment = async (a) => {
     const attachments = (lesson.attachments || []).filter(x => x.url !== a.url);
-    try { await updateLesson(lessonId, { attachments }); setLesson(l => ({ ...l, attachments })); } catch (e) { setError(e.message); }
+    try { await updateLesson(lessonId, { attachments }); setLesson(l => ({ ...l, attachments })); await syncNotes({ attachments: attachments.length ? attachments : null }); } catch (e) { setError(e.message); }
   };
   const remove = async () => {
     if (!window.confirm("Delete this lesson? Notes already sent stay with the students.")) return;
