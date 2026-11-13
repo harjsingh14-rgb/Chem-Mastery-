@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, collection, query, where, limit, getDocs, serverTimestamp, writeBatch } from "firebase/firestore";
+import { getFirestore, doc, getDoc as getDocRaw, setDoc as setDocRaw, addDoc as addDocRaw, updateDoc as updateDocRaw, deleteDoc as deleteDocRaw, collection, query, where, limit, getDocs as getDocsRaw, queryEqual, serverTimestamp, writeBatch as writeBatchRaw } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCtSbGHVvDJinQ2NnbZUAMp2YHU2aNtkTM",
@@ -14,6 +14,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// ---- Read cache ----
+// Every page re-read the database on every visit, so tabs showed "Loading…"
+// each time. Reads below go through these wrappers: a query or document read
+// is remembered for a few minutes and shared between the components that ask
+// for it, so coming back to a tab is instant. Any write from this client
+// (direct or through the API) forgets everything, so what you just changed is
+// re-read fresh. Coming back to the browser tab after a while forgets too, so
+// another person's changes (a student submitting, a tutor sending a note) show
+// up within that window at the latest.
+const READ_TTL = 3 * 60 * 1000;
+const docReads = new Map();   // path -> { at, promise }
+let queryReads = [];          // [{ q, at, promise }]
+export function forgetReads() { docReads.clear(); queryReads = []; }
+async function getDoc(ref) {
+  const hit = docReads.get(ref.path);
+  if (hit && Date.now() - hit.at < READ_TTL) return hit.promise;
+  const promise = getDocRaw(ref);
+  docReads.set(ref.path, { at: Date.now(), promise });
+  promise.catch(() => docReads.delete(ref.path));
+  return promise;
+}
+async function getDocs(q) {
+  const now = Date.now();
+  const hit = queryReads.find(e => now - e.at < READ_TTL && queryEqual(e.q, q));
+  if (hit) return hit.promise;
+  const promise = getDocsRaw(q);
+  queryReads.push({ q, at: now, promise });
+  if (queryReads.length > 300) queryReads.shift();
+  promise.catch(() => { queryReads = queryReads.filter(e => e.promise !== promise); });
+  return promise;
+}
+const afterWrite = (promise) => { forgetReads(); return promise.then(r => { forgetReads(); return r; }); };
+const setDoc = (...a) => afterWrite(setDocRaw(...a));
+const addDoc = (...a) => afterWrite(addDocRaw(...a));
+const updateDoc = (...a) => afterWrite(updateDocRaw(...a));
+const deleteDoc = (...a) => afterWrite(deleteDocRaw(...a));
+const writeBatch = (...a) => { const b = writeBatchRaw(...a); const commit = b.commit.bind(b); b.commit = () => afterWrite(commit()); return b; };
+if (typeof document !== "undefined") {
+  let hiddenAt = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") hiddenAt = Date.now();
+    else if (hiddenAt && Date.now() - hiddenAt > 30 * 1000) forgetReads();
+  });
+}
 const googleProvider = new GoogleAuthProvider();
 
 // --- Auth functions ---
@@ -730,6 +775,7 @@ export async function ppqMarkApi(payload) {
   const token = await auth.currentUser?.getIdToken();
   const res = await fetch("/api/ppq-mark", { method: "POST", headers: { "Content-Type": "application/json", ...(token && { Authorization: `Bearer ${token}` }) }, body: JSON.stringify(payload) });
   const data = await res.json().catch(() => ({}));
+  forgetReads(); // the server may have written anything
   if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
   return data;
 }
@@ -761,6 +807,7 @@ async function postApi(path, body) {
   const idToken = await user.getIdToken();
   const res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` }, body: JSON.stringify(body) });
   const data = await res.json().catch(() => ({}));
+  forgetReads(); // the server may have written anything
   if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
   return data;
 }

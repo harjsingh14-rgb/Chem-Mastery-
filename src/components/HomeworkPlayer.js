@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { auth, fetchAssignment, startSubmission, saveItemResult, submitSubmission, sendMarkQuery, notifyTutor } from "../firebase";
+import { auth, forgetReads, fetchAssignment, startSubmission, saveItemResult, submitSubmission, sendMarkQuery, notifyTutor } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
 import McqQuestion from "./McqQuestion";
@@ -58,6 +58,7 @@ async function examine(payload) {
     body: JSON.stringify(payload),
   });
   const data = await res.json();
+  forgetReads();
   if (!res.ok) throw new Error(data.error || "Marking failed");
   return data;
 }

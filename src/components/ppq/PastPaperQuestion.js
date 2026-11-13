@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, fetchPpqQuestion, fetchPpqAttempt, ppqMarkApi } from "../../firebase";
+import { auth, forgetReads, fetchPpqQuestion, fetchPpqAttempt, ppqMarkApi } from "../../firebase";
 import { T } from "../../ui/theme";
 import { Button, Card, Chip, Notice, Icon } from "../../ui/components";
 import track from "../../utils/track";
@@ -130,6 +130,7 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
         body: JSON.stringify({ qid, answers, images: images.map(i => ({ mediaType: i.mediaType, dataBase64: i.dataBase64 })), mode: inkCount > 0 ? "draw" : photos.length ? "photo" : "typed", hintsUsed: hints, inkOnly, onlyParts: subset }),
       });
       const data = await res.json().catch(() => ({}));
+      forgetReads(); // the server stored the attempt
       if (!res.ok) throw new Error(data.error || `Marking failed (${res.status})`);
       setResult(data);
       setDrawing(false);

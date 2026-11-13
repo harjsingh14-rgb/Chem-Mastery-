@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
+import { auth, forgetReads } from "../firebase";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
 import track from "../utils/track";
 import { T } from "../ui/theme";
@@ -128,6 +128,7 @@ export default function ExtendedTab({ board, hasFullAccess, logActivity, logAtte
         body: JSON.stringify({ question: q.question, markScheme: q.markScheme, studentAnswer: extDraft, maxMarks: q.marks, levels: q.levels }),
       });
       const data = await res.json();
+      forgetReads();
       if (!res.ok) throw new Error(data.error || "Server error");
       setExtAiResult(data);
       const covered = new Set((data.coveredPoints || []).map((c, i) => c ? i : -1).filter(i => i >= 0));
