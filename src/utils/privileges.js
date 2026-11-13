@@ -6,7 +6,7 @@
 // firestore.rules enforces the same keys on the collections each one covers.
 
 export const PRIVILEGES = [
-  { id: "groups", label: "Groups", desc: "Create groups and change their usual times and Zoom link" },
+  { id: "groups", label: "Groups", desc: "Create groups and change their usual times and meeting link" },
   { id: "calendar", label: "Calendar", desc: "Add, move, cancel and delete sessions. Off means the calendar is view only" },
   { id: "lessons", label: "Lessons and notes", desc: "Record lessons, take attendance and write lesson notes" },
   { id: "sendNotes", label: "Email parents", desc: "Send lesson notes to parents. Off means notes are saved but not sent" },

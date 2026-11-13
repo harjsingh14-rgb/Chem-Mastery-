@@ -402,7 +402,7 @@ function SessionDetail({ s, cls, colour, tutorName, busy, canEdit = true, canNot
             {s.studentIds ? `For ${(s.studentNames || []).join(", ") || "the named students"} only. Nobody else in the group sees it.` : `${cls ? boardLabel(cls.board) : ""} · every student in the group sees it`}
             {s.note ? ` · ${s.note}` : ""}
           </div>
-          {zoom && <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>Zoom: <a href={zoom} target="_blank" rel="noopener noreferrer" className="cm-link">{zoom}</a>{s.zoomLink ? " (this session only)" : ""}</div>}
+          {zoom && <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>Meeting link: <a href={zoom} target="_blank" rel="noopener noreferrer" className="cm-link">{zoom}</a>{s.zoomLink ? " (this session only)" : ""}</div>}
         </div>
         <Button variant="ghost" aria-label="Close" onClick={onClose}><Icon name="x" size={16} /></Button>
       </div>
@@ -468,7 +468,7 @@ function SessionForm({ form, setF, classes, classOf, students, busy, onSubmit, o
       </div>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
         <div style={{ ...field, flex: "1 1 220px" }}><label style={label} htmlFor="ss-title">Title (optional)</label><Input id="ss-title" value={form.title} onChange={e => setF({ title: e.target.value })} placeholder={form.who === "students" ? "e.g. Catch-up: equilibrium" : "e.g. Mock exam, Revision day"} /></div>
-        <div style={{ ...field, flex: "1 1 260px" }}><label style={label} htmlFor="ss-zoom">Zoom link (blank = the group's usual link)</label><Input id="ss-zoom" type="url" value={form.zoomLink} onChange={e => setF({ zoomLink: e.target.value })} placeholder={cls?.zoomLink || "https://zoom.us/j/…"} /></div>
+        <div style={{ ...field, flex: "1 1 260px" }}><label style={label} htmlFor="ss-zoom">Meeting link (blank = the group's usual link)</label><Input id="ss-zoom" type="url" value={form.zoomLink} onChange={e => setF({ zoomLink: e.target.value })} placeholder={cls?.zoomLink || "https://zoom.us/j/…"} /></div>
       </div>
       <div style={field}><label style={label} htmlFor="ss-note">Note for students (optional)</label><Input id="ss-note" value={form.note} onChange={e => setF({ note: e.target.value })} placeholder="e.g. Bring your data sheet. Shown with the session." /></div>
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>

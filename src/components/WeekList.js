@@ -6,7 +6,7 @@ import { T, groupColour } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Notice } from "../ui/components";
 
 // "This week" on the tutor Overview: every lesson and session from Monday to
-// Sunday as a list, with the Zoom link and a one-click way into the register.
+// Sunday as a list, with the meeting link and a one-click way into the register.
 
 const DAY_LABEL = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const mondayOf = (iso) => { const d = new Date(`${iso}T00:00:00`); return addDays(iso, -((d.getDay() + 6) % 7)); };
@@ -96,7 +96,7 @@ export default function WeekList({ sessions, classes, tutorUid, tutorName, onLes
                 <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
                   {cancelled && <Chip tone="red">Cancelled</Chip>}
                   {!cancelled && s.lessonId && <Chip tone="green">Notes started</Chip>}
-                  {!cancelled && zoom && <Button size="sm" onClick={() => window.open(zoom, "_blank", "noopener")}>Zoom</Button>}
+                  {!cancelled && zoom && <Button size="sm" onClick={() => window.open(zoom, "_blank", "noopener")}>Join</Button>}
                   {!cancelled && canNotes && <Button size="sm" variant={past && !s.lessonId ? "accent" : "secondary"} icon="pencil" onClick={() => openNotes(s)} disabled={busyId === s.id}>
                     {busyId === s.id ? "Opening…" : s.lessonId ? "Open notes" : past ? "Attendance and notes" : "Take attendance"}
                   </Button>}

@@ -41,7 +41,7 @@ export function NextLessonCard({ authUser, userProfile }) {
   const live = rows.find(r => !r.cancelled);
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      <CardHeader title="Next lesson" sub={slots.length ? `Usually ${describeSlots(slots)}` : cls?.lessonSlot || "On Zoom"} />
+      <CardHeader title="Next lesson" sub={slots.length ? `Usually ${describeSlots(slots)}` : cls?.lessonSlot || "Online"} />
       {loading && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
       {!loading && rows.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Nothing is on the calendar yet. Your tutor will add the next lessons.</span>}
       {rows.map((o, i) => (
@@ -53,7 +53,7 @@ export function NextLessonCard({ authUser, userProfile }) {
         </div>
       ))}
       {live?.note && <span style={{ fontSize: 12, color: T.muted }}>{live.note}</span>}
-      {live?.zoomLink && <div><Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join on Zoom</Button></div>}
+      {live?.zoomLink && <div><Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join the meeting</Button></div>}
     </Card>
   );
 }

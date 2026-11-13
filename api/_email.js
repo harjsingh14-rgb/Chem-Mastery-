@@ -168,7 +168,7 @@ function lessonReminder({ studentName, groupName, when, zoomNote, zoomLink, home
   const html = layout("Lesson tomorrow", `
     <p>Hi ${esc(sf)},</p>
     <p>Your ${groupName ? `<strong>${esc(groupName)}</strong> ` : ""}lesson is <strong>${esc(when)}</strong>.${zoomNote ? ` ${esc(zoomNote)}` : ""}</p>
-    ${zoomLink ? button(zoomLink, "Join on Zoom") : ""}
+    ${zoomLink ? button(zoomLink, "Join the meeting") : ""}
     ${homework.length ? `<p><strong>Homework still to finish before the lesson</strong><br>${homework.map(h => `${esc(h.title)}${h.dueAt ? ` (due ${esc(fmtShortDate(h.dueAt))})` : ""}`).join("<br>")}</p>${button(`${SITE}/`, "Open my homework")}` : "<p>Your homework is all in. Bring any questions from the week.</p>"}
     <p>See you tomorrow,<br>HSJ Tuition</p>`);
   return { subject: `Lesson tomorrow: ${when}`, html };

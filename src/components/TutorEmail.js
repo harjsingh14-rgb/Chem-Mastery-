@@ -143,7 +143,7 @@ export default function TutorEmail({ authUser }) {
                 style={{ padding: "10px 12px", borderRadius: 10, border: `1px solid ${T.border}`, fontSize: 14, color: T.ink, resize: "vertical", fontFamily: "inherit", lineHeight: 1.6 }} /></div>
             <div className="cm-grid-2" style={{ gap: 12 }}>
               <div style={field}><label htmlFor="em-link" style={label}>Button link (optional)</label><Input id="em-link" type="url" value={link} onChange={e => setLink(e.target.value)} placeholder="https://…" /></div>
-              <div style={field}><label htmlFor="em-link-label" style={label}>Button text</label><Input id="em-link-label" value={linkLabel} onChange={e => setLinkLabel(e.target.value)} placeholder="e.g. Join on Zoom" maxLength={60} /></div>
+              <div style={field}><label htmlFor="em-link-label" style={label}>Button text</label><Input id="em-link-label" value={linkLabel} onChange={e => setLinkLabel(e.target.value)} placeholder="e.g. Join the meeting" maxLength={60} /></div>
             </div>
             <div style={field}>
               <span style={label}>Attachments</span>

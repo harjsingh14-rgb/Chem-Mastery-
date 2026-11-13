@@ -137,7 +137,7 @@ function vevent(s, group, tutor, staff) {
   if (who) desc.push(staff ? `Students: ${who}` : "Session for chosen students only.");
   else if (s.studentIds && staff) desc.push(`${s.studentIds.length} chosen student${s.studentIds.length === 1 ? "" : "s"}`);
   if (s.note) desc.push(s.note);
-  if (zoom) desc.push(`Zoom: ${zoom}`);
+  if (zoom) desc.push(`Meeting link: ${zoom}`);
   if (group?.zoomNote) desc.push(group.zoomNote);
   desc.push(staff ? `Attendance and notes: ${SITE}/tutor/calendar` : `Lesson notes and homework: ${SITE}`);
   const created = isoStamp(s.createdAt);
@@ -149,7 +149,7 @@ function vevent(s, group, tutor, staff) {
     `DTEND;TZID=Europe/London:${localStamp(s.date, addMinutes(s.time, minutes))}`,
     `SUMMARY:${escapeText(summary)}`,
     `DESCRIPTION:${escapeText(desc.join("\n"))}`,
-    `LOCATION:${escapeText(zoom ? "Zoom (link in the description)" : "Online")}`,
+    `LOCATION:${escapeText(zoom ? "Online (meeting link in the description)" : "Online")}`,
     zoom ? `URL:${zoom}` : null,
     created ? `CREATED:${created}` : null,
     `STATUS:${cancelled ? "CANCELLED" : "CONFIRMED"}`,

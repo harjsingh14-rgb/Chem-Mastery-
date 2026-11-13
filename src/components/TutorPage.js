@@ -168,7 +168,7 @@ export default function TutorPage({ authUser, userProfile }) {
           <CardHeader title={`Usual weekly times for ${classes.find(c => c.code === editSchedule.code)?.name || "this group"}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them." />
           <SlotsFields slots={editSchedule.slots} onChange={slots => setEditSchedule(e => ({ ...e, slots }))} />
           <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 520 }}>
-            <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Zoom link (shown to students and parents, and in reminder emails)</label>
+            <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Meeting link (shown to students and parents, and in reminder emails)</label>
             <Input id="cls-zoom" type="url" value={editSchedule.zoomLink} onChange={e => setEditSchedule(x => ({ ...x, zoomLink: e.target.value }))} placeholder="https://zoom.us/j/…" />
           </div>
           <div style={{ display: "flex", gap: 8 }}>

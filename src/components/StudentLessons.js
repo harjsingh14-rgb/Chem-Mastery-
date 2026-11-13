@@ -87,7 +87,7 @@ const endOf = (hhmm, minutes) => {
   return fmtTime(`${String(Math.floor(t / 60) % 24).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`);
 };
 
-/** One upcoming lesson: a row that opens to its time, note and Zoom link. */
+/** One upcoming lesson: a row that opens to its time, note and meeting link. */
 function UpcomingRow({ o, live, open, onToggle, first, who }) {
   return (
     <div style={{ borderTop: first ? "none" : `1px solid ${T.line}` }}>
@@ -109,8 +109,8 @@ function UpcomingRow({ o, live, open, onToggle, first, who }) {
           {o.cancelled
             ? <div style={{ color: T.muted }}>This lesson is cancelled.</div>
             : o.zoomLink
-              ? <div><Button size="sm" variant="primary" icon="play" onClick={() => window.open(o.zoomLink, "_blank", "noopener")}>Join on Zoom</Button></div>
-              : <div style={{ color: T.muted }}>No Zoom link yet. Your tutor adds it to the group and it appears here.</div>}
+              ? <div><Button size="sm" variant="primary" icon="play" onClick={() => window.open(o.zoomLink, "_blank", "noopener")}>Join the meeting</Button></div>
+              : <div style={{ color: T.muted }}>No meeting link yet. Your tutor adds it to the group and it appears here.</div>}
         </div>
       )}
     </div>
@@ -128,8 +128,8 @@ export function UpcomingLessons({ uid, classId, who = "you" }) {
   const openKey = open ?? live?.key ?? null;
   return (
     <Card style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 14 }}>
-      <CardHeader title="Coming up" sub={slots.length ? `Usually ${describeSlots(slots)}. Tap a lesson for the Zoom link.` : "Lessons and sessions on the calendar"}
-        right={live?.zoomLink ? <Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join on Zoom</Button> : null} />
+      <CardHeader title="Coming up" sub={slots.length ? `Usually ${describeSlots(slots)}. Tap a lesson for the meeting link.` : "Lessons and sessions on the calendar"}
+        right={live?.zoomLink ? <Button size="sm" variant="primary" onClick={() => window.open(live.zoomLink, "_blank", "noopener")}>Join the meeting</Button> : null} />
       {loading && <span style={{ fontSize: 13, color: T.muted }}>Loading…</span>}
       {!loading && rows.length === 0 && <span style={{ fontSize: 13, color: T.muted }}>Nothing is on the calendar yet.</span>}
       {rows.map((o, i) => <UpcomingRow key={o.key} o={o} live={o === live} first={i === 0} open={openKey === o.key} onToggle={() => setOpen(openKey === o.key ? "" : o.key)} who={who} />)}
