@@ -508,6 +508,12 @@ export async function fetchTutorLessons(tutorUid) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.clientTime || 0) - (a.clientTime || 0));
 }
 
+/** Every tutor's lessons (admins). */
+export async function fetchAllLessons() {
+  const snap = await getDocs(collection(db, "lessons"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.clientTime || 0) - (a.clientTime || 0));
+}
+
 export async function fetchLesson(id) {
   const snap = await getDoc(doc(db, "lessons", id));
   return snap.exists() ? { id: snap.id, ...snap.data() } : null;

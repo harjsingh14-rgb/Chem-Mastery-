@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
   fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
-  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote, fetchClassAssignments } from "../firebase";
+  fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote, fetchClassAssignments, fetchAllClasses, fetchAllLessons, fetchAllSessions } from "../firebase";
 import { T, boardLabel } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, Tabs, Icon } from "../ui/components";
 import { SELF_EVALUATION } from "../data/self-evaluation";
@@ -70,15 +70,16 @@ export function TutorLessonsList({ authUser, userProfile }) {
   const [topics, setTopics] = useState([]);
   const [creating, setCreating] = useState(false);
   const uid = authUser?.uid;
+  const isAdmin = userProfile?.role === "admin"; // admins see every group's lessons, whoever the tutor is
 
   useEffect(() => {
     if (!uid) return;
     let cancelled = false;
-    Promise.all([fetchTutorClasses(uid), fetchTutorLessons(uid), fetchTutorSessions(uid).catch(() => [])])
+    Promise.all([isAdmin ? fetchAllClasses() : fetchTutorClasses(uid), isAdmin ? fetchAllLessons() : fetchTutorLessons(uid), (isAdmin ? fetchAllSessions() : fetchTutorSessions(uid)).catch(() => [])])
       .then(([g, l, ses]) => { if (!cancelled) { setGroups(g); setLessons(l); setSessions(ses); if (g[0]) setClassId(g[0].code); if (l.length === 0) setShowNew(true); } })
       .catch(e => { if (!cancelled) { setError(e.message); setGroups([]); setLessons([]); } });
     return () => { cancelled = true; };
-  }, [uid]);
+  }, [uid, isAdmin]);
 
   const group = groups?.find(g => g.code === classId);
   // Default the date to the group's latest calendar session, else its usual weekly time
@@ -108,7 +109,7 @@ export function TutorLessonsList({ authUser, userProfile }) {
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
       {groups && groups.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Lessons belong to a group. Create one on the Overview tab." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
       {groups && groups.length > 0 && <div style={{ marginBottom: 12 }}><Tabs tabs={[{ id: "lessons", label: "Lessons" }, { id: "register", label: "Attendance register" }]} value={tab} onChange={setTab} /></div>}
-      {tab === "register" && groups && groups.length > 0 && <AttendanceRegister uid={uid} scope={userProfile?.role === "admin" ? null : uid} groups={groups} lessons={lessons || []} />}
+      {tab === "register" && groups && groups.length > 0 && <AttendanceRegister uid={uid} scope={isAdmin ? null : uid} groups={groups} lessons={lessons || []} />}
       {tab === "lessons" && showNew && groups && groups.length > 0 && (
         <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 12 }}>
           <CardHeader title="New lesson" sub="Which group, when, and what you covered. You can change the topics afterwards." />
