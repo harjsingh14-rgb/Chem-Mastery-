@@ -246,12 +246,21 @@ export default function App() {
   // Remember the board so "/" goes straight back to it next time
   useEffect(() => { if (board) { try { localStorage.setItem("hsj-board", board); } catch {} } }, [board]);
   useEffect(() => {
-    if (screen !== "board" || !authUser) return;
+    // Wait for the profile: before it loads, savedBoard is only whatever this
+    // browser used last, which may be another board entirely
+    if (screen !== "board" || !authUser || !userProfile) return;
     // Tutors land on their dashboard; parents on their child's page; students on their board's dashboard
     if (isTutor) navigate("/tutor", { replace: true });
     else if (isParent) navigate("/parent", { replace: true });
     else if (savedBoard) navigate(`/${savedBoard}`, { replace: true });
-  }, [screen, authUser, savedBoard, isTutor, isParent, navigate]);
+  }, [screen, authUser, userProfile, savedBoard, isTutor, isParent, navigate]);
+  // A placed student is locked to their own board: a stale /ocr link or a
+  // remembered board from someone else's session on the same browser is swapped
+  const profileBoard = !isTutor && !isParent && BOARD_IDS.includes(userProfile?.board) ? userProfile.board : null;
+  useEffect(() => {
+    if (!profileBoard || !board || board === profileBoard) return;
+    navigate(`/${profileBoard}${location.pathname.slice(board.length + 1)}${location.search}`, { replace: true });
+  }, [profileBoard, board, location.pathname, location.search, navigate]);
   // Parents have no student screens of their own
   useEffect(() => {
     if (isParent && authUser && screen !== "parent" && screen !== "board" && screen !== "onboarding") navigate("/parent", { replace: true });
