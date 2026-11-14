@@ -4,7 +4,7 @@
 // details. "Parent view" opens the page the parent sees for this student.
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserProfiles, fetchClass, fetchStudentLessonNotes, fetchStudentPrivateNotes, fetchPayments, fetchStudentSessions, fetchAttemptsForUser, setStudentName, setStudentPhoto, studentsApi } from "../firebase";
+import { fetchUserProfiles, fetchClass, fetchAllClasses, fetchStudentLessonNotes, fetchStudentPrivateNotes, fetchPayments, fetchStudentSessions, fetchAttemptsForUser, setStudentName, setStudentPhoto, studentsApi } from "../firebase";
 import { T, boardLabel, pctColour } from "../ui/theme";
 import { Card, CardHeader, Chip, StatTile, Tabs, EmptyState, Notice, Table, th, td, Button, Input, Icon, AccuracyBar, chipToneForPct } from "../ui/components";
 import { summarise, relativeTime, TYPE_LABEL, attemptTime } from "../utils/analytics";
@@ -143,6 +143,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
             </div>
           </Card>
 
+          {isAdmin && <GroupCard student={student} onMoved={patch => { setStudent(s => ({ ...s, ...patch })); fetchClass(patch.classId).then(setGroup).catch(() => setGroup(null)); }} />}
           {isAdmin && <AccessCard student={student} onChange={patch => setStudent(s => ({ ...s, ...patch }))} />}
 
           {canFamily && <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -270,6 +271,55 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
 const loginMs = (u) => u?.lastLogin?.toMillis ? u.lastLogin.toMillis() : (u?.lastLogin?.seconds ? u.lastLogin.seconds * 1000 : null);
 
 /** Admin: the student's (and parent's) login, with new login details, a password reset and an on/off switch. */
+/** Admins: which group (and so which tutor) the student is in, with a move control. */
+function GroupCard({ student, onMoved }) {
+  const [classes, setClasses] = useState(null);
+  const [tutors, setTutors] = useState({});
+  const [choice, setChoice] = useState("");
+  const [moving, setMoving] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState(null);
+  useEffect(() => {
+    if (!moving || classes) return;
+    fetchAllClasses().then(async cs => {
+      setClasses(cs);
+      const ids = Array.from(new Set(cs.map(c => c.tutorId).filter(Boolean)));
+      try { const ps = await fetchUserProfiles(ids); setTutors(Object.fromEntries(ps.map(p => [p.uid, p.displayName || p.email]))); } catch { /* names are a nicety */ }
+    }).catch(e => setMsg(e.message));
+  }, [moving, classes]);
+  const move = async () => {
+    const target = (classes || []).find(c => c.code === choice);
+    if (!target) return;
+    if (!window.confirm(`Move ${student.displayName || "this student"} to ${target.name || target.code}${target.tutorId ? ` with ${tutors[target.tutorId] || "its tutor"}` : ""}? Their lessons, homework and notes from now on belong to that group.`)) return;
+    setBusy(true); setMsg(null);
+    try {
+      const r = await studentsApi("move", { uid: student.uid, groupCode: choice });
+      onMoved({ classId: r.classId, className: r.className, tutorId: r.tutorId, board: r.board });
+      setMoving(false); setChoice(""); setMsg(`Moved to ${r.className}.`);
+    } catch (e) { setMsg(e.message); }
+    setBusy(false);
+  };
+  return (
+    <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <CardHeader title="Group" sub={student.className || "Not in a group"} right={!moving && <Button size="sm" variant="secondary" onClick={() => setMoving(true)}>{student.className ? "Move" : "Place"}</Button>} />
+      {moving && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <select value={choice} onChange={e => setChoice(e.target.value)} style={{ padding: "9px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, background: T.card }}>
+            <option value="">{classes ? "Choose a group" : "Loading groups…"}</option>
+            {(classes || []).filter(c => c.code !== student.classId).map(c => <option key={c.code} value={c.code}>{c.name || c.code}{c.tutorId ? ` · ${tutors[c.tutorId] || "tutor"}` : " · no tutor"}{c.board ? ` · ${boardLabel(c.board)}` : ""}</option>)}
+          </select>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button size="sm" variant="primary" onClick={move} disabled={!choice || busy}>{busy ? "Moving…" : "Move student"}</Button>
+            <Button size="sm" variant="ghost" onClick={() => { setMoving(false); setChoice(""); }}>Cancel</Button>
+          </div>
+          <span style={{ fontSize: 12, color: T.muted }}>The student's tutor becomes the new group's tutor. Past lesson notes stay with the lessons they were written on.</span>
+        </div>
+      )}
+      {msg && <Notice tone={/^Moved/.test(msg) ? "green" : "red"}>{msg}</Notice>}
+    </Card>
+  );
+}
+
 function AccessCard({ student, onChange }) {
   const [parent, setParent] = useState(null);
   const [busy, setBusy] = useState(null);

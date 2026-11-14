@@ -466,7 +466,7 @@ export default function App() {
         : tutorPage === "students"
           ? (tutorParam === "email"
               ? (isAdmin ? <TutorEmail authUser={authUser} userProfile={userProfile} /> : <Locked what="Emailing students" />)
-              : tutorParam && tutorParam !== "onboarding"
+              : tutorParam && tutorParam !== "onboarding" && tutorParam !== "questionnaires"
               ? (pathParts[3] === "parent"
                   ? (can(userProfile, "family") ? <ParentPage authUser={authUser} userProfile={userProfile} previewUid={tutorParam} /> : <Locked what="The parent view" />)
                   : <StudentProfile authUser={authUser} userProfile={userProfile} uid={tutorParam} initialTab={pathParts[3] || null} />)

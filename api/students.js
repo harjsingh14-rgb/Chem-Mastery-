@@ -524,6 +524,27 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, ...r });
     }
 
+    // Move a placed student to another group (and so to that group's tutor).
+    // Their diagnostic homework and its submission follow them.
+    if (action === "move") {
+      const uid = str(body.uid, 128);
+      const groupCode = str(body.groupCode, 20).toUpperCase();
+      if (!uid || !groupCode) throw bad("uid and groupCode required");
+      const profile = await fb.getDocument(`users/${uid}`, token);
+      if (!profile || profile.role !== "student") throw bad("Student not found");
+      const group = await fb.getDocument(`classes/${groupCode}`, token);
+      if (!group) throw bad("Group not found");
+      if (profile.classId === (group.code || groupCode)) throw bad("The student is already in that group");
+      const patch = { classId: group.code || groupCode, className: group.name || groupCode, tutorId: group.tutorId || null, board: group.board || profile.board || null, movedAt: new Date(), movedFrom: profile.classId || null };
+      await fb.updateDocument(`users/${uid}`, patch, token);
+      if (profile.applicantId) await fb.updateDocument(`applicants/${profile.applicantId}`, { groupCode: patch.classId }, token).catch(() => {});
+      const diagId = `diag_${uid}`;
+      const diagPatch = { classId: patch.classId, tutorId: patch.tutorId };
+      if (await fb.getDocument(`assignments/${diagId}`, token)) await fb.updateDocument(`assignments/${diagId}`, diagPatch, token);
+      if (await fb.getDocument(`submissions/${diagId}_${uid}`, token)) await fb.updateDocument(`submissions/${diagId}_${uid}`, diagPatch, token);
+      return res.status(200).json({ ok: true, ...patch, movedAt: Date.now() });
+    }
+
     if (action === "create") {
       const details = validateDetails(body);
       const id = fb.newToken().slice(0, 20);

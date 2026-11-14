@@ -9,6 +9,7 @@ import { T, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Avatar, AccuracyBar, Tabs } from "../ui/components";
 import { summarise, relativeTime, studentRow } from "../utils/analytics";
 import TutorStudents from "./TutorStudents";
+import ParentQuestionnaires from "./ParentQuestionnaires";
 
 export function AttendanceChips({ a }) {
   if (!a) return <span style={{ fontSize: 12, color: T.muted }}>No lessons noted</span>;
@@ -27,13 +28,13 @@ export default function StudentsPage({ authUser, userProfile, tab = "all" }) {
   const location = useLocation();
   const isAdmin = userProfile?.role === "admin";
   const params = new URLSearchParams(location.search);
-  const tabs = [{ id: "all", label: "All students" }, ...(isAdmin ? [{ id: "onboarding", label: "Onboarding" }] : [])];
-  const go = (id) => navigate(id === "all" ? "/tutor/students" : "/tutor/students/onboarding");
+  const tabs = [{ id: "all", label: "All students" }, ...(isAdmin ? [{ id: "onboarding", label: "Onboarding" }, { id: "questionnaires", label: "Questionnaires" }] : [])];
+  const go = (id) => navigate(id === "all" ? "/tutor/students" : `/tutor/students/${id}`);
 
   return (
     <>
-      <PageHeader eyebrow="Students" title={tab === "onboarding" ? "Onboarding" : "Students"}
-        sub={tab === "onboarding" ? "Add a student after the discovery call. They get the self-evaluation, the parent gets the terms, and you place them into a group here." : "Everyone you teach. Open a student for their attendance, notes, homework and family details."}
+      <PageHeader eyebrow="Students" title={tab === "onboarding" ? "Onboarding" : tab === "questionnaires" ? "Parent questionnaires" : "Students"}
+        sub={tab === "onboarding" ? "Add a student after the discovery call. They get the self-evaluation, the parent gets the terms, and you place them into a group here." : tab === "questionnaires" ? "What parents told us on the agreement link: starting point, why now, expectations and how they found HSJ. Download the lot as a spreadsheet." : "Everyone you teach. Open a student for their attendance, notes, homework and family details."}
         right={isAdmin && tab === "all" ? <>
           <Button icon="message" onClick={() => navigate("/tutor/students/email")}>Email students</Button>
           <Button icon="users" onClick={() => navigate("/tutor/students/onboarding?import=1")}>Import current students</Button>
@@ -42,6 +43,8 @@ export default function StudentsPage({ authUser, userProfile, tab = "all" }) {
       {tabs.length > 1 && <Tabs tabs={tabs} value={tab} onChange={go} />}
       {tab === "onboarding"
         ? <TutorStudents authUser={authUser} userProfile={userProfile} embedded startNew={params.get("new") === "1"} startImport={params.get("import") === "1"} />
+        : tab === "questionnaires" && isAdmin
+        ? <ParentQuestionnaires />
         : <Directory authUser={authUser} isAdmin={isAdmin} initialGroup={params.get("group") || ""} initialAttention={params.get("attention") === "1"} />}
     </>
   );
