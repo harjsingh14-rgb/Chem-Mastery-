@@ -15,7 +15,9 @@ export function useHomework(uid, classId) {
       try {
         const [asg, subs] = await Promise.all([fetchClassAssignments(classId), fetchMySubmissions(uid)]);
         if (cancelled) return;
-        const rows = asg.filter(a => a.status !== "closed" || subs.some(s => s.assignmentId === a.id)).map(a => {
+        // Homework set for the whole group, or for this student by name (the initial diagnostic)
+        const mine = asg.filter(a => !Array.isArray(a.studentIds) || a.studentIds.includes(uid));
+        const rows = mine.filter(a => a.status !== "closed" || subs.some(s => s.assignmentId === a.id)).map(a => {
           const sub = subs.find(s => s.assignmentId === a.id) || null;
           const answered = sub ? Object.keys(sub.answers || {}).length : 0;
           const status = !sub ? "todo" : sub.submittedAt ? "done" : "progress";
@@ -38,10 +40,12 @@ export function HomeworkRow({ row, board }) {
     <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 20px", borderTop: `1px solid ${T.line}`, flexWrap: "wrap" }}>
       <IconTile name={status === "done" ? "check" : "checkSquare"} tone={tone} size={40} />
       <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 2 }}>
-        <span style={{ fontWeight: 600 }}>{a.title}</span>
-        <span style={{ fontSize: 12, color: overdue ? T.red : T.muted }}>{a.minutes} min · {a.summary} · {status === "done" ? "Marked" : `Due ${fmtDue(a.dueAt)}`}{overdue ? " · overdue" : ""}</span>
+        <span style={{ fontWeight: 600 }}>{a.title}{a.kind === "diagnostic" && <Chip tone="indigo" style={{ marginLeft: 8, fontSize: 11 }}>First task</Chip>}</span>
+        <span style={{ fontSize: 12, color: overdue ? T.red : T.muted }}>{a.minutes} min · {a.summary} · {status === "done" ? (a.kind === "diagnostic" ? "Submitted" : "Marked") : `Due ${fmtDue(a.dueAt)}`}{overdue ? " · overdue" : ""}</span>
       </div>
-      {status === "done" ? (
+      {status === "done" && a.kind === "diagnostic" && !row.sub.report?.sentAt ? (
+        <Chip tone="accent">Submitted · report on its way</Chip>
+      ) : status === "done" ? (
         <Chip tone={pct >= 75 ? "green" : pct >= 50 ? "amber" : "red"}>{row.sub.totalScore} / {row.sub.maxScore} · {pct}%</Chip>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 4, width: 140 }}>
@@ -49,7 +53,7 @@ export function HomeworkRow({ row, board }) {
           <Bar value={(answered / Math.max(1, a.items.length)) * 100} colour={T.accent} />
         </div>
       )}
-      <Button variant={status === "done" ? "secondary" : "primary"} onClick={() => navigate(`/${board}/homework/${a.id}`)}>{status === "done" ? "Feedback" : status === "progress" ? "Continue" : "Start"}</Button>
+      <Button variant={status === "done" ? "secondary" : "primary"} onClick={() => navigate(`/${board}/homework/${a.id}`)}>{status === "done" ? (a.kind === "diagnostic" ? (row.sub.report?.sentAt ? "Feedback report" : "View") : "Feedback") : status === "progress" ? "Continue" : "Start"}</Button>
     </div>
   );
 }

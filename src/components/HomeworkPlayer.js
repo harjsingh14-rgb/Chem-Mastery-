@@ -8,6 +8,7 @@ import { partKey } from "./ppq/ppqUtils";
 import { resolveItem, TYPE_LABEL, fmtDue } from "../utils/homeworkBank";
 import chemFormat from "../utils/chemFormat";
 import ErrorLogPrompt from "./ErrorLogPrompt";
+import { StudentReport } from "./DiagnosticReport";
 
 // ─── Attempt and hint rules, agreed with HSJ Tuition ─────────────────────
 // - A part can be attempted up to MAX_ATTEMPTS times (MCQs twice: four options).
@@ -379,7 +380,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   };
 
   const handleSubmit = async () => {
-    if (!window.confirm("Submit your homework? You will not be able to change your answers afterwards.")) return;
+    if (!window.confirm(a?.kind === "diagnostic" ? "Submit your diagnostic? Your tutor then reviews it and sends your feedback report." : "Submit your homework? You will not be able to change your answers afterwards.")) return;
     setSubmitting(true);
     try {
       await submitSubmission(a.id, authUser.uid, { totalScore: total(answers), timeSpentMs: timeSpent() });
@@ -405,6 +406,11 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   if (!a || !subm) return <div style={{ color: T.muted, fontSize: 13, padding: 20 }}>Loading homework…</div>;
 
   const readOnly = submitted;
+  // The initial diagnostic: one attempt, no hints, and the marks stay hidden
+  // until the tutor has reviewed them and sent the feedback report.
+  const diagnostic = a.kind === "diagnostic";
+  const released = !!subm.report?.sentAt;
+  const hideMarks = diagnostic && !released;
   // Context for the error-log prompt under each marked part
   const logFor = (it) => ({ authUser, userProfile, entry: {
     source: "homework", questionId: String(it.questionId), topic: it.topic || null, topicLabel: it.topicLabel || null, title: it.topicLabel || null, board, assignmentId: a.id,
@@ -425,13 +431,22 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
         </div>
         <Chip tone="neutral"><Icon name="clock" size={13} />{Math.round(timeSpent() / 60000)} min · {a.minutes} min guide</Chip>
         {submitted
-          ? <Chip tone={pctScore >= 75 ? "green" : pctScore >= 50 ? "amber" : "red"}>Marked · {total(answers)} / {subm.maxScore} · {pctScore}%</Chip>
+          ? (hideMarks ? <Chip tone="accent">Submitted · report on its way</Chip> : <Chip tone={pctScore >= 75 ? "green" : pctScore >= 50 ? "amber" : "red"}>Marked · {total(answers)} / {subm.maxScore} · {pctScore}%</Chip>)
           : <Chip tone="amber">Due {fmtDue(a.dueAt)}</Chip>}
-        {!submitted && <Button variant="primary" onClick={handleSubmit} disabled={submitting || !allComplete} title={allComplete ? undefined : "Finish every question before submitting"}>{submitting ? "Submitting…" : "Submit homework"}</Button>}
+        {!submitted && <Button variant="primary" onClick={handleSubmit} disabled={submitting || !allComplete} title={allComplete ? undefined : "Finish every question before submitting"}>{submitting ? "Submitting…" : diagnostic ? "Submit diagnostic" : "Submit homework"}</Button>}
         <Button variant="secondary" onClick={onExit}>{submitted ? "Back to homework" : "Save and exit"}</Button>
       </div>
 
-      {submitted && (
+      {submitted && hideMarks && (
+        <Notice tone="accent" style={{ fontSize: 14 }}><b>Submitted.</b> Your tutor is reviewing your answers and will send your feedback report by email. It will appear here too, with every mark and the mark schemes.</Notice>
+      )}
+      {submitted && diagnostic && released && subm.report && (
+        <StudentReport report={subm.report} studentName={userProfile?.displayName || authUser?.displayName} title={a.title} year={userProfile?.year} />
+      )}
+      {!submitted && diagnostic && (
+        <Notice tone="indigo" style={{ fontSize: 13 }}><b>Your initial diagnostic.</b> Work through it on your own, without notes. Each question is marked once and there are no hints, so answer every part as fully as you can. Your marks come back with your tutor's feedback report.</Notice>
+      )}
+      {submitted && !hideMarks && (
         <Card style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
           <div style={{ fontFamily: T.display, fontSize: 40, fontWeight: 800, color: pctColour(pctScore), lineHeight: 1 }}>{pctScore}%</div>
           <div style={{ flex: 1, minWidth: 200 }}>
@@ -467,8 +482,8 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
                     const r = answers[it.key];
                     const current = i === idx;
                     const good = r && r.score >= Math.ceil(it.marks * COUNT_AS_CORRECT);
-                    const bg = current ? T.ink : r ? (good ? T.greenTint : r.score > 0 ? T.amberTint : T.redTint) : T.card;
-                    const fg = current ? "#fff" : r ? (good ? T.green : r.score > 0 ? T.amber : T.red) : T.muted;
+                    const bg = current ? T.ink : r ? (hideMarks ? T.accentTint : good ? T.greenTint : r.score > 0 ? T.amberTint : T.redTint) : T.card;
+                    const fg = current ? "#fff" : r ? (hideMarks ? T.accentText : good ? T.green : r.score > 0 ? T.amber : T.red) : T.muted;
                     const locked = !readOnly && firstIncomplete !== -1 && i > firstIncomplete;
                     return <button key={it.key} onClick={() => setIdx(i)} disabled={locked} aria-label={`Question ${i + 1}${locked ? " (locked until earlier questions are complete)" : ""}`} style={{ height: 34, borderRadius: 8, border: current || r ? "none" : `1px solid ${T.border}`, background: bg, color: fg, fontWeight: 700, fontSize: 12, cursor: locked ? "not-allowed" : "pointer", opacity: locked ? 0.45 : 1 }}>{i + 1}</button>;
                   })}
@@ -494,11 +509,11 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 
               {item.type === "ppq" && (
                 <>
-                  {!readOnly && !answers[item.key] && <Notice tone="neutral" style={{ fontSize: 13 }}>A real exam question. Answer every part, then press <b>Mark my answer</b>. You can be marked twice; your first mark counts for this homework.</Notice>}
+                  {!readOnly && !answers[item.key] && <Notice tone="neutral" style={{ fontSize: 13 }}>{diagnostic ? <>A real exam question. Answer every part, then press <b>Mark my answer</b>. One attempt per question.</> : <>A real exam question. Answer every part, then press <b>Mark my answer</b>. You can be marked twice; your first mark counts for this homework.</>}</Notice>}
                   <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} userProfile={userProfile} assignmentId={a.id} embedded onlyParts={Array.isArray(item.parts) ? item.parts : null}
-                    locked={readOnly || (answers[item.key]?.attempts?.length || 0) >= MAX_ATTEMPTS.ppq}
+                    locked={readOnly || (answers[item.key]?.attempts?.length || 0) >= (diagnostic ? 1 : MAX_ATTEMPTS.ppq)} assessment={hideMarks}
                     onMarked={(data, doc, extra) => recordPpq(item, data, doc, extra)} />
-                  {answers[item.key] && <AttemptBanner result={answers[item.key]} maxAttempts={MAX_ATTEMPTS.ppq} />}
+                  {answers[item.key] && !hideMarks && <AttemptBanner result={answers[item.key]} maxAttempts={diagnostic ? 1 : MAX_ATTEMPTS.ppq} />}
                 </>
               )}
 

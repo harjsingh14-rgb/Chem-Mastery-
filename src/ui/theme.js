@@ -54,6 +54,12 @@ export const GLOBAL_CSS = `
   body { margin: 0; background: ${T.bg}; color: ${T.ink}; font-family: ${T.font}; -webkit-font-smoothing: antialiased; }
   .cm-shell button, .cm-shell input, .cm-shell select, .cm-shell textarea { font-family: inherit; }
   .cm-nav a { transition: background 0.15s, color 0.15s; }
+  @media print {
+    /* Printing a feedback report: only the report itself */
+    body:has(.cm-report) * { visibility: hidden; }
+    body:has(.cm-report) .cm-report, body:has(.cm-report) .cm-report * { visibility: visible; }
+    body:has(.cm-report) .cm-report { position: absolute; left: 0; top: 0; width: 100%; padding: 16px; background: #fff; }
+  }
   .cm-nav a:hover { background: ${T.soft}; color: ${T.ink}; }
   .cm-row-hover:hover { background: #F8FAFB; }
   .cm-link { color: ${T.accentText}; font-weight: 600; text-decoration: none; }

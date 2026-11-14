@@ -19,8 +19,10 @@ GEOM = {
     "aqa-legacy":     dict(x0=34, x1=545, top=60, bottom=788),
     "ocr-legacy":     dict(x0=34, x1=562, top=58, bottom=768),
     "edexcel-legacy": dict(x0=34, x1=562, top=52, bottom=790),
+    # HSJ diagnostic papers (Exampro export, US Letter, footer at y=765)
+    "diag":           dict(x0=29, x1=569, top=27, bottom=737),   # in 595-wide units like the others
 }
-def geom_for(rec): return GEOM[rec["board"] + ("-legacy" if rec.get("legacy") else "")]
+def geom_for(rec): return GEOM[rec.get("geom") or rec["board"] + ("-legacy" if rec.get("legacy") else "")]
 END_RE = re.compile(r"END\s+OF\s+QUESTION|END\s+OF\s+PAPER|TOTAL FOR PAPER", re.I)
 SKIP_PAGE_RE = re.compile(r"no questions printed on this page|BLANK PAGE|ADDITIONAL ANSWER SPACE|Additional page", re.I)
 NOISE_RE = re.compile(r"^(PMT|Do not write|outside the|box|DO NOT WRITE IN THIS AREA.*|Turn over.*|\d{1,2}|\(\d\d\)|WMP/.*|© OCR 20\d\d|\*\w+\*|© .*|IB/M/.*|Question \d+ continues on the next page|[.\s_]+)$", re.I)

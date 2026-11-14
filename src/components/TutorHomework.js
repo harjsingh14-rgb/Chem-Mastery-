@@ -9,6 +9,7 @@ import { fmtDue, isOverdue, resolveItem, TYPE_LABEL } from "../utils/homeworkBan
 import { seriesLabel, paperLabel } from "./ppq/ppqUtils";
 import { relativeTime } from "../utils/analytics";
 import { can } from "../utils/privileges";
+import { DiagnosticReportEditor } from "./DiagnosticReport";
 
 const pct = (n, d) => d ? Math.round((n / d) * 100) : null;
 
@@ -38,7 +39,7 @@ export function TutorHomeworkList({ authUser, userProfile }) {
     return (
       <div className="cm-row-hover" onClick={() => navigate(`/tutor/homework/${a.id}`)} style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 20px", borderTop: `1px solid ${T.line}`, cursor: "pointer", flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 2 }}>
-          <span style={{ fontWeight: 600 }}>{a.title}</span>
+          <span style={{ fontWeight: 600 }}>{a.title}{a.kind === "diagnostic" && <Chip tone="indigo" style={{ marginLeft: 8, fontSize: 11 }}>{a.studentName || "One student"}</Chip>}</span>
           <span style={{ fontSize: 12, color: T.muted }}>{a.minutes} min · {a.summary} · Due {fmtDue(a.dueAt)}{isOverdue(a.dueAt) && a.status !== "closed" ? " (past due)" : ""}</span>
         </div>
         <div style={{ width: 150, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -90,8 +91,11 @@ export function TutorHomeworkReview({ authUser, userProfile, assignmentId }) {
     fetchAssignment(assignmentId).then(async asg => {
       if (!asg) { setError("This homework has been deleted. Set a new one from the Homework tab."); return; }
       setA(asg);
-      const [st, sb] = await Promise.all([fetchClassStudents(asg.classId, authUser.uid), fetchSubmissionsForAssignment(assignmentId, authUser.uid)]);
-      setStudents(st); setSubs(sb);
+      // Admins review any group's homework; a tutor their own. A homework set
+      // for named students (the initial diagnostic) lists only those students.
+      const scope = userProfile?.role === "admin" ? null : authUser.uid;
+      const [st, sb] = await Promise.all([fetchClassStudents(asg.classId, scope), fetchSubmissionsForAssignment(assignmentId, scope)]);
+      setStudents(Array.isArray(asg.studentIds) ? st.filter(x => asg.studentIds.includes(x.uid)) : st); setSubs(sb);
     }).catch(e => setError(/permission/i.test(e.message) ? "This homework has been deleted, or it was set by another tutor. Set a new one from the Homework tab." : e.message));
   };
   useEffect(load, [authUser, assignmentId]); // eslint-disable-line
@@ -200,6 +204,7 @@ export function TutorHomeworkReview({ authUser, userProfile, assignmentId }) {
                         </tr>
                         {isOpen && sub && (
                           <tr style={{ background: "#FAFBFC" }}><td colSpan={6} style={{ padding: "6px 20px 18px" }}>
+                            {a.kind === "diagnostic" && <DiagnosticReportEditor a={a} sub={sub} student={s} canMark={canMark} onSaved={report => setSubs(prev => prev.map(x => x.id === sub.id ? { ...x, report } : x))} />}
                             {a.items.map((it, i) => {
                               const r = sub.answers?.[it.key];
                               const res = resolveItem(it);

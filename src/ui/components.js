@@ -248,8 +248,8 @@ export function Input(props) {
 export function Notice({ tone = "neutral", children, style }) {
   const tones = {
     neutral: [T.soft, T.body, T.border], green: [T.greenTint, T.green, "#BBF7D0"], amber: [T.amberTint, "#92400E", "#FDE2B5"], red: [T.redTint, T.red, "#FECACA"],
-    accent: [T.accentTint, T.accentText, "#BBDDF3"],
+    accent: [T.accentTint, T.accentText, "#BBDDF3"], indigo: [T.indigoTint, T.indigo, "#D6D3F5"],
   };
-  const [bg, fg, bd] = tones[tone];
+  const [bg, fg, bd] = tones[tone] || tones.neutral;
   return <div style={{ background: bg, color: fg, border: `1px solid ${bd}`, borderRadius: T.radiusSm, padding: "10px 14px", fontSize: 13, lineHeight: 1.5, ...style }}>{children}</div>;
 }

@@ -260,7 +260,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
 
           {tab === "homework" && <HomeworkTab student={student} />}
           {tab === "payments" && canFamily && <PaymentsTab student={student} isAdmin={isAdmin} />}
-          {tab === "details" && canFamily && <DetailsTab student={student} group={group} />}
+          {tab === "details" && canFamily && <DetailsTab student={student} group={group} isAdmin={isAdmin} onChange={patch => setStudent(st => ({ ...st, ...patch }))} />}
         </div>
       </div>
     </>
@@ -441,12 +441,34 @@ function PaymentsTab({ student, isAdmin }) {
   );
 }
 
-function DetailsTab({ student, group }) {
+function DetailsTab({ student, group, isAdmin, onChange }) {
   const ev = student.selfEvaluation;
   const rag = ragCounts(ev?.ratings);
   const ag = student.agreement || {};
+  const navigate = useNavigate();
+  const [diagBusy, setDiagBusy] = useState(false);
+  const [diagMsg, setDiagMsg] = useState(null);
+  const dg = student.diagnostic;
+  const setDiagnostic = async () => {
+    setDiagBusy(true); setDiagMsg(null);
+    try {
+      const r = await studentsApi("assignDiagnostic", { uid: student.uid });
+      onChange && onChange({ diagnostic: { ...(dg || {}), assignmentId: r.assignmentId, dueAt: r.dueAt, setAt: Date.now() } });
+      setDiagMsg(r.existing ? "The diagnostic was already set; nothing changed." : `Set, due ${fmtDue(r.dueAt)}. It is on the student's Homework page now.`);
+    } catch (e) { setDiagMsg(e.message); }
+    setDiagBusy(false);
+  };
   return (
     <>
+      <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <CardHeader title="Initial diagnostic" sub={dg?.reportSentAt ? `Report sent ${fmtDate(dg.reportSentAt)}${dg.score != null ? ` · ${dg.score} / ${dg.max}` : ""}` : dg?.assignmentId ? `Set ${fmtDate(dg.setAt)} · due ${fmtDue(dg.dueAt)}` : "Not set"}
+          right={<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {dg?.assignmentId && <Button variant="secondary" size="sm" onClick={() => navigate(`/tutor/homework/${dg.assignmentId}`)}>Open the review</Button>}
+            {isAdmin && !dg?.assignmentId && <Button variant="primary" size="sm" onClick={setDiagnostic} disabled={diagBusy}>{diagBusy ? "Setting…" : "Set the initial diagnostic"}</Button>}
+          </div>} />
+        <span style={{ fontSize: 13, color: T.muted }}>{dg?.assignmentId ? "The paper is the student's first homework. Marks are hidden from them until the tutor sends the feedback report from the review page." : "Set automatically when a student is placed, once the Year 12 and Year 13 papers are published. Students placed before that get it from here."}</span>
+        {diagMsg && <Notice tone={/already|Set,/.test(diagMsg) ? "green" : "red"}>{diagMsg}</Notice>}
+      </Card>
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <CardHeader title="Course" />
         <div className="cm-grid-2" style={{ fontSize: 13 }}>

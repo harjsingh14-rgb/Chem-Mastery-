@@ -58,7 +58,7 @@ function enrichPrompt({ question, msText, topics }) {
   const topicList = (topics || []).map(t => `${t.ref}: ${t.title}`).join("\n");
   return `You are a senior ${BOARD_NAME[question.board] || question.board} ${LEVEL_NAME[question.level] || ""} Chemistry examiner preparing a past-paper question for a revision app. Students will see the original question as an image; you are producing the structured data behind it.
 
-PAPER: ${question.legacy ? `${BOARD_NAME[question.board]} legacy unit ${question.unit} (the specification examined 2010 to 2016)` : `${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} Paper ${question.paper}`}, ${question.series}, question ${question.q}. Total marks on the paper: ${question.total}.
+PAPER: ${question.diagnostic ? `HSJ Tuition ${question.title || "initial diagnostic"}, an initial diagnostic paper assembled from ${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} exam questions${question.coverTitle ? ` (listed on the cover as "${question.coverTitle}")` : ""}` : question.legacy ? `${BOARD_NAME[question.board]} legacy unit ${question.unit} (the specification examined 2010 to 2016)` : `${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} Paper ${question.paper}`}, ${question.series}, question ${question.q}. Total marks on the paper: ${question.total}.
 
 QUESTION TEXT (extracted from the PDF; layout, tables and diagrams may be lost or garbled; answer lines removed):
 <<<
@@ -134,10 +134,26 @@ const INDEX_FIELDS = ["q", "paper", "series", "year", "totalMarks", "title", "to
 async function reindex({ board, level }, token) {
   if (!board || !level) throw fb.httpError(400, "board and level required");
   const docs = await fb.queryDocuments("ppq", { board, level }, token, { limit: 3000 });
-  const items = docs.filter(d => d.status !== "offspec").map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined && d[k] !== null && d[k] !== false) o[k] = d[k]; return o; })
+  const items = docs.filter(d => d.status !== "offspec" && !d.diagnostic).map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined && d[k] !== null && d[k] !== false) o[k] = d[k]; return o; })
     .sort((a, b) => (a.year - b.year) || String(a.series).localeCompare(String(b.series)) || (a.paper - b.paper) || (a.q - b.q));
   await fb.updateDocument(`ppqIndex/${board}_${level}`, { board, level, count: items.length, items, updatedAt: new Date() }, token);
   return { count: items.length };
+}
+
+/**
+ * The question list of one HSJ diagnostic paper (ppq docs with unit = the
+ * paper id), written to ppqIndex/diag_{unit} for api/students.js to set as a
+ * new student's first homework. Diagnostic questions never enter the practise
+ * index above.
+ */
+async function diagnosticIndex({ unit, title, level, board }, token) {
+  if (!unit) throw fb.httpError(400, "unit required");
+  const docs = await fb.queryDocuments("ppq", { unit, diagnostic: true }, token, { limit: 200 });
+  const items = docs.filter(d => d.status !== "offspec").map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined && d[k] !== null && d[k] !== false) o[k] = d[k]; return o; })
+    .sort((a, b) => (a.q - b.q));
+  const totalMarks = items.reduce((a, it) => a + (Number(it.totalMarks) || 0), 0);
+  await fb.updateDocument(`ppqIndex/diag_${unit}`, { unit, title: title || unit, level: level || null, board: board || null, diagnostic: true, count: items.length, totalMarks, items, updatedAt: new Date() }, token);
+  return { count: items.length, totalMarks };
 }
 
 module.exports = async function handler(req, res) {
@@ -166,6 +182,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, cors: data.cors });
     }
     if (action === "reindex") return res.status(200).json(await reindex(payload, token));
+    if (action === "diagnosticIndex") return res.status(200).json(await diagnosticIndex(payload, token));
     throw fb.httpError(400, "Unknown action");
   } catch (e) {
     return res.status(e.status || 500).json({ error: e.message || "Server error" });

@@ -23,7 +23,9 @@ const docCache = {};
  * once the homework is submitted (locked=true) the stored marking is shown
  * read-only.
  */
-export default function PastPaperQuestion({ board, qid, authUser, userProfile = null, assignmentId = null, logAttempt, onExit, embedded = false, locked = false, onMarked, onlyParts = null }) {
+export default function PastPaperQuestion({ board, qid, authUser, userProfile = null, assignmentId = null, logAttempt, onExit, embedded = false, locked = false, onMarked, onlyParts = null, assessment = false }) {
+  // assessment: an initial diagnostic. One attempt, no hints, and the marks,
+  // scheme and model answers stay hidden until the tutor sends the report.
   const navigate = useNavigate();
   const [doc, setDoc] = useState(docCache[qid] || null);
   const [error, setError] = useState(null);
@@ -182,7 +184,13 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
           {header}
 
           {/* Result banner */}
-          {result && (
+          {result && assessment && (
+            <Notice tone="green" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <Icon name="check" size={16} />
+              <span style={{ flex: 1, minWidth: 200 }}>Answer recorded. Your marks and the feedback come back with your tutor's report once the whole paper is submitted.</span>
+            </Notice>
+          )}
+          {result && !assessment && (
             <Card style={{ borderColor: toneColour[scoreTone], display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
               <div style={{ width: 72, height: 72, borderRadius: 16, background: `${toneColour[scoreTone]}14`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ fontFamily: T.display, fontSize: 26, fontWeight: 800, color: toneColour[scoreTone], lineHeight: 1 }}>{result.score}</span>
@@ -207,7 +215,7 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
           {locked && !result && !attempt?.latest && <Notice tone="neutral">Not attempted.</Notice>}
 
           {/* Previous attempt */}
-          {!result && !locked && attempt?.latest && (
+          {!result && !locked && !assessment && attempt?.latest && (
             <Notice tone="neutral" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <span style={{ flex: 1, minWidth: 200 }}>You have tried this {attempt.attempts === 1 ? "once" : `${attempt.attempts} times`}. Best {attempt.best}/{attempt.totalMarks}, last {attempt.latest.score}/{attempt.totalMarks}.{attempt.hasOpenQuery ? " A mark query is with your tutor." : ""}</span>
               <Button size="sm" onClick={showLast}>Show last marking</Button>
@@ -246,14 +254,14 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
           {/* Parts */}
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {parts.map(p => (
-              <PartCard key={p.label} part={p}
+              <PartCard key={p.label} part={assessment ? { ...p, hints: [] } : p}
                 value={answers[p.label] || ""} onChange={v => setAnswers(a => ({ ...a, [p.label]: v }))}
                 hintsShown={hints[p.label] || 0} onHint={() => { setHints(h => ({ ...h, [p.label]: Math.min((h[p.label] || 0) + 1, (p.hints || []).length) })); track("ppq_hint", { board, qid, part: p.label }); }}
-                result={result?.parts?.find(r => r.label === p.label)} scheme={result?.scheme?.find(s => s.label === p.label)}
+                result={assessment ? null : result?.parts?.find(r => r.label === p.label)} scheme={assessment ? null : result?.scheme?.find(s => s.label === p.label)}
                 showModel={!!showModel[p.label]} onToggleModel={() => setShowModel(m => ({ ...m, [p.label]: !m[p.label] }))}
-                locked={!!result || locked} query={attempt?.queries?.[partKey(p.label)]} onQuery={result ? (note) => sendQuery(p.label, note) : null}
+                locked={!!result || locked} query={assessment ? null : attempt?.queries?.[partKey(p.label)]} onQuery={result && !assessment ? (note) => sendQuery(p.label, note) : null}
                 logPrompt={(() => {
-                  const r = result?.parts?.find(x => x.label === p.label);
+                  const r = assessment ? null : result?.parts?.find(x => x.label === p.label);
                   if (!r) return null;
                   return <ErrorLogPrompt authUser={authUser} userProfile={userProfile} suggested={r.errorType || null} note={r.errorNote || null} lost={(Number(p.marks) || 0) - (r.score || 0)} maxMarks={p.marks}
                     entry={{ source: embedded ? "homework" : "ppq", type: "ppq", questionId: qid, partLabel: p.label || "Q", topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null, title: doc.title || `Question ${doc.q}`, board, assignmentId, retestPath: `/${board}/practise/${qid}`, attempted: r.attempted !== false }} />;

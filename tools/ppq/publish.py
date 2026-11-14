@@ -70,6 +70,7 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
     else:
         question = {k: rec[k] for k in ("board", "level", "paper", "series")}
         if rec.get("legacy"): question.update(legacy=True, unit=rec.get("unit"))
+        if rec.get("diagnostic"): question.update(diagnostic=True, title=rec.get("title"), coverTitle=qd.get("coverTitle"))
         question.update(q=qd["q"], total=qd["total"], text=qd["text"][:9000])
         enr = call("enrich", {"question": question, "msText": ms_text[:12000], "topics": [{"ref": t["ref"], "title": t["title"]} for t in TOPICS[rec["board"]]]})
         os.makedirs(os.path.dirname(epath), exist_ok=True)
@@ -88,7 +89,7 @@ def process_question(rec, qd, ms_text, pdir, st, opts):
                    topics=enr.get("topics") or [], keywords=enr.get("keywords") or [], kind=enr.get("kind") or "structured",
                    parts=enr.get("parts") or [], imageUrl=s.get("imageUrl"), imageW=qd.get("width"), imageH=qd.get("height"),
                    qText=qd["text"][:6000], msText=ms_text[:8000], source={"qp": rec.get("qp"), "ms": rec.get("ms")},
-                   legacy=bool(rec.get("legacy")), unit=rec.get("unit") or None,
+                   legacy=bool(rec.get("legacy")), unit=rec.get("unit") or None, diagnostic=bool(rec.get("diagnostic")),
                    status="offspec" if enr.get("offSpec") else ("live" if not problems else "review"), problems=problems)
         call("upsert", {"id": qid, "doc": doc})
         s["upserted"] = True
@@ -130,6 +131,9 @@ def main():
             if u: total_usage["input_tokens"] += u.get("input_tokens", 0); total_usage["output_tokens"] += u.get("output_tokens", 0)
         print(f"{rec['id']:24s} {len(results):3d} questions in {time.time()-t0:5.0f}s, {len(flagged)} flagged", flush=True)
         for qid, p in flagged: print(f"    {qid}: {'; '.join(p)}", flush=True)
+        if rec.get("diagnostic") and not opts["no_upsert"]:
+            r = call("diagnosticIndex", {"unit": rec["unit"], "title": rec.get("title"), "level": rec["level"], "board": rec["board"]})
+            print(f"    diagnostic index {rec['unit']}: {r}", flush=True)
     if opts["reindex"] or opts["all"]:
         for board, level in sorted(touched):
             r = call("reindex", {"board": board, "level": level}); print(f"reindex {board} {level}: {r}")

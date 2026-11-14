@@ -105,7 +105,7 @@ const discordBlock = (invite, who) => invite ? `
       <div style="margin-top:8px;"><a href="${invite}" style="color:#4338CA;font-weight:700;">${esc(invite)}</a></div>
     </div>` : "";
 
-function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite, evalLink }) {
+function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite, evalLink, diagnostic }) {
   const html = layout("Your HSJ Tuition account is ready", `
     <p>Hi ${esc(firstName(a.studentName))},</p>
     <p>You are in <strong>${esc(groupName)}</strong>${tutorName ? ` with ${esc(tutorName)}` : ""}. Your homework, feedback and progress all live in your HSJ Tuition account.</p>
@@ -118,6 +118,7 @@ function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite, 
     </div>` : `<p>Log in with your existing account for <strong>${esc(email)}</strong>.</p>`}
     ${button(SITE, "Log in to HSJ Tuition")}
     ${evalLink ? `<p style="margin-top:18px;"><strong>One thing to do first.</strong> Fill in the short self-evaluation (about 5 minutes): tick the modules you have been taught so far and rate yourself Red, Amber or Green on each topic. It shapes what we work on. <a href="${evalLink}" style="color:#1F7FB5;font-weight:700;">Complete my self-evaluation</a></p>` : ""}
+    ${diagnostic ? `<p style="margin-top:18px;"><strong>Your first homework is already waiting: the ${esc(diagnostic.title)}.</strong> It is a short exam-style paper that shows your tutor exactly where to start with you. Do it on your own, without notes, and submit it by <strong>${esc(diagnostic.due)}</strong>, before your first lesson. It is marked in the app and your tutor then sends you and your parent a feedback report.</p>` : ""}
     ${discordBlock(discordInvite, "student")}
     <p style="margin-top:22px;">How it works: after each lesson a homework set appears in your account. Do it before the next lesson. Most of it is marked as you go, and I look at the rest. Your parent is copied in here so they know where to find everything.</p>
     <p>See you in the lesson,<br>Harj</p>`);
@@ -292,4 +293,16 @@ function tutorQuery({ tutorName, studentName, where, note, link }) {
   return { subject: `Mark query from ${studentName}: ${where}`, html };
 }
 
-module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
+/** The initial diagnostic feedback report, to the parent with the student copied. */
+function diagnosticReport({ studentName, parentName, title, year, board, assignmentId, report }) {
+  const diag = require("./_diagnostic");
+  const first = firstName(studentName);
+  const html = layout(`${first}'s initial diagnostic: feedback report`, `
+    <p>Hi ${esc(firstName(parentName) === "there" ? first : firstName(parentName))},</p>
+    <p>${esc(first)} has completed the ${esc(title || "initial diagnostic")}. The report below shows where ${esc(first)} is starting from and what the first few lessons will focus on. It is also in ${esc(first)}'s HSJ Tuition account under Homework.</p>
+    ${diag.html(report, { studentName, title, year, esc })}
+    ${button(`${SITE}/${board || "aqa"}/homework/${assignmentId}`, "Open in HSJ Tuition")}`);
+  return { subject: `${first}'s initial diagnostic: feedback report`, html };
+}
+
+module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, diagnosticReport, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };

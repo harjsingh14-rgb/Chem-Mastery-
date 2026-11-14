@@ -186,6 +186,58 @@ async function deleteAccounts(body, token, res) {
  * parent copied) and give the parent their own account. With sendEmails false
  * the accounts are made but both welcomes are held for api action sendWelcome.
  */
+const DIAGNOSTIC_UNIT = { 12: "hsj-diag-y12", 13: "hsj-diag-y13" };
+const MIN_PER_MARK = 1.5;
+const DAY = 24 * 60 * 60 * 1000;
+const fmtDay = (ms) => new Date(ms).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" });
+
+/**
+ * The initial diagnostic (Year 12 or Year 13 paper, published by tools/ppq as
+ * ppqIndex/diag_{unit}) set as a homework for this one student, due the day
+ * before their first lesson. Returns { assignmentId, dueAt, title, existing }
+ * or null when the paper has not been published yet.
+ */
+async function assignDiagnostic({ uid, profile, group, token }) {
+  const unit = DIAGNOSTIC_UNIT[Number(profile.year)];
+  if (!unit || !group) return null;
+  const assignmentId = `diag_${uid}`;
+  const existing = await fb.getDocument(`assignments/${assignmentId}`, token);
+  const index = await fb.getDocument(`ppqIndex/diag_${unit}`, token);
+  if (!index || !Array.isArray(index.items) || index.items.length === 0) return null;
+  if (existing) return { assignmentId, dueAt: existing.dueAt, title: existing.title, existing: true };
+
+  // Due the day before the group's next lesson, and never sooner than three days from now
+  const now = Date.now();
+  let dueAt = now + 7 * DAY;
+  try {
+    const sessions = await fb.queryDocuments("sessions", { classId: group.code || profile.classId }, token, { limit: 300 });
+    const next = sessions.filter(x => x.status !== "cancelled" && x.type !== "session" && Number(x.startAt) > now && x.date).sort((x, y) => x.startAt - y.startAt)[0];
+    if (next) dueAt = new Date(`${next.date}T23:59:00`).getTime() - DAY;
+  } catch (e) { console.error("sessions lookup failed:", e.message); }
+  dueAt = Math.max(dueAt, now + 3 * DAY);
+
+  const items = index.items.map(q => {
+    const it = {
+      key: `ppq_${String(q.id).replace(/[^A-Za-z0-9]/g, "_")}`, type: "ppq", questionId: q.id,
+      marks: Number(q.totalMarks) || 0, minutes: Math.round((Number(q.totalMarks) || 0) * MIN_PER_MARK * 10) / 10,
+      topic: (q.topics || [])[0] || null, topicLabel: q.title || `Question ${q.q}`,
+    };
+    for (const k of ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks", "legacy", "unit"]) if (q[k] !== undefined && q[k] !== null) it[k] = q[k];
+    return it;
+  });
+  const maxScore = items.reduce((a, it) => a + it.marks, 0);
+  const title = `Initial diagnostic (Year ${profile.year})`;
+  await fb.createDocument("assignments", assignmentId, {
+    title, kind: "diagnostic", unit, classId: group.code || profile.classId, board: group.board || profile.board || "aqa",
+    tutorId: group.tutorId || null, studentIds: [uid], studentName: profile.displayName || null,
+    minutes: Math.round(items.reduce((a, it) => a + it.minutes, 0)), dueAt, maxScore,
+    note: "Answer every question on your own, without notes, in one or two sittings. It is a starting point, not a test you can fail: it shows your tutor exactly where to begin.",
+    items, summary: `${items.length} exam question${items.length === 1 ? "" : "s"} · ${maxScore} marks`,
+    status: "open", createdAt: new Date(now), clientTime: now, createdBy: "placement",
+  }, token);
+  return { assignmentId, dueAt, title, existing: false };
+}
+
 async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = true } = {}) {
   const group = await fb.getDocument(`classes/${groupCode}`, token);
   if (!group) throw bad("Group not found");
@@ -233,6 +285,9 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   };
   if (!existingProfile) { profile.photoURL = ""; profile.createdAt = new Date(now); }
   if (tempPassword) profile.needsPasswordChange = true;
+  let diagnostic = null;
+  try { diagnostic = await assignDiagnostic({ uid: auth.uid, profile, group, token }); } catch (e) { console.error("diagnostic not set:", e.message); }
+  if (diagnostic) profile.diagnostic = { assignmentId: diagnostic.assignmentId, unit: DIAGNOSTIC_UNIT[Number(profile.year)], dueAt: diagnostic.dueAt, setAt: new Date(now) };
   await fb.updateDocument(`users/${auth.uid}`, profile, token);
   await fb.updateDocument(`applicants/${id}`, { status: "placed", groupCode: profile.classId, studentUid: auth.uid, placedAt: now, welcomeHeld: !sendEmails }, token);
 
@@ -240,7 +295,8 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   if (sendEmails) {
     try {
       const evalLink = a.evaluation ? null : `${origin}/onboarding/${a.evalToken}`;
-      const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail, discordInvite, evalLink });
+      const { subject, html } = mail.welcome(withLabel(a), { groupName: profile.className, tutorName: tutor?.displayName || "", tempPassword, email: a.studentEmail, discordInvite, evalLink,
+        diagnostic: diagnostic ? { title: diagnostic.title, due: fmtDay(diagnostic.dueAt) } : null });
       await mail.sendEmail({ to: a.studentEmail, cc: a.parentEmail || undefined, subject, html });
     } catch (e) { emailError = e.message; }
   }
@@ -250,7 +306,7 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   try {
     parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", discordInvite, termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: sendEmails });
   } catch (e) { parent = { error: e.message }; }
-  return { uid: auth.uid, existingAccount: auth.existing, emailError, parent, groupName: profile.className };
+  return { uid: auth.uid, existingAccount: auth.existing, emailError, parent, groupName: profile.className, diagnostic: diagnostic ? { set: !diagnostic.existing, dueAt: diagnostic.dueAt } : { set: false, reason: "paper not published for this year group" } };
 }
 
 /** Send the welcomes that an import held back. Accounts never logged into get a fresh temporary password. */
@@ -450,6 +506,22 @@ module.exports = async function handler(req, res) {
     const body = req.body || {};
     const origin = fb.siteOrigin(req);
     const action = str(body.action, 20);
+
+    // Set the initial diagnostic for a student who is already in a group
+    // (one placed before the papers were published, or whose paper was replaced)
+    if (action === "assignDiagnostic") {
+      const uid = str(body.uid, 128);
+      if (!uid) throw bad("uid required");
+      const profile = await fb.getDocument(`users/${uid}`, token);
+      if (!profile || profile.role !== "student") throw bad("Student not found");
+      if (!profile.classId) throw bad("Put the student in a group first");
+      const group = await fb.getDocument(`classes/${profile.classId}`, token);
+      if (!group) throw bad("The student's group no longer exists");
+      const r = await assignDiagnostic({ uid, profile, group, token });
+      if (!r) throw bad(`The Year ${profile.year || "?"} diagnostic paper has not been published yet`);
+      if (!r.existing) await fb.updateDocument(`users/${uid}`, { diagnostic: { assignmentId: r.assignmentId, unit: DIAGNOSTIC_UNIT[Number(profile.year)], dueAt: r.dueAt, setAt: new Date() } }, token);
+      return res.status(200).json({ ok: true, ...r });
+    }
 
     if (action === "create") {
       const details = validateDetails(body);

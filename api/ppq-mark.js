@@ -20,6 +20,7 @@ const { ERROR_TYPES_PROMPT, cleanErrorType, cleanErrorNote } = require("./_error
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
 const mail = require("./_email");
+const diag = require("./_diagnostic");
 
 const TEXT_MODEL = "claude-sonnet-5-5";
 const VISION_MODEL = "claude-opus-5-5";
@@ -202,6 +203,57 @@ async function reply(caller, { attemptId, part, reply: text, score }) {
   return { ok: true, queries, latest: patch.latest || att.latest, best: patch.best ?? att.best };
 }
 
+// ---- Initial diagnostic feedback report ----------------------------------
+//   { action: "diagnosticReport", assignmentId, uid }            tutor/admin: write the draft report (Claude) onto the submission
+//   { action: "saveDiagnosticReport", assignmentId, uid, report } tutor/admin: keep the tutor's edits
+//   { action: "sendDiagnosticReport", assignmentId, uid, report } tutor/admin: save, email the parent (student copied), release in the app
+async function diagnosticContext(caller, { assignmentId, uid }) {
+  if (!assignmentId || !uid) throw fb.httpError(400, "assignmentId and uid required");
+  const token = await fb.getAccessToken();
+  const [profile, assignment, sub, student] = await Promise.all([
+    fb.getDocument(`users/${caller.uid}`, token), fb.getDocument(`assignments/${assignmentId}`, token),
+    fb.getDocument(`submissions/${assignmentId}_${uid}`, token), fb.getDocument(`users/${uid}`, token),
+  ]);
+  if (!profile || !["tutor", "admin"].includes(profile.role)) throw fb.httpError(403, "Tutor accounts only");
+  if (!assignment || assignment.kind !== "diagnostic") throw fb.httpError(404, "This homework is not a diagnostic");
+  if (profile.role !== "admin" && assignment.tutorId !== caller.uid) throw fb.httpError(403, "This student is not in one of your groups");
+  if (!sub || !sub.submittedAt) throw fb.httpError(400, "The student has not submitted the diagnostic yet");
+  if (!student) throw fb.httpError(404, "Student not found");
+  return { token, profile, assignment, sub, student };
+}
+
+async function diagnosticReport(caller, body) {
+  const { token, assignment, sub, student } = await diagnosticContext(caller, body);
+  const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();
+  if (!apiKey) throw fb.httpError(500, "ANTHROPIC_API_KEY not configured");
+  const report = await diag.generate({ assignment, sub, student, token, apiKey });
+  const stored = { ...report, status: "draft", generatedAt: Date.now(), generatedBy: caller.uid, sentAt: sub.report?.sentAt || null };
+  await fb.updateDocument(`submissions/${body.assignmentId}_${body.uid}`, { report: stored, updatedAt: new Date() }, token);
+  return { report: stored };
+}
+
+async function saveDiagnosticReport(caller, body, send) {
+  const { token, assignment, sub, student } = await diagnosticContext(caller, body);
+  if (!body.report) throw fb.httpError(400, "report required");
+  // Recompute the numbers from the submission; only the words come from the editor
+  const items = diag.scoreItems(assignment, sub);
+  const nums = diag.numbers(assignment, items, student.year);
+  const computed = { headline: nums.headline, byTopic: nums.byTopic, items: items.map(it => ({ n: it.n, q: it.q, title: it.title, score: it.score, max: it.max, attempted: it.attempted, topic: it.topics[0] || null })) };
+  const report = diag.sanitise(body.report, computed);
+  const stored = { ...report, status: send ? "sent" : "draft", generatedAt: sub.report?.generatedAt || null, editedAt: Date.now(), editedBy: caller.uid, sentAt: send ? Date.now() : (sub.report?.sentAt || null), sentBy: send ? caller.uid : (sub.report?.sentBy || null) };
+  await fb.updateDocument(`submissions/${body.assignmentId}_${body.uid}`, { report: stored, updatedAt: new Date() }, token);
+  let emailError = null;
+  if (send) {
+    try {
+      const { subject, html } = mail.diagnosticReport({ studentName: student.displayName || sub.studentName || "", parentName: student.parentName || "", title: assignment.title, year: student.year, board: assignment.board, assignmentId: body.assignmentId, report: stored });
+      const to = student.parentEmail || student.email;
+      await mail.sendEmail({ to, cc: student.parentEmail && student.email && student.email !== student.parentEmail ? student.email : undefined, subject, html });
+    } catch (e) { emailError = e.message; console.error("diagnostic report email failed:", e); }
+    try { await fb.updateDocument(`users/${body.uid}`, { diagnostic: { ...(student.diagnostic || {}), assignmentId: body.assignmentId, reportSentAt: Date.now(), score: stored.headline?.score ?? null, max: stored.headline?.max ?? null } }, token); } catch (e) { console.error("profile diagnostic update failed:", e.message); }
+  }
+  return { report: stored, emailError };
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -210,6 +262,9 @@ module.exports = async function handler(req, res) {
     if (!caller) throw fb.httpError(401, "Unauthorised");
     if (req.body?.action === "query") return res.status(200).json(await query(caller, req.body));
     if (req.body?.action === "reply") return res.status(200).json(await reply(caller, req.body));
+    if (req.body?.action === "diagnosticReport") return res.status(200).json(await diagnosticReport(caller, req.body));
+    if (req.body?.action === "saveDiagnosticReport") return res.status(200).json(await saveDiagnosticReport(caller, req.body, false));
+    if (req.body?.action === "sendDiagnosticReport") return res.status(200).json(await saveDiagnosticReport(caller, req.body, true));
     const { qid, answers = {}, images = [], mode = "typed", hintsUsed = {}, inkOnly = false, onlyParts = null } = req.body || {};
     if (!qid || typeof qid !== "string") throw fb.httpError(400, "qid required");
     if (!Array.isArray(images) || images.length > MAX_IMAGES) throw fb.httpError(400, `Up to ${MAX_IMAGES} images`);
