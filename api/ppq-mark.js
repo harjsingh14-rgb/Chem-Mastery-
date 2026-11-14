@@ -232,6 +232,26 @@ async function diagnosticReport(caller, body) {
   return { report: stored };
 }
 
+/** One `attempts` row per diagnostic question, written when the report is first released, so the
+ *  dashboard's topic stats include the diagnostic without revealing marks before the tutor sends them. */
+async function recordDiagnosticAttempts({ assignment, sub, student, uid, assignmentId, items, token }) {
+  const board = assignment.topicBoard || "aqa";
+  // Dated when the paper was sat, so the accuracy-over-time chart puts it in the right week
+  const sat = sub.submittedAt ? new Date(typeof sub.submittedAt === "number" ? sub.submittedAt : String(sub.submittedAt)) : new Date();
+  const at = isNaN(sat.getTime()) ? new Date() : sat;
+  for (const it of items) {
+    const topic = it.topics[0] || null;
+    const attempt = {
+      uid, tutorId: student.tutorId || null, classId: student.classId || null, board: student.board || assignment.board || null,
+      type: "ppq", questionId: String(it.questionId || it.key), topic, topicLabel: topic ? diag.topicTitle(board, topic) : (it.title || null), difficulty: null,
+      correct: it.max > 0 && it.score >= Math.ceil(it.max * 0.7), score: it.score, maxScore: it.max,
+      mode: "diagnostic", assignmentId, createdAt: at, clientTime: at.getTime(),
+    };
+    // Merge-write with a fixed id, so a repeat is harmless
+    await fb.updateDocument(`attempts/${`diag_${assignmentId}_${uid}_${it.key}`.replace(/[^A-Za-z0-9_.-]/g, "_")}`, attempt, token);
+  }
+}
+
 async function saveDiagnosticReport(caller, body, send) {
   const { token, assignment, sub, student } = await diagnosticContext(caller, body);
   if (!body.report) throw fb.httpError(400, "report required");
@@ -250,6 +270,11 @@ async function saveDiagnosticReport(caller, body, send) {
       await mail.sendEmail({ to, cc: student.parentEmail && student.email && student.email !== student.parentEmail ? student.email : undefined, subject, html });
     } catch (e) { emailError = e.message; console.error("diagnostic report email failed:", e); }
     try { await fb.updateDocument(`users/${body.uid}`, { diagnostic: { ...(student.diagnostic || {}), assignmentId: body.assignmentId, reportSentAt: Date.now(), score: stored.headline?.score ?? null, max: stored.headline?.max ?? null } }, token); } catch (e) { console.error("profile diagnostic update failed:", e.message); }
+    // First release only: the diagnostic answers now count towards the student's practice stats
+    if (!sub.report?.sentAt) {
+      try { await recordDiagnosticAttempts({ assignment, sub, student, uid: body.uid, assignmentId: body.assignmentId, items, token }); }
+      catch (e) { console.error("diagnostic attempts failed:", e); }
+    }
   }
   return { report: stored, emailError };
 }

@@ -182,4 +182,4 @@ function html(report, { studentName, title, year, esc }) {
     <p style="margin-top:22px;">${esc(first)}'s tutor will build the first few lessons around the priority areas above. Reply to this email with any questions.</p>`;
 }
 
-module.exports = { generate, sanitise, html, scoreItems, numbers };
+module.exports = { topicTitle, generate, sanitise, html, scoreItems, numbers };
