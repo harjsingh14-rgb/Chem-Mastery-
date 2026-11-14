@@ -350,7 +350,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
     setSubm(s => ({ ...s, answers: next, totalScore: totals.totalScore }));
     try { await saveItemResult(a.id, authUser.uid, item.key, next[item.key], totals); } catch (e) { setError("Could not save: " + e.message); }
     const isFirst = item.type === "exam" ? kind === "first" : (kind === "attempt" && (result.attempts?.length || 0) === 1);
-    if (isFirst && logAttempt) logAttempt({
+    if (isFirst && logAttempt && !diagnostic) logAttempt({
       board, type: item.type, questionId: item.questionId, topic: item.topic, topicLabel: item.topicLabel,
       difficulty: item.difficulty || null, score: result.score, maxScore: item.marks, correct: result.score >= Math.ceil(item.marks * COUNT_AS_CORRECT), mode: "homework", assignmentId: a.id,
     });

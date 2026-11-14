@@ -139,7 +139,9 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
       setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, errorType: p.errorType || null, errorNote: p.errorNote || null, answer: answers[p.label] || null }])) }, queries: {} }));
       noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, qid });
       onMarked && onMarked(data, doc, { answers, hintsUsed: Object.values(hints).reduce((x, n) => x + (n || 0), 0) });
-      logAttempt && logAttempt({
+      // An assessment (the initial diagnostic) is a baseline, not practice: it
+      // stays out of the student's accuracy and topic stats until the report tells them
+      !assessment && logAttempt && logAttempt({
         board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null,
         score: data.score, maxScore: totalMarks, correct: data.score >= Math.ceil(totalMarks * 0.7),
       });
