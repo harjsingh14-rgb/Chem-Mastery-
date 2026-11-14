@@ -172,7 +172,7 @@ export default function HomeworkBuilder({ authUser }) {
     setItems(buildItems({ board, minutes: Number(minutes) || 60, ppqPool: shownQuestions }));
   }, [lesson, ppq.loading, ppqTopics, shownQuestions, board, minutes]);
   const remove = (key) => setItems(prev => prev.filter(it => it.key !== key));
-  const toggleQuestion = (q) => setItems(prev => chosen.has(q.id) ? prev.filter(it => it.questionId !== q.id) : [...prev, ppqItem(q)]);
+  const toggleQuestion = (q) => setItems(prev => chosen.has(q.id) ? prev.filter(it => it.questionId !== q.id) : [...prev, ppqItem(q, board)]);
   const openQuestionParts = async (q) => {
     setOpenParts(o => ({ ...o, [q.id]: !o[q.id] }));
     if (docs[q.id]) return;
@@ -188,7 +188,7 @@ export default function HomeworkBuilder({ authUser }) {
       const kept = cur ? (Array.isArray(cur.parts) ? cur.parts : all) : [];
       const next = kept.includes(label) ? kept.filter(l => l !== label) : [...kept, label];
       if (next.length === 0) return prev.filter(it => it.questionId !== q.id);
-      const made = ppqItemWithParts(cur || ppqItem(q), d.parts, next);
+      const made = ppqItemWithParts(cur || ppqItem(q, board), d.parts, next);
       return cur ? prev.map(it => it.questionId === q.id ? made : it) : [...prev, made];
     });
   };
@@ -257,7 +257,7 @@ export default function HomeworkBuilder({ authUser }) {
             {retestQs.length > 0 && (
               <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 <CardHeader title="Retest from the error log" sub="Questions this group's students lost marks on and filed. Those marked due were logged two weeks or more ago."
-                  right={<Button size="sm" onClick={() => setItems(prev => [...prev, ...retestQs.filter(r => r.due > 0 && !chosen.has(r.q.id)).map(r => ppqItem(r.q))])} disabled={!retestQs.some(r => r.due > 0 && !chosen.has(r.q.id))}>Tick all due</Button>} />
+                  right={<Button size="sm" onClick={() => setItems(prev => [...prev, ...retestQs.filter(r => r.due > 0 && !chosen.has(r.q.id)).map(r => ppqItem(r.q, board))])} disabled={!retestQs.some(r => r.due > 0 && !chosen.has(r.q.id))}>Tick all due</Button>} />
                 <div style={{ border: `1px solid ${T.line}`, borderRadius: T.radiusSm, maxHeight: 260, overflowY: "auto" }}>
                   {retestQs.map((r, i) => {
                     const on = chosen.has(r.q.id);

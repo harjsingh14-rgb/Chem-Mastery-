@@ -85,9 +85,9 @@ function toItem(type, q, extra = {}) {
 }
 
 /** A homework item for one past-paper index entry (the tutor ticking a question, or the auto-fill). */
-export function ppqItem(q) {
+export function ppqItem(q, board = "aqa") {
   const snap = {}; for (const k of PPQ_SNAPSHOT) if (q[k] !== undefined) snap[k] = q[k];
-  return toItem("ppq", q, { ...snap, topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? topicTitle(q.board || "aqa", q.topics[0]) : (q.title || `Question ${q.q}`) });
+  return toItem("ppq", q, { ...snap, topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? topicTitle(q.board || board, q.topics[0]) : (q.title || `Question ${q.q}`) });
 }
 
 /**
@@ -158,7 +158,7 @@ export function buildItems(opts) {
   if (opts.ppqPool?.length) {
     // Shorter questions first so the homework ramps up; the snapshot lets the
     // builder, player and review describe the question without loading it.
-    pools.ppq = shuffle(opts.ppqPool).sort((a, b) => (Number(a.totalMarks) || 0) - (Number(b.totalMarks) || 0)).map(ppqItem);
+    pools.ppq = shuffle(opts.ppqPool).sort((a, b) => (Number(a.totalMarks) || 0) - (Number(b.totalMarks) || 0)).map(q => ppqItem(q, opts.board || "aqa"));
   }
 
   const present = Object.keys(pools).filter(k => pools[k].length > 0);
