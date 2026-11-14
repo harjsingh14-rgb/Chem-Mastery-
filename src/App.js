@@ -118,7 +118,7 @@ export default function App() {
   const LockedOverlay = ({ style }) => (
     <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.6)", backdropFilter: "blur(1px)", borderRadius: "inherit", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, ...style }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: "22px", marginBottom: "4px" }}>🔒</div>
+        <div style={{ marginBottom: "4px", display: "flex", justifyContent: "center" }}><Icon name="lock" size={22} color={T.navy} /></div>
         <div style={{ fontSize: "11px", fontWeight: 700, color: "#1a2d45" }}>HSJ students only</div>
       </div>
     </div>
@@ -127,7 +127,7 @@ export default function App() {
   const UpgradeCard = ({ section }) => (
     <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
       <div style={{ textAlign: "center", maxWidth: "420px" }}>
-        <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔒</div>
+        <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}><IconTile name="lock" tone="neutral" size={56} /></div>
         <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1a2d45", margin: "0 0 8px" }}>{section} is locked</h3>
         <p style={{ fontSize: "14px", color: "#7a95b0", lineHeight: 1.6, margin: "0 0 8px" }}>
           This is for HSJ Tuition students. If you are one, log in with the email your welcome email was sent to.
@@ -372,10 +372,10 @@ export default function App() {
 
   // AUTH LOADING
   if (authLoading) return (
-    <div style={{ minHeight: "100vh", background: "#0d1b2a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: T.bg, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: T.font }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: "32px", fontWeight: 800, color: "#ffffff", marginBottom: "12px" }}><span style={{ color: "#3B9FDB" }}>Chem</span>Mastery</div>
-        <div style={{ color: "#7a95b0", fontSize: "14px" }}>Loading...</div>
+        <div style={{ fontFamily: T.display, fontSize: "28px", fontWeight: 800, color: T.navy, marginBottom: "10px" }}>ChemMastery</div>
+        <div style={{ color: T.muted, fontSize: "14px" }}>Loading...</div>
       </div>
     </div>
   );
@@ -424,18 +424,17 @@ export default function App() {
     };
 
     return (
-      <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #0d1b2a 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "'DM Sans', sans-serif" }}>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <div style={{ minHeight: "100vh", background: T.bg, color: T.ink, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: T.font }}>
         <div style={{ width: "100%", maxWidth: "420px" }}>
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <div style={{ fontSize: "48px", marginBottom: "12px" }}>🔐</div>
-            <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 900, fontSize: "26px", color: "#fff", marginBottom: "8px" }}>Set Your Password</div>
-            <div style={{ fontSize: "14px", color: "#94a3b8", lineHeight: 1.6 }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "14px" }}><IconTile name="lock" tone="accent" size={56} /></div>
+            <div style={{ fontFamily: T.display, fontWeight: 800, fontSize: "24px", color: T.navy, marginBottom: "8px" }}>Set your password</div>
+            <div style={{ fontSize: "14px", color: T.muted, lineHeight: 1.6 }}>
               You signed up with a temporary password. Please choose a new one to keep your account secure.
             </div>
           </div>
 
-          <div style={{ background: "#ffffff", borderRadius: "20px", padding: "32px", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
+          <div style={{ background: T.card, borderRadius: T.radius, border: `1px solid ${T.border}`, padding: "28px", boxShadow: "0 8px 24px rgba(21,40,58,0.06)" }}>
             <form onSubmit={handleChangePassword}>
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>New password</label>
               <input type="password" placeholder="At least 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} required
@@ -455,7 +454,7 @@ export default function App() {
                 background: "#3B9FDB", color: "#ffffff", fontSize: "15px", fontWeight: 700,
                 cursor: "pointer", fontFamily: "inherit", opacity: passwordChangeLoading ? 0.6 : 1
               }}>
-                {passwordChangeLoading ? "Updating..." : "Set New Password"}
+                {passwordChangeLoading ? "Updating..." : "Set new password"}
               </button>
             </form>
           </div>
@@ -652,7 +651,7 @@ export default function App() {
                   <div style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px" }}>Random Quiz</div>
                   <div style={{ fontSize: "13px", opacity: 0.85, marginTop: "4px" }}>Weak cards shown more often</div>
                 </div>
-                <div style={{ fontSize: "36px" }}>🎯</div>
+                <Icon name="target" size={36} color="#fff" strokeWidth={1.75} />
               </div>
 
               {/* Mode toggle */}
@@ -966,7 +965,7 @@ export default function App() {
       {/* ── MECHANISMS TAB ────────────────────────────────── */}
       {topicsTab === "mechanisms" && !isAdmin && (
         <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
-          <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧪</div>
+          <div style={{ marginBottom:"16px", display:"flex", justifyContent:"center" }}><IconTile name="flask" tone="accent" size={56} /></div>
           <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Mechanisms Coming Soon</div>
           <div style={{ fontSize:"15px", color:"#64748b", lineHeight:1.6, maxWidth:"400px" }}>
             Step-by-step animated curly arrow mechanisms are being built. This feature will be available soon!
