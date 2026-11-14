@@ -25,6 +25,7 @@ const TutorPage = lazyPage(() => import("./components/TutorPage"));
 const TutorEmail = lazyPage(() => import("./components/TutorEmail"));
 const ProgressPage = lazyPage(() => import("./components/ProgressPage"));
 const PastPaperQuestion = lazyPage(() => import("./components/ppq/PastPaperQuestion"));
+const LegalPage = lazyPage(() => import("./components/LegalPage"));
 const RevisionPage = lazyPage(() => import("./components/RevisionPage"));
 const ExamStyleTab = lazyPage(() => import("./components/ExamStyleTab"));
 const ParentPage = lazyPage(() => import("./components/ParentPage"));
@@ -367,7 +368,8 @@ export default function App() {
     </AppShell>
   );
 
-  // PUBLIC ONBOARDING LINKS (self-evaluation, parent terms): no login needed
+  // PUBLIC PAGES: privacy policy, terms of use, onboarding links (self-evaluation, parent terms); no login needed
+  if (pathParts[0] === 'privacy' || pathParts[0] === 'terms') return <Suspense fallback={<PageLoading full />}><LegalPage kind={pathParts[0]} /></Suspense>;
   if (pathParts[0] === 'onboarding' && pathParts[1]) return <Suspense fallback={<PageLoading full />}><OnboardingPage token={pathParts[1]} /></Suspense>;
 
   // AUTH LOADING

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { signInGoogle, signInEmail, resetPassword } from "../firebase";
 import { T } from "../ui/theme";
 import { Icon } from "../ui/components";
@@ -117,7 +118,7 @@ export default function LoginScreen({ onLogin, onBack }) {
         </div>
 
         <div style={{ textAlign: "center", marginTop: "24px", fontSize: "11px", color: T.muted, lineHeight: 1.6, maxWidth: "360px", margin: "24px auto 0" }}>
-          <div style={{ marginBottom: "6px" }}>By signing in you agree to our terms of use and privacy policy.</div>
+          <div style={{ marginBottom: "6px" }}>By signing in you agree to our <Link to="/terms" style={{ color: T.muted, fontWeight: 600 }}>terms of use</Link> and <Link to="/privacy" style={{ color: T.muted, fontWeight: 600 }}>privacy policy</Link>.</div>
           <div>This platform is an independent revision tool and is not affiliated with, endorsed by, or connected to AQA, OCR, or any exam board. All exam board names and specifications are used for reference only.</div>
           <div style={{ marginTop: "10px", color: T.faint }}>&#169; {new Date().getFullYear()} HSJ Tuition. All rights reserved.</div>
         </div>
