@@ -2,6 +2,8 @@
 // resend their links, place them into a group (which creates the account and
 // sends the welcome email), edit or remove an applicant.
 const { setCors } = require("./_cors");
+const SPEC_TOPICS = require("./_specTopics");
+const specTopicTitle = (board, ref) => { const t = (SPEC_TOPICS[board] || {})[ref]; return t ? `${ref} ${t}` : ref; };
 const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
 const storage = require("./_storage");
@@ -220,7 +222,7 @@ async function assignDiagnostic({ uid, profile, group, token }) {
     const it = {
       key: `ppq_${String(q.id).replace(/[^A-Za-z0-9]/g, "_")}`, type: "ppq", questionId: q.id,
       marks: Number(q.totalMarks) || 0, minutes: Math.round((Number(q.totalMarks) || 0) * MIN_PER_MARK * 10) / 10,
-      topic: (q.topics || [])[0] || null, topicLabel: q.title || `Question ${q.q}`,
+      topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? specTopicTitle(index.board || "aqa", q.topics[0]) : (q.title || `Question ${q.q}`),
     };
     for (const k of ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks", "legacy", "unit"]) if (q[k] !== undefined && q[k] !== null) it[k] = q[k];
     return it;

@@ -8,7 +8,7 @@ import chemFormat from "../../utils/chemFormat";
 import DrawCanvas from "./DrawCanvas";
 import ErrorLogPrompt from "../ErrorLogPrompt";
 import { noteAttempt } from "../../hooks/usePpq";
-import { seriesLabel, paperLabel, topicShort, compressImage, loadQueue, partKey } from "./ppqUtils";
+import { seriesLabel, paperLabel, topicShort, topicTitle, compressImage, loadQueue, partKey } from "./ppqUtils";
 
 const MCQ_LETTERS = ["A", "B", "C", "D"];
 const docCache = {};
@@ -142,7 +142,9 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
       // An assessment (the initial diagnostic) is a baseline, not practice: it
       // stays out of the student's accuracy and topic stats until the report tells them
       !assessment && logAttempt && logAttempt({
-        board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null, topicLabel: doc.title || null,
+        board, type: "ppq", questionId: qid, topic: (doc.topics || [])[0] || null,
+        // The spec topic, so the student's stats group by topic rather than by question
+        topicLabel: (doc.topics || [])[0] ? topicTitle(board, doc.topics[0]) : (doc.title || null),
         score: data.score, maxScore: totalMarks, correct: data.score >= Math.ceil(totalMarks * 0.7),
       });
       window.scrollTo({ top: 0, behavior: "smooth" });

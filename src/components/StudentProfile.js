@@ -517,6 +517,10 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
     const m = SELF_EVALUATION[evBoard].modules.find(x => x.id === id);
     return m ? m.title.replace(/\s*\([^)]*\)\s*$/, "") : id;
   });
+  // Parent questionnaire: one dropdown per section, closed until opened
+  const [openQ, setOpenQ] = useState(() => new Set());
+  const toggleQ = (id) => setOpenQ(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
+  const allQOpen = QUESTIONNAIRE_SECTIONS.every(sec => openQ.has(sec.id));
   const ag = student.agreement || {};
   const navigate = useNavigate();
   const [diagBusy, setDiagBusy] = useState(false);
@@ -571,18 +575,32 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
         ) : <span style={{ fontSize: 13, color: T.muted }}>The student has not sent the self-evaluation. Resend it from the Onboarding tab.</span>}
       </Card>
       <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <CardHeader title="Parent questionnaire" sub={student.parentQuestionnaire ? `Completed ${fmtDate(student.parentQuestionnaire.submittedAt)}` : "Not completed yet"} />
-        {student.parentQuestionnaire ? QUESTIONNAIRE_SECTIONS.map(sec => (
-          <div key={sec.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: T.accentText, textTransform: "uppercase", letterSpacing: 0.6 }}>{sec.title}</div>
-            {sec.questions.filter(q => student.parentQuestionnaire[q.id] !== undefined).map(q => (
-              <div key={q.id} style={{ fontSize: 13 }}>
-                <div style={{ color: T.muted }}>{q.label}</div>
-                <div style={{ color: T.ink, whiteSpace: "pre-wrap" }}>{Array.isArray(student.parentQuestionnaire[q.id]) ? student.parentQuestionnaire[q.id].join(", ") : student.parentQuestionnaire[q.id]}</div>
-              </div>
-            ))}
-          </div>
-        )) : <span style={{ fontSize: 13, color: T.muted }}>The parent fills it in on the agreement page after accepting. Send the link again from the Onboarding tab.</span>}
+        <CardHeader title="Parent questionnaire" sub={student.parentQuestionnaire ? `Completed ${fmtDate(student.parentQuestionnaire.submittedAt)}` : "Not completed yet"}
+          right={student.parentQuestionnaire ? <Button size="sm" variant="ghost" onClick={() => setOpenQ(allQOpen ? new Set() : new Set(QUESTIONNAIRE_SECTIONS.map(sec => sec.id)))}>{allQOpen ? "Collapse all" : "Expand all"}</Button> : null} />
+        {student.parentQuestionnaire ? QUESTIONNAIRE_SECTIONS.map(sec => {
+          const answered = sec.questions.filter(q => student.parentQuestionnaire[q.id] !== undefined);
+          const open = openQ.has(sec.id);
+          return (
+            <div key={sec.id} style={{ border: `1px solid ${T.line}`, borderRadius: 10, overflow: "hidden" }}>
+              <button type="button" onClick={() => toggleQ(sec.id)} aria-expanded={open}
+                style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, background: open ? T.soft : "none", border: "none", padding: "10px 14px", cursor: "pointer", textAlign: "left" }}>
+                <span style={{ flex: 1, fontSize: 15, fontWeight: 700, color: T.ink }}>{sec.title}</span>
+                <span style={{ fontSize: 12, color: T.muted }}>{answered.length} answer{answered.length === 1 ? "" : "s"}</span>
+                <span style={{ display: "inline-flex", color: T.muted, transition: "transform .15s", transform: open ? "rotate(180deg)" : "none" }}><Icon name="chevronDown" size={16} /></span>
+              </button>
+              {open && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "10px 14px 14px" }}>
+                  {answered.map(q => (
+                    <div key={q.id} style={{ fontSize: 13 }}>
+                      <div style={{ color: T.muted }}>{q.label}</div>
+                      <div style={{ color: T.ink, whiteSpace: "pre-wrap" }}>{Array.isArray(student.parentQuestionnaire[q.id]) ? student.parentQuestionnaire[q.id].join(", ") : student.parentQuestionnaire[q.id]}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        }) : <span style={{ fontSize: 13, color: T.muted }}>The parent fills it in on the agreement page after accepting. Send the link again from the Onboarding tab.</span>}
       </Card>
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <CardHeader title="Agreement" sub={ag.acceptedAt ? `Accepted by ${ag.acceptedName || "the parent"} on ${fmtDate(ag.acceptedAt)}` : ag.agreedBeforePlatform ? "Current student: agreed before the platform" : "Not accepted yet"} />

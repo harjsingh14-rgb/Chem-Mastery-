@@ -4,6 +4,7 @@ import { CALC_SETS } from "../data/calc-sets";
 import { EXTENDED_QUESTIONS } from "../data/extended-questions";
 import { EXAM_QUESTIONS, EXAM_TOPICS, questionMarks } from "../data/exam-questions";
 import mcqData from "../mcq-data.json";
+import { topicTitle } from "../components/ppq/ppqUtils";
 
 // Agreed with HSJ Tuition: homework is budgeted at 1.5 minutes per mark.
 export const MIN_PER_MARK = 1.5;
@@ -86,7 +87,7 @@ function toItem(type, q, extra = {}) {
 /** A homework item for one past-paper index entry (the tutor ticking a question, or the auto-fill). */
 export function ppqItem(q) {
   const snap = {}; for (const k of PPQ_SNAPSHOT) if (q[k] !== undefined) snap[k] = q[k];
-  return toItem("ppq", q, { ...snap, topic: (q.topics || [])[0] || null, topicLabel: q.title || `Question ${q.q}` });
+  return toItem("ppq", q, { ...snap, topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? topicTitle(q.board || "aqa", q.topics[0]) : (q.title || `Question ${q.q}`) });
 }
 
 /**
