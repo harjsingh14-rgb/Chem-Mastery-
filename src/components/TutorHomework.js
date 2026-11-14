@@ -164,7 +164,7 @@ export function TutorHomeworkReview({ authUser, userProfile, assignmentId }) {
 
   return (
     <>
-      <PageHeader eyebrow="Homework" title={a.title} sub={`${a.minutes} min · ${a.summary} · ${a.maxScore} marks · Due ${fmtDue(a.dueAt)}`}
+      <PageHeader eyebrow="Homework" title={a.title} sub={`${a.minutes} min · ${a.summary}${/\bmarks?\b/.test(a.summary || "") ? "" : ` · ${a.maxScore} marks`} · Due ${fmtDue(a.dueAt)}`}
         right={<>
           <Button variant="secondary" icon="arrowLeft" onClick={() => navigate("/tutor/homework")}>All homework</Button>
           {canManage && <Button variant="secondary" onClick={toggleClosed} disabled={busy}>{a.status === "closed" ? "Reopen" : "Close"}</Button>}

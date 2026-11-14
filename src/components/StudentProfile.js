@@ -13,7 +13,7 @@ import { fmtTime, describeSlots, slotsOf, sessionEndMs, fmtLessonDay } from "../
 import { NoteBody } from "./StudentLessons";
 import { useHomework } from "./StudentHomework";
 import { money, paymentPlanLabel } from "../data/terms";
-import { ragCounts } from "../data/self-evaluation";
+import { ragCounts, subtopicTitle, SELF_EVALUATION } from "../data/self-evaluation";
 import { QUESTIONNAIRE_SECTIONS } from "../data/parent-questionnaire";
 import { PAYMENT_TONE, paymentStatusLabel } from "./StudentPanels";
 import { fmtDue } from "../utils/homeworkDates";
@@ -507,6 +507,12 @@ function PaymentsTab({ student, isAdmin }) {
 function DetailsTab({ student, group, isAdmin, onChange }) {
   const ev = student.selfEvaluation;
   const rag = ragCounts(ev?.ratings);
+  const evBoard = SELF_EVALUATION[student.board] ? student.board : "aqa";
+  // Module ids are stored on the evaluation; show their names, shortened to the part before the spec refs
+  const taughtTitles = (Array.isArray(ev?.taught) ? ev.taught : []).map(id => {
+    const m = SELF_EVALUATION[evBoard].modules.find(x => x.id === id);
+    return m ? m.title.replace(/\s*\([^)]*\)\s*$/, "") : id;
+  });
   const ag = student.agreement || {};
   const navigate = useNavigate();
   const [diagBusy, setDiagBusy] = useState(false);
@@ -551,10 +557,10 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
           <>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <Chip tone="red">{rag.red} red</Chip><Chip tone="amber">{rag.amber} amber</Chip><Chip tone="green">{rag.green} green</Chip>
-              {ev.taught && <Chip>Taught up to {ev.taught}</Chip>}
+              {Array.isArray(ev.taught) && ev.taught.length > 0 && <Chip title={taughtTitles.join("; ")}>Taught: {taughtTitles.join(", ")}</Chip>}
             </div>
             {Object.entries(ev.ratings || {}).filter(([, r]) => r?.rag === "red").length > 0 && (
-              <div style={{ fontSize: 13, color: T.body }}><strong>Red topics:</strong> {Object.entries(ev.ratings).filter(([, r]) => r?.rag === "red").map(([ref]) => ref).join(", ")}</div>
+              <div style={{ fontSize: 13, color: T.body }}><strong>Red topics:</strong> {Object.entries(ev.ratings).filter(([, r]) => r?.rag === "red").map(([ref]) => `${ref} ${subtopicTitle(evBoard, ref)}`).join(", ")}</div>
             )}
             {ev.notes && <div style={{ fontSize: 13, color: T.body, whiteSpace: "pre-wrap", background: T.soft, borderRadius: 8, padding: "8px 12px" }}>{ev.notes}</div>}
           </>
