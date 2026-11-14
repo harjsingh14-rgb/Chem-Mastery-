@@ -154,6 +154,10 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
                 {student.parentEmail && <a className="cm-link" href={`mailto:${student.parentEmail}`} style={{ fontWeight: 500 }}>{student.parentEmail}</a>}
                 {student.parentPhone && <a className="cm-link" href={`tel:${student.parentPhone}`} style={{ fontWeight: 500 }}>{student.parentPhone}</a>}
                 <span style={{ fontSize: 12, color: T.muted }}>{student.parentUid ? "Has a parent login" : "No parent login yet"}{student.agreement?.acceptedAt ? ` · agreement accepted ${fmtDate(student.agreement.acceptedAt)}` : student.agreement?.agreedBeforePlatform ? " · agreed before the platform" : " · agreement not accepted"}</span>
+                <span style={{ fontSize: 12, color: T.muted }}>
+                  {student.parentQuestionnaire ? `Questionnaire answered ${fmtDate(student.parentQuestionnaire.submittedAt)} · ` : "Questionnaire not answered yet · "}
+                  <button type="button" onClick={() => setTab("details")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", font: "inherit", fontWeight: 600, color: T.accentText }}>{student.parentQuestionnaire ? "read the answers" : "see the Details tab"}</button>
+                </span>
               </div>
             ) : <span style={{ fontSize: 13, color: T.muted }}>No parent details on file.</span>}
           </Card>}

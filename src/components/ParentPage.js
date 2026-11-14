@@ -276,7 +276,7 @@ function AgreementTab({ child }) {
         </div>
         <PrintAgreementButton />
       </Card>
-      <AgreementDocument vars={vars} accepted={accepted} printable title={`HSJ Tuition Agreement - ${child.displayName || "student"}`} />
+      <AgreementDocument vars={vars} accepted={accepted} printable collapsible title={`HSJ Tuition Agreement - ${child.displayName || "student"}`} />
     </>
   );
 }

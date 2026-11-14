@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyName, updateMyPhoto } from "./firebase";
+import { logOut, onAuthChange, getOrCreateUserProfile, recordAttempt, updateMyName, updateMyPhoto, fetchUserProfiles } from "./firebase";
 import StudentDashboard from "./components/StudentDashboard";
 import { VideosPage } from "./components/Placeholders";
 import AppShell, { ShellBody } from "./ui/AppShell";
@@ -257,6 +257,16 @@ export default function App() {
   // A placed student is locked to their own board: a stale /ocr link or a
   // remembered board from someone else's session on the same browser is swapped
   const profileBoard = !isTutor && !isParent && BOARD_IDS.includes(userProfile?.board) ? userProfile.board : null;
+  // Parents: the nav names each child rather than saying "My child"
+  const childIds = isParent ? (userProfile?.children || []) : [];
+  const childKey = childIds.join(",");
+  const [parentChildren, setParentChildren] = useState([]);
+  useEffect(() => {
+    if (!childKey) { setParentChildren([]); return undefined; }
+    let alive = true;
+    fetchUserProfiles(childKey.split(",")).then(list => { if (alive) setParentChildren(list.sort((a, b) => (a.displayName || "").localeCompare(b.displayName || ""))); }).catch(() => {});
+    return () => { alive = false; };
+  }, [childKey]);
   useEffect(() => {
     if (!profileBoard || !board || board === profileBoard) return;
     navigate(`/${profileBoard}${location.pathname.slice(board.length + 1)}${location.search}`, { replace: true });
@@ -291,8 +301,10 @@ export default function App() {
     { id: "progress", label: "Progress", icon: "chart", to: `/${navBoard}/progress`, active: screen === "dashboard" },
   ];
 
-  const parentNav = [
-    { id: "parent", label: "My child", icon: "users", to: "/parent", active: screen === "parent" },
+  const parentNav = parentChildren.length > 1
+    ? parentChildren.map((c, i) => ({ id: `parent-${c.uid}`, label: (c.displayName || "My child").split(" ")[0], icon: "users", to: `/parent/${c.uid}`,
+        active: screen === "parent" && ((pathParts[1] || parentChildren[0].uid) === c.uid) }))
+    : [{ id: "parent", label: parentChildren[0]?.displayName ? parentChildren[0].displayName.split(" ")[0] : "My child", icon: "users", to: "/parent", active: screen === "parent" },
   ];
   const menuSection = { borderTop: `1px solid ${T.line}`, paddingTop: 12, display: "flex", flexDirection: "column", gap: 6 };
   const menuLabel = { fontSize: 12, fontWeight: 600, color: T.muted };
