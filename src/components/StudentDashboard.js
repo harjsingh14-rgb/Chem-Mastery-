@@ -127,6 +127,36 @@ export default function StudentDashboard({ board, authUser, userProfile, current
               right={<Button size="sm" variant="ghost" iconRight="arrowRight" onClick={() => navigate(`/${board}/progress`)}>Full progress</Button>} />
             <TopicTable groups={groups.slice(0, 3)} />
           </Card>
+
+          {/* Progress cards sit under the topic table so the two columns end together */}
+          <div className="cm-grid-2">
+            <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <CardHeader title="Needs work" sub="Topics under 75% with 3+ answers" />
+              {s.weak.filter(t => t.pct < 75).length === 0
+                ? <span style={{ fontSize: 13, color: T.muted }}>Nothing flagged yet. Keep practising and weak spots will show here.</span>
+                : <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {s.weak.filter(t => t.pct < 75).map(t => <Chip key={t.key} tone={chipToneForPct(t.pct)}>{t.label} · {t.pct}%</Chip>)}
+                  </div>}
+              <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10, display: "flex", gap: 10, alignItems: "center" }}>
+                <IconTile name="video" tone="neutral" size={32} />
+                <span style={{ fontSize: 12, color: T.muted }}>Video explanations for weak topics will link here as the library grows.</span>
+              </div>
+            </Card>
+
+            <ErrorLogCard authUser={authUser} board={board} />
+
+            <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <CardHeader title="Strengths" />
+              {s.strong.length === 0
+                ? <span style={{ fontSize: 13, color: T.muted }}>Topics you score 70%+ on will appear here.</span>
+                : <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{s.strong.map(t => <Chip key={t.key} tone="green">{t.label} · {t.pct}%</Chip>)}</div>}
+            </Card>
+
+            <Card style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <CardHeader title="Accuracy over time" sub="weekly" />
+              <AccuracySpark weekly={s.weekly} />
+            </Card>
+          </div>
         </div>
 
         <aside className="cm-side-col">
@@ -144,32 +174,6 @@ export default function StudentDashboard({ board, authUser, userProfile, current
           {inClass && <PaymentsCard authUser={authUser} />}
           {inClass && <LessonNotesCard authUser={authUser} board={board} />}
 
-          <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <CardHeader title="Needs work" sub="Topics under 75% with 3+ answers" />
-            {s.weak.filter(t => t.pct < 75).length === 0
-              ? <span style={{ fontSize: 13, color: T.muted }}>Nothing flagged yet. Keep practising and weak spots will show here.</span>
-              : <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {s.weak.filter(t => t.pct < 75).map(t => <Chip key={t.key} tone={chipToneForPct(t.pct)}>{t.label} · {t.pct}%</Chip>)}
-                </div>}
-            <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10, display: "flex", gap: 10, alignItems: "center" }}>
-              <IconTile name="video" tone="neutral" size={32} />
-              <span style={{ fontSize: 12, color: T.muted }}>Video explanations for weak topics will link here as the library grows.</span>
-            </div>
-          </Card>
-
-          <ErrorLogCard authUser={authUser} board={board} />
-
-          <Card style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <CardHeader title="Strengths" />
-            {s.strong.length === 0
-              ? <span style={{ fontSize: 13, color: T.muted }}>Topics you score 70%+ on will appear here.</span>
-              : <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{s.strong.map(t => <Chip key={t.key} tone="green">{t.label} · {t.pct}%</Chip>)}</div>}
-          </Card>
-
-          <Card style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <CardHeader title="Accuracy over time" sub="weekly" />
-            <AccuracySpark weekly={s.weekly} />
-          </Card>
         </aside>
       </div>
     </>
