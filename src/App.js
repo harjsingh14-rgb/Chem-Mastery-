@@ -148,6 +148,7 @@ export default function App() {
   const screen = pathParts[0] === 'tutor' ? 'tutor'
     : pathParts[0] === 'parent' ? 'parent'
     : pathParts[0] === 'onboarding' ? 'onboarding'
+    : (pathParts[0] === 'privacy' || pathParts[0] === 'terms') ? 'legal'
     : !board ? 'board'
     : (routeTab === 'dashboard' || routeTab === 'progress') ? 'dashboard'
     : routeTab === 'cards' ? 'cards'
@@ -274,7 +275,7 @@ export default function App() {
   }, [profileBoard, board, location.pathname, location.search, navigate]);
   // Parents have no student screens of their own
   useEffect(() => {
-    if (isParent && authUser && screen !== "parent" && screen !== "board" && screen !== "onboarding") navigate("/parent", { replace: true });
+    if (isParent && authUser && screen !== "parent" && screen !== "board" && screen !== "onboarding" && screen !== "legal") navigate("/parent", { replace: true });
   }, [isParent, authUser, screen, navigate]);
 
   // ─── App shell: nav + account menu shared by every signed-in screen ───
