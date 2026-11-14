@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth, forgetReads, fetchAssignment, startSubmission, saveItemResult, submitSubmission, sendMarkQuery, notifyTutor } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/components";
@@ -312,6 +313,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
 
 // ─── The player ──────────────────────────────────────────────────────────
 export default function HomeworkPlayer({ board, authUser, userProfile, assignmentId, logAttempt, onExit }) {
+  const navigate = useNavigate();
   const [a, setA] = useState(null);
   const [subm, setSubm] = useState(null);
   const [idx, setIdx] = useState(0);
@@ -434,7 +436,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
           ? (hideMarks ? <Chip tone="accent">Submitted · report on its way</Chip> : <Chip tone={pctScore >= 75 ? "green" : pctScore >= 50 ? "amber" : "red"}>Marked · {total(answers)} / {subm.maxScore} · {pctScore}%</Chip>)
           : <Chip tone="amber">Due {fmtDue(a.dueAt)}</Chip>}
         {!submitted && <Button variant="primary" onClick={handleSubmit} disabled={submitting || !allComplete} title={allComplete ? undefined : "Finish every question before submitting"}>{submitting ? "Submitting…" : diagnostic ? "Submit diagnostic" : "Submit homework"}</Button>}
-        <Button variant="secondary" onClick={onExit}>{submitted ? "Back to homework" : "Save and exit"}</Button>
+        <Button variant="secondary" onClick={submitted && diagnostic ? () => navigate(`/${board}`) : onExit}>{submitted ? (diagnostic ? "Back to dashboard" : "Back to homework") : "Save and exit"}</Button>
       </div>
 
       {submitted && hideMarks && (
