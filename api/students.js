@@ -375,6 +375,29 @@ async function accessAction(body, admin, token, res) {
     await mail.sendEmail({ to: u.email, cc, subject, html });
     return res.status(200).json({ ok: true, sentTo: u.email, cc: cc || null });
   }
+  // Remove the account for good: login, profile, diagnostic homework, the
+  // applicant record, and the parent account when this was its only child.
+  if (op === "delete") {
+    const diagId = `diag_${uid}`;
+    await fb.deleteDocument(`submissions/${diagId}_${uid}`, token).catch(() => {});
+    await fb.deleteDocument(`assignments/${diagId}`, token).catch(() => {});
+    if (u.applicantId) await fb.deleteDocument(`applicants/${u.applicantId}`, token).catch(() => {});
+    let parentDeleted = false;
+    if (u.role === "student" && u.parentUid) {
+      const parent = await fb.getDocument(`users/${u.parentUid}`, token).catch(() => null);
+      const others = (parent?.children || []).filter(c => c !== uid);
+      if (parent && others.length === 0) {
+        await fb.deleteAuthUser(u.parentUid, token).catch(() => {});
+        await fb.deleteDocument(`users/${u.parentUid}`, token).catch(() => {});
+        parentDeleted = true;
+      } else if (parent) {
+        await fb.updateDocument(`users/${u.parentUid}`, { children: others }, token).catch(() => {});
+      }
+    }
+    await fb.deleteAuthUser(uid, token);
+    await fb.deleteDocument(`users/${uid}`, token);
+    return res.status(200).json({ ok: true, parentDeleted });
+  }
   throw bad("Unknown access action");
 }
 

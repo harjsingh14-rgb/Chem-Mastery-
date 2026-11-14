@@ -18,6 +18,20 @@ const STATUS = {
 const fmtDate = (ms) => ms ? new Date(ms).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "";
 const fmtDateTime = (ms) => ms ? new Date(ms).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
 const label = { fontSize: 12, fontWeight: 600, color: T.muted };
+
+/** The link the email carries, for sending by hand (WhatsApp, a second email) or opening to check. */
+function OnboardingLink({ token }) {
+  const [copied, setCopied] = useState(false);
+  if (!token) return null;
+  const url = `${window.location.origin}/onboarding/${token}`;
+  const copy = async () => { try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { window.prompt("Copy this link", url); } };
+  return (
+    <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 6, fontSize: 12 }}>
+      <Button size="sm" variant="ghost" onClick={copy}>{copied ? "Copied" : "Copy link"}</Button>
+      <a className="cm-link" href={url} target="_blank" rel="noreferrer" style={{ wordBreak: "break-all", color: T.muted }}>{url.replace(/^https?:\/\//, "")}</a>
+    </div>
+  );
+}
 const field = { display: "flex", flexDirection: "column", gap: 6 };
 const selectStyle = { padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink };
 const today = () => new Date().toISOString().slice(0, 10);
@@ -255,6 +269,7 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
             <>
               <div style={{ fontSize: 13, color: T.muted, marginBottom: 6 }}>Not completed yet. Link sent {fmtDateTime(a.evalSentAt) || "never"}.</div>
               <Button size="sm" onClick={() => resend("evaluation")} disabled={!!busy}>{busy === "evaluation" ? "Sending…" : "Resend to student"}</Button>
+              <OnboardingLink token={a.evalToken} />
             </>
           )}
         </div>
@@ -268,6 +283,7 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
             <>
               <div style={{ fontSize: 13, color: T.muted, marginBottom: 6 }}>Not accepted yet. {a.termsSentAt ? `Sent ${fmtDateTime(a.termsSentAt)}.` : "Sent automatically once the self-evaluation is in."}</div>
               <Button size="sm" onClick={() => resend("terms")} disabled={!!busy}>{busy === "terms" ? "Sending…" : a.termsSentAt ? "Resend to parent" : "Send to parent now"}</Button>
+              <OnboardingLink token={a.termsToken} />
             </>
           )}
           <div style={{ marginTop: 10, fontSize: 13 }}>
@@ -276,6 +292,7 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
               : <>
                   <div style={{ color: T.muted, marginBottom: 6 }}>Questionnaire not completed. {a.terms || a.currentStudent ? "" : "It is on the same page as the agreement, after accepting."}{a.questionnaireSentAt ? ` Reminder sent ${fmtDateTime(a.questionnaireSentAt)}.` : ""}</div>
                   <Button size="sm" onClick={() => resend("questionnaire")} disabled={!!busy}>{busy === "questionnaire" ? "Sending…" : "Send questionnaire link"}</Button>
+                  {(a.terms || a.currentStudent) && <OnboardingLink token={a.termsToken} />}
                 </>}
           </div>
         </div>

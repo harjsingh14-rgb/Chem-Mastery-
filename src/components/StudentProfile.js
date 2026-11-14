@@ -321,6 +321,7 @@ function GroupCard({ student, onMoved }) {
 }
 
 function AccessCard({ student, onChange }) {
+  const navigate = useNavigate();
   const [parent, setParent] = useState(null);
   const [busy, setBusy] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -350,6 +351,15 @@ function AccessCard({ student, onChange }) {
     setBusy(null);
   };
 
+  const remove = async () => {
+    const first = (student.displayName || student.email || "this student").split(" ")[0];
+    if (!window.confirm(`Delete ${first}'s account for good? Their login, profile, diagnostic homework and onboarding record are removed, and the parent's account too if ${first} is their only child. This cannot be undone.`)) return;
+    if (!window.confirm(`Last check: delete ${first}'s account now?`)) return;
+    setBusy("student:delete"); setMsg(null);
+    try { await studentsApi("access", { uid: student.uid, op: "delete" }); navigate("/tutor/students"); }
+    catch (e) { setMsg({ tone: "red", text: e.message }); setBusy(null); }
+  };
+
   const row = (who, u, title) => {
     const off = !!u.accessDisabled;
     const last = loginMs(u);
@@ -377,6 +387,9 @@ function AccessCard({ student, onChange }) {
       {parentUid && parent && <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10 }}>{row("parent", parent, "Parent")}</div>}
       {parentUid && !parent && <span style={{ fontSize: 12, color: T.muted }}>Loading the parent's login…</span>}
       {msg && <Notice tone={msg.tone} style={{ fontSize: 12 }}>{msg.text}</Notice>}
+      <div style={{ borderTop: `1px solid ${T.line}`, paddingTop: 10 }}>
+        <Button size="sm" variant="ghost" onClick={remove} disabled={!!busy} style={{ color: T.red }}>{busy === "student:delete" ? "Deleting…" : "Delete this account"}</Button>
+      </div>
     </Card>
   );
 }
