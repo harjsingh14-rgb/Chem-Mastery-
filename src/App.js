@@ -321,7 +321,13 @@ export default function App() {
         </div>
       )}
       <div style={menuSection}>
-        {!isParent && (
+        {!isParent && profileBoard && (
+          <>
+            <span style={menuLabel}>Exam board</span>
+            <div style={{ fontSize: 13, color: T.body, fontWeight: 600 }}>{boardLabel(profileBoard)}<span style={{ fontWeight: 400, color: T.muted }}> · set by your tutor</span></div>
+          </>
+        )}
+        {!isParent && !profileBoard && (
           <>
             <span style={menuLabel}>Exam board</span>
             <div style={{ display: "flex", gap: 4 }}>
