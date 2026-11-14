@@ -14,6 +14,7 @@ import { NoteBody } from "./StudentLessons";
 import { useHomework } from "./StudentHomework";
 import { money, paymentPlanLabel } from "../data/terms";
 import { ragCounts } from "../data/self-evaluation";
+import { QUESTIONNAIRE_SECTIONS } from "../data/parent-questionnaire";
 import { PAYMENT_TONE, paymentStatusLabel } from "./StudentPanels";
 import { fmtDue } from "../utils/homeworkDates";
 import PhotoUpload from "./PhotoUpload";
@@ -473,6 +474,20 @@ function DetailsTab({ student, group }) {
             {ev.notes && <div style={{ fontSize: 13, color: T.body, whiteSpace: "pre-wrap", background: T.soft, borderRadius: 8, padding: "8px 12px" }}>{ev.notes}</div>}
           </>
         ) : <span style={{ fontSize: 13, color: T.muted }}>The student has not sent the self-evaluation. Resend it from the Onboarding tab.</span>}
+      </Card>
+      <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <CardHeader title="Parent questionnaire" sub={student.parentQuestionnaire ? `Completed ${fmtDate(student.parentQuestionnaire.submittedAt)}` : "Not completed yet"} />
+        {student.parentQuestionnaire ? QUESTIONNAIRE_SECTIONS.map(sec => (
+          <div key={sec.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: T.accentText, textTransform: "uppercase", letterSpacing: 0.6 }}>{sec.title}</div>
+            {sec.questions.filter(q => student.parentQuestionnaire[q.id] !== undefined).map(q => (
+              <div key={q.id} style={{ fontSize: 13 }}>
+                <div style={{ color: T.muted }}>{q.label}</div>
+                <div style={{ color: T.ink, whiteSpace: "pre-wrap" }}>{Array.isArray(student.parentQuestionnaire[q.id]) ? student.parentQuestionnaire[q.id].join(", ") : student.parentQuestionnaire[q.id]}</div>
+              </div>
+            ))}
+          </div>
+        )) : <span style={{ fontSize: 13, color: T.muted }}>The parent fills it in on the agreement page after accepting. Send the link again from the Onboarding tab.</span>}
       </Card>
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <CardHeader title="Agreement" sub={ag.acceptedAt ? `Accepted by ${ag.acceptedName || "the parent"} on ${fmtDate(ag.acceptedAt)}` : ag.agreedBeforePlatform ? "Current student: agreed before the platform" : "Not accepted yet"} />

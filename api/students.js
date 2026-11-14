@@ -225,6 +225,7 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
       agreedBeforePlatform: !!a.currentStudent,
     },
     selfEvaluation: a.evaluation || null,
+    parentQuestionnaire: a.questionnaire || null,
     termsAccepted: a.terms || null,
     applicantId: id,
     evalToken: a.evaluation ? null : a.evalToken,
@@ -514,6 +515,12 @@ module.exports = async function handler(req, res) {
         if (a.currentStudent) throw bad("Terms for this student were agreed before the platform, so there is no agreement to send");
         await sendTermsInvite(a, origin);
         await fb.updateDocument(`applicants/${id}`, { termsSentAt: Date.now() }, token);
+      } else if (which === "questionnaire") {
+        // The questionnaire lives on the parent's terms link; this email points straight at it
+        if (a.questionnaire) throw bad("The parent has already completed the questionnaire");
+        const { subject, html } = mail.questionnaireInvite(withLabel(a), `${origin}/onboarding/${a.termsToken}`);
+        await mail.sendEmail({ to: a.parentEmail, subject, html });
+        await fb.updateDocument(`applicants/${id}`, { questionnaireSentAt: Date.now() }, token);
       } else throw bad("Say which email to resend");
       return res.status(200).json({ ok: true });
     }

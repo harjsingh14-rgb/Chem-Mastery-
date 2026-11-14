@@ -6,6 +6,7 @@ import { T, FONT_LINK, GLOBAL_CSS } from "../ui/theme";
 import { Button, Input, Notice, Chip } from "../ui/components";
 import { SELF_EVALUATION, RAG, COVERED } from "../data/self-evaluation";
 import { TERMS_VERSION } from "../data/terms";
+import { QUESTIONNAIRE_SECTIONS } from "../data/parent-questionnaire";
 import AgreementDocument, { PrintAgreementButton } from "./AgreementDocument";
 
 async function api(method, token, body) {
@@ -270,6 +271,22 @@ function TermsForm({ token, data, onDone }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [accepted, setAccepted] = useState(data.terms || null);
+  const [questionnaire, setQuestionnaire] = useState(data.questionnaire || null);
+  const first = data.studentName.split(" ")[0];
+  // Current students: the parent agreed terms before the platform, so this link is the questionnaire alone
+  if (data.currentStudent) {
+    return (
+      <>
+        <div style={{ marginBottom: 18 }}>
+          <div style={label}>Before the first lesson</div>
+          <h1 style={{ fontFamily: T.display, fontSize: 26, margin: "6px 0 6px" }}>A few questions about {first}</h1>
+          <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>So {first}'s tutor can personalise the support from the first session. It takes 5 to 7 minutes.</p>
+        </div>
+        <QuestionnaireForm token={token} studentName={data.studentName} done={questionnaire} onDone={setQuestionnaire} />
+        {onDone && <div style={cardStyle}><Button variant="accent" onClick={onDone}>Continue to {first}'s page</Button></div>}
+      </>
+    );
+  }
 
   const vars = {
     parentName: data.parentName, studentName: data.studentName,
@@ -303,10 +320,25 @@ function TermsForm({ token, data, onDone }) {
           <Notice tone="green">Accepted by {accepted.acceptedName} on {new Date(accepted.acceptedAt).toLocaleString("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}. Thank you. {data.status === "placed" ? `${data.studentName.split(" ")[0]} is in their group already, so there is nothing else to do.` : "Nothing else to do: HSJ Tuition will email the group and lesson time."}</Notice>
           <div style={{ marginTop: 12, display: "flex", gap: 8, flexWrap: "wrap" }} className="cm-no-print">
             <PrintAgreementButton />
-            {onDone && <Button variant="accent" onClick={onDone}>Continue to {data.studentName.split(" ")[0]}'s page</Button>}
           </div>
         </div>
-      ) : (
+      ) : null}
+      {accepted && (
+        <div className="cm-no-print">
+          <div style={{ margin: "26px 0 14px" }}>
+            <div style={label}>One more thing, 5 to 7 minutes</div>
+            <h2 style={{ fontFamily: T.display, fontSize: 22, margin: "6px 0 6px" }}>A few questions about {first}</h2>
+            <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>Where {first} is now, what you want from the course and how you found us. It goes straight to {first}'s tutor so the first lesson counts.</p>
+          </div>
+          <QuestionnaireForm token={token} studentName={data.studentName} done={questionnaire} onDone={setQuestionnaire} />
+          {onDone && (
+            <div style={cardStyle}>
+              <Button variant={questionnaire ? "accent" : "secondary"} onClick={onDone}>{questionnaire ? `Continue to ${first}'s page` : "Skip the questions for now and continue"}</Button>
+            </div>
+          )}
+        </div>
+      )}
+      {!accepted && (
         <form onSubmit={submit} style={cardStyle}>
           <div style={{ fontWeight: 700, marginBottom: 4 }}>Accept the agreement</div>
           <div style={{ fontSize: 13, color: T.muted, marginBottom: 10 }}>Typing your name and clicking Accept has the same effect as signing the agreement. Your name, the date and time are recorded.</div>
@@ -325,5 +357,73 @@ function TermsForm({ token, data, onDone }) {
         </form>
       )}
     </>
+  );
+}
+
+const fieldStyle = { width: "100%", boxSizing: "border-box", padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, fontFamily: T.font, fontSize: 14, color: T.ink, background: T.card };
+
+/** The parent questionnaire: one card per section, every question answered before it sends. */
+function QuestionnaireForm({ token, studentName, done, onDone }) {
+  const [answers, setAnswers] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  const first = studentName.split(" ")[0];
+  const set = (id, v) => setAnswers(prev => ({ ...prev, [id]: v }));
+  const toggle = (id, opt) => setAnswers(prev => { const cur = prev[id] || []; return { ...prev, [id]: cur.includes(opt) ? cur.filter(x => x !== opt) : [...cur, opt] }; });
+  const missing = QUESTIONNAIRE_SECTIONS.flatMap(sec => sec.questions).filter(q => !q.optional && (q.type === "multi" ? !(answers[q.id] || []).length : !String(answers[q.id] || "").trim()));
+
+  if (done) {
+    return (
+      <div style={cardStyle}>
+        <Notice tone="green">Thank you. Your answers went to {first}'s tutor{done.submittedAt ? ` on ${new Date(done.submittedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}` : ""}.</Notice>
+      </div>
+    );
+  }
+  const submit = async (e) => {
+    e.preventDefault();
+    if (missing.length) { setError(`Please answer every question (${missing.length} left).`); return; }
+    setSaving(true); setError(null);
+    try { const r = await api("POST", token, { action: "questionnaire", ...answers }); onDone(r.questionnaire || { submittedAt: Date.now() }); }
+    catch (err) { setError(err.message); }
+    setSaving(false);
+  };
+  return (
+    <form onSubmit={submit}>
+      {QUESTIONNAIRE_SECTIONS.map(sec => (
+        <div key={sec.id} style={cardStyle}>
+          <div style={{ fontWeight: 700, marginBottom: 12, fontFamily: T.display, fontSize: 17 }}>{sec.title}</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {sec.questions.map(q => (
+              <div key={q.id} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <label htmlFor={`pq-${q.id}`} style={{ fontSize: 14, fontWeight: 600, color: T.ink }}>{q.label}{q.optional ? <span style={{ color: T.muted, fontWeight: 400 }}> (optional)</span> : ""}</label>
+                {q.type === "select" && (
+                  <select id={`pq-${q.id}`} value={answers[q.id] || ""} onChange={e => set(q.id, e.target.value)} style={{ ...fieldStyle, maxWidth: 420 }}>
+                    <option value="">Choose one</option>
+                    {q.options.map(o => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                )}
+                {q.type === "text" && <textarea id={`pq-${q.id}`} value={answers[q.id] || ""} onChange={e => set(q.id, e.target.value)} rows={2} maxLength={2000} style={{ ...fieldStyle, resize: "vertical" }} />}
+                {q.type === "multi" && (
+                  <div id={`pq-${q.id}`} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    {q.options.map(o => (
+                      <label key={o} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, cursor: "pointer" }}>
+                        <input type="checkbox" checked={(answers[q.id] || []).includes(o)} onChange={() => toggle(q.id, o)} /> {o}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div style={cardStyle}>
+        {error && <Notice tone="red" style={{ marginBottom: 10 }}>{error}</Notice>}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <Button type="submit" variant="accent" disabled={saving}>{saving ? "Sending…" : "Send my answers"}</Button>
+          {missing.length > 0 && <span style={{ fontSize: 13, color: T.muted }}>{missing.length} question{missing.length === 1 ? "" : "s"} still to answer</span>}
+        </div>
+      </div>
+    </form>
   );
 }

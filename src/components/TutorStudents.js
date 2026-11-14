@@ -210,8 +210,8 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
   };
   const resend = (which) => run(which, async () => {
     await studentsApi("resend", { id: a.id, which });
-    onChange(which === "evaluation" ? { evalSentAt: Date.now() } : { termsSentAt: Date.now() });
-    setNotice({ tone: "green", text: `${which === "evaluation" ? "Self-evaluation" : "Terms"} email sent again to ${which === "evaluation" ? a.studentEmail : a.parentEmail}.` });
+    onChange(which === "evaluation" ? { evalSentAt: Date.now() } : which === "questionnaire" ? { questionnaireSentAt: Date.now() } : { termsSentAt: Date.now() });
+    setNotice({ tone: "green", text: `${which === "evaluation" ? "Self-evaluation" : which === "questionnaire" ? "Questionnaire" : "Terms"} email sent to ${which === "evaluation" ? a.studentEmail : a.parentEmail}.` });
   });
   const place = () => {
     const g = groups.find(x => x.code === groupCode);
@@ -270,6 +270,14 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
               <Button size="sm" onClick={() => resend("terms")} disabled={!!busy}>{busy === "terms" ? "Sending…" : a.termsSentAt ? "Resend to parent" : "Send to parent now"}</Button>
             </>
           )}
+          <div style={{ marginTop: 10, fontSize: 13 }}>
+            {a.questionnaire
+              ? <>Questionnaire completed<div style={{ fontSize: 12, color: T.muted }}>{fmtDateTime(a.questionnaire.submittedAt)} · answers on the student's profile, Details tab</div></>
+              : <>
+                  <div style={{ color: T.muted, marginBottom: 6 }}>Questionnaire not completed. {a.terms || a.currentStudent ? "" : "It is on the same page as the agreement, after accepting."}{a.questionnaireSentAt ? ` Reminder sent ${fmtDateTime(a.questionnaireSentAt)}.` : ""}</div>
+                  <Button size="sm" onClick={() => resend("questionnaire")} disabled={!!busy}>{busy === "questionnaire" ? "Sending…" : "Send questionnaire link"}</Button>
+                </>}
+          </div>
         </div>
         <div>
           <div style={{ ...label, textTransform: "uppercase", letterSpacing: 0.8, fontSize: 11, marginBottom: 6 }}>Group</div>

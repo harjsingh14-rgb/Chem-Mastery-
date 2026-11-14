@@ -78,9 +78,20 @@ function termsInvite(a, link, ragCounts) {
     <p>Hi ${esc(firstName(a.parentName))},</p>
     <p>${esc(firstName(a.studentName))} has completed the self-evaluation (${ragCounts.red} topics rated Red, ${ragCounts.amber} Amber, ${ragCounts.green} Green). I will use it to place ${esc(firstName(a.studentName))} in the right group and plan the first lessons.</p>
     <p>Please read and accept the HSJ Tuition Tutoring Programme Agreement. It sets out the programme, attendance, fees and payment dates we agreed on the call. It takes a few minutes and once done I will confirm the group and lesson time by email.</p>
+    <p>On the same page, once you have accepted, there is a short questionnaire (5 to 7 minutes): where ${esc(firstName(a.studentName))} is now, what you want from the course and how you found us. It goes straight to the tutor so the first lesson counts.</p>
     ${button(link, "Read and accept the agreement")}
     <p style="margin-top:22px;">Thank you,<br>Harj</p>`);
   return { subject: `HSJ Tuition Tutoring Programme Agreement for ${a.studentName}`, html };
+}
+
+/** To the parent: the questionnaire on its own (terms already accepted, or a current student). */
+function questionnaireInvite(a, link) {
+  const html = layout("A few questions before the first lesson", `
+    <p>Hi ${esc(firstName(a.parentName))},</p>
+    <p>So that ${esc(firstName(a.studentName))}'s tutor can personalise the support from the very first session, please fill in a short questionnaire: where ${esc(firstName(a.studentName))} is now with chemistry, what you want from the course and how you found us. It takes 5 to 7 minutes.</p>
+    ${button(link, "Complete the questionnaire")}
+    <p style="margin-top:22px;">Thank you,<br>Harj</p>`);
+  return { subject: `A few questions about ${firstName(a.studentName)} before the first lesson`, html };
 }
 
 /** To the student, parent copied: your account and group. */
@@ -281,4 +292,4 @@ function tutorQuery({ tutorName, studentName, where, note, link }) {
   return { subject: `Mark query from ${studentName}: ${where}`, html };
 }
 
-module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, welcome, parentWelcome, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
+module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };

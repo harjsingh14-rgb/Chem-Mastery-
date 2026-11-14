@@ -3,9 +3,11 @@
 //   GET  ?token=...                -> what this link is for, and the data the page needs
 //   POST { token, action: "evaluation", taught, ratings, notes }
 //   POST { token, action: "terms", name, version }
+//   POST { token, action: "questionnaire", ...answers }   the parent questionnaire, after the terms
 const { setCors } = require("./_cors");
 const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
+const { validateAnswers } = require("./_questionnaire");
 
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 const RAG = ["red", "amber", "green"];
@@ -31,6 +33,7 @@ function publicView(kind, a) {
     schedule: a.schedule || [], programmeStart: a.programmeStart || null, programmeEnd: a.programmeEnd || null,
     initialGrade: a.initialGrade || null, groupSize: a.groupSize || 6, extraTerms: a.extraTerms || "", agreementDate: a.createdAt || null,
     evaluationDone: !!a.evaluation, terms: a.terms ? { acceptedAt: a.terms.acceptedAt, acceptedName: a.terms.acceptedName, version: a.terms.version } : null,
+    questionnaire: a.questionnaire ? { submittedAt: a.questionnaire.submittedAt } : null,
   };
 }
 
@@ -134,6 +137,23 @@ module.exports = async function handler(req, res) {
         await mail.sendEmail({ to: mail.NOTIFY, subject, html });
       } catch (e) { console.error("notify failed:", e); }
       return res.status(200).json({ ok: true, terms });
+    }
+
+    // The parent questionnaire (starting point, why now, expectations,
+    // discovery): asked on the same link once the agreement is accepted.
+    if (action === "questionnaire") {
+      if (kind !== "terms") throw bad("This link is for the self-evaluation, not the parent questionnaire");
+      if (a.questionnaire) throw bad("This questionnaire has already been sent. Thank you.");
+      const { answers, missing } = validateAnswers(body);
+      if (missing.length) throw bad(`Please answer every question (${missing.length} left: ${missing[0]}${missing.length > 1 ? ", …" : ""})`);
+      const questionnaire = { ...answers, submittedAt: Date.now() };
+      await fb.updateDocument(`applicants/${a.id}`, { questionnaire }, fsToken);
+      if (a.status === "placed" && a.studentUid) await fb.updateDocument(`users/${a.studentUid}`, { parentQuestionnaire: questionnaire }, fsToken).catch(() => {});
+      try {
+        const { subject, html } = mail.notify(labelled, "Parent questionnaire completed", adminLink);
+        await mail.sendEmail({ to: mail.NOTIFY, subject, html });
+      } catch (e) { console.error("notify failed:", e); }
+      return res.status(200).json({ ok: true, questionnaire: { submittedAt: questionnaire.submittedAt } });
     }
 
     throw bad("Unknown action");
