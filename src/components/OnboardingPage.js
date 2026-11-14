@@ -2,7 +2,7 @@
 //   /onboarding/<evalToken>   the student's adaptive self-evaluation
 //   /onboarding/<termsToken>  the parent's terms acceptance
 import React, { useState, useEffect, useMemo } from "react";
-import { T, FONT_LINK, GLOBAL_CSS } from "../ui/theme";
+import { T, GLOBAL_CSS } from "../ui/theme";
 import { Button, Input, Notice, Chip } from "../ui/components";
 import { SELF_EVALUATION, RAG, COVERED } from "../data/self-evaluation";
 import { TERMS_VERSION } from "../data/terms";
@@ -37,7 +37,6 @@ export default function OnboardingPage({ token, onDone, account, onLogOut }) {
 
   return (
     <div style={{ minHeight: "100vh", background: T.bg, fontFamily: T.font, color: T.ink }}>
-      <link href={FONT_LINK} rel="stylesheet" />
       <style>{GLOBAL_CSS}</style>
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "28px 16px 60px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>

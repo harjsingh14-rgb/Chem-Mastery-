@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { T, FONT_LINK, GLOBAL_CSS } from "./theme";
+import { T, GLOBAL_CSS } from "./theme";
 import { Icon, Avatar } from "./components";
 
 /**
@@ -16,10 +16,9 @@ export default function AppShell({ brandSub, nav = [], right, menu, user, childr
 
   return (
     <div className="cm-shell" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: T.bg, color: T.ink, fontFamily: T.font, fontSize: 14, lineHeight: 1.5 }}>
-      <link href={FONT_LINK} rel="stylesheet" />
       <style>{GLOBAL_CSS}</style>
 
-      <header style={{ background: T.card, borderBottom: `1px solid ${T.border}`, padding: "0 24px", display: "flex", alignItems: "center", gap: 16, minHeight: 62, position: "sticky", top: 0, zIndex: 20 }}>
+      <header className="cm-header" style={{ background: T.card, borderBottom: `1px solid ${T.border}`, padding: "0 24px", display: "flex", alignItems: "center", gap: 16, minHeight: 62, position: "sticky", top: 0, zIndex: 20 }}>
         <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${T.navy}, ${T.accent})` }} />
         {focus && back ? (
           <>
@@ -33,13 +32,13 @@ export default function AppShell({ brandSub, nav = [], right, menu, user, childr
           </>
         ) : (
           <>
-            <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: T.ink }}>
+            <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: T.ink, flexShrink: 0 }}>
               <div style={{ width: 34, height: 34, borderRadius: 9, background: T.card, border: `1px solid ${T.border}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                 <img src="/hsj-logo.png" alt="" style={{ height: 28, objectFit: "contain" }} />
               </div>
-              <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
+              <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1, whiteSpace: "nowrap" }}>
                 <span style={{ fontFamily: T.display, fontWeight: 800, fontSize: 16, letterSpacing: -0.2, color: T.navy }}>HSJ Tuition</span>
-                <span style={{ fontSize: 11, color: T.muted, fontWeight: 500 }}>ChemMastery{brandSub ? ` · ${brandSub}` : ""}</span>
+                <span className="cm-brand-sub" style={{ fontSize: 11, color: T.muted, fontWeight: 500 }}>ChemMastery{brandSub ? ` · ${brandSub}` : ""}</span>
               </div>
             </Link>
             <nav className="cm-nav" style={{ display: "flex", gap: 2, marginLeft: 8, overflowX: "auto" }}>

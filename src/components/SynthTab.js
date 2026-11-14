@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { SYNTH_ROUTES } from "../data/synth-routes";
 
+// smiles-drawer is only needed on this tab, so it is fetched the first time a
+// starting molecule is picked rather than on every page of the app.
+let smilesDrawerLoad = null;
+function loadSmilesDrawer() {
+  if (typeof window === "undefined") return Promise.resolve(null);
+  if (window.SmilesDrawer) return Promise.resolve(window.SmilesDrawer);
+  if (!smilesDrawerLoad) {
+    smilesDrawerLoad = new Promise(resolve => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/smiles-drawer@2/dist/smiles-drawer.min.js";
+      script.async = true;
+      script.onload = () => resolve(window.SmilesDrawer || null);
+      script.onerror = () => { smilesDrawerLoad = null; resolve(null); };
+      document.body.appendChild(script);
+    });
+  }
+  return smilesDrawerLoad;
+}
+
 export default function SynthTab({ board }) {
   const [selectedFrom, setSelectedFrom] = useState(null);
   const [revealedRoutes, setRevealedRoutes] = useState(new Set());
@@ -8,10 +27,13 @@ export default function SynthTab({ board }) {
 
   useEffect(() => {
     if (!selectedFrom) return;
-    if (typeof window === "undefined" || !window.SmilesDrawer) return;
-    const timer = setTimeout(() => {
+    let cancelled = false;
+    let timer = null;
+    loadSmilesDrawer().then(drawer => {
+      if (cancelled || !drawer) return;
+      timer = setTimeout(() => {
       try {
-        window.SmilesDrawer.apply({
+        drawer.apply({
           width: 160, height: 110,
           bondThickness: 1.5, bondLength: 30,
           fontSizeLarge: 8, fontSizeSmall: 6,
@@ -23,8 +45,9 @@ export default function SynthTab({ board }) {
           }
         });
       } catch(e) {}
-    }, 120);
-    return () => clearTimeout(timer);
+      }, 120);
+    });
+    return () => { cancelled = true; if (timer) clearTimeout(timer); };
   }, [selectedFrom, board, revealedRoutes]);
 
   const mechColors = {
@@ -186,7 +209,7 @@ export default function SynthTab({ board }) {
                           <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a2d45" }}>{step.stage}</div>
                         </div>
                         {step.equation && (
-                          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "11px", color: "#1a2d45", background: "#fff", borderRadius: "10px", padding: "9px 12px", margin: "4px 0 6px 30px", border: "1px solid #e8edf2", whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
+                          <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "11px", color: "#1a2d45", background: "#fff", borderRadius: "10px", padding: "9px 12px", margin: "4px 0 6px 30px", border: "1px solid #e8edf2", whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
                             {step.equation}
                             {step.arrow && <span style={{ color: "#3B9FDB", fontWeight: 700 }}>{" "}{step.arrow}</span>}
                           </div>

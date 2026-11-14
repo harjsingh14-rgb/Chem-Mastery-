@@ -73,7 +73,7 @@ export const chemBond = (x1,y1,x2,y2,order,key) => {
 export const chemAtom = (x,y,txt,color,key,anchor) => React.createElement("text",{
   key, x, y, textAnchor: anchor||"middle", dominantBaseline:"central",
   fontSize:"11", fontWeight:"700", fill:color||"#1a2d45",
-  fontFamily:"'DM Sans',sans-serif", style:{userSelect:"none"}
+  fontFamily:"'Inter',sans-serif", style:{userSelect:"none"}
 }, txt);
 
 // Benzene ring helper - draws a regular hexagon with alternating double bonds

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MECHS } from "../data/mechanisms";
 import track from "../utils/track";
+import { IconTile } from "../ui/components";
 
 export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActivity, LockedOverlay }) {
   const [mechId, setMechId] = useState(null);
@@ -35,7 +36,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
                   <div style={{ width:"12px", height:"12px", borderRadius:"50%", background:m.color, flexShrink:0 }}/>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:"16px", fontWeight:700, color:"#0f1d35", marginBottom:"4px", lineHeight:1.3 }}>{m.title}</div>
-                    <div style={{ fontSize:"14px", color:"#475569", fontFamily:"'DM Sans',system-ui,sans-serif", letterSpacing:"0.3px" }}>{m.subtitle}</div>
+                    <div style={{ fontSize:"14px", color:"#475569", fontFamily:"'Inter',system-ui,sans-serif", letterSpacing:"0.3px" }}>{m.subtitle}</div>
                   </div>
                   <div style={{ display:"flex", gap:"5px", flexShrink:0 }}>
                     {!hasImages && <span style={{ fontSize:"11px", fontWeight:700, background:"#f59e0b20", color:"#d97706", padding:"3px 8px", borderRadius:"8px" }}>SOON</span>}
@@ -68,7 +69,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
           </button>
           <div style={{ flex:1 }}>
             <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", letterSpacing:"-0.3px" }}>{activeMech.title}</div>
-            <div style={{ fontSize:"15px", color:"#475569", fontFamily:"'DM Sans',system-ui,sans-serif", fontWeight:500, marginTop:"2px" }}>{activeMech.subtitle}</div>
+            <div style={{ fontSize:"15px", color:"#475569", fontFamily:"'Inter',system-ui,sans-serif", fontWeight:500, marginTop:"2px" }}>{activeMech.subtitle}</div>
           </div>
         </div>
 
@@ -145,7 +146,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
 
   return (
     <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
-      <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧪</div>
+      <div style={{ marginBottom:"16px", display:"flex", justifyContent:"center" }}><IconTile name="flask" tone="accent" size={56} /></div>
       <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Handdrawn Explanation Coming Soon</div>
       <div style={{ fontSize:"15px", color:"#64748b", lineHeight:1.6, maxWidth:"400px" }}>
         The handdrawn step-by-step explanation of this mechanism is being built. Check back soon!

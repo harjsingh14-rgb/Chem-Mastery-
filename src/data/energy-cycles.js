@@ -93,7 +93,7 @@ export const BornHaberCycle = ({ compound, steps, find }) => {
   const lattArrowX = RX + lineW + 22;
 
   return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ fontFamily: "'Outfit','DM Sans',sans-serif", display: "block", margin: "0 auto" }}>
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ fontFamily: "'Outfit','Inter',sans-serif", display: "block", margin: "0 auto" }}>
       {/* Energy axis */}
       <text x="14" y={H / 2} textAnchor="middle" fontSize="13" fontWeight="800" fill="#0f1d35" transform={`rotate(-90, 14, ${H/2})`}>Energy</text>
       <line x1="30" y1={H - padB + 5} x2="30" y2={padT} stroke="#0f1d35" strokeWidth="2.5"/>

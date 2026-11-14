@@ -81,6 +81,9 @@ export const GLOBAL_CSS = `
     .cm-hide-sm { display: none !important; }
   }
   @media (max-width: 560px) {
+    .cm-header { padding: 0 12px !important; gap: 8px !important; }
+    .cm-brand-sub { display: none; }
+    .cm-nav { margin-left: 0 !important; }
     .cm-grid-3 { grid-template-columns: 1fr; }
     .cm-grid-2 { grid-template-columns: 1fr; }
     .cm-page { padding: 16px 16px 40px !important; }

@@ -316,7 +316,7 @@ export default function PathwaysTab({ board }) {
                   {example && (
                     <div style={{ padding:"4px 16px 16px" }}>
                       <div style={{ fontSize:"9px", fontWeight:700, color:"#7a95b0", textTransform:"uppercase", letterSpacing:"0.8px", marginBottom:"8px" }}>Example Reaction</div>
-                      <div style={{ fontSize:"12px", color:"#475569", fontWeight:600, textAlign:"center", marginBottom:"10px", fontFamily:"'DM Sans',sans-serif", letterSpacing:"0.2px", lineHeight:1.5 }}>
+                      <div style={{ fontSize:"12px", color:"#475569", fontWeight:600, textAlign:"center", marginBottom:"10px", fontFamily:"'Inter',sans-serif", letterSpacing:"0.2px", lineHeight:1.5 }}>
                         {example.eq.split(" --> ").map((part, pi) => (
                           <span key={pi}>
                             {pi > 0 && <span style={{ color:"#1a2d45", fontWeight:700, margin:"0 6px" }}> → </span>}
