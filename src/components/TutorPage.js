@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchAllStudents, fetchStudentsForTutor, fetchAttemptsForTutor, updateClass, fetchTutorSessions, fetchAllSessions, fetchTutorSubmissions, fetchPayments, fetchApplicants } from "../firebase";
+import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchAllStudents, fetchStudentsForTutor, fetchAttemptsForTutor, updateClass, fetchTutorSessions, fetchAllSessions, fetchTutorSubmissions, fetchPayments, fetchApplicants, studentsApi } from "../firebase";
 import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, upcomingSessions, fmtLessonDay, fmtTime, isoDate, addDays, sessionEndMs } from "../utils/schedule";
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel, groupColour } from "../ui/theme";
@@ -65,6 +65,15 @@ export default function TutorPage({ authUser, userProfile }) {
     return () => { cancelled = true; };
   }, [tutorUid, isAdmin, canGroups]);
 
+  const deleteGroup = async (c) => {
+    if (!window.confirm(`Delete the group ${c.name}?\n\nIts calendar sessions and any group homework are removed too. This cannot be undone.`)) return;
+    try {
+      await studentsApi("deleteGroup", { groupCode: c.code });
+      setClasses(list => list.filter(x => x.code !== c.code));
+      setSessions(list => (list || []).filter(x => x.classId !== c.code));
+      if (selected === c.code) setSelected(null);
+    } catch (e) { setError(e.message); }
+  };
   const saveSchedule = async () => {
     const cls = classes?.find(c => c.code === editSchedule?.code);
     if (!cls) return;
@@ -232,6 +241,7 @@ export default function TutorPage({ authUser, userProfile }) {
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                       {canGroups && <Button size="sm" onClick={() => openSchedule(c)}>{slotsOf(c).length ? "Usual times" : "Set usual times"}</Button>}
                       <Button size="sm" icon="users" onClick={() => navigate(`/tutor/students?group=${encodeURIComponent(c.code)}`)}>Students</Button>
+                      {isAdmin && count === 0 && <Button size="sm" variant="danger" onClick={() => deleteGroup(c)} title="Only an empty group can be deleted">Delete</Button>}
                     </div>
                   </div>
                 );

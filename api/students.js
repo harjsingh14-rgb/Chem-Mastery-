@@ -551,6 +551,25 @@ module.exports = async function handler(req, res) {
 
     // Move a placed student to another group (and so to that group's tutor).
     // Their diagnostic homework and its submission follow them.
+    // Delete an empty group: its calendar sessions and class-wide homework go
+    // with it. Refused while any student is still placed in it (move them first).
+    if (action === "deleteGroup") {
+      const groupCode = str(body.groupCode, 20).toUpperCase();
+      if (!groupCode) throw bad("groupCode required");
+      const group = await fb.getDocument(`classes/${groupCode}`, token);
+      if (!group) throw bad("Group not found");
+      const members = await fb.queryDocuments("users", { classId: groupCode }, token, { limit: 5 });
+      if (members.length) throw bad(`${members.length} student${members.length === 1 ? " is" : "s are"} still in this group. Move them to another group first.`);
+      const waiting = await fb.queryDocuments("applicants", { groupCode, status: "placed" }, token, { limit: 5 });
+      if (waiting.length) throw bad("An applicant is still recorded against this group");
+      const sessions = await fb.queryDocuments("sessions", { classId: groupCode }, token, { limit: 500 });
+      for (const sdoc of sessions) await fb.deleteDocument(`sessions/${sdoc.id}`, token).catch(() => {});
+      const assignments = await fb.queryDocuments("assignments", { classId: groupCode, studentIds: null }, token, { limit: 500 });
+      for (const a of assignments) await fb.deleteDocument(`assignments/${a.id}`, token).catch(() => {});
+      await fb.deleteDocument(`classes/${groupCode}`, token);
+      return res.status(200).json({ ok: true, sessions: sessions.length, assignments: assignments.length });
+    }
+
     if (action === "move") {
       const uid = str(body.uid, 128);
       const groupCode = str(body.groupCode, 20).toUpperCase();
