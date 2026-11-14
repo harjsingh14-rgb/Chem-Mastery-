@@ -547,8 +547,16 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, paddingTop: 8, borderTop: `1px solid ${T.line}`, flexWrap: "wrap" }}>
                 <Button variant="secondary" icon="arrowLeft" onClick={() => setIdx(i => Math.max(0, i - 1))} disabled={idx === 0}>Previous</Button>
-                {!readOnly && !isComplete(item) && <span style={{ fontSize: 12, color: T.muted }}>{idx >= items.length - 1 ? "Answer every part, then submit at the top." : "Answer every part of this question to move on."}</span>}
-                <Button variant="secondary" iconRight="arrowRight" onClick={() => setIdx(i => Math.min(items.length - 1, i + 1))} disabled={idx >= items.length - 1 || (!readOnly && !isComplete(item))}>Next</Button>
+                {!readOnly && !isComplete(item) && <span style={{ fontSize: 12, color: T.muted }}>{idx >= items.length - 1 ? "Answer every part, then submit." : "Answer every part of this question to move on."}</span>}
+                {!readOnly && idx >= items.length - 1 && isComplete(item) && !allComplete && (
+                  <span style={{ fontSize: 12, color: T.muted }}>
+                    {items.length - completeCount} question{items.length - completeCount === 1 ? "" : "s"} still to answer ·{" "}
+                    <button type="button" onClick={() => setIdx(firstIncomplete)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", font: "inherit", fontWeight: 600, color: T.accentText }}>go to question {firstIncomplete + 1}</button>
+                  </span>
+                )}
+                {!readOnly && idx >= items.length - 1
+                  ? <Button variant="primary" iconRight="arrowRight" onClick={handleSubmit} disabled={submitting || !allComplete} title={allComplete ? undefined : "Finish every question before submitting"}>{submitting ? "Submitting…" : diagnostic ? "Submit diagnostic" : "Submit homework"}</Button>
+                  : <Button variant="secondary" iconRight="arrowRight" onClick={() => setIdx(i => Math.min(items.length - 1, i + 1))} disabled={idx >= items.length - 1 || (!readOnly && !isComplete(item))}>Next</Button>}
               </div>
             </Card>
           )}
