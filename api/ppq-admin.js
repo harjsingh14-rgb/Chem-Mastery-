@@ -58,7 +58,7 @@ function enrichPrompt({ question, msText, topics }) {
   const topicList = (topics || []).map(t => `${t.ref}: ${t.title}`).join("\n");
   return `You are a senior ${BOARD_NAME[question.board] || question.board} ${LEVEL_NAME[question.level] || ""} Chemistry examiner preparing a past-paper question for a revision app. Students will see the original question as an image; you are producing the structured data behind it.
 
-PAPER: ${question.diagnostic ? `HSJ Tuition ${question.title || "initial diagnostic"}, an initial diagnostic paper assembled from ${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} exam questions${question.coverTitle ? ` (listed on the cover as "${question.coverTitle}")` : ""}` : question.legacy ? `${BOARD_NAME[question.board]} legacy unit ${question.unit} (the specification examined 2010 to 2016)` : `${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} Paper ${question.paper}`}, ${question.series}, question ${question.q}. Total marks on the paper: ${question.total}.
+PAPER: ${question.diagnostic ? `HSJ Tuition ${question.title || "initial diagnostic"}, an initial diagnostic paper assembled from ${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} exam questions and sat by new HSJ students of every exam board${question.coverTitle ? ` (listed on the cover as "${question.coverTitle}")` : ""}` : question.legacy ? `${BOARD_NAME[question.board]} legacy unit ${question.unit} (the specification examined 2010 to 2016)` : `${BOARD_NAME[question.board]} ${LEVEL_NAME[question.level]} Paper ${question.paper}`}, ${question.series}, question ${question.q}. Total marks on the paper: ${question.total}.
 
 QUESTION TEXT (extracted from the PDF; layout, tables and diagrams may be lost or garbled; answer lines removed):
 <<<

@@ -13,7 +13,7 @@ import split
 
 TOTAL_RE = re.compile(r"^\(Total (\d+) marks?\)$")
 LABEL_RE = re.compile(r"^\d{1,2}\.$")
-FOOT_Y = 740
+FOOT_Y = 760   # footer text starts at y=765
 
 def text_blocks(page):
     out = []

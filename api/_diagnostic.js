@@ -28,8 +28,11 @@ function scoreItems(assignment, sub) {
   });
 }
 
+// The papers are built from AQA questions and tagged with AQA topic refs; students of any board sit them
+const topicBoard = (assignment) => assignment.topicBoard || "aqa";
+
 function numbers(assignment, items, year) {
-  const board = assignment.board || "aqa";
+  const board = topicBoard(assignment);
   const max = items.reduce((a, it) => a + it.max, 0);
   const score = items.reduce((a, it) => a + it.score, 0);
   const attempted = items.filter(it => it.attempted);
@@ -42,7 +45,7 @@ function numbers(assignment, items, year) {
   }
   const byTopic = Object.values(byTopicMap).map(r => ({ ...r, pct: pct(r.score, r.max) })).sort((a, b) => (a.pct ?? 0) - (b.pct ?? 0));
   let year12 = null;
-  if (Number(year) === 13 && board === "aqa") {
+  if (Number(year) === 13) {
     const as = items.filter(it => AQA_AS.has(it.topics[0]));
     const asMax = as.reduce((a, it) => a + it.max, 0);
     if (asMax) year12 = { score: as.reduce((a, it) => a + it.score, 0), max: asMax, pct: pct(as.reduce((a, it) => a + it.score, 0), asMax) };
@@ -70,12 +73,13 @@ function questionBlock(it, doc, board) {
 }
 
 function prompt({ student, assignment, items, docs, nums, year }) {
-  const board = assignment.board || "aqa";
+  const board = topicBoard(assignment);
+  const examBoard = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" }[student.board || assignment.board] || "A-level";
   const first = (student.displayName || "the student").trim().split(/\s+/)[0];
   const pq = student.parentQuestionnaire || {};
   return `You are a senior A-level Chemistry tutor at HSJ Tuition writing the feedback report on a new student's initial diagnostic paper. The parent and the student both read it. Write in clear, direct, exam-style language with UK spelling. No em dashes. Be honest about weaknesses, specific about the chemistry, and constructive: every weakness comes with what to do about it. Refer to the student by first name (${first}). Do not invent anything that is not in the data below.
 
-STUDENT: ${first}, Year ${year || "?"}, ${board.toUpperCase()} specification. Paper: ${assignment.title} (${assignment.unit || ""}).
+STUDENT: ${first}, Year ${year || "?"}, studying the ${examBoard} specification. Paper: ${assignment.title} (${assignment.unit || ""}), an HSJ paper sat by students of every board; its topic labels follow the AQA numbering.
 Parent's view: current grade ${pq.currentGrade || "not given"}, target grade ${pq.targetGrade || "not given"}${pq.hardestTopics ? `, hardest topics according to the parent: ${pq.hardestTopics}` : ""}${pq.feeling ? `, how they feel about chemistry: ${pq.feeling}` : ""}.
 Student's self-evaluation (Red/Amber/Green by topic):
 ${ragSummary(student.selfEvaluation, board)}

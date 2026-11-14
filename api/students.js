@@ -229,6 +229,7 @@ async function assignDiagnostic({ uid, profile, group, token }) {
   const title = `Initial diagnostic (Year ${profile.year})`;
   await fb.createDocument("assignments", assignmentId, {
     title, kind: "diagnostic", unit, classId: group.code || profile.classId, board: group.board || profile.board || "aqa",
+    topicBoard: index.board || "aqa",   // the paper's questions are tagged with this board's topic refs, whatever board the student sits
     tutorId: group.tutorId || null, studentIds: [uid], studentName: profile.displayName || null,
     minutes: Math.round(items.reduce((a, it) => a + it.minutes, 0)), dueAt, maxScore,
     note: "Answer every question on your own, without notes, in one or two sittings. It is a starting point, not a test you can fail: it shows your tutor exactly where to begin.",
