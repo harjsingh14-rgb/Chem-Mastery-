@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { T } from "../ui/theme";
 import { Button, Icon } from "../ui/components";
 import { TERMS_VERSION, buildAgreement, agreementPreamble, paymentPlanLabel, money, fmtLongDate, SCHEDULE_TOKEN } from "../data/terms";
+import { yearLabel } from "../data/years";
 
 // The Tutoring Programme Agreement as a document: the summary grid, the
 // preamble and the numbered sections. Used on the parent's acceptance page
@@ -27,7 +28,7 @@ export function agreementVarsFromProfile(child) {
   return {
     parentName: child.parentName || "", studentName: child.displayName || "",
     agreementDate: when ? new Date(when).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "",
-    subject: "Chemistry", level: `A Level (${child.board ? child.board.toUpperCase() : ""}${child.year ? `, Year ${child.year}` : ""})`,
+    subject: "Chemistry", level: `A Level (${child.board ? child.board.toUpperCase() : ""}${yearLabel(child.year) ? `, ${yearLabel(child.year)}` : ""})`,
     startDate: ag.programmeStart || null, programmeEnd: ag.programmeEnd || null, groupSize: ag.groupSize || 6,
     totalFee: ag.totalFee, paymentPlan: ag.paymentPlan, schedule: ag.schedule || [],
     initialGrade: ag.initialGrade || null, extraTerms: ag.extraTerms || "",

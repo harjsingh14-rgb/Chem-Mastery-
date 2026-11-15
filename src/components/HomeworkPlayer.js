@@ -399,7 +399,8 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
   const answeredCount = items.filter(it => answers[it.key]).length;
   // A question is complete once every part has been attempted at least once.
   // Students work through the homework in order and cannot skip ahead.
-  const isComplete = (it) => { const r = answers[it.key]; return !!r && (it.type === "exam" ? !!r.detail?.complete : (r.attempts?.length || 0) > 0); };
+  // A diagnostic question on a topic school has not taught yet may be skipped
+  const isComplete = (it) => { if (a?.kind === "diagnostic" && it.notTaught) return true; const r = answers[it.key]; return !!r && (it.type === "exam" ? !!r.detail?.complete : (r.attempts?.length || 0) > 0); };
   const completeCount = items.filter(isComplete).length;
   const firstIncomplete = items.findIndex(it => !isComplete(it));
   const allComplete = firstIncomplete === -1;
@@ -511,6 +512,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 
               {item.type === "ppq" && (
                 <>
+                  {diagnostic && item.notTaught && !answers[item.key] && <Notice tone="amber" style={{ fontSize: 13 }}><b>Your school has not taught this topic yet.</b> Have a go if you can, or move on to the next question. It does not count against you.</Notice>}
                   {!readOnly && !answers[item.key] && <Notice tone="neutral" style={{ fontSize: 13 }}>{diagnostic ? <>A real exam question. Answer every part, then press <b>Mark my answer</b>. One attempt per question.</> : <>A real exam question. Answer every part, then press <b>Mark my answer</b>. You can be marked twice; your first mark counts for this homework.</>}</Notice>}
                   <PastPaperQuestion board={board} qid={item.questionId} authUser={authUser} userProfile={userProfile} assignmentId={a.id} embedded onlyParts={Array.isArray(item.parts) ? item.parts : null}
                     locked={readOnly || (answers[item.key]?.attempts?.length || 0) >= (diagnostic ? 1 : MAX_ATTEMPTS.ppq)} assessment={hideMarks}

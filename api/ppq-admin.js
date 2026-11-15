@@ -146,11 +146,20 @@ async function reindex({ board, level }, token) {
  * new student's first homework. Diagnostic questions never enter the practise
  * index above.
  */
-async function diagnosticIndex({ unit, title, level, board }, token) {
+async function diagnosticIndex({ unit, title, level, board, ids }, token) {
   if (!unit) throw fb.httpError(400, "unit required");
-  const docs = await fb.queryDocuments("ppq", { unit, diagnostic: true }, token, { limit: 200 });
-  const items = docs.filter(d => d.status !== "offspec").map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined && d[k] !== null && d[k] !== false) o[k] = d[k]; return o; })
-    .sort((a, b) => (a.q - b.q));
+  let docs;
+  if (Array.isArray(ids) && ids.length) {
+    // A paper assembled from bank questions (the Resit paper): the listed
+    // questions in the given order, numbered 1..n, while they stay in Practise for everyone else
+    const got = await Promise.all(ids.slice(0, 60).map(id => fb.getDocument(`ppq/${String(id).slice(0, 80)}`, token)));
+    const missing = ids.filter((_, i) => !got[i]);
+    if (missing.length) throw fb.httpError(400, `Not in the bank: ${missing.join(", ")}`);
+    docs = got.map((d, i) => ({ ...d, q: i + 1, sourceQ: d.q }));
+  } else {
+    docs = (await fb.queryDocuments("ppq", { unit, diagnostic: true }, token, { limit: 200 })).sort((a, b) => (a.q - b.q));
+  }
+  const items = docs.filter(d => d.status !== "offspec").map(d => { const o = { id: d.id }; for (const k of INDEX_FIELDS) if (d[k] !== undefined && d[k] !== null && d[k] !== false) o[k] = d[k]; return o; });
   const totalMarks = items.reduce((a, it) => a + (Number(it.totalMarks) || 0), 0);
   await fb.updateDocument(`ppqIndex/diag_${unit}`, { unit, title: title || unit, level: level || null, board: board || null, diagnostic: true, count: items.length, totalMarks, items, updatedAt: new Date() }, token);
   return { count: items.length, totalMarks };

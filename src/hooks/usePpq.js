@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { fetchPpqIndex, fetchMyPpqAttempts } from "../firebase";
+import { fetchPpqIndex, fetchMyPpqAttempts, fetchAssignment } from "../firebase";
 
 // Module-level caches so moving between the browser and a question does not
 // refetch the index (one document per board and level) or the attempts.
 const indexCache = {};               // `${board}_${level}` -> items[]
 const attemptsCache = { uid: null, byQid: null, at: 0 };
+const hiddenCache = { uid: null, ids: null };   // questions in the student's own diagnostic paper, kept out of Practise
 const TTL = 5 * 60 * 1000;
 
 /** Every question for a board at both levels, plus the student's attempts keyed by question id. */
@@ -13,6 +14,25 @@ export default function usePpq(board, uid) {
   const [attempts, setAttempts] = useState(() => (attemptsCache.uid === uid && attemptsCache.byQid) || null);
   const [loading, setLoading] = useState(!items);
   const [error, setError] = useState(null);
+  const [hidden, setHidden] = useState(() => (hiddenCache.uid === uid && hiddenCache.ids) || null);
+
+  // The Resit diagnostic is assembled from bank questions: a student who sat it
+  // should not meet the same questions again as practice, so they are left out
+  useEffect(() => {
+    let alive = true;
+    if (!uid) { setHidden(new Set()); return undefined; }
+    if (hiddenCache.uid === uid && hiddenCache.ids) { setHidden(hiddenCache.ids); return undefined; }
+    (async () => {
+      let ids = new Set();
+      try {
+        const diag = await fetchAssignment(`diag_${uid}`);
+        ids = new Set((diag?.items || []).map(it => it.questionId).filter(Boolean));
+      } catch (e) { /* no diagnostic, or not readable: hide nothing */ }
+      hiddenCache.uid = uid; hiddenCache.ids = ids;
+      if (alive) setHidden(ids);
+    })();
+    return () => { alive = false; };
+  }, [uid]);
 
   useEffect(() => {
     let alive = true;
@@ -49,7 +69,8 @@ export default function usePpq(board, uid) {
 
   useEffect(() => { loadAttempts(false); }, [loadAttempts]);
 
-  return { items: items || [], attempts: attempts || {}, loading, error, reloadAttempts: () => loadAttempts(true) };
+  const visible = hidden && hidden.size ? (items || []).filter(x => !hidden.has(x.id)) : (items || []);
+  return { items: visible, attempts: attempts || {}, loading, error, reloadAttempts: () => loadAttempts(true) };
 }
 
 function merge(board) {

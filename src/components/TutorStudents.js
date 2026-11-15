@@ -9,6 +9,7 @@ import { SELF_EVALUATION, ragCounts } from "../data/self-evaluation";
 import { PAYMENT_PLANS, paymentPlanLabel, GRADES, programmeEndFor, DEFAULT_GROUP_SIZE, money } from "../data/terms";
 import StudentImport from "./StudentImport";
 import AgreementTermsFields, { termsFormFrom } from "./AgreementTermsFields";
+import { YEARS, yearLabel } from "../data/years";
 
 const STATUS = {
   invited: { tone: "amber", label: "Self-evaluation sent" },
@@ -125,7 +126,7 @@ export default function TutorStudents({ authUser, userProfile, embedded, startNe
               <div style={field}><span style={label}>Exam board</span>
                 <div style={{ display: "flex", gap: 6 }}>{BOARDS.map(b => <Button key={b.id} type="button" variant={form.board === b.id ? "primary" : "secondary"} onClick={() => setF("board", b.id)}>{b.label}</Button>)}</div></div>
               <div style={field}><span style={label}>Year group</span>
-                <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setYear(y)}>Year {y}</Button>)}</div></div>
+                <div style={{ display: "flex", gap: 6 }}>{YEARS.map(y => <Button key={y.id} type="button" variant={form.year === y.id ? "primary" : "secondary"} onClick={() => setYear(y.id)}>{y.label}</Button>)}</div></div>
               <div style={field}><label style={label} htmlFor="ns-start">Programme start date</label><Input id="ns-start" type="date" required value={form.programmeStart} onChange={e => setF("programmeStart", e.target.value)} /></div>
               <div style={field}><label style={label} htmlFor="ns-end">Programme runs until</label><Input id="ns-end" value={form.programmeEnd} onChange={e => setF("programmeEnd", e.target.value)} placeholder={programmeEndFor(form.year)} /></div>
               <div style={field}><label style={label} htmlFor="ns-grade">Initial assessed grade</label>
@@ -184,7 +185,7 @@ export default function TutorStudents({ authUser, userProfile, embedded, startNe
                         <div style={{ fontSize: 11, color: T.muted }}>{a.studentEmail}</div>
                       </td>
                       <td style={td}><div>{a.parentName}</div><div style={{ fontSize: 11, color: T.muted }}>{a.parentEmail}{a.parentPhone ? ` · ${a.parentPhone}` : ""}</div></td>
-                      <td style={td}>{boardLabel(a.board)} · Year {a.year}</td>
+                      <td style={td}>{boardLabel(a.board)} · {yearLabel(a.year)}</td>
                       <td style={td}>{paymentPlanLabel(a.paymentPlan)}{a.paymentAmount ? <span style={{ color: T.muted }}> · {money(a.paymentAmount)}</span> : null}</td>
                       <td style={td}><Chip tone={st.tone}>{st.label}</Chip></td>
                       <td style={{ ...td, paddingRight: 20, color: T.muted }}>
@@ -249,7 +250,7 @@ function EditDetailsForm({ a, onSaved, onCancel }) {
         <div style={field}><span style={label}>Exam board</span>
           <div style={{ display: "flex", gap: 6 }}>{BOARDS.map(b => <Button key={b.id} type="button" variant={form.board === b.id ? "primary" : "secondary"} onClick={() => setF("board", b.id)}>{b.label}</Button>)}</div></div>
         <div style={field}><span style={label}>Year group</span>
-          <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setYear(y)}>Year {y}</Button>)}</div></div>
+          <div style={{ display: "flex", gap: 6 }}>{YEARS.map(y => <Button key={y.id} type="button" variant={form.year === y.id ? "primary" : "secondary"} onClick={() => setYear(y.id)}>{y.label}</Button>)}</div></div>
       </div>
       <div style={{ marginTop: 12 }}><AgreementTermsFields form={form} setForm={setForm} year={form.year} idPrefix="ed" /></div>
       <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ed-notes">Notes from the call (optional)</label>

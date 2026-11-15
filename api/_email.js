@@ -1,3 +1,4 @@
+const { yearLabel } = require("./_years");
 // Onboarding emails, sent through Resend. The sender and the copy address
 // for HSJ notifications can be changed with env vars without a code change.
 const FROM = process.env.ONBOARDING_FROM || "Harj at HSJ Tuition <harj@hsjtuition.co.uk>";
@@ -64,8 +65,8 @@ function evaluationInvite(a, link) {
   const html = layout("Welcome to HSJ Tuition", `
     <p>Hi ${esc(firstName(a.studentName))},</p>
     ${a.currentStudent
-      ? `<p>Your homework, feedback and progress are moving to the new HSJ Tuition platform (A-level Chemistry, ${esc(a.boardLabel)}, Year ${esc(a.year)}). To set it up for you I need an honest picture of where you are right now on each topic.</p>`
-      : `<p>Great to have you joining us for A-level Chemistry (${esc(a.boardLabel)}, Year ${esc(a.year)}). Before your first lesson I need a picture of where you are, so I can put you in the right group and plan what we cover.</p>`}
+      ? `<p>Your homework, feedback and progress are moving to the new HSJ Tuition platform (A-level Chemistry, ${esc(a.boardLabel)}, ${esc(yearLabel(a.year))}). To set it up for you I need an honest picture of where you are right now on each topic.</p>`
+      : `<p>Great to have you joining us for A-level Chemistry (${esc(a.boardLabel)}, ${esc(yearLabel(a.year))}). Before your first lesson I need a picture of where you are, so I can put you in the right group and plan what we cover.</p>`}
     <p>Please fill in the short self-evaluation below. Tick the modules you have been taught in school so far, then rate yourself Red, Amber or Green on each topic. Be honest, there are no wrong answers and it takes about 5 minutes.</p>
     ${button(link, "Complete my self-evaluation")}
     <p style="margin-top:22px;">Speak soon,<br>Harj</p>`);
@@ -128,7 +129,7 @@ function welcome(a, { groupName, tutorName, tempPassword, email, discordInvite, 
 /** To HSJ: something happened on an applicant. */
 function notify(a, what, link) {
   const html = layout(what, `
-    <p><strong>${esc(a.studentName)}</strong> (${esc(a.boardLabel)}, Year ${esc(a.year)})<br>Parent: ${esc(a.parentName)} · ${esc(a.parentEmail)}</p>
+    <p><strong>${esc(a.studentName)}</strong> (${esc(a.boardLabel)}, ${esc(yearLabel(a.year))})<br>Parent: ${esc(a.parentName)} · ${esc(a.parentEmail)}</p>
     ${button(link, "Open onboarding")}`);
   return { subject: `${what}: ${a.studentName}`, html };
 }

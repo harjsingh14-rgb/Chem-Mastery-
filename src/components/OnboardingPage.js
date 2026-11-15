@@ -8,6 +8,7 @@ import { SELF_EVALUATION, RAG, COVERED } from "../data/self-evaluation";
 import { TERMS_VERSION } from "../data/terms";
 import { QUESTIONNAIRE_SECTIONS } from "../data/parent-questionnaire";
 import AgreementDocument, { PrintAgreementButton } from "./AgreementDocument";
+import { normYear, yearLabel } from "../data/years";
 
 async function api(method, token, body) {
   const res = await fetch(method === "GET" ? `/api/onboarding?token=${encodeURIComponent(token)}` : "/api/onboarding", {
@@ -89,11 +90,15 @@ const ragTone = (id) => id === "red" ? { fg: T.red, bg: T.redTint } : id === "am
 function EvaluationForm({ token, data, onDone }) {
   const tree = SELF_EVALUATION[data.board];
   const existing = data.evaluation;
-  const [step, setStep] = useState(existing ? 2 : 1);
+  // Resit students skip "modules taught so far": everything has been taught
+  const resit = normYear(data.year) === "resit";
+  const [step, setStep] = useState(existing || resit ? 2 : 1);
   const [taught, setTaught] = useState(() => {
     if (existing?.taught?.length) return existing.taught;
-    // A Year 13 student has done the Year 12 modules, so start with those ticked
-    return data.year === 13 && tree ? tree.modules.filter(m => m.year === 12).map(m => m.id) : [];
+    if (!tree) return [];
+    // A resit student has done the whole course; a Year 13 student has done the Year 12 modules
+    if (resit) return tree.modules.map(m => m.id);
+    return data.year === 13 ? tree.modules.filter(m => m.year === 12).map(m => m.id) : [];
   });
   const [ratings, setRatings] = useState(existing?.ratings || {});
   const [notes, setNotes] = useState(existing?.notes || "");
@@ -152,14 +157,14 @@ function EvaluationForm({ token, data, onDone }) {
   return (
     <>
       <div style={{ marginBottom: 18 }}>
-        <div style={label}>Self-evaluation · {data.boardLabel} · Year {data.year}</div>
+        <div style={label}>Self-evaluation · {data.boardLabel} · {yearLabel(data.year)}</div>
         <h1 style={{ fontFamily: T.display, fontSize: 26, margin: "6px 0 6px" }}>Hi {data.studentName.split(" ")[0]}, where are you right now?</h1>
         <p style={{ color: T.body, lineHeight: 1.6, margin: 0, fontSize: 14 }}>{data.currentStudent ? "This shows your tutor which topics still need work, so lessons go where they are needed." : "This helps HSJ place you in the right group and plan your first lessons."} Be honest: Red means you need it taught, Amber means you have gaps, Green means exam ready.</p>
       </div>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-        {["Modules taught so far", "Rate each topic", "Send"].map((t, i) => (
-          <Chip key={t} tone={step === i + 1 ? "accent" : step > i + 1 ? "green" : "neutral"}>{i + 1}. {t}</Chip>
+        {["Modules taught so far", "Rate each topic", "Send"].map((t, i) => (resit && i === 0) ? null : (
+          <Chip key={t} tone={step === i + 1 ? "accent" : step > i + 1 ? "green" : "neutral"}>{resit ? i : i + 1}. {t}</Chip>
         ))}
       </div>
 
@@ -192,7 +197,7 @@ function EvaluationForm({ token, data, onDone }) {
       {step === 2 && (
         <>
           <Notice tone="accent" style={{ marginBottom: 12 }}>
-            For each topic say whether school has covered it, then rate yourself. {rated} of {subtopics.length} done.
+            {resit ? "Rate yourself on every topic." : "For each topic say whether school has covered it, then rate yourself."} {rated} of {subtopics.length} done.
           </Notice>
           {modules.map(m => (
             <div key={m.id} style={cardStyle}>
@@ -208,10 +213,10 @@ function EvaluationForm({ token, data, onDone }) {
                           <span style={{ fontSize: 11, color: T.faint, fontWeight: 600, marginRight: 8 }}>{s.ref}</span>
                           <span style={{ fontSize: 14, fontWeight: 600 }}>{s.title}</span>
                         </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                        {!resit && <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                           <span style={{ fontSize: 10, color: T.muted, fontWeight: 600 }}>Covered in school?</span>
                           <Seg options={COVERED} value={covered} onChange={v => setR(s.ref, { covered: v, rag: v === "no" ? null : r.rag || null })} />
-                        </div>
+                        </div>}
                         <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                           <span style={{ fontSize: 10, color: T.muted, fontWeight: 600 }}>How confident?</span>
                           <Seg options={RAG} value={r.rag || null} onChange={v => setR(s.ref, { rag: v })} tone={ragTone} disabled={covered === "no"} />
@@ -228,7 +233,7 @@ function EvaluationForm({ token, data, onDone }) {
             </div>
           ))}
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
-            <Button variant="secondary" icon="arrowLeft" onClick={() => setStep(1)}>Modules</Button>
+            {resit ? <span /> : <Button variant="secondary" icon="arrowLeft" onClick={() => setStep(1)}>Modules</Button>}
             <Button variant="primary" iconRight="arrowRight" onClick={() => { if (missing.length) setError(`Rate every topic before moving on (${missing.length} left).`); else { setError(null); setStep(3); } }}>Next</Button>
           </div>
           {error && <Notice tone="red" style={{ marginTop: 10 }}>{error}</Notice>}
@@ -290,7 +295,7 @@ function TermsForm({ token, data, onDone }) {
   const vars = {
     parentName: data.parentName, studentName: data.studentName,
     agreementDate: data.agreementDate ? new Date(data.agreementDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "",
-    subject: "Chemistry", level: `A Level (${data.boardLabel}, Year ${data.year})`,
+    subject: "Chemistry", level: `A Level (${data.boardLabel}${yearLabel(data.year) ? `, ${yearLabel(data.year)}` : ""})`,
     startDate: data.programmeStart, programmeEnd: data.programmeEnd, groupSize: data.groupSize,
     totalFee: data.paymentAmount, paymentPlan: data.paymentPlan, schedule: data.schedule || [],
     initialGrade: data.initialGrade, extraTerms: data.extraTerms,

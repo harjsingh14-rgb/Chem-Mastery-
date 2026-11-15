@@ -16,6 +16,7 @@ import { useHomework } from "./StudentHomework";
 import { fmtDue } from "../utils/homeworkDates";
 import AgreementDocument, { PrintAgreementButton, agreementVarsFromProfile } from "./AgreementDocument";
 import { VariationReview, AgreementHistory } from "./AgreementVariation";
+import { yearLabel } from "../data/years";
 
 const TABS = [{ id: "progress", label: "Progress" }, { id: "lessons", label: "Lessons" }, { id: "homework", label: "Homework" }, { id: "payments", label: "Payments" }, { id: "agreement", label: "Agreement" }];
 
@@ -59,7 +60,7 @@ export default function ParentPage({ authUser, userProfile, childUid, previewUid
         </Notice>
       )}
       <PageHeader eyebrow={previewUid ? "Parent view" : "Parent"} title={child.displayName || "My child"}
-        sub={[child.className, child.board ? boardLabel(child.board) : null, child.year ? `Year ${child.year}` : null].filter(Boolean).join(" · ")}
+        sub={[child.className, child.board ? boardLabel(child.board) : null, yearLabel(child.year) || null].filter(Boolean).join(" · ")}
         right={children.length > 1 && (
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {children.map(c => <Button key={c.uid} size="sm" variant={c.uid === child.uid ? "primary" : "secondary"} onClick={() => navigate(`/parent/${c.uid}`)}>{(c.displayName || "Student").split(" ")[0]}</Button>)}

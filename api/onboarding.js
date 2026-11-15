@@ -84,7 +84,7 @@ module.exports = async function handler(req, res) {
     if (action === "evaluation") {
       if (kind !== "evaluation") throw bad("This link is for the parent terms, not the self-evaluation");
       if (a.evaluation) throw bad("This self-evaluation has already been sent. Ask your tutor if something needs changing.");
-      const evaluation = validateEvaluation(body);
+      const evaluation = { ...validateEvaluation(body), board: a.board || null };
       const patch = { evaluation, status: a.status === "agreed" || a.currentStudent ? "agreed" : "evaluated" };
       let emailError = null;
       // Current students: the parent agreed terms before the platform, so no agreement goes out

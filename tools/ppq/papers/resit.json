@@ -1,0 +1,24 @@
+{
+ "unit": "hsj-diag-resit",
+ "title": "Initial diagnostic (Resit)",
+ "level": "a2",
+ "board": "aqa",
+ "note": "DRAFT awaiting Harj's approval; sittings: 1 physical (first 6), 2 organic (last 9)",
+ "ids": [
+  "aqa-a2-p1-JUN19-q01",
+  "aqa-a2-p2-JUN20-q01",
+  "aqa-a2-p1-JUN18-q02",
+  "aqa-a2-p1-JUN21-q09",
+  "aqa-a2-p1-JUN20-q04",
+  "aqa-a2-p2-JUN24-q02",
+  "aqa-a2-p2-JUN17-q04",
+  "aqa-a2-p2-JUN19-q13",
+  "aqa-a2-p2-JUN22-q07",
+  "aqa-a2-p2-JUN21-q04",
+  "aqa-a2-p2-JUN24-q09",
+  "aqa-a2-p2-SPEC-q07",
+  "aqa-a2-p2-JUN18-q08",
+  "aqa-a2-p2-JUN22-q06",
+  "aqa-a2-p2-JUN19-q09"
+ ]
+}

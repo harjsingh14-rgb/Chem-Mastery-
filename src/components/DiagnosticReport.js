@@ -7,6 +7,7 @@ import { ppqMarkApi } from "../firebase";
 import { T, pctColour } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Notice, Bar } from "../ui/components";
 import chemFormat from "../utils/chemFormat";
+import { yearLabel } from "../data/years";
 
 const fmt = (ms) => ms ? new Date(ms).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
 const area = { width: "100%", minHeight: 72, padding: "9px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, fontFamily: "inherit", lineHeight: 1.5, color: T.ink, background: T.card, resize: "vertical", boxSizing: "border-box" };
@@ -36,12 +37,13 @@ export function ReportView({ report, studentName, title, year, editable = false,
   const first = (studentName || "").trim().split(/\s+/)[0];
   return (
     <div className="cm-report" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      <div style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>{title || "Initial diagnostic"}{year ? ` · Year ${year}` : ""}{studentName ? ` · ${studentName}` : ""}</div>
+      <div style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>{title || "Initial diagnostic"}{yearLabel(year) ? ` · ${yearLabel(year)}` : ""}{studentName ? ` · ${studentName}` : ""}</div>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 6 }}>
         <Tile label="Overall score" value={`${h.score ?? "–"} / ${h.max ?? "–"}`} sub={h.pct != null ? `${h.pct}%` : ""} colour={pctColour(h.pct ?? 0)} />
         <Tile label="On attempted questions" value={h.attemptedPct != null ? `${h.attemptedPct}%` : "–"} sub={`${h.attemptedScore ?? 0} / ${h.attemptedMax ?? 0}`} />
         <Tile label="Left blank" value={`${h.blankMarks ?? 0} marks`} sub={`${h.blankCount ?? 0} question${h.blankCount === 1 ? "" : "s"}`} colour={h.blankMarks ? T.red : T.ink} />
         {h.year12 && <Tile label="Year 12 content" value={`${h.year12.pct}%`} sub={`${h.year12.score} / ${h.year12.max}`} colour={pctColour(h.year12.pct)} />}
+        {h.taught && <Tile label="On topics taught so far" value={h.taught.pct != null ? `${h.taught.pct}%` : "–"} sub={`${h.taught.score} / ${h.taught.max} · ${h.taught.notTaughtCount} question${h.taught.notTaughtCount === 1 ? "" : "s"} not yet taught`} colour={pctColour(h.taught.pct ?? 0)} />}
       </div>
 
       <H>Summary</H>
@@ -52,7 +54,7 @@ export function ReportView({ report, studentName, title, year, editable = false,
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {(r.byTopic || []).map(t => (
           <div key={t.ref} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13 }}>
-            <span style={{ flex: "1 1 200px" }}>{t.area}<span style={{ color: T.muted, fontSize: 12 }}> · Q{(t.questions || []).join(", Q")}</span></span>
+            <span style={{ flex: "1 1 200px" }}>{t.area}<span style={{ color: T.muted, fontSize: 12 }}> · Q{(t.questions || []).join(", Q")}{t.notTaught ? " · not yet taught at school" : ""}</span></span>
             <Bar value={t.pct || 0} colour={pctColour(t.pct ?? 0)} style={{ flex: "1 1 120px" }} />
             <span style={{ fontWeight: 700, color: pctColour(t.pct ?? 0), whiteSpace: "nowrap", width: 90, textAlign: "right" }}>{t.score} / {t.max} · {t.pct ?? 0}%</span>
           </div>
@@ -92,7 +94,7 @@ export function ReportView({ report, studentName, title, year, editable = false,
             <div key={it.n} style={{ display: "flex", gap: 10, padding: "8px 0", borderTop: `1px solid ${T.line}`, fontSize: 13, alignItems: "flex-start" }}>
               <div style={{ width: 70, flexShrink: 0 }}><b>Q{it.n}</b> <span style={{ fontWeight: 700, color: it.score >= it.max ? T.green : it.score > 0 ? T.amber : T.red }}>{it.score}/{it.max}</span></div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ color: T.muted, fontSize: 12 }}>{chemFormat(it.title)}{it.attempted ? "" : " · not attempted"}</div>
+                <div style={{ color: T.muted, fontSize: 12 }}>{chemFormat(it.title)}{it.attempted ? "" : " · not attempted"}{it.notTaught ? " · not yet taught at school" : ""}</div>
                 {editable ? <textarea style={{ ...area, minHeight: 44, marginTop: 4 }} value={c?.comment || ""} onChange={e => setComment(it.n, e.target.value)} /> : <div style={{ lineHeight: 1.5 }}>{chemFormat(c?.comment || "")}</div>}
               </div>
             </div>

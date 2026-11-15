@@ -20,6 +20,7 @@ import { fmtDue } from "../utils/homeworkDates";
 import PhotoUpload from "./PhotoUpload";
 import { ProposeVariationCard, AgreementHistory } from "./AgreementVariation";
 import { can } from "../utils/privileges";
+import { YEARS, yearLabel, normYear, diagnosticUnitFor, DIAGNOSTIC_UNIT } from "../data/years";
 
 const toMs = (v) => v?.toMillis ? v.toMillis() : typeof v === "number" ? v : v ? new Date(v).getTime() : null;
 const fmtDate = (v) => { const ms = toMs(v); return ms ? new Date(ms).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""; };
@@ -132,7 +133,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
             )}
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
               {student.className && <Chip tone="accent">{student.className}</Chip>}
-              {student.year && <Chip>Year {student.year}</Chip>}
+              {yearLabel(student.year) && <Chip>{yearLabel(student.year)}</Chip>}
               {student.board && <Chip>{boardLabel(student.board)}</Chip>}
               {student.needsPasswordChange && <Chip tone="amber">Not logged in yet</Chip>}
             </div>
@@ -527,14 +528,29 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
   const [diagBusy, setDiagBusy] = useState(false);
   const [diagMsg, setDiagMsg] = useState(null);
   const dg = student.diagnostic;
-  const setDiagnostic = async () => {
+  // The paper the student's year calls for, against the one set (a student moved to Resit, say)
+  const wantUnit = diagnosticUnitFor(student.year);
+  const paperMismatch = !!(dg?.assignmentId && !dg.reportSentAt && wantUnit && dg.unit && dg.unit !== wantUnit);
+  const setDiagnostic = async (replace = false) => {
+    if (replace && !window.confirm(`Replace the set paper with the ${yearLabel(student.year)} diagnostic? Any answers the student has entered on the current paper are removed.`)) return;
     setDiagBusy(true); setDiagMsg(null);
     try {
-      const r = await studentsApi("assignDiagnostic", { uid: student.uid });
-      onChange && onChange({ diagnostic: { ...(dg || {}), assignmentId: r.assignmentId, dueAt: r.dueAt, setAt: Date.now() } });
+      const r = await studentsApi("assignDiagnostic", { uid: student.uid, replace });
+      onChange && onChange({ diagnostic: { ...(dg || {}), assignmentId: r.assignmentId, unit: r.unit || wantUnit, dueAt: r.dueAt, setAt: Date.now() } });
       setDiagMsg(r.existing ? "The diagnostic was already set; nothing changed." : `Set, due ${fmtDue(r.dueAt)}. It is on the student's Homework page now.`);
     } catch (e) { setDiagMsg(e.message); }
     setDiagBusy(false);
+  };
+  const [yearBusy, setYearBusy] = useState(false);
+  const changeYear = async (e) => {
+    const year = normYear(e.target.value);
+    if (!year || year === normYear(student.year)) return;
+    setYearBusy(true); setDiagMsg(null);
+    try {
+      await studentsApi("setYear", { uid: student.uid, year });
+      onChange && onChange({ year });
+    } catch (err) { setDiagMsg(err.message); }
+    setYearBusy(false);
   };
   return (
     <>
@@ -542,9 +558,11 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
         <CardHeader title="Initial diagnostic" sub={dg?.reportSentAt ? `Report sent ${fmtDate(dg.reportSentAt)}${dg.score != null ? ` · ${dg.score} / ${dg.max}` : ""}` : dg?.assignmentId ? `Set ${fmtDate(dg.setAt)} · due ${fmtDue(dg.dueAt)}` : "Not set"}
           right={<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {dg?.assignmentId && <Button variant="secondary" size="sm" onClick={() => navigate(`/tutor/homework/${dg.assignmentId}`)}>Open the review</Button>}
-            {isAdmin && !dg?.assignmentId && <Button variant="primary" size="sm" onClick={setDiagnostic} disabled={diagBusy}>{diagBusy ? "Setting…" : "Set the initial diagnostic"}</Button>}
+            {isAdmin && !dg?.assignmentId && <Button variant="primary" size="sm" onClick={() => setDiagnostic(false)} disabled={diagBusy}>{diagBusy ? "Setting…" : "Set the initial diagnostic"}</Button>}
+            {isAdmin && paperMismatch && <Button variant="primary" size="sm" onClick={() => setDiagnostic(true)} disabled={diagBusy}>{diagBusy ? "Replacing…" : `Replace with the ${yearLabel(student.year)} paper`}</Button>}
           </div>} />
         <span style={{ fontSize: 13, color: T.muted }}>{dg?.assignmentId ? "The paper is the student's first homework. Marks are hidden from them until the tutor sends the feedback report from the review page." : "Set automatically when a student is placed, once the Year 12 and Year 13 papers are published. Students placed before that get it from here."}</span>
+        {paperMismatch && <Notice tone="amber" style={{ fontSize: 13 }}>The paper set is the {yearLabel(Object.keys(DIAGNOSTIC_UNIT).find(k => DIAGNOSTIC_UNIT[k] === dg.unit))} diagnostic, but the student is now {yearLabel(student.year)}.</Notice>}
         {diagMsg && <Notice tone={/already|Set,/.test(diagMsg) ? "green" : "red"}>{diagMsg}</Notice>}
       </Card>
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -552,7 +570,11 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
         <div className="cm-grid-2" style={{ fontSize: 13 }}>
           <Field label="Group">{student.className || "Not placed"}</Field>
           <Field label="Exam board">{student.board ? boardLabel(student.board) : "–"}</Field>
-          <Field label="Year group">{student.year ? `Year ${student.year}` : "–"}</Field>
+          <Field label="Year group">{isAdmin
+            ? <select value={normYear(student.year) ?? ""} onChange={changeYear} disabled={yearBusy} aria-label="Year group" style={{ padding: "4px 8px", borderRadius: 8, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink }}>
+                {!normYear(student.year) && <option value="">–</option>}{YEARS.map(y => <option key={y.id} value={y.id}>{y.label}</option>)}
+              </select>
+            : (yearLabel(student.year) || "–")}</Field>
           <Field label="Usual lessons">{group ? describeSlots(slotsOf(group)) || group.lessonSlot || "Not set" : "–"}</Field>
           <Field label="Programme">{ag.programmeStart ? `${fmtIso(ag.programmeStart)} until ${ag.programmeEnd || "the end of the course"}` : "–"}</Field>
           <Field label="Initial assessed grade">{ag.initialGrade || "–"}</Field>

@@ -9,6 +9,7 @@ import { fetchApplicants } from "../firebase";
 import { T } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Bar } from "../ui/components";
 import { QUESTIONNAIRE_SECTIONS, QUESTIONNAIRE_QUESTIONS } from "../data/parent-questionnaire";
+import { yearLabel } from "../data/years";
 
 const fmtDate = (ms) => ms ? new Date(ms).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
 const csvCell = (v) => { const s = Array.isArray(v) ? v.join("; ") : String(v ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
@@ -105,7 +106,7 @@ export default function ParentQuestionnaires() {
                 return (
                   <React.Fragment key={r.id}>
                     <tr className="cm-row-hover" onClick={() => setOpen(isOpen ? null : r.id)} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer" }}>
-                      <td style={{ ...td, paddingLeft: 20, fontWeight: 600 }}>{r.studentName}<div style={{ fontSize: 12, color: T.muted, fontWeight: 400 }}>Year {r.year}{r.board ? ` · ${r.board.toUpperCase()}` : ""}</div></td>
+                      <td style={{ ...td, paddingLeft: 20, fontWeight: 600 }}>{r.studentName}<div style={{ fontSize: 12, color: T.muted, fontWeight: 400 }}>{yearLabel(r.year)}{r.board ? ` · ${r.board.toUpperCase()}` : ""}</div></td>
                       <td style={td}>{r.parentName}<div style={{ fontSize: 12, color: T.muted }}>{r.parentEmail}</div></td>
                       <td style={td}><Chip tone="neutral">{q.currentGrade || "?"} now</Chip> <Chip tone="accent">{q.targetGrade || "?"} target</Chip></td>
                       <td style={{ ...td, color: T.body }}>{q.heardFrom || "–"}</td>

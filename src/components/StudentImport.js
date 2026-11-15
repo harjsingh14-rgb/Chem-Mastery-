@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { studentsApi } from "../firebase";
 import { T, BOARDS, boardLabel } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Table, th, td, Notice } from "../ui/components";
+import { YEARS, normYear } from "../data/years";
 
 // Bulk import of current students: paste rows from a spreadsheet (TutorBird
 // export, Google Sheet, Excel). Columns are matched by their headings; a group,
@@ -50,7 +51,7 @@ function parseTable(text) {
 }
 
 const boardOf = (v) => { const s = norm(v); if (!s) return ""; if (s.startsWith("aqa")) return "aqa"; if (s.startsWith("ocr")) return "ocr"; if (s.startsWith("edex") || s.startsWith("pearson")) return "edexcel"; return s; };
-const yearOf = (v) => { const m = String(v || "").match(/1[23]/); return m ? Number(m[0]) : ""; };
+const yearOf = (v) => { const t = String(v || ""); if (/resit/i.test(t)) return "resit"; const m = t.match(/1[23]/); return m ? Number(m[0]) : ""; };
 
 /** Map parsed rows to import rows using the heading row (or a fixed order when there is none). */
 function toRows(table, groups, defaults) {
@@ -152,8 +153,8 @@ export default function StudentImport({ groups, onImported, onClose }) {
               </select>
             </label>
             <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12, fontWeight: 600, color: T.muted }}>Year when a row has none
-              <select value={defaults.year} onChange={e => setDefaults(d => ({ ...d, year: Number(e.target.value) }))} style={{ padding: "8px 10px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink }}>
-                <option value={12}>Year 12</option><option value={13}>Year 13</option>
+              <select value={defaults.year} onChange={e => setDefaults(d => ({ ...d, year: normYear(e.target.value) || 12 }))} style={{ padding: "8px 10px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink }}>
+                {YEARS.map(y => <option key={y.id} value={y.id}>{y.label}</option>)}
               </select>
             </label>
             <Button variant="primary" onClick={runCheck} disabled={busy || parsed.rows.length === 0}>{busy && !check ? "Checking…" : `Check ${parsed.rows.length} row${parsed.rows.length === 1 ? "" : "s"}`}</Button>

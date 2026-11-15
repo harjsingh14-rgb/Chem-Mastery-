@@ -4,6 +4,8 @@ React app (Create React App, no local Node on the Mac: builds run on Vercel) wit
 
 ## Roles and the access-control matrix
 
+Year groups (`users/{uid}.year`, `applicants.year`) are `12`, `13` or the string `"resit"` (helpers in `src/data/years.js` and `api/_years.js`; never compare with `Number(year) === 13` alone). Each has its own initial diagnostic paper (`ppqIndex/diag_hsj-diag-y12`, `-y13`, `-resit`; the Resit paper is a list of bank questions, published with `tools/ppq/diag_from_bank.py`).
+
 Roles live on `users/{uid}.role`: `free` (signed in, not placed), `student` (placed in a group, `classId` + `tutorId`), `parent` (`children: [uid]`), `tutor` (per-tutor `privileges` switches, see `src/utils/privileges.js`), `admin` (everything). The source of truth is `firestore.rules` (published by hand from the Firebase console, never by the deploy). The `api/*` functions use a service account, which bypasses the rules, so every API action must check the caller itself: `verifyFirebaseToken` for identity, `requireAdmin` or an ownership check for authority.
 
 | Data | Student | Parent | Tutor | Admin |

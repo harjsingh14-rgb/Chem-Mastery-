@@ -8,6 +8,8 @@ const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
 const storage = require("./_storage");
 const { verifyFirebaseToken } = require("./_auth");
+const Y = require("./_years");
+const { untaughtAqaRefs } = require("./_topicMap");
 
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 const PLANS = ["pif", "instalments", "results"];
@@ -28,7 +30,7 @@ function validateDetails(b, { partial = false } = {}) {
   if (has("parentEmail")) { out.parentEmail = str(b.parentEmail).toLowerCase(); if (!EMAIL_RE.test(out.parentEmail)) throw bad("Parent email is not valid"); }
   if (has("parentPhone")) out.parentPhone = str(b.parentPhone, 40);
   if (has("board")) { out.board = str(b.board, 10); if (!BOARDS[out.board]) throw bad("Exam board must be AQA, OCR A or Edexcel"); }
-  if (has("year")) { out.year = Number(b.year); if (![12, 13].includes(out.year)) throw bad("Year group must be 12 or 13"); }
+  if (has("year")) { out.year = Y.normYear(b.year); if (!out.year) throw bad("Year group must be 12, 13 or Resit"); }
   if (has("paymentPlan")) { out.paymentPlan = str(b.paymentPlan, 20); if (!PLANS.includes(out.paymentPlan)) throw bad("Payment option must be paid in full, instalments or results-based"); }
   if (has("paymentAmount")) { const n = b.paymentAmount === "" || b.paymentAmount === null ? null : Number(b.paymentAmount); if (n === null || !Number.isFinite(n) || n <= 0) throw bad("Total programme fee is required"); out.paymentAmount = n; }
   if (has("schedule")) {
@@ -109,7 +111,7 @@ async function proposeVariation(body, admin, token, origin) {
   const fields = body.fields && typeof body.fields === "object" ? body.fields : {};
   const picked = {};
   for (const k of VARIATION_KEYS) if (fields[k] !== undefined) picked[k] = fields[k];
-  if ([12, 13].includes(Number(st.year))) picked.year = Number(st.year);
+  if (Y.normYear(st.year)) picked.year = Y.normYear(st.year);
   const v = validateDetails(picked, { partial: true });
   const current = agreementTerms(st.agreement);
   const next = { ...current };
@@ -293,25 +295,34 @@ async function deleteAccounts(body, token, res) {
  * parent copied) and give the parent their own account. With sendEmails false
  * the accounts are made but both welcomes are held for api action sendWelcome.
  */
-const DIAGNOSTIC_UNIT = { 12: "hsj-diag-y12", 13: "hsj-diag-y13" };
 const MIN_PER_MARK = 1.5;
 const DAY = 24 * 60 * 60 * 1000;
 const fmtDay = (ms) => new Date(ms).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" });
 
 /**
- * The initial diagnostic (Year 12 or Year 13 paper, published by tools/ppq as
- * ppqIndex/diag_{unit}) set as a homework for this one student, due the day
- * before their first lesson. Returns { assignmentId, dueAt, title, existing }
- * or null when the paper has not been published yet.
+ * The initial diagnostic (the Year 12, Year 13 or Resit paper, published by
+ * tools/ppq as ppqIndex/diag_{unit}) set as a homework for this one student,
+ * due the day before their first lesson. Questions on topics the student's
+ * self-evaluation says school has not taught yet are flagged notTaught, so the
+ * player lets them skip those and the report scores taught content separately.
+ * With replace, an existing paper (and its submission) is removed first.
+ * Returns { assignmentId, dueAt, title, unit, existing } or null when the
+ * paper has not been published yet.
  */
-async function assignDiagnostic({ uid, profile, group, token }) {
-  const unit = DIAGNOSTIC_UNIT[Number(profile.year)];
+async function assignDiagnostic({ uid, profile, group, token, replace = false }) {
+  const unit = Y.diagnosticUnitFor(profile.year);
   if (!unit || !group) return null;
   const assignmentId = `diag_${uid}`;
-  const existing = await fb.getDocument(`assignments/${assignmentId}`, token);
+  let existing = await fb.getDocument(`assignments/${assignmentId}`, token);
   const index = await fb.getDocument(`ppqIndex/diag_${unit}`, token);
   if (!index || !Array.isArray(index.items) || index.items.length === 0) return null;
-  if (existing) return { assignmentId, dueAt: existing.dueAt, title: existing.title, existing: true };
+  if (existing && replace) {
+    await fb.deleteDocument(`submissions/${assignmentId}_${uid}`, token).catch(() => {});
+    await fb.deleteDocument(`assignments/${assignmentId}`, token);
+    existing = null;
+  }
+  if (existing) return { assignmentId, dueAt: existing.dueAt, title: existing.title, unit: existing.unit || null, existing: true };
+  const untaught = untaughtAqaRefs(profile.selfEvaluation, profile.selfEvaluation?.board || profile.board || group.board || "aqa");
 
   // Due the day before the group's next lesson, and never sooner than three days from now
   const now = Date.now();
@@ -330,20 +341,22 @@ async function assignDiagnostic({ uid, profile, group, token }) {
       topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? specTopicTitle(index.board || "aqa", q.topics[0]) : (q.title || `Question ${q.q}`),
     };
     for (const k of ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks", "legacy", "unit"]) if (q[k] !== undefined && q[k] !== null) it[k] = q[k];
+    if (it.topic && untaught.has(it.topic)) it.notTaught = true;
     return it;
   });
   const maxScore = items.reduce((a, it) => a + it.marks, 0);
-  const title = `Initial diagnostic (Year ${profile.year})`;
+  const notTaught = items.filter(it => it.notTaught).length;
+  const title = `Initial diagnostic (${Y.yearLabel(profile.year)})`;
   await fb.createDocument("assignments", assignmentId, {
     title, kind: "diagnostic", unit, classId: group.code || profile.classId, board: group.board || profile.board || "aqa",
     topicBoard: index.board || "aqa",   // the paper's questions are tagged with this board's topic refs, whatever board the student sits
     tutorId: group.tutorId || null, studentIds: [uid], studentName: profile.displayName || null,
     minutes: Math.round(items.reduce((a, it) => a + it.minutes, 0)), dueAt, maxScore,
-    note: "Answer every question on your own, without notes, in one or two sittings. It is a starting point, not a test you can fail: it shows your tutor exactly where to begin.",
+    note: `Answer every question on your own, without notes, in one or two sittings. It is a starting point, not a test you can fail: it shows your tutor exactly where to begin.${notTaught ? ` ${notTaught} question${notTaught === 1 ? " is" : "s are"} on topics your school has not taught yet: have a go if you can, or skip them.` : ""}`,
     items, summary: `${items.length} exam question${items.length === 1 ? "" : "s"} · ${maxScore} marks`,
     status: "open", createdAt: new Date(now), clientTime: now, createdBy: "placement",
   }, token);
-  return { assignmentId, dueAt, title, existing: false };
+  return { assignmentId, dueAt, title, unit, existing: false, notTaught };
 }
 
 async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = true } = {}) {
@@ -395,7 +408,7 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   if (tempPassword) profile.needsPasswordChange = true;
   let diagnostic = null;
   try { diagnostic = await assignDiagnostic({ uid: auth.uid, profile, group, token }); } catch (e) { console.error("diagnostic not set:", e.message); }
-  if (diagnostic) profile.diagnostic = { assignmentId: diagnostic.assignmentId, unit: DIAGNOSTIC_UNIT[Number(profile.year)], dueAt: diagnostic.dueAt, setAt: new Date(now) };
+  if (diagnostic) profile.diagnostic = { assignmentId: diagnostic.assignmentId, unit: Y.diagnosticUnitFor(profile.year), dueAt: diagnostic.dueAt, setAt: new Date(now) };
   await fb.updateDocument(`users/${auth.uid}`, profile, token);
   await fb.updateDocument(`applicants/${id}`, { status: "placed", groupCode: profile.classId, studentUid: auth.uid, placedAt: now, welcomeHeld: !sendEmails }, token);
 
@@ -593,8 +606,8 @@ async function importStudents(body, admin, token, origin, res) {
     if (!group) out.problems.push(r.groupCode ? `group ${str(r.groupCode, 20)} not found` : "no group");
     const board = str(r.board, 10).toLowerCase() || group?.board || "";
     if (!BOARDS[board]) out.problems.push("exam board must be AQA, OCR or Edexcel");
-    const year = Number(r.year);
-    if (![12, 13].includes(year)) out.problems.push("year must be 12 or 13");
+    const year = Y.normYear(r.year);
+    if (!year) out.problems.push("year must be 12, 13 or resit");
     if (seen.has(out.studentEmail)) out.problems.push("duplicate row");
     seen.add(out.studentEmail);
     const prior = byEmail[out.studentEmail];
@@ -650,10 +663,28 @@ module.exports = async function handler(req, res) {
       if (!profile.classId) throw bad("Put the student in a group first");
       const group = await fb.getDocument(`classes/${profile.classId}`, token);
       if (!group) throw bad("The student's group no longer exists");
-      const r = await assignDiagnostic({ uid, profile, group, token });
-      if (!r) throw bad(`The Year ${profile.year || "?"} diagnostic paper has not been published yet`);
-      if (!r.existing) await fb.updateDocument(`users/${uid}`, { diagnostic: { assignmentId: r.assignmentId, unit: DIAGNOSTIC_UNIT[Number(profile.year)], dueAt: r.dueAt, setAt: new Date() } }, token);
+      // replace: swap the set paper for the one matching the student's year (a
+      // student moved to Resit, say). Refused once the feedback report has gone.
+      const replace = body.replace === true;
+      if (replace && profile.diagnostic?.reportSentAt) throw bad("The feedback report has already been sent, so the paper cannot be replaced");
+      const r = await assignDiagnostic({ uid, profile, group, token, replace });
+      if (!r) throw bad(`The ${Y.yearLabel(profile.year) || "?"} diagnostic paper has not been published yet`);
+      if (!r.existing) await fb.updateDocument(`users/${uid}`, { diagnostic: { assignmentId: r.assignmentId, unit: r.unit, dueAt: r.dueAt, setAt: new Date() } }, token);
       return res.status(200).json({ ok: true, ...r });
+    }
+
+    // Change a placed student's year group (Year 12, Year 13 or Resit). The
+    // profile card then offers to replace the diagnostic when its paper no longer matches.
+    if (action === "setYear") {
+      const uid = str(body.uid, 128);
+      const year = Y.normYear(body.year);
+      if (!uid) throw bad("uid required");
+      if (!year) throw bad("Year group must be 12, 13 or Resit");
+      const profile = await fb.getDocument(`users/${uid}`, token);
+      if (!profile || profile.role !== "student") throw bad("Student not found");
+      await fb.updateDocument(`users/${uid}`, { year }, token);
+      if (profile.applicantId) await fb.updateDocument(`applicants/${profile.applicantId}`, { year }, token).catch(() => {});
+      return res.status(200).json({ ok: true, year, diagnosticUnit: Y.diagnosticUnitFor(year) });
     }
 
     // Move a placed student to another group (and so to that group's tutor).
