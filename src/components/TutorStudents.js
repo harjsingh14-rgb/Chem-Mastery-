@@ -207,9 +207,87 @@ export default function TutorStudents({ authUser, userProfile, embedded, startNe
 }
 
 
+/** Change a pending student's details and agreement terms. The parent's link
+ *  builds the agreement from the applicant record each time it is opened, so
+ *  a saved change is what they see next, without a new link. */
+function EditDetailsForm({ a, onSaved, onCancel }) {
+  const [form, setForm] = useState(() => ({
+    studentName: a.studentName || "", studentEmail: a.studentEmail || "", parentName: a.parentName || "", parentEmail: a.parentEmail || "", parentPhone: a.parentPhone || "",
+    board: a.board || "aqa", year: a.year || 12, paymentPlan: a.paymentPlan || "instalments", paymentAmount: a.paymentAmount ?? "",
+    schedule: (a.schedule || []).length ? a.schedule.map(r => ({ amount: r.amount, due: r.due })) : [{ amount: "", due: "" }],
+    programmeStart: a.programmeStart || today(), programmeEnd: a.programmeEnd || programmeEndFor(a.year || 12),
+    initialGrade: a.initialGrade || "Not yet assessed", groupSize: a.groupSize || DEFAULT_GROUP_SIZE, extraTerms: a.extraTerms || "", notes: a.notes || "",
+  }));
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState(null);
+  const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const setYear = (y) => setForm(f => ({ ...f, year: y, programmeEnd: !f.programmeEnd || f.programmeEnd === programmeEndFor(f.year) ? programmeEndFor(y) : f.programmeEnd }));
+  const setRow = (i, k, v) => setForm(f => ({ ...f, schedule: f.schedule.map((r, j) => j === i ? { ...r, [k]: v } : r) }));
+
+  const save = async (e) => {
+    e.preventDefault();
+    setSaving(true); setErr(null);
+    try {
+      const fields = { ...form, schedule: form.schedule.filter(r => r.amount || r.due) };
+      const { applicant } = await studentsApi("update", { id: a.id, fields });
+      onSaved(applicant || fields);
+    } catch (ex) { setErr(ex.message); }
+    setSaving(false);
+  };
+
+  return (
+    <form onSubmit={save} style={{ padding: 16, borderRadius: T.radius, background: T.card, border: `1px solid ${T.border}` }}>
+      <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Edit details</div>
+      <div style={{ fontSize: 12, color: T.muted, marginBottom: 12 }}>
+        {a.terms ? "The parent has already accepted the agreement, so changes here update the record but not what they signed." : "The parent has not accepted yet. Their link shows the agreement with these details the next time they open it."}
+      </div>
+      {err && <Notice tone="red" style={{ marginBottom: 12 }}>{err}</Notice>}
+      <div className="cm-grid-2" style={{ gap: 12 }}>
+        <div style={field}><label style={label} htmlFor="ed-name">Student name</label><Input id="ed-name" required value={form.studentName} onChange={e => setF("studentName", e.target.value)} /></div>
+        <div style={field}><label style={label} htmlFor="ed-email">Student email (their login)</label><Input id="ed-email" type="email" required value={form.studentEmail} onChange={e => setF("studentEmail", e.target.value)} /></div>
+        <div style={field}><label style={label} htmlFor="ed-pname">Parent name</label><Input id="ed-pname" required value={form.parentName} onChange={e => setF("parentName", e.target.value)} /></div>
+        <div style={field}><label style={label} htmlFor="ed-pemail">Parent email</label><Input id="ed-pemail" type="email" required value={form.parentEmail} onChange={e => setF("parentEmail", e.target.value)} /></div>
+        <div style={field}><label style={label} htmlFor="ed-phone">Parent phone</label><Input id="ed-phone" value={form.parentPhone} onChange={e => setF("parentPhone", e.target.value)} /></div>
+        <div style={field}><span style={label}>Exam board</span>
+          <div style={{ display: "flex", gap: 6 }}>{BOARDS.map(b => <Button key={b.id} type="button" variant={form.board === b.id ? "primary" : "secondary"} onClick={() => setF("board", b.id)}>{b.label}</Button>)}</div></div>
+        <div style={field}><span style={label}>Year group</span>
+          <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setYear(y)}>Year {y}</Button>)}</div></div>
+        <div style={field}><label style={label} htmlFor="ed-start">Programme start date</label><Input id="ed-start" type="date" required value={form.programmeStart} onChange={e => setF("programmeStart", e.target.value)} /></div>
+        <div style={field}><label style={label} htmlFor="ed-end">Programme runs until</label><Input id="ed-end" value={form.programmeEnd} onChange={e => setF("programmeEnd", e.target.value)} placeholder={programmeEndFor(form.year)} /></div>
+        <div style={field}><label style={label} htmlFor="ed-grade">Initial assessed grade</label>
+          <select id="ed-grade" value={form.initialGrade} onChange={e => setF("initialGrade", e.target.value)} style={selectStyle}>{GRADES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
+        <div style={field}><label style={label} htmlFor="ed-size">Group size (up to)</label><Input id="ed-size" type="number" min="2" max="12" value={form.groupSize} onChange={e => setF("groupSize", e.target.value)} style={{ width: 90 }} /></div>
+        <div style={field}><label style={label} htmlFor="ed-plan">Payment option</label>
+          <select id="ed-plan" value={form.paymentPlan} onChange={e => setF("paymentPlan", e.target.value)} style={selectStyle}>{PAYMENT_PLANS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}</select></div>
+        <div style={field}><label style={label} htmlFor="ed-fee">Total programme fee (£)</label><Input id="ed-fee" type="number" min="1" step="1" required value={form.paymentAmount} onChange={e => setF("paymentAmount", e.target.value)} /></div>
+      </div>
+      <div style={{ ...field, marginTop: 12 }}>
+        <span style={label}>Payment schedule (goes into clause 5.4 of the agreement)</span>
+        {form.schedule.map((r, i) => (
+          <div key={i} style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <Input type="number" min="1" step="1" placeholder="£ amount" aria-label="Amount" value={r.amount} onChange={e => setRow(i, "amount", e.target.value)} style={{ width: 130 }} />
+            <Input placeholder="Due, e.g. On signing, or 26 November 2026" aria-label="When due" value={r.due} onChange={e => setRow(i, "due", e.target.value)} style={{ flex: 1 }} />
+            {form.schedule.length > 1 && <Button type="button" variant="ghost" size="sm" onClick={() => setForm(f => ({ ...f, schedule: f.schedule.filter((_, j) => j !== i) }))} aria-label="Remove line">×</Button>}
+          </div>
+        ))}
+        <div><Button type="button" size="sm" onClick={() => setForm(f => ({ ...f, schedule: [...f.schedule, { amount: "", due: "" }] }))}>Add a payment line</Button></div>
+      </div>
+      <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ed-extra">Additional or replacement terms (optional). One clause per line.</label>
+        <textarea id="ed-extra" rows={3} value={form.extraTerms} onChange={e => setF("extraTerms", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
+      <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ed-notes">Notes from the call (optional)</label>
+        <textarea id="ed-notes" rows={2} value={form.notes} onChange={e => setF("notes", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
+      <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+        <Button type="submit" variant="accent" disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
+        <Button type="button" variant="ghost" onClick={onCancel} disabled={saving}>Cancel</Button>
+      </div>
+    </form>
+  );
+}
+
 function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
   const [busy, setBusy] = useState(null);
   const [showAll, setShowAll] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [err, setErr] = useState(null);
   const matching = groups.filter(g => g.board === a.board);
   const [groupCode, setGroupCode] = useState(() => (matching[0] || groups[0] || {}).code || "");
@@ -365,8 +443,16 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
       </div>
       {a.notes && <div style={{ fontSize: 13, color: T.body }}><strong>Call notes:</strong> {a.notes}</div>}
 
+      {editing && (
+        <EditDetailsForm a={a} onCancel={() => setEditing(false)}
+          onSaved={(fields) => { onChange(fields); setEditing(false); setNotice({ tone: "green", text: a.terms ? `${fields.studentName || a.studentName}'s details updated.` : `${fields.studentName || a.studentName}'s details updated. The parent's link now shows the new agreement; use Resend to parent if you want to tell them.` }); }} />
+      )}
+
       {a.status !== "placed" && (
-        <div><Button size="sm" variant="ghost" onClick={remove} disabled={!!busy} style={{ color: T.red }}>{busy === "delete" ? "Removing…" : "Remove from onboarding"}</Button></div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {!editing && <Button size="sm" icon="pencil" onClick={() => setEditing(true)} disabled={!!busy}>Edit details</Button>}
+          <Button size="sm" variant="ghost" onClick={remove} disabled={!!busy} style={{ color: T.red }}>{busy === "delete" ? "Removing…" : "Remove from onboarding"}</Button>
+        </div>
       )}
     </div>
   );
