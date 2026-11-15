@@ -1,5 +1,7 @@
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
+const fb = require("./_firebaseAdmin");
+const { takeQuota } = require("./_quota");
 const { ERROR_TYPES_PROMPT, cleanErrorType, cleanErrorNote } = require("./_errorTypes");
 
 // Marking conventions agreed with HSJ Tuition. These are quoted verbatim in
@@ -123,8 +125,14 @@ module.exports = async function handler(req, res) {
     const caller = await verifyFirebaseToken(req);
     if (!caller) return res.status(401).json({ error: "Unauthorized" });
 
-    const { mode, question, context, markScheme, allow, reject, studentAnswer, maxMarks, levels } = req.body || {};
+    let { mode, question, context, markScheme, allow, reject, studentAnswer, maxMarks, levels } = req.body || {};
     if (!studentAnswer || !markScheme || !question) return res.status(400).json({ error: "Missing required fields" });
+    // Caps on what the client may send to the model
+    const cap = (v, n) => typeof v === "string" ? v.slice(0, n) : v;
+    studentAnswer = cap(String(studentAnswer), 4000); question = cap(String(question), 4000); context = cap(context, 4000);
+    markScheme = cap(markScheme, 6000); allow = cap(allow, 2000); reject = cap(reject, 2000);
+    try { await takeQuota(caller.uid, "examine", await fb.getAccessToken()); }
+    catch (e) { if (e.status === 429) return res.status(429).json({ error: e.message }); throw e; }
     const max = Math.max(1, Math.min(20, parseInt(maxMarks, 10) || 6));
 
     const apiKey = (process.env.ANTHROPIC_API_KEY || "").trim();

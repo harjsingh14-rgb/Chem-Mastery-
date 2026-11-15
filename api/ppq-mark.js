@@ -16,6 +16,7 @@
 //   { action: "query", qid, part, note }                      student asks their tutor to check a part's mark
 //   { action: "reply", attemptId, part, reply, score? }       tutor (or admin) answers and may adjust the part's score
 const fb = require("./_firebaseAdmin");
+const { takeQuota } = require("./_quota");
 const { ERROR_TYPES_PROMPT, cleanErrorType, cleanErrorNote } = require("./_errorTypes");
 const { setCors } = require("./_cors");
 const { verifyFirebaseToken } = require("./_auth");
@@ -25,6 +26,7 @@ const diag = require("./_diagnostic");
 const TEXT_MODEL = "claude-sonnet-5-5";
 const VISION_MODEL = "claude-opus-5-5";
 const MAX_IMAGES = 4;
+const MAX_ANSWER_CHARS = 4000;          // per part, typed answer
 const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024;   // per image, after the client has downscaled it
 
 const BOARD_NAME = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
@@ -297,10 +299,13 @@ module.exports = async function handler(req, res) {
       if (!im || !/^image\/(jpeg|png|webp)$/.test(im.mediaType || "") || typeof im.dataBase64 !== "string") throw fb.httpError(400, "Images must be JPEG, PNG or WebP");
       if (im.dataBase64.length * 0.75 > MAX_IMAGE_BYTES) throw fb.httpError(413, "An image is too large. Please retake it or use a smaller photo.");
     }
+    // Typed answers are capped before they reach the model: an exam answer is a few hundred words at most
+    for (const k of Object.keys(answers)) if (typeof answers[k] === "string" && answers[k].length > MAX_ANSWER_CHARS) answers[k] = answers[k].slice(0, MAX_ANSWER_CHARS);
     const typedAny = Object.values(answers).some(v => v && String(v).trim());
     if (!typedAny && images.length === 0) throw fb.httpError(400, "Type an answer, draw on the question or add a photo before marking.");
 
     const token = await fb.getAccessToken();
+    await takeQuota(caller.uid, "mark", token);
     const full = await fb.getDocument(`ppq/${qid}`, token);
     if (!full || !Array.isArray(full.parts) || full.parts.length === 0) throw fb.httpError(404, "Question not found");
     // A homework may set only some parts: mark those alone, out of their marks
