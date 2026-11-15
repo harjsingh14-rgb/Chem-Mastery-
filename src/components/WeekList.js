@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLesson, updateSession } from "../firebase";
-import { fmtTime, isoDate, addDays, sessionEndMs, DEFAULT_MINUTES } from "../utils/schedule";
+import { fmtTime, isoDate, addDays, sessionEndMs, groupLink, DEFAULT_MINUTES } from "../utils/schedule";
 import { T, groupColour } from "../ui/theme";
 import { Card, CardHeader, Chip, Button, Notice } from "../ui/components";
 
@@ -81,7 +81,7 @@ export default function WeekList({ sessions, classes, tutorUid, tutorName, onLes
             const cancelled = s.status === "cancelled";
             const past = sessionEndMs(s) < Date.now();
             const grp = groupOf(s);
-            const zoom = s.zoomLink || grp?.zoomLink || null;
+            const zoom = groupLink(grp, s);
             const who = s.studentIds ? (s.studentNames?.length ? s.studentNames.join(", ") : `${s.studentIds.length} student${s.studentIds.length === 1 ? "" : "s"}`) : "Whole group";
             return (
               <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 20px", flexWrap: "wrap", opacity: cancelled ? 0.6 : 1 }}>

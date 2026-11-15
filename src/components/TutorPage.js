@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { createClass, fetchTutorClasses, fetchAllClasses, fetchTutors, fetchAllStudents, fetchStudentsForTutor, fetchAttemptsForTutor, updateClass, fetchTutorSessions, fetchAllSessions, fetchTutorSubmissions, fetchPayments, fetchApplicants, studentsApi } from "../firebase";
-import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, upcomingSessions, fmtLessonDay, fmtTime, isoDate, addDays, sessionEndMs } from "../utils/schedule";
+import { WEEKDAYS, DEFAULT_MINUTES, describeSchedule, describeSlots, slotsOf, nextOccurrences, upcomingSessions, fmtLessonDay, fmtTime, isoDate, addDays, sessionEndMs, meetingUrl } from "../utils/schedule";
 import { useNavigate } from "react-router-dom";
 import { T, pctColour, BOARDS, boardLabel, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, StatTile, AccuracyBar, Avatar, Button, Input, Notice } from "../ui/components";
@@ -79,10 +79,10 @@ export default function TutorPage({ authUser, userProfile }) {
     const cls = classes?.find(c => c.code === editSchedule?.code);
     if (!cls) return;
     try {
-      const slots = (editSchedule.slots || []).filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES }));
+      const slots = (editSchedule.slots || []).filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES, zoomLink: meetingUrl(s.zoomLink) || null }));
       if (slots.length === 0) throw new Error("Add at least one lesson time");
       // `schedule` keeps the first slot for anything that still reads the old single-slot shape
-      const patch = { slots, schedule: slots[0], lessonSlot: describeSlots(slots), zoomLink: (editSchedule.zoomLink || "").trim() || null };
+      const patch = { slots, schedule: slots[0], lessonSlot: describeSlots(slots), zoomLink: meetingUrl(editSchedule.zoomLink) || null };
       await updateClass(cls.code, patch);
       setClasses(list => list.map(c => c.code === cls.code ? { ...c, ...patch } : c));
       setEditSchedule(null);
@@ -107,7 +107,7 @@ export default function TutorPage({ authUser, userProfile }) {
     if (!newName.trim()) return;
     setCreating(true); setError(null);
     try {
-      const slots = newSlots.filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES }));
+      const slots = newSlots.filter(s => s.time).map(s => ({ weekday: Number(s.weekday), time: s.time, minutes: Number(s.minutes) || DEFAULT_MINUTES, zoomLink: meetingUrl(s.zoomLink) || null }));
       const cls = await createClass(tutorUid, { name: newName, board: newBoard, tutorId: isAdmin ? newTutor : tutorUid, lessonSlot: describeSlots(slots), schedule: slots[0] || null, slots });
       setClasses(prev => [...(prev || []), cls].sort((a, b) => a.name.localeCompare(b.name)));
       setSelected(cls.code); setNewName(""); setShowNew(false);
@@ -205,11 +205,11 @@ export default function TutorPage({ authUser, userProfile }) {
 
       {editSchedule && classes && canGroups && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <CardHeader title={`Usual weekly times for ${classes.find(c => c.code === editSchedule.code)?.name || "this group"}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them." />
+          <CardHeader title={`Usual weekly times for ${classes.find(c => c.code === editSchedule.code)?.name || "this group"}`} sub="A template, not the timetable. One row per lesson each week, each with its own meeting link if the days differ. You can paste a whole Zoom invitation and only the link is kept. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them." />
           <SlotsFields slots={editSchedule.slots} onChange={slots => setEditSchedule(e => ({ ...e, slots }))} />
           <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 520 }}>
-            <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Meeting link (shown to students and parents, and in reminder emails)</label>
-            <Input id="cls-zoom" type="url" value={editSchedule.zoomLink} onChange={e => setEditSchedule(x => ({ ...x, zoomLink: e.target.value }))} placeholder="https://zoom.us/j/…" />
+            <label htmlFor="cls-zoom" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Meeting link for any lesson without its own (shown to students and parents, and in reminder emails)</label>
+            <Input id="cls-zoom" type="text" value={editSchedule.zoomLink} onChange={e => setEditSchedule(x => ({ ...x, zoomLink: e.target.value }))} onBlur={e => { const u = meetingUrl(e.target.value); if (u !== e.target.value) setEditSchedule(x => ({ ...x, zoomLink: u })); }} placeholder="https://zoom.us/j/…" />
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <Button variant="accent" onClick={saveSchedule}>Save</Button>
@@ -362,6 +362,7 @@ function SlotsFields({ slots, onChange }) {
             {[30, 45, 60, 90, 120, 150, 180].map(m => <option key={m} value={m}>{lengthLabel(m)}</option>)}
           </select>
           <span style={{ fontSize: 12, color: T.muted }}>{describeSchedule(value)}</span>
+          <Input type="text" value={value.zoomLink || ""} onChange={e => set(i, "zoomLink", e.target.value)} onBlur={e => { const u = meetingUrl(e.target.value); if (u !== e.target.value) set(i, "zoomLink", u); }} placeholder="Meeting link for this day (optional)" aria-label="Meeting link for this lesson" style={{ flex: "1 1 240px", minWidth: 200 }} />
           {slots.length > 1 && <Button size="sm" variant="ghost" onClick={() => onChange(slots.filter((_, j) => j !== i))} aria-label="Remove this lesson time">Remove</Button>}
         </div>
       ))}

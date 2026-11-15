@@ -9,6 +9,7 @@
 const { setCors } = require("./_cors");
 const fb = require("./_firebaseAdmin");
 const { verifyFirebaseToken } = require("./_auth");
+const { groupLink } = require("./_groupLink");
 
 const SITE = "https://fc.hsjtuition.co.uk";
 const TOKEN_RE = /^[a-f0-9]{48}$/;
@@ -127,7 +128,7 @@ function vevent(s, group, tutor, staff) {
   const className = s.className || group?.name || s.classId || "Chemistry";
   const cancelled = s.status === "cancelled";
   const minutes = Number(s.minutes) || DEFAULT_MINUTES;
-  const zoom = s.zoomLink || group?.zoomLink || null;
+  const zoom = groupLink(group, s);
   const who = Array.isArray(s.studentNames) && s.studentNames.length ? s.studentNames.join(", ") : null;
   let summary = s.title ? `${s.title} · ${className}` : (staff ? `${className} lesson` : `Chemistry lesson · ${className}`);
   if (cancelled) summary = `Cancelled: ${summary}`;

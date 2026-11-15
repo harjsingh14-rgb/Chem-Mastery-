@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { fetchClass, fetchPayments, fetchStudentSessions } from "../firebase";
 import { T } from "../ui/theme";
 import { Card, CardHeader, Chip, Button } from "../ui/components";
-import { describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime, upcomingSessions, DEFAULT_MINUTES } from "../utils/schedule";
+import { describeSlots, slotsOf, nextOccurrences, fmtLessonDay, fmtTime, upcomingSessions, groupLink, DEFAULT_MINUTES } from "../utils/schedule";
 
 /** The student's group and calendar sessions. sessions is null while loading. */
 export function useStudentCalendar(uid, classId) {
@@ -28,9 +28,9 @@ export function useStudentCalendar(uid, classId) {
  */
 export function nextLessonRows(cls, sessions, n = 3) {
   if (sessions && sessions.length > 0) {
-    return upcomingSessions(sessions, n).map(s => ({ key: s.id, date: s.date, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, title: s.title || null, named: !!s.studentIds, note: s.note || null, cancelled: s.status === "cancelled", zoomLink: s.zoomLink || cls?.zoomLink || null }));
+    return upcomingSessions(sessions, n).map(s => ({ key: s.id, date: s.date, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, title: s.title || null, named: !!s.studentIds, note: s.note || null, cancelled: s.status === "cancelled", zoomLink: groupLink(cls, s) }));
   }
-  return nextOccurrences(slotsOf(cls), n).map(o => ({ key: `${o.iso}_${o.time}`, date: o.iso, time: o.time, minutes: o.minutes, title: null, named: false, note: null, cancelled: false, zoomLink: cls?.zoomLink || null }));
+  return nextOccurrences(slotsOf(cls), n).map(o => ({ key: `${o.iso}_${o.time}`, date: o.iso, time: o.time, minutes: o.minutes, title: null, named: false, note: null, cancelled: false, zoomLink: o.slot?.zoomLink || cls?.zoomLink || null }));
 }
 
 export function NextLessonCard({ authUser, userProfile }) {

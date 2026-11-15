@@ -140,4 +140,34 @@ export function templateOccurrences(slots, fromIso, toIso) {
   return out;
 }
 
+/**
+ * Pull the meeting URL out of whatever was pasted: a bare link, or a whole
+ * Zoom invitation with the link somewhere in the middle. Empty when none.
+ */
+export function meetingUrl(text) {
+  const t = String(text || "").trim();
+  if (!t) return "";
+  const m = t.match(/https?:\/\/[^\s<>"']+/i);
+  return (m ? m[0] : t).replace(/[.,;)]+$/, "");
+}
+
+/**
+ * The meeting link for one lesson: the session's own link, else the link on
+ * the usual-time row it comes from (same weekday and start time, or the
+ * only row at that time), else the group's link.
+ */
+export function groupLink(cls, s) {
+  if (s?.zoomLink) return s.zoomLink;
+  if (!cls) return null;
+  const slots = slotsOf(cls).filter(x => x.zoomLink);
+  if (slots.length && s?.time) {
+    const weekday = s.weekday != null ? Number(s.weekday) : s.date ? new Date(`${s.date}T00:00:00`).getDay() : null;
+    const exact = weekday == null ? null : slots.find(x => Number(x.weekday) === weekday && x.time === s.time);
+    if (exact) return exact.zoomLink;
+    const sameTime = slots.filter(x => x.time === s.time);
+    if (sameTime.length === 1) return sameTime[0].zoomLink;
+  }
+  return cls.zoomLink || null;
+}
+
 export const addDays = (iso, n) => { const d = new Date(`${iso}T00:00:00`); d.setDate(d.getDate() + n); return isoDate(d); };

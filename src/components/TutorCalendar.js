@@ -8,7 +8,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchTutorSessions, fetchAllSessions,
   createSession, createSessions, updateSession, deleteSession, createLesson } from "../firebase";
-import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, templateOccurrences, DEFAULT_MINUTES, describeSession, sessionEndMs } from "../utils/schedule";
+import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, templateOccurrences, DEFAULT_MINUTES, describeSession, sessionEndMs, groupLink, meetingUrl } from "../utils/schedule";
 import { T, boardLabel, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { CalendarSubscribePanel } from "./CalendarSubscribe";
@@ -110,7 +110,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
       const roster = studentsByClass[form.classId] || [];
       const studentIds = form.who === "students" ? form.studentIds : null;
       const studentNames = studentIds ? studentIds.map(id => roster.find(s => s.uid === id)?.displayName || "Student") : null;
-      const base = { classId: cls.code, className: cls.name, board: cls.board, tutorId: cls.tutorId, time: form.time, minutes: Number(form.minutes), type: studentIds ? "session" : form.type, title: form.title, zoomLink: form.zoomLink, note: form.note, studentIds, studentNames };
+      const base = { classId: cls.code, className: cls.name, board: cls.board, tutorId: cls.tutorId, time: form.time, minutes: Number(form.minutes), type: studentIds ? "session" : form.type, title: form.title, zoomLink: meetingUrl(form.zoomLink), note: form.note, studentIds, studentNames };
       if (form.mode === "edit") {
         const patch = await updateSession(form.id, { ...base, date: form.date });
         setSessions(prev => prev.map(s => s.id === form.id ? { ...s, ...patch } : s));
@@ -384,7 +384,7 @@ function UpcomingList({ sessions, colourOf, selected, tutorName, onPick }) {
 function SessionDetail({ s, cls, colour, tutorName, busy, canEdit = true, canNotes = true, onEdit, onCancel, onRestore, onDelete, onDeleteFuture, onNotes, onClose }) {
   const [bg, fg] = colour;
   const cancelled = s.status === "cancelled";
-  const zoom = s.zoomLink || cls?.zoomLink || null;
+  const zoom = groupLink(cls, s);
   const past = sessionEndMs(s) < Date.now();
   return (
     <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10, borderLeft: `4px solid ${fg}` }}>
@@ -468,7 +468,7 @@ function SessionForm({ form, setF, classes, classOf, students, busy, onSubmit, o
       </div>
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
         <div style={{ ...field, flex: "1 1 220px" }}><label style={label} htmlFor="ss-title">Title (optional)</label><Input id="ss-title" value={form.title} onChange={e => setF({ title: e.target.value })} placeholder={form.who === "students" ? "e.g. Catch-up: equilibrium" : "e.g. Mock exam, Revision day"} /></div>
-        <div style={{ ...field, flex: "1 1 260px" }}><label style={label} htmlFor="ss-zoom">Meeting link (blank = the group's usual link)</label><Input id="ss-zoom" type="url" value={form.zoomLink} onChange={e => setF({ zoomLink: e.target.value })} placeholder={cls?.zoomLink || "https://zoom.us/j/…"} /></div>
+        <div style={{ ...field, flex: "1 1 260px" }}><label style={label} htmlFor="ss-zoom">Meeting link (blank = the group's usual link)</label><Input id="ss-zoom" type="text" value={form.zoomLink} onChange={e => setF({ zoomLink: e.target.value })} placeholder={groupLink(cls, { date: form.date, time: form.time }) || "https://zoom.us/j/…"} /></div>
       </div>
       <div style={field}><label style={label} htmlFor="ss-note">Note for students (optional)</label><Input id="ss-note" value={form.note} onChange={e => setF({ note: e.target.value })} placeholder="e.g. Bring your data sheet. Shown with the session." /></div>
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>

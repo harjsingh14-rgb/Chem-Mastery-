@@ -8,6 +8,7 @@
 const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
 const { verifyFirebaseToken } = require("./_auth");
+const { groupLink, slotsOf } = require("./_groupLink");
 
 const DAY = 86400000;
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -70,7 +71,7 @@ module.exports = async function handler(req, res) {
               const sub = await fb.getDocument(`submissions/${a.id}_${s.id}`, token);
               if (!sub?.submittedAt) homework.push({ title: a.title, dueAt: a.dueAt });
             }
-            const { subject, html } = mail.lessonReminder({ studentName: s.displayName, groupName: title ? `${cls.name} (${title})` : cls.name, when, zoomNote: cls.zoomNote || "", zoomLink: zoomLink || cls.zoomLink || "", homework });
+            const { subject, html } = mail.lessonReminder({ studentName: s.displayName, groupName: title ? `${cls.name} (${title})` : cls.name, when, zoomNote: cls.zoomNote || "", zoomLink: zoomLink || "", homework });
             await mail.sendEmail({ to: s.email, cc: s.parentEmail && s.parentEmail !== s.email ? s.parentEmail : undefined, subject, html });
           });
           if (sent) report.lessons++;
@@ -85,16 +86,15 @@ module.exports = async function handler(req, res) {
       onCalendar.add(cls.id);
       if (ses.status === "cancelled") continue;
       const recipients = Array.isArray(ses.studentIds) && ses.studentIds.length ? ses.studentIds.map(id => byUid[id]).filter(Boolean) : (byClass[cls.id] || []);
-      await remind(cls, recipients, { key: `lesson_${cls.id}_${tomorrow.iso}_${ses.time}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(ses.time)}`, zoomLink: ses.zoomLink, title: ses.title });
+      await remind(cls, recipients, { key: `lesson_${cls.id}_${tomorrow.iso}_${ses.time}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(ses.time)}`, zoomLink: groupLink(cls, ses), title: ses.title });
     }
     for (const cls of classes) {
       if (onCalendar.has(cls.id)) continue;
       const any = await fb.queryDocuments("sessions", { classId: cls.id }, token, { limit: 1 });
       if (any.length) continue; // the group is on the calendar and simply has nothing tomorrow
-      const slots = (Array.isArray(cls.slots) && cls.slots.length ? cls.slots : cls.schedule ? [cls.schedule] : []).filter(s => s && s.time);
-      const sch = slots.find(s => Number(s.weekday) === tomorrow.weekday);
+      const sch = slotsOf(cls).find(s => Number(s.weekday) === tomorrow.weekday);
       if (!sch) continue;
-      await remind(cls, byClass[cls.id] || [], { key: `lesson_${cls.id}_${tomorrow.iso}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(sch.time)}` });
+      await remind(cls, byClass[cls.id] || [], { key: `lesson_${cls.id}_${tomorrow.iso}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(sch.time)}`, zoomLink: sch.zoomLink || cls.zoomLink || "" });
     }
 
     // 2. Homework due within 24h, not submitted
