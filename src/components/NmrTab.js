@@ -212,7 +212,7 @@ export default function NmrTab({ board }) {
               style={{ perspective: "1200px", cursor: "pointer", maxWidth: "700px", margin: "0 auto" }}>
               <div style={{ position: "relative", minHeight: "320px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d",
                 transform: nmrFlashFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
-                <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: `linear-gradient(145deg, ${accentColor}, #6d28d9)`,
+                <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: accentColor,
                   borderRadius: "20px", padding: "32px 24px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
                   boxShadow: `0 12px 40px ${accentColor}50` }}>
                   <div style={{ position: "absolute", top: "14px", left: "18px", fontSize: "10px", color: "rgba(255,255,255,0.7)", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Question</div>

@@ -17,7 +17,7 @@ export default function MechanismsTab({ hasFullAccess, FREE_MECH_COUNT, logActiv
         Handdrawn curly-arrow mechanisms with interactive explanations. Tap a mechanism to start.
       </p>
       {Object.entries(
-        MECHS.reduce((acc,m)=>{ (acc[m.category]=acc[m.category]||[]).push(m); return acc; }, {})
+        MECHS.filter(m => m.hasHanddrawn).reduce((acc,m)=>{ (acc[m.category]=acc[m.category]||[]).push(m); return acc; }, {})
       ).map(([cat, list]) => (
         <div key={cat} style={{ marginBottom:"22px" }}>
           <div style={{ fontSize:"13px", fontWeight:800, color:"#0f1d35", textTransform:"uppercase", letterSpacing:"1.2px", marginBottom:"10px", borderBottom:"2px solid #e2e8f0", paddingBottom:"6px" }}>{cat}</div>

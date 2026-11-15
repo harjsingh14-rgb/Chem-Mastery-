@@ -81,13 +81,13 @@ export default function LoginScreen({ onLogin, onBack }) {
 
           {/* Email form */}
           <form onSubmit={handleEmail}>
-            <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required
+            <input type="email" autoComplete="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required
               style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: `1.5px solid ${T.border}`, fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "12px", boxSizing: "border-box", transition: "border 0.15s" }}
               onFocus={e => e.target.style.borderColor = T.accent}
               onBlur={e => e.target.style.borderColor = T.border}
             />
             {mode === "login" && (
-              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
+              <input type="password" autoComplete="current-password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: `1.5px solid ${T.border}`, fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box", transition: "border 0.15s" }}
                 onFocus={e => e.target.style.borderColor = T.accent}
                 onBlur={e => e.target.style.borderColor = T.border}

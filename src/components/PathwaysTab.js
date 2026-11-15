@@ -65,7 +65,7 @@ export default function PathwaysTab({ board }) {
         <div style={{ flex:1 }} />
         <button onClick={() => setSynthQuiz(q => !q)} style={{
           padding:"6px 14px", borderRadius:"20px", border:"none",
-          background:synthQuiz?"linear-gradient(135deg,#f97316,#ea580c)":"#f0f4f8", color:synthQuiz?"#fff":"#7a95b0",
+          background:synthQuiz?"#ea580c":"#f0f4f8", color:synthQuiz?"#fff":"#7a95b0",
           fontSize:"12px", fontWeight:700, cursor:"pointer", fontFamily:"inherit",
           boxShadow: synthQuiz ? "0 2px 8px rgba(249,115,22,0.3)" : "none"
         }}>Quiz {synthQuiz?"ON":"OFF"}</button>
@@ -73,7 +73,7 @@ export default function PathwaysTab({ board }) {
       <div style={{ fontSize:"12px", color: selId ? "#059669" : "#94a3b8", fontWeight: selId ? 600 : 400, padding:"6px 14px 5px", textAlign:"center", flexShrink:0, background: selId ? "#f0fdf4" : "#fff", borderBottom:"1px solid #f0f4f8", transition:"all 0.2s" }}>
         {selId ? `${selNodeData ? selNodeData[1].replace(/\n/g," ") : ""} selected - tap another compound or background to clear` : "Tap a compound to highlight its reaction routes"}
       </div>
-      <div style={{ flex:1, overflow:"auto", WebkitOverflowScrolling:"touch", background:"linear-gradient(180deg, #f0f4f8 0%, #e8eef6 100%)" }}>
+      <div style={{ flex:1, overflow:"auto", WebkitOverflowScrolling:"touch", background:"#f0f4f8" }}>
         <svg
           viewBox={`0 0 ${vbW} ${vbH}`}
           width={vbW * 1.05} height={vbH * 1.05}

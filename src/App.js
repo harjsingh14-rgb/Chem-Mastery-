@@ -13,6 +13,13 @@ import { MCQ_COUNT } from "./data/mcq-meta";
 import { SETS } from "./data/sets";
 import { SECTIONS, TOPIC_ORDER, OCR_SECTIONS, OCR_TOPIC_ORDER, EDEXCEL_SECTIONS, EDEXCEL_TOPIC_ORDER } from "./data/sections";
 import LoginScreen from "./components/LoginScreen";
+
+/** Sections that are not ready for students send them back to Revision rather than showing a placeholder. */
+function RedirectTo({ to }) {
+  const navigate = useNavigate();
+  useEffect(() => { navigate(to, { replace: true }); }, [to, navigate]);
+  return null;
+}
 import PhotoUpload from "./components/PhotoUpload";
 import lazyPage, { PageLoading } from "./utils/lazyPage";
 import track from "./utils/track";
@@ -440,13 +447,13 @@ export default function App() {
           <div style={{ background: T.card, borderRadius: T.radius, border: `1px solid ${T.border}`, padding: "28px", boxShadow: "0 8px 24px rgba(21,40,58,0.06)" }}>
             <form onSubmit={handleChangePassword}>
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>New password</label>
-              <input type="password" placeholder="At least 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} required
+              <input type="password" autoComplete="new-password" placeholder="At least 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
                 onFocus={e => e.target.style.borderColor = "#3B9FDB"}
                 onBlur={e => e.target.style.borderColor = "#e0e8f0"}
               />
               <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#4a6080", marginBottom: "6px" }}>Confirm new password</label>
-              <input type="password" placeholder="Type it again" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} required
+              <input type="password" autoComplete="new-password" placeholder="Type it again" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} required
                 style={{ width: "100%", padding: "13px 16px", borderRadius: "12px", border: "1.5px solid #e0e8f0", fontSize: "15px", fontFamily: "inherit", outline: "none", marginBottom: "16px", boxSizing: "border-box" }}
                 onFocus={e => e.target.style.borderColor = "#3B9FDB"}
                 onBlur={e => e.target.style.borderColor = "#e0e8f0"}
@@ -649,7 +656,7 @@ export default function App() {
               <button onClick={() => setQuizScreen(null)} style={{ background: "none", border: "none", color: "#7a95b0", cursor: "pointer", fontSize: "13px", fontFamily: "inherit", fontWeight: 600, padding: "0 0 18px 0" }}>← Back to Topics</button>
 
               {/* Hero */}
-              <div style={{ background: "linear-gradient(135deg,#3B9FDB,#23408F)", borderRadius: "20px", padding: "22px 24px", color: "#fff", marginBottom: "24px", boxShadow: "0 6px 20px rgba(41,171,226,0.35)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ background: T.navy, borderRadius: "20px", padding: "22px 24px", color: "#fff", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <div style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "-0.5px" }}>Random Quiz</div>
                   <div style={{ fontSize: "13px", opacity: 0.85, marginTop: "4px" }}>Weak cards shown more often</div>
@@ -764,10 +771,10 @@ export default function App() {
 
               <button onClick={startQuiz} disabled={!canStart} style={{
                 width: "100%", padding: "18px", borderRadius: "14px", border: "none",
-                background: canStart ? "linear-gradient(135deg,#3B9FDB,#23408F)" : "#e0e8f0",
+                background: canStart ? T.accent : "#e0e8f0",
                 color: canStart ? "#ffffff" : "#aab5c2",
                 fontFamily: "inherit", fontSize: "17px", fontWeight: 800, cursor: canStart ? "pointer" : "not-allowed",
-                boxShadow: canStart ? "0 4px 16px rgba(41,171,226,0.4)" : "none",
+                boxShadow: "none",
               }}>Start Quiz →</button>
             </div>
           </div>
@@ -792,14 +799,14 @@ export default function App() {
               </div>
               {/* Progress bar */}
               <div style={{ height: "6px", background: "#e0e8f0", borderRadius: "3px", overflow: "hidden", marginBottom: "14px" }}>
-                <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg,#3B9FDB,#22c55e)", borderRadius: "3px", transition: "width 0.3s" }} />
+                <div style={{ height: "100%", width: `${progress}%`, background: T.accent, borderRadius: "3px", transition: "width 0.3s" }} />
               </div>
               {/* Topic label */}
               <div style={{ fontSize: "12px", color: "#7a95b0", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", textAlign: "center", marginBottom: "12px" }}>{topicTitle}</div>
               {/* Card */}
               <div onClick={() => setQuizFlipped(f => !f)} style={{
                 minHeight: "260px", borderRadius: "24px", padding: "36px 32px",
-                background: quizFlipped ? "linear-gradient(135deg,#f0fdf4,#dcfce7)" : "#ffffff",
+                background: quizFlipped ? "#f0fdf4" : "#ffffff",
                 border: `2px solid ${quizFlipped ? "#86efac" : "#dde4ed"}`,
                 boxShadow: "0 6px 28px rgba(0,0,0,0.09)", cursor: "pointer",
                 display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
@@ -829,7 +836,7 @@ export default function App() {
                   }}>✗ Missed it</button>
                   <button onClick={() => recordQuizAnswer(true)} style={{
                     flex: 1, padding: "18px 10px", borderRadius: "16px", border: "none",
-                    background: "linear-gradient(135deg,#22c55e,#16a34a)", color: "#ffffff",
+                    background: "#16a34a", color: "#ffffff",
                     fontFamily: "inherit", fontSize: "16px", fontWeight: 800, cursor: "pointer",
                     boxShadow: "0 4px 12px rgba(34,197,94,0.35)",
                   }}>✓ Got it</button>
@@ -859,7 +866,7 @@ export default function App() {
           <div style={{ padding: "24px 16px", flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div style={{ width: "100%", maxWidth: "360px" }}>
               {/* Score card */}
-              <div style={{ background: "linear-gradient(135deg,#1a2d45,#3B9FDB)", borderRadius: "24px", padding: "32px 24px", textAlign: "center", color: "#fff", marginBottom: "20px", boxShadow: "0 8px 28px rgba(41,171,226,0.3)" }}>
+              <div style={{ background: T.navy, borderRadius: "24px", padding: "32px 24px", textAlign: "center", color: "#fff", marginBottom: "20px" }}>
                 <div style={{ fontSize: "22px", fontWeight: 800, marginBottom: "4px" }}>{msg}</div>
                 <div style={{ fontSize: "52px", fontWeight: 800, lineHeight: 1, margin: "12px 0" }}>{pct}%</div>
                 <div style={{ fontSize: "14px", opacity: 0.85 }}>{quizSessionScore.correct} correct · {quizSessionScore.wrong} missed · {total} cards</div>
@@ -880,9 +887,8 @@ export default function App() {
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <button onClick={() => { startQuiz(); }} style={{
                   width: "100%", padding: "16px", borderRadius: "14px", border: "none",
-                  background: "linear-gradient(135deg,#3B9FDB,#23408F)", color: "#ffffff",
+                  background: T.accent, color: "#ffffff",
                   fontFamily: "inherit", fontSize: "15px", fontWeight: 800, cursor: "pointer",
-                  boxShadow: "0 4px 16px rgba(41,171,226,0.4)",
                 }}>Play Again →</button>
                 <button onClick={() => setQuizScreen("setup")} style={{
                   width: "100%", padding: "14px", borderRadius: "14px", border: "2px solid #dde4ed",
@@ -966,15 +972,7 @@ export default function App() {
       )}
 
       {/* ── MECHANISMS TAB ────────────────────────────────── */}
-      {topicsTab === "mechanisms" && !isAdmin && (
-        <div style={{ padding:"40px 24px", flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center" }}>
-          <div style={{ marginBottom:"16px", display:"flex", justifyContent:"center" }}><IconTile name="flask" tone="accent" size={56} /></div>
-          <div style={{ fontSize:"22px", fontWeight:800, color:"#0f1d35", marginBottom:"8px" }}>Mechanisms Coming Soon</div>
-          <div style={{ fontSize:"15px", color:"#64748b", lineHeight:1.6, maxWidth:"400px" }}>
-            Step-by-step animated curly arrow mechanisms are being built. This feature will be available soon!
-          </div>
-        </div>
-      )}
+      {topicsTab === "mechanisms" && !isAdmin && <RedirectTo to={`/${board}/revision`} />}
       {topicsTab === "mechanisms" && isAdmin && (
         <MechanismsTab hasFullAccess={hasFullAccess} FREE_MECH_COUNT={FREE_MECH_COUNT} logActivity={logActivity} LockedOverlay={LockedOverlay} />
       )}
@@ -1013,7 +1011,7 @@ export default function App() {
       <div style={{ padding: "10px 20px 4px", position: "relative", zIndex: 2 }}>
         <h2 style={{ margin: "0 0 6px", fontSize: "13px", fontWeight: 600, color: "#3B9FDB" }}>{topic} · {SETS[topic]?.title}</h2>
         <div style={{ height: "5px", background: "#dde4ed", borderRadius: "3px", overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${progress}%`, background: "linear-gradient(90deg, #3B9FDB, #50C8F4)", borderRadius: "3px", transition: "width 0.3s ease" }} />
+          <div style={{ height: "100%", width: `${progress}%`, background: T.accent, borderRadius: "3px", transition: "width 0.3s ease" }} />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "5px", fontSize: "12px", color: "#7a95b0" }}>
           <span>{index + 1} / {order.length}</span>
@@ -1026,7 +1024,7 @@ export default function App() {
         <div onClick={() => setFlipped(f => !f)} style={{ width: "100%", maxWidth: "700px", minHeight: "440px", perspective: "1200px", cursor: "pointer" }}>
           <div style={{ position: "relative", width: "100%", minHeight: "440px", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
             {/* Front */}
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: "linear-gradient(145deg, #3B9FDB 0%, #1a8fc4 100%)", border: "none", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.35)" }}>
+            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", background: T.accent, border: "none", borderRadius: "24px", padding: "36px 28px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", boxShadow: "0 12px 40px rgba(41,171,226,0.35)" }}>
               <div style={{ position: "absolute", top: "16px", left: "20px", fontSize: "10px", color: "rgba(255,255,255,0.75)", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 700 }}>Question</div>
               {knownSet.has(currentCardIndex) && <div style={{ position: "absolute", top: "13px", right: "18px", fontSize: "11px", color: "#ffffff", fontWeight: 600, background: "rgba(255,255,255,0.25)", padding: "3px 10px", borderRadius: "20px" }}>Mastered</div>}
               <p style={{ fontSize: card.q.length > 120 ? "16px" : card.q.length > 60 ? "18px" : "21px", lineHeight: 1.55, textAlign: "center", fontWeight: 700, color: "#ffffff", margin: 0 }}>{chemFormat(card.q)}</p>
@@ -1051,7 +1049,7 @@ export default function App() {
       </div>
 
       {knownCount === cards.length && (
-        <div style={{ margin: "0 24px 16px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg, #E9F4FB, #d0eefa)", border: "1px solid rgba(41,171,226,0.4)", textAlign: "center", fontSize: "14px", color: "#1a8fc4", fontWeight: 700 }}>
+        <div style={{ margin: "0 24px 16px", padding: "14px", borderRadius: "14px", background: T.accentTint, border: "1px solid rgba(41,171,226,0.4)", textAlign: "center", fontSize: "14px", color: "#1a8fc4", fontWeight: 700 }}>
           All {cards.length} cards mastered
         </div>
       )}

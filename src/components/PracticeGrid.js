@@ -19,8 +19,8 @@ export default function PracticeGrid({ board, counts = {}, hasFullAccess, isAdmi
   const navigate = useNavigate();
   return (
     <div className="cm-grid-3">
-      {PRACTICE_MODULES.map(m => {
-        const comingSoon = (m.id === "mechanisms" || m.id === "nmr") && !isAdmin;
+      {PRACTICE_MODULES.filter(m => isAdmin || !(m.id === "mechanisms" || m.id === "nmr")).map(m => {
+        const comingSoon = false;
         const locked = !hasFullAccess && (m.id === "pathways");
         const preview = !hasFullAccess && !locked && !comingSoon;
         return (
