@@ -2,7 +2,7 @@
 // per student with attendance, the tutor's comment and the week's homework
 // record, emailed to the parent with the student copied.
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { createLesson, updateLesson, deleteLesson, fetchTutorLessons, fetchLesson, fetchTutorClasses, fetchClassStudents,
   fetchLessonNotes, saveLessonNote, lessonNoteId, sendLessonNote, fetchTutorAssignments, fetchSubmissionsForAssignment, fetchTutorSessions, updateSession,
   fetchClassLessonNotes, fetchPrivateNotes, savePrivateNote, fetchClassAssignments, fetchAllClasses, fetchAllLessons, fetchAllSessions, fetchClass } from "../firebase";
@@ -59,6 +59,15 @@ function TopicPicker({ board, value, onChange }) {
 
 export function TutorLessonsList({ authUser, userProfile }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  // The lesson page comes back here once every note is sent, with a line to show
+  const [flash, setFlash] = useState(() => location.state?.flash || null);
+  useEffect(() => {
+    if (!location.state?.flash) return undefined;
+    window.history.replaceState({}, "");
+    const t = window.setTimeout(() => setFlash(null), 6000);
+    return () => window.clearTimeout(t);
+  }, [location.state]);
   const [groups, setGroups] = useState(null);
   const [lessons, setLessons] = useState(null);
   const [sessions, setSessions] = useState([]);
@@ -107,6 +116,7 @@ export function TutorLessonsList({ authUser, userProfile }) {
       <PageHeader eyebrow="Lessons" title="Lesson notes" sub="Record each lesson, then write and send a note per student. Parents get it by email with the student copied."
         right={<Button variant="primary" icon="plus" onClick={() => setShowNew(v => !v)}>New lesson</Button>} />
       {error && <Notice tone="red" style={{ marginBottom: 12 }}>{error}</Notice>}
+      {flash && <Notice tone="green" style={{ marginBottom: 12 }}>{flash}</Notice>}
       {groups && groups.length === 0 && <Card padding={0}><EmptyState icon="users" title="Create a group first" body="Lessons belong to a group. Create one on the Overview tab." action={<Button variant="primary" onClick={() => navigate("/tutor")}>Overview</Button>} /></Card>}
       {groups && groups.length > 0 && <div style={{ marginBottom: 12 }}><Tabs tabs={[{ id: "lessons", label: "Lessons" }, { id: "register", label: "Attendance register" }]} value={tab} onChange={setTab} /></div>}
       {tab === "register" && groups && groups.length > 0 && <AttendanceRegister uid={uid} scope={isAdmin ? null : uid} groups={groups} lessons={lessons || []} />}
@@ -333,19 +343,32 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
     } catch (e) { setError(e.message); }
     setBusy(b => ({ ...b, [s.uid]: null }));
   };
-  const send = async (s) => {
+  // Once every student's note for this lesson has gone out there is nothing
+  // left to do here, so the page returns to the lessons list with a line saying so
+  const leaveWhenDone = (justSent) => {
+    const sentNow = new Set([...Object.keys(notes).filter(u => notes[u]?.sentAt), ...justSent]);
+    if (!(students || []).length || !(students || []).every(x => sentNow.has(x.uid))) return false;
+    const n = justSent.length;
+    navigate("/tutor/lessons", { state: { flash: `${n} note${n === 1 ? "" : "s"} sent. Every student in ${lesson.className || lesson.classId} has their note for ${fmtLessonDate(lesson.date)}.` } });
+    return true;
+  };
+  const send = async (s, { fromAll = false } = {}) => {
     const d = drafts[s.uid] || {};
     const written = [d.www, d.ebi, d.extra, d.text].some(x => (x || "").trim());
-    if (!written && !window.confirm(`Send ${s.displayName || "this student"}'s note with attendance only and nothing written?`)) return;
+    if (!written && !window.confirm(`Send ${s.displayName || "this student"}'s note with attendance only and nothing written?`)) return false;
     setBusy(b => ({ ...b, [s.uid]: "send" })); setError(null);
+    let ok = false;
     try {
       const data = noteData(s);
       await saveLessonNote(lessonId, s.uid, data);
       await savePrivate(s);
       const r = await sendLessonNote(lessonNoteId(lessonId, s.uid));
       setNotes(prev => ({ ...prev, [s.uid]: { ...(prev[s.uid] || {}), ...data, sentAt: Date.now(), sentTo: r.sentTo } }));
+      ok = true;
     } catch (e) { setError(`${s.displayName || "Student"}: ${e.message}`); }
     setBusy(b => ({ ...b, [s.uid]: null }));
+    if (ok && !fromAll && !notes[s.uid]?.sentAt) leaveWhenDone([s.uid]);
+    return ok;
   };
   const saveAttendanceAll = async () => {
     setError(null);
@@ -356,7 +379,9 @@ export function TutorLessonEditor({ authUser, userProfile, lessonId }) {
     const pending = (students || []).filter(s => !notes[s.uid]?.sentAt && [drafts[s.uid]?.www, drafts[s.uid]?.ebi, drafts[s.uid]?.extra, drafts[s.uid]?.text].some(x => (x || "").trim()));
     if (pending.length === 0) { setError("No written, unsent notes to send."); return; }
     if (!window.confirm(`Send ${pending.length} note${pending.length === 1 ? "" : "s"} now?`)) return;
-    for (const s of pending) await send(s);
+    const sent = [];
+    for (const s of pending) { if (await send(s, { fromAll: true })) sent.push(s.uid); }
+    if (sent.length === pending.length) leaveWhenDone(sent);
   };
   // Lesson-level fields are copied into each note when it is saved, so a change
   // made afterwards (adding the recording link once Zoom has processed it, say)
