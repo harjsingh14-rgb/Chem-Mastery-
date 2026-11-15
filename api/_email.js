@@ -305,4 +305,35 @@ function diagnosticReport({ studentName, parentName, title, year, board, assignm
   return { subject: `${first}'s initial diagnostic: feedback report`, html };
 }
 
-module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, diagnosticReport, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, NOTIFY, SITE };
+
+/** To the parent: HSJ has proposed a change to the signed agreement; review and accept it online. */
+function variationInvite({ parentName, studentName, changes, reason, link }) {
+  const rows = (changes || []).map(c => `<tr>
+      <td style="padding:6px 12px 6px 0;color:#6b7a8c;vertical-align:top;white-space:nowrap;">${esc(c.label)}</td>
+      <td style="padding:6px 12px 6px 0;color:#6b7a8c;text-decoration:line-through;vertical-align:top;">${esc(c.from || "Not set")}</td>
+      <td style="padding:6px 0;font-weight:600;vertical-align:top;">${esc(c.to || "Not set")}</td></tr>`).join("");
+  const html = layout(`A change to ${firstName(studentName)}'s tutoring agreement`, `
+    <p>Hi ${esc(firstName(parentName))},</p>
+    <p>I would like to change the following in ${esc(firstName(studentName))}'s Tutoring Programme Agreement.${reason ? `<br>${nl2br(reason)}` : ""}</p>
+    <table style="border-collapse:collapse;font-size:14px;margin:10px 0 6px;">
+      <tr><th style="text-align:left;padding:0 12px 6px 0;font-size:12px;color:#6b7a8c;">Term</th><th style="text-align:left;padding:0 12px 6px 0;font-size:12px;color:#6b7a8c;">Now</th><th style="text-align:left;padding:0 0 6px;font-size:12px;color:#6b7a8c;">Proposed</th></tr>
+      ${rows}
+    </table>
+    <p>Nothing changes until you accept: the agreement you signed stays in force. Log in, open the Agreement tab, read the revised agreement and accept it by typing your name, as before. If you would rather not, reply to this email and we will talk it through.</p>
+    ${button(link, "Review the change")}
+    <p style="margin-top:22px;">Thank you,<br>Harj</p>`);
+  return { subject: `A change to ${studentName}'s HSJ Tuition agreement`, html };
+}
+
+/** To HSJ: the parent accepted the revised agreement. */
+function variationAccepted({ studentName, parentName, acceptedName, changes, link }) {
+  const list = (changes || []).map(c => `<li>${esc(c.label)}: ${esc(c.to || "Not set")}</li>`).join("");
+  const html = layout("Revised agreement accepted", `
+    <p><strong>${esc(studentName)}</strong><br>Parent: ${esc(parentName)}, accepted by typing the name "${esc(acceptedName)}".</p>
+    <ul style="padding-left:18px;">${list}</ul>
+    <p>The previous version is kept on the student's profile. Payments now follows the new schedule.</p>
+    ${button(link, "Open the profile")}`);
+  return { subject: `Revised agreement accepted: ${studentName}`, html };
+}
+
+module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, diagnosticReport, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, variationInvite, variationAccepted, NOTIFY, SITE };

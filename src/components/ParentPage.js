@@ -15,6 +15,7 @@ import { describeSlots, slotsOf } from "../utils/schedule";
 import { useHomework } from "./StudentHomework";
 import { fmtDue } from "../utils/homeworkDates";
 import AgreementDocument, { PrintAgreementButton, agreementVarsFromProfile } from "./AgreementDocument";
+import { VariationReview, AgreementHistory } from "./AgreementVariation";
 
 const TABS = [{ id: "progress", label: "Progress" }, { id: "lessons", label: "Lessons" }, { id: "homework", label: "Homework" }, { id: "payments", label: "Payments" }, { id: "agreement", label: "Agreement" }];
 
@@ -38,6 +39,7 @@ export default function ParentPage({ authUser, userProfile, childUid, previewUid
     if (!children || children.length === 0) return null;
     return children.find(c => c.uid === childUid) || children[0];
   }, [children, childUid]);
+  const patchChild = (uid, patch) => setChildren(list => (list || []).map(c => c.uid === uid ? { ...c, ...patch } : c));
 
   if (children === null) return <div style={{ color: T.muted, padding: 20 }}>Loading…</div>;
   if (children.length === 0) return (
@@ -63,13 +65,19 @@ export default function ParentPage({ authUser, userProfile, childUid, previewUid
             {children.map(c => <Button key={c.uid} size="sm" variant={c.uid === child.uid ? "primary" : "secondary"} onClick={() => navigate(`/parent/${c.uid}`)}>{(c.displayName || "Student").split(" ")[0]}</Button>)}
           </div>
         )} />
+      {child.agreementProposal && tab !== "agreement" && (
+        <Notice tone="accent" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
+          <span style={{ flex: 1 }}>HSJ Tuition has proposed a change to {(child.displayName || "your child").split(" ")[0]}'s agreement. Nothing changes until you have read and accepted it.</span>
+          <Button size="sm" variant="primary" onClick={() => setTab("agreement")}>Review the change</Button>
+        </Notice>
+      )}
       <Tabs tabs={TABS} value={tab} onChange={setTab} />
       {tab === "progress" && <CommunityCard who="parent" style={{ marginBottom: 14 }} />}
       {tab === "progress" && <ProgressTab child={child} />}
       {tab === "lessons" && <LessonsTab child={child} />}
       {tab === "homework" && <HomeworkTab child={child} />}
       {tab === "payments" && <PaymentsTab child={child} parentName={userProfile?.displayName} />}
-      {tab === "agreement" && <AgreementTab child={child} />}
+      {tab === "agreement" && <AgreementTab child={child} previewUid={previewUid} onPatch={patch => patchChild(child.uid, patch)} />}
     </>
   );
 }
@@ -259,24 +267,34 @@ function PaymentsTab({ child }) {
 }
 
 // ─── The signed Tutoring Programme Agreement ───────────────────────────────
-function AgreementTab({ child }) {
+function AgreementTab({ child, previewUid, onPatch }) {
+  const [justAccepted, setJustAccepted] = useState(false);
   const ag = child.agreement || null;
   const first = (child.displayName || "your child").split(" ")[0];
+  // A change HSJ has proposed: shown first, the signed terms stand until it is accepted
+  const review = <VariationReview child={child} previewUid={previewUid}
+    onAccepted={(r) => { onPatch({ agreement: r.agreement, agreementHistory: r.history, agreementProposal: null }); setJustAccepted(true); }} />;
   if (!ag || ag.agreedBeforePlatform) return (
-    <Card padding={0}><EmptyState icon="book" title="Agreed before the platform" body={`The terms for ${first} were agreed with HSJ Tuition directly, before this platform existed, so there is no copy to show here. Email HSJ Tuition if you would like one.`} /></Card>
+    <>
+      {review}
+      <Card padding={0}><EmptyState icon="book" title="Agreed before the platform" body={`The terms for ${first} were agreed with HSJ Tuition directly, before this platform existed, so there is no copy to show here. Email HSJ Tuition if you would like one.`} /></Card>
+    </>
   );
   const accepted = ag.acceptedAt ? { acceptedAt: ag.acceptedAt, acceptedName: ag.acceptedName, version: ag.version } : null;
   const vars = agreementVarsFromProfile(child);
   return (
     <>
+      {justAccepted && <Notice tone="green" style={{ marginBottom: 14 }}>Thank you. The revised agreement is accepted and is the one shown below. The version you accepted before is kept under Previous versions.</Notice>}
+      {review}
       <Card style={{ marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }} className="cm-no-print">
         <div>
           <div style={{ fontWeight: 700 }}>Tutoring Programme Agreement for {first}</div>
-          <div style={{ fontSize: 13, color: T.muted }}>{accepted ? `Accepted by ${accepted.acceptedName} on ${new Date(accepted.acceptedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.` : "Not yet accepted."} Download or print saves it as a PDF from your browser's print dialog.</div>
+          <div style={{ fontSize: 13, color: T.muted }}>{accepted ? `Accepted by ${accepted.acceptedName} on ${new Date(accepted.acceptedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.` : "Not yet accepted."}{ag.revision > 1 ? ` Revision ${ag.revision}, replacing the version accepted before.` : ""} Download or print saves it as a PDF from your browser's print dialog.</div>
         </div>
         <PrintAgreementButton />
       </Card>
       <AgreementDocument vars={vars} accepted={accepted} printable collapsible title={`HSJ Tuition Agreement - ${child.displayName || "student"}`} />
+      <AgreementHistory child={child} />
     </>
   );
 }

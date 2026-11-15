@@ -8,6 +8,7 @@ import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, Empty
 import { SELF_EVALUATION, ragCounts } from "../data/self-evaluation";
 import { PAYMENT_PLANS, paymentPlanLabel, GRADES, programmeEndFor, DEFAULT_GROUP_SIZE, money } from "../data/terms";
 import StudentImport from "./StudentImport";
+import AgreementTermsFields, { termsFormFrom } from "./AgreementTermsFields";
 
 const STATUS = {
   invited: { tone: "amber", label: "Self-evaluation sent" },
@@ -213,16 +214,13 @@ export default function TutorStudents({ authUser, userProfile, embedded, startNe
 function EditDetailsForm({ a, onSaved, onCancel }) {
   const [form, setForm] = useState(() => ({
     studentName: a.studentName || "", studentEmail: a.studentEmail || "", parentName: a.parentName || "", parentEmail: a.parentEmail || "", parentPhone: a.parentPhone || "",
-    board: a.board || "aqa", year: a.year || 12, paymentPlan: a.paymentPlan || "instalments", paymentAmount: a.paymentAmount ?? "",
-    schedule: (a.schedule || []).length ? a.schedule.map(r => ({ amount: r.amount, due: r.due })) : [{ amount: "", due: "" }],
-    programmeStart: a.programmeStart || today(), programmeEnd: a.programmeEnd || programmeEndFor(a.year || 12),
-    initialGrade: a.initialGrade || "Not yet assessed", groupSize: a.groupSize || DEFAULT_GROUP_SIZE, extraTerms: a.extraTerms || "", notes: a.notes || "",
+    board: a.board || "aqa", year: a.year || 12, notes: a.notes || "",
+    ...termsFormFrom(a, a.year || 12),
   }));
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState(null);
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const setYear = (y) => setForm(f => ({ ...f, year: y, programmeEnd: !f.programmeEnd || f.programmeEnd === programmeEndFor(f.year) ? programmeEndFor(y) : f.programmeEnd }));
-  const setRow = (i, k, v) => setForm(f => ({ ...f, schedule: f.schedule.map((r, j) => j === i ? { ...r, [k]: v } : r) }));
 
   const save = async (e) => {
     e.preventDefault();
@@ -252,28 +250,8 @@ function EditDetailsForm({ a, onSaved, onCancel }) {
           <div style={{ display: "flex", gap: 6 }}>{BOARDS.map(b => <Button key={b.id} type="button" variant={form.board === b.id ? "primary" : "secondary"} onClick={() => setF("board", b.id)}>{b.label}</Button>)}</div></div>
         <div style={field}><span style={label}>Year group</span>
           <div style={{ display: "flex", gap: 6 }}>{[12, 13].map(y => <Button key={y} type="button" variant={form.year === y ? "primary" : "secondary"} onClick={() => setYear(y)}>Year {y}</Button>)}</div></div>
-        <div style={field}><label style={label} htmlFor="ed-start">Programme start date</label><Input id="ed-start" type="date" required value={form.programmeStart} onChange={e => setF("programmeStart", e.target.value)} /></div>
-        <div style={field}><label style={label} htmlFor="ed-end">Programme runs until</label><Input id="ed-end" value={form.programmeEnd} onChange={e => setF("programmeEnd", e.target.value)} placeholder={programmeEndFor(form.year)} /></div>
-        <div style={field}><label style={label} htmlFor="ed-grade">Initial assessed grade</label>
-          <select id="ed-grade" value={form.initialGrade} onChange={e => setF("initialGrade", e.target.value)} style={selectStyle}>{GRADES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
-        <div style={field}><label style={label} htmlFor="ed-size">Group size (up to)</label><Input id="ed-size" type="number" min="2" max="12" value={form.groupSize} onChange={e => setF("groupSize", e.target.value)} style={{ width: 90 }} /></div>
-        <div style={field}><label style={label} htmlFor="ed-plan">Payment option</label>
-          <select id="ed-plan" value={form.paymentPlan} onChange={e => setF("paymentPlan", e.target.value)} style={selectStyle}>{PAYMENT_PLANS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}</select></div>
-        <div style={field}><label style={label} htmlFor="ed-fee">Total programme fee (£)</label><Input id="ed-fee" type="number" min="1" step="1" required value={form.paymentAmount} onChange={e => setF("paymentAmount", e.target.value)} /></div>
       </div>
-      <div style={{ ...field, marginTop: 12 }}>
-        <span style={label}>Payment schedule (goes into clause 5.4 of the agreement)</span>
-        {form.schedule.map((r, i) => (
-          <div key={i} style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            <Input type="number" min="1" step="1" placeholder="£ amount" aria-label="Amount" value={r.amount} onChange={e => setRow(i, "amount", e.target.value)} style={{ width: 130 }} />
-            <Input placeholder="Due, e.g. On signing, or 26 November 2026" aria-label="When due" value={r.due} onChange={e => setRow(i, "due", e.target.value)} style={{ flex: 1 }} />
-            {form.schedule.length > 1 && <Button type="button" variant="ghost" size="sm" onClick={() => setForm(f => ({ ...f, schedule: f.schedule.filter((_, j) => j !== i) }))} aria-label="Remove line">×</Button>}
-          </div>
-        ))}
-        <div><Button type="button" size="sm" onClick={() => setForm(f => ({ ...f, schedule: [...f.schedule, { amount: "", due: "" }] }))}>Add a payment line</Button></div>
-      </div>
-      <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ed-extra">Additional or replacement terms (optional). One clause per line.</label>
-        <textarea id="ed-extra" rows={3} value={form.extraTerms} onChange={e => setF("extraTerms", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
+      <div style={{ marginTop: 12 }}><AgreementTermsFields form={form} setForm={setForm} year={form.year} idPrefix="ed" /></div>
       <div style={{ ...field, marginTop: 12 }}><label style={label} htmlFor="ed-notes">Notes from the call (optional)</label>
         <textarea id="ed-notes" rows={2} value={form.notes} onChange={e => setF("notes", e.target.value)} style={{ ...selectStyle, fontFamily: T.font, resize: "vertical" }} /></div>
       <div style={{ display: "flex", gap: 8, marginTop: 14 }}>

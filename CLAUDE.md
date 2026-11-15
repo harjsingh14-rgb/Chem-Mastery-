@@ -16,6 +16,8 @@ Roles live on `users/{uid}.role`: `free` (signed in, not placed), `student` (pla
 | `privateNotes`, `payments`, `messages`, `applicants`, `reminders`, `quotas` | no | payments for child: read | own: read/write where applicable | all |
 | `ppq`, `ppqIndex`, `settings` | read | read | read | write |
 
+A signed agreement (`users/{uid}.agreement`) is changed only by a variation: admin proposes (`agreementProposal`, emailed), the linked parent accepts (`acceptVariation`, the one non-admin action in `api/students.js`), the replaced version goes into `agreementHistory` and `agreement.revision` increments; invoices carry `scheduleRevision`.
+
 Unauthenticated: only `api/onboarding.js` (48-character random token per applicant) and `api/stripe-webhook.js` (signature checked). Every other endpoint needs a Firebase ID token. Endpoints that call Claude (`api/ppq-mark.js`, `api/examine.js`) are rate limited per account per day in `api/_quota.js`.
 
 Secrets (`ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `RESEND_API_KEY`, `FIREBASE_SERVICE_ACCOUNT`, `CRON_SECRET`) are Vercel environment variables read only in `api/`. Nothing secret goes in `src/` or `public/`. The Firebase web config in `src/firebase.js` is public by design.

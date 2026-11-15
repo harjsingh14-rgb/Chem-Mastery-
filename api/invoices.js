@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
       if (!email) throw fb.httpError(400, "The student has no parent email on file");
 
       const customer = await findOrCreateCustomer({ email, name: student.parentName || student.displayName || email, uid, studentName: student.displayName || "" });
-      const metadata = { uid, studentName: student.displayName || "", scheduleIndex: body.scheduleIndex ?? "" };
+      const metadata = { uid, studentName: student.displayName || "", scheduleIndex: body.scheduleIndex ?? "", scheduleRevision: body.scheduleRevision ?? "" };
       const invoice = await stripe("POST", "/invoices", {
         customer: customer.id, collection_method: "send_invoice", due_date: dueUnix, description,
         auto_advance: false, currency: "gbp", metadata,

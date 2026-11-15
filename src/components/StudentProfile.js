@@ -18,6 +18,7 @@ import { QUESTIONNAIRE_SECTIONS } from "../data/parent-questionnaire";
 import { PAYMENT_TONE, paymentStatusLabel } from "./StudentPanels";
 import { fmtDue } from "../utils/homeworkDates";
 import PhotoUpload from "./PhotoUpload";
+import { ProposeVariationCard, AgreementHistory } from "./AgreementVariation";
 import { can } from "../utils/privileges";
 
 const toMs = (v) => v?.toMillis ? v.toMillis() : typeof v === "number" ? v : v ? new Date(v).getTime() : null;
@@ -603,7 +604,7 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
         }) : <span style={{ fontSize: 13, color: T.muted }}>The parent fills it in on the agreement page after accepting. Send the link again from the Onboarding tab.</span>}
       </Card>
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <CardHeader title="Agreement" sub={ag.acceptedAt ? `Accepted by ${ag.acceptedName || "the parent"} on ${fmtDate(ag.acceptedAt)}` : ag.agreedBeforePlatform ? "Current student: agreed before the platform" : "Not accepted yet"} />
+        <CardHeader title="Agreement" sub={`${ag.acceptedAt ? `Accepted by ${ag.acceptedName || "the parent"} on ${fmtDate(ag.acceptedAt)}` : ag.agreedBeforePlatform ? "Current student: agreed before the platform" : "Not accepted yet"}${ag.revision > 1 ? ` · revision ${ag.revision}` : ""}${student.agreementProposal ? " · a change is waiting for the parent" : ""}`} />
         <div className="cm-grid-2" style={{ fontSize: 13 }}>
           <Field label="Fee">{ag.totalFee ? money(ag.totalFee) : "–"}</Field>
           <Field label="Payment option">{ag.paymentPlan ? paymentPlanLabel(ag.paymentPlan) : "–"}</Field>
@@ -612,6 +613,8 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
         </div>
         {ag.extraTerms && <div style={{ fontSize: 13, color: T.body, whiteSpace: "pre-wrap", background: T.soft, borderRadius: 8, padding: "8px 12px" }}><strong>Extra terms.</strong> {ag.extraTerms}</div>}
       </Card>
+      {isAdmin && student.classId && <ProposeVariationCard student={student} onChange={onChange} />}
+      <AgreementHistory child={student} />
     </>
   );
 }

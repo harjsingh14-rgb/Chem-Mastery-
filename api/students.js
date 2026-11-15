@@ -7,6 +7,7 @@ const specTopicTitle = (board, ref) => { const t = (SPEC_TOPICS[board] || {})[re
 const fb = require("./_firebaseAdmin");
 const mail = require("./_email");
 const storage = require("./_storage");
+const { verifyFirebaseToken } = require("./_auth");
 
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 const PLANS = ["pif", "instalments", "results"];
@@ -48,6 +49,110 @@ function validateDetails(b, { partial = false } = {}) {
 }
 
 const withLabel = (a) => ({ ...a, boardLabel: BOARDS[a.board] || a.board });
+
+
+// ---- Changing a signed agreement --------------------------------------------
+// A signed agreement is only changed by a variation the parent accepts. The
+// admin proposes new terms (stored on the profile as agreementProposal and
+// emailed), the parent accepts them from their Agreement tab, and the version
+// they replace is kept in agreementHistory. Until then the signed terms stand.
+const VARIATION_KEYS = ["paymentPlan", "paymentAmount", "schedule", "programmeStart", "programmeEnd", "initialGrade", "groupSize", "extraTerms"];
+const PLAN_LABEL = { pif: "Paid in full", instalments: "Instalments", results: "Results-based instalments" };
+const gbp = (n) => (n === null || n === undefined || n === "" || Number.isNaN(Number(n))) ? "" : `£${Number(n).toLocaleString("en-GB")}`;
+const longDate = (iso) => { if (!iso) return ""; const d = new Date(`${iso}T00:00:00`); return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); };
+const scheduleText = (rows) => (rows || []).map(r => `${gbp(r.amount)} ${r.due || ""}`.trim()).join("\n");
+
+/** Just the variable terms of an agreement (or a proposal), with defaults. */
+function agreementTerms(ag = {}) {
+  return {
+    totalFee: ag.totalFee ?? null, paymentPlan: ag.paymentPlan || null, schedule: Array.isArray(ag.schedule) ? ag.schedule : [],
+    programmeStart: ag.programmeStart || null, programmeEnd: ag.programmeEnd || null,
+    initialGrade: ag.initialGrade || null, groupSize: ag.groupSize || 6, extraTerms: ag.extraTerms || "",
+  };
+}
+
+/** Old terms against new, one row per clause that differs, as the parent will read them. */
+function agreementChanges(from, to) {
+  const rows = [
+    ["totalFee", "Total programme fee (clause 5.1)", gbp(from.totalFee), gbp(to.totalFee)],
+    ["paymentPlan", "Payment option (clause 5.2)", PLAN_LABEL[from.paymentPlan] || from.paymentPlan || "", PLAN_LABEL[to.paymentPlan] || to.paymentPlan || ""],
+    ["schedule", "Payment schedule (clause 5.4)", scheduleText(from.schedule), scheduleText(to.schedule)],
+    ["programmeStart", "Programme start date (clause 2.3)", longDate(from.programmeStart), longDate(to.programmeStart)],
+    ["programmeEnd", "Programme runs until (clause 2.4)", from.programmeEnd || "", to.programmeEnd || ""],
+    ["groupSize", "Group size (clause 2.6)", from.groupSize ? `Up to ${from.groupSize}` : "", to.groupSize ? `Up to ${to.groupSize}` : ""],
+    ["initialGrade", "Initial assessed grade (clause 7.1)", from.initialGrade || "", to.initialGrade || ""],
+    ["extraTerms", "Additional terms (Section 14)", from.extraTerms || "", to.extraTerms || ""],
+  ];
+  return rows.filter(([, , a, b]) => a !== b).map(([key, label, a, b]) => ({ key, label, from: a, to: b }));
+}
+
+async function emailVariation(uid, st, proposal, origin) {
+  const to = str(st.parentEmail, 160).toLowerCase();
+  if (!EMAIL_RE.test(to)) return { emailedAt: null, emailError: "No parent email on file" };
+  try {
+    const { subject, html } = mail.variationInvite({ parentName: st.parentName, studentName: st.displayName, changes: proposal.changes, reason: proposal.reason, link: `${origin}/parent/${uid}` });
+    await mail.sendEmail({ to, subject, html });
+    return { emailedAt: Date.now(), emailError: null };
+  } catch (e) { return { emailedAt: null, emailError: e.message }; }
+}
+
+async function loadStudent(body, token) {
+  const uid = str(body.uid, 128);
+  if (!uid) throw bad("uid required");
+  const st = await fb.getDocument(`users/${uid}`, token);
+  if (!st || st.role !== "student") throw bad("Student not found");
+  return { uid, st };
+}
+
+async function proposeVariation(body, admin, token, origin) {
+  const { uid, st } = await loadStudent(body, token);
+  const fields = body.fields && typeof body.fields === "object" ? body.fields : {};
+  const picked = {};
+  for (const k of VARIATION_KEYS) if (fields[k] !== undefined) picked[k] = fields[k];
+  if ([12, 13].includes(Number(st.year))) picked.year = Number(st.year);
+  const v = validateDetails(picked, { partial: true });
+  const current = agreementTerms(st.agreement);
+  const next = { ...current };
+  if (v.paymentAmount !== undefined) next.totalFee = v.paymentAmount;
+  for (const k of ["paymentPlan", "schedule", "programmeStart", "programmeEnd", "initialGrade", "groupSize", "extraTerms"]) if (v[k] !== undefined) next[k] = v[k];
+  if (!next.totalFee || !next.paymentPlan || next.schedule.length === 0) throw bad("The fee, the payment option and at least one payment line are needed");
+  const changes = agreementChanges(current, next);
+  if (changes.length === 0) throw bad("Nothing has changed from the current agreement");
+  const proposal = { ...next, changes, reason: str(body.reason, 1000), proposedAt: Date.now(), proposedBy: admin.uid, proposedByName: admin.profile?.displayName || "", emailedAt: null, emailError: null };
+  Object.assign(proposal, await emailVariation(uid, st, proposal, origin));
+  await fb.updateDocument(`users/${uid}`, { agreementProposal: proposal }, token);
+  return { ok: true, proposal, emailed: !!proposal.emailedAt, emailError: proposal.emailError, parentLogin: !!st.parentUid };
+}
+
+/** The parent accepts the proposed terms: they become the agreement, the old one goes into the history. */
+async function acceptVariation(req, body, token, origin) {
+  const caller = await verifyFirebaseToken(req);
+  if (!caller) throw fb.httpError(401, "Please sign in again");
+  const uid = str(body.uid, 128);
+  const me = await fb.getDocument(`users/${caller.uid}`, token);
+  if (!uid || !me || me.role !== "parent" || !(me.children || []).includes(uid)) throw fb.httpError(403, "Only the parent or guardian linked to this student can accept the change");
+  const st = await fb.getDocument(`users/${uid}`, token);
+  const p = st?.agreementProposal;
+  if (!p) throw bad("There is no proposed change waiting on this agreement");
+  const name = str(body.name);
+  if (name.length < 2) throw bad("Please type your full name to accept");
+  const old = st.agreement || {};
+  const now = Date.now();
+  const agreement = {
+    ...agreementTerms(p),
+    acceptedAt: now, acceptedName: name, version: str(body.version, 40) || old.version || null,
+    revision: Number(old.revision || 1) + 1, agreedBeforePlatform: false,
+    variedAt: now, variationReason: p.reason || "", changes: Array.isArray(p.changes) ? p.changes : [],
+    ip: str((req.headers["x-forwarded-for"] || "").split(",")[0], 60), userAgent: str(req.headers["user-agent"], 200),
+  };
+  const history = [...(Array.isArray(st.agreementHistory) ? st.agreementHistory : []), { ...old, revision: old.revision || 1, supersededAt: now }].slice(-20);
+  await fb.updateDocument(`users/${uid}`, { agreement, agreementHistory: history, agreementProposal: null, paymentPlan: agreement.paymentPlan, paymentAmount: agreement.totalFee }, token);
+  try {
+    const { subject, html } = mail.variationAccepted({ studentName: st.displayName, parentName: st.parentName || me.displayName || "", acceptedName: name, changes: agreement.changes, link: `${origin}/tutor/students/${uid}` });
+    await mail.sendEmail({ to: mail.NOTIFY, subject, html });
+  } catch (e) { console.error("variation notify failed:", e.message); }
+  return { ok: true, agreement, history };
+}
 
 async function sendEvaluationInvite(a, origin) {
   const link = `${origin}/onboarding/${a.evalToken}`;
@@ -528,10 +633,12 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const token = await fb.getAccessToken();
-    const admin = await fb.requireAdmin(req, token);
     const body = req.body || {};
     const origin = fb.siteOrigin(req);
     const action = str(body.action, 20);
+    // The one action a parent takes here: accepting a proposed change to the agreement
+    if (action === "acceptVariation") return res.status(200).json(await acceptVariation(req, body, token, origin));
+    const admin = await fb.requireAdmin(req, token);
 
     // Set the initial diagnostic for a student who is already in a group
     // (one placed before the papers were published, or whose paper was replaced)
@@ -623,6 +730,22 @@ module.exports = async function handler(req, res) {
     if (action === "upload") {
       const file = await storage.uploadAttachment({ folder: `mail/${admin.uid.slice(0, 12)}`, name: body.name, type: body.type, dataBase64: body.dataBase64 }, token);
       return res.status(200).json({ ok: true, file });
+    }
+
+    // Changing a signed agreement: propose, chase, or take the proposal back
+    if (action === "proposeVariation") return res.status(200).json(await proposeVariation(body, admin, token, origin));
+    if (action === "withdrawVariation") {
+      const { uid } = await loadStudent(body, token);
+      await fb.updateDocument(`users/${uid}`, { agreementProposal: null }, token);
+      return res.status(200).json({ ok: true });
+    }
+    if (action === "resendVariation") {
+      const { uid, st } = await loadStudent(body, token);
+      if (!st.agreementProposal) throw bad("There is no proposed change to send");
+      const mailed = await emailVariation(uid, st, st.agreementProposal, origin);
+      if (mailed.emailError) throw bad(mailed.emailError);
+      await fb.updateDocument(`users/${uid}`, { agreementProposal: { ...st.agreementProposal, ...mailed } }, token);
+      return res.status(200).json({ ok: true, ...mailed });
     }
 
     if (!["update", "resend", "delete", "place", "sendWelcome"].includes(action)) {

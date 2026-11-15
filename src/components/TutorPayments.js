@@ -34,7 +34,10 @@ export default function TutorPayments() {
 
   const student = students.find(s => s.uid === form.uid);
   const schedule = student?.agreement?.schedule || [];
-  const invoicedIdx = useMemo(() => new Set((payments || []).filter(p => p.uid === form.uid && p.status !== "void" && p.scheduleIndex !== null && p.scheduleIndex !== undefined).map(p => p.scheduleIndex)), [payments, form.uid]);
+  // Lines already invoiced, from this revision of the schedule only: an accepted
+  // change to the agreement renumbers the lines, so earlier invoices do not count
+  const revision = student?.agreement?.revision || 1;
+  const invoicedIdx = useMemo(() => new Set((payments || []).filter(p => p.uid === form.uid && p.status !== "void" && (p.scheduleRevision || 1) === revision && p.scheduleIndex !== null && p.scheduleIndex !== undefined).map(p => p.scheduleIndex)), [payments, form.uid, revision]);
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const useLine = (i) => {
     const r = schedule[i];
@@ -45,7 +48,7 @@ export default function TutorPayments() {
     e.preventDefault();
     setBusy("create"); setError(null); setNotice(null);
     try {
-      const { payment } = await invoicesApi("create", { ...form, scheduleIndex: form.scheduleIndex === "" ? undefined : Number(form.scheduleIndex) });
+      const { payment } = await invoicesApi("create", { ...form, scheduleIndex: form.scheduleIndex === "" ? undefined : Number(form.scheduleIndex), scheduleRevision: revision });
       setPayments(p => [payment, ...(p || []).filter(x => x.id !== payment.id)]);
       setNotice(`Invoice ${payment.number || ""} for ${money(payment.amountDue)} sent to ${payment.customerEmail}.`);
       setForm(f => ({ ...f, amount: "", description: "", scheduleIndex: "" }));
@@ -95,7 +98,8 @@ export default function TutorPayments() {
               {student && <span style={{ fontSize: 12, color: T.muted }}>Invoice goes to {student.parentName ? `${student.parentName}, ` : ""}{student.parentEmail || student.email}{student.agreement?.totalFee ? ` · programme fee ${money(student.agreement.totalFee)}` : ""}</span>}
             </div>
             {student && schedule.length > 0 && (
-              <div style={field}><span style={label}>Agreed schedule (clause 5.4)</span>
+              <div style={field}><span style={label}>Agreed schedule (clause 5.4){revision > 1 ? `, revision ${revision}` : ""}</span>
+                {student.agreementProposal && <span style={{ fontSize: 12, color: T.amber }}>A change to this agreement is waiting for the parent. The schedule below stands until they accept.</span>}
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {schedule.map((r, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13 }}>

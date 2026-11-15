@@ -60,6 +60,8 @@ function paymentFromInvoice(inv, student, extra = {}) {
     hostedInvoiceUrl: inv.hosted_invoice_url || null,
     invoicePdf: inv.invoice_pdf || null,
     scheduleIndex: inv.metadata?.scheduleIndex !== undefined && inv.metadata?.scheduleIndex !== "" ? Number(inv.metadata.scheduleIndex) : null,
+    // Which revision of the agreed schedule the line came from (a variation the parent accepted renumbers it)
+    scheduleRevision: inv.metadata?.scheduleRevision ? Number(inv.metadata.scheduleRevision) : null,
     updatedAt: Date.now(),
     ...extra,
   };
