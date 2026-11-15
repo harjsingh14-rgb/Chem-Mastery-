@@ -32,6 +32,7 @@ export default function TutorPage({ authUser, userProfile }) {
   const [newTutor, setNewTutor] = useState("");
   const [newSlots, setNewSlots] = useState([{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }]);
   const [editSchedule, setEditSchedule] = useState(null); // { code, slots, zoomLink }
+  const [editTutor, setEditTutor] = useState(null); // { code, tutorId, busy }
   const [selected, setSelected] = useState(null); // group whose weak spots are shown
   const [showNew, setShowNew] = useState(false);
   const [newName, setNewName] = useState("");
@@ -88,6 +89,19 @@ export default function TutorPage({ authUser, userProfile }) {
     } catch (e) { setError(e.message); }
   };
   const openSchedule = (cls) => setEditSchedule(editSchedule?.code === cls.code ? null : { code: cls.code, slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" });
+  const openTutor = (cls) => setEditTutor(editTutor?.code === cls.code ? null : { code: cls.code, tutorId: cls.tutorId || "", busy: false });
+  const saveTutor = async () => {
+    const cls = classes?.find(c => c.code === editTutor?.code);
+    if (!cls || !editTutor.tutorId || editTutor.tutorId === cls.tutorId) return;
+    setEditTutor(e => ({ ...e, busy: true })); setError(null);
+    try {
+      const r = await studentsApi("setGroupTutor", { groupCode: cls.code, tutorId: editTutor.tutorId });
+      setClasses(list => list.map(c => c.code === cls.code ? { ...c, tutorId: r.tutorId } : c));
+      setStudents(list => (list || []).map(s => s.classId === cls.code ? { ...s, tutorId: r.tutorId } : s));
+      setSessions(list => (list || []).map(x => x.classId === cls.code && x.date >= isoDate(new Date()) ? { ...x, tutorId: r.tutorId } : x));
+      setEditTutor(null);
+    } catch (e) { setError(e.message); setEditTutor(x => x ? { ...x, busy: false } : x); }
+  };
 
   const handleCreate = async () => {
     if (!newName.trim()) return;
@@ -172,6 +186,23 @@ export default function TutorPage({ authUser, userProfile }) {
           onLessonCreated={(sid, lid) => setSessions(prev => prev.map(x => x.id === sid ? { ...x, lessonId: lid } : x))} />
       )}
 
+      {editTutor && classes && isAdmin && (
+        <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <CardHeader title={`Change the tutor for ${classes.find(c => c.code === editTutor.code)?.name || "this group"}`} sub="The group, its students, lessons from today on, its homework and any unmarked work move to the new tutor. Past lessons, notes and marked work stay with the tutor who did them." />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 360 }}>
+            <label htmlFor="cls-tutor" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Tutor</label>
+            <select id="cls-tutor" value={editTutor.tutorId} onChange={e => setEditTutor(x => ({ ...x, tutorId: e.target.value }))}
+              style={{ padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, color: T.ink }}>
+              {tutors.map(t => <option key={t.uid} value={t.uid}>{t.displayName || t.email}{t.uid === tutorUid ? " (you)" : ""}</option>)}
+            </select>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button variant="accent" onClick={saveTutor} disabled={editTutor.busy || !editTutor.tutorId || editTutor.tutorId === classes.find(c => c.code === editTutor.code)?.tutorId}>{editTutor.busy ? "Changing…" : "Change tutor"}</Button>
+            <Button variant="ghost" onClick={() => setEditTutor(null)} disabled={editTutor.busy}>Cancel</Button>
+          </div>
+        </Card>
+      )}
+
       {editSchedule && classes && canGroups && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <CardHeader title={`Usual weekly times for ${classes.find(c => c.code === editSchedule.code)?.name || "this group"}`} sub="A template, not the timetable. One row per lesson each week. On the Calendar tab, Fill from usual times puts a term's lessons on the calendar from these, and you can then move or cancel any of them." />
@@ -240,6 +271,7 @@ export default function TutorPage({ authUser, userProfile }) {
                     </div>
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                       {canGroups && <Button size="sm" onClick={() => openSchedule(c)}>{slotsOf(c).length ? "Usual times" : "Set usual times"}</Button>}
+                      {isAdmin && tutors.length > 1 && <Button size="sm" onClick={() => openTutor(c)}>Change tutor</Button>}
                       <Button size="sm" icon="users" onClick={() => navigate(`/tutor/students?group=${encodeURIComponent(c.code)}`)}>Students</Button>
                       {isAdmin && count === 0 && <Button size="sm" variant="danger" onClick={() => deleteGroup(c)} title="Only an empty group can be deleted">Delete</Button>}
                     </div>

@@ -708,6 +708,34 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, sessions: sessions.length, assignments: assignments.length });
     }
 
+    if (action === "setGroupTutor") {
+      // Hand a group to another tutor. Everything that still needs the tutor
+      // follows: the group, its students, sessions from today on, the group's
+      // homework and any submission not yet marked. Past lessons, notes and
+      // marked work stay with the tutor who did them.
+      const groupCode = str(body.groupCode, 20).toUpperCase();
+      const tutorId = str(body.tutorId, 128);
+      if (!groupCode || !tutorId) throw bad("groupCode and tutorId required");
+      const group = await fb.getDocument(`classes/${groupCode}`, token);
+      if (!group) throw bad("Group not found");
+      const tutor = await fb.getDocument(`users/${tutorId}`, token);
+      if (!tutor || !["tutor", "admin"].includes(tutor.role)) throw bad("That account is not a tutor");
+      if (group.tutorId === tutorId) throw bad("That tutor already teaches this group");
+      const patch = { tutorId };
+      await fb.updateDocument(`classes/${groupCode}`, { tutorId, tutorChangedAt: new Date(), tutorChangedFrom: group.tutorId || null }, token);
+      const members = (await fb.queryDocuments("users", { classId: groupCode }, token, { limit: 200 })).filter(m => m.role === "student");
+      for (const m of members) await fb.updateDocument(`users/${m.id}`, patch, token);
+      const today = new Date().toISOString().slice(0, 10);
+      // Single-field queries, filtered here, so no composite index is needed
+      const sessions = (await fb.queryDocuments("sessions", { classId: groupCode }, token, { limit: 1000 })).filter(sdoc => (sdoc.date || "") >= today);
+      for (const sdoc of sessions) await fb.updateDocument(`sessions/${sdoc.id}`, patch, token).catch(() => {});
+      const assignments = await fb.queryDocuments("assignments", { classId: groupCode }, token, { limit: 500 });
+      for (const a of assignments) await fb.updateDocument(`assignments/${a.id}`, patch, token).catch(() => {});
+      const subs = (await fb.queryDocuments("submissions", { classId: groupCode }, token, { limit: 1000 })).filter(sub => !sub.reviewedAt);
+      for (const sub of subs) await fb.updateDocument(`submissions/${sub.id}`, patch, token).catch(() => {});
+      return res.status(200).json({ ok: true, tutorId, tutorName: tutor.displayName || tutor.email || null, students: members.length, sessions: sessions.length, assignments: assignments.length, submissions: subs.length });
+    }
+
     if (action === "move") {
       const uid = str(body.uid, 128);
       const groupCode = str(body.groupCode, 20).toUpperCase();
