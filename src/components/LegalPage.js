@@ -10,10 +10,11 @@ import { Icon } from "../ui/components";
 
 const UPDATED = "14 November 2026";
 const CONTACT = "info@hsjtuition.co.uk";
+const COMPANY = "HSJ Tuition Limited, a company registered in England and Wales (company number 16196193), registered office 40 Blackhalve Lane, Wolverhampton WV11 1BH";
 
 const PRIVACY = [
   { title: "Who we are", body: [
-    "ChemMastery is the online learning platform of HSJ Tuition Limited (\"HSJ Tuition\", \"we\", \"us\"). HSJ Tuition is the data controller for the personal information held on this platform. You can contact us about anything in this policy at " + CONTACT + ".",
+    "ChemMastery is the online learning platform of " + COMPANY + " (\"HSJ Tuition\", \"we\", \"us\"). HSJ Tuition is the data controller for the personal information held on this platform. You can contact us about anything in this policy at " + CONTACT + ".",
     "This policy covers the ChemMastery platform at fc.hsjtuition.co.uk. The HSJ Tuition marketing website has its own privacy policy.",
   ] },
   { title: "Who uses the platform", body: [
@@ -60,7 +61,7 @@ const PRIVACY = [
 
 const TERMS = [
   { title: "About these terms", body: [
-    "These terms cover use of the ChemMastery platform at fc.hsjtuition.co.uk, run by HSJ Tuition Limited. The tuition itself, including fees, attendance and cancellations, is governed by the Tutoring Programme Agreement accepted by the parent or guardian when a student joins. If the two conflict, the Tutoring Programme Agreement applies to the tuition and these terms apply to the website.",
+    "These terms cover use of the ChemMastery platform at fc.hsjtuition.co.uk, run by " + COMPANY + ". The tuition itself, including fees, attendance and cancellations, is governed by the Tutoring Programme Agreement accepted by the parent or guardian when a student joins. If the two conflict, the Tutoring Programme Agreement applies to the tuition and these terms apply to the website.",
   ] },
   { title: "Accounts", body: [
     "Accounts are created by HSJ Tuition for enrolled students, their parents or guardians, and tutors. Keep your password private and tell us straight away if you think someone else has used your account. An account is personal and must not be shared.",
@@ -122,6 +123,7 @@ export default function LegalPage({ kind }) {
         ))}
         <div style={{ color: T.muted, fontSize: 13, marginTop: 20 }}>
           See also the <Link to={privacy ? "/terms" : "/privacy"} style={{ color: T.accentText, fontWeight: 600 }}>{privacy ? "Terms of Use" : "Privacy Policy"}</Link>. Questions: <a href={`mailto:${CONTACT}`} style={{ color: T.accentText, fontWeight: 600 }}>{CONTACT}</a>.
+          <div style={{ marginTop: 8 }}>HSJ Tuition Limited · Company number 16196193 · 40 Blackhalve Lane, Wolverhampton WV11 1BH</div>
         </div>
       </main>
     </div>
