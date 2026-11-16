@@ -165,6 +165,78 @@ async function diagnosticIndex({ unit, title, level, board, ids }, token) {
   return { count: items.length, totalMarks };
 }
 
+/**
+ * One-off repair: multiple-choice letters marked by the AI examiner before
+ * picked letters were compared on the server. Re-scores every stored part
+ * where the student picked a letter and the bank part is an MCQ with a
+ * letter answer, in Practise attempts (ppqAttempts) and homework
+ * submissions. { dry: true } reports without writing.
+ */
+async function fixMcq({ dry = true }, token) {
+  const bank = new Map();
+  const bankDoc = async (qid) => { if (!bank.has(qid)) bank.set(qid, await fb.getDocument(`ppq/${qid}`, token).catch(() => null)); return bank.get(qid); };
+  const letter = (v) => { const t = String(v == null ? "" : v).trim().toUpperCase(); return /^[A-D]$/.test(t) ? t : null; };
+  const pk = (label) => (label === "" || label === null || label === undefined) ? "q" : String(label);
+  // Right score for one stored part, or null when it is not a picked-letter MCQ
+  const rescore = async (qid, key, stored) => {
+    const doc = await bankDoc(qid);
+    const part = (doc?.parts || []).find(p => pk(p.label) === key);
+    if (!part || part.type !== "mcq") return null;
+    const want = letter(part.answer), got = letter(stored?.answer);
+    if (!want || !got) return null;
+    return { score: got === want ? Number(part.marks) || 1 : 0, marks: Number(part.marks) || 1, right: got === want };
+  };
+  const report = { attempts: { seen: 0, fixed: 0 }, submissions: { seen: 0, fixed: 0 }, changes: [] };
+
+  const attempts = await fb.queryDocuments("ppqAttempts", {}, token, { limit: 5000 });
+  for (const att of attempts) {
+    report.attempts.seen++;
+    const latest = att.latest; if (!latest?.parts) continue;
+    let changed = false; const parts = { ...latest.parts };
+    for (const [key, sp] of Object.entries(parts)) {
+      const r = await rescore(att.qid, key, sp);
+      if (!r || r.score === sp.score) continue;
+      parts[key] = { ...sp, score: r.score, marks: r.marks, awarded: [r.right], attempted: true, feedback: r.right ? "Correct." : sp.feedback, errorType: r.right ? null : sp.errorType || null, errorNote: r.right ? null : sp.errorNote || null };
+      changed = true;
+    }
+    if (!changed) continue;
+    const score = Object.values(parts).reduce((a, p) => a + (Number(p.score) || 0), 0);
+    const patch = { latest: { ...latest, parts, score, repairedAt: new Date() }, best: Math.max(att.best || 0, score) };
+    if ((att.attempts || 1) === 1 && att.first) patch.first = { ...att.first, score };
+    report.attempts.fixed++; report.changes.push({ kind: "attempt", id: att.id, from: latest.score, to: score });
+    if (!dry) await fb.updateDocument(`ppqAttempts/${att.id}`, patch, token);
+  }
+
+  const subs = await fb.queryDocuments("submissions", {}, token, { limit: 5000 });
+  for (const sub of subs) {
+    report.submissions.seen++;
+    const answers = sub.answers || {}; let changed = false; const next = { ...answers };
+    for (const [itemKey, ans] of Object.entries(answers)) {
+      const d = ans?.detail; if (!d?.qid || !d.parts) continue;
+      let itemChanged = false; const parts = { ...d.parts };
+      for (const [key, sp] of Object.entries(parts)) {
+        const r = await rescore(d.qid, key, sp);
+        if (!r || r.score === sp.score) continue;
+        parts[key] = { ...sp, score: r.score, attempted: true, feedback: r.right ? "Correct." : sp.feedback };
+        itemChanged = true;
+      }
+      if (!itemChanged) continue;
+      const score = Object.values(parts).reduce((a, p) => a + (Number(p.score) || 0), 0);
+      const list = Array.isArray(ans.attempts) ? ans.attempts.slice() : [];
+      if (list.length) list[list.length - 1] = { ...list[list.length - 1], score };
+      const first = list.length ? list[0].score : score;
+      const maxScore = Number(ans.maxScore) || score;
+      next[itemKey] = { ...ans, detail: { ...d, parts }, attempts: list, score: first, bestScore: Math.max(first, ...list.map(x => Number(x.score) || 0)), correct: first >= Math.ceil(maxScore * 0.75), repairedAt: Date.now() };
+      changed = true;
+    }
+    if (!changed) continue;
+    const totalScore = Object.values(next).reduce((a, v) => a + (Number(v?.score) || 0), 0);
+    report.submissions.fixed++; report.changes.push({ kind: "submission", id: sub.id, from: sub.totalScore, to: totalScore, tutorMarks: Object.keys(sub.tutorMarks || {}).length });
+    if (!dry) await fb.updateDocument(`submissions/${sub.id}`, { answers: next, totalScore }, token);
+  }
+  return { dry, ...report };
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -180,6 +252,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, id: payload.id });
     }
     if (action === "get") return res.status(200).json({ doc: await fb.getDocument(`ppq/${payload.id}`, token) });
+    if (action === "fixMcq") return res.status(200).json(await fixMcq(payload, token));
     if (action === "cors") {
       // Let the web app read question images into a canvas (whiteboard export)
       const r = await fetch(`https://storage.googleapis.com/storage/v1/b/${BUCKET}?fields=cors`, {
