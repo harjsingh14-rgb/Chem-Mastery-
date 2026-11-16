@@ -183,7 +183,12 @@ function QueryBox({ query, onSend, readOnly }) {
     );
   }
   if (readOnly) return null;
-  if (!open) return <div><Button size="sm" variant="ghost" icon="message" onClick={() => setOpen(true)} style={{ color: T.muted }}>Query this mark</Button></div>;
+  if (!open) return (
+    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+      <Button size="sm" variant="ghost" icon="message" onClick={() => setOpen(true)} style={{ color: T.muted }} title="Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different.">Query this mark</Button>
+      <span title="Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different." aria-label="What a query is for" style={{ display: "inline-flex", color: T.faint, cursor: "help" }}><Icon name="help" size={14} /></span>
+    </div>
+  );
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "12px 14px", background: "#FAFBFC", border: `1px solid ${T.line}`, borderRadius: T.radiusSm }}>
       <span style={{ fontSize: 13, fontWeight: 600 }}>Tell your tutor why you think this mark should be different</span>
