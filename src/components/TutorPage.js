@@ -33,6 +33,7 @@ export default function TutorPage({ authUser, userProfile }) {
   const [newSlots, setNewSlots] = useState([{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }]);
   const [editSchedule, setEditSchedule] = useState(null); // { code, slots, zoomLink }
   const [editTutor, setEditTutor] = useState(null); // { code, tutorId, busy }
+  const [editName, setEditName] = useState(null); // { code, name, busy }
   const [selected, setSelected] = useState(null); // group whose weak spots are shown
   const [showNew, setShowNew] = useState(false);
   const [newName, setNewName] = useState("");
@@ -89,6 +90,20 @@ export default function TutorPage({ authUser, userProfile }) {
     } catch (e) { setError(e.message); }
   };
   const openSchedule = (cls) => setEditSchedule(editSchedule?.code === cls.code ? null : { code: cls.code, slots: slotsOf(cls).length ? slotsOf(cls) : [{ weekday: 2, time: "18:00", minutes: DEFAULT_MINUTES }], zoomLink: cls.zoomLink || "" });
+  const openName = (cls) => setEditName(editName?.code === cls.code ? null : { code: cls.code, name: cls.name || "", busy: false });
+  const saveName = async () => {
+    const cls = classes?.find(c => c.code === editName?.code);
+    const name = (editName?.name || "").trim();
+    if (!cls || !name || name === cls.name) return;
+    setEditName(e => ({ ...e, busy: true })); setError(null);
+    try {
+      await studentsApi("renameGroup", { groupCode: cls.code, name });
+      setClasses(list => list.map(c => c.code === cls.code ? { ...c, name } : c).sort((a, b) => a.name.localeCompare(b.name)));
+      setStudents(list => (list || []).map(s => s.classId === cls.code ? { ...s, className: name } : s));
+      setSessions(list => (list || []).map(x => x.classId === cls.code ? { ...x, className: name } : x));
+      setEditName(null);
+    } catch (e) { setError(e.message); setEditName(x => x ? { ...x, busy: false } : x); }
+  };
   const openTutor = (cls) => setEditTutor(editTutor?.code === cls.code ? null : { code: cls.code, tutorId: cls.tutorId || "", busy: false });
   const saveTutor = async () => {
     const cls = classes?.find(c => c.code === editTutor?.code);
@@ -186,6 +201,20 @@ export default function TutorPage({ authUser, userProfile }) {
           onLessonCreated={(sid, lid) => setSessions(prev => prev.map(x => x.id === sid ? { ...x, lessonId: lid } : x))} />
       )}
 
+      {editName && classes && isAdmin && (
+        <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <CardHeader title={`Rename ${classes.find(c => c.code === editName.code)?.name || "this group"}`} sub="The new name shows everywhere the group does: students' pages, the calendar, lessons and homework. Notes already sent to parents keep the old name." />
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, maxWidth: 360 }}>
+            <label htmlFor="cls-name" style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>Group name</label>
+            <Input id="cls-name" value={editName.name} onChange={e => setEditName(x => ({ ...x, name: e.target.value }))} onKeyDown={e => e.key === "Enter" && saveName()} disabled={editName.busy} />
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button variant="accent" onClick={saveName} disabled={editName.busy || !editName.name.trim() || editName.name.trim() === classes.find(c => c.code === editName.code)?.name}>{editName.busy ? "Renaming…" : "Rename"}</Button>
+            <Button variant="ghost" onClick={() => setEditName(null)} disabled={editName.busy}>Cancel</Button>
+          </div>
+        </Card>
+      )}
+
       {editTutor && classes && isAdmin && (
         <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <CardHeader title={`Change the tutor for ${classes.find(c => c.code === editTutor.code)?.name || "this group"}`} sub="The group, its students, lessons from today on, its homework and any unmarked work move to the new tutor. Past lessons, notes and marked work stay with the tutor who did them." />
@@ -271,6 +300,7 @@ export default function TutorPage({ authUser, userProfile }) {
                     </div>
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                       {canGroups && <Button size="sm" onClick={() => openSchedule(c)}>{slotsOf(c).length ? "Usual times" : "Set usual times"}</Button>}
+                      {isAdmin && <Button size="sm" onClick={() => openName(c)}>Rename</Button>}
                       {isAdmin && tutors.length > 1 && <Button size="sm" onClick={() => openTutor(c)}>Change tutor</Button>}
                       <Button size="sm" icon="users" onClick={() => navigate(`/tutor/students?group=${encodeURIComponent(c.code)}`)}>Students</Button>
                       {isAdmin && count === 0 && <Button size="sm" variant="danger" onClick={() => deleteGroup(c)} title="Only an empty group can be deleted">Delete</Button>}

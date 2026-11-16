@@ -768,6 +768,27 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, patch });
     }
 
+    if (action === "renameGroup") {
+      // Rename a group and rewrite the copies of its name on its students,
+      // sessions, lessons, lesson notes and homework. Notes already sent to
+      // parents keep the name they were sent with.
+      const groupCode = str(body.groupCode, 20).toUpperCase();
+      const name = str(body.name, 80);
+      if (!groupCode || !name) throw bad("groupCode and name required");
+      const group = await fb.getDocument(`classes/${groupCode}`, token);
+      if (!group) throw bad("Group not found");
+      if (group.name === name) throw bad("The group already has that name");
+      await fb.updateDocument(`classes/${groupCode}`, { name, renamedAt: new Date(), renamedFrom: group.name || null }, token);
+      const patch = { className: name };
+      const counts = {};
+      for (const [coll, limit] of [["users", 200], ["sessions", 1000], ["lessons", 1000], ["lessonNotes", 2000], ["assignments", 500]]) {
+        const docs = await fb.queryDocuments(coll, { classId: groupCode }, token, { limit });
+        for (const d of docs) await fb.updateDocument(`${coll}/${d.id}`, patch, token).catch(() => {});
+        counts[coll] = docs.length;
+      }
+      return res.status(200).json({ ok: true, name, ...counts });
+    }
+
     if (action === "setGroupTutor") {
       // Hand a group to another tutor. Everything that still needs the tutor
       // follows: the group, its students, sessions from today on, the group's
