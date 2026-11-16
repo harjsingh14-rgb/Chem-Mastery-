@@ -84,6 +84,8 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
   const noted = (notes || []).filter(n => ATT[n.attendance]).length;
   const attended = (counts.present || 0) + (counts.late || 0);
   const canEdit = !!student && (isAdmin || student.tutorId === tutorUid) && can(userProfile, "editStudents");
+  const canEditNotes = !!student && (isAdmin || student.tutorId === tutorUid) && can(userProfile, "lessons");
+  const [openNote, setOpenNote] = useState(null); // lesson note row expanded to read in full
   const name = student?.displayName || (student?.email ? student.email.split("@")[0] : "Student");
 
   const saveName = async () => {
@@ -227,27 +229,63 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
                 <StatTile label="Absent" value={counts.absent || 0} subTone={counts.absent ? "red" : undefined} />
               </div>
               <Card padding={0}>
-                <CardHeader title="Attendance and notes" sub="One row per lesson. Open a row to read or edit the note; private notes are yours only." style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
+                <CardHeader title="Attendance and notes" sub="One row per lesson. Click a row to read the note in full; the pencil opens the lesson to edit it. Private notes are yours only." style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
                 {notes === null && <div style={{ padding: 20, fontSize: 13, color: T.muted }}>Loading…</div>}
                 {notes && notes.length === 0 && <EmptyState icon="calendar" title="No lessons noted yet" body="After a lesson, open it from the calendar or the week list and take attendance. The note you write appears here and can be sent to the parent." />}
                 {notes && notes.length > 0 && (
                   <Table minWidth={640}>
-                    <thead><tr><th style={{ ...th, paddingLeft: 20 }}>Lesson</th><th style={th}>Attendance</th><th style={th}>Note</th><th style={th}>Private</th><th style={{ ...th, paddingRight: 20 }}>Sent</th></tr></thead>
+                    <thead><tr><th style={{ ...th, paddingLeft: 20 }}>Lesson</th><th style={th}>Attendance</th><th style={th}>Note</th><th style={th}>Private</th><th style={th}>Sent</th><th style={{ ...th, paddingRight: 20, width: 40 }} aria-label="Actions" /></tr></thead>
                     <tbody>
                       {notes.map(n => {
                         const [tone, label] = ATT[n.attendance] || ["neutral", "Not marked"];
                         const pn = privateNotes.find(p => p.lessonId === n.lessonId);
                         const pnText = pn ? (pn.text || pn.note || pn.body || "") : "";
+                        const isOpen = openNote === n.id;
+                        const hw = n.homework;
+                        const sections = [
+                          ["What we covered", n.text || n.summary || ""], ["What went well", n.www || ""], ["Even better if", n.ebi || ""], ["Anything else", n.extra || ""],
+                          ["Homework", hw ? (hw.status === "submitted" ? `${hw.title}: ${hw.score}/${hw.maxScore} (${hw.pct}%)${hw.weak?.length ? ` · weak: ${hw.weak.join(", ")}` : ""}` : hw.status === "in-progress" ? `${hw.title}: started, not finished` : `${hw.title}: not started`) : ""],
+                        ].filter(([, v]) => v);
                         return (
-                          <tr key={n.id} className="cm-row-hover" onClick={() => navigate(`/tutor/lessons/${n.lessonId}`)} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer" }}>
+                          <React.Fragment key={n.id}>
+                          <tr className="cm-row-hover" onClick={() => setOpenNote(isOpen ? null : n.id)} aria-expanded={isOpen} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer", background: isOpen ? T.soft : undefined }}>
                             <td style={{ ...td, paddingLeft: 20, whiteSpace: "nowrap" }}><div style={{ fontWeight: 600 }}>{fmtIso(n.date)}</div>{n.topics?.length ? <div style={{ fontSize: 11, color: T.muted, whiteSpace: "normal" }}>{n.topics.join(", ")}</div> : null}</td>
                             <td style={td}><Chip tone={tone}>{label}</Chip></td>
                             <td style={{ ...td, color: T.body, maxWidth: 360 }}>
                               {n.www || n.ebi || n.text || n.summary ? <span style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{n.www || n.text || n.summary || n.ebi}</span> : <span style={{ color: T.faint }}>No note yet</span>}
                             </td>
                             <td style={{ ...td, color: T.muted, maxWidth: 200 }}>{pnText ? <span style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={pnText}>{pnText}</span> : <span style={{ color: T.faint }}>–</span>}</td>
-                            <td style={{ ...td, paddingRight: 20 }}>{n.sentAt ? <Chip tone="green">Sent {fmtDate(n.sentAt)}</Chip> : <Chip tone="neutral">Not sent</Chip>}</td>
+                            <td style={td}>{n.sentAt ? <Chip tone="green">Sent {fmtDate(n.sentAt)}</Chip> : <Chip tone="neutral">Not sent</Chip>}</td>
+                            <td style={{ ...td, paddingRight: 20, whiteSpace: "nowrap" }}>
+                              <span style={{ display: "inline-flex", alignItems: "center", gap: 2 }}>
+                                {canEditNotes && <button type="button" onClick={e => { e.stopPropagation(); navigate(`/tutor/lessons/${n.lessonId}`); }} title="Edit this lesson's notes" aria-label="Edit this lesson's notes" style={{ display: "inline-flex", padding: 6, border: "none", background: "none", color: T.muted, cursor: "pointer", borderRadius: 8 }}><Icon name="pencil" size={15} /></button>}
+                                <span style={{ display: "inline-flex", color: T.faint, transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 120ms" }}><Icon name="chevronDown" size={15} /></span>
+                              </span>
+                            </td>
                           </tr>
+                          {isOpen && (
+                            <tr style={{ background: T.soft }}>
+                              <td colSpan={6} style={{ padding: "4px 20px 16px 20px" }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: 13, color: T.body, maxWidth: 760 }}>
+                                  {sections.length === 0 && !pnText && <span style={{ color: T.muted }}>No note written for this lesson yet.</span>}
+                                  {sections.map(([h, v]) => (
+                                    <div key={h} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                      <span style={{ fontSize: 11, fontWeight: 700, color: h === "What went well" ? T.green : h === "Even better if" ? T.amber : T.muted, textTransform: "uppercase", letterSpacing: 0.6 }}>{h}</span>
+                                      <span style={{ whiteSpace: "pre-wrap", lineHeight: 1.55 }}>{v}</span>
+                                    </div>
+                                  ))}
+                                  {pnText && (
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 2, borderTop: `1px solid ${T.line}`, paddingTop: 8 }}>
+                                      <span style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6 }}>Private note (never sent)</span>
+                                      <span style={{ whiteSpace: "pre-wrap", lineHeight: 1.55, color: T.muted }}>{pnText}</span>
+                                    </div>
+                                  )}
+                                  <span style={{ fontSize: 12, color: T.muted }}>{n.sentAt ? `Sent to the parent ${fmtDate(n.sentAt)}.` : "Not sent to the parent yet."}</span>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                          </React.Fragment>
                         );
                       })}
                     </tbody>
