@@ -514,11 +514,13 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
   const ev = student.selfEvaluation;
   const rag = ragCounts(ev?.ratings);
   const evBoard = SELF_EVALUATION[student.board] ? student.board : "aqa";
-  // Module ids are stored on the evaluation; show their names, shortened to the part before the spec refs
-  const taughtTitles = (Array.isArray(ev?.taught) ? ev.taught : []).map(id => {
-    const m = SELF_EVALUATION[evBoard].modules.find(x => x.id === id);
-    return m ? m.title.replace(/\s*\([^)]*\)\s*$/, "") : id;
-  });
+  // Module ids are stored on the evaluation. Show every module of the board
+  // by year, taught ones green, with the title cut down to the part that
+  // tells them apart ("Physical chemistry", "2.1 Atoms and reactions").
+  const taughtSet = new Set(Array.isArray(ev?.taught) ? ev.taught : []);
+  const shortModule = (m) => m.title.replace(/\s*\([^)]*\)\s*$/, "").replace(/^Module \d+:[^,]*,\s*/, "").replace(/^Year 1[23]:\s*/, "").replace(/,\s*Year 1[23]$/, "");
+  const modulesByYear = [12, 13].map(y => ({ year: y, modules: SELF_EVALUATION[evBoard].modules.filter(m => Number(m.year) === y) })).filter(g => g.modules.length);
+  const allTaught = modulesByYear.every(g => g.modules.every(m => taughtSet.has(m.id)));
   // Parent questionnaire: one dropdown per section, closed until opened
   const [openQ, setOpenQ] = useState(() => new Set());
   const toggleQ = (id) => setOpenQ(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
@@ -589,8 +591,22 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
           <>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <Chip tone="red">{rag.red} red</Chip><Chip tone="amber">{rag.amber} amber</Chip><Chip tone="green">{rag.green} green</Chip>
-              {Array.isArray(ev.taught) && ev.taught.length > 0 && <Chip title={taughtTitles.join("; ")}>Taught: {taughtTitles.join(", ")}</Chip>}
             </div>
+            {taughtSet.size > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 13 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6 }}>Taught at school{allTaught ? ": everything" : ""}</span>
+                {modulesByYear.map(g => (
+                  <div key={g.year} style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                    <span style={{ width: 56, color: T.muted, fontWeight: 600 }}>Year {g.year}</span>
+                    {g.modules.map(m => (
+                      <span key={m.id} title={taughtSet.has(m.id) ? m.title : `${m.title}: not taught yet`} style={{ display: "inline-flex" }}>
+                        {taughtSet.has(m.id) ? <Chip tone="green">{shortModule(m)}</Chip> : <Chip tone="neutral" style={{ opacity: 0.6 }}>{shortModule(m)} · not yet</Chip>}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
             {Object.entries(ev.ratings || {}).filter(([, r]) => r?.rag === "red").length > 0 && (
               <div style={{ fontSize: 13, color: T.body }}><strong>Red topics:</strong> {Object.entries(ev.ratings).filter(([, r]) => r?.rag === "red").map(([ref]) => `${ref} ${subtopicTitle(evBoard, ref)}`).join(", ")}</div>
             )}
