@@ -312,7 +312,7 @@ export default function TutorPage({ authUser, userProfile }) {
                   <div key={t.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}>
                       <span>{t.label}</span>
-                      <span style={{ fontWeight: 700, color: pctColour(t.pct) }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.c}/{t.n})</span></span>
+                      <span style={{ fontWeight: 700, color: pctColour(t.pct) }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.m}/{t.mx} marks)</span></span>
                     </div>
                     <AccuracyBar pct={t.pct} width="100%" />
                   </div>
@@ -336,7 +336,7 @@ function TopicList({ title, topics, empty }) {
       {topics && topics.map(t => (
         <div key={t.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, padding: "3px 0", gap: 8 }}>
           <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.label}</span>
-          <span style={{ fontWeight: 700, color: pctColour(t.pct), flexShrink: 0 }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.c}/{t.n})</span></span>
+          <span style={{ fontWeight: 700, color: pctColour(t.pct), flexShrink: 0 }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.m}/{t.mx} marks)</span></span>
         </div>
       ))}
     </div>

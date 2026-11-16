@@ -47,7 +47,7 @@ export function TopicTable({ groups, emptyBody }) {
           <th style={{ ...th, textAlign: "right" }}>Right</th>
           <th style={{ ...th, textAlign: "right" }}>Wrong</th>
           <th style={{ ...th, textAlign: "right" }}>Total</th>
-          <th style={{ ...th, paddingRight: 20, width: 200 }}>Accuracy</th>
+          <th style={{ ...th, paddingRight: 20, width: 200 }}>Marks</th>
         </tr>
       </thead>
       <tbody>
@@ -165,7 +165,7 @@ export default function StudentDashboard({ board, authUser, userProfile, current
             <StatTile label="Accuracy · 30 days" value={s.monthPct === null ? "–" : `${s.monthPct}%`}
               sub={s.trend === null ? `${s.month} answers` : `${s.trend >= 0 ? "▲" : "▼"} ${Math.abs(s.trend)} pts vs last week`}
               subTone={s.trend === null ? undefined : s.trend >= 0 ? "green" : "red"} />
-            <StatTile label="This week" value={s.week} sub={s.weekPct === null ? "questions" : `questions · ${s.weekPct}% right`} />
+            <StatTile label="This week" value={s.week} sub={s.weekPct === null ? "questions" : `questions · ${s.weekPct}% of marks`} />
             <StatTile label="Flashcards known" value={`${cardPct}%`} sub={`${knownCards} of ${totalCards} cards`} />
           </div>
 

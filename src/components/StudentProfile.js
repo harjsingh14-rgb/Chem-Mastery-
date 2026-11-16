@@ -195,7 +195,7 @@ export default function StudentProfile({ authUser, userProfile, uid, initialTab 
                     {sum.weak.filter(t => t.pct < 75).length === 0 && <span style={{ fontSize: 13, color: T.muted }}>{sum.total ? "Nothing under 75% yet." : "No answers recorded yet."}</span>}
                     {sum.weak.filter(t => t.pct < 75).map(t => (
                       <div key={t.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}><span>{t.label}</span><span style={{ fontWeight: 700, color: pctColour(t.pct) }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.c}/{t.n})</span></span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 13 }}><span>{t.label}</span><span style={{ fontWeight: 700, color: pctColour(t.pct) }}>{t.pct}% <span style={{ color: T.faint, fontWeight: 400 }}>({t.m}/{t.mx} marks)</span></span></div>
                         <AccuracyBar pct={t.pct} width="100%" />
                       </div>
                     ))}

@@ -129,7 +129,7 @@ function Directory({ authUser, isAdmin, initialGroup, initialAttention }) {
                 <th style={th}>Group</th>
                 <th style={th}>Status</th>
                 <th style={th}>This week</th>
-                <th style={{ ...th, width: 170 }}>Accuracy · 7d</th>
+                <th style={{ ...th, width: 170 }}>Marks · 7d</th>
                 <th style={th}>Attendance</th>
                 <th style={{ ...th, paddingRight: 20 }}>Last active</th>
               </tr>
