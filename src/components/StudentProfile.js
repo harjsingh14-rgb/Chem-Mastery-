@@ -565,6 +565,7 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
         {paperMismatch && <Notice tone="amber" style={{ fontSize: 13 }}>The paper set is the {yearLabel(Object.keys(DIAGNOSTIC_UNIT).find(k => DIAGNOSTIC_UNIT[k] === dg.unit))} diagnostic, but the student is now {yearLabel(student.year)}.</Notice>}
         {diagMsg && <Notice tone={/already|Set,/.test(diagMsg) ? "green" : "red"}>{diagMsg}</Notice>}
       </Card>
+      {isAdmin && <ContactDetailsCard student={student} onChange={onChange} />}
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <CardHeader title="Course" />
         <div className="cm-grid-2" style={{ fontSize: 13 }}>
@@ -638,6 +639,64 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
       {isAdmin && student.classId && <ProposeVariationCard student={student} onChange={onChange} />}
       <AgreementHistory child={student} />
     </>
+  );
+}
+
+/** Admin: change the student's and parent's name, email and phone. An email is the login, so the account changes with it. */
+function ContactDetailsCard({ student, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState(null);
+  const blank = () => ({ studentName: student.displayName || "", studentEmail: student.email || "", parentName: student.parentName || "", parentEmail: student.parentEmail || "", parentPhone: student.parentPhone || "" });
+  const [form, setForm] = useState(blank);
+  const start = () => { setForm(blank()); setMsg(null); setOpen(true); };
+  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
+  const changed = Object.keys(form).filter(k => (form[k] || "").trim() !== (blank()[k] || ""));
+  const save = async () => {
+    if (changed.length === 0) { setOpen(false); return; }
+    const fields = Object.fromEntries(changed.map(k => [k, form[k].trim()]));
+    setBusy(true); setMsg(null);
+    try {
+      const r = await studentsApi("updateDetails", { uid: student.uid, fields });
+      onChange && onChange(r.patch || {});
+      setOpen(false);
+      setMsg(fields.studentEmail || fields.parentEmail ? "Saved. The new email is the login from now on; the old address no longer signs in. Nothing has been emailed." : "Saved.");
+    } catch (e) { setMsg(e.message || "Could not save the details"); }
+    setBusy(false);
+  };
+  const field = (label, k, type = "text") => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <label htmlFor={`cd-${k}`} style={{ fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: 0.6 }}>{label}</label>
+      <Input id={`cd-${k}`} type={type} value={form[k]} onChange={set(k)} disabled={busy} />
+    </div>
+  );
+  return (
+    <Card style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <CardHeader title="Contact details" sub="Student and parent names, emails and phone. An email is a login, so changing it changes who can sign in."
+        right={!open && <Button size="sm" variant="secondary" onClick={start}>Edit details</Button>} />
+      {open ? (
+        <>
+          <div className="cm-grid-2" style={{ fontSize: 13 }}>
+            {field("Student name", "studentName")}
+            {field("Student email (login)", "studentEmail", "email")}
+            {field("Parent name", "parentName")}
+            {field("Parent email (login)", "parentEmail", "email")}
+            {field("Parent phone", "parentPhone", "tel")}
+          </div>
+          <Notice tone="amber" style={{ fontSize: 13 }}>A changed email takes effect at once: the old address stops signing in and the new one takes over with the same password. The signed agreement keeps the details it was signed with. Nothing is emailed from here.</Notice>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button variant="accent" onClick={save} disabled={busy || changed.length === 0}>{busy ? "Saving…" : "Save changes"}</Button>
+            <Button variant="ghost" onClick={() => setOpen(false)} disabled={busy}>Cancel</Button>
+          </div>
+        </>
+      ) : (
+        <div className="cm-grid-2" style={{ fontSize: 13 }}>
+          <Field label="Student">{student.displayName || "–"} · {student.email}</Field>
+          <Field label="Parent">{student.parentName || "–"}{student.parentEmail ? ` · ${student.parentEmail}` : ""}{student.parentPhone ? ` · ${student.parentPhone}` : ""}</Field>
+        </div>
+      )}
+      {msg && <Notice tone={msg.startsWith("Saved") ? "green" : "red"} style={{ fontSize: 13 }}>{msg}</Notice>}
+    </Card>
   );
 }
 

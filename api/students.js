@@ -708,6 +708,66 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, sessions: sessions.length, assignments: assignments.length });
     }
 
+    if (action === "updateDetails") {
+      // Change a placed student's contact details. An email is the login, so
+      // the auth account changes with it and the old address stops working at
+      // once; the profile and the applicant record follow, and the parent's
+      // own account where the parent's details change. The signed agreement
+      // is left as signed. Nothing is emailed.
+      const uid = str(body.uid, 128);
+      if (!uid) throw bad("uid required");
+      const profile = await fb.getDocument(`users/${uid}`, token);
+      if (!profile || profile.role !== "student") throw bad("Student not found");
+      const allowed = ["studentName", "studentEmail", "parentName", "parentEmail", "parentPhone"];
+      const fields = Object.fromEntries(Object.entries(body.fields || {}).filter(([k]) => allowed.includes(k)));
+      const d = validateDetails(fields, { partial: true });
+      if (Object.keys(d).length === 0) throw bad("Nothing to update");
+      const taken = async (email, ownUid) => { const u = await fb.lookupAuthUser(email, token); return u && u.uid !== ownUid; };
+      const patch = {};
+      // Student
+      if (d.studentEmail !== undefined && d.studentEmail !== (profile.email || "").toLowerCase()) {
+        if (await taken(d.studentEmail, uid)) throw bad("Another account already uses that student email");
+        await fb.updateAuthUser(uid, { email: d.studentEmail }, token);
+        patch.email = d.studentEmail;
+      }
+      if (d.studentName !== undefined && d.studentName !== profile.displayName) {
+        await fb.updateAuthUser(uid, { displayName: d.studentName }, token).catch(() => {});
+        patch.displayName = d.studentName;
+      }
+      // Parent, on the student's profile and on the parent's own account
+      for (const k of ["parentName", "parentEmail", "parentPhone"]) if (d[k] !== undefined && d[k] !== (profile[k] || "")) patch[k] = d[k];
+      if (profile.parentUid && (patch.parentEmail !== undefined || patch.parentName !== undefined)) {
+        const parent = await fb.getDocument(`users/${profile.parentUid}`, token);
+        if (parent) {
+          const pp = {};
+          if (patch.parentEmail !== undefined && patch.parentEmail !== (parent.email || "").toLowerCase()) {
+            if (await taken(patch.parentEmail, profile.parentUid)) throw bad("Another account already uses that parent email");
+            await fb.updateAuthUser(profile.parentUid, { email: patch.parentEmail }, token);
+            pp.email = patch.parentEmail;
+          }
+          if (patch.parentName !== undefined && patch.parentName !== parent.displayName) {
+            await fb.updateAuthUser(profile.parentUid, { displayName: patch.parentName }, token).catch(() => {});
+            pp.displayName = patch.parentName;
+          }
+          if (Object.keys(pp).length) await fb.updateDocument(`users/${profile.parentUid}`, { ...pp, updatedAt: new Date() }, token);
+        }
+      }
+      if (Object.keys(patch).length === 0) return res.status(200).json({ ok: true, patch: {} });
+      await fb.updateDocument(`users/${uid}`, { ...patch, detailsChangedAt: new Date(), detailsChangedBy: admin.uid }, token);
+      if (profile.applicantId) {
+        const ap = {};
+        if (patch.displayName !== undefined) ap.studentName = patch.displayName;
+        if (patch.email !== undefined) ap.studentEmail = patch.email;
+        for (const k of ["parentName", "parentEmail", "parentPhone"]) if (patch[k] !== undefined) ap[k] = patch[k];
+        await fb.updateDocument(`applicants/${profile.applicantId}`, ap, token).catch(() => {});
+      }
+      if (patch.displayName !== undefined) {
+        const diagId = `diag_${uid}`;
+        if (await fb.getDocument(`assignments/${diagId}`, token)) await fb.updateDocument(`assignments/${diagId}`, { studentName: patch.displayName }, token).catch(() => {});
+      }
+      return res.status(200).json({ ok: true, patch });
+    }
+
     if (action === "setGroupTutor") {
       // Hand a group to another tutor. Everything that still needs the tutor
       // follows: the group, its students, sessions from today on, the group's
