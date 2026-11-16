@@ -388,6 +388,7 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
 /** "Query this mark": the student's note to their tutor on one part, and the reply once it comes. */
 function QueryBox({ query, onSend }) {
   const [open, setOpen] = useState(false);
+  const [help, setHelp] = useState(false);
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
@@ -402,9 +403,13 @@ function QueryBox({ query, onSend }) {
   }
   if (!onSend) return null;
   if (!open) return (
-    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-      <Button size="sm" variant="ghost" icon="message" onClick={() => setOpen(true)} style={{ color: T.muted }} title="Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different.">Query this mark</Button>
-      <span title="Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different." aria-label="What a query is for" style={{ display: "inline-flex", color: T.faint, cursor: "help" }}><Icon name="help" size={14} /></span>
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        <Button size="sm" variant="ghost" icon="message" onClick={() => setOpen(true)} style={{ color: T.muted }} title="Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different.">Query this mark</Button>
+        <button type="button" onClick={() => setHelp(h => !h)} title="Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different." aria-label="What a query is for" aria-expanded={help}
+          style={{ display: "inline-flex", alignItems: "center", padding: 6, border: "none", background: "none", color: help ? T.accentText : T.faint, cursor: "pointer" }}><Icon name="help" size={14} /></button>
+      </div>
+      {help && <span style={{ fontSize: 12, color: T.muted, paddingLeft: 10 }}>Think the examiner has got this mark wrong? Send a note and your tutor will check it and change the mark if it should be different.</span>}
     </div>
   );
   return (
