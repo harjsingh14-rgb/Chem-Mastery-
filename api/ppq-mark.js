@@ -305,7 +305,6 @@ module.exports = async function handler(req, res) {
     if (!typedAny && images.length === 0) throw fb.httpError(400, "Type an answer, draw on the question or add a photo before marking.");
 
     const token = await fb.getAccessToken();
-    await takeQuota(caller.uid, "mark", token);
     const full = await fb.getDocument(`ppq/${qid}`, token);
     if (!full || !Array.isArray(full.parts) || full.parts.length === 0) throw fb.httpError(404, "Question not found");
     // A homework may set only some parts: mark those alone, out of their marks
@@ -316,13 +315,41 @@ module.exports = async function handler(req, res) {
     if (doc.parts.length === 0) throw fb.httpError(400, "None of the requested parts exist on this question");
 
     const hasImages = images.length > 0;
-    const content = [];
-    if (doc.imageUrl) content.push({ type: "image", source: { type: "url", url: doc.imageUrl } });
-    for (const im of images) content.push({ type: "image", source: { type: "base64", media_type: im.mediaType, data: im.dataBase64 } });
-    content.push({ type: "text", text: markPrompt({ doc: { ...doc, onlyParts: !!subset }, answers, hasImages, mode, inkOnly: !!inkOnly }) });
-
-    const raw = await callClaude({ model: hasImages ? VISION_MODEL : TEXT_MODEL, content, maxTokens: 4000 });
-    const result = tidy(raw, doc);
+    // A picked multiple-choice letter is marked here by comparison with the
+    // bank answer: instant, always the same, and no AI quota. The AI examiner
+    // marks everything else (written parts, and a letter given only in ink).
+    const exact = new Map();
+    for (const p of doc.parts) {
+      const key = String(p.answer || "").trim().toUpperCase();
+      const given = String(answers[p.label] || "").trim().toUpperCase();
+      if (p.type !== "mcq" || !/^[A-D]$/.test(key) || !/^[A-D]$/.test(given)) continue;
+      const right = given === key;
+      exact.set(String(p.label), {
+        label: p.label, marks: p.marks, score: right ? p.marks : 0, awarded: (p.ms || []).map(() => right), attempted: true,
+        feedback: right ? "Correct." : "Not the correct letter. Work through the question again and check which option your answer matches.",
+        errorType: null, errorNote: null,
+      });
+    }
+    const aiParts = doc.parts.filter(p => !exact.has(String(p.label)));
+    let raw = { model: "exact", usage: null, parts: [], overall: "", confidence: "high" };
+    if (aiParts.length > 0) {
+      await takeQuota(caller.uid, "mark", token);
+      const aiDoc = { ...doc, parts: aiParts, totalMarks: aiParts.reduce((a, p) => a + (Number(p.marks) || 0), 0), onlyParts: !!subset || aiParts.length < doc.parts.length };
+      const content = [];
+      if (doc.imageUrl) content.push({ type: "image", source: { type: "url", url: doc.imageUrl } });
+      for (const im of images) content.push({ type: "image", source: { type: "base64", media_type: im.mediaType, data: im.dataBase64 } });
+      content.push({ type: "text", text: markPrompt({ doc: aiDoc, answers, hasImages, mode, inkOnly: !!inkOnly }) });
+      raw = await callClaude({ model: hasImages ? VISION_MODEL : TEXT_MODEL, content, maxTokens: 4000 });
+    }
+    const ai = tidy(raw, { ...doc, parts: aiParts });
+    const merged = doc.parts.map(p => exact.get(String(p.label)) || ai.parts.find(x => String(x.label) === String(p.label)));
+    const result = {
+      parts: merged,
+      score: Math.min(merged.reduce((a, p) => a + p.score, 0), doc.totalMarks || Infinity),
+      totalMarks: doc.totalMarks,
+      overall: aiParts.length > 0 ? ai.overall : (merged.every(p => p.score >= p.marks) ? "Correct." : ""),
+      confidence: aiParts.length > 0 ? ai.confidence : "high",
+    };
 
     // Persist: one document per student per question
     const attemptId = `${qid}_${caller.uid}`;
