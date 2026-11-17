@@ -22,6 +22,8 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
   const [eraser, setEraser] = useState(false);
   const [, bump] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const dims = useRef({ width, height }); dims.current = { width, height };
+  const onChangeRef = useRef(onChange); onChangeRef.current = onChange;
 
   useImperativeHandle(ref, () => ({
     /**
@@ -77,7 +79,7 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
     if (!cv) return;
     const ctx = cv.getContext("2d");
     ctx.clearRect(0, 0, cv.width, cv.height);
-    paint(ctx, cv.width / width);
+    paint(ctx, cv.width / dims.current.width);
   };
 
   // Keep the overlay the same displayed size as the image, at device resolution
@@ -98,37 +100,73 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
     // eslint-disable-next-line
   }, [loaded, width, height]);
 
+  // Pointer handling. No pointer capture: WebKit on iPadOS has been seen to
+  // swallow later taps on buttons after a captured touch or pencil stroke, so
+  // the stroke follows the pointer through window listeners instead. One
+  // pointer draws at a time, so a resting palm does not add a second stroke.
+  const pointerId = useRef(null);
+  const lastAt = useRef(0);
   const toImage = (e) => {
     const cv = canvasRef.current;
     const r = cv.getBoundingClientRect();
-    return [((e.clientX - r.left) / r.width) * width, ((e.clientY - r.top) / r.height) * height];
+    return [((e.clientX - r.left) / r.width) * dims.current.width, ((e.clientY - r.top) / r.height) * dims.current.height];
   };
-
-  const down = (e) => {
-    if (!active) return;
-    e.preventDefault();
-    canvasRef.current.setPointerCapture(e.pointerId);
-    current.current = { colour, size: size * (width / 1100), eraser, points: [toImage(e)] };
-    redraw();
-  };
-  const move = (e) => {
-    if (!current.current) return;
-    e.preventDefault();
-    current.current.points.push(toImage(e));
-    redraw();
-  };
-  const up = (e) => {
+  const commit = () => {
     if (!current.current) return;
     strokes.current.push(current.current);
     current.current = null;
     redraw(); bump(n => n + 1);
-    onChange && onChange(strokes.current.length);
+    onChangeRef.current && onChangeRef.current(strokes.current.length);
+  };
+  const listeners = useRef(null);
+  if (!listeners.current) {
+    function move(e) {
+      if (!current.current || e.pointerId !== pointerId.current) return;
+      if (e.cancelable) e.preventDefault();
+      lastAt.current = Date.now();
+      current.current.points.push(toImage(e));
+      redraw();
+    }
+    function up(e) {
+      if (e.pointerId !== pointerId.current) return;
+      detach();
+      commit();
+    }
+    function detach() {
+      pointerId.current = null;
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    }
+    function attach() {
+      window.addEventListener("pointermove", move, { passive: false });
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
+    }
+    listeners.current = { attach, detach };
+  }
+  useEffect(() => { const l = listeners.current; return () => l.detach(); }, []);
+
+  const down = (e) => {
+    if (!active) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (pointerId.current !== null) {
+      if (Date.now() - lastAt.current < 1500) return;   // a second finger while drawing
+      listeners.current.detach();                       // the last stroke's end never arrived
+    }
+    if (e.cancelable) e.preventDefault();
+    commit();                                           // a stroke whose end was never reported
+    pointerId.current = e.pointerId;
+    lastAt.current = Date.now();
+    current.current = { colour, size: size * (dims.current.width / 1100), eraser, points: [toImage(e)] };
+    redraw();
+    listeners.current.attach();
   };
   const undo = () => { strokes.current.pop(); redraw(); bump(n => n + 1); onChange && onChange(strokes.current.length); };
 
   const tool = (on, onClick, label, children, key) => (
     <button key={key} type="button" onClick={onClick} aria-label={label} title={label}
-      style={{ width: 32, height: 32, borderRadius: 8, border: `1px solid ${on ? T.ink : T.border}`, background: on ? T.ink : T.card, color: on ? "#fff" : T.ink, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0 }}>
+      style={{ width: 32, height: 32, borderRadius: 8, border: `1px solid ${on ? T.ink : T.border}`, background: on ? T.ink : T.card, color: on ? "#fff" : T.ink, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0, touchAction: "manipulation" }}>
       {children}
     </button>
   );
@@ -157,10 +195,9 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
       )}
       <div style={{ position: "relative", lineHeight: 0, borderRadius: T.radiusSm, overflow: "hidden", border: `1px solid ${T.border}`, background: "#fff" }}>
         <img ref={imgRef} src={src} alt="Exam question" width={width} height={height} onLoad={() => setLoaded(true)}
-          style={{ width: "100%", height: "auto", display: "block", userSelect: "none" }} draggable={false} />
-        <canvas ref={canvasRef}
-          onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onPointerLeave={(e) => { if (current.current) up(e); }}
-          style={{ position: "absolute", inset: 0, touchAction: active ? "none" : "auto", cursor: active ? (eraser ? "cell" : "crosshair") : "default", pointerEvents: active ? "auto" : "none" }} />
+          style={{ width: "100%", height: "auto", display: "block", userSelect: "none", WebkitUserSelect: "none", WebkitTouchCallout: "none" }} draggable={false} />
+        <canvas ref={canvasRef} onPointerDown={down} onContextMenu={e => e.preventDefault()}
+          style={{ position: "absolute", inset: 0, touchAction: active ? "none" : "auto", cursor: active ? (eraser ? "cell" : "crosshair") : "default", pointerEvents: active ? "auto" : "none", WebkitTouchCallout: "none", WebkitUserSelect: "none", userSelect: "none" }} />
       </div>
     </div>
   );
