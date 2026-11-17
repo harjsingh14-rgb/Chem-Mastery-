@@ -50,6 +50,11 @@ function validateDetails(b, { partial = false } = {}) {
   return out;
 }
 
+// Roles from the old platform (before HSJ-only): an account with children
+// and one of these is a parent that was never relabelled.
+const LEGACY_ROLES = ["free", "paid", "access_key"];
+const isLegacyParent = (u) => LEGACY_ROLES.includes(u.role || "free") && Array.isArray(u.children) && u.children.length > 0;
+
 const withLabel = (a) => ({ ...a, boardLabel: BOARDS[a.board] || a.board });
 
 
@@ -190,7 +195,7 @@ async function ensureParentAccount({ parentName, parentEmail, studentUid, studen
   const now = new Date();
   const profile = { email, children, childTerms, updatedAt: now };
   if (!existing) Object.assign(profile, { displayName: parentName || "Parent", role: "parent", photoURL: "", createdAt: now });
-  else if (!existing.role || existing.role === "free") profile.role = "parent";
+  else if (!existing.role || LEGACY_ROLES.includes(existing.role)) profile.role = "parent";
   if (!existing?.displayName && parentName) profile.displayName = parentName;
   if (tempPassword) profile.needsPasswordChange = true;
   await fb.updateDocument(`users/${auth.uid}`, profile, token);
@@ -469,6 +474,7 @@ async function accessAction(body, admin, token, res) {
   if (!uid) throw bad("Missing account id");
   const u = await fb.getDocument(`users/${uid}`, token);
   if (!u) throw fb.httpError(404, "Account not found");
+  if (isLegacyParent(u)) { await fb.updateDocument(`users/${uid}`, { role: "parent" }, token); u.role = "parent"; }
   if (!["student", "parent"].includes(u.role)) throw bad("Only student and parent accounts can be managed here");
 
   if (op === "disable" || op === "enable") {
@@ -889,6 +895,20 @@ module.exports = async function handler(req, res) {
     }
 
     if (!["update", "resend", "delete", "place", "sendWelcome"].includes(action)) {
+      if (action === "fixParentRoles") {
+        // Relabel old-platform parent accounts (role paid/free/access_key with children) as parent
+        const dry = body.dryRun !== false;
+        const fixed = [];
+        for (const role of LEGACY_ROLES) {
+          const list = await fb.queryDocuments("users", { role }, token, { limit: 2000 });
+          for (const u of list) {
+            if (!isLegacyParent(u)) continue;
+            fixed.push({ uid: u.id, from: role, children: u.children.length });
+            if (!dry) await fb.updateDocument(`users/${u.id}`, { role: "parent" }, token);
+          }
+        }
+        return res.status(200).json({ ok: true, dry, fixed });
+      }
       if (action === "backfillParents") return await backfillParents(body, token, res);
       if (action === "backfillOnboarding") return await backfillOnboarding(token, res);
       if (action === "deleteAccounts") return await deleteAccounts(body, token, res);
