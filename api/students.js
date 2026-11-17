@@ -862,10 +862,10 @@ module.exports = async function handler(req, res) {
     // Bulk import of current students: rows pasted from a spreadsheet, each
     // created as a current student (no agreement, no payment details) and
     // placed straight into a group. dryRun checks the rows without writing.
-    if (action === "import") return importStudents(body, admin, token, origin, res);
+    if (action === "import") return await importStudents(body, admin, token, origin, res);
     // Account access for one student or parent, and emails to many
-    if (action === "access") return accessAction(body, admin, token, res);
-    if (action === "email") return emailAction(body, admin, token, res);
+    if (action === "access") return await accessAction(body, admin, token, res);
+    if (action === "email") return await emailAction(body, admin, token, res);
     // One file for an email, stored first so the send itself stays small
     if (action === "upload") {
       const file = await storage.uploadAttachment({ folder: `mail/${admin.uid.slice(0, 12)}`, name: body.name, type: body.type, dataBase64: body.dataBase64 }, token);
@@ -889,9 +889,9 @@ module.exports = async function handler(req, res) {
     }
 
     if (!["update", "resend", "delete", "place", "sendWelcome"].includes(action)) {
-      if (action === "backfillParents") return backfillParents(body, token, res);
-      if (action === "backfillOnboarding") return backfillOnboarding(token, res);
-      if (action === "deleteAccounts") return deleteAccounts(body, token, res);
+      if (action === "backfillParents") return await backfillParents(body, token, res);
+      if (action === "backfillOnboarding") return await backfillOnboarding(token, res);
+      if (action === "deleteAccounts") return await deleteAccounts(body, token, res);
       throw bad("Unknown action");
     }
 
