@@ -31,8 +31,8 @@ export default function SymbolStrip({ target, value, onChange, disabled, note, s
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0, maxWidth: "100%", ...style }}>
-      {/* minWidth 0: a scroll container still reports its full content width as its minimum inside a flex column, which would widen the page on a phone */}
-      <div role="toolbar" aria-label="Insert a symbol" style={{ display: "flex", gap: 4, overflowX: "auto", minWidth: 0, maxWidth: "100%", paddingBottom: 2, WebkitOverflowScrolling: "touch" }}>
+      {/* Wraps rather than scrolls: on a phone every symbol stays visible, and the strip never widens the page */}
+      <div role="toolbar" aria-label="Insert a symbol" style={{ display: "flex", flexWrap: "wrap", gap: 4, minWidth: 0, maxWidth: "100%" }}>
         {SYMBOLS.map(([s, label]) => (
           <button key={s} type="button" disabled={disabled} onClick={() => insert(s)} aria-label={`Insert ${label}`} title={label}
             onPointerDown={e => e.preventDefault()}
