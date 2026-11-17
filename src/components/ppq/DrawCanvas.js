@@ -50,6 +50,9 @@ const DrawCanvas = forwardRef(function DrawCanvas({ src, width, height, active, 
     },
     isEmpty() { return strokes.current.length === 0; },
     clear() { strokes.current = []; redraw(); onChange && onChange(0); },
+    /** The strokes as plain data, for keeping a draft between visits. */
+    getStrokes() { return strokes.current; },
+    setStrokes(list) { strokes.current = Array.isArray(list) ? list.filter(s => s && Array.isArray(s.points) && s.points.length) : []; redraw(); bump(n => n + 1); onChange && onChange(strokes.current.length); },
   }));
 
   const paint = (ctx, scale) => {

@@ -41,6 +41,11 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
   const [lockedShown, setLockedShown] = useState(false);
   const canvasRef = useRef(null);
   const fileRef = useRef(null);
+  // Unmarked work is kept on this device, so leaving the question (another
+  // question, a reload) and coming back does not lose it. Cleared on marking.
+  const draftKey = `ppqDraft:${authUser?.uid || "anon"}:${assignmentId || "practise"}:${qid}`;
+  const pendingInk = useRef(null);
+  const draftTimer = useRef(null);
 
   const queue = useMemo(() => embedded ? [] : loadQueue(), [embedded]);
   const pos = queue.indexOf(qid);
@@ -50,6 +55,10 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
   useEffect(() => {
     let alive = true;
     setResult(null); setAnswers({}); setHints({}); setPhotos([]); setInkCount(0); setShowModel({}); setError(null);
+    try {
+      const d = JSON.parse(localStorage.getItem(draftKey) || "null");
+      if (d && typeof d === "object") { setAnswers(d.answers || {}); setHints(d.hints || {}); pendingInk.current = Array.isArray(d.strokes) && d.strokes.length ? d.strokes : null; }
+    } catch { /* no draft */ }
     if (docCache[qid]) { setDoc(docCache[qid]); return undefined; }
     setDoc(null);
     fetchPpqQuestion(qid).then(d => {
@@ -96,6 +105,24 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
     setAttempt(a => ({ ...(a || {}), qid, queries: r.queries, hasOpenQuery: true }));
   };
 
+  useEffect(() => {
+    if (!doc || !pendingInk.current || !canvasRef.current?.setStrokes) return;
+    canvasRef.current.setStrokes(pendingInk.current); pendingInk.current = null;
+  }, [doc]);
+  useEffect(() => {
+    if (result) return undefined;
+    clearTimeout(draftTimer.current);
+    draftTimer.current = setTimeout(() => {
+      try {
+        const strokes = canvasRef.current?.getStrokes ? canvasRef.current.getStrokes() : [];
+        const any = Object.values(answers).some(v => v && String(v).trim()) || strokes.length > 0 || Object.values(hints).some(Boolean);
+        if (any) localStorage.setItem(draftKey, JSON.stringify({ answers, hints, strokes, at: Date.now() }));
+        else localStorage.removeItem(draftKey);
+      } catch { /* storage unavailable: nothing to keep */ }
+    }, 400);
+    return () => clearTimeout(draftTimer.current);
+  }, [answers, hints, inkCount, result, draftKey]);
+
   // A homework may set only some parts of the question; the rest are not shown or marked
   const subset = Array.isArray(onlyParts) && onlyParts.length > 0 ? onlyParts : null;
   const parts = (doc?.parts || []).filter(p => !subset || subset.includes(p.label));
@@ -136,6 +163,7 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
       if (!res.ok) throw new Error(data.error || `Marking failed (${res.status})`);
       setResult(data);
       setDrawing(false);
+      try { localStorage.removeItem(draftKey); } catch { /* nothing kept */ }
       setAttempt(a => ({ ...(a || {}), qid, attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, latest: { score: data.score, overall: data.overall, parts: Object.fromEntries(data.parts.map(p => [partKey(p.label), { score: p.score, marks: p.marks, feedback: p.feedback, awarded: p.awarded, attempted: p.attempted, errorType: p.errorType || null, errorNote: p.errorNote || null, answer: answers[p.label] || null }])) }, queries: {} }));
       noteAttempt(authUser?.uid, qid, { attempts: data.attempts, best: data.best, totalMarks: data.totalMarks || doc.totalMarks, qid });
       onMarked && onMarked(data, doc, { answers, hintsUsed: Object.values(hints).reduce((x, n) => x + (n || 0), 0) });

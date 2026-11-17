@@ -561,7 +561,7 @@ export default function HomeworkPlayer({ board, authUser, userProfile, assignmen
 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, paddingTop: 8, borderTop: `1px solid ${T.line}`, flexWrap: "wrap" }}>
                 <Button variant="secondary" icon="arrowLeft" onClick={() => setIdx(i => Math.max(0, i - 1))} disabled={idx === 0}>Previous</Button>
-                {!readOnly && !isComplete(item) && <span style={{ fontSize: 12, color: T.muted }}>{idx >= items.length - 1 ? "Answer every part, then submit." : "Answer every part of this question to move on."}</span>}
+                {!readOnly && !isComplete(item) && <span style={{ fontSize: 12, color: T.muted }}>{idx >= items.length - 1 ? "Answer every part, press Mark my answer, then submit." : "Answer every part and press Mark my answer to move on. Unmarked working is kept on this device if you go back."}</span>}
                 {!readOnly && idx >= items.length - 1 && isComplete(item) && !allComplete && (
                   <span style={{ fontSize: 12, color: T.muted }}>
                     {items.length - completeCount} question{items.length - completeCount === 1 ? "" : "s"} still to answer ·{" "}
