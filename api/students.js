@@ -47,6 +47,8 @@ function validateDetails(b, { partial = false } = {}) {
   // Current students joined before the platform: the parent agreed terms
   // already, so no agreement is emailed and the parent is not gated on one.
   if (has("currentStudent")) out.currentStudent = b.currentStudent === true || b.currentStudent === "true";
+  // A returning student needs no initial diagnostic: none is set when they are placed.
+  if (has("skipDiagnostic")) out.skipDiagnostic = b.skipDiagnostic === true || b.skipDiagnostic === "true";
   return out;
 }
 
@@ -412,7 +414,9 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   if (!existingProfile) { profile.photoURL = ""; profile.createdAt = new Date(now); }
   if (tempPassword) profile.needsPasswordChange = true;
   let diagnostic = null;
-  try { diagnostic = await assignDiagnostic({ uid: auth.uid, profile, group, token }); } catch (e) { console.error("diagnostic not set:", e.message); }
+  if (!a.skipDiagnostic) {
+    try { diagnostic = await assignDiagnostic({ uid: auth.uid, profile, group, token }); } catch (e) { console.error("diagnostic not set:", e.message); }
+  }
   if (diagnostic) profile.diagnostic = { assignmentId: diagnostic.assignmentId, unit: Y.diagnosticUnitFor(profile.year), dueAt: diagnostic.dueAt, setAt: new Date(now) };
   await fb.updateDocument(`users/${auth.uid}`, profile, token);
   await fb.updateDocument(`applicants/${id}`, { status: "placed", groupCode: profile.classId, studentUid: auth.uid, placedAt: now, welcomeHeld: !sendEmails }, token);
@@ -432,7 +436,7 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   try {
     parent = await ensureParentAccount({ parentName: a.parentName, parentEmail: a.parentEmail, studentUid: auth.uid, studentEmail: a.studentEmail, studentName: a.studentName, groupName: profile.className, tutorName: tutor?.displayName || "", discordInvite, termsToken: a.terms || a.currentStudent ? null : a.termsToken }, token, { sendEmail: sendEmails });
   } catch (e) { parent = { error: e.message }; }
-  return { uid: auth.uid, existingAccount: auth.existing, emailError, parent, groupName: profile.className, diagnostic: diagnostic ? { set: !diagnostic.existing, dueAt: diagnostic.dueAt } : { set: false, reason: "paper not published for this year group" } };
+  return { uid: auth.uid, existingAccount: auth.existing, emailError, parent, groupName: profile.className, diagnostic: diagnostic ? { set: !diagnostic.existing, dueAt: diagnostic.dueAt } : { set: false, reason: a.skipDiagnostic ? "skipped for a returning student" : "paper not published for this year group" } };
 }
 
 /** Send the welcomes that an import held back. Accounts never logged into get a fresh temporary password. */
@@ -677,6 +681,22 @@ module.exports = async function handler(req, res) {
       if (!r) throw bad(`The ${Y.yearLabel(profile.year) || "?"} diagnostic paper has not been published yet`);
       if (!r.existing) await fb.updateDocument(`users/${uid}`, { diagnostic: { assignmentId: r.assignmentId, unit: r.unit, dueAt: r.dueAt, setAt: new Date() } }, token);
       return res.status(200).json({ ok: true, ...r });
+    }
+
+    // Take the initial diagnostic off a student who does not need it (one who
+    // was with HSJ before). The homework and any answers go; refused once the
+    // feedback report has been sent.
+    if (action === "removeDiagnostic") {
+      const uid = str(body.uid, 128);
+      if (!uid) throw bad("uid required");
+      const profile = await fb.getDocument(`users/${uid}`, token);
+      if (!profile || profile.role !== "student") throw bad("Student not found");
+      if (profile.diagnostic?.reportSentAt) throw bad("The feedback report has already been sent, so the diagnostic stays");
+      const assignmentId = `diag_${uid}`;
+      await fb.deleteDocument(`submissions/${assignmentId}_${uid}`, token).catch(() => {});
+      await fb.deleteDocument(`assignments/${assignmentId}`, token).catch(() => {});
+      await fb.updateDocument(`users/${uid}`, { diagnostic: null, diagnosticRemovedAt: new Date(), diagnosticRemovedBy: admin.uid }, token);
+      return res.status(200).json({ ok: true });
     }
 
     // Change a placed student's year group (Year 12, Year 13 or Resit). The

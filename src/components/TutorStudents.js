@@ -39,7 +39,7 @@ const selectStyle = { padding: "9px 12px", borderRadius: 10, border: `1px solid 
 const today = () => new Date().toISOString().slice(0, 10);
 const EMPTY_FORM = () => ({ studentName: "", studentEmail: "", parentName: "", parentEmail: "", parentPhone: "", board: "aqa", year: 12,
   paymentPlan: "instalments", paymentAmount: "", schedule: [{ amount: "", due: "" }], programmeStart: today(), programmeEnd: programmeEndFor(12),
-  initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "", currentStudent: false });
+  initialGrade: "Not yet assessed", groupSize: DEFAULT_GROUP_SIZE, extraTerms: "", notes: "", currentStudent: false, skipDiagnostic: false });
 
 export default function TutorStudents({ authUser, userProfile, embedded, startNew, startImport }) {
   const isAdmin = userProfile?.role === "admin";
@@ -116,6 +116,10 @@ export default function TutorStudents({ authUser, userProfile, embedded, startNe
             <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginTop: 12, padding: "10px 14px", borderRadius: 10, background: form.currentStudent ? T.accentTint : T.soft, border: `1px solid ${form.currentStudent ? T.accent : T.line}`, cursor: "pointer" }}>
               <input type="checkbox" checked={form.currentStudent} onChange={e => setF("currentStudent", e.target.checked)} style={{ marginTop: 3 }} />
               <span style={{ fontSize: 13, color: T.ink }}><strong>Current student</strong>, already with HSJ before the platform. The self-evaluation still goes out, but no agreement is emailed and the parent is not asked to accept one when they log in. Fill in the fee and schedule so Payments is right.</span>
+            </label>
+            <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginTop: 8, padding: "10px 14px", borderRadius: 10, background: form.skipDiagnostic ? T.accentTint : T.soft, border: `1px solid ${form.skipDiagnostic ? T.accent : T.line}`, cursor: "pointer" }}>
+              <input type="checkbox" checked={form.skipDiagnostic} onChange={e => setF("skipDiagnostic", e.target.checked)} style={{ marginTop: 3 }} />
+              <span style={{ fontSize: 13, color: T.ink }}><strong>Skip the initial diagnostic</strong>, for a student who has been taught by HSJ before. No diagnostic paper is set when they are placed; it can still be set later from their profile.</span>
             </label>
             <div className="cm-grid-2" style={{ gap: 12, marginTop: 12 }}>
               <div style={field}><label style={label} htmlFor="ns-name">Student name</label><Input id="ns-name" required value={form.studentName} onChange={e => setF("studentName", e.target.value)} /></div>
@@ -419,6 +423,7 @@ function ApplicantDetail({ a, groups, onChange, onRemove, setNotice }) {
         {(a.schedule || []).length > 0 && <span><strong>Schedule:</strong> {a.schedule.map(r => `${money(r.amount)} ${r.due}`).join("; ")}</span>}
         {a.programmeStart && <span><strong>Starts:</strong> {a.programmeStart}{a.programmeEnd ? ` until ${a.programmeEnd}` : ""}</span>}
         {a.initialGrade && <span><strong>Initial grade:</strong> {a.initialGrade}</span>}
+        {a.skipDiagnostic && <span><strong>Diagnostic:</strong> skipped</span>}
       </div>
       {a.notes && <div style={{ fontSize: 13, color: T.body }}><strong>Call notes:</strong> {a.notes}</div>}
 

@@ -581,6 +581,16 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
     } catch (e) { setDiagMsg(e.message); }
     setDiagBusy(false);
   };
+  const removeDiagnostic = async () => {
+    if (!window.confirm("Take the initial diagnostic off this student? The homework and any answers they have entered are removed. It can be set again from here.")) return;
+    setDiagBusy(true); setDiagMsg(null);
+    try {
+      await studentsApi("removeDiagnostic", { uid: student.uid });
+      onChange && onChange({ diagnostic: null });
+      setDiagMsg("Removed. The paper is no longer on the student's Homework page.");
+    } catch (e) { setDiagMsg(e.message); }
+    setDiagBusy(false);
+  };
   const [yearBusy, setYearBusy] = useState(false);
   const changeYear = async (e) => {
     const year = normYear(e.target.value);
@@ -600,10 +610,11 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
             {dg?.assignmentId && <Button variant="secondary" size="sm" onClick={() => navigate(`/tutor/homework/${dg.assignmentId}`)}>Open the review</Button>}
             {isAdmin && !dg?.assignmentId && <Button variant="primary" size="sm" onClick={() => setDiagnostic(false)} disabled={diagBusy}>{diagBusy ? "Setting…" : "Set the initial diagnostic"}</Button>}
             {isAdmin && paperMismatch && <Button variant="primary" size="sm" onClick={() => setDiagnostic(true)} disabled={diagBusy}>{diagBusy ? "Replacing…" : `Replace with the ${yearLabel(student.year)} paper`}</Button>}
+            {isAdmin && dg?.assignmentId && !dg.reportSentAt && <Button variant="ghost" size="sm" onClick={removeDiagnostic} disabled={diagBusy}>Remove</Button>}
           </div>} />
-        <span style={{ fontSize: 13, color: T.muted }}>{dg?.assignmentId ? "The paper is the student's first homework. Marks are hidden from them until the tutor sends the feedback report from the review page." : "Set automatically when a student is placed, once the Year 12 and Year 13 papers are published. Students placed before that get it from here."}</span>
+        <span style={{ fontSize: 13, color: T.muted }}>{dg?.assignmentId ? "The paper is the student's first homework. Marks are hidden from them until the tutor sends the feedback report from the review page." : "Set automatically when a student is placed, unless it was skipped for a returning student. It can be set from here at any time."}</span>
         {paperMismatch && <Notice tone="amber" style={{ fontSize: 13 }}>The paper set is the {yearLabel(Object.keys(DIAGNOSTIC_UNIT).find(k => DIAGNOSTIC_UNIT[k] === dg.unit))} diagnostic, but the student is now {yearLabel(student.year)}.</Notice>}
-        {diagMsg && <Notice tone={/already|Set,/.test(diagMsg) ? "green" : "red"}>{diagMsg}</Notice>}
+        {diagMsg && <Notice tone={/already|Set,|Removed/.test(diagMsg) ? "green" : "red"}>{diagMsg}</Notice>}
       </Card>
       {isAdmin && <ContactDetailsCard student={student} onChange={onChange} />}
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
