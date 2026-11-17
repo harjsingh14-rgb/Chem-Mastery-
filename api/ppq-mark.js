@@ -39,7 +39,8 @@ const CONVENTIONS = `MARKING CONVENTIONS (apply all of these):
 4. Contradictions: if a correct statement is contradicted elsewhere in the answer, award 0 for that point. Use REJECT notes where given.
 5. Never award more than the marks available for a point, never award a point twice, and never award a mark for a part the student has not attempted.
 6. Multiple-choice parts: award the mark only if the student's letter matches the scheme. A letter with a correct explanation of a different letter still scores 0.
-7. Drawn answers (structures, mechanisms, dot-and-cross diagrams, graphs): check every feature the scheme asks for (bonds, charges, lone pairs, curly arrows from the right place, labels, axes). Be as strict as a real examiner.`;
+7. Drawn answers (structures, mechanisms, dot-and-cross diagrams, graphs): check every feature the scheme asks for (bonds, charges, lone pairs, curly arrows from the right place, labels, axes). Be as strict as a real examiner.
+8. Typed notation: students type on phones, so read plain-text notation as the chemistry intended and never deduct for it: 10^-7, 1.7e-7 or 1.7 x 10-7 for powers; mol dm-3, mol/dm3 or moldm-3 for units; H2SO4 or SO4 2- for formulae and ions; -> or = for reaction arrows; <=> for equilibrium; ^ for superscripts; numbers after symbols for subscripts.`;
 
 const FEEDBACK_RULES = `FEEDBACK RULES (the student may try the question again):
 - Do NOT state a missing marking point, the correct value, the correct letter, or the answer.

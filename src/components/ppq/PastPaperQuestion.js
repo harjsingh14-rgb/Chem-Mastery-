@@ -6,6 +6,7 @@ import { Button, Card, Chip, Notice, Icon } from "../../ui/components";
 import track from "../../utils/track";
 import chemFormat from "../../utils/chemFormat";
 import DrawCanvas from "./DrawCanvas";
+import SymbolStrip, { NOTATION_NOTE } from "../../ui/SymbolStrip";
 import ErrorLogPrompt from "../ErrorLogPrompt";
 import { noteAttempt } from "../../hooks/usePpq";
 import { seriesLabel, paperLabel, topicShort, topicTitle, compressImage, loadQueue, partKey } from "./ppqUtils";
@@ -325,6 +326,7 @@ export default function PastPaperQuestion({ board, qid, authUser, userProfile = 
 function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, showModel, onToggleModel, locked, query, onQuery, logPrompt }) {
   const hints = part.hints || [];
   const isMcq = part.type === "mcq";
+  const boxRef = useRef(null);
   const tone = result ? (result.score >= part.marks ? "green" : result.score > 0 ? "amber" : result.attempted ? "red" : "neutral") : null;
   const toneColour = { green: T.green, amber: T.amber, red: T.red, neutral: T.faint };
   return (
@@ -351,10 +353,13 @@ function PartCard({ part, value, onChange, hintsShown, onHint, result, scheme, s
           <span style={{ fontSize: 12, color: T.muted }}>Pick one letter.</span>
         </div>
       ) : (
-        <textarea value={value} onChange={e => onChange(e.target.value)} disabled={locked} rows={part.type === "extended" ? 7 : part.marks >= 3 ? 4 : 2} aria-label={`Answer to ${part.label}`}
+        <>
+        <textarea ref={boxRef} value={value} onChange={e => onChange(e.target.value)} disabled={locked} rows={part.type === "extended" ? 7 : part.marks >= 3 ? 4 : 2} aria-label={`Answer to ${part.label}`}
           placeholder={part.type === "calc" ? "Show your working line by line, then the final answer with units." : part.type === "draw" ? "Describe what you have drawn, or draw on the question above and leave this blank." : part.type === "extended" ? "Write your full answer in connected sentences." : "Type your answer"}
           style={{ width: "100%", padding: "10px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, color: T.ink, resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", background: locked ? T.soft : T.card, outline: "none" }}
           onFocus={e => e.target.style.borderColor = T.accent} onBlur={e => e.target.style.borderColor = T.border} />
+        {!result && !locked && <SymbolStrip target={boxRef} value={value} onChange={onChange} note={part.type === "calc" ? NOTATION_NOTE : null} />}
+        </>
       )}
 
       {/* Hints before marking */}

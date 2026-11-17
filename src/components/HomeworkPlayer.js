@@ -6,6 +6,7 @@ import { Card, Chip, Button, Bar, Notice, EmptyState, Icon } from "../ui/compone
 import McqQuestion from "./McqQuestion";
 import PastPaperQuestion from "./ppq/PastPaperQuestion";
 import { partKey } from "./ppq/ppqUtils";
+import SymbolStrip, { NOTATION_NOTE } from "../ui/SymbolStrip";
 import { resolveItem, TYPE_LABEL, fmtDue } from "../utils/homeworkBank";
 import chemFormat from "../utils/chemFormat";
 import ErrorLogPrompt from "./ErrorLogPrompt";
@@ -219,6 +220,7 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [input, setInput] = useState(last?.answer ?? "");
+  const boxRef = useRef(null);
   const [selected, setSelected] = useState(null);
   const [showModel, setShowModel] = useState(false);
 
@@ -255,8 +257,9 @@ function Part({ type, q, context, maxScore, result, readOnly, submitted, onRecor
 
       {written && canAttempt && (
         <>
-          <textarea value={input} onChange={e => setInput(e.target.value)} rows={type === "extended" ? 8 : 4} aria-label="Your answer" placeholder={`Write your answer (${maxScore} marks)`}
+          <textarea ref={boxRef} value={input} onChange={e => setInput(e.target.value)} rows={type === "extended" ? 8 : 4} aria-label="Your answer" placeholder={`Write your answer (${maxScore} marks)`}
             style={{ width: "100%", padding: "12px 14px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, fontSize: 14, outline: "none", color: T.ink, resize: "vertical", lineHeight: 1.6, boxSizing: "border-box", fontFamily: "inherit" }} />
+          <SymbolStrip target={boxRef} value={String(input ?? "")} onChange={setInput} disabled={busy} note={type === "extended" ? null : NOTATION_NOTE.split(" For long")[0]} />
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
             <Button variant="primary" icon="pencil" onClick={() => attempt(input)} disabled={busy || String(input).trim().length < 10 || (last && String(input).trim() === String(last.answer).trim())}>{busy ? "Marking…" : `${label}${attempts.length ? " again" : ""}`}</Button>
             {busy && <span style={{ fontSize: 12, color: T.muted }}>Marking against the mark scheme…</span>}
