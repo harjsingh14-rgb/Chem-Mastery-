@@ -191,7 +191,8 @@ service cloud.firestore {
         && request.resource.data.classId is string
         && request.resource.data.title is string
         && request.resource.data.items is list;
-      allow update, delete: if signedIn() && resource.data.tutorId == request.auth.uid && may('homework');
+      // The tutor who set it, or an admin (the initial diagnostic is set by the server with the group's tutor as owner)
+      allow update, delete: if may('homework') && (isAdmin() || resource.data.tutorId == request.auth.uid);
     }
 
     // One submission per student per assignment (doc id: assignmentId_uid)
