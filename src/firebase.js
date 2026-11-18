@@ -460,6 +460,18 @@ export async function fetchTutorSubmissions(tutorUid) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
+/** Admin: every tutor's homework, newest first. */
+export async function fetchAllAssignments() {
+  const snap = await getDocs(collection(db, "assignments"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+}
+
+/** Admin: every submission, for the homework list's counts and averages. */
+export async function fetchAllSubmissions() {
+  const snap = await getDocs(collection(db, "submissions"));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
 /** Create the student's submission doc the first time they open an assignment. */
 export async function startSubmission(user, profile, assignment) {
   const id = submissionId(assignment.id, user.uid);

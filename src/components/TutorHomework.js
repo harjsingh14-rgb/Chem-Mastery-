@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchTutorAssignments, fetchTutorSubmissions, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery, updateLesson } from "../firebase";
+import { fetchTutorAssignments, fetchTutorSubmissions, fetchAllAssignments, fetchAllSubmissions, fetchTutors, fetchAssignment, fetchClassStudents, fetchSubmissionsForAssignment, saveTutorMark, updateAssignment, deleteAssignment, answerMarkQuery, updateLesson } from "../firebase";
 import TutorPpqQueries from "./ppq/TutorPpqQueries";
 import { T, pctColour } from "../ui/theme";
 import chemFormat from "../utils/chemFormat";
@@ -13,22 +13,27 @@ import { DiagnosticReportEditor } from "./DiagnosticReport";
 
 const pct = (n, d) => d ? Math.round((n / d) * 100) : null;
 
-// ─── List of all homework set by this tutor ──────────────────────────────
+// ─── List of all homework set by this tutor (admins: by every tutor) ─────
 export function TutorHomeworkList({ authUser, userProfile }) {
   const navigate = useNavigate();
+  const isAdmin = userProfile?.role === "admin";
   const [assignments, setAssignments] = useState(null);
   const [subs, setSubs] = useState([]);
+  const [tutors, setTutors] = useState([]);
+  const [tutorFilter, setTutorFilter] = useState("all");
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!authUser?.uid) return;
-    Promise.all([fetchTutorAssignments(authUser.uid), fetchTutorSubmissions(authUser.uid)])
-      .then(([a, s]) => { setAssignments(a); setSubs(s); })
+    Promise.all(isAdmin ? [fetchAllAssignments(), fetchAllSubmissions(), fetchTutors()] : [fetchTutorAssignments(authUser.uid), fetchTutorSubmissions(authUser.uid), Promise.resolve([])])
+      .then(([a, s, t]) => { setAssignments(a); setSubs(s); setTutors(t); })
       .catch(e => { setError(e.message); setAssignments([]); });
-  }, [authUser]);
+  }, [authUser, isAdmin]);
 
-  const open = (assignments || []).filter(a => a.status !== "closed");
-  const closed = (assignments || []).filter(a => a.status === "closed");
+  const tutorName = (tid) => { const t = tutors.find(x => x.uid === tid); return t ? (t.displayName || t.email) : ""; };
+  const shown = (assignments || []).filter(a => tutorFilter === "all" || a.tutorId === tutorFilter);
+  const open = shown.filter(a => a.status !== "closed");
+  const closed = shown.filter(a => a.status === "closed");
   const canSet = can(userProfile, "homework");
   const setBtn = canSet ? <Button variant="primary" icon="plus" onClick={() => navigate("/tutor/homework/new")}>Set homework</Button> : null;
 
@@ -39,8 +44,8 @@ export function TutorHomeworkList({ authUser, userProfile }) {
     return (
       <div className="cm-row-hover" onClick={() => navigate(`/tutor/homework/${a.id}`)} style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 20px", borderTop: `1px solid ${T.line}`, cursor: "pointer", flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 2 }}>
-          <span style={{ fontWeight: 600 }}>{a.title}{a.kind === "diagnostic" && <Chip tone="indigo" style={{ marginLeft: 8, fontSize: 11 }}>{a.studentName || "One student"}</Chip>}</span>
-          <span style={{ fontSize: 12, color: T.muted }}>{a.minutes} min · {a.summary} · Due {fmtDue(a.dueAt)}{isOverdue(a.dueAt) && a.status !== "closed" ? " (past due)" : ""}</span>
+          <span style={{ fontWeight: 600 }}>{a.title}{a.kind === "diagnostic" && <Chip tone="indigo" style={{ marginLeft: 8, fontSize: 11 }}>{a.studentName || "One student"}</Chip>}{isAdmin && a.tutorId !== authUser.uid && <Chip tone="neutral" style={{ marginLeft: 8, fontSize: 11 }}>{tutorName(a.tutorId) || "Another tutor"}</Chip>}</span>
+          <span style={{ fontSize: 12, color: T.muted }}>{a.className || a.classId ? `${a.className || a.classId} · ` : ""}{a.minutes} min · {a.summary} · Due {fmtDue(a.dueAt)}{isOverdue(a.dueAt) && a.status !== "closed" ? " (past due)" : ""}</span>
         </div>
         <div style={{ width: 150, display: "flex", flexDirection: "column", gap: 4 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}><span style={{ color: T.muted }}>Submitted</span><span style={{ fontWeight: 600 }}>{submitted.length}{mine.length > submitted.length ? ` (+${mine.length - submitted.length} started)` : ""}</span></div>
@@ -54,14 +59,22 @@ export function TutorHomeworkList({ authUser, userProfile }) {
 
   return (
     <>
-      <PageHeader eyebrow="Homework" title="Homework" sub="Everything you've set, with who has done it and how they did."
-        right={setBtn} />
+      <PageHeader eyebrow="Homework" title="Homework" sub={isAdmin ? "Everything set by every tutor, with who has done it and how they did." : "Everything you've set, with who has done it and how they did."}
+        right={<>
+          {isAdmin && tutors.length > 1 && (
+            <select value={tutorFilter} onChange={e => setTutorFilter(e.target.value)} aria-label="Tutor" style={{ padding: "9px 12px", borderRadius: T.radiusSm, border: `1px solid ${T.border}`, background: T.card, fontSize: 13, fontWeight: 600, color: T.ink, fontFamily: T.font }}>
+              <option value="all">All tutors</option>
+              {tutors.map(t => <option key={t.uid} value={t.uid}>{t.displayName || t.email}</option>)}
+            </select>
+          )}
+          {setBtn}
+        </>} />
       {error && <Notice tone="red">{error}</Notice>}
       {can(userProfile, "marking") && <TutorPpqQueries authUser={authUser} isAdmin={userProfile?.role === "admin"} />}
       <Card padding={0}>
         <CardHeader title="Open" right={<Chip tone="accent">{open.length}</Chip>} style={{ padding: "16px 20px" }} />
         {assignments === null && <div style={{ padding: 20, color: T.muted, fontSize: 13 }}>Loading…</div>}
-        {assignments && open.length === 0 && <EmptyState icon="checkSquare" title="No open homework" body={canSet ? "Set homework from the question banks with a time budget and due date." : "Homework for your groups is set by HSJ admin."} action={setBtn} />}
+        {assignments && open.length === 0 && <EmptyState icon="checkSquare" title="No open homework" body={tutorFilter !== "all" ? "This tutor has no open homework." : canSet ? "Set homework from the question banks with a time budget and due date." : "Homework for your groups is set by HSJ admin."} action={setBtn} />}
         {open.map(a => <Row key={a.id} a={a} />)}
       </Card>
       {closed.length > 0 && (
