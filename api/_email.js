@@ -187,6 +187,22 @@ function lessonReminder({ studentName, groupName, when, zoomNote, zoomLink, home
   return { subject: `Lesson tomorrow: ${when}`, html };
 }
 
+/** To a tutor or admin (or a student, parent copied): the lessons coming up, by day. */
+function lessonDigest({ name, title, intro, days, url, urlLabel, signoff }) {
+  const row = (i) => `<tr>
+      <td style="padding:5px 12px 5px 0;white-space:nowrap;font-weight:700;vertical-align:top;">${esc(i.time)}</td>
+      <td style="padding:5px 0;vertical-align:top;">${esc(i.group)}${i.who ? `<span style="color:#6b7a8c;"> · ${esc(i.who)}</span>` : ""}${i.tutor ? `<span style="color:#6b7a8c;"> · ${esc(i.tutor)}</span>` : ""}${i.link ? ` · <a href="${i.link}" style="color:#29ABE2;font-weight:600;text-decoration:none;">Join</a>` : ""}</td>
+    </tr>`;
+  const html = layout(title, `
+    <p>Hi ${esc(firstName(name))},</p>
+    <p>${esc(intro)}</p>
+    ${days.map(d => `<p style="margin:18px 0 2px;font-weight:700;color:#1a2d45;">${esc(d.label)}</p>
+    <table cellpadding="0" cellspacing="0" style="font-size:14px;line-height:1.5;border-collapse:collapse;">${d.items.map(row).join("")}</table>`).join("")}
+    ${url ? button(url, urlLabel || "Open the calendar") : ""}
+    <p style="margin-top:20px;">${esc(signoff || "HSJ Tuition")}</p>`);
+  return { subject: title, html };
+}
+
 /** To the student: homework due within a day and not yet submitted. */
 function homeworkReminder({ studentName, title, dueAt, started }) {
   const sf = firstName(studentName);
@@ -337,4 +353,4 @@ function variationAccepted({ studentName, parentName, acceptedName, changes, lin
   return { subject: `Revised agreement accepted: ${studentName}`, html };
 }
 
-module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, diagnosticReport, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, homeworkReminder, paymentReminder, variationInvite, variationAccepted, NOTIFY, SITE };
+module.exports = { sendEmail, sendBatch, loginDetails, broadcast, evaluationInvite, termsInvite, questionnaireInvite, welcome, parentWelcome, diagnosticReport, staffWelcome, tutorSubmission, tutorQuery, notify, lessonNote, lessonReminder, lessonDigest, homeworkReminder, paymentReminder, variationInvite, variationAccepted, NOTIFY, SITE };

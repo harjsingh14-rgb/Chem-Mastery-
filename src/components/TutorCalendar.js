@@ -4,11 +4,11 @@
 // them, and each one can then be moved, cancelled or deleted on its own.
 // A session is for the whole group, or for named students (a drop-in or
 // catch-up) who are the only ones to see it.
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchTutorClasses, fetchAllClasses, fetchTutors, fetchClassStudents, fetchTutorSessions, fetchAllSessions,
   createSession, createSessions, updateSession, deleteSession, createLesson } from "../firebase";
-import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, templateOccurrences, DEFAULT_MINUTES, describeSession, sessionEndMs, groupLink, meetingUrl } from "../utils/schedule";
+import { slotsOf, describeSlots, fmtTime, fmtLessonDay, isoDate, addDays, addMinutes, templateOccurrences, DEFAULT_MINUTES, describeSession, sessionEndMs, groupLink, meetingUrl } from "../utils/schedule";
 import { T, boardLabel, groupColour } from "../ui/theme";
 import { Card, CardHeader, PageHeader, Chip, Button, Input, Table, th, td, EmptyState, Notice, Icon } from "../ui/components";
 import { CalendarSubscribePanel } from "./CalendarSubscribe";
@@ -44,6 +44,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
   const [cursor, setCursor] = useState(todayIso());
   const [tutorFilter, setTutorFilter] = useState("all");
   const [selected, setSelected] = useState(null);
+  const [anchor, setAnchor] = useState(null);   // where the chosen session was clicked, so its details open beside it
   const [form, setForm] = useState(null);
   const [fill, setFill] = useState(null);
   const [showSubscribe, setShowSubscribe] = useState(false);
@@ -84,10 +85,13 @@ export default function TutorCalendar({ authUser, userProfile }) {
     return list;
   }, [studentsByClass, isAdmin, uid]);
   useEffect(() => { if (form?.who === "students" && form.classId) loadStudents(form.classId).catch(e => setError(e.message)); }, [form?.who, form?.classId, loadStudents]);
+  const sel = selected ? (sessions || []).find(s => s.id === selected) : null;
+  useEffect(() => { if (sel?.classId) loadStudents(sel.classId).catch(() => {}); }, [sel?.classId, loadStudents]);
+  const pick = useCallback((s, rect) => { setForm(null); setFill(null); setSelected(s.id); setAnchor(rect || null); }, []);
+  const closeDetail = useCallback(() => setSelected(null), []);
 
   const visible = useMemo(() => (sessions || []).filter(s => tutorFilter === "all" || s.tutorId === tutorFilter), [sessions, tutorFilter]);
   const byDate = useMemo(() => { const m = {}; for (const s of visible) (m[s.date] = m[s.date] || []).push(s); for (const k of Object.keys(m)) m[k].sort((a, b) => a.startAt - b.startAt); return m; }, [visible]);
-  const sel = selected ? (sessions || []).find(s => s.id === selected) : null;
 
   const say = (msg) => { setFlash(msg); window.clearTimeout(say.t); say.t = window.setTimeout(() => setFlash(null), 4000); };
 
@@ -97,8 +101,9 @@ export default function TutorCalendar({ authUser, userProfile }) {
     const slot = slotsOf(cls)[0];
     return { mode: "add", classId: cls?.code || "", date: todayIso(), time: slot?.time || "18:00", minutes: slot?.minutes || DEFAULT_MINUTES, who: "group", studentIds: [], title: "", zoomLink: "", note: "", repeat: 1, type: "lesson", ...patch };
   };
-  const openAdd = (patch) => { if (!canEdit) return; setFill(null); setSelected(null); setForm(blankForm(patch)); };
-  const openEdit = (s) => { setFill(null); setForm({ mode: "edit", id: s.id, classId: s.classId, date: s.date, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, who: s.studentIds ? "students" : "group", studentIds: s.studentIds || [], title: s.title || "", zoomLink: s.zoomLink || "", note: s.note || "", type: s.type || "lesson" }); };
+  const toTop = () => { if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const openAdd = (patch) => { if (!canEdit) return; setFill(null); setSelected(null); setForm(blankForm(patch)); toTop(); };
+  const openEdit = (s) => { setFill(null); toTop(); setForm({ mode: "edit", id: s.id, classId: s.classId, date: s.date, time: s.time, minutes: s.minutes || DEFAULT_MINUTES, who: s.studentIds ? "students" : "group", studentIds: s.studentIds || [], title: s.title || "", zoomLink: s.zoomLink || "", note: s.note || "", type: s.type || "lesson" }); };
   const setF = (patch) => setForm(f => ({ ...f, ...patch }));
 
   const submitForm = async () => {
@@ -188,8 +193,8 @@ export default function TutorCalendar({ authUser, userProfile }) {
   dayHandler.enabled = canEdit;
 
   // ---- navigation ----
-  const go = (n) => setCursor(c => view === "month" ? shiftMonth(c, n) : addDays(c, 7 * n));
-  const title = view === "month" ? monthTitle(cursor) : view === "week" ? `Week of ${fmtLessonDay(monday(cursor))}` : "Upcoming sessions";
+  const go = (n) => setCursor(c => view === "month" || view === "summary" ? shiftMonth(c, n) : addDays(c, 7 * n));
+  const title = view === "month" ? monthTitle(cursor) : view === "summary" ? `${monthTitle(cursor)} summary` : view === "week" ? `Week of ${fmtLessonDay(monday(cursor))}` : "Upcoming sessions";
 
   const headerRight = (
     <>
@@ -200,7 +205,7 @@ export default function TutorCalendar({ authUser, userProfile }) {
         </select>
       )}
       <div style={{ display: "inline-flex", border: `1px solid ${T.border}`, borderRadius: T.radiusSm, overflow: "hidden" }}>
-        {[["month", "Month"], ["week", "Week"], ["list", "List"]].map(([id, lbl]) => (
+        {[["month", "Month"], ["week", "Week"], ["list", "List"], ["summary", "Month summary"]].map(([id, lbl]) => (
           <button key={id} onClick={() => setView(id)} style={{ padding: "8px 12px", border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600, fontFamily: T.font, background: view === id ? T.ink : T.card, color: view === id ? "#fff" : T.muted }}>{lbl}</button>
         ))}
       </div>
@@ -261,14 +266,18 @@ export default function TutorCalendar({ authUser, userProfile }) {
       )}
 
       {sel && !form && (
-        <SessionDetail s={sel} cls={classOf(sel.classId)} colour={colourOf(sel.classId)} tutorName={isAdmin ? tutorName(sel.tutorId) : null} busy={busy} canEdit={canEdit} canNotes={canNotes}
-          onEdit={() => openEdit(sel)} onCancel={() => setStatus(sel, "cancelled")} onRestore={() => setStatus(sel, "scheduled")}
-          onDelete={() => remove(sel)} onDeleteFuture={() => removeFuture(sel)} onNotes={() => openNotes(sel)} onClose={() => setSelected(null)} />
+        <SessionPopover anchor={anchor} onClose={closeDetail}>
+          <SessionDetail s={sel} cls={classOf(sel.classId)} colour={colourOf(sel.classId)} tutorName={isAdmin ? tutorName(sel.tutorId) : null} roster={studentsByClass[sel.classId]} busy={busy} canEdit={canEdit} canNotes={canNotes}
+            onEdit={() => openEdit(sel)} onCancel={() => setStatus(sel, "cancelled")} onRestore={() => setStatus(sel, "scheduled")}
+            onDelete={() => remove(sel)} onDeleteFuture={() => removeFuture(sel)} onNotes={() => openNotes(sel)} onClose={closeDetail} />
+        </SessionPopover>
       )}
 
-      {view === "month" && <MonthGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} onDay={dayHandler} />}
-      {view === "week" && <WeekGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} onDay={dayHandler} />}
-      {view === "list" && <UpcomingList sessions={visible} colourOf={colourOf} selected={selected} tutorName={isAdmin ? tutorName : null} onPick={s => { setForm(null); setFill(null); setSelected(s.id); }} />}
+      {view === "month" && <MonthGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={pick} onDay={dayHandler} />}
+      {view === "week" && <WeekGrid cursor={cursor} byDate={byDate} colourOf={colourOf} selected={selected} onPick={pick} onDay={dayHandler} />}
+      {view === "list" && <UpcomingList sessions={visible} colourOf={colourOf} selected={selected} tutorName={isAdmin ? tutorName : null} onPick={pick} />}
+      {view === "summary" && <MonthSummary cursor={cursor} sessions={visible} colourOf={colourOf} selected={selected} onPick={pick}
+        tutorsShown={isAdmin && tutorFilter === "all" ? tutors : null} tutorName={tutorName} ownName={userProfile?.displayName || ""} />}
 
       {classes && classes.length > 0 && (
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
@@ -288,7 +297,7 @@ function Pill({ s, colour, selected, onClick, full }) {
   const count = s.studentIds ? s.studentIds.length : null;
   const who = count ? (s.studentNames?.length === 1 ? s.studentNames[0].split(" ")[0] : `${count} student${count === 1 ? "" : "s"}`) : "Whole group";
   return (
-    <button onClick={e => { e.stopPropagation(); onClick(s); }} title={`${s.className || s.classId} · ${describeSession(s)}${s.title ? ` · ${s.title}` : ""}${cancelled ? " · cancelled" : ""}`}
+    <button onClick={e => { e.stopPropagation(); onClick(s, e.currentTarget.getBoundingClientRect()); }} title={`${s.className || s.classId} · ${describeSession(s)}${s.title ? ` · ${s.title}` : ""}${cancelled ? " · cancelled" : ""}`}
       style={{ display: "block", width: "100%", textAlign: "left", border: "none", outline: selected ? `2px solid ${fg}` : "none", outlineOffset: 1, borderLeft: `3px solid ${cancelled ? T.faint : fg}`, borderRadius: 6,
         padding: full ? "6px 8px 7px" : "3px 7px", background: cancelled ? T.soft : bg, color: cancelled ? T.muted : fg,
         fontSize: 11.5, cursor: "pointer", fontFamily: T.font, lineHeight: 1.35, textDecoration: cancelled ? "line-through" : "none", overflow: "hidden", whiteSpace: full ? "normal" : "nowrap", textOverflow: "ellipsis" }}>
@@ -323,8 +332,11 @@ function MonthGrid({ cursor, byDate, colourOf, selected, onPick, onDay }) {
             const list = byDate[d] || [];
             return (
               <div key={d} role="button" tabIndex={0} onClick={() => onDay(d)} onKeyDown={e => e.key === "Enter" && onDay(d)} title={onDay.enabled === false ? undefined : "Add a session on this day"}
-                style={{ minHeight: 92, padding: 6, borderTop: `1px solid ${T.line}`, borderLeft: i % 7 ? `1px solid ${T.line}` : "none", background: inMonth ? T.card : "#FAFBFC", cursor: "pointer", display: "flex", flexDirection: "column", gap: 3 }}>
-                <span style={{ alignSelf: "flex-start", fontSize: 12, fontWeight: d === today ? 800 : 600, color: d === today ? "#fff" : inMonth ? T.ink : T.faint, background: d === today ? T.accent : "transparent", borderRadius: 999, minWidth: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0 5px" }}>{Number(d.slice(8))}</span>
+                style={{ minHeight: 92, padding: 6, borderTop: d === today ? `2px solid ${T.accent}` : `1px solid ${T.line}`, borderLeft: i % 7 ? `1px solid ${T.line}` : "none", background: d === today ? T.accentTint : inMonth ? T.card : "#FAFBFC", cursor: "pointer", display: "flex", flexDirection: "column", gap: 3 }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 12, fontWeight: d === today ? 800 : 600, color: d === today ? "#fff" : inMonth ? T.ink : T.faint, background: d === today ? T.accent : "transparent", borderRadius: 999, minWidth: 22, height: 22, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0 5px" }}>{Number(d.slice(8))}</span>
+                  {d === today && <span style={{ fontSize: 10, fontWeight: 700, color: T.accentText, textTransform: "uppercase", letterSpacing: 0.4 }}>Today</span>}
+                </span>
                 {list.map(s => <Pill key={s.id} s={s} colour={colourOf(s.classId)} selected={s.id === selected} onClick={onPick} />)}
               </div>
             );
@@ -345,8 +357,8 @@ function WeekGrid({ cursor, byDate, colourOf, selected, onPick, onDay }) {
           const list = byDate[d] || [];
           return (
             <div key={d} role="button" tabIndex={0} onClick={() => onDay(d)} onKeyDown={e => e.key === "Enter" && onDay(d)} title={onDay.enabled === false ? undefined : "Add a session on this day"}
-              style={{ minHeight: 260, padding: 8, borderLeft: i ? `1px solid ${T.line}` : "none", cursor: "pointer", display: "flex", flexDirection: "column", gap: 6 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: d === today ? T.accentText : T.ink, paddingBottom: 6, borderBottom: `1px solid ${T.line}` }}>{DAYS[i]} <span style={{ color: T.muted, fontWeight: 500 }}>{Number(d.slice(8))}</span></div>
+              style={{ minHeight: 260, padding: 8, borderLeft: i ? `1px solid ${T.line}` : "none", borderTop: d === today ? `2px solid ${T.accent}` : "2px solid transparent", background: d === today ? T.accentTint : undefined, cursor: "pointer", display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: d === today ? T.accentText : T.ink, paddingBottom: 6, borderBottom: `1px solid ${T.line}`, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}><span>{DAYS[i]} <span style={{ color: T.muted, fontWeight: 500 }}>{Number(d.slice(8))}</span></span>{d === today && <span style={{ fontSize: 10, fontWeight: 700, color: T.accentText, textTransform: "uppercase", letterSpacing: 0.4 }}>Today</span>}</div>
               {list.length === 0 && <span style={{ fontSize: 11, color: T.faint }}>Nothing on</span>}
               {list.map(s => <Pill key={s.id} s={s} colour={colourOf(s.classId)} selected={s.id === selected} onClick={onPick} full />)}
             </div>
@@ -367,7 +379,7 @@ function UpcomingList({ sessions, colourOf, selected, tutorName, onPick }) {
         <thead><tr><th style={{ ...th, paddingLeft: 20 }}>When</th><th style={th}>Group</th><th style={th}>Who</th>{tutorName && <th style={th}>Tutor</th>}<th style={{ ...th, paddingRight: 20 }}>Status</th></tr></thead>
         <tbody>
           {list.map(s => { const [bg, fg] = colourOf(s.classId); return (
-            <tr key={s.id} className="cm-row-hover" onClick={() => onPick(s)} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer", background: s.id === selected ? T.soft : undefined }}>
+            <tr key={s.id} className="cm-row-hover" onClick={e => onPick(s, e.currentTarget.getBoundingClientRect())} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer", background: s.id === selected ? T.soft : undefined }}>
               <td style={{ ...td, paddingLeft: 20, fontWeight: 600, textDecoration: s.status === "cancelled" ? "line-through" : "none" }}>{describeSession(s)}</td>
               <td style={td}><span style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 999, background: bg, color: fg }}>{s.className || s.classId}</span></td>
               <td style={{ ...td, color: T.muted }}>{s.studentIds ? `${(s.studentNames || []).join(", ") || `${s.studentIds.length} students`}${s.title ? ` · ${s.title}` : ""}` : s.title || "Whole group"}</td>
@@ -381,13 +393,102 @@ function UpcomingList({ sessions, colourOf, selected, tutorName, onPick }) {
   );
 }
 
-function SessionDetail({ s, cls, colour, tutorName, busy, canEdit = true, canNotes = true, onEdit, onCancel, onRestore, onDelete, onDeleteFuture, onNotes, onClose }) {
+/** The session's details, floated beside the place it was clicked (centred on a phone). */
+function SessionPopover({ anchor, onClose, children }) {
+  const ref = useRef(null);
+  const [box, setBox] = useState(null);
+  useEffect(() => { const k = (e) => { if (e.key === "Escape") onClose(); }; window.addEventListener("keydown", k); return () => window.removeEventListener("keydown", k); }, [onClose]);
+  useLayoutEffect(() => {
+    const el = ref.current; if (!el) return;
+    const W = window.innerWidth, H = window.innerHeight, w = el.offsetWidth, h = el.offsetHeight;
+    if (!anchor || W < 720) { setBox({ left: Math.max(12, (W - w) / 2), top: Math.max(12, (H - h) / 2) }); return; }
+    const left = Math.min(Math.max(12, anchor.left), Math.max(12, W - w - 12));
+    let top = anchor.bottom + 8;
+    if (top + h > H - 12) top = Math.max(12, anchor.top - h - 8);
+    setBox({ left, top });
+  }, [anchor]);
+  return (
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(15,29,53,0.22)", zIndex: 1000 }}>
+      <div ref={ref} role="dialog" aria-modal="true" aria-label="Session details" onClick={e => e.stopPropagation()}
+        style={{ position: "fixed", left: box?.left ?? 12, top: box?.top ?? 12, width: "min(600px, calc(100vw - 24px))", maxHeight: "calc(100vh - 24px)", overflowY: "auto", visibility: box ? "visible" : "hidden", boxShadow: "0 18px 48px rgba(21,40,58,0.22)", borderRadius: T.radius }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+const hoursOf = (mins) => { const h = Math.round((mins / 60) * 100) / 100; return `${h} hour${h === 1 ? "" : "s"}`; };
+const statusOf = (s) => s.status === "cancelled" ? "Cancelled" : s.lessonId ? "Notes written" : sessionEndMs(s) < Date.now() ? "Held" : "Scheduled";
+const whoOf = (s) => s.studentIds ? ((s.studentNames || []).join(", ") || `${s.studentIds.length} students`) : "Whole group";
+const csvCell = (v) => { const t = String(v ?? ""); return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
+
+/** One tutor's lessons for the month on screen, with totals for invoicing. */
+function MonthSummary({ cursor, sessions, colourOf, selected, onPick, tutorsShown, tutorName, ownName }) {
+  const month = cursor.slice(0, 7);
+  const inMonth = useMemo(() => sessions.filter(s => (s.date || "").slice(0, 7) === month).sort((a, b) => a.startAt - b.startAt), [sessions, month]);
+  const blocks = tutorsShown
+    ? tutorsShown.map(t => ({ key: t.uid, name: t.displayName || t.email, list: inMonth.filter(s => s.tutorId === t.uid) })).filter(b => b.list.length)
+    : [{ key: "me", name: ownName, list: inMonth }];
+  if (blocks.length === 0) return <Card padding={0}><EmptyState icon="calendar" title={`Nothing on the calendar in ${monthTitle(cursor)}`} body="Use the arrows to move to another month, or add sessions from the Month view." /></Card>;
+  const download = (b) => {
+    const rows = [["Date", "Start", "End", "Group", "Who", "Minutes", "Status", "Tutor"], ...b.list.map(s => [s.date, fmtTime(s.time), fmtTime(addMinutes(s.time || "00:00", s.minutes || DEFAULT_MINUTES)), s.className || s.classId, whoOf(s), s.minutes || DEFAULT_MINUTES, statusOf(s), b.name])];
+    const blob = new Blob([rows.map(r => r.map(csvCell).join(",")).join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `lessons-${month}${b.name ? `-${b.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}` : ""}.csv`; a.click(); URL.revokeObjectURL(a.href);
+  };
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {blocks.map(b => {
+        const held = b.list.filter(s => s.status !== "cancelled");
+        const mins = held.reduce((x, s) => x + (s.minutes || DEFAULT_MINUTES), 0);
+        const byGroup = {};
+        for (const s of held) { const k = s.className || s.classId; byGroup[k] = byGroup[k] || { n: 0, mins: 0 }; byGroup[k].n++; byGroup[k].mins += s.minutes || DEFAULT_MINUTES; }
+        return (
+          <Card key={b.key} padding={0}>
+            <CardHeader title={b.name || "Your lessons"} sub={`${held.length} session${held.length === 1 ? "" : "s"} · ${hoursOf(mins)} in ${monthTitle(cursor)}. Cancelled sessions are listed but not counted.`}
+              right={<Button size="sm" icon="download" onClick={() => download(b)}>Download CSV</Button>} style={{ padding: "16px 20px", borderBottom: `1px solid ${T.line}` }} />
+            <Table minWidth={620}>
+              <thead><tr><th style={{ ...th, paddingLeft: 20 }}>Date</th><th style={th}>Time</th><th style={th}>Group</th><th style={th}>Who</th><th style={th}>Length</th><th style={{ ...th, paddingRight: 20 }}>Status</th></tr></thead>
+              <tbody>
+                {b.list.map(s => { const [bg, fg] = colourOf(s.classId); const cancelled = s.status === "cancelled"; const st = statusOf(s); return (
+                  <tr key={s.id} className="cm-row-hover" onClick={e => onPick(s, e.currentTarget.getBoundingClientRect())} style={{ borderTop: `1px solid ${T.line}`, cursor: "pointer", background: s.id === selected ? T.soft : undefined, color: cancelled ? T.muted : undefined, textDecoration: cancelled ? "line-through" : "none" }}>
+                    <td style={{ ...td, paddingLeft: 20, fontWeight: 600 }}>{fmtLessonDay(s.date)}</td>
+                    <td style={td}>{fmtTime(s.time)} to {fmtTime(addMinutes(s.time || "00:00", s.minutes || DEFAULT_MINUTES))}</td>
+                    <td style={td}><span style={{ fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 999, background: bg, color: fg, textDecoration: "none" }}>{s.className || s.classId}</span></td>
+                    <td style={{ ...td, color: T.muted }}>{whoOf(s)}{s.title ? ` · ${s.title}` : ""}</td>
+                    <td style={td}>{s.minutes || DEFAULT_MINUTES} min</td>
+                    <td style={{ ...td, paddingRight: 20 }}>{st === "Cancelled" ? <Chip tone="red">Cancelled</Chip> : st === "Notes written" ? <Chip tone="green">Notes written</Chip> : st === "Held" ? <Chip tone="indigo">Held</Chip> : <Chip tone="neutral">Scheduled</Chip>}</td>
+                  </tr>
+                ); })}
+              </tbody>
+              <tfoot>
+                {Object.entries(byGroup).map(([k, v]) => (
+                  <tr key={k} style={{ borderTop: `1px solid ${T.line}`, background: "#FAFBFC" }}>
+                    <td style={{ ...td, paddingLeft: 20, color: T.muted }} colSpan={2}>{k}</td>
+                    <td style={{ ...td, color: T.muted }} colSpan={2}>{v.n} session{v.n === 1 ? "" : "s"}</td>
+                    <td style={{ ...td, color: T.muted }} colSpan={2}>{v.mins} min · {hoursOf(v.mins)}</td>
+                  </tr>
+                ))}
+                <tr style={{ borderTop: `2px solid ${T.border}` }}>
+                  <td style={{ ...td, paddingLeft: 20, fontWeight: 700 }} colSpan={2}>Total</td>
+                  <td style={{ ...td, fontWeight: 700 }} colSpan={2}>{held.length} session{held.length === 1 ? "" : "s"}</td>
+                  <td style={{ ...td, fontWeight: 700 }} colSpan={2}>{mins} min · {hoursOf(mins)}</td>
+                </tr>
+              </tfoot>
+            </Table>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
+function SessionDetail({ s, cls, colour, tutorName, roster, busy, canEdit = true, canNotes = true, onEdit, onCancel, onRestore, onDelete, onDeleteFuture, onNotes, onClose, style }) {
   const [bg, fg] = colour;
   const cancelled = s.status === "cancelled";
   const zoom = groupLink(cls, s);
   const past = sessionEndMs(s) < Date.now();
   return (
-    <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10, borderLeft: `4px solid ${fg}` }}>
+    <Card style={{ marginBottom: 14, display: "flex", flexDirection: "column", gap: 10, borderLeft: `4px solid ${fg}`, ...style }}>
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 220 }}>
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
@@ -403,6 +504,7 @@ function SessionDetail({ s, cls, colour, tutorName, busy, canEdit = true, canNot
             {s.note ? ` · ${s.note}` : ""}
           </div>
           {zoom && <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>Meeting link: <a href={zoom} target="_blank" rel="noopener noreferrer" className="cm-link">{zoom}</a>{s.zoomLink ? " (this session only)" : ""}</div>}
+          {!s.studentIds && roster && <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>{roster.length === 0 ? "No students are in this group yet." : `${roster.length} student${roster.length === 1 ? "" : "s"}: ${roster.map(r => r.displayName || r.email).join(", ")}`}</div>}
         </div>
         <Button variant="ghost" aria-label="Close" onClick={onClose}><Icon name="x" size={16} /></Button>
       </div>

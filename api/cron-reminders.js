@@ -1,8 +1,11 @@
-// Daily reminders (Vercel cron, see vercel.json). Three passes, each
+// Daily reminders (Vercel cron, see vercel.json). Five passes, each
 // de-duplicated through `reminders/{key}` so a day is never emailed twice:
 //   1. lesson tomorrow -> student, parent copied (with homework still open)
 //   2. homework due within 24 hours and not submitted -> student
 //   3. invoice due within 3 days, or overdue (nudged weekly) -> parent
+//   4. tomorrow's lessons -> each tutor (their own), each admin (everyone's)
+//   5. on Sundays, the week ahead -> tutors and admins as above, and every
+//      student with a lesson that week, parent copied
 // Protected by CRON_SECRET (Vercel sends it as a Bearer token). The same
 // endpoint also accepts an admin's Firebase token for a manual run.
 const fb = require("./_firebaseAdmin");
@@ -13,6 +16,11 @@ const { groupLink, slotsOf } = require("./_groupLink");
 const DAY = 86400000;
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const fmtTime = (hhmm) => { const [h, m] = (hhmm || "0:0").split(":").map(Number); const hh = h % 12 === 0 ? 12 : h % 12; return `${hh}${m ? `:${String(m).padStart(2, "0")}` : ""}${h >= 12 ? "pm" : "am"}`; };
+const addMinutes = (hhmm, mins) => { const [h, m] = (hhmm || "0:0").split(":").map(Number); const t = h * 60 + m + Number(mins || 0); return `${String(Math.floor(t / 60) % 24).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`; };
+const timeRange = (s) => `${fmtTime(s.time)} to ${fmtTime(addMinutes(s.time, s.minutes || 120))}`;
+const addDaysIso = (iso, n) => { const d = new Date(`${iso}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const fmtDay = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+const fmtShort = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 
 // Dates are judged in UK time whatever the server's zone.
 function ukParts(ms) {
@@ -131,6 +139,51 @@ module.exports = async function handler(req, res) {
         });
         if (sent) report.payments++;
       } catch (e) { report.errors.push(`payment ${p.id}: ${e.message}`); }
+    }
+
+    // 4 and 5. Digests for staff, and the week ahead for students. Every
+    //    session on the calendar from tomorrow for a week, cancelled ones left out.
+    report.digests = 0;
+    const today = ukParts(now);
+    const sunday = today.weekday === 0;
+    const weekFrom = tomorrow.iso, weekTo = addDaysIso(weekFrom, 6);
+    const ahead = (await fb.queryDocuments("sessions", { date: weekFrom }, token, { limit: 1000, ops: { date: "GREATER_THAN_OR_EQUAL" } }))
+      .filter(s => s.date <= weekTo && s.status !== "cancelled" && classes.some(c => c.id === s.classId))
+      .sort((a, b) => a.date.localeCompare(b.date) || String(a.time).localeCompare(String(b.time)));
+    const staff = [...await fb.queryDocuments("users", { role: "tutor" }, token, { limit: 100 }), ...await fb.queryDocuments("users", { role: "admin" }, token, { limit: 20 })];
+    const staffName = Object.fromEntries(staff.map(t => [t.id, t.displayName || t.email || ""]));
+    const whoOf = (s) => s.studentIds ? ((s.studentNames || []).join(", ") || `${s.studentIds.length} students`) : "Whole group";
+    const item = (s, withTutor) => { const cls = classes.find(c => c.id === s.classId); return { time: timeRange(s), group: `${cls?.name || s.className || s.classId}${s.title ? ` (${s.title})` : ""}`, who: whoOf(s), tutor: withTutor ? staffName[s.tutorId] || "" : "", link: cls ? groupLink(cls, s) : (s.zoomLink || "") }; };
+    const byDay = (list, withTutor) => { const m = {}; for (const s of list) (m[s.date] = m[s.date] || []).push(s); return Object.keys(m).sort().map(d => ({ label: fmtDay(d), items: m[d].map(s => item(s, withTutor)) })); };
+    const digest = async (to, cc, key, props) => {
+      if (!to) return;
+      try {
+        const sent = await once(key, token, async () => { const { subject, html } = mail.lessonDigest(props); await mail.sendEmail({ to, cc, subject, html }); });
+        if (sent) report.digests++;
+      } catch (e) { report.errors.push(`digest ${key}: ${e.message}`); }
+    };
+    for (const t of staff) {
+      const all = t.role === "admin";
+      const mine = all ? ahead : ahead.filter(s => s.tutorId === t.id);
+      const tmrw = mine.filter(s => s.date === tomorrow.iso);
+      const plural = (n) => `${n} lesson${n === 1 ? "" : "s"}`;
+      if (tmrw.length) await digest(t.email, undefined, `digest_day_${t.id}_${tomorrow.iso}`, {
+        name: t.displayName, title: `${all ? "Lessons" : "Your lessons"} tomorrow, ${fmtDay(tomorrow.iso)}`,
+        intro: `${all ? "There are" : "You have"} ${plural(tmrw.length)} tomorrow.`, days: byDay(tmrw, all), url: `${mail.SITE}/tutor/calendar` });
+      if (sunday && mine.length) await digest(t.email, undefined, `digest_week_${t.id}_${weekFrom}`, {
+        name: t.displayName, title: `${all ? "Lessons" : "Your lessons"} this week, ${fmtShort(weekFrom)} to ${fmtShort(weekTo)}`,
+        intro: `${all ? "There are" : "You have"} ${plural(mine.length)} on the calendar this week.`, days: byDay(mine, all), url: `${mail.SITE}/tutor/calendar` });
+    }
+    if (sunday) {
+      for (const s of students) {
+        if (!s.email || !s.classId) continue;
+        const mine = ahead.filter(x => x.classId === s.classId && (!x.studentIds || x.studentIds.includes(s.id)));
+        if (!mine.length) continue;
+        await digest(s.email, s.parentEmail && s.parentEmail !== s.email ? s.parentEmail : undefined, `digest_week_student_${s.id}_${weekFrom}`, {
+          name: s.displayName, title: `Your lessons this week, ${fmtShort(weekFrom)} to ${fmtShort(weekTo)}`,
+          intro: `You have ${mine.length} lesson${mine.length === 1 ? "" : "s"} this week. A reminder with the meeting link comes the day before each one.`,
+          days: byDay(mine, false), url: `${mail.SITE}/`, urlLabel: "Open ChemMastery", signoff: "See you in the lesson, HSJ Tuition" });
+      }
     }
 
     console.log("reminders:", who, JSON.stringify(report));

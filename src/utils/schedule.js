@@ -24,7 +24,7 @@ export const fmtTime = (hhmm) => {
   return m ? `${hh}:${String(m).padStart(2, "0")}${ampm}` : `${hh}${ampm}`;
 };
 
-const addMinutes = (hhmm, mins) => {
+export const addMinutes = (hhmm, mins) => {
   const [h, m] = hhmm.split(":").map(Number);
   const t = h * 60 + m + mins;
   return `${String(Math.floor(t / 60) % 24).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
