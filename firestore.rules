@@ -200,7 +200,7 @@ service cloud.firestore {
       // A student's first visit reads a submission that does not exist yet,
       // so a get on a missing doc is allowed when the id ends in their uid
       allow get: if signedIn()
-        && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid));
+        && (id.matches('.*_' + request.auth.uid) || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
       allow list: if signedIn()
         && (resource.data.uid == request.auth.uid || resource.data.tutorId == request.auth.uid || isParentOf(resource.data.uid) || isAdmin());
       // Student creates their own, for an assignment set to their group

@@ -105,10 +105,12 @@ module.exports = async function handler(req, res) {
       await remind(cls, byClass[cls.id] || [], { key: `lesson_${cls.id}_${tomorrow.iso}`, when: `tomorrow, ${WEEKDAYS[tomorrow.weekday]} at ${fmtTime(sch.time)}`, zoomLink: sch.zoomLink || cls.zoomLink || "" });
     }
 
-    // 2. Homework due within 24h, not submitted
+    // 2. Homework due within 24h, not submitted. A homework set for named
+    //    students (the initial diagnostic) reminds only them, not the group.
     for (const a of assignments) {
       if (a.status === "draft" || !a.dueAt || a.dueAt < now || a.dueAt > now + DAY) continue;
-      for (const s of byClass[a.classId] || []) {
+      const recipients = Array.isArray(a.studentIds) && a.studentIds.length ? a.studentIds.map(id => byUid[id]).filter(Boolean) : (byClass[a.classId] || []);
+      for (const s of recipients) {
         if (!s.email) continue;
         try {
           const sub = await fb.getDocument(`submissions/${a.id}_${s.id}`, token);
