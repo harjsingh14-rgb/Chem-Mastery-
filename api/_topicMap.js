@@ -34,6 +34,41 @@ const TO_AQA = {
   },
 };
 
+const RAG_ORDER = { red: 0, amber: 1, green: 2 };
+
+/**
+ * What the self-evaluation says, in AQA refs: `taught` and `untaught` sets,
+ * and `rag` (the worst rating given to any of the student's own refs that map
+ * onto each taught AQA ref). All empty when there is no evaluation.
+ */
+function evaluationTopics(selfEvaluation, board) {
+  const ev = selfEvaluation;
+  const none = { taught: new Set(), untaught: new Set(), rag: {} };
+  if (!ev || !Array.isArray(ev.taught) || ev.taught.length === 0) return none;
+  const first = String(ev.taught[0]);
+  const evBoard = ev.board || (first.startsWith("ocr-") ? "ocr" : first.startsWith("edx-") ? "edexcel" : first.startsWith("aqa-") ? "aqa" : board);
+  const mods = MODULES[evBoard] || {};
+  const map = TO_AQA[evBoard] || {};
+  if (!Object.keys(mods).length) return none;
+  const taughtRefs = new Set(), untaughtRefs = new Set();
+  for (const [mid, refs] of Object.entries(mods)) {
+    const ticked = ev.taught.includes(mid);
+    for (const ref of refs) {
+      const covered = ev.ratings?.[ref]?.covered;
+      if (ticked && covered !== "no") taughtRefs.add(ref); else untaughtRefs.add(ref);
+    }
+  }
+  const taught = new Set(), rag = {};
+  for (const r of taughtRefs) for (const a of map[r] || []) {
+    taught.add(a);
+    const g = ev.ratings?.[r]?.rag;
+    if (g in RAG_ORDER && (!(a in rag) || RAG_ORDER[g] < RAG_ORDER[rag[a]])) rag[a] = g;
+  }
+  const untaught = new Set();
+  for (const r of untaughtRefs) for (const a of map[r] || []) if (!taught.has(a)) untaught.add(a);
+  return { taught, untaught, rag };
+}
+
 /**
  * The set of AQA refs the student has not been taught, from their
  * self-evaluation. Empty when there is no evaluation or everything is taught.
@@ -62,4 +97,4 @@ function untaughtAqaRefs(selfEvaluation, board) {
   return out;
 }
 
-module.exports = { untaughtAqaRefs, TO_AQA };
+module.exports = { untaughtAqaRefs, evaluationTopics, TO_AQA };

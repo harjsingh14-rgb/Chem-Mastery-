@@ -571,13 +571,20 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
   // The paper the student's year calls for, against the one set (a student moved to Resit, say)
   const wantUnit = diagnosticUnitFor(student.year);
   const paperMismatch = !!(dg?.assignmentId && !dg.reportSentAt && wantUnit && dg.unit && dg.unit !== wantUnit);
-  const setDiagnostic = async (replace = false) => {
-    if (replace && !window.confirm(`Replace the set paper with the ${yearLabel(student.year)} diagnostic? Any answers the student has entered on the current paper are removed.`)) return;
+  // A fixed paper can be rebuilt around the topics the self-evaluation says school has taught
+  const canTailor = isAdmin && dg?.assignmentId && !dg.reportSentAt && !dg.tailored && Array.isArray(student.selfEvaluation?.taught) && student.selfEvaluation.taught.length > 0;
+  const setDiagnostic = async (replace = false, why = "paper") => {
+    if (replace && !window.confirm(why === "tailor"
+      ? "Rebuild the diagnostic from the topics school has taught so far? The current paper and any answers the student has entered on it are removed, and the new paper goes on their Homework page."
+      : `Replace the set paper with the ${yearLabel(student.year)} diagnostic? Any answers the student has entered on the current paper are removed.`)) return;
     setDiagBusy(true); setDiagMsg(null);
     try {
       const r = await studentsApi("assignDiagnostic", { uid: student.uid, replace });
-      onChange && onChange({ diagnostic: { ...(dg || {}), assignmentId: r.assignmentId, unit: r.unit || wantUnit, dueAt: r.dueAt, setAt: Date.now() } });
-      setDiagMsg(r.existing ? "The diagnostic was already set; nothing changed." : `Set, due ${fmtDue(r.dueAt)}. It is on the student's Homework page now.`);
+      onChange && onChange({ diagnostic: { ...(dg || {}), assignmentId: r.assignmentId, unit: r.unit || wantUnit, dueAt: r.dueAt, setAt: Date.now(), tailored: !!r.tailored, topicCount: r.topicCount || 0 } });
+      setDiagMsg(r.existing ? "The diagnostic was already set; nothing changed."
+        : r.tailored ? `Set, due ${fmtDue(r.dueAt)}. Built from the ${r.topicCount} topic${r.topicCount === 1 ? "" : "s"} school has taught so far. It is on the student's Homework page now.`
+        : why === "tailor" ? `Set, due ${fmtDue(r.dueAt)}. The self-evaluation says every topic on the paper has been taught, so the full paper is set.`
+        : `Set, due ${fmtDue(r.dueAt)}. It is on the student's Homework page now.`);
     } catch (e) { setDiagMsg(e.message); }
     setDiagBusy(false);
   };
@@ -605,14 +612,15 @@ function DetailsTab({ student, group, isAdmin, onChange }) {
   return (
     <>
       <Card style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <CardHeader title="Initial diagnostic" sub={dg?.reportSentAt ? `Report sent ${fmtDate(dg.reportSentAt)}${dg.score != null ? ` · ${dg.score} / ${dg.max}` : ""}` : dg?.assignmentId ? `Set ${fmtDate(dg.setAt)} · due ${fmtDue(dg.dueAt)}` : "Not set"}
+        <CardHeader title="Initial diagnostic" sub={dg?.reportSentAt ? `Report sent ${fmtDate(dg.reportSentAt)}${dg.score != null ? ` · ${dg.score} / ${dg.max}` : ""}` : dg?.assignmentId ? `Set ${fmtDate(dg.setAt)} · due ${fmtDue(dg.dueAt)}${dg.tailored ? ` · built from the ${dg.topicCount || ""} topic${dg.topicCount === 1 ? "" : "s"} taught so far` : ""}` : "Not set"}
           right={<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {dg?.assignmentId && <Button variant="secondary" size="sm" onClick={() => navigate(`/tutor/homework/${dg.assignmentId}`)}>Open the review</Button>}
             {isAdmin && !dg?.assignmentId && <Button variant="primary" size="sm" onClick={() => setDiagnostic(false)} disabled={diagBusy}>{diagBusy ? "Setting…" : "Set the initial diagnostic"}</Button>}
             {isAdmin && paperMismatch && <Button variant="primary" size="sm" onClick={() => setDiagnostic(true)} disabled={diagBusy}>{diagBusy ? "Replacing…" : `Replace with the ${yearLabel(student.year)} paper`}</Button>}
+            {canTailor && !paperMismatch && <Button variant="secondary" size="sm" onClick={() => setDiagnostic(true, "tailor")} disabled={diagBusy}>{diagBusy ? "Rebuilding…" : "Rebuild from the taught topics"}</Button>}
             {isAdmin && dg?.assignmentId && !dg.reportSentAt && <Button variant="ghost" size="sm" onClick={removeDiagnostic} disabled={diagBusy}>Remove</Button>}
           </div>} />
-        <span style={{ fontSize: 13, color: T.muted }}>{dg?.assignmentId ? "The paper is the student's first homework. Marks are hidden from them until the tutor sends the feedback report from the review page." : "Set automatically when a student is placed, unless it was skipped for a returning student. It can be set from here at any time."}</span>
+        <span style={{ fontSize: 13, color: T.muted }}>{dg?.assignmentId ? `The paper is the student's first homework. Marks are hidden from them until the tutor sends the feedback report from the review page.${canTailor ? " It is the fixed paper: questions on topics the self-evaluation says school has not taught yet are marked for the student to skip. Rebuilding sets a paper on the taught topics only and removes any answers entered so far." : ""}` : "Set automatically when a student is placed: on the topics school has taught so far when the self-evaluation says some have not been, otherwise the full paper. Skipped for a returning student. It can be set from here at any time."}</span>
         {paperMismatch && <Notice tone="amber" style={{ fontSize: 13 }}>The paper set is the {yearLabel(Object.keys(DIAGNOSTIC_UNIT).find(k => DIAGNOSTIC_UNIT[k] === dg.unit))} diagnostic, but the student is now {yearLabel(student.year)}.</Notice>}
         {diagMsg && <Notice tone={/already|Set,|Removed/.test(diagMsg) ? "green" : "red"}>{diagMsg}</Notice>}
       </Card>

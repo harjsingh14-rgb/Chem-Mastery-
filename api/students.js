@@ -9,7 +9,7 @@ const mail = require("./_email");
 const storage = require("./_storage");
 const { verifyFirebaseToken } = require("./_auth");
 const Y = require("./_years");
-const { untaughtAqaRefs } = require("./_topicMap");
+const { untaughtAqaRefs, evaluationTopics } = require("./_topicMap");
 
 const BOARDS = { aqa: "AQA", ocr: "OCR A", edexcel: "Edexcel" };
 const PLANS = ["pif", "instalments", "results"];
@@ -306,12 +306,70 @@ const MIN_PER_MARK = 1.5;
 const DAY = 24 * 60 * 60 * 1000;
 const fmtDay = (ms) => new Date(ms).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" });
 
+/** A bank question (ppqIndex entry) as a homework item, the shape the player and review expect. */
+function diagnosticItem(q, board) {
+  const it = {
+    key: `ppq_${String(q.id).replace(/[^A-Za-z0-9]/g, "_")}`, type: "ppq", questionId: q.id,
+    marks: Number(q.totalMarks) || 0, minutes: Math.round((Number(q.totalMarks) || 0) * MIN_PER_MARK * 10) / 10,
+    topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? specTopicTitle(board, q.topics[0]) : (q.title || `Question ${q.q}`),
+  };
+  for (const k of ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks", "legacy", "unit"]) if (q[k] !== undefined && q[k] !== null) it[k] = q[k];
+  return it;
+}
+
+const shuffle = (list) => { const a = [...list]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const specOrder = (a, b) => String(a).localeCompare(String(b), undefined, { numeric: true });
+
+/**
+ * A paper on the topics school has taught so far. The fixed paper's questions
+ * on taught topics are kept; the rest are replaced with bank questions on the
+ * taught topics (red topics first, then amber, then green) until the paper is
+ * about the fixed paper's length. Null when the bank is not published or has
+ * nothing to offer, in which case the fixed paper is set with notTaught flags.
+ */
+async function tailoredItems(index, ev, level, token) {
+  const bank = await fb.getDocument(`ppqIndex/aqa_${level}`, token);
+  if (!bank || !Array.isArray(bank.items) || bank.items.length === 0) return null;
+  const board = index.board || "aqa";
+  const fixed = index.items.map(q => diagnosticItem(q, board));
+  const targetMarks = fixed.reduce((a, it) => a + it.marks, 0);
+  const kept = fixed.filter(it => it.topic && ev.taught.has(it.topic));
+  const used = new Set(index.items.map(q => q.id));
+  const pools = {};
+  for (const q of bank.items) {
+    const t = (q.topics || [])[0];
+    const marks = Number(q.totalMarks) || 0;
+    if (!t || !ev.taught.has(t) || used.has(q.id) || q.legacy || q.diagnostic || marks < 2 || marks > 12) continue;
+    (pools[t] = pools[t] || []).push(q);
+  }
+  for (const t of Object.keys(pools)) pools[t] = shuffle(pools[t]);
+  // Red topics lead and get a second question in the first round
+  const order = [...ev.taught].filter(t => pools[t]?.length).sort((a, b) => ({ red: 0, amber: 1, green: 2 }[ev.rag[a]] ?? 3) - ({ red: 0, amber: 1, green: 2 }[ev.rag[b]] ?? 3) || specOrder(a, b));
+  if (order.length === 0 && kept.length === 0) return null;
+  const items = [...kept];
+  let marks = kept.reduce((a, it) => a + it.marks, 0);
+  let round = 0;
+  while (marks < targetMarks && order.some(t => pools[t].length)) {
+    for (const t of order) {
+      if (marks >= targetMarks) break;
+      const n = round === 0 && ev.rag[t] === "red" ? 2 : 1;
+      for (let i = 0; i < n && pools[t].length && marks < targetMarks; i++) { const it = diagnosticItem(pools[t].shift(), board); items.push(it); marks += it.marks; }
+    }
+    round++;
+  }
+  if (items.length < 4) return null;
+  items.sort((a, b) => specOrder(a.topic, b.topic) || a.marks - b.marks);
+  return { items, topics: [...new Set(items.map(it => it.topic))].sort(specOrder) };
+}
+
 /**
  * The initial diagnostic (the Year 12, Year 13 or Resit paper, published by
  * tools/ppq as ppqIndex/diag_{unit}) set as a homework for this one student,
- * due the day before their first lesson. Questions on topics the student's
- * self-evaluation says school has not taught yet are flagged notTaught, so the
- * player lets them skip those and the report scores taught content separately.
+ * due the day before their first lesson. When the student's self-evaluation
+ * says school has not taught some topics yet, the paper is built for them from
+ * the taught topics instead (tailoredItems); failing that the fixed paper is
+ * set with those questions flagged notTaught, so the player lets them skip
+ * those and the report scores taught content separately.
  * With replace, an existing paper (and its submission) is removed first.
  * Returns { assignmentId, dueAt, title, unit, existing } or null when the
  * paper has not been published yet.
@@ -328,8 +386,10 @@ async function assignDiagnostic({ uid, profile, group, token, replace = false })
     await fb.deleteDocument(`assignments/${assignmentId}`, token);
     existing = null;
   }
-  if (existing) return { assignmentId, dueAt: existing.dueAt, title: existing.title, unit: existing.unit || null, existing: true };
-  const untaught = untaughtAqaRefs(profile.selfEvaluation, profile.selfEvaluation?.board || profile.board || group.board || "aqa");
+  if (existing) return { assignmentId, dueAt: existing.dueAt, title: existing.title, unit: existing.unit || null, existing: true, tailored: !!existing.tailored };
+  const evBoard = profile.selfEvaluation?.board || profile.board || group.board || "aqa";
+  const untaught = untaughtAqaRefs(profile.selfEvaluation, evBoard);
+  const ev = evaluationTopics(profile.selfEvaluation, evBoard);
 
   // Due the day before the group's next lesson, and never sooner than three days from now
   const now = Date.now();
@@ -341,29 +401,32 @@ async function assignDiagnostic({ uid, profile, group, token, replace = false })
   } catch (e) { console.error("sessions lookup failed:", e.message); }
   dueAt = Math.max(dueAt, now + 3 * DAY);
 
-  const items = index.items.map(q => {
-    const it = {
-      key: `ppq_${String(q.id).replace(/[^A-Za-z0-9]/g, "_")}`, type: "ppq", questionId: q.id,
-      marks: Number(q.totalMarks) || 0, minutes: Math.round((Number(q.totalMarks) || 0) * MIN_PER_MARK * 10) / 10,
-      topic: (q.topics || [])[0] || null, topicLabel: (q.topics || [])[0] ? specTopicTitle(index.board || "aqa", q.topics[0]) : (q.title || `Question ${q.q}`),
-    };
-    for (const k of ["title", "paper", "series", "year", "level", "q", "kind", "topics", "totalMarks", "legacy", "unit"]) if (q[k] !== undefined && q[k] !== null) it[k] = q[k];
+  // Some topics not taught yet: build the paper from the taught ones where the bank allows
+  let tailored = null;
+  if (untaught.size && ev.taught.size) {
+    try { tailored = await tailoredItems(index, ev, index.level || (Y.isA2(profile.year) ? "a2" : "as"), token); }
+    catch (e) { console.error("tailored diagnostic failed, using the fixed paper:", e.message); }
+  }
+  const items = tailored ? tailored.items : index.items.map(q => {
+    const it = diagnosticItem(q, index.board || "aqa");
     if (it.topic && untaught.has(it.topic)) it.notTaught = true;
     return it;
   });
   const maxScore = items.reduce((a, it) => a + it.marks, 0);
   const notTaught = items.filter(it => it.notTaught).length;
   const title = `Initial diagnostic (${Y.yearLabel(profile.year)})`;
+  const topicCount = tailored ? tailored.topics.length : 0;
   await fb.createDocument("assignments", assignmentId, {
     title, kind: "diagnostic", unit, classId: group.code || profile.classId, board: group.board || profile.board || "aqa",
     topicBoard: index.board || "aqa",   // the paper's questions are tagged with this board's topic refs, whatever board the student sits
     tutorId: group.tutorId || null, studentIds: [uid], studentName: profile.displayName || null,
     minutes: Math.round(items.reduce((a, it) => a + it.minutes, 0)), dueAt, maxScore,
-    note: `Answer every question on your own, without notes, in one or two sittings. It is a starting point, not a test you can fail: it shows your tutor exactly where to begin.${notTaught ? ` ${notTaught} question${notTaught === 1 ? " is" : "s are"} on topics your school has not taught yet: have a go if you can, or skip them.` : ""}`,
-    items, summary: `${items.length} exam question${items.length === 1 ? "" : "s"} · ${maxScore} marks`,
+    tailored: !!tailored, taughtTopics: tailored ? tailored.topics : null,
+    note: `Answer every question on your own, without notes, in one or two sittings. It is a starting point, not a test you can fail: it shows your tutor exactly where to begin.${tailored ? ` The questions are on the ${topicCount} topic${topicCount === 1 ? "" : "s"} your school has taught so far, from your self-evaluation.` : notTaught ? ` ${notTaught} question${notTaught === 1 ? " is" : "s are"} on topics your school has not taught yet: have a go if you can, or skip them.` : ""}`,
+    items, summary: `${items.length} exam question${items.length === 1 ? "" : "s"} · ${maxScore} marks${tailored ? ` · ${topicCount} topic${topicCount === 1 ? "" : "s"} taught so far` : ""}`,
     status: "open", createdAt: new Date(now), clientTime: now, createdBy: "placement",
   }, token);
-  return { assignmentId, dueAt, title, unit, existing: false, notTaught };
+  return { assignmentId, dueAt, title, unit, existing: false, notTaught, tailored: !!tailored, topicCount };
 }
 
 async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = true } = {}) {
@@ -417,7 +480,7 @@ async function placeApplicant(a, id, groupCode, token, origin, { sendEmails = tr
   if (!a.skipDiagnostic) {
     try { diagnostic = await assignDiagnostic({ uid: auth.uid, profile, group, token }); } catch (e) { console.error("diagnostic not set:", e.message); }
   }
-  if (diagnostic) profile.diagnostic = { assignmentId: diagnostic.assignmentId, unit: Y.diagnosticUnitFor(profile.year), dueAt: diagnostic.dueAt, setAt: new Date(now) };
+  if (diagnostic) profile.diagnostic = { assignmentId: diagnostic.assignmentId, unit: Y.diagnosticUnitFor(profile.year), dueAt: diagnostic.dueAt, setAt: new Date(now), tailored: !!diagnostic.tailored, topicCount: diagnostic.topicCount || 0 };
   await fb.updateDocument(`users/${auth.uid}`, profile, token);
   await fb.updateDocument(`applicants/${id}`, { status: "placed", groupCode: profile.classId, studentUid: auth.uid, placedAt: now, welcomeHeld: !sendEmails }, token);
 
@@ -679,7 +742,7 @@ module.exports = async function handler(req, res) {
       if (replace && profile.diagnostic?.reportSentAt) throw bad("The feedback report has already been sent, so the paper cannot be replaced");
       const r = await assignDiagnostic({ uid, profile, group, token, replace });
       if (!r) throw bad(`The ${Y.yearLabel(profile.year) || "?"} diagnostic paper has not been published yet`);
-      if (!r.existing) await fb.updateDocument(`users/${uid}`, { diagnostic: { assignmentId: r.assignmentId, unit: r.unit, dueAt: r.dueAt, setAt: new Date() } }, token);
+      if (!r.existing) await fb.updateDocument(`users/${uid}`, { diagnostic: { assignmentId: r.assignmentId, unit: r.unit, dueAt: r.dueAt, setAt: new Date(), tailored: !!r.tailored, topicCount: r.topicCount || 0 } }, token);
       return res.status(200).json({ ok: true, ...r });
     }
 
