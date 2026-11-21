@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { createAssignment, fetchTutorClasses, fetchPpqQuestion, fetchLesson, fetchTutorSessions, fetchTutorLessons, updateLesson, fetchOpenErrorLogForGroup } from "../firebase";
+import { createAssignment, fetchTutorClasses, fetchClassStudents, fetchLessonNotes, fetchPpqQuestion, fetchLesson, fetchTutorSessions, fetchTutorLessons, updateLesson, fetchOpenErrorLogForGroup } from "../firebase";
 import { typeShort, isDue } from "../utils/errorLog";
 import { fmtLessonDay, addDays, isoDate } from "../utils/schedule";
 import { T, boardLabel } from "../ui/theme";
@@ -36,7 +36,7 @@ function Toggle({ on, onClick, children, count }) {
   );
 }
 
-export default function HomeworkBuilder({ authUser }) {
+export default function HomeworkBuilder({ authUser, userProfile }) {
   const navigate = useNavigate();
   const [classes, setClasses] = useState(null);
   const [classId, setClassId] = useState("");
@@ -63,6 +63,13 @@ export default function HomeworkBuilder({ authUser }) {
   const lessonId = searchParams.get("lesson");
   const [lesson, setLesson] = useState(null);
   const autoFilled = useRef(false);
+  // Who it is for: the whole group, or chosen students. From a lesson with
+  // attendance saved, students marked absent start unticked.
+  const [roster, setRoster] = useState(null);
+  const [who, setWho] = useState("group");
+  const [picked, setPicked] = useState([]);
+  const [absent, setAbsent] = useState({});     // uid -> true, from the lesson's saved attendance
+  const whoTouched = useRef(false);
 
   useEffect(() => {
     if (!authUser?.uid) return;
@@ -73,6 +80,25 @@ export default function HomeworkBuilder({ authUser }) {
   const board = cls?.board || "aqa";
 
   const classCode = cls?.code || null;
+  const isAdmin = userProfile?.role === "admin";
+  useEffect(() => {
+    if (!classCode || !authUser?.uid) { setRoster(null); return undefined; }
+    let alive = true;
+    setRoster(null); setWho("group"); setPicked([]); whoTouched.current = false;
+    fetchClassStudents(classCode, isAdmin ? null : authUser.uid)
+      .then(list => alive && setRoster(list.sort((a, b) => (a.displayName || a.email || "").localeCompare(b.displayName || b.email || ""))))
+      .catch(() => alive && setRoster([]));
+    return () => { alive = false; };
+  }, [classCode, authUser, isAdmin]);
+  // Absent students are left out by default, unless the tutor has already chosen
+  useEffect(() => {
+    if (!roster || whoTouched.current) return;
+    const out = roster.filter(st => absent[st.uid]);
+    if (out.length === 0 || out.length === roster.length) return;
+    setWho("students"); setPicked(roster.filter(st => !absent[st.uid]).map(st => st.uid));
+  }, [roster, absent]);
+  const togglePick = (uid) => { whoTouched.current = true; setPicked(p => p.includes(uid) ? p.filter(x => x !== uid) : [...p, uid]); };
+  const chooseWho = (v) => { whoTouched.current = true; setWho(v); if (v === "students" && picked.length === 0 && roster) setPicked(roster.filter(st => !absent[st.uid]).map(st => st.uid)); };
   useEffect(() => {
     if (!classCode) { setLogEntries([]); return undefined; }
     let alive = true;
@@ -97,6 +123,9 @@ export default function HomeworkBuilder({ authUser }) {
         const when = fmtLessonDay(l.date);
         setLesson(l);
         setClassId(group.code);
+        fetchLessonNotes(lessonId, isAdmin ? null : authUser.uid)
+          .then(ns => alive && setAbsent(Object.fromEntries(ns.filter(n => n.attendance === "absent").map(n => [n.uid, true]))))
+          .catch(() => {});
         setPpqTopics(refs);
         setOpenModules(Object.fromEntries(picked.map(t => [t.module, true])));
         setYear(picked.some(t => Number(t.year) === 13) ? "a2" : "as");
@@ -114,7 +143,7 @@ export default function HomeworkBuilder({ authUser }) {
       } catch (e) { if (alive) setError(e.message); }
     })();
     return () => { alive = false; };
-  }, [lessonId, classes, authUser]);
+  }, [lessonId, classes, authUser, isAdmin]);
   // Past-paper questions: the index for this board, narrowed to the chosen
   // level, spec topics and question kinds. AS homework uses AS papers only;
   // A2 homework can draw on both levels.
@@ -200,6 +229,7 @@ export default function HomeworkBuilder({ authUser }) {
 
   const assign = async () => {
     if (!cls || !title.trim() || items.length === 0) return;
+    if (who === "students" && picked.length === 0) { setError("Tick at least one student, or set it for the whole group."); return; }
     setSaving(true); setError(null);
     try {
       const dueAt = due ? new Date(due + "T23:59:00").getTime() : null;
@@ -215,6 +245,8 @@ export default function HomeworkBuilder({ authUser }) {
       const made = await createAssignment(authUser.uid, {
         title: title.trim(), classId: cls.code, board, minutes: Number(minutes) || tot.minutes, dueAt, note: note.trim() || null,
         items, summary: describeItems(items), maxScore: tot.marks, lessonId: target?.id || null,
+        studentIds: who === "students" ? picked : null,
+        studentNames: who === "students" ? picked.map(id => (roster || []).find(st => st.uid === id)?.displayName || "Student") : null,
       });
       if (target) await updateLesson(target.id, { homeworkAssignmentId: made.id, homeworkAssignmentTitle: title.trim() }).catch(() => {});
       if (lesson) navigate(`/tutor/lessons/${lesson.id}`); else navigate("/tutor/homework");
@@ -248,6 +280,26 @@ export default function HomeworkBuilder({ authUser }) {
                 <div style={field}><label htmlFor="hw-title" style={label}>Title</label><Input id="hw-title" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Born-Haber cycles" /></div>
                 <div style={field}><label htmlFor="hw-min" style={label}>Time budget (minutes)</label><Input id="hw-min" type="number" min={10} max={240} value={minutes} onChange={e => setMinutes(e.target.value)} /></div>
                 <div style={field}><label htmlFor="hw-due" style={label}>Due</label><Input id="hw-due" type="date" value={due} onChange={e => setDue(e.target.value)} /></div>
+              </div>
+              <div style={field}>
+                <span style={label}>Who is it for?</span>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <Button size="sm" type="button" variant={who === "group" ? "primary" : "secondary"} onClick={() => chooseWho("group")}>Whole group</Button>
+                  <Button size="sm" type="button" variant={who === "students" ? "primary" : "secondary"} onClick={() => chooseWho("students")}>Chosen students</Button>
+                  {who === "group" && Object.keys(absent).length > 0 && <span style={{ fontSize: 12, color: T.muted, alignSelf: "center" }}>Everyone in the group, including anyone absent from the lesson.</span>}
+                </div>
+                {who === "students" && (
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 4 }}>
+                    {roster === null && <span style={{ fontSize: 12, color: T.muted }}>Loading students…</span>}
+                    {roster && roster.length === 0 && <span style={{ fontSize: 12, color: T.amber }}>No students are in {cls.name} yet.</span>}
+                    {(roster || []).map(st => { const on = picked.includes(st.uid); return (
+                      <button key={st.uid} type="button" onClick={() => togglePick(st.uid)} style={{ padding: "6px 10px", borderRadius: 999, border: `1px solid ${on ? T.accent : T.border}`, background: on ? T.accentTint : T.card, color: on ? T.accentText : T.ink, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: T.font }}>
+                        {on ? "✓ " : ""}{st.displayName || st.email}{absent[st.uid] ? <span style={{ fontWeight: 500, color: on ? T.accentText : T.muted }}> · absent{lesson ? ` ${fmtLessonDay(lesson.date)}` : ""}</span> : null}
+                      </button>
+                    ); })}
+                    <span style={{ fontSize: 12, color: T.muted, alignSelf: "center" }}>Only the ticked students see it and get the reminder. Nobody else in the group is shown it.</span>
+                  </div>
+                )}
               </div>
               <div style={field}><label htmlFor="hw-note" style={label}>Note to students (optional)</label>
                 <textarea id="hw-note" value={note} onChange={e => setNote(e.target.value)} rows={2} placeholder="e.g. Show your working in the calculations. Method marks are given even if the final value is off."

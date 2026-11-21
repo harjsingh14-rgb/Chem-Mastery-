@@ -486,7 +486,7 @@ export default function App() {
       ? <Card padding={0}><EmptyState icon="lock" title="Tutor accounts only" body="Ask HSJ Tuition to upgrade your account to a tutor account." /></Card>
       : tutorPage === "homework"
         ? (tutorParam === "new"
-            ? (can(userProfile, "homework") ? <HomeworkBuilder authUser={authUser} /> : <Locked what="Setting homework" />)
+            ? (can(userProfile, "homework") ? <HomeworkBuilder authUser={authUser} userProfile={userProfile} /> : <Locked what="Setting homework" />)
             : tutorParam
               ? (can(userProfile, "homework") || can(userProfile, "marking") ? <TutorHomeworkReview authUser={authUser} userProfile={userProfile} assignmentId={tutorParam} /> : <Locked what="Homework" />)
               : (can(userProfile, "homework") || can(userProfile, "marking") ? <TutorHomeworkList authUser={authUser} userProfile={userProfile} /> : <Locked what="Homework" />))
