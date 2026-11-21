@@ -125,12 +125,28 @@ async function callClaude({ model, content, maxTokens }) {
   return out;
 }
 
+// Part labels as the examiner may retype them: "4(f)", "(f)" or "f" for "4 (f)", "2.1" for "02.1".
+const normLabel = (s) => String(s ?? "").toLowerCase().replace(/[^a-z0-9.]/g, "").replace(/\b0+(\d)/g, "$1");
+
 /** Clamp and complete the model's output against the question's parts. */
 function tidy(result, doc) {
-  const byLabel = new Map((Array.isArray(result.parts) ? result.parts : []).map(p => [String(p.label), p]));
+  const given = Array.isArray(result.parts) ? result.parts : [];
+  const docParts = doc.parts || [];
+  const byLabel = new Map(given.map(p => [String(p.label), p]));
+  const byNorm = new Map(given.map(p => [normLabel(p.label), p]));
+  const docLabels = new Set(docParts.map(p => String(p.label)));
+  const docNorms = new Set(docParts.map(p => normLabel(p.label)));
+  const unmatched = [];
   let total = 0;
-  const parts = (doc.parts || []).map(p => {
-    const r = byLabel.get(String(p.label)) || {};
+  const parts = docParts.map((p, i) => {
+    // Exact label first, then the label with spaces and brackets ignored, then (when the examiner
+    // returned one entry per part) the entry in the same position, so long as it is not another part's.
+    let r = byLabel.get(String(p.label)) || byNorm.get(normLabel(p.label)) || null;
+    if (!r && given.length === docParts.length) {
+      const g = given[i];
+      if (g && !docLabels.has(String(g.label)) && !docNorms.has(normLabel(g.label))) r = g;
+    }
+    if (!r) { unmatched.push(p.label); r = {}; }
     const n = (p.ms || []).length;
     let awarded = Array.isArray(r.awarded) ? r.awarded.slice(0, n).map(Boolean) : [];
     while (awarded.length < n) awarded.push(false);
@@ -145,7 +161,7 @@ function tidy(result, doc) {
     return { label: p.label, marks: p.marks, score, awarded, attempted, feedback: typeof r.feedback === "string" ? r.feedback : "", errorType, errorNote: errorType ? cleanErrorNote(r.errorNote) : null };
   });
   return {
-    parts, score: Math.min(total, doc.totalMarks || total), totalMarks: doc.totalMarks,
+    parts, unmatched, score: Math.min(total, doc.totalMarks || total), totalMarks: doc.totalMarks,
     overall: typeof result.overall === "string" ? result.overall : "",
     confidence: ["high", "medium", "low"].includes(result.confidence) ? result.confidence : "medium",
   };
@@ -333,9 +349,10 @@ module.exports = async function handler(req, res) {
     }
     const aiParts = doc.parts.filter(p => !exact.has(String(p.label)));
     let raw = { model: "exact", usage: null, parts: [], overall: "", confidence: "high" };
+    let aiDoc = null;
     if (aiParts.length > 0) {
       await takeQuota(caller.uid, "mark", token);
-      const aiDoc = { ...doc, parts: aiParts, totalMarks: aiParts.reduce((a, p) => a + (Number(p.marks) || 0), 0), onlyParts: !!subset || aiParts.length < doc.parts.length };
+      aiDoc = { ...doc, parts: aiParts, totalMarks: aiParts.reduce((a, p) => a + (Number(p.marks) || 0), 0), onlyParts: !!subset || aiParts.length < doc.parts.length };
       const content = [];
       if (doc.imageUrl) content.push({ type: "image", source: { type: "url", url: doc.imageUrl } });
       for (const im of images) content.push({ type: "image", source: { type: "base64", media_type: im.mediaType, data: im.dataBase64 } });
@@ -343,6 +360,27 @@ module.exports = async function handler(req, res) {
       raw = await callClaude({ model: hasImages ? VISION_MODEL : TEXT_MODEL, content, maxTokens: 4000 });
     }
     const ai = tidy(raw, { ...doc, parts: aiParts });
+    // Safety net: a part the student typed an answer for must never come back "not attempted".
+    // It happens when a long multi-part question is marked from images and the examiner skips or
+    // mislabels a part. Those parts are marked again on their own, from the typed words alone.
+    const typedFor = (label) => { const v = answers[label]; return v && String(v).trim() ? String(v).trim() : ""; };
+    const suspect = ai.parts.filter(p => typedFor(p.label) && (!p.attempted || ai.unmatched.includes(p.label)));
+    if (suspect.length > 0 && aiDoc) {
+      console.warn("ppq-mark: typed parts came back unattempted, re-marking", { qid, parts: suspect.map(p => p.label), returned: (raw.parts || []).map(p => p.label), model: raw.model });
+      try {
+        const retryParts = aiParts.filter(p => suspect.some(s => String(s.label) === String(p.label)));
+        const retryDoc = { ...aiDoc, parts: retryParts, totalMarks: retryParts.reduce((a, p) => a + (Number(p.marks) || 0), 0), onlyParts: true };
+        const content = [];
+        if (doc.imageUrl) content.push({ type: "image", source: { type: "url", url: doc.imageUrl } });
+        content.push({ type: "text", text: markPrompt({ doc: retryDoc, answers, hasImages: false, mode: "typed", inkOnly: false }) + "\n\nNOTE: the student typed an answer for every part above, so none of them is unattempted. Mark the words given against the scheme." });
+        const again = tidy(await callClaude({ model: TEXT_MODEL, content, maxTokens: 2000 }), retryDoc);
+        for (const p of again.parts) {
+          if (!p.attempted && p.score === 0) continue;
+          const i = ai.parts.findIndex(x => String(x.label) === String(p.label));
+          if (i >= 0) ai.parts[i] = p;
+        }
+      } catch (e) { console.error("ppq-mark: re-mark failed", e.message); }
+    }
     const merged = doc.parts.map(p => exact.get(String(p.label)) || ai.parts.find(x => String(x.label) === String(p.label)));
     const result = {
       parts: merged,
